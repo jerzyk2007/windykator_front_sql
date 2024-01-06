@@ -1,12 +1,108 @@
 .nav_menu {
     flex-basis: 50%;
+    /* height: 40px; */
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    user-select: none;
+    z-index: 1;
+}
+
+.nav_menu__container {
+    flex-grow: 1;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.nav_menu__container-item {
+    padding: 10px;
+    position: relative;
+}
+
+.nav_menu__container-item a {
+    font-size: 1.2rem;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.nav_menu-item:hover>a {
+    color: rgb(247, 0, 0);
+}
+
+.nav_menu-item:hover {
+    background-color: rgba(0, 0, 0, .08);
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+}
+
+.nav_menu-dropdown__menu {
+    display: none;
+}
+
+.nav_menu ul li:hover .nav_menu-dropdown__menu {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(197, 247, 147);
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+}
+
+.nav_menu ul li:hover .nav_menu-dropdown__menu ul {
+    display: block;
+    margin: 10px;
+    text-align: center;
+}
+
+.nav_menu ul li:hover .nav_menu-dropdown__menu ul li {
+    width: 200px;
+    padding: 10px;
+}
+
+.fas {
+    float: right;
+    margin-left: 10px;
+    padding-top: 3px;
+}
+
+.nav_menu-dropdown__menu--side {
+    display: none;
+}
+
+.nav_menu-dropdown__menu--side {
+    position: absolute;
+    top: 0;
+    left: 200px;
+    background-color: rgb(197, 247, 147);
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+}
+
+
+.nav_menu-dropdown__menu ul li:hover .nav_menu-dropdown__menu--side {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 200px;
+    background-color: rgb(197, 247, 147);
+
+
+}
+
+/* .nav_menu {
+    flex-basis: 50%;
     height: 40px;
     display: flex;
     align-items: center;
     padding: 0 5%;
     user-select: none;
     z-index: 1;
-    /* background-color: rgb(17, 57, 57); */
 }
 
 .nav_menu ul {
@@ -94,4 +190,4 @@
     background-color: rgb(197, 247, 147);
 
 
-}
+} */
