@@ -3,7 +3,7 @@ import './NavMenu.css';
 const NavMenu = () => {
     return (
         <nav className='nav_menu'>
-            <ul>
+            <ul className='nav_menu__container'>
                 <li><a>Tabelka</a>
                     <div className="nav_menu-dropdown__menu">
                         <ul>

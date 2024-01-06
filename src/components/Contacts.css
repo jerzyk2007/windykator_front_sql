@@ -1,3 +1,97 @@
 .contacts {
     flex-grow: 1;
+    margin: 0px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    overflow-y: auto;
+    /* background-color: rgb(127, 255, 144); */
+    /* background-color: rgb(194, 228, 161); */
+    /* background-color: #66d8f5; */
+}
+
+.contacts-search {
+    position: sticky;
+    top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* z-index: 1; */
+}
+
+.contacts-search-text {
+    width: 60%;
+    background-color: #ffffff;
+    /* background-color: rgb(197, 247, 147); */
+    font-size: 1.5rem;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+}
+
+.contacts__container {
+    background-color: #d7fcae;
+    margin: 20px;
+    padding: 10px 5px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.contacts__container--name {
+    text-align: center;
+    margin: 5px 10px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    background-color: #fff;
+
+    /* border: 2px solid black; */
+}
+
+.contacts__container--mail,
+.contacts__container--phone,
+.contacts__container--NIP,
+.contacts__container--comment {
+    display: flex;
+    width: 80%;
+    padding: 10px;
+    margin: 10px;
+    /* border-bottom: 2px solid black; */
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    background-color: #fff;
+}
+
+.contacts__container--title {
+    flex-basis: 30%;
+    display: flex;
+    align-items: center;
+}
+
+.contacts__container-item {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.contacts__container-item--context {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contacts__container-item--context>input {
+    height: 1rem;
+    width: 1rem;
+    margin-left: 10px;
 }
