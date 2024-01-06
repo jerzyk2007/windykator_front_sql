@@ -1,12 +1,31 @@
+import { useState } from 'react';
+import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import HeaderNotification from './HeaderNotification';
 import NavMenu from './NavMenu';
 import './Header.css';
 
 const Header = () => {
+
+    const [mobileMenu, setMobileMenu] = useState(false);
+
+    const handleMobileMenu = () => {
+        setMobileMenu(!mobileMenu);
+    };
+
+    const handleCloseMobileMenu = () => {
+        setMobileMenu(false);
+    };
     return (
         <header className='header'>
             <HeaderNotification />
-            <NavMenu />
+            <NavMenu
+                handleCloseMobileMenu={handleCloseMobileMenu}
+                handleMobileMenu={handleMobileMenu}
+                mobileMenu={mobileMenu}
+            />
+            <div className="header-menu">
+                {mobileMenu ? <HiOutlineMenu onClick={handleMobileMenu} /> : <HiOutlineX onClick={handleMobileMenu} />}
+            </div>
         </header>
     );
 };

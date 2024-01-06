@@ -3,3 +3,12 @@
     background-color: rgb(197, 247, 147);
     background-color: rgb(162, 223, 102);
 }
+
+@media screen and (max-width: 960px) {
+
+
+    .footer {
+        height: 40px;
+
+    }
+}
