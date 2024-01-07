@@ -1,21 +1,24 @@
 .header {
-    /* height: 40px; */
-    /* background-color: rgb(197, 247, 147); */
     background-color: rgb(162, 223, 102);
     display: flex;
+    position: relative;
 }
 
 .header-menu {
     display: none;
+    height: 50px;
+
 }
 
 @media screen and (max-width: 960px) {
     .header {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
         justify-content: end;
     }
 
     .header-menu {
-        height: 40px;
         margin: 0 20px;
         font-size: 1.9rem;
         color: #000;

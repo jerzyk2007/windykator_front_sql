@@ -6,9 +6,6 @@
     align-items: center;
     width: 100%;
     overflow-y: auto;
-    /* background-color: rgb(127, 255, 144); */
-    /* background-color: rgb(194, 228, 161); */
-    /* background-color: #66d8f5; */
 }
 
 .contacts-search {
@@ -18,13 +15,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* z-index: 1; */
 }
 
 .contacts-search-text {
     width: 60%;
     background-color: #ffffff;
-    /* background-color: rgb(197, 247, 147); */
     font-size: 1.5rem;
     padding: 10px;
     border-radius: 10px;
@@ -53,8 +48,6 @@
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     background-color: #fff;
-
-    /* border: 2px solid black; */
 }
 
 .contacts__container--mail,
@@ -65,7 +58,6 @@
     width: 80%;
     padding: 10px;
     margin: 10px;
-    /* border-bottom: 2px solid black; */
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     background-color: #fff;

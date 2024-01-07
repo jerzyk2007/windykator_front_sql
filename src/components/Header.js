@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import HeaderNotification from './HeaderNotification';
 import NavMenu from './NavMenu';
+// import MobileMenu from './MobileMenu';
 import './Header.css';
 
 const Header = () => {
@@ -24,7 +25,7 @@ const Header = () => {
                 mobileMenu={mobileMenu}
             />
             <div className="header-menu">
-                {mobileMenu ? <HiOutlineMenu onClick={handleMobileMenu} /> : <HiOutlineX onClick={handleMobileMenu} />}
+                {!mobileMenu ? <HiOutlineMenu onClick={handleMobileMenu} /> : <HiOutlineX onClick={handleMobileMenu} />}
             </div>
         </header>
     );

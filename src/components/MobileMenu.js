@@ -1,6 +1,6 @@
-import './NavMenu.css';
+import './MobileMenu.css';
 
-const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
+const MobileMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     return (
         <nav className='nav_menu'>
             <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'}>
@@ -24,13 +24,15 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         </ul>
                     </div>
                 </li>
+                {/* <li><a>Pages <i className='fas fa-caret-down'></i></a> */}
+
                 <li className='nav_menu__menu-item'><a>Raporty</a>
                     <div className="nav_menu-dropdown__menu">
                         <ul className='nav_menu__menu-dropmenu'>
                             <li className='nav_menu-item-dropmenu'><a>Zbiorczy działu</a></li>
                             <li className='nav_menu-item-dropmenu'><a>Pracownika</a></li>
                             <li className='nav_menu-item-dropmenu'><a>Test
-                                <i className='fas fa-caret-right' ></i>
+                                <i className={!mobileMenu ? 'fas fa-caret-right right' : 'fas fa-caret-left'} ></i>
                             </a>
                                 <div className="nav_menu-dropdown__menu--side">
                                     <ul className='nav_menu__menu--side'>
@@ -65,4 +67,4 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     );
 };
 
-export default NavMenu;
+export default MobileMenu;
