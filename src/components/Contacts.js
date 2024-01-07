@@ -18,7 +18,7 @@ const Contacts = () => {
                         <section className='contacts__container-item'>
                             {contact.mail.map((email, index) => (
                                 <span key={index} className='contacts__container-item--context'>
-                                    <span > {email.email}</span>
+                                    <p > {email.email}</p>
                                     <input
                                         type="checkbox"
                                         checked={email.verify}

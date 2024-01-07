@@ -2,6 +2,7 @@
     background-color: rgb(162, 223, 102);
     display: flex;
     position: relative;
+    z-index: 1;
 }
 
 .header-menu {

@@ -4,6 +4,13 @@
     background-color: rgb(162, 223, 102);
 }
 
+.footer p {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 @media screen and (max-width: 960px) {
 
 
@@ -13,11 +20,4 @@
         bottom: 0;
 
     } */
-
-    .footer p {
-        height: 50px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 }
