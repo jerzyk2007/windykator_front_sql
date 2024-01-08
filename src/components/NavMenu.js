@@ -1,13 +1,17 @@
+import { Link } from 'react-router-dom';
+
 import './NavMenu.css';
 
 const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     return (
         <nav className='nav_menu'>
             <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'}>
-                <li className='nav_menu__menu-item'><a>Tabelka</a>
+                <li className='nav_menu__menu-item'><Link className="nav_menu-link">Tabelka
+                </Link>
                     <div className="nav_menu-dropdown__menu">
                         <ul className='nav_menu__menu-dropmenu'>
-                            <li className='nav_menu-item-dropmenu'><a>Aktualne</a></li>
+                            <li className='nav_menu-item-dropmenu'><Link to="/" className="nav_menu-link" onClick={handleCloseMobileMenu}>Aktualne
+                            </Link></li>
                             <li className='nav_menu-item-dropmenu'><a>Archiwum</a></li>
                             <li className='nav_menu-item-dropmenu'><a>Kancelaria</a>
                             </li>
@@ -19,7 +23,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     <div className="nav_menu-dropdown__menu">
                         <ul className='nav_menu__menu-dropmenu'>
                             <li className='nav_menu-item-dropmenu'><a>Mailing</a></li>
-                            <li className='nav_menu-item-dropmenu'><a>Kontakty</a></li>
+                            <li className='nav_menu-item-dropmenu'><Link to="/contacts" className="nav_menu-link" onClick={handleCloseMobileMenu}>Kontakty
+                            </Link></li>
 
                         </ul>
                     </div>

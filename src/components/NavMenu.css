@@ -39,6 +39,7 @@
     color: rgb(0, 0, 0);
     font-weight: bold;
     padding: 5px;
+    text-decoration: none;
 }
 
 .nav_menu__menu-item:hover>a,

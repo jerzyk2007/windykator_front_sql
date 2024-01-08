@@ -108,9 +108,17 @@ const Contacts = () => {
     useEffect(() => {
         const filteredResults = filteredData.filter(item =>
             ((item.name).toLowerCase()).includes(search.toLowerCase())
-            // || ((item.mail).toLowerCase()).includes(search.toLowerCase())
-        );
+            || (item.mail && (
+                (Array.isArray(item.mail) && item.mail.length > 0 && item.mail.some(email => typeof email === 'string' && email.includes(search)))
+                || (typeof item.mail === 'string' && item.mail.includes(search))
+                || (Array.isArray(item.mail) && item.mail.length > 0 && item.mail.some(emailObj => emailObj.email && emailObj.email.includes(search)))
+                || (typeof item.mail === 'object' && item.mail.email && item.mail.email.includes(search))
+            ))
 
+            || (item.comments && (item.comments).toLowerCase().includes(search.toLowerCase()))
+            || (item.NIP && item.NIP.toString().includes(search))
+        );
+        console.log(filteredResults);
         setContactsData(filteredResults);
     }, [search]);
 
