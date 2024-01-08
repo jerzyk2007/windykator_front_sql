@@ -19,11 +19,10 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
 
     return (
         <nav className='nav_menu'>
-            <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'}  >
-                <li className='nav_menu__menu-item'><Link className="nav_menu-link" onClick={toggleActiveState}>Tabelka
+            <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'} onMouseEnter={() => setMenuActive(true)}>
+                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Tabelka
                 </Link>
-                    {/* <div className="nav_menu-dropdown__menu"> */}
-                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} onMouseLeave={() => setMenuActive(false)}>
+                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'}  >
                         <ul className='nav_menu__menu-dropmenu' >
                             <li className='nav_menu-item-dropmenu'><Link to="/" className="nav_menu-link" onClick={handleLinkClick}>Aktualne
                             </Link></li>
@@ -37,11 +36,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </li>
                         </ul>
                     </div></li>
-                {/* <li className='nav_menu__menu-item'><Link className="nav_menu-link">Dodatki */}
-                <li className='nav_menu__menu-item'><Link className="nav_menu-link" onClick={toggleActiveState}>Dodatki
+                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Dodatki
                 </Link>
-                    {/* <div className="nav_menu-dropdown__menu"> */}
-                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} onMouseLeave={() => setMenuActive(false)}>
+                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Mailing
                             </Link></li>
@@ -51,18 +48,16 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         </ul>
                     </div>
                 </li>
-                <li className='nav_menu__menu-item'><Link className="nav_menu-link" onClick={toggleActiveState}>Raporty
+                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Raporty
                 </Link>
-                    {/* <div className="nav_menu-dropdown__menu"> */}
-                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} onMouseLeave={() => setMenuActive(false)}>
+                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zbiorczy
                             </Link></li>
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Pracownika
                             </Link></li>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link">Test
-
-                                <i className='fas fa-caret-right' ></i>
+                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link">
+                                <i className='fas fa-caret-right' ></i>Test
                             </Link>
                                 <div className="nav_menu-dropdown__menu--side">
                                     <ul className='nav_menu__menu--side'>
@@ -80,10 +75,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         </ul>
                     </div>
                 </li>
-                <li className='nav_menu__menu-item'><Link className="nav_menu-link" onClick={toggleActiveState}>Ustawienia
+                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Ustawienia
                 </Link>
-                    {/* <div className="nav_menu-dropdown__menu"> */}
-                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} onMouseLeave={() => setMenuActive(false)}>
+                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Kolumny tabeli
                             </Link></li>
@@ -91,10 +85,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link></li>
                         </ul>
                     </div></li>
-                <li className='nav_menu__menu-item'><Link className="nav_menu-link" onClick={toggleActiveState}>Użytkownik
+                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Użytkownik
                 </Link>
-                    {/* <div className="nav_menu-dropdown__menu"> */}
-                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} onMouseLeave={() => setMenuActive(false)}>
+                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Dodaj użytkownika
                             </Link></li>

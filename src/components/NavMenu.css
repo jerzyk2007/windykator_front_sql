@@ -211,8 +211,10 @@
     }
 
     .nav_menu-dropdown__menu .fas {
-        float: left;
-        margin-right: 10px;
+        position: absolute;
+        left: 0;
+        /* float: left; */
+        /* margin-left: 20px; */
         padding-top: 3px;
         transform: rotate(180deg);
     }
