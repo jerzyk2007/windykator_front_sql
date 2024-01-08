@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import useData from './hooks/useData';
 
 import './Contacts.css';
 
 const Contacts = () => {
-    const [contactsData, setContactsData] = useState([]);
+    const { contactsData, setContactsData, getContacts } = useData();
+
     const [filteredData, setFilteredData] = useState([]);
     const [search, setSearch] = useState('');
 
-    const contactsItem = contactsData.map((contact, index) => {
+    const contactsItem = filteredData.map((contact, index) => {
         return (
             <section key={index} className="contacts__container">
                 <p className='contacts__container--name'>{contact.name}</p>
@@ -58,55 +59,7 @@ const Contacts = () => {
     });
 
     useEffect(() => {
-        const importData = async () => {
-            try {
-                const result = await axios.get('http://localhost:3100/contacts');
-
-                const processMailAndKeys = result.data.map(contact => {
-                    // Sprawdzanie i dodawanie brakujących kluczy
-                    const processedContact = {
-                        name: contact.kontrahent || null,
-                        mail: contact.mail || [],
-                        phone: contact.telefon || null,
-                        NIP: contact.NIP || null,
-                        comments: contact.uwagi || null,
-                        verify: contact.weryfikacja || false
-                    };
-                    // Przetwarzanie maili
-                    if (processedContact.mail && typeof processedContact.mail === 'string') {
-                        const emails = processedContact.mail.split(';').map((email) => email.trim());
-                        // processedContact.mail = emails;
-                        processedContact.mail = emails.map(email => {
-                            return {
-                                email,
-                                verify: contact.weryfikacja
-                            };
-                        });
-                    } else {
-                        processedContact.mail = [];
-                    }
-                    if (processedContact.phone) {
-                        processedContact.phone = [{
-                            phone: processedContact.phone,
-                            verify: contact.weryfikacja
-                        }];
-                    }
-                    else {
-                        processedContact.phone = null;
-                    }
-                    return processedContact;
-                });
-                setContactsData(processMailAndKeys);
-                setFilteredData(processMailAndKeys);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-        importData();
-    }, []);
-
-    useEffect(() => {
-        const filteredResults = filteredData.filter(item =>
+        const filteredResults = contactsData.filter(item =>
             ((item.name).toLowerCase()).includes(search.toLowerCase())
             || (item.mail && (
                 (Array.isArray(item.mail) && item.mail.length > 0 && item.mail.some(email => typeof email === 'string' && email.includes(search)))
@@ -118,9 +71,16 @@ const Contacts = () => {
             || (item.comments && (item.comments).toLowerCase().includes(search.toLowerCase()))
             || (item.NIP && item.NIP.toString().includes(search))
         );
-        console.log(filteredResults);
-        setContactsData(filteredResults);
+        setFilteredData(filteredResults);
     }, [search]);
+
+    useEffect(() => {
+        setFilteredData(contactsData);
+    }, [contactsData]);
+
+    useEffect(() => {
+        getContacts();
+    }, []);
 
     return (
         <section className='contacts'>

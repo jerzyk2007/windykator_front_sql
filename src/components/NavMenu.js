@@ -5,16 +5,12 @@ import './NavMenu.css';
 const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     const [isMenuActive, setMenuActive] = useState(false);
 
-    console.log(mobileMenu);
-
-    const toggleActiveState = () => {
-        setMenuActive(!isMenuActive);
-    };
 
     const handleLinkClick = () => {
-        handleCloseMobileMenu();
         setMenuActive(false);
-
+        if (mobileMenu) {
+            handleCloseMobileMenu();
+        }
     };
 
     return (
