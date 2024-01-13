@@ -4,6 +4,7 @@ const DataContext = createContext({});
 
 export const DataProvider = ({ children }) => {
     const [contactsData, setContactsData] = useState([]);
+    const [pleaseWait, setPleaseWait] = useState(false);
 
     const getContacts = async () => {
         try {
@@ -18,7 +19,7 @@ export const DataProvider = ({ children }) => {
 
 
     return (
-        <DataContext.Provider value={{ contactsData, setContactsData, getContacts }}>
+        <DataContext.Provider value={{ contactsData, setContactsData, getContacts, pleaseWait, setPleaseWait }}>
             {children}
         </DataContext.Provider>
     );

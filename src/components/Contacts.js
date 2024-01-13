@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import axios, { axiosPrivate } from '../api/axios';
-// import useData from './hooks/useData';
+import useData from './hooks/useData';
+import PleaseWait from './PleaseWait';
 
 import './Contacts.css';
 
 const Contacts = () => {
+    const { pleaseWait, setPleaseWait } = useData();
+
     const [contactsData, setContactsData] = useState([]);
     const [search, setSearch] = useState('');
 
@@ -29,8 +32,6 @@ const Contacts = () => {
                         ))}
                     </section>
                 </section>}
-
-
                 {contact.phones.length > 0 && (
                     <section className='contacts__container--phone'>
                         <span className='contacts__container--title'>Telefon:</span>
@@ -63,16 +64,20 @@ const Contacts = () => {
     const searchResult = async (e) => {
         e.preventDefault();
         if (search.length > 2) {
+            setPleaseWait(true);
             const result = await axios.get(`/contacts/getSearch/${search}`);
             setContactsData(result.data);
-            console.log(result.data);
+            setPleaseWait(false);
         }
     };
 
-
+    useEffect(() => {
+        setContactsData([]);
+    }, [search]);
 
     return (
-        <section className='contacts'>
+
+        pleaseWait ? <PleaseWait /> : <section className='contacts'>
             <form
                 className="contacts-search"
                 onSubmit={searchResult}
@@ -90,6 +95,7 @@ const Contacts = () => {
             </form>
             {contactsItem}
         </section>
+
     );
 };
 

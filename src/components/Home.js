@@ -1,14 +1,15 @@
-import { useState } from 'react';
 import { axiosPrivate } from '../api/axios';
 import axios from '../api/axios';
 import useData from './hooks/useData';
+import PleaseWait from './PleaseWait';
 import './Home.css';
 
 const Home = () => {
-    const { contactsData, setContactsData, getContacts } = useData();
+    const { pleaseWait, setPleaseWait } = useData();
 
 
     const handleFileChange = async (e) => {
+        setPleaseWait(true);
         const file = e.target.files[0];
         if (!file) return console.log('Brak pliku');
         if (!file.name.endsWith('.xlsx')) {
@@ -25,7 +26,8 @@ const Home = () => {
                 },
             });
 
-            console.log(response.data);
+            setPleaseWait(false);
+
         } catch (error) {
             console.error('Error uploading file:', error);
         }
@@ -44,8 +46,7 @@ const Home = () => {
     };
 
     return (
-        <div className='home'>
-
+        pleaseWait ? <PleaseWait /> : <div className='home'>
             <input type="file" name="uploadfile" id="xlsx" style={{ display: "none" }} onChange={handleFileChange} />
             <label htmlFor="xlsx" className="add_data_file-click-me">Click me to upload xlsx file</label>
             <br />
