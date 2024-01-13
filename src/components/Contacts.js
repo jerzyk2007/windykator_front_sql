@@ -12,6 +12,9 @@ const Contacts = () => {
         return (
             <section key={index} className="contacts__container">
                 <p className='contacts__container--name'>{contact.name}</p>
+                {/* {contact.name.map((item, index) => (
+                    <p className='contacts__container--name' key={index}>{item}</p>
+                ))} */}
                 {contact.emails.length > 0 && <section className='contacts__container--mail'>
                     <span className='contacts__container--title'>Email:</span>
                     <section className='contacts__container-item'>
@@ -62,6 +65,7 @@ const Contacts = () => {
         if (search.length > 2) {
             const result = await axios.get(`/contacts/getSearch/${search}`);
             setContactsData(result.data);
+            console.log(result.data);
         }
     };
 
