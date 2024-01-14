@@ -32,13 +32,14 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </li>
                         </ul>
                     </div></li>
-                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Dodatki
+                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Kontakty
                 </Link>
                     <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Mailing
+
+                            <li className='nav_menu-item-dropmenu'><Link to="/contacts" className="nav_menu-link" onClick={handleLinkClick}>Wyszukaj
                             </Link></li>
-                            <li className='nav_menu-item-dropmenu'><Link to="/contacts" className="nav_menu-link" onClick={handleLinkClick}>Kontakty
+                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Dodaj
                             </Link></li>
 
                         </ul>
