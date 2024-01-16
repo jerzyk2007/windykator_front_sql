@@ -8,6 +8,13 @@ import './ContactItem.css';
 const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, contactsData }) => {
     // console.log(conctactItemData);
 
+
+    // do zrobienia
+    // sprawdzić czy się nie dublują maile
+    // porównanie czy jakies dane w kontacie się zmieniły, żeby był sens zapisywac do bazy danych
+    // zapis do bazy danych
+
+
     const [contact, setContact] = useState(conctactItemData);
     const [isValidEmail, setIsValidEmail] = useState(false);
     const [isValidPhone, setIsValidPhone] = useState(false);
@@ -228,7 +235,8 @@ const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, co
             </section>
             <section className="contact_item__action-panel">
                 <button className='action-panel--cancel' onClick={() => setContactItemData({})}>Anuluj</button>
-                <button className='action-panel--OK' onClick={handleUpdateContact}  >Zapisz</button>
+                <button className='action-panel--OK' onClick={handleUpdateContact} disabled={isValidPhone && isValidEmail ? isValidPhone.includes(false) || isValidEmail.includes(false) : null}
+                >Zapisz</button>
             </section>
         </section>
     );
