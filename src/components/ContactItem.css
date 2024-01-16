@@ -4,6 +4,7 @@
     flex-direction: column;
     align-items: center;
     background-color: #bce7fb;
+    font-family: Helvetica, sans-serif;
 }
 
 .contact_item--name,
@@ -19,8 +20,7 @@
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     background-color: #fff;
-    font-size: 1.2rem;
-    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.3rem;
 }
 
 
@@ -33,9 +33,11 @@
     display: flex;
 }
 
-.contact_item--NIP {
-    align-items: center;
+.contact_item--name {
+    height: 5rem;
+    display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .contact_item__action-panel {
@@ -113,6 +115,8 @@
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     font-size: 1.2rem;
+    font-family: Helvetica, sans-serif;
+    margin: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -121,10 +125,10 @@
 .contact_item__item--mail,
 .contact_item__item--phone {
     width: 80%;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     margin: 5px 0;
     padding: 10px;
-    font-family: Arial, Helvetica, sans-serif;
+    border: none;
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     text-align: center;
@@ -210,7 +214,6 @@
         font-size: 1rem;
         margin: 5px 0;
         padding: 10px;
-        font-family: Arial, Helvetica, sans-serif;
         border-radius: 10px;
         box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
         text-align: center;

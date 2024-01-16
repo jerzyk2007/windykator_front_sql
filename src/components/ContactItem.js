@@ -97,7 +97,9 @@ const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, co
                 <section className="contact_item__add">
                     <span className='contact_item--title'>NIP:</span>
                 </section>
-                <p className='contact_item__item--text'>{contact.NIP}</p>
+                <section className='contact_item__container'>
+                    <p className='contact_item__item--text'>{contact.NIP}</p>
+                </section>
             </section>
 
             <section className='contact_item--mail' >
