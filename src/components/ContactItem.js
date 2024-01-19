@@ -6,7 +6,6 @@ import { FcCancel } from "react-icons/fc";
 import './ContactItem.css';
 
 const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, contactsData }) => {
-    // console.log(conctactItemData);
 
 
     // do zrobienia
@@ -91,25 +90,37 @@ const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, co
 
     return (
         <section className="contact_item">
-            <p className='contact_item--name'>{contact.name}</p>
 
-            <section className='contact_item--NIP'>
-                <section className="contact_item__add">
-                    <span className='contact_item--title'>NIP:</span>
+            <section className='contact_item__container'>
+                <section className='contact_item__title'>
                 </section>
-                <section className='contact_item__container'>
-                    <p className='contact_item__item--text'>{contact.NIP}</p>
+                <section className='contact_item__context'>
+                    <p className='contact_item--text'>{contact.name}</p>
+                </section>
+                <section className='contact_item__settings'>
                 </section>
             </section>
 
-            <section className='contact_item--mail' >
-                <section className="contact_item__add">
+            <section className='contact_item__container'>
+                <section className='contact_item__title'>
+                    <span className='contact_item--name'>NIP:</span>
+                </section>
+                <section className='contact_item__context'>
+                    <p className='contact_item--text'>{contact.NIP}</p>
+                </section>
+                <section className='contact_item__settings'>
+                </section>
+            </section>
+
+            <section className='contact_item__container'>
+                <section className='contact_item__title'>
                     <button className='contact_item--title--add' onClick={handleAddMail} disabled={isValidEmail ? isValidEmail.includes(false) : null}>Email:
                     </button>
                 </section>
-                <section className='contact_item__item'>
+
+                <section className='contact_item__context'>
                     {contact.emails.map((email, index) => (
-                        <span key={index} className='contact_item__item--context'>
+                        <section key={index} className='contact_item__item--context'>
                             <input
                                 className='contact_item__item--mail'
                                 type='text'
@@ -125,7 +136,12 @@ const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, co
                                 }}
                             />
                             {isValidEmail[index] ? < SiVerizon className='contact_item__item--verify-mail' /> : <FcCancel className='contact_item__item--verify-mail' />}
-
+                        </section>
+                    ))}
+                </section>
+                <section className='contact_item__settings'>
+                    {contact.emails.map((email, index) => (
+                        <section key={index} className='contact_item__item--context'>
                             <input
                                 className='contact_item-checkbox'
                                 type="checkbox"
@@ -140,19 +156,19 @@ const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, co
                                     }));
                                 }}
                             />
-                        </span>
+                        </section>
                     ))}
                 </section>
             </section>
 
-            <section className='contact_item--phone'>
-                <section className="contact_item__add">
+            <section className='contact_item__container'>
+                <section className='contact_item__title'>
                     <button className='contact_item--title--add' onClick={handleAddPhone} disabled={isValidPhone ? isValidPhone.includes(false) : null}>Telefon:</button>
                 </section>
 
-                <section className='contact_item__item'>
+                <section className='contact_item__context'>
                     {contact.phones.map((phone, index) => (
-                        <span key={index} className='contact_item__item--context'>
+                        <section key={index} className='contact_item__item--context'>
                             <input
                                 className='contact_item__item--phone'
                                 type='text'
@@ -168,6 +184,13 @@ const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, co
                                 }}
                             />
                             {isValidPhone[index] ? < SiVerizon className='contact_item__item--verify-mail' /> : <FcCancel className='contact_item__item--verify-mail' />}
+                        </section>
+                    ))}
+                </section>
+                <section className='contact_item__settings'>
+                    {contact.phones.map((phone, index) => (
+                        <section key={index} className='contact_item__item--context'>
+
                             <input
                                 className='contact_item-checkbox'
                                 type="checkbox"
@@ -182,64 +205,73 @@ const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, co
                                     }));
                                 }}
                             />
-                        </span>
+                        </section>
                     ))}
                 </section>
             </section>
 
-            <section className='contact_item--comment'>
-                <section className="contact_item__add">
-                    <section className="contact_item__add">
-                        <span className='contact_item--title--add'>Uwagi:</span>
-                    </section>
+
+
+
+            <section className='contact_item__container'>
+                <section className="contact_item__title">
+                    <span className='contact_item--name'>Uwagi:</span>
                 </section>
-                <textarea
-                    className='contact_item__item--edit'
-                    value={contact.comment ? contact.comment : ''}
-                    onChange={(e) => setContact(prev => {
-                        return {
-                            ...prev,
-                            comment: e.target.value
-                        };
-                    })}
-                    rows={5}
-                />
+                <section className='contact_item__context'>
+                    <textarea
+                        className='contact_item__item--edit'
+                        value={contact.comment ? contact.comment : ''}
+                        onChange={(e) => setContact(prev => {
+                            return {
+                                ...prev,
+                                comment: e.target.value
+                            };
+                        })}
+                        rows={5}
+                    />
+                </section>
+                <section className='contact_item__settings'>
+                </section>
             </section>
-            <section className='contact_item--mailing'>
-                <section className="contact_item__add">
-                    <span className='contact_item--title--add'>Mailing:</span>
+
+            <section className='contact_item__container'>
+                <section className='contact_item__title'>
+                    <span className='contact_item--name'>Mailing:</span>
                 </section>
-                <section className='contact_item__item'>
-                    <span className='contact_item__item--context' >
-                        <span>Ile dni przed terminem wysłać:</span>
-                        <section className='contact_item__item--mailing-time'>
+                <section className='contact_item__context'>
+                    <section className='contact_item__mailing'>
+                        <span className='contact_item__mailing--info '>Ile dni przed terminiem:</span>
+                        <section className='contact_item__mailing--settings'>
                             <IoIosArrowDown className='mailing-time--down' onClick={() => handleChangeMailingTime('down')} />
                             <span className='mailing-time--info'>{contact.mailing.time}</span>
                             <IoIosArrowUp className='mailing-time--up' onClick={() => handleChangeMailingTime('up')} />
-
-                            <input
-                                className='contact_item-checkbox'
-                                type='checkbox'
-                                checked={contact.mailing.sending}
-                                onChange={() => setContact(prev => {
-                                    return {
-                                        ...prev,
-                                        mailing: {
-                                            ...prev.mailing,
-                                            sending: !prev.mailing.sending
-                                        }
-                                    };
-                                })}
-                            />
                         </section>
-                    </span>
+                    </section>
+                </section>
+                <section className='contact_item__settings'>
+                    <input
+                        className='contact_item-checkbox'
+                        type='checkbox'
+                        checked={contact.mailing.sending}
+                        onChange={() => setContact(prev => {
+                            return {
+                                ...prev,
+                                mailing: {
+                                    ...prev.mailing,
+                                    sending: !prev.mailing.sending
+                                }
+                            };
+                        })}
+                    />
                 </section>
             </section>
-            <section className="contact_item__action-panel">
+
+            <section className='contact_item__container--panel'>
                 <button className='action-panel--cancel' onClick={() => setContactItemData({})}>Anuluj</button>
                 <button className='action-panel--OK' onClick={handleUpdateContact} disabled={isValidPhone && isValidEmail ? isValidPhone.includes(false) || isValidEmail.includes(false) : null}
                 >Zapisz</button>
             </section>
+
         </section>
     );
 };

@@ -1,51 +1,179 @@
 .contact_item {
+    width: 60%;
+    margin: 10px auto;
     flex-grow: 1;
+    background-color: #d5eef5;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-y: auto;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.contact_item__container {
+    width: 100%;
+    display: flex;
+    margin: 5px 0;
+
+}
+
+.contact_item__title {
+    width: 20%;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.contact_item__context {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.contact_item__settings {
+    width: 10%;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #bce7fb;
-    font-family: Helvetica, sans-serif;
+    justify-content: center;
 }
 
-.contact_item--name,
-.contact_item--mail,
-.contact_item--phone,
-.contact_item--NIP,
-.contact_item--comment,
-.contact_item--mailing {
-    width: 55%;
+.contact_item--name {
+    width: 80%;
     text-align: center;
     margin: 5px 10px;
     padding: 15px;
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     background-color: #fff;
-    font-size: 1.3rem;
-}
-
-
-
-.contact_item--mail,
-.contact_item--phone,
-.contact_item--NIP,
-.contact_item--comment,
-.contact_item--mailing {
-    display: flex;
-}
-
-.contact_item--name {
-    height: 5rem;
+    font-size: 1.2rem;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.contact_item__action-panel {
-    width: 30%;
+.contact_item--text {
+    flex-grow: 1;
+    text-align: center;
+    padding: 5px;
+    margin: 5px 0;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    background-color: #fff;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.contact_item--title--add {
+    width: 80%;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    font-size: 1.2rem;
+    background-color: #d7fcae;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contact_item__item--context {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.contact_item__item--mail,
+.contact_item__item--phone {
+    width: 100%;
+    font-size: 1.2rem;
+    margin: 5px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    text-align: center;
+}
+
+.contact_item__item--verify-mail {
+    color: green;
+    font-size: 1.2rem;
+    margin: 0 10px;
+}
+
+.contact_item-checkbox {
+    height: 1.4rem;
+    width: 1.4rem;
+    margin-left: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+}
+
+.contact_item__item--edit {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+}
+
+.contact_item__mailing {
+    display: flex;
+    justify-content: space-between;
+}
+
+.contact_item__mailing--info,
+.contact_item__mailing--settings {
+    flex-basis: 45%;
+    font-size: 1.2rem;
+    padding: 10px;
+    background-color: #fff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact_item__mailing--settings {
+    flex-basis: 45%;
+    background-color: #fff;
+    justify-content: space-evenly;
+}
+
+.mailing-time--down,
+.mailing-time--up {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.mailing-time--down:active,
+.mailing-time--up:active {
+    color: red;
+}
+
+.mailing-time--info {
+    user-select: none;
+}
+
+.contact_item__container--panel {
+    width: 60%;
     margin: 5px 10px;
     padding: 15px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 .action-panel--OK,
@@ -69,183 +197,68 @@
     background-color: #7fb0ef;
 }
 
-.contact_item__item {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.contact_item__item--context {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-
-}
-
-.contact_item__item--edit {
-    flex-grow: 1;
-    padding: 10px;
-    margin: 5px 0 5px 10px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-}
-
-.contact_item__add {
-    flex-basis: 20%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.contact_item--title--add {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    font-size: 1.2rem;
-    background-color: #d7fcae;
-    cursor: pointer;
-}
-
-.contact_item__item--text {
-    width: 85%;
-    min-height: 3rem;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    font-size: 1.2rem;
-    font-family: Helvetica, sans-serif;
-    margin: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.contact_item__item--mail,
-.contact_item__item--phone {
-    width: 80%;
-    font-size: 1.3rem;
-    margin: 5px 0;
-    padding: 10px;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    text-align: center;
-}
-
-.contact_item__item--verify-mail {
-    color: green;
-}
-
-
-
-.contact_item-checkbox {
-    height: 1.4rem;
-    width: 1.4rem;
-    margin-left: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-}
-
-.contact_item__item--mailing-time {
-    width: 30%;
-    height: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.mailing-time--down,
-.mailing-time--up {
-    font-size: 2rem;
-    cursor: pointer;
-}
-
-.mailing-time--down:active,
-.mailing-time--up:active {
-    color: red;
-}
-
-.mailing-time--info {
-    user-select: none;
-}
-
-.contact_item__item--context>span {
-    flex-grow: 1;
-}
 
 @media screen and (max-width: 960px) {
 
-    .contact_item--name,
-    .contact_item--mail,
-    .contact_item--phone,
-    .contact_item--NIP,
-    .contact_item--comment,
-    .contact_item--mailing {
+    .contact_item {
         width: 95%;
-        margin: 5px;
-        padding: 5px 10px;
-        font-size: 1rem;
+        /* padding: 5px; */
+        /* margin: 0 auto; */
     }
 
-    .contact_item__action-panel {
-        width: 100%;
-        justify-content: space-evenly;
+    .contact_item--name {
+        font-size: .8rem;
     }
 
-    .contact_item__add {
-        flex-basis: 15%;
+    .contact_item--text {
+        font-size: .8rem;
     }
 
     .contact_item--title--add {
-        padding: 10px;
-        font-size: 1rem;
-    }
-
-    .contact_item__item--text {
-        width: 80%;
-        min-height: 2rem;
-        font-size: 1rem;
+        font-size: .8rem;
     }
 
     .contact_item__item--mail,
     .contact_item__item--phone {
-        width: 70%;
-        font-size: 1rem;
-        margin: 5px 0;
-        padding: 10px;
-        border-radius: 10px;
-        box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-        text-align: center;
+        font-size: .8rem;
+
     }
 
-    .contact_item__item--phone {
-        width: 60%;
+    .contact_item__item--verify-mail {
+        font-size: .8rem;
     }
 
     .contact_item-checkbox {
         height: 1rem;
         width: 1rem;
-        margin-left: 0px;
-        /* margin-right: 10px; */
-
+        margin-right: 10px;
     }
 
-    .contact_item__item--mailing-time {
-        width: 40%;
+    .contact_item__item--edit {
+        font-size: .8rem;
+    }
+
+    .contact_item__mailing--info,
+    .contact_item__mailing--settings {
+        font-size: .8rem;
+        text-align: center;
     }
 
     .mailing-time--down,
     .mailing-time--up {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
 
-    .mailing-time--up {
-        margin-right: 10px;
+    .contact_item__container--panel {
+        width: 90%;
     }
 
-    .contact_item__item--context>span {
-        flex-grow: 1;
-        padding: 10px;
+    .action-panel--OK,
+    .action-panel--cancel {
+        font-size: .8rem;
+    }
+
+    .action-panel--cancel {
+        background-color: #f69797;
     }
 }

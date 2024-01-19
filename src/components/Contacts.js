@@ -25,9 +25,6 @@ const Contacts = () => {
                     <span className='contacts__container--title'>NIP:</span>
                     <span className='contacts__container-item--context'>{contact.NIP}</span>
                 </section>}
-                {/* {contact.name.map((item, index) => (
-                    <p className='contacts__container--name' key={index}>{item}</p>
-                ))} */}
                 {contact.emails.length > 0 && <section className='contacts__container--mail' >
                     <span className='contacts__container--title'>Email:</span>
                     <section className='contacts__container-item'>
@@ -87,9 +84,6 @@ const Contacts = () => {
         searchRef.current.focus();
     }, []);
 
-    useEffect(() => {
-        // console.log(contactsData);
-    }, [conctactItemData]);
 
     return (
 
