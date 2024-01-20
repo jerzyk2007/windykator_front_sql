@@ -19,52 +19,139 @@ const Contacts = () => {
 
     const contactsItem = contactsData.map((contact, index) => {
         return (
-            <section key={index} className="contacts__container" >
-                <p className='contacts__container--name'>{contact.name}</p>
-                {contact.NIP && <section className='contacts__container--NIP'>
-                    <span className='contacts__container--title'>NIP:</span>
-                    <span className='contacts__container-item--context'>{contact.NIP}</span>
-                </section>}
-                {contact.emails.length > 0 && <section className='contacts__container--mail' >
-                    <span className='contacts__container--title'>Email:</span>
-                    <section className='contacts__container-item'>
-                        {contact.emails.map((email, index) => (
-                            <span key={index} className='contacts__container-item--context'>
-                                <p > {email.email}</p>
+            <section className="contacts__container" key={index}>
+                <section className="contacts__container--item" >
+                    <section className='contacts__title'></section>
+                    <section className='contacts-context'>
+                        <p className='contacts__container--text'>{contact.name}</p>
+                    </section>
+                    <section className='contacts__settings'></section>
+                </section>
+                {
+                    contact.NIP &&
+                    <section className="contacts__container--item" >
+                        <section className='contacts__title'>
+                            <span className='contacts__container--name'>NIP:</span>
+                        </section>
+                        <section className='contacts-context'>
+                            <p className='contacts__container--text'>{contact.NIP}</p>
+                        </section>
+                        <section className='contacts__settings'></section>
+                    </section>
+                }
+                {
+                    contact.emails.length > 0 &&
+                    <section className="contacts__container--item" >
+                        <section className='contacts__title'>
+                            <span className='contacts__container--name'>Email:</span>
+                        </section>
+                        <section className='contacts-context'>
+                            {contact.emails.map((email, index) =>
+                                <p className='contacts__container--text' key={index}>{email.email}</p>
+                            )}
+
+                        </section>
+                        <section className='contacts__settings'>
+                            {contact.emails.map((email, index) =>
                                 <input
+                                    className='contacts__settings--checkbox'
+                                    key={index}
                                     type="checkbox"
                                     checked={email.verify}
                                     readOnly />
-                            </span>
-                        ))}
-                    </section>
-                </section>}
-                {contact.phones.length > 0 && (
-                    <section className='contacts__container--phone'>
-                        <span className='contacts__container--title'>Telefon:</span>
-                        <section className='contacts__container-item'>
-                            {contact.phones.map((phone, index) => (
-                                <span key={index} className='contacts__container-item--context'>
-                                    <span > {phone.phone}</span>
-                                    <input
-                                        type="checkbox"
-                                        checked={phone.verify}
-                                        readOnly />
-                                </span>
-                            ))}
+                            )}
                         </section>
-                    </section>)
+                    </section>
                 }
+                {
+                    contact.phones.length > 0 &&
+                    <section className="contacts__container--item" >
+                        <section className='contacts__title'>
+                            <span className='contacts__container--name'>Telefon:</span>
+                        </section>
+                        {/* zamiana 9 cyfrowego numeru na 111-222-333 */}
+                        <section className='contacts-context'>
+                            {contact.phones.map((phone, index) =>
+                                <p className='contacts__container--text' key={index}>
+                                    {`${phone.phone.toString().substring(0, 3)}-${phone.phone.toString().substring(3, 6)}-${phone.phone.toString().substring(6, 9)}`}
+                                </p>
+                            )}
 
+                        </section>
 
-                {contact.comment && <section className='contacts__container--comment'>
-                    <span className='contacts__container--title'>Uwagi:</span>
-                    <span className='contacts__container-item--context' style={{ marginLeft: "20px" }}>{contact.comment}</span>
-                </section>}
+                        <section className='contacts__settings'>
+                            {contact.phones.map((phone, index) =>
+                                <input
+                                    className='contacts__settings--checkbox'
+                                    key={index}
+                                    type="checkbox"
+                                    checked={phone.verify}
+                                    readOnly />
+                            )}
+                        </section>
+                    </section>
+                }
+                {
+                    contact.comment &&
+                    <section className="contacts__container--item" >
+                        <section className='contacts__title'>
+                            <span className='contacts__container--name'>Uwagi:</span>
+                        </section>
+                        <section className='contacts-context'>
+                            <p className='contacts__container--text'>{contact.comment}</p>
+                        </section>
+                        <section className='contacts__settings'></section>
+                    </section>
+                }
                 <LiaEditSolid className="contacts__container--edit" onClick={() => setContactItemData(contact)} />
-            </section>
-        );
+            </section>);
     });
+
+    //         {
+    //             contact.emails.length > 0 &&
+    //             <section className='contacts__container--mail' >
+    //                 <span className='contacts__container--title'>Email:</span>
+    //                 <section className='contacts__container-item'>
+    //                     {contact.emails.map((email, index) => (
+    //                         <span key={index} className='contacts__container-item--context'>
+    //                             <p > {email.email}</p>
+    //                             <input
+    //                                 type="checkbox"
+    //                                 checked={email.verify}
+    //                                 readOnly />
+    //                         </span>
+    //                     ))}
+    //                 </section>
+    //             </section>;
+    // }
+    //         {
+    //             contact.phones.length > 0 && (
+    //                 <section className='contacts__container--phone'>
+    //                     <span className='contacts__container--title'>Telefon:</span>
+    //                     <section className='contacts__container-item'>
+    //                         {contact.phones.map((phone, index) => (
+    //                             <span key={index} className='contacts__container-item--context'>
+    //                                 <span > {phone.phone}</span>
+    //                                 <input
+    //                                     type="checkbox"
+    //                                     checked={phone.verify}
+    //                                     readOnly />
+    //                             </span>
+    //                         ))}
+    //                     </section>
+    //                 </section>);
+    // }
+
+
+    //         {
+    //             contact.comment && <section className='contacts__container--comment'>
+    //                 <span className='contacts__container--title'>Uwagi:</span>
+    //                 <span className='contacts__container-item--context' style={{ marginLeft: "20px" }}>{contact.comment}</span>
+    //             </section>;
+    // }
+    //         <LiaEditSolid className="contacts__container--edit" onClick={() => setContactItemData(contact)} />
+    //         );
+
 
     const searchResult = async (e) => {
         e.preventDefault();
@@ -87,25 +174,26 @@ const Contacts = () => {
 
     return (
 
-        pleaseWait ? <PleaseWait /> : conctactItemData.name ? <ContactItem conctactItemData={conctactItemData} setContactItemData={setContactItemData} setContactsData={setContactsData} contactsData={contactsData} /> : <section className='contacts'>
-            <form
-                className="contacts-search"
-                onSubmit={searchResult}
-            >
-                <input
-                    className='contacts-search-text'
-                    autoComplete='off'
-                    id="search"
-                    type="text"
-                    ref={searchRef}
-                    name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
-                    placeholder="Wyszukaj kontakt (min 3 znaki)"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-            </form>
-            {contactsItem}
-        </section>
+        pleaseWait ? <PleaseWait /> : conctactItemData.name ? <ContactItem conctactItemData={conctactItemData} setContactItemData={setContactItemData} setContactsData={setContactsData} contactsData={contactsData} /> :
+            <section className='contacts'>
+                <form
+                    className="contacts-search"
+                    onSubmit={searchResult}
+                >
+                    <input
+                        className='contacts-search-text'
+                        autoComplete='off'
+                        id="search"
+                        type="text"
+                        ref={searchRef}
+                        name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
+                        placeholder="Wyszukaj kontakt (min 3 znaki)"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                </form>
+                {contactsItem}
+            </section>
 
     );
 };
