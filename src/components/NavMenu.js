@@ -20,7 +20,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 </Link>
                     <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'}  >
                         <ul className='nav_menu__menu-dropmenu' >
-                            <li className='nav_menu-item-dropmenu'><Link to="/" className="nav_menu-link" onClick={handleLinkClick}>Aktualne
+                            <li className='nav_menu-item-dropmenu'><Link to="/actual-table" className="nav_menu-link" onClick={handleLinkClick}>Aktualne
                             </Link></li>
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Archiwum
                             </Link></li>
@@ -72,11 +72,11 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         </ul>
                     </div>
                 </li>
-                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Ustawienia
+                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >System
                 </Link>
                     <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Kolumny tabeli
+                            <li className='nav_menu-item-dropmenu'><Link to="/add-data" className="nav_menu-link" onClick={handleLinkClick}>Dodaj dane
                             </Link></li>
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Ustawienia
                             </Link></li>
