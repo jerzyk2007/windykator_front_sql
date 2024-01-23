@@ -4,7 +4,7 @@
     /* background-color: #b2ff9a; */
     display: flex;
     position: relative;
-    z-index: 1;
+    z-index: 3;
 }
 
 .header-menu {

@@ -1,3 +1,27 @@
-.actual-table {
+.actual_table {
     flex-grow: 1;
+    width: 100vw;
+    overflow-x: scroll;
+}
+
+.actual_table tr:nth-of-type(odd) td {
+    background-color: #f1f3ed;
+
+}
+
+.actual_table td {
+    cursor: pointer;
+}
+
+.table-save-settings {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    z-index: 5;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.table-save-settings:active {
+    color: red;
 }

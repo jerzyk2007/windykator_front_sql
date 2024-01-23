@@ -22,12 +22,12 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         <ul className='nav_menu__menu-dropmenu' >
                             <li className='nav_menu-item-dropmenu'><Link to="/actual-table" className="nav_menu-link" onClick={handleLinkClick}>Aktualne
                             </Link></li>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Archiwum
+                            <li className='nav_menu-item-dropmenu'><Link to="/archive-table" className="nav_menu-link" onClick={handleLinkClick}>Archiwum
                             </Link></li>
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Kancelaria
                             </Link>
                             </li>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Kpl dane
+                            <li className='nav_menu-item-dropmenu'><Link to="/all-data-table" className="nav_menu-link" onClick={handleLinkClick}>Kpl dane
                             </Link>
                             </li>
                         </ul>

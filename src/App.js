@@ -14,7 +14,9 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/actual-table' element={<ActualTable />} />
+          <Route path='/actual-table' element={<ActualTable info={"actual"} />} />
+          <Route path='/archive-table' element={<ActualTable info={"archive"} />} />
+          <Route path='/all-data-table' element={<ActualTable info={"all"} />} />
           <Route path='/contacts' element={<Contacts />} />
           <Route path='/add-data' element={<AddDataFromFile />} />
         </Routes>
