@@ -17,7 +17,6 @@ const ActualTable = ({ info }) => {
     const [documents, setDocuments] = useState([]);
     const [customFilter, setCustomFilter] = useState([]);
     const [columnSettings, setColumnSettings] = useState({});
-
     const [columnVisibility, setColumnVisibility] = useState({
         // NUMER: true,
         // KONTRAHENT: true,
@@ -42,101 +41,9 @@ const ActualTable = ({ info }) => {
         // NRREJESTRACYJNY: 200,
         // UWAGI: 200,
     });
+
     const [densityChange, setDensityChange] = useState('compact');
-    // const [columns, setColumns] = useState([
-    //     {
-    //         accessorKey: 'NUMER',
-    //         header: 'Faktura',
-    //         filterVariant: 'text',
-    //         enableResizing: true,
-    //         enableHiding: false,
-    //         enablePinning: false,
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.NUMER ? columnSize.NUMER : 180,
-    //     },
-    //     {
-    //         accessorKey: 'KONTRAHENT',
-    //         header: 'Kontrahent',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.KONTRAHENT ? columnSize.KONTRAHENT : 180,
-    //     },
-    //     {
-    //         accessorKey: 'DZIAL',
-    //         header: 'Dział',
-    //         filterVariant: 'multi-select',
-    //         filterSelectOptions: customFilter,
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.DZIAL ? columnSize.DZIAL : 120,
-    //     },
-    //     {
-    //         accessorKey: 'NRNADWOZIA',
-    //         header: 'VIN',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.NRNADWOZIA ? columnSize.NRNADWOZIA : 120,
-    //     },
-    //     {
-    //         accessorKey: 'W_BRUTTO',
-    //         header: 'Brutto',
-    //         Cell: ({ cell }) => {
-    //             const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
-    //                 minimumFractionDigits: 2,
-    //                 maximumFractionDigits: 2,
-    //                 useGrouping: true,
-    //             });
-    //             return `${formattedSalary}`;
-    //         },
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.W_BRUTTO ? columnSize.W_BRUTTO : 140,
-    //     },
-    //     {
-    //         accessorKey: 'DOROZLICZ_',
-    //         header: 'Brakuje',
-    //         Cell: ({ cell }) => {
-    //             const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
-    //                 minimumFractionDigits: 2,
-    //                 maximumFractionDigits: 2,
-    //                 useGrouping: true,
-    //             });
-    //             return `${formattedSalary}`;
-    //         },
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.DOROZLICZ_ ? columnSize.DOROZLICZ_ : 140,
-    //     },
-    //     {
-    //         accessorKey: 'PRZYGOTOWAL',
-    //         header: 'Przygował',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.PRZYGOTOWAL ? columnSize.PRZYGOTOWAL : 140,
-    //     },
-    //     {
-    //         accessorKey: 'PLATNOSC',
-    //         header: 'Płatność',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.PLATNOSC ? columnSize.PLATNOSC : 140,
-    //     },
-    //     {
-    //         accessorKey: 'NRREJESTRACYJNY',
-    //         header: 'Nr rej',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.NRREJESTRACYJNY ? columnSize.NRREJESTRACYJNY : 140,
-    //     },
-    //     {
-    //         accessorKey: 'UWAGI',
-    //         header: 'Uwagi',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.UWAGI ? columnSize.UWAGI : 140,
-    //     },
-    // ]);
+
     const prepareTable = async () => {
         try {
             setPleaseWait(true);
@@ -161,13 +68,18 @@ const ActualTable = ({ info }) => {
         const name = Object.keys(columnInfo)[0];
         const size = columnInfo[name];
         if (name && size) {
+            // setTimeout(() => {
             setColumnSize(prev => {
                 return {
                     ...prev,
                     [name]: size
                 };
             });
+
+            // }, 200);
         }
+        // console.log(info);
+        // console.log(txt);
     };
 
     const handleSaveSettings = async () => {
@@ -198,7 +110,40 @@ const ActualTable = ({ info }) => {
                 [name]: visible
             };
         });
+
+        // const _ref2 = '';
+        // const columnInfo = columnSize(_ref2);
+        // const name = Object.keys(columnInfo)[0];
+        // const size = columnInfo[name];
+        // if (name && size) {
+        //     // setTimeout(() => {
+        //     setColumnSettings(prev => {
+        //         return {
+        //             ...prev,
+        //             [name]: {
+        //                 // ...prev[name],
+        //                 size,
+        //                 visible: true,
+        //             },
+        //         };
+        //     });
+
+        // setColumnSettings(prev => {
+        //     return prev.map(item => {
+        //         if (item.key === txt) {
+        //             // Zaktualizuj pole 'value' dla konkretnego klucza
+        //             return { ...item, [txt]: info };
+        //         }
+        //         // Zachowaj pozostałe elementy bez zmian
+        //         return item;
+        //     });
+        // });
     };
+
+    // useEffect(() => {
+    //     console.log(xcolumnSettings);
+    // },
+    //     [xcolumnSettings]);
 
     const handleDensityChange = () => {
         const densityOptions = ['comfortable', 'compact', 'spacious'];
@@ -213,37 +158,90 @@ const ActualTable = ({ info }) => {
             {
                 accessorKey: 'NUMER',
                 header: 'Faktura',
-                filterVariant: 'text',
+                filterVariant: 'text', // default
+                // pining: 'left',
+                // size: 'auto',
                 enableResizing: true,
                 enableHiding: false,
                 enablePinning: false,
-                minSize: 100,
-                maxSize: 400,
-                size: columnSize?.NUMER ? columnSize.NUMER : 180,
+                enableEditing: false,
+                minSize: 100, //allow columns to get smaller than default
+                maxSize: 400, //allow columns to get larger than default
+                size: columnSize?.NUMER ? columnSize.NUMER : 180, //make columns wider by default
+                // Header: ({ header }) => handleTest(header.getSize(), header.column.columnDef.accessorKey)
+                // enableColumnResizing: true,
             },
             {
                 accessorKey: 'KONTRAHENT',
                 header: 'Kontrahent',
-                minSize: 100,
-                maxSize: 400,
-                size: columnSize?.KONTRAHENT ? columnSize.KONTRAHENT : 180,
+                // Cell: ({ cell }) =>
+                //     cell.getValue().toLocaleString('pln-PL', {
+                //         style: 'currency',
+                //         currency: 'pln',
+                //     }),
+
+                // brak symbolu waluty
+                //    {     Cell: ({ cell }) => {
+                //             const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
+                //                 minimumFractionDigits: 2,
+                //                 maximumFractionDigits: 2,
+                //             });
+                //             return `${formattedSalary}`;
+                //         },
+                //         filterVariant: 'range-slider',
+                //         filterFn: 'betweenInclusive', // default (or between)
+                //         muiFilterSliderProps: {
+                //             //no need to specify min/max/step if using faceted values
+                //             marks: true,
+                //             max: 200000, //custom max (as opposed to faceted max)
+                //             min: 30000, //custom min (as opposed to faceted min)
+                //             step: 10000,
+                //             valueLabelFormat: (value) =>
+                //                 value.toLocaleString('pln-PL', {
+                //                     style: 'currency',
+                //                     currency: 'PLN',
+                //                 }),
+                //         },}
+
+                enableEditing: false,
+
+                minSize: 100, //allow columns to get smaller than default
+                maxSize: 400, //allow columns to get larger than default
+                size: columnSize?.KONTRAHENT ? columnSize.KONTRAHENT : 180, //make columns wider by default
+                // Header: ({ column }) => handleSize(column.getSize(), column.columnDef.accessorKey),
             },
             {
                 accessorKey: 'DZIAL',
                 header: 'Dział',
                 filterVariant: 'multi-select',
                 filterSelectOptions: customFilter,
-                minSize: 100,
-                maxSize: 400,
-                size: columnSize?.DZIAL ? columnSize.DZIAL : 120,
+                enableEditing: false,
+
+                minSize: 100, //allow columns to get smaller than default
+                maxSize: 400, //allow columns to get larger than default
+
+                size: columnSize?.DZIAL ? columnSize.DZIAL : 120, //make columns wider by default
+                // Header: ({ column }) => setxColumnSettings(column.getSize(), column.columnDef.accessorKey),
+                // Header: ({ header }) => setxColumnSettings(header.getSize(), header.columnDef.accessorKey),
+                // Header: (e) => setTimeout(() => { console.log(e); }, 20),
+
+
             },
             {
                 accessorKey: 'NRNADWOZIA',
                 header: 'VIN',
-                minSize: 100,
-                maxSize: 400,
-                size: columnSize?.NRNADWOZIA ? columnSize.NRNADWOZIA : 120,
+                // filterVariant: 'multi-select',
+                // filterSelectOptions: citiesList,
+                enableEditing: false,
+
+                minSize: 100, //allow columns to get smaller than default
+                maxSize: 400, //allow columns to get larger than default
+                size: columnSize?.NRNADWOZIA ? columnSize.NRNADWOZIA : 120, //make columns wider by default
+                // Header: ({ column }) => handleSize(column.getSize(), column.columnDef.accessorKey),
+
+
             },
+
             {
                 accessorKey: 'W_BRUTTO',
                 header: 'Brutto',
@@ -251,64 +249,134 @@ const ActualTable = ({ info }) => {
                     const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
-                        useGrouping: true,
+                        useGrouping: true, // Add this option to include thousands grouping
                     });
                     return `${formattedSalary}`;
                 },
-                minSize: 100,
-                maxSize: 400,
-                size: columnSize?.W_BRUTTO ? columnSize.W_BRUTTO : 140,
-            },
+                enableEditing: false,
+
+                minSize: 100, //allow columns to get smaller than default
+                maxSize: 400, //allow columns to get larger than default
+                size: columnSize?.W_BRUTTO ? columnSize.W_BRUTTO : 140, //make columns wider by default
+                // Header: ({ column }) => handleSize(column.getSize(), column.columnDef.accessorKey),
+                enableEditing: true,
+
+            }
+
+            // {
+            //     accessorKey: 'W_BRUTTO',
+            //     header: 'Brutto',
+            //     // filterVariant: 'multi-select',
+            //     // filterSelectOptions: usStateList,
+            //     Cell: ({ cell }) => {
+            //         const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
+            //             minimumFractionDigits: 2,
+            //             maximumFractionDigits: 2,
+            //         });
+            //         return `${formattedSalary}`;
+            //     },
+
+            //     // Cell: ({ cell }) =>
+            //     //     cell.getValue().toLocaleString('pln-PL', {
+            //     //         style: 'currency',
+            //     //         currency: 'pln',
+            //     //     }),
+
+            //     size: 300,
+            // }
+
+            ,
             {
                 accessorKey: 'DOROZLICZ_',
                 header: 'Brakuje',
+                // filterVariant: 'multi-select',
+                // filterSelectOptions: usStateList,
                 Cell: ({ cell }) => {
                     const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
-                        useGrouping: true,
+                        useGrouping: true, // Add this option to include thousands grouping
                     });
                     return `${formattedSalary}`;
                 },
-                minSize: 100,
-                maxSize: 400,
-                size: columnSize?.DOROZLICZ_ ? columnSize.DOROZLICZ_ : 140,
+                enableEditing: false,
+
+                minSize: 100, //allow columns to get smaller than default
+                maxSize: 400, //allow columns to get larger than default
+                size: columnSize?.DOROZLICZ_ ? columnSize.DOROZLICZ_ : 140, //make columns wider by default
+                // Header: ({ column }) => handleSize(column.getSize(), column.columnDef.accessorKey),
+
             },
             {
                 accessorKey: 'PRZYGOTOWAL',
                 header: 'Przygował',
-                minSize: 100,
-                maxSize: 400,
-                size: columnSize?.PRZYGOTOWAL ? columnSize.PRZYGOTOWAL : 140,
+                // filterVariant: 'multi-select',
+                // filterSelectOptions: usStateList,
+                enableEditing: false,
+
+                minSize: 100, //allow columns to get smaller than default
+                maxSize: 400, //allow columns to get larger than default
+                size: columnSize?.PRZYGOTOWAL ? columnSize.PRZYGOTOWAL : 140, //make columns wider by default
+                // Header: ({ column }) => handleSize(column.getSize(), column.columnDef.accessorKey),
+
             },
             {
                 accessorKey: 'PLATNOSC',
                 header: 'Płatność',
-                minSize: 100,
-                maxSize: 400,
-                size: columnSize?.PLATNOSC ? columnSize.PLATNOSC : 140,
+                // filterVariant: 'multi-select',
+                // filterSelectOptions: usStateList,
+                enableEditing: false,
+
+                minSize: 100, //allow columns to get smaller than default
+                maxSize: 400, //allow columns to get larger than default
+                size: columnSize?.PLATNOSC ? columnSize.PLATNOSC : 140, //make columns wider by default
+                // Header: ({ column }) => handleSize(column.getSize(), column.columnDef.accessorKey),
+
             },
             {
                 accessorKey: 'NRREJESTRACYJNY',
                 header: 'Nr rej',
-                minSize: 100,
-                maxSize: 400,
-                size: columnSize?.NRREJESTRACYJNY ? columnSize.NRREJESTRACYJNY : 140,
+                // filterVariant: 'multi-select',
+                // filterSelectOptions: usStateList,
+                enableEditing: false,
+
+                minSize: 100, //allow columns to get smaller than default
+                maxSize: 400, //allow columns to get larger than default
+                size: columnSize?.NRREJESTRACYJNY ? columnSize.NRREJESTRACYJNY : 140, //make columns wider by default
+                // Header: ({ column }) => handleSize(column.getSize(), column.columnDef.accessorKey),
+
             },
             {
                 accessorKey: 'UWAGI',
                 header: 'Uwagi',
-                minSize: 100,
-                maxSize: 400,
-                size: columnSize?.UWAGI ? columnSize.UWAGI : 140,
+
+                // filterVariant: 'multi-select',
+                // filterSelectOptions: usStateList,
+                minSize: 100, //allow columns to get smaller than default
+                maxSize: 400, //allow columns to get larger than default
+                size: columnSize?.UWAGI ? columnSize.UWAGI : 140, //make columns wider by default
+                // Header: ({ column }) => handleSize(column.getSize(), column.columnDef.accessorKey),
+
             },
         ],
         [customFilter, documents, columnSize],
     );
 
+    // const handleColumnSizingChange = (info) => {
+    //     const _ref2 = 100;
+    //     const test = info(_ref2);
+    //     console.log(test);
+    // };
+
     useEffect(() => {
         prepareTable();
     }, [info]);
+
+    // const table = useMaterialReactTable({
+    //     columns,
+    //     data,
+    //     initialState: { columnVisibility: { address: false } },
+    // });
 
 
     return (
@@ -378,19 +446,6 @@ const ActualTable = ({ info }) => {
                         //     },
                         // }}
 
-                        muiTableHeadCellProps={() => ({
-                            align: "left",
-                            sx: {
-                                fontWeight: "bold",
-                                fontSize: "20px",
-                                color: "black",
-                                backgroundColor: "#a5f089",
-                                // borderRadius: "5px",
-                                // boxShadow: "2px 2px 2px #757575",
-                                borderRight: "1px solid #000",
-                            },
-                        })}
-
                         // odczytanie danych po kliknięciu w wiersz
                         muiTableBodyCellProps={({ column, cell }) => ({
                             onClick: () => {
@@ -398,7 +453,7 @@ const ActualTable = ({ info }) => {
                             },
                             sx: {
                                 borderRight: "1px solid #c9c7c7", //add a border between columns
-                                fontSize: "18px",
+                                fontSize: "16px",
                                 fontFamily: "Calibri",
                                 padding: "15px",
                             },
