@@ -4,7 +4,7 @@ import { MRT_Localization_PL } from 'material-react-table/locales/pl';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material';
 import { plPL } from '@mui/material/locale';
 import useData from './hooks/useData';
-import { axiosPrivate } from '../api/axios';
+import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { processAndExportData, nowaFunkcja } from './TableSettings/Filter';
 import { TfiSave } from "react-icons/tfi";
 import PleaseWait from './PleaseWait';
@@ -13,7 +13,9 @@ import './ActualTable.css';
 
 const ActualTable = ({ info }) => {
     const theme = useTheme();
+    const axiosPrivateIntercept = useAxiosPrivateIntercept();
     const { pleaseWait, setPleaseWait } = useData();
+
     const [documents, setDocuments] = useState([]);
     const [customFilter, setCustomFilter] = useState([]);
     const [columnSettings, setColumnSettings] = useState({});
@@ -51,9 +53,9 @@ const ActualTable = ({ info }) => {
     const prepareTable = async () => {
         try {
             setPleaseWait(true);
-            const result = await axiosPrivate.get(`/getAllDocuments/${info}`);
+            const result = await axiosPrivateIntercept.get(`/getAllDocuments/${info}`);
             setDocuments(result.data);
-            const settings = await axiosPrivate.get('/settings/getSettings');
+            const settings = await axiosPrivateIntercept.get('/settings/getSettings');
             setColumnVisibility(settings?.data?.columnSettings?.visible ? settings.data.columnSettings.visible : {});
             setColumnSize(settings?.data?.columnSettings?.size ? settings.data.columnSettings.size : {});
             setDensityChange(settings?.data?.columnSettings?.density ? settings.data.columnSettings.density : 'comfortable');
@@ -86,7 +88,7 @@ const ActualTable = ({ info }) => {
         const columnSettings = { size: { ...columnSize }, visible: { ...columnVisibility }, density: densityChange, order: columnsOrder };
 
         try {
-            const result = await axiosPrivate.post('/settings/saveSettings/',
+            const result = await axiosPrivateIntercept.post('/settings/saveSettings/',
                 JSON.stringify({ columnSettings }),
                 {
                     headers: { 'Content-Type': 'application/json' },
