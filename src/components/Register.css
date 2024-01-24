@@ -1,0 +1,120 @@
+.register {
+    width: 40%;
+    min-width: 300px;
+    margin: auto;
+    padding: 1.2rem;
+    background-color: rgb(193, 250, 187);
+    font-family: Helvetica, sans-serif;
+    font-size: 1.2rem;
+    color: #000000;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-title {
+    /* font-size: 1.7rem; */
+    text-align: center;
+}
+
+.register__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+}
+
+.register__container-title {
+    font-size: 1rem;
+    margin-top: 20px;
+}
+
+.register__container-title--valid {
+    border-radius: 50%;
+    background-color: #fff;
+    padding: 1px 3px;
+    margin: 5px;
+    color: rgb(75, 130, 241);
+    /* margin-left: 0.25rem; */
+    font-size: 1rem;
+}
+
+.register__container-title--invalid {
+    border-radius: 50%;
+    background-color: #fff;
+    padding: 1px 3px;
+    color: red;
+    margin: 5px;
+    font-size: 1rem;
+}
+
+.register__container-title--hide {
+    display: none;
+}
+
+.register__container-text {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    font-size: 1.2rem;
+}
+
+
+.register-error-message {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    background-color: #fffd7d;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    width: 100%;
+    padding: 10px 20px;
+}
+
+/* .register-error-message--offscreen {
+    position: absolute;
+    left: -9999px;
+} */
+
+.register__container-instructions {
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    border-radius: 0.5rem;
+    background: #000000;
+    color: #fff;
+    padding: 0.25rem;
+    position: relative;
+    bottom: -5px;
+}
+
+.register__container-button {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 20px auto;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    background-color: rgb(127, 240, 134);
+}
+
+.register-button:active {
+    background-color: rgb(22, 171, 81);
+    color: #fff;
+}
+
+@media screen and (max-width: 960px) {
+    .register {
+        width: 90%;
+        min-width: 300px;
+    }
+}

@@ -296,12 +296,18 @@ const ActualTable = ({ info }) => {
                         //         },
                         //     },
                         // }}
+                        muiPaginationProps={{
+                            color: 'secondary',
+                            rowsPerPageOptions: [10, 20, 30, 50],
+                            shape: 'rounded',
+                            variant: 'outlined',
+                        }}
 
                         muiTableHeadCellProps={() => ({
                             align: "left",
                             sx: {
                                 fontWeight: "bold",
-                                fontSize: "20px",
+                                fontSize: "18px",
                                 color: "black",
                                 backgroundColor: "#a5f089",
                                 // borderRadius: "5px",

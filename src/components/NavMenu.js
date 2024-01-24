@@ -1,16 +1,28 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router";
 import { Link } from 'react-router-dom';
+import useData from "./hooks/useData";
+import useLogout from './hooks/useLogout';
 import './NavMenu.css';
 
 const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
-    const [isMenuActive, setMenuActive] = useState(false);
+    const logout = useLogout();
+    const navigate = useNavigate();
+    const { auth } = useData();
 
+    const [isMenuActive, setMenuActive] = useState(false);
 
     const handleLinkClick = () => {
         setMenuActive(false);
         if (mobileMenu) {
             handleCloseMobileMenu();
         }
+    };
+
+    const handleLogout = async () => {
+        handleLinkClick();
+        await logout();
+        navigate('/login');
     };
 
     return (
@@ -32,7 +44,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </li>
                         </ul>
                     </div></li>
-                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Kontakty
+                {auth?.roles?.includes(200 || 300) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Kontakty
                 </Link>
                     <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
@@ -44,7 +56,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
 
                         </ul>
                     </div>
-                </li>
+                </li>}
                 <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Raporty
                 </Link>
                     <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
@@ -72,7 +84,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         </ul>
                     </div>
                 </li>
-                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >System
+                {auth?.roles?.includes(200 || 300) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >System
                 </Link>
                     <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
@@ -81,19 +93,20 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Ustawienia
                             </Link></li>
                         </ul>
-                    </div></li>
+                    </div>
+                </li>}
                 <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Użytkownik
                 </Link>
                     <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Dodaj użytkownika
-                            </Link></li>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zmień uprawnienia
-                            </Link></li>
+                            {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link to="/register" className="nav_menu-link" onClick={handleLinkClick}>Dodaj użytkownika
+                            </Link></li>}
+                            {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zmień uprawnienia
+                            </Link></li>}
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zmień hasło
                             </Link>
                             </li>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Wyloguj
+                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLogout}>Wyloguj
                             </Link></li>
                         </ul>
                     </div></li>

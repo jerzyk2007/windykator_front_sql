@@ -107,52 +107,6 @@ const Contacts = () => {
             </section>);
     });
 
-    //         {
-    //             contact.emails.length > 0 &&
-    //             <section className='contacts__container--mail' >
-    //                 <span className='contacts__container--title'>Email:</span>
-    //                 <section className='contacts__container-item'>
-    //                     {contact.emails.map((email, index) => (
-    //                         <span key={index} className='contacts__container-item--context'>
-    //                             <p > {email.email}</p>
-    //                             <input
-    //                                 type="checkbox"
-    //                                 checked={email.verify}
-    //                                 readOnly />
-    //                         </span>
-    //                     ))}
-    //                 </section>
-    //             </section>;
-    // }
-    //         {
-    //             contact.phones.length > 0 && (
-    //                 <section className='contacts__container--phone'>
-    //                     <span className='contacts__container--title'>Telefon:</span>
-    //                     <section className='contacts__container-item'>
-    //                         {contact.phones.map((phone, index) => (
-    //                             <span key={index} className='contacts__container-item--context'>
-    //                                 <span > {phone.phone}</span>
-    //                                 <input
-    //                                     type="checkbox"
-    //                                     checked={phone.verify}
-    //                                     readOnly />
-    //                             </span>
-    //                         ))}
-    //                     </section>
-    //                 </section>);
-    // }
-
-
-    //         {
-    //             contact.comment && <section className='contacts__container--comment'>
-    //                 <span className='contacts__container--title'>Uwagi:</span>
-    //                 <span className='contacts__container-item--context' style={{ marginLeft: "20px" }}>{contact.comment}</span>
-    //             </section>;
-    // }
-    //         <LiaEditSolid className="contacts__container--edit" onClick={() => setContactItemData(contact)} />
-    //         );
-
-
     const searchResult = async (e) => {
         e.preventDefault();
         if (search.length > 2) {
