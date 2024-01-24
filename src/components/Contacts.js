@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import axios, { axiosPrivate } from '../api/axios';
+import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from './hooks/useData';
 import PleaseWait from './PleaseWait';
 import ContactItem from './ContactItem';
@@ -9,6 +9,7 @@ import './Contacts.css';
 const Contacts = () => {
     const { pleaseWait, setPleaseWait } = useData();
     const searchRef = useRef();
+    const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
     const [contactsData, setContactsData] = useState([]);
     const [search, setSearch] = useState('');
@@ -111,7 +112,12 @@ const Contacts = () => {
         e.preventDefault();
         if (search.length > 2) {
             setPleaseWait(true);
-            const result = await axios.get(`/contacts/getSearch/${search}`);
+            const result = await axiosPrivateIntercept.get(`/contacts/getSearch/${search}`,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true,
+                }
+            );
             setContactsData(result.data);
             setPleaseWait(false);
         }

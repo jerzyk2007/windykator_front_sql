@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
-import useAxiosPrivate from "./hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useLogout from "./hooks/useLogout";
 import useData from "./hooks/useData";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
@@ -13,7 +13,7 @@ const ChangePassword = () => {
     const passRef = useRef();
     const errRef = useRef();
     const navigate = useNavigate();
-    const axiosPrivate = useAxiosPrivate();
+    const axiosPrivate = useAxiosPrivateIntercept();
     const logout = useLogout();
 
     const { auth } = useData();
