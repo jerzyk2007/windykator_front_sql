@@ -9,6 +9,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import PersistLogin from './components/PersistLogin';
 import RequireAuth from './components/RequireAuth';
+import ChangePassword from './components/ChangePassword';
 import './App.css';
 
 const ROLES = {
@@ -34,7 +35,11 @@ function App() {
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]} />}>
               <Route path='/actual-table' element={<ActualTable info={"actual"} />} />
-              <Route path='/archive-table' element={<ActualTable info={"archive"} />} />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]} />}>
+            </Route>
+            <Route path='/archive-table' element={<ActualTable info={"archive"} />} />
+            <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]} />}>
               <Route path='/all-data-table' element={<ActualTable info={"all"} />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
@@ -43,7 +48,9 @@ function App() {
             <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
               <Route path='/add-data' element={<AddDataFromFile />} />
             </Route>
-
+            <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+              <Route path='/change-password' element={<ChangePassword />} />
+            </Route>
           </Route>
         </Routes>
         <Footer />

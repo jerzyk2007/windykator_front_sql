@@ -121,7 +121,7 @@ const Register = () => {
                             name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
                             ref={userRef}
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(e) => setUsername((e.target.value).toLowerCase())}
                             required
                             onFocus={() => setUserFocus(true)}
                             onBlur={() => setUserFocus(false)}
@@ -177,6 +177,7 @@ const Register = () => {
                         </p>}
                         <button className="register__container-button" disabled={!validUsername || !validPassword || !validMatchPassword}>Zarejestruj</button>
                     </form>
+                    <FiX className='change_password-close-button' onClick={() => navigate(-1)} />
                 </section>)}
         </>
     );

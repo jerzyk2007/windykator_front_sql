@@ -103,7 +103,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link></li>}
                             {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zmień uprawnienia
                             </Link></li>}
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zmień hasło
+                            <li className='nav_menu-item-dropmenu'><Link to="/change-password" className="nav_menu-link" onClick={handleLinkClick}>Zmień hasło
                             </Link>
                             </li>
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLogout}>Wyloguj
