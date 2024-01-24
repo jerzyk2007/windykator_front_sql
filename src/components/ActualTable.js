@@ -43,100 +43,11 @@ const ActualTable = ({ info }) => {
         // UWAGI: 200,
     });
     const [densityChange, setDensityChange] = useState('compact');
-    // const [columns, setColumns] = useState([
-    //     {
-    //         accessorKey: 'NUMER',
-    //         header: 'Faktura',
-    //         filterVariant: 'text',
-    //         enableResizing: true,
-    //         enableHiding: false,
-    //         enablePinning: false,
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.NUMER ? columnSize.NUMER : 180,
-    //     },
-    //     {
-    //         accessorKey: 'KONTRAHENT',
-    //         header: 'Kontrahent',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.KONTRAHENT ? columnSize.KONTRAHENT : 180,
-    //     },
-    //     {
-    //         accessorKey: 'DZIAL',
-    //         header: 'Dział',
-    //         filterVariant: 'multi-select',
-    //         filterSelectOptions: customFilter,
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.DZIAL ? columnSize.DZIAL : 120,
-    //     },
-    //     {
-    //         accessorKey: 'NRNADWOZIA',
-    //         header: 'VIN',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.NRNADWOZIA ? columnSize.NRNADWOZIA : 120,
-    //     },
-    //     {
-    //         accessorKey: 'W_BRUTTO',
-    //         header: 'Brutto',
-    //         Cell: ({ cell }) => {
-    //             const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
-    //                 minimumFractionDigits: 2,
-    //                 maximumFractionDigits: 2,
-    //                 useGrouping: true,
-    //             });
-    //             return `${formattedSalary}`;
-    //         },
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.W_BRUTTO ? columnSize.W_BRUTTO : 140,
-    //     },
-    //     {
-    //         accessorKey: 'DOROZLICZ_',
-    //         header: 'Brakuje',
-    //         Cell: ({ cell }) => {
-    //             const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
-    //                 minimumFractionDigits: 2,
-    //                 maximumFractionDigits: 2,
-    //                 useGrouping: true,
-    //             });
-    //             return `${formattedSalary}`;
-    //         },
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.DOROZLICZ_ ? columnSize.DOROZLICZ_ : 140,
-    //     },
-    //     {
-    //         accessorKey: 'PRZYGOTOWAL',
-    //         header: 'Przygował',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.PRZYGOTOWAL ? columnSize.PRZYGOTOWAL : 140,
-    //     },
-    //     {
-    //         accessorKey: 'PLATNOSC',
-    //         header: 'Płatność',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.PLATNOSC ? columnSize.PLATNOSC : 140,
-    //     },
-    //     {
-    //         accessorKey: 'NRREJESTRACYJNY',
-    //         header: 'Nr rej',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.NRREJESTRACYJNY ? columnSize.NRREJESTRACYJNY : 140,
-    //     },
-    //     {
-    //         accessorKey: 'UWAGI',
-    //         header: 'Uwagi',
-    //         minSize: 100,
-    //         maxSize: 400,
-    //         size: columnSize?.UWAGI ? columnSize.UWAGI : 140,
-    //     },
-    // ]);
+
+    const [columnsOrder, setColumnsOrder] = useState([
+        // 'NUMER', 'UWAGI', 'KONTRAHENT', 'DZIAL', 'DOROZLICZ_', 'PRZYGOTOWAL', 'PLATNOSC', 'NRREJESTRACYJNY'
+        // , 'NRNADWOZIA', 'W_BRUTTO', 'mrt-row-select'
+    ]);
     const prepareTable = async () => {
         try {
             setPleaseWait(true);
@@ -146,6 +57,7 @@ const ActualTable = ({ info }) => {
             setColumnVisibility(settings?.data?.columnSettings?.visible ? settings.data.columnSettings.visible : {});
             setColumnSize(settings?.data?.columnSettings?.size ? settings.data.columnSettings.size : {});
             setDensityChange(settings?.data?.columnSettings?.density ? settings.data.columnSettings.density : 'comfortable');
+            setColumnsOrder(settings?.data?.columnSettings?.order ? (settings.data.columnSettings.order).map(order => order) : []);
             const processedData = processAndExportData(result.data);
             setCustomFilter(processedData);
             setPleaseWait(false);
@@ -171,7 +83,7 @@ const ActualTable = ({ info }) => {
     };
 
     const handleSaveSettings = async () => {
-        const columnSettings = { size: { ...columnSize }, visible: { ...columnVisibility }, density: densityChange };
+        const columnSettings = { size: { ...columnSize }, visible: { ...columnVisibility }, density: densityChange, order: columnsOrder };
 
         try {
             const result = await axiosPrivate.post('/settings/saveSettings/',
@@ -303,8 +215,9 @@ const ActualTable = ({ info }) => {
                 size: columnSize?.UWAGI ? columnSize.UWAGI : 140,
             },
         ],
-        [customFilter, documents, columnSize],
+        [customFilter, documents, columnSize, columnVisibility, densityChange],
     );
+
 
     useEffect(() => {
         prepareTable();
@@ -332,7 +245,8 @@ const ActualTable = ({ info }) => {
                         // onColumnVisibilityChange={(visibility) => handleVisibilityChange(visibility)}
                         onColumnVisibilityChange={handleVisibilityChange}
                         onDensityChange={handleDensityChange}
-
+                        onColumnOrderChange={(order) => setColumnsOrder(order)}
+                        enableColumnOrdering
 
 
                         // enableRowActions
@@ -349,7 +263,12 @@ const ActualTable = ({ info }) => {
                         localization={MRT_Localization_PL}
                         state={{
                             columnVisibility: columnVisibility,
-                            density: densityChange
+                            density: densityChange,
+                            columnOrder: columnsOrder
+                            // [
+                            //     'NUMER', 'UWAGI', 'KONTRAHENT', 'DZIAL', 'DOROZLICZ_', 'PRZYGOTOWAL', 'PLATNOSC', 'NRREJESTRACYJNY'
+                            //     , 'NRNADWOZIA', 'W_BRUTTO', 'mrt-row-select']
+                            //     ,
                         }}
                         // muiTableBodyCellProps={{
                         //     sx: {
