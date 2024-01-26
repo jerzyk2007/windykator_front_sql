@@ -13,7 +13,7 @@ const ChangePassword = () => {
     const passRef = useRef();
     const errRef = useRef();
     const navigate = useNavigate();
-    const axiosPrivate = useAxiosPrivateIntercept();
+    const axiosPrivateIntercept = useAxiosPrivateIntercept();
     const logout = useLogout();
 
     const { auth } = useData();
@@ -40,7 +40,7 @@ const ChangePassword = () => {
                 setErrMsg("Invalid entry");
                 return;
             }
-            await axiosPrivate.patch('/user/change-pass',
+            await axiosPrivateIntercept.patch('/user/change-pass',
 
                 JSON.stringify({ username: auth.username, password }),
                 {

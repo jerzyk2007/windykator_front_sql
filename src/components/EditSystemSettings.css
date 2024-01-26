@@ -1,0 +1,133 @@
+.edit_system_settings {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.edit_system_change {
+    flex-grow: 1;
+    justify-content: center;
+    display: flex;
+}
+
+.edit_system_confirm {
+    flex-basis: 5%;
+    flex-shrink: 0;
+}
+
+.edit_system_settings--user {
+    flex-basis: 33%;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.edit_system_settings--data {
+    flex-basis: 33%;
+    flex-shrink: 0;
+    background-color: rgb(177, 118, 30);
+}
+
+.edit_system_settings--table {
+    flex-basis: 33%;
+    flex-shrink: 0;
+    background-color: rgb(54, 37, 115);
+}
+
+.edit_system_change--name__container,
+.edit_system_change--pass__container,
+.edit_system_change--permission__container,
+.edit_system_change--delete__container {
+    flex-grow: 1;
+    padding: 10px;
+    margin: 10px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.edit_system_change--name__container--title,
+.edit_system_change--pass__container--title,
+.edit_system_change--permission__container--title,
+.edit_system_change--delete__container--title {
+    margin: 10px auto;
+    text-align: center;
+}
+
+.edit_system_change--name__container--edit,
+.edit_system_change--pass__container--edit,
+.edit_system_change--delete__container--edit {
+    display: block;
+    width: 80%;
+    font-size: 1.2rem;
+    margin: 10px auto;
+    padding: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    border-radius: 5px;
+    border: none;
+}
+
+.edit_system_change--name__container--button,
+.edit_system_change--pass__container--button,
+.edit_system_change--permission__container--button,
+.edit_system_change--delete__container--button {
+    padding: 10px;
+    margin: 10px auto;
+    background-color: rgb(92, 201, 87);
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 2px rgb(106, 132, 134);
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.edit_system_change--name__container--button:active,
+.edit_system_change--pass__container--button:active,
+.edit_system_change--permission__container--button:active,
+.edit_system_change--delete__container--button:active {
+    background-color: rgb(0, 51, 255);
+}
+
+.edit_system_change--permission__container--choice {
+    width: 80%;
+    margin: 5px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.edit_system_change--permission__container--text {
+    user-select: none;
+}
+
+.edit_system_change--permission__container--info {
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.edit_system_change--permission__container--check {
+    width: 20px;
+}
+
+.edit_system_change--delete__container-confirm {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.edit_system_change--delete__container--cancel {
+    background-color: rgb(123, 182, 234);
+}
+
+.edit_system_change--delete__container--confirm {
+    background-color: red;
+}
