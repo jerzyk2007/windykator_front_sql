@@ -127,7 +127,9 @@ const ActualTable = ({ info }) => {
             {
                 accessorKey: 'NUMER',
                 header: 'Faktura',
-                filterVariant: 'text',
+                // filterVariant: 'text',
+                // filterVariant: 'autocomplete',
+                filterVariant: 'contains',
                 enableResizing: true,
                 enableHiding: false,
                 enablePinning: false,
@@ -138,6 +140,7 @@ const ActualTable = ({ info }) => {
             {
                 accessorKey: 'KONTRAHENT',
                 header: 'Kontrahent',
+                filterVariant: 'text',
                 minSize: 100,
                 maxSize: 400,
                 size: columnSize?.KONTRAHENT ? columnSize.KONTRAHENT : 180,
@@ -220,6 +223,9 @@ const ActualTable = ({ info }) => {
         [customFilter, documents, columnSize, columnVisibility, densityChange],
     );
 
+    const handleTest = (info) => {
+        console.log(info);
+    };
 
     useEffect(() => {
         prepareTable();
@@ -251,6 +257,10 @@ const ActualTable = ({ info }) => {
                         enableColumnOrdering
 
 
+                        // onGlobalFilterChange={handleTest}
+
+                        // globalFilterModeOptions={['fuzzy', 'startsWith']}
+                        globalFilterFn={'contains'}
                         // enableRowActions
                         // enableRowSelection
                         enableSelectAll={false}
@@ -298,6 +308,7 @@ const ActualTable = ({ info }) => {
                         //         },
                         //     },
                         // }}
+
                         muiPaginationProps={{
                             color: 'secondary',
                             rowsPerPageOptions: [10, 20, 30, 50],
@@ -309,7 +320,7 @@ const ActualTable = ({ info }) => {
                             align: "left",
                             sx: {
                                 fontWeight: "bold",
-                                fontSize: "18px",
+                                fontSize: "16px",
                                 color: "black",
                                 backgroundColor: "#a5f089",
                                 // borderRadius: "5px",
@@ -325,7 +336,7 @@ const ActualTable = ({ info }) => {
                             },
                             sx: {
                                 borderRight: "1px solid #c9c7c7", //add a border between columns
-                                fontSize: "18px",
+                                fontSize: "16px",
                                 fontFamily: "Calibri",
                                 padding: "15px",
                             },

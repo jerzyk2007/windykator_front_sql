@@ -26,9 +26,10 @@ const Login = () => {
                     withCredentials: true
                 }
             );
-            const accessToken = response?.data?.accessToken;
+            // const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
-            setAuth({ username, password, roles, accessToken });
+            // setAuth({ username, password, roles, accessToken });
+            setAuth({ username, roles });
             navigate('/');
         }
         catch (err) {
