@@ -5,7 +5,7 @@ import { createTheme, ThemeProvider, useTheme } from '@mui/material';
 import { plPL } from '@mui/material/locale';
 import useData from './hooks/useData';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import { processAndExportData, nowaFunkcja } from './TableSettings/Filter';
+import { addPrefiksDepartment } from './TableSettings/TableFilters';
 import { TfiSave } from "react-icons/tfi";
 import PleaseWait from './PleaseWait';
 
@@ -14,11 +14,10 @@ import './ActualTable.css';
 const ActualTable = ({ info }) => {
     const theme = useTheme();
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
-    const { pleaseWait, setPleaseWait } = useData();
+    const { pleaseWait, setPleaseWait, auth } = useData();
 
     const [documents, setDocuments] = useState([]);
     const [customFilter, setCustomFilter] = useState([]);
-    const [columnSettings, setColumnSettings] = useState({});
 
     const [columnVisibility, setColumnVisibility] = useState({
         // NUMER: true,
@@ -50,18 +49,20 @@ const ActualTable = ({ info }) => {
         // 'NUMER', 'UWAGI', 'KONTRAHENT', 'DZIAL', 'DOROZLICZ_', 'PRZYGOTOWAL', 'PLATNOSC', 'NRREJESTRACYJNY'
         // , 'NRNADWOZIA', 'W_BRUTTO', 'mrt-row-select'
     ]);
+
+
+
     const prepareTable = async () => {
         try {
             setPleaseWait(true);
             const result = await axiosPrivateIntercept.get(`/getAllDocuments/${info}`);
             setDocuments(result.data);
-            const settings = await axiosPrivateIntercept.get('/settings/getSettings');
-            setColumnVisibility(settings?.data?.columnSettings?.visible ? settings.data.columnSettings.visible : {});
-            setColumnSize(settings?.data?.columnSettings?.size ? settings.data.columnSettings.size : {});
-            setDensityChange(settings?.data?.columnSettings?.density ? settings.data.columnSettings.density : 'comfortable');
-            setColumnsOrder(settings?.data?.columnSettings?.order ? (settings.data.columnSettings.order).map(order => order) : []);
-            const processedData = processAndExportData(result.data);
-            setCustomFilter(processedData);
+            setCustomFilter(addPrefiksDepartment(result.data));
+            const settingsTable = await axiosPrivateIntercept.get('/user/get-table-settings/', { params: { username: auth.username } });
+            setColumnVisibility(settingsTable?.data?.visible ? settingsTable.data.visible : {});
+            setColumnSize(settingsTable?.data?.size ? settingsTable.data.size : {});
+            setDensityChange(settingsTable?.data?.density ? settingsTable.data.density : 'comfortable');
+            setColumnsOrder(settingsTable?.data?.order ? (settingsTable.data.order).map(order => order) : []);
             setPleaseWait(false);
         } catch (err) {
             console.log(err);
@@ -85,15 +86,13 @@ const ActualTable = ({ info }) => {
     };
 
     const handleSaveSettings = async () => {
-        const columnSettings = { size: { ...columnSize }, visible: { ...columnVisibility }, density: densityChange, order: columnsOrder };
+        const tableSettings = { size: { ...columnSize }, visible: { ...columnVisibility }, density: densityChange, order: columnsOrder };
+
 
         try {
-            const result = await axiosPrivateIntercept.post('/settings/saveSettings/',
-                JSON.stringify({ columnSettings }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true,
-                }
+            const result = await axiosPrivateIntercept.patch('/user/save-table-settings/',
+                { tableSettings, username: auth.username }
+                // JSON.stringify({ tableSettings, username: auth.username })        
             );
         }
         catch (err) {

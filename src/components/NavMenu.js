@@ -29,7 +29,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     return (
         <nav className='nav_menu'>
             {/* <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'} onMouseEnter={() => setMenuActive(true)}> */}
-            <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'} onClick={() => setMenuActive(!menuActive)}>
+            <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'} onClick={() => setMenuActive(!menuActive)} onMouseLeave={() => setMenuActive(false)}>
                 <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Tabelka
                 </Link>
                     <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'}  >
@@ -86,13 +86,13 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         </ul>
                     </div>
                 </li>
-                {auth?.roles?.includes(200 || 300) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >System
+                {auth?.roles?.includes(500) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >System
                 </Link>
                     <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
                             <li className='nav_menu-item-dropmenu'><Link to="/add-data" className="nav_menu-link" onClick={handleLinkClick}>Dodaj dane
                             </Link></li>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Ustawienia
+                            <li className='nav_menu-item-dropmenu'><Link to="/system-settings" className="nav_menu-link" onClick={handleLinkClick}>Uprawnienia
                             </Link></li>
                         </ul>
                     </div>
@@ -103,8 +103,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         <ul className='nav_menu__menu-dropmenu'>
                             {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link to="/register" className="nav_menu-link" onClick={handleLinkClick}>Dodaj użytkownika
                             </Link></li>}
-                            {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zmień uprawnienia
-                            </Link></li>}
+                            {/* {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zmień uprawnienia
+                            </Link></li>} */}
                             <li className='nav_menu-item-dropmenu'><Link to="/change-password" className="nav_menu-link" onClick={handleLinkClick}>Zmień hasło
                             </Link>
                             </li>
