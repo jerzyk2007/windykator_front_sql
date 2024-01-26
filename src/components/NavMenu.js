@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router";
 import { Link } from 'react-router-dom';
 import useData from "./hooks/useData";
@@ -10,10 +10,10 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     const navigate = useNavigate();
     const { auth } = useData();
 
-    const [isMenuActive, setMenuActive] = useState(false);
+    const [menuActive, setMenuActive] = useState(false);
 
     const handleLinkClick = () => {
-        setMenuActive(false);
+        // setMenuActive(false);
         if (mobileMenu) {
             handleCloseMobileMenu();
         }
@@ -25,12 +25,14 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
         navigate('/login');
     };
 
+
     return (
         <nav className='nav_menu'>
-            <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'} onMouseEnter={() => setMenuActive(true)}>
+            {/* <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'} onMouseEnter={() => setMenuActive(true)}> */}
+            <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'} onClick={() => setMenuActive(!menuActive)}>
                 <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Tabelka
                 </Link>
-                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'}  >
+                    <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'}  >
                         <ul className='nav_menu__menu-dropmenu' >
                             <li className='nav_menu-item-dropmenu'><Link to="/actual-table" className="nav_menu-link" onClick={handleLinkClick}>Aktualne
                             </Link></li>
@@ -46,7 +48,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </div></li>
                 {auth?.roles?.includes(200 || 300) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Kontakty
                 </Link>
-                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
+                    <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
 
                             <li className='nav_menu-item-dropmenu'><Link to="/contacts" className="nav_menu-link" onClick={handleLinkClick}>Wyszukaj
@@ -59,7 +61,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 </li>}
                 <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Raporty
                 </Link>
-                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
+                    <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zbiorczy
                             </Link></li>
@@ -86,7 +88,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 </li>
                 {auth?.roles?.includes(200 || 300) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >System
                 </Link>
-                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
+                    <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
                             <li className='nav_menu-item-dropmenu'><Link to="/add-data" className="nav_menu-link" onClick={handleLinkClick}>Dodaj dane
                             </Link></li>
@@ -97,7 +99,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 </li>}
                 <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Użytkownik
                 </Link>
-                    <div className={isMenuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
+                    {menuActive && <div className='nav_menu-dropdown__menu' >
                         <ul className='nav_menu__menu-dropmenu'>
                             {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link to="/register" className="nav_menu-link" onClick={handleLinkClick}>Dodaj użytkownika
                             </Link></li>}
@@ -109,7 +111,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLogout}>Wyloguj
                             </Link></li>
                         </ul>
-                    </div></li>
+                    </div>}
+                </li>
             </ul>
         </nav >
     );
