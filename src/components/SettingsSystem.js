@@ -42,6 +42,7 @@ const SettingsSystem = () => {
     });
 
     useEffect(() => {
+        setUsers([]);
         setSearch('');
     }, [edit]);
 

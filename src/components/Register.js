@@ -53,8 +53,6 @@ const Register = () => {
                     withCredentials: true,
                 }
             );
-            console.log('result');
-            console.log(result);
             setSuccess(result.data);
             setUserlogin('');
             setPassword('');
@@ -112,6 +110,30 @@ const Register = () => {
                     {!errMsg && <h1 className="register-title">Rejestracja</h1>}
                     <form className="register__container" onSubmit={handleSubmit}>
 
+                        <label htmlFor="userlogin" className="register__container-title">
+                            E-mail:
+                            <span className={validUserlogin ? "register__container-title--valid" : "register__container-title--hide"}><FontAwesomeIcon icon={faCheck} /></span>
+                            <span className={validUserlogin || !userlogin ? "register__container-title--hide" : "register__container-title--invalid"}><FontAwesomeIcon icon={faTimes} /></span>
+                        </label>
+                        <input
+                            className="register__container-text"
+                            type="text"
+                            id="userlogin"
+                            autoComplete="new-userlogin"
+                            name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
+                            // ref={userRef}
+                            value={userlogin}
+                            onChange={(e) => setUserlogin((e.target.value).toLowerCase())}
+                            required
+                            onFocus={() => setUserFocus(true)}
+                            onBlur={() => setUserFocus(false)}
+                        />
+                        {userFocus && userlogin && !validUserlogin && <p className="register__container-instructions" >
+                            <FontAwesomeIcon icon={faInfoCircle} />
+                            Od 4 do 24 znaków<br />
+                            Musi to byc format adresu email.<br />
+                        </p>}
+
                         <label htmlFor="username" className="register__container-title">
                             Imię:
                         </label>
@@ -144,29 +166,7 @@ const Register = () => {
                             onBlur={() => setUserFocus(false)}
                         />
 
-                        <label htmlFor="userlogin" className="register__container-title">
-                            E-mail:
-                            <span className={validUserlogin ? "register__container-title--valid" : "register__container-title--hide"}><FontAwesomeIcon icon={faCheck} /></span>
-                            <span className={validUserlogin || !userlogin ? "register__container-title--hide" : "register__container-title--invalid"}><FontAwesomeIcon icon={faTimes} /></span>
-                        </label>
-                        <input
-                            className="register__container-text"
-                            type="text"
-                            id="userlogin"
-                            autoComplete="new-userlogin"
-                            name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
-                            // ref={userRef}
-                            value={userlogin}
-                            onChange={(e) => setUserlogin((e.target.value).toLowerCase())}
-                            required
-                            onFocus={() => setUserFocus(true)}
-                            onBlur={() => setUserFocus(false)}
-                        />
-                        {userFocus && userlogin && !validUserlogin && <p className="register__container-instructions" >
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            Od 4 do 24 znaków<br />
-                            Musi to byc format adresu email.<br />
-                        </p>}
+
                         <label htmlFor="password" className="register__container-title">
                             Hasło:
                             <span className={validPassword ? "register__container-title--valid" : "register__container-title--hide"}><FontAwesomeIcon icon={faCheck} /></span>

@@ -17,10 +17,8 @@ const EditSystemSettings = ({ user, setEdit }) => {
     const [errPass, setErrPass] = useState('');
 
     const [name, setName] = useState('');
-    const [errName, setErrName] = useState('');
-
     const [surname, setSurname] = useState('');
-    const [errSurname, setErrSurname] = useState('');
+    const [errName, setErrName] = useState('');
 
     const [permissions, setPermissions] = useState(user.permissions);
     const [errPermission, setErrPermission] = useState('');
@@ -31,9 +29,84 @@ const EditSystemSettings = ({ user, setEdit }) => {
     const [roles, setRoles] = useState({});
     const [errRoles, setErrRoles] = useState('');
 
+    const [departments, setDepartments] = useState([]);
+    const [errDepartments, setErrDepartments] = useState('');
 
     const MAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+
+    const rolesItem = Object.entries(roles).map(([role, isChecked], index) => (
+        <form key={index} className='edit_system_change--roles__container--choice'>
+            <label className='edit_system_change--roles__container--info' id={`role${index}`}>
+                <span className='edit_system_change--roles__container--text' >{role}
+                    {role === "User" && <span className='edit_system_change--roles__container--text-information'> - przeglądanie</span>}
+                    {role === "Editor" && <span className='edit_system_change--roles__container--text-information'> - edytowanie tabel i raportów</span>}
+                    {role === "Admin" && <span className='edit_system_change--roles__container--text-information'> - uprawnienia użytkownika</span>}
+                </span>
+                <input
+                    className='edit_system_change--roles__container--check'
+                    name={`role${index}`}
+                    type="checkbox"
+                    checked={isChecked || role === 'User'}
+                    onChange={() => {
+                        // Jeśli rola to 'User', nie zmieniaj wartości
+                        if (role === 'User') return;
+                        setRoles(prevRoles => {
+                            const updatedRoles = { ...prevRoles, [role]: !isChecked };
+
+                            // Jeśli zaznaczono 'Admin', ustaw także 'Editor' na 'true'
+                            if (role === 'Admin' && !isChecked) {
+                                updatedRoles['Editor'] = true;
+                            }
+
+                            // Jeśli odznaczono 'Editor', ustaw także 'Admin' na 'false'
+                            if (role === 'Editor' && isChecked) {
+                                updatedRoles['Admin'] = false;
+                            }
+
+                            return updatedRoles;
+                        });
+                    }}
+                />
+            </label>
+        </form>
+    ));
+
+    const departmentsItem = Object.entries(departments).map(([dep, isChecked], index) => (
+        <label key={index} className='edit_system_change--departments__container--info' id={`dep${index}`}>
+            <span className='edit_system_change--departments__container--text'>{dep}</span>
+            <input
+                className='edit_system_change--departments__container--check'
+                name={`dep${index}`}
+                type="checkbox"
+                onChange={() => setDepartments(prev => {
+                    return {
+                        ...prev,
+                        [dep]: !isChecked
+                    };
+                }
+
+                )}
+                checked={isChecked}
+            />
+        </label>
+
+
+    ));
+
+
+    const handleChangeDepartments = async () => {
+        try {
+            const result = await axiosPrivateIntercept.patch('/user/change-departments', {
+                userlogin: user.userlogin, departments
+            });
+            setErrDepartments(`Sukces.`);
+        }
+        catch (err) {
+            setErrDepartments(`Zmiana się nie powiodła.`);
+            console.log(err);
+        }
+    };
 
     const handleChangeLogin = async () => {
         try {
@@ -79,7 +152,6 @@ const EditSystemSettings = ({ user, setEdit }) => {
     };
 
     const handleChangePermission = async () => {
-        console.log(permissions);
         try {
             const result = await axiosPrivateIntercept.patch('/user/change-permissions', {
                 userlogin: user.userlogin, permissions
@@ -105,50 +177,8 @@ const EditSystemSettings = ({ user, setEdit }) => {
         }
     };
 
-    const rolesItem = Object.entries(roles).map(([role, isChecked], index) => (
-        <form key={index} className='edit_system_change--roles__container--choice'>
-            <label className='edit_system_change--roles__container--info' id={`role${index}`}>
-                <span className='edit_system_change--roles__container--text' >{role}
-                    {role === "User" && <span className='edit_system_change--roles__container--text-information'> - przeglądanie</span>}
-                    {role === "Editor" && <span className='edit_system_change--roles__container--text-information'> - edytowanie tabel i raportów</span>}
-                    {role === "Admin" && <span className='edit_system_change--roles__container--text-information'> - uprawnienia użytkownika</span>}
-                </span>
-                <input
-                    className='edit_system_change--roles__container--check'
-                    name={`role${index}`}
-                    type="checkbox"
-                    checked={isChecked || role === 'User'}
-                    onChange={() => {
-                        // Jeśli rola to 'User', nie zmieniaj wartości
-                        if (role === 'User') return;
-                        setRoles(prevRoles => {
-                            const updatedRoles = { ...prevRoles, [role]: !isChecked };
-
-                            // Jeśli zaznaczono 'Admin', ustaw także 'Editor' na 'true'
-                            if (role === 'Admin' && !isChecked) {
-                                updatedRoles['Editor'] = true;
-                            }
-
-                            // Jeśli odznaczono 'Editor', ustaw także 'Admin' na 'false'
-                            if (role === 'Editor' && isChecked) {
-                                updatedRoles['Admin'] = false;
-                            }
-
-                            return updatedRoles;
-                        });
-                    }}
-                />
-            </label>
-        </form>
-    ));
-
     const handleChangeRoles = async () => {
-
-        const departments = ["D6", "D7", "D8", "D17", "D88", "D98"];
         try {
-            // const result = await axiosPrivateIntercept.post('/settings/change-roles', { roles, departments });
-
-            // const result = await axiosPrivateIntercept.get('/settings/get-settings');
             const arrayRoles = Object.entries(roles).map(([role, isChecked], index) => {
                 if (isChecked) {
                     return role;
@@ -181,6 +211,18 @@ const EditSystemSettings = ({ user, setEdit }) => {
     }, [permissions]);
 
     useEffect(() => {
+        setErrDepartments('');
+    }, [departments]);
+
+    useEffect(() => {
+        setErrRoles('');
+    }, [roles]);
+
+    useEffect(() => {
+        setErrName('');
+    }, [name, surname]);
+
+    useEffect(() => {
         const getGlobalSettings = async () => {
             const result = await axiosPrivateIntercept.get('/settings/get-settings');
             const filteredRoles = result.data.map(item => item.roles).filter(Boolean)[0];
@@ -189,7 +231,13 @@ const EditSystemSettings = ({ user, setEdit }) => {
                 acc[role] = user?.roles[index] ? true : false;
                 return acc;
             }, {});
+            const filteredDepartments = result.data.map(item => item.departments).filter(Boolean)[0];
 
+            const departments = filteredDepartments.reduce((acc, dep, index) => {
+                acc[dep] = user?.departments[dep] ? true : false;
+                return acc;
+            }, {});
+            setDepartments(departments);
             setRoles(roles);
         };
         getGlobalSettings();
@@ -238,6 +286,14 @@ const EditSystemSettings = ({ user, setEdit }) => {
                             </label>
                         </form>
                         <button className='edit_system_change--permissions__container--button' onClick={handleChangePermission}>Zmień</button>
+                    </section>
+
+                    <section className='edit_system_change--departments__container'>
+                        <h3 className='edit_system_change--departments__container--title'>{!errDepartments ? "Dostęp do działów" : errDepartments}</h3>
+                        <section className='edit_system_change--departments__container--choice'>
+                            {departmentsItem}
+                        </section>
+                        <button className='edit_system_change--departments__container--button' onClick={handleChangeDepartments}>Zmień</button>
                     </section>
 
                 </section>
@@ -299,9 +355,9 @@ const EditSystemSettings = ({ user, setEdit }) => {
                     </section>
                 </section>
             </section>
-            <section className='edit_system_confirm'>
+            {/* <section className='edit_system_confirm'>
                 <button>OK</button>
-            </section>
+            </section> */}
             <FiX className='edit_system_settings-close-button' onClick={() => setEdit(false)} />
         </section>
     );
