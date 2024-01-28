@@ -58,7 +58,7 @@ const ActualTable = ({ info }) => {
             const result = await axiosPrivateIntercept.get(`/getAllDocuments/${info}`);
             setDocuments(result.data);
             setCustomFilter(addPrefiksDepartment(result.data));
-            const settingsTable = await axiosPrivateIntercept.get('/user/get-table-settings/', { params: { username: auth.username } });
+            const settingsTable = await axiosPrivateIntercept.get('/user/get-table-settings/', { params: { userlogin: auth.userlogin } });
             setColumnVisibility(settingsTable?.data?.visible ? settingsTable.data.visible : {});
             setColumnSize(settingsTable?.data?.size ? settingsTable.data.size : {});
             setDensityChange(settingsTable?.data?.density ? settingsTable.data.density : 'comfortable');
@@ -91,8 +91,7 @@ const ActualTable = ({ info }) => {
 
         try {
             const result = await axiosPrivateIntercept.patch('/user/save-table-settings/',
-                { tableSettings, username: auth.username }
-                // JSON.stringify({ tableSettings, username: auth.username })        
+                { tableSettings, userlogin: auth.userlogin }
             );
         }
         catch (err) {

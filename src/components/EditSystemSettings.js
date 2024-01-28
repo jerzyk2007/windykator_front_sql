@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import { FiX } from "react-icons/fi";
 import './EditSystemSettings.css';
 
 // dokończyc usuwanie użytkonika;
 
 const EditSystemSettings = ({ user, setEdit }) => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
+
     const [login, setLogin] = useState('');
     const [isValidLogin, setIsValidLogin] = useState(false);
     const [errLogin, setErrLogin] = useState('');
@@ -13,6 +15,12 @@ const EditSystemSettings = ({ user, setEdit }) => {
     const [pass, setPass] = useState('');
     const [isValidPass, setIsValidPass] = useState(false);
     const [errPass, setErrPass] = useState('');
+
+    const [name, setName] = useState('');
+    const [errName, setErrName] = useState('');
+
+    const [surname, setSurname] = useState('');
+    const [errSurname, setErrSurname] = useState('');
 
     const [permissions, setPermissions] = useState(user.permissions);
     const [errPermission, setErrPermission] = useState('');
@@ -29,8 +37,8 @@ const EditSystemSettings = ({ user, setEdit }) => {
 
     const handleChangeLogin = async () => {
         try {
-            const result = await axiosPrivateIntercept.patch('/user/change-name', {
-                username: user.username, newUsername: login
+            const result = await axiosPrivateIntercept.patch('/user/change-login', {
+                userlogin: user.userlogin, newUserlogin: login
             });
             setEdit(false);
         }
@@ -44,10 +52,23 @@ const EditSystemSettings = ({ user, setEdit }) => {
         }
     };
 
+    const handleChangeNameSurname = async () => {
+        try {
+            const result = await axiosPrivateIntercept.patch('/user/change-name', {
+                userlogin: user.userlogin, name, surname
+            });
+            setErrName('Sukces.');
+        }
+        catch (err) {
+            setErrName(`Zmiana się nie powiodła.`);
+            console.log(err);
+        }
+    };
+
     const handleChangePass = async () => {
         try {
             const result = await axiosPrivateIntercept.patch('/user/another-user-change-pass', {
-                username: user.username, password: pass
+                userlogin: user.userlogin, password: pass
             });
             setErrPass('Sukces.');
         }
@@ -61,7 +82,7 @@ const EditSystemSettings = ({ user, setEdit }) => {
         console.log(permissions);
         try {
             const result = await axiosPrivateIntercept.patch('/user/change-permissions', {
-                username: user.username, permissions
+                userlogin: user.userlogin, permissions
             });
             setErrPermission('Sukces.');
         }
@@ -74,7 +95,7 @@ const EditSystemSettings = ({ user, setEdit }) => {
     const handleConfirmDeleteUser = async () => {
         try {
             const result = await axiosPrivateIntercept.delete(`/user/delete-user/${user._id}`, {
-                username: user.username
+                userlogin: user.userlogin
             });
             setEdit(false);
         }
@@ -121,29 +142,6 @@ const EditSystemSettings = ({ user, setEdit }) => {
         </form>
     ));
 
-
-    // const rolesItem = roles.map((role, index) => {
-    //     return (
-    //         <form
-    //             key={index} className='edit_system_change--roles__container--choice'
-    //         >
-    //             <label className='edit_system_change--permissions__container--info' id={`role${index}`}>
-    //                 <span className='edit_system_change--permissions__container--text' >{role}</span>
-    //                 <input
-    //                     className='edit_system_change--permissions__container--check'
-    //                     name={`role${index}`}
-    //                     type="checkbox"
-    //                     checked={permissions.Basic}
-    //                     onChange={() => setPermissions({
-    //                         Basic: true,
-    //                         Standard: false
-    //                     })}
-    //                 />
-    //             </label>
-    //         </form >
-    //     );
-    // });
-
     const handleChangeRoles = async () => {
 
         const departments = ["D6", "D7", "D8", "D17", "D88", "D98"];
@@ -158,9 +156,6 @@ const EditSystemSettings = ({ user, setEdit }) => {
             }).filter(Boolean);
             const result = await axiosPrivateIntercept.patch(`/settings/change-roles/${user._id}`, { roles: arrayRoles });
             setErrRoles('Sukces.');
-            console.log(result.data);
-            console.log(user._id);
-
         }
         catch (err) {
             setErrRoles('Dostęp nie został zmieniony.');
@@ -249,16 +244,36 @@ const EditSystemSettings = ({ user, setEdit }) => {
 
                 <section className='edit_system_settings--user'>
                     <section className='edit_system_change--name__container'>
-                        <h3 className='edit_system_change--name__container--title'>{!errLogin ? "Zmień login użytkownika" : errLogin}</h3>
+                        <h3 className='edit_system_change--name__container--title'>{!errName ? "Zmień imię i nazwisko użytkownika" : errName}</h3>
                         <input
                             className='edit_system_change--name__container--edit'
                             type="text"
                             placeholder={user.username}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <input
+                            className='edit_system_change--name__container--edit'
+                            type="text"
+                            placeholder={user.usersurname}
+                            value={surname}
+                            onChange={(e) => setSurname(e.target.value)}
+                        />
+                        <button className='edit_system_change--name__container--button' disabled={!name || !surname} onClick={handleChangeNameSurname}>Zmień</button>
+                    </section>
+
+                    <section className='edit_system_change--name__container'>
+                        <h3 className='edit_system_change--name__container--title'>{!errLogin ? "Zmień login użytkownika" : errLogin}</h3>
+                        <input
+                            className='edit_system_change--name__container--edit'
+                            type="text"
+                            placeholder={user.userlogin}
                             value={login}
                             onChange={(e) => setLogin((e.target.value).toLocaleLowerCase())}
                         />
                         <button className='edit_system_change--name__container--button' disabled={!isValidLogin} onClick={handleChangeLogin}>Zmień login</button>
                     </section>
+
                     <section className='edit_system_change--pass__container'>
                         <h3 className='edit_system_change--pass__container--title'>{!errPass ? "Zmień hasło użytkownika" : errPass}</h3>
                         <input
@@ -275,7 +290,7 @@ const EditSystemSettings = ({ user, setEdit }) => {
                         {!confirmDelete && <h3 className='edit_system_change--delete__container--title'>{!errDelete ? "Usuń użytkownika" : errDelete}</h3>}
                         {confirmDelete && <h3 className='edit_system_change--delete__container--title'>Potwierdź, tej operacji nie można cofnąć !</h3>}
                         <p className='edit_system_change--delete__container--edit'
-                        >{user.username}</p>
+                        >{user.userlogin}</p>
                         {!confirmDelete ? <button className='edit_system_change--delete__container--button' onClick={() => setConfirmDelete(true)}>Usuń użytkownika</button> :
                             <section className='edit_system_change--delete__container-confirm'>
                                 <button className='edit_system_change--delete__container--button edit_system_change--delete__container--cancel' onClick={() => setConfirmDelete(false)}>Anuluj</button>
@@ -287,6 +302,7 @@ const EditSystemSettings = ({ user, setEdit }) => {
             <section className='edit_system_confirm'>
                 <button>OK</button>
             </section>
+            <FiX className='edit_system_settings-close-button' onClick={() => setEdit(false)} />
         </section>
     );
 };

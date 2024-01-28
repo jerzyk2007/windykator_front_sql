@@ -20,7 +20,6 @@ const SettingsSystem = () => {
         setIsLoading(true);
         try {
             const result = await axiosPrivateIntercept.get('/user/get-userdata/', { params: { search } });
-            console.log(result.data);
             setUsers(result.data);
             setIsLoading(false);
         }
@@ -36,7 +35,7 @@ const SettingsSystem = () => {
     const userItem = users.map((userItem, index) => {
         return (
             <section className='settings_system__result' key={index}>
-                <p className='settings_system__result--name'>{userItem.username}</p>
+                <p className='settings_system__result--name'>{userItem.userlogin}</p>
                 <LiaEditSolid className="settings_system__result--edit" onClick={() => handleEdit(userItem)} />
             </section>
         );

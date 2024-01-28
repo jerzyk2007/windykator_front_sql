@@ -14,7 +14,10 @@ const Register = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
     const [username, setUsername] = useState('');
-    const [validUsername, setValidUsername] = useState(false);
+    const [usersurname, setUsersurname] = useState('');
+
+    const [userlogin, setUserlogin] = useState('');
+    const [validUserlogin, setValidUserlogin] = useState(false);
     const [userFocus, setUserFocus] = useState(false);
 
     const [password, setPassword] = useState('');
@@ -35,7 +38,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const v1 = USER_REGEX.test(username);
+            const v1 = USER_REGEX.test(userlogin);
             const v2 = PASSWORD_REGEX.test(password);
 
             if (!v1 || !v2) {
@@ -44,15 +47,16 @@ const Register = () => {
             }
             const result = await axiosPrivateIntercept.post('/user/register',
 
-                JSON.stringify({ username, password }),
+                JSON.stringify({ userlogin, password, username, usersurname }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true,
                 }
             );
-            console.log(result.data);
+            console.log('result');
+            console.log(result);
             setSuccess(result.data);
-            setUsername('');
+            setUserlogin('');
             setPassword('');
             setMatchPassword('');
 
@@ -81,9 +85,9 @@ const Register = () => {
     }, []);
 
     useEffect(() => {
-        const result = USER_REGEX.test(username);
-        setValidUsername(result);
-    }, [username]);
+        const result = USER_REGEX.test(userlogin);
+        setValidUserlogin(result);
+    }, [userlogin]);
 
     useEffect(() => {
         const result = PASSWORD_REGEX.test(password);
@@ -94,7 +98,7 @@ const Register = () => {
 
     useEffect(() => {
         setErrMsg('');
-    }, [username, password, matchPassword]);
+    }, [userlogin, password, matchPassword]);
 
     return (
         <>
@@ -109,9 +113,7 @@ const Register = () => {
                     <form className="register__container" onSubmit={handleSubmit}>
 
                         <label htmlFor="username" className="register__container-title">
-                            Użytkownik:
-                            <span className={validUsername ? "register__container-title--valid" : "register__container-title--hide"}><FontAwesomeIcon icon={faCheck} /></span>
-                            <span className={validUsername || !username ? "register__container-title--hide" : "register__container-title--invalid"}><FontAwesomeIcon icon={faTimes} /></span>
+                            Imię:
                         </label>
                         <input
                             className="register__container-text"
@@ -121,12 +123,46 @@ const Register = () => {
                             name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
                             ref={userRef}
                             value={username}
-                            onChange={(e) => setUsername((e.target.value).toLowerCase())}
+                            onChange={(e) => setUsername(e.target.value)}
                             required
                             onFocus={() => setUserFocus(true)}
                             onBlur={() => setUserFocus(false)}
                         />
-                        {userFocus && username && !validUsername && <p className="register__container-instructions" >
+                        <label htmlFor="usersurname" className="register__container-title">
+                            Nazwisko:
+                        </label>
+                        <input
+                            className="register__container-text"
+                            type="text"
+                            id="usersurname"
+                            autoComplete="new-usersurname"
+                            name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
+                            value={usersurname}
+                            onChange={(e) => setUsersurname(e.target.value)}
+                            required
+                            onFocus={() => setUserFocus(true)}
+                            onBlur={() => setUserFocus(false)}
+                        />
+
+                        <label htmlFor="userlogin" className="register__container-title">
+                            E-mail:
+                            <span className={validUserlogin ? "register__container-title--valid" : "register__container-title--hide"}><FontAwesomeIcon icon={faCheck} /></span>
+                            <span className={validUserlogin || !userlogin ? "register__container-title--hide" : "register__container-title--invalid"}><FontAwesomeIcon icon={faTimes} /></span>
+                        </label>
+                        <input
+                            className="register__container-text"
+                            type="text"
+                            id="userlogin"
+                            autoComplete="new-userlogin"
+                            name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
+                            // ref={userRef}
+                            value={userlogin}
+                            onChange={(e) => setUserlogin((e.target.value).toLowerCase())}
+                            required
+                            onFocus={() => setUserFocus(true)}
+                            onBlur={() => setUserFocus(false)}
+                        />
+                        {userFocus && userlogin && !validUserlogin && <p className="register__container-instructions" >
                             <FontAwesomeIcon icon={faInfoCircle} />
                             Od 4 do 24 znaków<br />
                             Musi to byc format adresu email.<br />
@@ -175,9 +211,9 @@ const Register = () => {
                             <FontAwesomeIcon icon={faInfoCircle} />
                             Hasła musza być takie same.
                         </p>}
-                        <button className="register__container-button" disabled={!validUsername || !validPassword || !validMatchPassword}>Zarejestruj</button>
+                        <button className="register__container-button" disabled={!validUserlogin || !validPassword || !validMatchPassword}>Zarejestruj</button>
                     </form>
-                    <FiX className='change_password-close-button' onClick={() => navigate(-1)} />
+                    <FiX className='register-close-button' onClick={() => navigate(-1)} />
                 </section>)}
         </>
     );

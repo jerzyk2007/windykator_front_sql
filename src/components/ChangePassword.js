@@ -42,7 +42,7 @@ const ChangePassword = () => {
             }
             await axiosPrivateIntercept.patch('/user/change-pass',
 
-                JSON.stringify({ username: auth.username, password }),
+                JSON.stringify({ userlogin: auth.userlogin, password }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true,

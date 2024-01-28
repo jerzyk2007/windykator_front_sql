@@ -18,6 +18,7 @@ export const DataProvider = ({ children }) => {
     //     }
     // };
 
+
     return (
         <DataContext.Provider value={{
             auth, setAuth,

@@ -11,25 +11,25 @@ const Login = () => {
     const userRef = useRef();
     const errRef = useRef();
 
-    const [username, setUsername] = useState('');
+    const [userlogin, setUserlogin] = useState('');
     const [password, setPassword] = useState('');
     const [errMsg, setErrMsg] = useState('');
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log('test');
         try {
             const response = await axiosPrivate.post('/login',
-                JSON.stringify({ username, password }),
+                JSON.stringify({ userlogin, password }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
                 }
             );
-            // const accessToken = response?.data?.accessToken;
-            const roles = response?.data?.roles;
-            // setAuth({ username, password, roles, accessToken });
-            setAuth({ username, roles });
+
+            const { username, usersurname, roles } = response?.data;
+            setAuth({ username, usersurname, userlogin, roles });
             navigate('/');
         }
         catch (err) {
@@ -49,28 +49,28 @@ const Login = () => {
 
     useEffect(() => {
         setErrMsg('');
-    }, [username, password]);
+    }, [userlogin, password]);
 
-    useEffect(() => {
-        if (!localStorage?.getItem("username")) {
-            userRef.current.focus();
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (!localStorage?.getItem("username")) {
+    //         userRef.current.focus();
+    //     }
+    // }, []);
 
     return (
         <section className="login">
             {errMsg && <p className="login-error-message" ref={errRef}>{errMsg}</p>}
             {!errMsg && <h1 className="login-title">Logowanie</h1>}
             <form className="login__container" onSubmit={handleSubmit}>
-                <label htmlFor="username" className="login__container-title">Użytkownik:</label>
+                <label htmlFor="userlogin" className="login__container-title">Użytkownik:</label>
                 <input
                     className="login__container-text"
                     type="text"
-                    id="username"
-                    placeholder="username"
+                    id="userlogin"
+                    placeholder="userlogin"
                     ref={userRef}
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={userlogin}
+                    onChange={(e) => setUserlogin(e.target.value)}
                     required
                 />
                 <label htmlFor="password" className="login__container-title">Hasło:</label>

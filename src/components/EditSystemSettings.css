@@ -1,4 +1,5 @@
 .edit_system_settings {
+    position: relative;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -143,4 +144,16 @@
 
 .edit_system_change--delete__container--confirm {
     background-color: red;
+}
+
+.edit_system_settings-close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: red;
+    font-size: 2.5rem;
+    border: 2px solid red;
+    border-radius: 50%;
+    cursor: pointer;
+    margin: 5px;
 }
