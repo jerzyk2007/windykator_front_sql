@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { SiVerizon } from "react-icons/si";
 import { FcCancel } from "react-icons/fc";
@@ -11,8 +12,8 @@ const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, co
     // do zrobienia
     // sprawdzić czy się nie dublują maile
     // porównanie czy jakies dane w kontacie się zmieniły, żeby był sens zapisywac do bazy danych
-    // zapis do bazy danych
-
+    // okienko na wyświetlanie bęłdów jęsli kontakt się nie zapisze
+    const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
     const [contact, setContact] = useState(conctactItemData);
     const [isValidEmail, setIsValidEmail] = useState(false);
@@ -46,8 +47,6 @@ const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, co
         setContact(updatedContact);
     };
 
-
-
     const handleChangeMailingTime = (info) => {
         setContact(prev => {
             return {
@@ -72,15 +71,26 @@ const ContactItem = ({ conctactItemData, setContactItemData, setContactsData, co
         setIsValidPhone(verifyPhones);
     };
 
-    const handleUpdateContact = () => {
-        const filteredContacts = contactsData.map(item => {
-            if (item._id === contact._id) {
-                return contact;
-            }
-            return item;
-        });
-        setContactsData(filteredContacts);
-        setContactItemData({});
+    const handleUpdateContact = async () => {
+
+        const _id = contactsData[0]._id;
+        try {
+            const result = await axiosPrivateIntercept.patch(`/contacts/update-contact/${_id}`, {
+                contactItem: contactsData[0]
+            });
+            const filteredContacts = contactsData.map(item => {
+                if (item._id === contact._id) {
+                    return contact;
+                }
+                return item;
+            });
+            setContactsData(filteredContacts);
+            setContactItemData({});
+        }
+        catch (err) {
+            console.log(err);
+        }
+
     };
 
     useEffect(() => {

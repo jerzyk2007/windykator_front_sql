@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { LiaEditSolid } from "react-icons/lia";
 import PleaseWait from './PleaseWait';
@@ -7,6 +7,8 @@ import './SettingsSystem.css';
 
 const SettingsSystem = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
+    // const searchRef = useRef();
+
     const [search, setSearch] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [users, setUsers] = useState([]);
@@ -17,7 +19,8 @@ const SettingsSystem = () => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const result = await axiosPrivateIntercept.get('/user/get-username/', { params: { search } });
+            const result = await axiosPrivateIntercept.get('/user/get-userdata/', { params: { search } });
+            console.log(result.data);
             setUsers(result.data);
             setIsLoading(false);
         }
@@ -43,6 +46,10 @@ const SettingsSystem = () => {
         setSearch('');
     }, [edit]);
 
+    // useEffect(() => {
+    //     searchRef.current.focus();
+    // }, []);
+
     return (
         <section className='settings_system'>
             {!edit ? <section className='settings_system__container'>
@@ -51,6 +58,7 @@ const SettingsSystem = () => {
                         <input
                             className="settings_system__search-text"
                             type="text"
+                            // ref={searchRef}
                             placeholder="Wyszukaj użytkownika - min 5 znaków"
                             value={search}
                             onChange={(e) => setSearch((e.target.value).toLocaleLowerCase())}
