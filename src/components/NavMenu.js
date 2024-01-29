@@ -3,12 +3,14 @@ import { useNavigate } from "react-router";
 import { Link } from 'react-router-dom';
 import useData from "./hooks/useData";
 import useLogout from './hooks/useLogout';
+import useWindowSize from './hooks/useWindow';
 import './NavMenu.css';
 
 const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     const logout = useLogout();
     const navigate = useNavigate();
     const { auth } = useData();
+    const { width } = useWindowSize();
 
     const [menuActive, setMenuActive] = useState(false);
 
@@ -25,15 +27,13 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
         navigate('/login');
     };
 
-
-    useEffect(() => {
-        console.log(menuActive);
-    }, [menuActive]);
-
-
     return (
         <nav className='nav_menu'>
-            <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'} onClick={() => setMenuActive(!menuActive)} onMouseLeave={() => setMenuActive(false)}>
+
+            <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'}
+                onClick={width && width >= 960 ? () => setMenuActive(!menuActive) : () => setMenuActive(true)}
+                onMouseLeave={width && width >= 960 ? () => setMenuActive(false) : undefined}
+            >
                 <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Tabelka
                 </Link>
                     <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'}  >
