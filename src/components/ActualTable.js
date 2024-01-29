@@ -50,7 +50,10 @@ const ActualTable = ({ info }) => {
         // , 'NRNADWOZIA', 'W_BRUTTO', 'mrt-row-select'
     ]);
 
-
+    const [columnsPinning, setColumnsPinning] = useState({
+        // left: [],
+        // right: []
+    });
 
     const prepareTable = async () => {
         try {
@@ -63,6 +66,7 @@ const ActualTable = ({ info }) => {
             setColumnSize(settingsTable?.data?.size ? settingsTable.data.size : {});
             setDensityChange(settingsTable?.data?.density ? settingsTable.data.density : 'comfortable');
             setColumnsOrder(settingsTable?.data?.order ? (settingsTable.data.order).map(order => order) : []);
+            setColumnsPinning(settingsTable?.data?.pinning ? (settingsTable.data.pinning) : { left: [], right: [] });
             setPleaseWait(false);
         } catch (err) {
             console.log(err);
@@ -86,7 +90,7 @@ const ActualTable = ({ info }) => {
     };
 
     const handleSaveSettings = async () => {
-        const tableSettings = { size: { ...columnSize }, visible: { ...columnVisibility }, density: densityChange, order: columnsOrder };
+        const tableSettings = { size: { ...columnSize }, visible: { ...columnVisibility }, density: densityChange, order: columnsOrder, pinning: columnsPinning };
 
 
         try {
@@ -98,6 +102,35 @@ const ActualTable = ({ info }) => {
             console.log(err);
         }
     };
+
+    const handlePinning = (info) => {
+        if (JSON.stringify(info) !== JSON.stringify({ left: [], right: [] })) {
+            const test = info();
+            const leftItem = test.left.toString();
+            const rightItem = test.right.toString();
+
+            const newColumnsPinning = { ...columnsPinning };
+            let newColumnsPinningLeft = newColumnsPinning.left;
+            let newColumnsPinningRight = newColumnsPinning.right;
+
+            if (leftItem) {
+                newColumnsPinningLeft = [...newColumnsPinningLeft, leftItem];
+            }
+            if (rightItem) {
+                newColumnsPinningRight = [...newColumnsPinningRight, rightItem];
+            };
+            setColumnsPinning(
+                {
+                    left: newColumnsPinningLeft,
+                    right: newColumnsPinningRight
+                }
+            );
+        } else {
+            setColumnsPinning(info);
+        }
+    };
+
+
 
     const handleVisibilityChange = (visibility) => {
         const columnInfo = visibility();
@@ -120,6 +153,8 @@ const ActualTable = ({ info }) => {
         setDensityChange(densityOptions[nextIndex]);
     };
 
+
+
     const columns = useMemo(
         () => [
             {
@@ -128,9 +163,9 @@ const ActualTable = ({ info }) => {
                 // filterVariant: 'text',
                 // filterVariant: 'autocomplete',
                 filterVariant: 'contains',
-                enableResizing: true,
-                enableHiding: false,
-                enablePinning: false,
+                // enableResizing: true,
+                // enableHiding: false,
+                // enablePinning: false,
                 minSize: 100,
                 maxSize: 400,
                 size: columnSize?.NUMER ? columnSize.NUMER : 180,
@@ -172,7 +207,7 @@ const ActualTable = ({ info }) => {
                 },
                 minSize: 100,
                 maxSize: 400,
-                size: columnSize?.W_BRUTTO ? columnSize.W_BRUTTO : 140,
+                size: columnSize?.W_BRUTTO ? columnSize.W_BRUTTO : 180,
             },
             {
                 accessorKey: 'DOROZLICZ_',
@@ -218,7 +253,7 @@ const ActualTable = ({ info }) => {
                 size: columnSize?.UWAGI ? columnSize.UWAGI : 140,
             },
         ],
-        [customFilter, documents, columnSize, columnVisibility, densityChange],
+        [customFilter, documents, columnSize, columnVisibility, densityChange, columnsPinning],
     );
 
 
@@ -242,7 +277,6 @@ const ActualTable = ({ info }) => {
                         enableStickyHeader
                         enableStickyFooter
                         // enableEditing
-                        enableColumnPinning
                         enableColumnResizing
                         onColumnSizingChange={handleSize}
                         // onColumnVisibilityChange={(visibility) => handleVisibilityChange(visibility)}
@@ -250,7 +284,9 @@ const ActualTable = ({ info }) => {
                         onDensityChange={handleDensityChange}
                         onColumnOrderChange={(order) => setColumnsOrder(order)}
                         enableColumnOrdering
-
+                        enableColumnPinning
+                        onColumnPinningChange={handlePinning}
+                        // layoutMode={'grid-no-grow'}
 
                         // onGlobalFilterChange={handleTest}
 
@@ -265,13 +301,15 @@ const ActualTable = ({ info }) => {
                             // columnVisibility: { KONTRAHENT: columnSettings?.KONTRAHENT?.visible ? columnSettings.KONTRAHENT.visible : true },
                             // columnVisibility: { KONTRAHENT: true },
 
-                            columnPinning: { left: ['NUMER'] }
                         }}
                         localization={MRT_Localization_PL}
                         state={{
                             columnVisibility: columnVisibility,
                             density: densityChange,
-                            columnOrder: columnsOrder
+                            columnOrder: columnsOrder,
+                            // columnPinning: { left: ['NUMER'] }
+                            columnPinning: columnsPinning
+
                             // [
                             //     'NUMER', 'UWAGI', 'KONTRAHENT', 'DZIAL', 'DOROZLICZ_', 'PRZYGOTOWAL', 'PLATNOSC', 'NRREJESTRACYJNY'
                             //     , 'NRNADWOZIA', 'W_BRUTTO', 'mrt-row-select']
