@@ -3,7 +3,7 @@ import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { LiaEditSolid } from "react-icons/lia";
 import PleaseWait from './PleaseWait';
 import EditSystemSettings from './EditSystemSettings';
-import './SettingsSystem.css';
+import './UserSettings.css';
 
 const SettingsSystem = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();

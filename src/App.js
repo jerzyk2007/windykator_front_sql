@@ -10,7 +10,7 @@ import Register from './components/Register';
 import PersistLogin from './components/PersistLogin';
 import RequireAuth from './components/RequireAuth';
 import ChangePassword from './components/ChangePassword';
-import SettingsSystem from './components/SettingsSystem';
+import UserSettings from './components/UserSettings';
 import './App.css';
 
 const ROLES = {
@@ -50,7 +50,7 @@ function App() {
               <Route path='/add-data' element={<AddDataFromFile />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
-              <Route path='/system-settings' element={<SettingsSystem />} />
+              <Route path='/user-settings' element={<UserSettings />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
               <Route path='/change-password' element={<ChangePassword />} />

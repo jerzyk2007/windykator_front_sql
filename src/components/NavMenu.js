@@ -95,7 +95,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         <ul className='nav_menu__menu-dropmenu'>
                             <li className='nav_menu-item-dropmenu'><Link to="/add-data" className="nav_menu-link" onClick={handleLinkClick}>Dodaj dane
                             </Link></li>
-                            <li className='nav_menu-item-dropmenu'><Link to="/system-settings" className="nav_menu-link" onClick={handleLinkClick}>Uprawnienia
+                            <li className='nav_menu-item-dropmenu'><Link to="/user-settings" className="nav_menu-link" onClick={handleLinkClick}>Uprawnienia użytkownika
+                            </Link></li>
+                            <li className='nav_menu-item-dropmenu'><Link to="/table-settings" className="nav_menu-link" onClick={handleLinkClick}>Ustawienia tabel
                             </Link></li>
                         </ul>
                     </div>
