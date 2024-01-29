@@ -13,7 +13,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     const { width } = useWindowSize();
 
     const [menuActive, setMenuActive] = useState(false);
-
     const handleLinkClick = () => {
         // setMenuActive(false);
         if (mobileMenu) {

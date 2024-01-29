@@ -221,9 +221,6 @@ const ActualTable = ({ info }) => {
         [customFilter, documents, columnSize, columnVisibility, densityChange],
     );
 
-    const handleTest = (info) => {
-        console.log(info);
-    };
 
     useEffect(() => {
         prepareTable();

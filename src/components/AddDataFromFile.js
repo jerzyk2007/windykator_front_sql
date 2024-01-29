@@ -34,23 +34,23 @@ const AddDataFromFile = () => {
     };
 
 
-    const handleGetAllContacts = async () => {
-        try {
-            const response = await axiosPrivate.get('/contacts/getAllContacts');
+    // const handleGetAllContacts = async () => {
+    //     try {
+    //         const response = await axiosPrivate.get('/contacts/getAllContacts');
 
-            console.log(response.data);
-        }
-        catch (err) {
-            console.log(err);
-        }
-    };
+    //         console.log(response.data);
+    //     }
+    //     catch (err) {
+    //         console.log(err);
+    //     }
+    // };
 
     return (
         pleaseWait ? <PleaseWait /> : <div className='add_data_from_file'>
             <input type="file" name="uploadfile" id="xlsx" style={{ display: "none" }} onChange={handleFileChange} />
             <label htmlFor="xlsx" className="add_data_file-click-me">Click me to upload xlsx file</label>
             <br />
-            <button onClick={handleGetAllContacts}>Pobierz</button>
+            {/* <button onClick={handleGetAllContacts}>Pobierz</button> */}
 
         </div>
     );
