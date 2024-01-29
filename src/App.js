@@ -11,6 +11,7 @@ import PersistLogin from './components/PersistLogin';
 import RequireAuth from './components/RequireAuth';
 import ChangePassword from './components/ChangePassword';
 import UserSettings from './components/UserSettings';
+import TableSettings from './components/TableSettings';
 import './App.css';
 
 const ROLES = {
@@ -46,11 +47,14 @@ function App() {
             <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
               <Route path='/contacts' element={<Contacts />} />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
               <Route path='/add-data' element={<AddDataFromFile />} />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
               <Route path='/user-settings' element={<UserSettings />} />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+              <Route path='/table-settings' element={<TableSettings />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
               <Route path='/change-password' element={<ChangePassword />} />

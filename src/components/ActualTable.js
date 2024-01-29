@@ -5,7 +5,7 @@ import { createTheme, ThemeProvider, useTheme } from '@mui/material';
 import { plPL } from '@mui/material/locale';
 import useData from './hooks/useData';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import { addPrefiksDepartment } from './TableSettings/TableFilters';
+import { addPrefiksDepartment } from './TableFilters/TableFilters';
 import { TfiSave } from "react-icons/tfi";
 import PleaseWait from './PleaseWait';
 

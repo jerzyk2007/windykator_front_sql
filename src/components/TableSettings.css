@@ -1,0 +1,31 @@
+.table_settings {
+    flex-grow: 1;
+    display: flex;
+    padding: 5px;
+}
+
+.table_settings-table {
+    flex-grow: 1;
+    flex-shrink: 0;
+    margin: 5px;
+    padding: 5px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    border-radius: 5px;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.table_settings-raport {
+    flex-grow: 1;
+    flex-shrink: 0;
+    margin: 5px;
+    padding: 5px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    border-radius: 5px;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
