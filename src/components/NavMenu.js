@@ -26,9 +26,13 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     };
 
 
+    useEffect(() => {
+        console.log(menuActive);
+    }, [menuActive]);
+
+
     return (
         <nav className='nav_menu'>
-            {/* <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'} onMouseEnter={() => setMenuActive(true)}> */}
             <ul className={!mobileMenu ? 'nav_menu__menu' : 'nav_menu__menu active'} onClick={() => setMenuActive(!menuActive)} onMouseLeave={() => setMenuActive(false)}>
                 <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Tabelka
                 </Link>
