@@ -318,12 +318,13 @@ const ActualTable = ({ info }) => {
                             align: "left",
                             sx: {
                                 fontWeight: "bold",
-                                fontSize: "16px",
+                                fontSize: "14px",
                                 color: "black",
                                 backgroundColor: "#a5f089",
                                 // borderRadius: "5px",
                                 // boxShadow: "2px 2px 2px #757575",
-                                borderRight: "1px solid #000",
+                                // borderRight: "1px solid #000",
+
                             },
                         })}
 

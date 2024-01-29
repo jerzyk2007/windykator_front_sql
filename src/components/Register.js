@@ -110,7 +110,7 @@ const Register = () => {
                     {!errMsg && <h1 className="register-title">Rejestracja</h1>}
                     <form className="register__container" onSubmit={handleSubmit}>
 
-                        <label htmlFor="userlogin" className="register__container-title">
+                        <label htmlFor="username" className="register__container-title">
                             E-mail:
                             <span className={validUserlogin ? "register__container-title--valid" : "register__container-title--hide"}><FontAwesomeIcon icon={faCheck} /></span>
                             <span className={validUserlogin || !userlogin ? "register__container-title--hide" : "register__container-title--invalid"}><FontAwesomeIcon icon={faTimes} /></span>
@@ -118,7 +118,7 @@ const Register = () => {
                         <input
                             className="register__container-text"
                             type="text"
-                            id="userlogin"
+                            id="username"
                             autoComplete="new-userlogin"
                             name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
                             // ref={userRef}
@@ -134,13 +134,13 @@ const Register = () => {
                             Musi to byc format adresu email.<br />
                         </p>}
 
-                        <label htmlFor="username" className="register__container-title">
+                        <label htmlFor="user" className="register__container-title">
                             Imię:
                         </label>
                         <input
                             className="register__container-text"
                             type="text"
-                            id="username"
+                            id="user"
                             autoComplete="new-username"
                             name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
                             ref={userRef}

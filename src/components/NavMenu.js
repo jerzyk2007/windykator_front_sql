@@ -86,7 +86,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         </ul>
                     </div>
                 </li>
-                {auth?.roles?.includes(500) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >System
+                {auth?.roles?.includes(300) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >System
                 </Link>
                     <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
