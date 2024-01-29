@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { FiX } from "react-icons/fi";
-import './EditSystemSettings.css';
-
-// dokończyc usuwanie użytkonika;
+import './EditUserSettings.css';
 
 const EditSystemSettings = ({ user, setEdit }) => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();

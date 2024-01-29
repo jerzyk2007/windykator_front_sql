@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { LiaEditSolid } from "react-icons/lia";
 import PleaseWait from './PleaseWait';
-import EditSystemSettings from './EditSystemSettings';
+import EditUserSettings from './EditUserSettings';
 import './UserSettings.css';
 
 const SettingsSystem = () => {
@@ -34,9 +34,9 @@ const SettingsSystem = () => {
 
     const userItem = users.map((userItem, index) => {
         return (
-            <section className='settings_system__result' key={index}>
-                <p className='settings_system__result--name'>{userItem.userlogin}</p>
-                <LiaEditSolid className="settings_system__result--edit" onClick={() => handleEdit(userItem)} />
+            <section className='user_settings__result' key={index}>
+                <p className='user_settings__result--name'>{userItem.userlogin}</p>
+                <LiaEditSolid className="user_settings__result--edit" onClick={() => handleEdit(userItem)} />
             </section>
         );
     });
@@ -46,29 +46,25 @@ const SettingsSystem = () => {
         setSearch('');
     }, [edit]);
 
-    // useEffect(() => {
-    //     searchRef.current.focus();
-    // }, []);
-
     return (
-        <section className='settings_system'>
-            {!edit ? <section className='settings_system__container'>
-                <section className='settings_system__search'>
-                    <form className="settings_system__search-form" onSubmit={handleSubmit}>
+        <section className='user_settings'>
+            {!edit ? <section className='user_settings__container'>
+                <section className='user_settings__search'>
+                    <form className="user_settings__search-form" onSubmit={handleSubmit}>
                         <input
-                            className="settings_system__search-text"
+                            className="user_settings__search-text"
                             type="text"
                             // ref={searchRef}
                             placeholder="Wyszukaj użytkownika - min 5 znaków"
                             value={search}
                             onChange={(e) => setSearch((e.target.value).toLocaleLowerCase())}
                         />
-                        <button className="settings_system__search-button" type="submit" disabled={search.length < 5 ? true : false}>Szukaj</button>
+                        <button className="user_settings__search-button" type="submit" disabled={search.length < 5 ? true : false}>Szukaj</button>
                     </form>
                 </section>
                 {search && userItem}
 
-            </section> : <EditSystemSettings user={user} setEdit={setEdit} />}
+            </section> : <EditUserSettings user={user} setEdit={setEdit} />}
             {isLoading && <PleaseWait />}
         </section>
     );

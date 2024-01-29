@@ -1,4 +1,4 @@
-.settings_system {
+.user_settings {
     flex-grow: 1;
     display: flex;
     justify-content: center;
@@ -6,13 +6,13 @@
     overflow-y: auto;
 }
 
-.settings_system__container {
+.user_settings__container {
     width: 70%;
     display: flex;
     flex-direction: column;
 }
 
-.settings_system__search {
+.user_settings__search {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
@@ -20,7 +20,7 @@
 }
 
 
-.settings_system__search-form {
+.user_settings__search-form {
     width: 100%;
     margin: 0 auto;
     display: flex;
@@ -28,7 +28,7 @@
     justify-content: center;
 }
 
-.settings_system__search-text {
+.user_settings__search-text {
     display: block;
     width: 80%;
     font-size: 1.2rem;
@@ -40,7 +40,7 @@
 }
 
 
-.settings_system__search-button {
+.user_settings__search-button {
     flex-grow: 0;
     padding: 10px;
     margin-left: 10px;
@@ -58,7 +58,7 @@
     background-color: #43c752;
 }
 
-.settings_system__result {
+.user_settings__result {
     width: 90%;
     margin: 10px auto;
     display: flex;
@@ -69,7 +69,7 @@
     box-shadow: 2px 2px 3px 2px rgb(106, 132, 134);
 }
 
-.settings_system__result--edit {
+.user_settings__result--edit {
     font-size: 2.5rem;
     margin-left: auto;
     color: rgb(46, 157, 24);
@@ -78,37 +78,37 @@
     flex-shrink: 0;
 }
 
-.settings_system__result--name {
+.user_settings__result--name {
     display: flex;
     font-size: 1.2rem;
     align-items: center;
 }
 
 @media screen and (max-width: 960px) {
-    .settings_system__container {
+    .user_settings__container {
         width: 95%;
     }
 
-    .settings_system__search-text {
+    .user_settings__search-text {
         width: 100%;
         font-size: .9rem;
 
     }
 
-    .settings_system__result {
+    .user_settings__result {
         width: 100%;
     }
 
-    .settings_system__result--name {
+    .user_settings__result--name {
         flex-grow: 1;
         font-size: 1rem;
     }
 
-    .settings_system__result--edit {
+    .user_settings__result--edit {
         font-size: 2rem;
     }
 
-    .settings_system__search-button {
+    .user_settings__search-button {
         font-size: .8rem;
     }
 }
