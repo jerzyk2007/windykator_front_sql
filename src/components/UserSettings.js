@@ -5,7 +5,7 @@ import PleaseWait from './PleaseWait';
 import EditUserSettings from './EditUserSettings';
 import './UserSettings.css';
 
-const SettingsSystem = () => {
+const UserSetting = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
     // const searchRef = useRef();
 
@@ -70,4 +70,4 @@ const SettingsSystem = () => {
     );
 };
 
-export default SettingsSystem;
+export default UserSetting;

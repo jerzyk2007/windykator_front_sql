@@ -22,10 +22,57 @@ const ActualTable = ({ info }) => {
     const [density, setDensity] = useState('');
     const [columnOrder, setColumnOrder] = useState([]);
     const [columnPinning, setColumnPinning] = useState({});
+    const [columns, setColumns] = useState([]);
+
+    const prepareColumns = (columnsData, data) => {
+        const changeColumn = columnsData.map(item => {
+            // Tworzymy kopię obiektu, aby nie modyfikować oryginału
+            const modifiedItem = { ...item };
+
+            if (item.filterVariant === 'multi-select') {
+                const uniqueValues = Array.from(new Set(data.map(filtr => filtr[item.accessorKey])));
+                modifiedItem.filterSelectOptions = uniqueValues;
+            }
+
+
+            if (item.filterVariant === "range-slider") {
+                modifiedItem.muiFilterSliderProps = {
+                    marks: true,
+                    max: data.reduce((max, key) => Math.max(max, key[item.accessorKey]), Number.NEGATIVE_INFINITY),
+                    min: data.reduce((min, key) => Math.min(min, key[item.accessorKey]), Number.POSITIVE_INFINITY),
+                    step: 100,
+                    valueLabelFormat: (value) =>
+                        value.toLocaleString('pl-PL', {
+                            style: 'currency',
+                            currency: 'PLN',
+                        }),
+                };
+            }
+            if (item.type === 'money') {
+                modifiedItem.Cell = ({ cell }) => {
+                    const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                        useGrouping: true,
+                    });
+                    return `${formattedSalary}`;
+                };
+            }
+
+            // Usuwamy właściwość 'type' z każdego obiektu
+            delete modifiedItem.type;
+
+            return modifiedItem;
+        });
+        console.log(changeColumn);
+        return changeColumn;
+    };
+
 
     const prepareTable = async () => {
         try {
             setPleaseWait(true);
+
             const result = await axiosPrivateIntercept.get(`/getAllDocuments/${info}`);
             setDocuments(result.data);
             const settingsTable = await axiosPrivateIntercept.get('/user/get-table-settings/', { params: { userlogin: auth.userlogin } });
@@ -34,6 +81,9 @@ const ActualTable = ({ info }) => {
             setDensity(settingsTable?.data?.density ? settingsTable.data.density : 'comfortable');
             setColumnOrder(settingsTable?.data?.order ? (settingsTable.data.order).map(order => order) : []);
             setColumnPinning(settingsTable?.data?.pinning ? (settingsTable.data.pinning) : { left: [], right: [] });
+            const getColumns = await axiosPrivateIntercept.get('/settings/get-columns');
+            const modifiedColumns = prepareColumns(getColumns.data, result.data);
+            setColumns(modifiedColumns);
             setPleaseWait(false);
         } catch (err) {
             console.log(err);
@@ -64,130 +114,144 @@ const ActualTable = ({ info }) => {
         return uniqueTypeOfPayment;
     };
 
-    const columns = useMemo(
-        () => [
-            {
-                accessorKey: 'NUMER',
-                header: 'Faktura',
-                // filterVariant: 'text',
-                // filterVariant: 'autocomplete',
-                filterVariant: 'contains',
-                // enableResizing: true,
-                // enableHiding: false,
-                // enablePinning: false,
-                minSize: 100,
-                maxSize: 400,
-                size: columnSizing?.NUMER ? columnSizing.NUMER : 180,
-            },
-            {
-                accessorKey: 'KONTRAHENT',
-                header: 'Kontrahent',
-                filterVariant: 'text',
-                minSize: 100,
-                maxSize: 400,
-                size: columnSizing?.KONTRAHENT ? columnSizing.KONTRAHENT : 180,
-            },
-            {
-                accessorKey: 'DZIAL',
-                header: 'Dział',
-                filterVariant: 'multi-select',
-                filterSelectOptions: Array.from(new Set(documents.map(item => item.DZIAL))),
-                minSize: 100,
-                maxSize: 400,
-                size: columnSizing?.DZIAL ? columnSizing.DZIAL : 120,
-            },
-            {
-                accessorKey: 'NRNADWOZIA',
-                header: 'VIN',
-                minSize: 100,
-                maxSize: 400,
-                size: columnSizing?.NRNADWOZIA ? columnSizing.NRNADWOZIA : 120,
-            },
-            {
-                accessorKey: 'W_BRUTTO',
-                header: 'Brutto',
-                Cell: ({ cell }) => {
-                    const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                        useGrouping: true,
-                    });
-                    return `${formattedSalary}`;
-                },
-                minSize: 100,
-                maxSize: 400,
-                size: columnSizing?.W_BRUTTO ? columnSizing.W_BRUTTO : 180,
-            },
-            {
-                accessorKey: 'DOROZLICZ_',
-                header: 'Brakuje',
-                filterVariant: 'range-slider',
-                // filterFn: 'betweenInclusive',
-                muiFilterSliderProps: {
-                    marks: true,
-                    max: getMaxValue(documents, 'DOROZLICZ_'),
-                    min: 0,
-                    step: 100,
-                    valueLabelFormat: (value) =>
-                        value.toLocaleString('pl-PL', {
-                            style: 'currency',
-                            currency: 'PLN',
-                        }),
-                },
-                Cell: ({ cell }) => {
-                    const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                        useGrouping: true,
-                    });
-                    return `${formattedSalary}`;
-                },
-                minSize: 100,
-                maxSize: 400,
-                size: columnSizing?.DOROZLICZ_ ? columnSizing.DOROZLICZ_ : 140,
-            },
-            {
-                accessorKey: 'PRZYGOTOWAL',
-                header: 'Przygował',
-                filterVariant: 'multi-select',
-                filterSelectOptions: Array.from(new Set(documents.map(item => item.PRZYGOTOWAL))),
-                minSize: 100,
-                maxSize: 400,
-                size: columnSizing?.PRZYGOTOWAL ? columnSizing.PRZYGOTOWAL : 140,
-            },
-            {
-                accessorKey: 'PLATNOSC',
-                header: 'Płatność',
-                filterVariant: 'multi-select',
-                filterSelectOptions: Array.from(new Set(documents.map(item => item.PLATNOSC))),
-                minSize: 100,
-                maxSize: 400,
-                size: columnSizing?.PLATNOSC ? columnSizing.PLATNOSC : 140,
-            },
-            {
-                accessorKey: 'NRREJESTRACYJNY',
-                header: 'Nr rej',
-                minSize: 100,
-                maxSize: 400,
-                size: columnSizing?.NRREJESTRACYJNY ? columnSizing.NRREJESTRACYJNY : 140,
-            },
-            {
-                accessorKey: 'UWAGI',
-                header: 'Uwagi',
-                minSize: 100,
-                maxSize: 400,
-                size: columnSizing?.UWAGI ? columnSizing.UWAGI : 140,
-            },
-        ],
-        [customFilter, documents, columnSizing, columnVisibility, density, columnPinning],
+    // const columnsXXX = useMemo(
+    //     () => [
+    //         {
+    //             accessorKey: 'NUMER',
+    //             header: 'Faktura',
+    //             // filterVariant: 'text',
+    //             // filterVariant: 'autocomplete',
+    //             filterVariant: 'contains',
+    //             // enableResizing: true,
+    //             // enableHiding: false,
+    //             // enablePinning: false,
+    //             minSize: 100,
+    //             maxSize: 400,
+    //             size: columnSizing?.NUMER ? columnSizing.NUMER : 180,
+    //         },
+    //         {
+    //             accessorKey: 'KONTRAHENT',
+    //             header: 'Kontrahent',
+    //             filterVariant: 'text',
+    //             minSize: 100,
+    //             maxSize: 400,
+    //             size: columnSizing?.KONTRAHENT ? columnSizing.KONTRAHENT : 180,
+    //         },
+    //         {
+    //             accessorKey: 'DZIAL',
+    //             header: 'Dział',
+    //             filterVariant: 'multi-select',
+    //             filterSelectOptions: Array.from(new Set(documents.map(item => item.DZIAL))),
+    //             minSize: 100,
+    //             maxSize: 400,
+    //             size: columnSizing?.DZIAL ? columnSizing.DZIAL : 120,
+    //         },
+    //         {
+    //             accessorKey: 'NRNADWOZIA',
+    //             header: 'VIN',
+    //             minSize: 100,
+    //             maxSize: 400,
+    //             size: columnSizing?.NRNADWOZIA ? columnSizing.NRNADWOZIA : 120,
+    //         },
+    //         {
+    //             accessorKey: 'W_BRUTTO',
+    //             header: 'Brutto',
+    //             Cell: ({ cell }) => {
+    //                 const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
+    //                     minimumFractionDigits: 2,
+    //                     maximumFractionDigits: 2,
+    //                     useGrouping: true,
+    //                 });
+    //                 return `${formattedSalary}`;
+    //             },
+    //             minSize: 100,
+    //             maxSize: 400,
+    //             size: columnSizing?.W_BRUTTO ? columnSizing.W_BRUTTO : 180,
+    //         },
+    //         {
+    //             accessorKey: 'DOROZLICZ_',
+    //             header: 'Brakuje',
+    //             filterVariant: 'range-slider',
+    //             // filterFn: 'betweenInclusive',
+    //             muiFilterSliderProps: {
+    //                 marks: true,
+    //                 // max: getMaxValue(documents, 'DOROZLICZ_'),
+    //                 max: documents.reduce((max, item) => Math.max(max, item['DOROZLICZ_']), Number.NEGATIVE_INFINITY),
+    //                 // min: 0,
+    //                 min: documents.reduce((min, item) => Math.min(min, item['DOROZLICZ_']), Number.POSITIVE_INFINITY),
+    //                 step: 100,
+    //                 valueLabelFormat: (value) =>
+    //                     value.toLocaleString('pl-PL', {
+    //                         style: 'currency',
+    //                         currency: 'PLN',
+    //                     }),
+    //             },
+    //             Cell: ({ cell }) => {
+    //                 const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
+    //                     minimumFractionDigits: 2,
+    //                     maximumFractionDigits: 2,
+    //                     useGrouping: true,
+    //                 });
+    //                 return `${formattedSalary}`;
+    //             },
+    //             minSize: 100,
+    //             maxSize: 400,
+    //             size: columnSizing?.DOROZLICZ_ ? columnSizing.DOROZLICZ_ : 140,
+    //         },
+    //         {
+    //             accessorKey: 'PRZYGOTOWAL',
+    //             header: 'Przygował',
+    //             enableColumnFilterModes: false,
+    //             filterVariant: 'multi-select',
+    //             filterSelectOptions: Array.from(new Set(documents.map(item => item.PRZYGOTOWAL))),
+    //             minSize: 100,
+    //             maxSize: 400,
+    //             size: columnSizing?.PRZYGOTOWAL ? columnSizing.PRZYGOTOWAL : 140,
+    //         },
+    //         {
+    //             accessorKey: 'PLATNOSC',
+    //             header: 'Płatność-xxx',
+    //             filterVariant: 'multi-select',
+    //             filterSelectOptions: Array.from(new Set(documents.map(item => item.PLATNOSC))),
+    //             minSize: 100,
+    //             maxSize: 400,
+    //             size: columnSizing?.PLATNOSC ? columnSizing.PLATNOSC : 140,
+    //         },
+    //         {
+    //             accessorKey: 'NRREJESTRACYJNY',
+    //             header: 'Nr rej',
+    //             minSize: 100,
+    //             maxSize: 400,
+    //             size: columnSizing?.NRREJESTRACYJNY ? columnSizing.NRREJESTRACYJNY : 140,
+    //         },
+    //         {
+    //             accessorKey: 'UWAGI',
+    //             header: 'Uwagi',
+    //             minSize: 100,
+    //             maxSize: 400,
+    //             size: columnSizing?.UWAGI ? columnSizing.UWAGI : 140,
+    //         },
+    //     ],
+    //     [customFilter, documents, columnSizing, columnVisibility, density, columnPinning],
+    // );
+
+    // const columns = useMemo(
+    //     () => columnsItem.map(column => ({ ...column }))
+    //     [customFilter, documents, columnSizing, columnVisibility, density, columnPinning, columnsItem],
+    // );
+
+    const columnsItem = useMemo(
+        () => columns.map(column => ({
+            ...column,
+            size: columnSizing?.[column.accessorKey] ? columnSizing[column.accessorKey] : column.size,
+        })),
+        [customFilter, documents, columnSizing, columnVisibility, density, columnPinning, columns]
     );
 
 
     useEffect(() => {
         prepareTable();
     }, [info]);
-
-
 
     return (
         <section className='actual_table'>
@@ -197,7 +261,8 @@ const ActualTable = ({ info }) => {
                     <MaterialReactTable
                         className='actual_table__table'
                         // table={table}
-                        columns={columns}
+                        columns={columnsItem}
+                        // columns={columnsXXX}
                         data={documents}
                         enableColumnFilterModes
                         enableStickyHeader

@@ -88,10 +88,7 @@ const EditSystemSettings = ({ user, setEdit }) => {
                 checked={isChecked}
             />
         </label>
-
-
     ));
-
 
     const handleChangeDepartments = async () => {
         try {
@@ -182,7 +179,7 @@ const EditSystemSettings = ({ user, setEdit }) => {
                     return role;
                 }
             }).filter(Boolean);
-            const result = await axiosPrivateIntercept.patch(`/settings/change-roles/${user._id}`, { roles: arrayRoles });
+            const result = await axiosPrivateIntercept.patch(`/user/change-roles/${user._id}`, { roles: arrayRoles });
             setErrRoles('Sukces.');
         }
         catch (err) {
