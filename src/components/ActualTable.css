@@ -1,7 +1,7 @@
 .actual_table {
     flex-grow: 1;
     width: 100vw;
-    overflow-x: scroll;
+    overflow-y: auto;
 }
 
 .actual_table tr:nth-of-type(odd) td {

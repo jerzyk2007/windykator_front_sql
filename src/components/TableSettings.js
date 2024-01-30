@@ -11,8 +11,8 @@ const TableSettings = () => {
             header: 'Faktura',
             enableColumnFilterModes: false,
             filterVariant: 'contains',
-            enableHiding: false,
-            enablePinning: false,
+            enableHiding: true,
+            enablePinning: true,
             minSize: 100,
             maxSize: 400,
             type: "text"
