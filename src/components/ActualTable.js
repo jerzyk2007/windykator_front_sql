@@ -18,42 +18,11 @@ const ActualTable = ({ info }) => {
 
     const [documents, setDocuments] = useState([]);
     const [customFilter, setCustomFilter] = useState([]);
-
-    const [columnVisibility, setColumnVisibility] = useState({
-        // NUMER: true,
-        // KONTRAHENT: true,
-        // DZIAL: true,
-        // NRNADWOZIA: true,
-        // W_BRUTTO: true,
-        // DOROZLICZ_: true,
-        // PRZYGOTOWAL: true,
-        // PLATNOSC: true,
-        // NRREJESTRACYJNY: true,
-        // UWAGI: true,
-    });
-    const [columnSize, setColumnSize] = useState({
-        // NUMER: 200,
-        // KONTRAHENT: 200,
-        // DZIAL: 200,
-        // NRNADWOZIA: 200,
-        // W_BRUTTO: 200,
-        // DOROZLICZ_: 200,
-        // PRZYGOTOWAL: 200,
-        // PLATNOSC: 200,
-        // NRREJESTRACYJNY: 200,
-        // UWAGI: 200,
-    });
-    const [densityChange, setDensityChange] = useState('compact');
-
-    const [columnsOrder, setColumnsOrder] = useState([
-        // 'NUMER', 'UWAGI', 'KONTRAHENT', 'DZIAL', 'DOROZLICZ_', 'PRZYGOTOWAL', 'PLATNOSC', 'NRREJESTRACYJNY'
-        // , 'NRNADWOZIA', 'W_BRUTTO', 'mrt-row-select'
-    ]);
-
-    const [columnsPinning, setColumnsPinning] = useState({
-        // left: [],
-        // right: []
-    });
+    const [columnVisibility, setColumnVisibility] = useState({});
+    const [columnSizing, setColumnSizing] = useState({});
+    const [density, setDensity] = useState('');
+    const [columnOrder, setColumnOrder] = useState([]);
+    const [columnPinning, setColumnPinning] = useState({});
 
     const prepareTable = async () => {
         try {
@@ -63,34 +32,18 @@ const ActualTable = ({ info }) => {
             setCustomFilter(addPrefiksDepartment(result.data));
             const settingsTable = await axiosPrivateIntercept.get('/user/get-table-settings/', { params: { userlogin: auth.userlogin } });
             setColumnVisibility(settingsTable?.data?.visible ? settingsTable.data.visible : {});
-            setColumnSize(settingsTable?.data?.size ? settingsTable.data.size : {});
-            setDensityChange(settingsTable?.data?.density ? settingsTable.data.density : 'comfortable');
-            setColumnsOrder(settingsTable?.data?.order ? (settingsTable.data.order).map(order => order) : []);
-            setColumnsPinning(settingsTable?.data?.pinning ? (settingsTable.data.pinning) : { left: [], right: [] });
+            setColumnSizing(settingsTable?.data?.size ? settingsTable.data.size : {});
+            setDensity(settingsTable?.data?.density ? settingsTable.data.density : 'comfortable');
+            setColumnOrder(settingsTable?.data?.order ? (settingsTable.data.order).map(order => order) : []);
+            setColumnPinning(settingsTable?.data?.pinning ? (settingsTable.data.pinning) : { left: [], right: [] });
             setPleaseWait(false);
         } catch (err) {
             console.log(err);
         }
     };
 
-    const handleSize = (columnSize) => {
-
-        const _ref2 = '';
-        const columnInfo = columnSize(_ref2);
-        const name = Object.keys(columnInfo)[0];
-        const size = columnInfo[name];
-        if (name && size) {
-            setColumnSize(prev => {
-                return {
-                    ...prev,
-                    [name]: size
-                };
-            });
-        }
-    };
-
     const handleSaveSettings = async () => {
-        const tableSettings = { size: { ...columnSize }, visible: { ...columnVisibility }, density: densityChange, order: columnsOrder, pinning: columnsPinning };
+        const tableSettings = { size: { ...columnSizing }, visible: { ...columnVisibility }, density, order: columnOrder, pinning: columnPinning };
 
 
         try {
@@ -102,57 +55,6 @@ const ActualTable = ({ info }) => {
             console.log(err);
         }
     };
-
-    const handlePinning = (info) => {
-        if (JSON.stringify(info) !== JSON.stringify({ left: [], right: [] })) {
-            const test = info();
-            const leftItem = test.left.toString();
-            const rightItem = test.right.toString();
-
-            const newColumnsPinning = { ...columnsPinning };
-            let newColumnsPinningLeft = newColumnsPinning.left;
-            let newColumnsPinningRight = newColumnsPinning.right;
-
-            if (leftItem) {
-                newColumnsPinningLeft = [...newColumnsPinningLeft, leftItem];
-            }
-            if (rightItem) {
-                newColumnsPinningRight = [...newColumnsPinningRight, rightItem];
-            };
-            setColumnsPinning(
-                {
-                    left: newColumnsPinningLeft,
-                    right: newColumnsPinningRight
-                }
-            );
-        } else {
-            setColumnsPinning(info);
-        }
-    };
-
-
-
-    const handleVisibilityChange = (visibility) => {
-        const columnInfo = visibility();
-        const name = Object.keys(columnInfo)[0];
-        const visible = columnInfo[name];
-
-        setColumnVisibility(prev => {
-            return {
-                ...prev,
-                [name]: visible
-            };
-        });
-    };
-
-    const handleDensityChange = () => {
-        const densityOptions = ['comfortable', 'compact', 'spacious'];
-        const currentIndex = densityOptions.indexOf(densityChange);
-        const nextIndex = (currentIndex + 1) % densityOptions.length;
-
-        setDensityChange(densityOptions[nextIndex]);
-    };
-
 
 
     const columns = useMemo(
@@ -168,7 +70,7 @@ const ActualTable = ({ info }) => {
                 // enablePinning: false,
                 minSize: 100,
                 maxSize: 400,
-                size: columnSize?.NUMER ? columnSize.NUMER : 180,
+                size: columnSizing?.NUMER ? columnSizing.NUMER : 180,
             },
             {
                 accessorKey: 'KONTRAHENT',
@@ -176,7 +78,7 @@ const ActualTable = ({ info }) => {
                 filterVariant: 'text',
                 minSize: 100,
                 maxSize: 400,
-                size: columnSize?.KONTRAHENT ? columnSize.KONTRAHENT : 180,
+                size: columnSizing?.KONTRAHENT ? columnSizing.KONTRAHENT : 180,
             },
             {
                 accessorKey: 'DZIAL',
@@ -185,14 +87,14 @@ const ActualTable = ({ info }) => {
                 filterSelectOptions: customFilter,
                 minSize: 100,
                 maxSize: 400,
-                size: columnSize?.DZIAL ? columnSize.DZIAL : 120,
+                size: columnSizing?.DZIAL ? columnSizing.DZIAL : 120,
             },
             {
                 accessorKey: 'NRNADWOZIA',
                 header: 'VIN',
                 minSize: 100,
                 maxSize: 400,
-                size: columnSize?.NRNADWOZIA ? columnSize.NRNADWOZIA : 120,
+                size: columnSizing?.NRNADWOZIA ? columnSizing.NRNADWOZIA : 120,
             },
             {
                 accessorKey: 'W_BRUTTO',
@@ -207,11 +109,12 @@ const ActualTable = ({ info }) => {
                 },
                 minSize: 100,
                 maxSize: 400,
-                size: columnSize?.W_BRUTTO ? columnSize.W_BRUTTO : 180,
+                size: columnSizing?.W_BRUTTO ? columnSizing.W_BRUTTO : 180,
             },
             {
                 accessorKey: 'DOROZLICZ_',
                 header: 'Brakuje',
+
                 Cell: ({ cell }) => {
                     const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
                         minimumFractionDigits: 2,
@@ -222,44 +125,45 @@ const ActualTable = ({ info }) => {
                 },
                 minSize: 100,
                 maxSize: 400,
-                size: columnSize?.DOROZLICZ_ ? columnSize.DOROZLICZ_ : 140,
+                size: columnSizing?.DOROZLICZ_ ? columnSizing.DOROZLICZ_ : 140,
             },
             {
                 accessorKey: 'PRZYGOTOWAL',
                 header: 'Przygował',
                 minSize: 100,
                 maxSize: 400,
-                size: columnSize?.PRZYGOTOWAL ? columnSize.PRZYGOTOWAL : 140,
+                size: columnSizing?.PRZYGOTOWAL ? columnSizing.PRZYGOTOWAL : 140,
             },
             {
                 accessorKey: 'PLATNOSC',
                 header: 'Płatność',
                 minSize: 100,
                 maxSize: 400,
-                size: columnSize?.PLATNOSC ? columnSize.PLATNOSC : 140,
+                size: columnSizing?.PLATNOSC ? columnSizing.PLATNOSC : 140,
             },
             {
                 accessorKey: 'NRREJESTRACYJNY',
                 header: 'Nr rej',
                 minSize: 100,
                 maxSize: 400,
-                size: columnSize?.NRREJESTRACYJNY ? columnSize.NRREJESTRACYJNY : 140,
+                size: columnSizing?.NRREJESTRACYJNY ? columnSizing.NRREJESTRACYJNY : 140,
             },
             {
                 accessorKey: 'UWAGI',
                 header: 'Uwagi',
                 minSize: 100,
                 maxSize: 400,
-                size: columnSize?.UWAGI ? columnSize.UWAGI : 140,
+                size: columnSizing?.UWAGI ? columnSizing.UWAGI : 140,
             },
         ],
-        [customFilter, documents, columnSize, columnVisibility, densityChange, columnsPinning],
+        [customFilter, documents, columnSizing, columnVisibility, density, columnPinning],
     );
 
 
     useEffect(() => {
         prepareTable();
     }, [info]);
+
 
 
     return (
@@ -273,47 +177,28 @@ const ActualTable = ({ info }) => {
                         columns={columns}
                         data={documents}
                         enableColumnFilterModes
-                        // enableColumnOrdering
                         enableStickyHeader
                         enableStickyFooter
-                        // enableEditing
                         enableColumnResizing
-                        onColumnSizingChange={handleSize}
-                        // onColumnVisibilityChange={(visibility) => handleVisibilityChange(visibility)}
-                        onColumnVisibilityChange={handleVisibilityChange}
-                        onDensityChange={handleDensityChange}
-                        onColumnOrderChange={(order) => setColumnsOrder(order)}
+                        onColumnSizingChange={setColumnSizing}
+                        onColumnVisibilityChange={setColumnVisibility}
+                        onDensityChange={setDensity}
+                        onColumnOrderChange={setColumnOrder}
                         enableColumnOrdering
                         enableColumnPinning
-                        onColumnPinningChange={handlePinning}
-                        // layoutMode={'grid-no-grow'}
-
-                        // onGlobalFilterChange={handleTest}
-
-                        // globalFilterModeOptions={['fuzzy', 'startsWith']}
+                        onColumnPinningChange={setColumnPinning}
                         globalFilterFn={'contains'}
-                        // enableRowActions
-                        // enableRowSelection
                         enableSelectAll={false}
                         initialState={{
                             showColumnFilters: false,
                             showGlobalFilter: true,
-                            // columnVisibility: { KONTRAHENT: columnSettings?.KONTRAHENT?.visible ? columnSettings.KONTRAHENT.visible : true },
-                            // columnVisibility: { KONTRAHENT: true },
-
                         }}
                         localization={MRT_Localization_PL}
                         state={{
                             columnVisibility: columnVisibility,
-                            density: densityChange,
-                            columnOrder: columnsOrder,
-                            // columnPinning: { left: ['NUMER'] }
-                            columnPinning: columnsPinning
-
-                            // [
-                            //     'NUMER', 'UWAGI', 'KONTRAHENT', 'DZIAL', 'DOROZLICZ_', 'PRZYGOTOWAL', 'PLATNOSC', 'NRREJESTRACYJNY'
-                            //     , 'NRNADWOZIA', 'W_BRUTTO', 'mrt-row-select']
-                            //     ,
+                            density,
+                            columnOrder,
+                            columnPinning
                         }}
                         // muiTableBodyCellProps={{
                         //     sx: {
