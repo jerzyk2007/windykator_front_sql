@@ -5,7 +5,6 @@ import { createTheme, ThemeProvider, useTheme } from '@mui/material';
 import { plPL } from '@mui/material/locale';
 import useData from './hooks/useData';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import { addPrefiksDepartment } from './TableFilters/TableFilters';
 import { TfiSave } from "react-icons/tfi";
 import PleaseWait from './PleaseWait';
 
@@ -17,7 +16,7 @@ const ActualTable = ({ info }) => {
     const { pleaseWait, setPleaseWait, auth } = useData();
 
     const [documents, setDocuments] = useState([]);
-    const [customFilter, setCustomFilter] = useState([]);
+    const [customFilter, setCustomFilter] = useState({});
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnSizing, setColumnSizing] = useState({});
     const [density, setDensity] = useState('');
@@ -29,7 +28,6 @@ const ActualTable = ({ info }) => {
             setPleaseWait(true);
             const result = await axiosPrivateIntercept.get(`/getAllDocuments/${info}`);
             setDocuments(result.data);
-            setCustomFilter(addPrefiksDepartment(result.data));
             const settingsTable = await axiosPrivateIntercept.get('/user/get-table-settings/', { params: { userlogin: auth.userlogin } });
             setColumnVisibility(settingsTable?.data?.visible ? settingsTable.data.visible : {});
             setColumnSizing(settingsTable?.data?.size ? settingsTable.data.size : {});
@@ -55,7 +53,16 @@ const ActualTable = ({ info }) => {
             console.log(err);
         }
     };
+    const getMaxValue = (documents, accessor) => {
+        return Math.max(...documents.map((item) => item[accessor]));
+    };
 
+    const generateCustomFilters = (accessor) => {
+        // Pobierz unikalne nazwy z tablicy
+        const uniqueTypeOfPayment = Array.from(new Set(documents.map(item => item[accessor])));
+
+        return uniqueTypeOfPayment;
+    };
 
     const columns = useMemo(
         () => [
@@ -84,7 +91,7 @@ const ActualTable = ({ info }) => {
                 accessorKey: 'DZIAL',
                 header: 'Dział',
                 filterVariant: 'multi-select',
-                filterSelectOptions: customFilter,
+                filterSelectOptions: Array.from(new Set(documents.map(item => item.DZIAL))),
                 minSize: 100,
                 maxSize: 400,
                 size: columnSizing?.DZIAL ? columnSizing.DZIAL : 120,
@@ -114,7 +121,19 @@ const ActualTable = ({ info }) => {
             {
                 accessorKey: 'DOROZLICZ_',
                 header: 'Brakuje',
-
+                filterVariant: 'range-slider',
+                // filterFn: 'betweenInclusive',
+                muiFilterSliderProps: {
+                    marks: true,
+                    max: getMaxValue(documents, 'DOROZLICZ_'),
+                    min: 0,
+                    step: 100,
+                    valueLabelFormat: (value) =>
+                        value.toLocaleString('pl-PL', {
+                            style: 'currency',
+                            currency: 'PLN',
+                        }),
+                },
                 Cell: ({ cell }) => {
                     const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
                         minimumFractionDigits: 2,
@@ -130,6 +149,8 @@ const ActualTable = ({ info }) => {
             {
                 accessorKey: 'PRZYGOTOWAL',
                 header: 'Przygował',
+                filterVariant: 'multi-select',
+                filterSelectOptions: Array.from(new Set(documents.map(item => item.PRZYGOTOWAL))),
                 minSize: 100,
                 maxSize: 400,
                 size: columnSizing?.PRZYGOTOWAL ? columnSizing.PRZYGOTOWAL : 140,
@@ -137,6 +158,8 @@ const ActualTable = ({ info }) => {
             {
                 accessorKey: 'PLATNOSC',
                 header: 'Płatność',
+                filterVariant: 'multi-select',
+                filterSelectOptions: Array.from(new Set(documents.map(item => item.PLATNOSC))),
                 minSize: 100,
                 maxSize: 400,
                 size: columnSizing?.PLATNOSC ? columnSizing.PLATNOSC : 140,
