@@ -104,16 +104,6 @@ const ActualTable = ({ info }) => {
             console.log(err);
         }
     };
-    const getMaxValue = (documents, accessor) => {
-        return Math.max(...documents.map((item) => item[accessor]));
-    };
-
-    const generateCustomFilters = (accessor) => {
-        // Pobierz unikalne nazwy z tablicy
-        const uniqueTypeOfPayment = Array.from(new Set(documents.map(item => item[accessor])));
-
-        return uniqueTypeOfPayment;
-    };
 
     const columnsItem = useMemo(
         () => columns.map(column => ({
@@ -124,7 +114,7 @@ const ActualTable = ({ info }) => {
     );
 
     useEffect(() => {
-        setTableSize(height - 200);
+        setTableSize(height - 220);
     }, [height]);
 
     useEffect(() => {
@@ -138,9 +128,7 @@ const ActualTable = ({ info }) => {
                     theme={createTheme(theme, plPL)} >
                     <MaterialReactTable
                         className='actual_table__table'
-                        // table={table}
                         columns={columnsItem}
-                        // columns={columnsXXX}
                         data={documents}
                         enableColumnFilterModes
                         enableStickyHeader
