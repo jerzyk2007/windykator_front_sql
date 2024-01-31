@@ -45,7 +45,7 @@
 
 // export default AddDataFromFile;
 
-import { useRef } from 'react';
+import { useState } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from './hooks/useData';
 import PleaseWait from './PleaseWait';
@@ -54,7 +54,8 @@ import './AddDataFromFile.css';
 const AddDataFromFile = () => {
     const { pleaseWait, setPleaseWait } = useData();
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
-    const fileInputRef = useRef(null);
+
+    const [errMsg, setErrMsg] = useState('');
 
     const handleSendFile = async (e) => {
         setPleaseWait(true);
@@ -69,17 +70,22 @@ const AddDataFromFile = () => {
             formData.append('excelFile', file);
 
             const response = await axiosPrivateIntercept.post('/documents/send-documents', formData,
-                headers: {
-                'Content-Type': 'multipart/form-data',
-            },);
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                });
+
+            setErrMsg('Dokumenty zaktualizowane.');
 
             setPleaseWait(false);
             // Zresetuj wartość inputu, aby umożliwić ponowne wybranie tego samego pliku
-            if (fileInputRef.current) {
-                fileInputRef.current.value = '';
-            }
+            // if (fileInputRef.current) {
+            //     fileInputRef.current.value = '';
+            // }
 
         } catch (error) {
+            setErrMsg('Błąd aktualizacji dokumentów');
             console.error('Błąd przesyłania pliku:', error);
         }
     };
@@ -88,17 +94,22 @@ const AddDataFromFile = () => {
         pleaseWait ? <PleaseWait /> :
             <section className='add_data_from_file'>
                 <section className='add_data_from_file__container'>
-                    <section className='add_data_from_file__container-documents'>
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            name="uploadfile"
-                            id="xlsx"
-                            style={{ display: "none" }}
-                            onChange={handleSendFile}
-                        />
-                        <label htmlFor="xlsx" className="add_data_file-click-me">Prześlij wszytskie faktury xlsx</label>
-                    </section>
+                    {!errMsg ?
+                        <section className='add_data_from_file__container-documents'>
+                            <input
+                                // ref={fileInputRef}
+                                type="file"
+                                name="uploadfile"
+                                id="xlsx"
+                                style={{ display: "none" }}
+                                onChange={handleSendFile}
+                            />
+                            <label htmlFor="xlsx" className="add_data_file-click-me">Prześlij wszytskie faktury xlsx</label>
+                        </section> :
+                        <section className='add_data_from_file__container-documents'>
+                            <span className="add_data_file-click-me">{errMsg}</span>
+                        </section>
+                    }
                     <section className='add_data_from_file__container-contacts'>
                     </section>
                     <section className='add_data_from_file__container-settlements'>
