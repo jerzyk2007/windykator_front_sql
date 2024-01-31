@@ -160,6 +160,8 @@ const ActualTable = ({ info }) => {
                         }}
 
                         muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
+                        // wyświetla filtry nad komórką - 
+                        // columnFilterDisplayMode={'popover'}
 
                         muiPaginationProps={{
                             color: 'secondary',
