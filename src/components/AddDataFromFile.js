@@ -79,10 +79,6 @@ const AddDataFromFile = () => {
             setErrMsg('Dokumenty zaktualizowane.');
 
             setPleaseWait(false);
-            // Zresetuj wartość inputu, aby umożliwić ponowne wybranie tego samego pliku
-            // if (fileInputRef.current) {
-            //     fileInputRef.current.value = '';
-            // }
 
         } catch (error) {
             setErrMsg('Błąd aktualizacji dokumentów');
