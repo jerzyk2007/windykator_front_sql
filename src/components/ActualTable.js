@@ -9,6 +9,7 @@ import { TfiSave } from "react-icons/tfi";
 import PleaseWait from './PleaseWait';
 import useWindowSize from './hooks/useWindow';
 
+
 import './ActualTable.css';
 
 const ActualTable = ({ info }) => {
@@ -125,6 +126,8 @@ const ActualTable = ({ info }) => {
         prepareTable();
     }, [info]);
 
+
+
     return (
         <section className='actual_table'>
             {pleaseWait ? <PleaseWait /> :
@@ -145,7 +148,7 @@ const ActualTable = ({ info }) => {
                         enableColumnOrdering
                         enableColumnPinning
                         onColumnPinningChange={setColumnPinning}
-                        globalFilterFn={'contains'}
+                        // globalFilterFn={'contains'}
                         enableSelectAll={false}
                         initialState={{
                             showColumnFilters: false,
@@ -158,6 +161,10 @@ const ActualTable = ({ info }) => {
                             columnOrder,
                             columnPinning
                         }}
+
+                        // icons={{ SearchIcon: () => <input /> }}
+
+                        enableColumnActions={false}
 
                         muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
                         // wyświetla filtry nad komórką - 
@@ -177,11 +184,12 @@ const ActualTable = ({ info }) => {
                                 fontSize: "12px",
                                 color: "black",
                                 backgroundColor: "#a5f089",
-                                padding: "15px"
+                                padding: "15px",
+                                textAlign: "center",
                                 // borderRadius: "5px",
                                 // boxShadow: "2px 2px 2px #757575",
-                                // borderRight: "1px solid #000",
-
+                                // border: ".5px solid #c9c7c7",
+                                border: '1px solid rgba(81, 81, 81, .2)'
                             },
                         })}
 
