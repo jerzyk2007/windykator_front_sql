@@ -7,13 +7,16 @@ import useData from './hooks/useData';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { TfiSave } from "react-icons/tfi";
 import PleaseWait from './PleaseWait';
+import useWindowSize from './hooks/useWindow';
 
 import './ActualTable.css';
 
 const ActualTable = ({ info }) => {
     const theme = useTheme();
+
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
     const { pleaseWait, setPleaseWait, auth } = useData();
+    const { height } = useWindowSize();
 
     const [documents, setDocuments] = useState([]);
     const [customFilter, setCustomFilter] = useState({});
@@ -27,7 +30,6 @@ const ActualTable = ({ info }) => {
 
     const prepareColumns = (columnsData, data) => {
         const changeColumn = columnsData.map(item => {
-            // Tworzymy kopię obiektu, aby nie modyfikować oryginału
             const modifiedItem = { ...item };
 
             if (item.filterVariant === 'multi-select') {
@@ -60,12 +62,10 @@ const ActualTable = ({ info }) => {
                 };
             }
 
-            // Usuwamy właściwość 'type' z każdego obiektu
             delete modifiedItem.type;
 
             return modifiedItem;
         });
-        console.log(changeColumn);
         return changeColumn;
     };
 
@@ -115,140 +115,17 @@ const ActualTable = ({ info }) => {
         return uniqueTypeOfPayment;
     };
 
-    // const columnsXXX = useMemo(
-    //     () => [
-    //         {
-    //             accessorKey: 'NUMER',
-    //             header: 'Faktura',
-    //             // filterVariant: 'text',
-    //             // filterVariant: 'autocomplete',
-    //             filterVariant: 'contains',
-    //             // enableResizing: true,
-    //             // enableHiding: false,
-    //             // enablePinning: false,
-    //             minSize: 100,
-    //             maxSize: 400,
-    //             size: columnSizing?.NUMER ? columnSizing.NUMER : 180,
-    //         },
-    //         {
-    //             accessorKey: 'KONTRAHENT',
-    //             header: 'Kontrahent',
-    //             filterVariant: 'text',
-    //             minSize: 100,
-    //             maxSize: 400,
-    //             size: columnSizing?.KONTRAHENT ? columnSizing.KONTRAHENT : 180,
-    //         },
-    //         {
-    //             accessorKey: 'DZIAL',
-    //             header: 'Dział',
-    //             filterVariant: 'multi-select',
-    //             filterSelectOptions: Array.from(new Set(documents.map(item => item.DZIAL))),
-    //             minSize: 100,
-    //             maxSize: 400,
-    //             size: columnSizing?.DZIAL ? columnSizing.DZIAL : 120,
-    //         },
-    //         {
-    //             accessorKey: 'NRNADWOZIA',
-    //             header: 'VIN',
-    //             minSize: 100,
-    //             maxSize: 400,
-    //             size: columnSizing?.NRNADWOZIA ? columnSizing.NRNADWOZIA : 120,
-    //         },
-    //         {
-    //             accessorKey: 'W_BRUTTO',
-    //             header: 'Brutto',
-    //             Cell: ({ cell }) => {
-    //                 const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
-    //                     minimumFractionDigits: 2,
-    //                     maximumFractionDigits: 2,
-    //                     useGrouping: true,
-    //                 });
-    //                 return `${formattedSalary}`;
-    //             },
-    //             minSize: 100,
-    //             maxSize: 400,
-    //             size: columnSizing?.W_BRUTTO ? columnSizing.W_BRUTTO : 180,
-    //         },
-    //         {
-    //             accessorKey: 'DOROZLICZ_',
-    //             header: 'Brakuje',
-    //             filterVariant: 'range-slider',
-    //             // filterFn: 'betweenInclusive',
-    //             muiFilterSliderProps: {
-    //                 marks: true,
-    //                 // max: getMaxValue(documents, 'DOROZLICZ_'),
-    //                 max: documents.reduce((max, item) => Math.max(max, item['DOROZLICZ_']), Number.NEGATIVE_INFINITY),
-    //                 // min: 0,
-    //                 min: documents.reduce((min, item) => Math.min(min, item['DOROZLICZ_']), Number.POSITIVE_INFINITY),
-    //                 step: 100,
-    //                 valueLabelFormat: (value) =>
-    //                     value.toLocaleString('pl-PL', {
-    //                         style: 'currency',
-    //                         currency: 'PLN',
-    //                     }),
-    //             },
-    //             Cell: ({ cell }) => {
-    //                 const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
-    //                     minimumFractionDigits: 2,
-    //                     maximumFractionDigits: 2,
-    //                     useGrouping: true,
-    //                 });
-    //                 return `${formattedSalary}`;
-    //             },
-    //             minSize: 100,
-    //             maxSize: 400,
-    //             size: columnSizing?.DOROZLICZ_ ? columnSizing.DOROZLICZ_ : 140,
-    //         },
-    //         {
-    //             accessorKey: 'PRZYGOTOWAL',
-    //             header: 'Przygował',
-    //             enableColumnFilterModes: false,
-    //             filterVariant: 'multi-select',
-    //             filterSelectOptions: Array.from(new Set(documents.map(item => item.PRZYGOTOWAL))),
-    //             minSize: 100,
-    //             maxSize: 400,
-    //             size: columnSizing?.PRZYGOTOWAL ? columnSizing.PRZYGOTOWAL : 140,
-    //         },
-    //         {
-    //             accessorKey: 'PLATNOSC',
-    //             header: 'Płatność-xxx',
-    //             filterVariant: 'multi-select',
-    //             filterSelectOptions: Array.from(new Set(documents.map(item => item.PLATNOSC))),
-    //             minSize: 100,
-    //             maxSize: 400,
-    //             size: columnSizing?.PLATNOSC ? columnSizing.PLATNOSC : 140,
-    //         },
-    //         {
-    //             accessorKey: 'NRREJESTRACYJNY',
-    //             header: 'Nr rej',
-    //             minSize: 100,
-    //             maxSize: 400,
-    //             size: columnSizing?.NRREJESTRACYJNY ? columnSizing.NRREJESTRACYJNY : 140,
-    //         },
-    //         {
-    //             accessorKey: 'UWAGI',
-    //             header: 'Uwagi',
-    //             minSize: 100,
-    //             maxSize: 400,
-    //             size: columnSizing?.UWAGI ? columnSizing.UWAGI : 140,
-    //         },
-    //     ],
-    //     [customFilter, documents, columnSizing, columnVisibility, density, columnPinning],
-    // );
-
-    // const columns = useMemo(
-    //     () => columnsItem.map(column => ({ ...column }))
-    //     [customFilter, documents, columnSizing, columnVisibility, density, columnPinning, columnsItem],
-    // );
-
     const columnsItem = useMemo(
         () => columns.map(column => ({
             ...column,
             size: columnSizing?.[column.accessorKey] ? columnSizing[column.accessorKey] : column.size,
         })),
-        [customFilter, documents, columnSizing, columnVisibility, density, columnPinning, columns]
+        [columnSizing, columnVisibility, density, columnPinning, columns]
     );
 
+    useEffect(() => {
+        setTableSize(height - 200);
+    }, [height]);
 
     useEffect(() => {
         prepareTable();
@@ -289,32 +166,8 @@ const ActualTable = ({ info }) => {
                             columnOrder,
                             columnPinning
                         }}
-                        // muiTableBodyCellProps={{
-                        //     sx: {
-                        //         borderRight: "1px solid #c9c7c7", //add a border between columns
-                        //         fontSize: "16px",
-                        //         fontFamily: "Calibri",
-                        //         padding: "15px",
-                        //     },
-                        // }}
 
-                        // odczytanie danych po kliknięciu w wiersz
-
-
-
-                        // muiSearchTextFieldProps={{
-                        //     placeholder: "Szukaj wszędzie",
-                        //     sx: { minWidth: "18rem" },
-                        //     variant: "outlined",
-                        // }}
-
-                        // muiTableBodyProps={{
-                        //     sx: {
-                        //         "& tr:nth-of-type(odd)": {
-                        //             backgroundColor: "red",
-                        //         },
-                        //     },
-                        // }}
+                        muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
 
                         muiPaginationProps={{
                             color: 'secondary',
@@ -350,7 +203,6 @@ const ActualTable = ({ info }) => {
                             },
                         })}
                     />
-                    {/* <Example /> */}
                 </ThemeProvider>
                     <TfiSave className='table-save-settings' onClick={handleSaveSettings} />
                 </>}
@@ -359,43 +211,3 @@ const ActualTable = ({ info }) => {
 };
 
 export default ActualTable;
-
-
-{/* <ThemeProvider theme={createTheme(theme, plPL)}>
-                {/* <Example />
-
-                <MaterialReactTable
-                    columns={columns}
-                    data={data}
-                    enableColumnFilterModes
-                    enableColumnOrdering
-                    // enableEditing
-                    enableColumnPinning
-                    enableRowActions
-                    // enableRowSelection
-                    enableSelectAll={false}
-                    initialState={{ showColumnFilters: false, showGlobalFilter: true }}
-                    localization={MRT_Localization_PL}
-
-                    // obramowanie i styl komórki
-                    muiTableBodyCellProps={{
-                        sx: {
-                            borderRight: "1px dashed #e0e0e0", //add a border between columns
-                            fontSize: "16px",
-                            fontFamily: "Calibri",
-                            // padding: "8px",
-                        },
-                    }}
-
-                    // obramowanie i styl header
-                    muiTableHeadCellProps={{
-                        //simple styling with the `sx` prop, works just like a style prop in this example
-                        sx: {
-                            fontWeight: 'bold',
-                            fontSize: '20px',
-                        }
-                    }}
-
-                />
-
-            </ThemeProvider> */};

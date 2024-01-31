@@ -1,8 +1,9 @@
 .actual_table {
     flex-grow: 1;
     width: 100vw;
-    overflow-y: auto;
+    overflow-x: auto;
 }
+
 
 .actual_table tr:nth-of-type(odd) td {
     background-color: #f1f3ed;
