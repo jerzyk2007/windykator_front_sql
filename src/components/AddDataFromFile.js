@@ -68,7 +68,10 @@ const AddDataFromFile = () => {
             const formData = new FormData();
             formData.append('excelFile', file);
 
-            const response = await axiosPrivateIntercept.post('/documents/send-documents', formData);
+            const response = await axiosPrivateIntercept.post('/documents/send-documents', formData,
+                headers: {
+                'Content-Type': 'multipart/form-data',
+            },);
 
             setPleaseWait(false);
             // Zresetuj wartość inputu, aby umożliwić ponowne wybranie tego samego pliku
