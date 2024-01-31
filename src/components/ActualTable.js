@@ -74,7 +74,7 @@ const ActualTable = ({ info }) => {
         try {
             setPleaseWait(true);
 
-            const result = await axiosPrivateIntercept.get(`/getAllDocuments/${info}`);
+            const result = await axiosPrivateIntercept.get(`/documents/get-all/${info}`);
             setDocuments(result.data);
             const settingsTable = await axiosPrivateIntercept.get('/user/get-table-settings/', { params: { userlogin: auth.userlogin } });
             setColumnVisibility(settingsTable?.data?.visible ? settingsTable.data.visible : {});
