@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import { TfiSave } from "react-icons/tfi";
+
 import './TableSettings.css';
 
 const TableSettings = () => {
@@ -193,22 +195,59 @@ const TableSettings = () => {
     const [columns, setColumns] = useState([]);
     const [columnsName, setColumnsName] = useState([]);
 
-    // const columnItems = columns.map((col, index) => {
-    //     return (
-    //         <section className='table_settings-table__columns' key={index}>
-    //             <p >{col}</p>
-    //             <p>Podaj nazwe</p>
-    //             <p>Podaj filtr</p>
-    //             <p>Podaj typ danych</p>
+    const handleHeaderChange = (index, field, newValue) => {
+        setColumns((prevColumns) => {
+            const updatedColumns = [...prevColumns]; // Klonuj tablicę, aby nie modyfikować oryginału
 
-    //         </section>
-    //     );
-    // });
+            // Zaktualizuj pole dla konkretnego indeksu
+            updatedColumns[index] = {
+                ...updatedColumns[index],
+                [field]: newValue,
+            };
+
+            return updatedColumns;
+        });
+    };
+
+    const columnItems = columns.map((col, index) => {
+        return (
+            <section className='table_settings-table__columns' key={index}>
+                <section className='columns-item'>
+                    <span className='columns-item-header'>Nazwa w DB:</span>
+                    <span className='columns-item-choice'>{col.accessorKey}</span>
+                </section>
+                <section className='columns-item'>
+                    <span className='columns-item-header'>Podaj swoją nazwę:</span>
+                    <input
+                        className='columns-item-choice'
+                        type="text"
+                        value={col.header}
+                        onChange={(e) => handleHeaderChange(index, 'header', e.target.value)}
+                    />
+                </section>
+                <section className='columns-item'>
+                    <span className='columns-item-header'>Wybierz filtr:</span>
+                    <input
+                        className='columns-item-choice'
+                        type="text"
+                        value={col.filterVariant}
+                        onChange={(e) => handleHeaderChange(index, 'filterVariant', e.target.value)}
+                    />
+
+                </section>
+                <section className='columns-item'>
+                    <span className='columns-item-header'>Wybierz typ danych:</span>
+                    <span className='columns-item-choice'>{col.type}</span>
+                </section>
+
+
+            </section>
+        );
+    });
 
     const handleSaveColumnsSetinngs = async () => {
         try {
             const result = await axiosPrivateIntercept.patch('/settings/change-columns', { columns });
-            console.log(result.data);
         }
         catch (err) {
             console.log(err);
@@ -236,7 +275,6 @@ const TableSettings = () => {
             };
         });
         setColumns(newColumns);
-        console.log((newColumns));
     };
 
     useEffect(() => {
@@ -250,11 +288,14 @@ const TableSettings = () => {
     return (
         <section className='table_settings'>
             <section className='table_settings-table'>
-                <h2>Ustawienia kolumn tabeli</h2>
-                <button onClick={handleSaveColumnsSetinngs}>Zapis</button>
+                <section className='table_settings-table--title'>
+                    <h2 className='table_settings-table--name'>Ustawienia kolumn tabeli</h2>
+                    <TfiSave className='table_settings-table--save' onClick={handleSaveColumnsSetinngs} />
+                </section>
+                {/* <button onClick={handleSaveColumnsSetinngs}>Zapis</button> */}
                 {/* <button onClick={handleGetColumsFromDocuments}>Pobierz</button> */}
                 <section className='table_settings-table__container'>
-                    {/* {columnItems} */}
+                    {columnItems}
                 </section>
             </section>
             <section className='table_settings-raport'>

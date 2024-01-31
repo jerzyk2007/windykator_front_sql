@@ -1,4 +1,5 @@
 .table_settings {
+    position: relative;
     flex-grow: 1;
     display: flex;
     padding: 5px;
@@ -9,14 +10,40 @@
 .table_settings-raport {
     flex-grow: 1;
     flex-shrink: 0;
+    flex-basis: 50%;
     align-items: center;
     margin: 5px;
     padding: 5px;
+    font-size: 1.2rem;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     border-radius: 5px;
     border: none;
     display: flex;
     flex-direction: column;
+}
+
+.table_settings-table--title {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.table_settings-table--name {
+    margin: 10px;
+    padding: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    border-radius: 5px;
+    border: none;
+}
+
+.table_settings-table--save {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.table_settings-table--save:active {
+    color: red;
 }
 
 /* .table_settings-raport {
@@ -35,12 +62,54 @@
 } */
 
 .table_settings-table__container {
+    flex-grow: 1;
     overflow-y: scroll;
+    /* width: 100%; */
+    margin: 10px 0;
+    padding: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    /* flex-direction: column; */
+}
+
+.table_settings-table__columns {
+    flex-grow: 1;
     width: 100%;
+    margin: 15px;
+    padding: 10px;
+    background-color: rgb(174, 245, 146);
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    border-radius: 5px;
+    border: none;
     display: flex;
     flex-direction: column;
 }
 
-.table_settings-table__columns {
-    padding: 10px;
+.columns-item {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* .columns-item-header {
+    flex-basis: 50%;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    border-radius: 5px;
+    border: none;
+} */
+
+.columns-item-header,
+.columns-item-choice {
+    flex-basis: 50%;
+    background-color: #fff;
+    font-size: 1.2rem;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

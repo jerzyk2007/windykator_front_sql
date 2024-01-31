@@ -177,6 +177,7 @@ const ActualTable = ({ info }) => {
                                 fontSize: "12px",
                                 color: "black",
                                 backgroundColor: "#a5f089",
+                                padding: "15px"
                                 // borderRadius: "5px",
                                 // boxShadow: "2px 2px 2px #757575",
                                 // borderRight: "1px solid #000",
@@ -193,7 +194,7 @@ const ActualTable = ({ info }) => {
                                 borderRight: "1px solid #c9c7c7", //add a border between columns
                                 fontSize: "16px",
                                 fontFamily: "Calibri",
-                                padding: "15px",
+                                padding: "5px",
                             },
                         })}
                     />
