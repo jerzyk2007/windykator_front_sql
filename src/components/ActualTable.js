@@ -23,6 +23,7 @@ const ActualTable = ({ info }) => {
     const [columnOrder, setColumnOrder] = useState([]);
     const [columnPinning, setColumnPinning] = useState({});
     const [columns, setColumns] = useState([]);
+    const [tableSize, setTableSize] = useState(500);
 
     const prepareColumns = (columnsData, data) => {
         const changeColumn = columnsData.map(item => {
