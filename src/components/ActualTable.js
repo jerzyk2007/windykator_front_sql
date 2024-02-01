@@ -28,6 +28,8 @@ const ActualTable = ({ info }) => {
     const [columnPinning, setColumnPinning] = useState({});
     const [columns, setColumns] = useState([]);
     const [tableSize, setTableSize] = useState(500);
+    const [pagination, setPagination] = useState({});
+
 
     const prepareColumns = (columnsData, data) => {
         const changeColumn = columnsData.map(item => {
@@ -52,6 +54,7 @@ const ActualTable = ({ info }) => {
                         }),
                 };
             }
+
             if (item.type === 'money') {
                 modifiedItem.Cell = ({ cell }) => {
                     const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
@@ -83,6 +86,7 @@ const ActualTable = ({ info }) => {
             setDensity(settingsTable?.data?.density ? settingsTable.data.density : 'comfortable');
             setColumnOrder(settingsTable?.data?.order ? (settingsTable.data.order).map(order => order) : []);
             setColumnPinning(settingsTable?.data?.pinning ? (settingsTable.data.pinning) : { left: [], right: [] });
+            setPagination(settingsTable?.data?.pagination ? settingsTable.data.pagination : { pageIndex: 0, pageSize: 10, });
             const getColumns = await axiosPrivateIntercept.get('/settings/get-columns');
             const modifiedColumns = prepareColumns(getColumns.data, result.data);
             setColumns(modifiedColumns);
@@ -93,8 +97,7 @@ const ActualTable = ({ info }) => {
     };
 
     const handleSaveSettings = async () => {
-        const tableSettings = { size: { ...columnSizing }, visible: { ...columnVisibility }, density, order: columnOrder, pinning: columnPinning };
-
+        const tableSettings = { size: { ...columnSizing }, visible: { ...columnVisibility }, density, order: columnOrder, pinning: columnPinning, pagination };
 
         try {
             const result = await axiosPrivateIntercept.patch('/user/save-table-settings/',
@@ -112,7 +115,8 @@ const ActualTable = ({ info }) => {
             size: columnSizing?.[column.accessorKey] ? columnSizing[column.accessorKey] : column.size,
             enableHiding: true,
             enablePinning: true,
-            minSize: 100,
+            enableColumnFilterModes: false,
+            minSize: 50,
             maxSize: 400,
         })),
         [columnSizing, columnVisibility, density, columnPinning, columns]
@@ -125,8 +129,6 @@ const ActualTable = ({ info }) => {
     useEffect(() => {
         prepareTable();
     }, [info]);
-
-
 
     return (
         <section className='actual_table'>
@@ -148,6 +150,7 @@ const ActualTable = ({ info }) => {
                         enableColumnOrdering
                         enableColumnPinning
                         onColumnPinningChange={setColumnPinning}
+                        onPaginationChange={setPagination}
                         // globalFilterFn={'contains'}
                         enableSelectAll={false}
                         initialState={{
@@ -159,7 +162,8 @@ const ActualTable = ({ info }) => {
                             columnVisibility: columnVisibility,
                             density,
                             columnOrder,
-                            columnPinning
+                            columnPinning,
+                            pagination
                         }}
 
                         // icons={{ SearchIcon: () => <input /> }}
@@ -172,7 +176,7 @@ const ActualTable = ({ info }) => {
 
                         muiPaginationProps={{
                             color: 'secondary',
-                            rowsPerPageOptions: [10, 20, 30, 50],
+                            rowsPerPageOptions: [10, 20, 30, 50, 100],
                             shape: 'rounded',
                             variant: 'outlined',
                         }}

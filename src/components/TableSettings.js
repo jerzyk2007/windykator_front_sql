@@ -218,26 +218,48 @@ const TableSettings = () => {
                 </section>
                 <section className='columns-item'>
                     <span className='columns-item-header'>Podaj swoją nazwę:</span>
-                    <input
-                        className='columns-item-choice'
-                        type="text"
-                        value={col.header}
-                        onChange={(e) => handleHeaderChange(index, 'header', e.target.value)}
-                    />
+                    <span className='columns-item-choice'>
+                        <input
+                            className='item-choice'
+                            type="text"
+                            value={col.header}
+                            onChange={(e) => handleHeaderChange(index, 'header', e.target.value)}
+                        />
+                    </span>
                 </section>
                 <section className='columns-item'>
                     <span className='columns-item-header'>Wybierz filtr:</span>
-                    <input
-                        className='columns-item-choice'
-                        type="text"
-                        value={col.filterVariant}
-                        onChange={(e) => handleHeaderChange(index, 'filterVariant', e.target.value)}
-                    />
-
+                    <span className='columns-item-choice'>
+                        {/* <input
+                            className='item-choice'
+                            type="text"
+                            value={col.filterVariant}
+                            onChange={(e) => handleHeaderChange(index, 'filterVariant', e.target.value)}
+                        /> */}
+                        <select
+                            className='item-choice'
+                            value={col.filterVariant}
+                            onChange={(e) => handleHeaderChange(index, 'filterVariant', e.target.value)}
+                        >
+                            <option value="contains">Dokładne wyszukanie</option>
+                            <option value="text">Zbliżone wyszukanie</option>
+                            <option value="multi-select">Zaznacz wiele</option>
+                            <option value="range-slider">Suwak do kwot</option>
+                        </select>
+                    </span>
                 </section>
                 <section className='columns-item'>
                     <span className='columns-item-header'>Wybierz typ danych:</span>
-                    <span className='columns-item-choice'>{col.type}</span>
+                    <span className='columns-item-choice'>
+                        <select
+                            className='item-choice'
+                            value={col.type}
+                            onChange={(e) => handleHeaderChange(index, 'type', e.target.value)}
+                        >
+                            <option value="text">tekst</option>
+                            <option value="money">waluta</option>
+                        </select>
+                    </span>
                 </section>
 
 
@@ -254,32 +276,51 @@ const TableSettings = () => {
         }
     };
 
-    const handleGetColumsFromDocuments = async () => {
+    const handleGetColums = async () => {
         try {
-            const result = await axiosPrivateIntercept.get('/documents/get-columns');
-            setColumnsName(result.data);
+            const documentsColumn = await axiosPrivateIntercept.get('/documents/get-columns');
+            setColumnsName(documentsColumn.data);
         }
         catch (err) {
             console.log(err);
         }
     };
 
-    const createColumns = () => {
-        const newColumns = columnsName.map(col => {
-            return {
-                accessorKey: col,
-                header: col,
-                enableColumnFilterModes: false,
-                filterVariant: 'contains',
-                type: "text"
-            };
-        });
-        setColumns(newColumns);
+    const createColumns = async () => {
+        try {
+            const settingsColumn = await axiosPrivateIntercept.get('/settings/get-columns');
+
+            const newColumns = columnsName.map(colName => {
+                const matchingColumn = settingsColumn.data.find(column => column.accessorKey === colName);
+
+                if (matchingColumn) {
+                    return {
+                        accessorKey: matchingColumn.accessorKey,
+                        header: matchingColumn.header,
+                        filterVariant: matchingColumn.filterVariant,
+                        type: matchingColumn.type
+                    };
+                } else {
+                    return {
+                        accessorKey: colName,
+                        header: colName,
+                        filterVariant: "contains",
+                        type: "text"
+                    };
+                }
+            });
+
+            setColumns(newColumns);
+        } catch (error) {
+            console.error('Błąd podczas pobierania kolumn: ', error);
+        }
     };
 
+
     useEffect(() => {
-        handleGetColumsFromDocuments();
+        handleGetColums();
     }, []);
+
 
     useEffect(() => {
         createColumns();
@@ -289,7 +330,7 @@ const TableSettings = () => {
         <section className='table_settings'>
             <section className='table_settings-table'>
                 <section className='table_settings-table--title'>
-                    <h2 className='table_settings-table--name'>Ustawienia kolumn tabeli</h2>
+                    <h3 className='table_settings-table--name'>Ustawienia kolumn tabeli</h3>
                     <TfiSave className='table_settings-table--save' onClick={handleSaveColumnsSetinngs} />
                 </section>
                 {/* <button onClick={handleSaveColumnsSetinngs}>Zapis</button> */}
@@ -299,7 +340,11 @@ const TableSettings = () => {
                 </section>
             </section>
             <section className='table_settings-raport'>
-                <h2>Ustawienia kolumn raportu</h2>
+                <section className='table_settings-table--title'>
+                    <h3 className='table_settings-table--name'>Ustawienia kolumn raportu</h3>
+                    <TfiSave className='table_settings-table--save' />
+                </section>
+
             </section>
         </section>
     );
