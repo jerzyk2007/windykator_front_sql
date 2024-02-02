@@ -40,9 +40,8 @@ const ChangePassword = () => {
                 setErrMsg("Invalid entry");
                 return;
             }
-            await axiosPrivateIntercept.patch('/user/change-pass',
-
-                JSON.stringify({ userlogin: auth.userlogin, password }),
+            await axiosPrivateIntercept.patch(`/user/change-pass/${auth._id}`,
+                JSON.stringify({ password }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true,

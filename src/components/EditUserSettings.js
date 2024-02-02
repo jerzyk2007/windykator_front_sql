@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { FiX } from "react-icons/fi";
+import isEqual from 'lodash/isEqual';
 import './EditUserSettings.css';
 
 const EditSystemSettings = ({ user, setEdit }) => {
@@ -29,6 +30,9 @@ const EditSystemSettings = ({ user, setEdit }) => {
 
     const [departments, setDepartments] = useState([]);
     const [errDepartments, setErrDepartments] = useState('');
+
+    const [columns, setColumns] = useState([]);
+    const [errColumns, setErrColumns] = useState('');
 
     const MAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -90,10 +94,49 @@ const EditSystemSettings = ({ user, setEdit }) => {
         </label>
     ));
 
+    const columnsItem = columns.map((col, index) => {
+        return (
+            <section key={index} className='edit_system_change__content-item'>
+                <section className='edit_system_change__content-item--name'>
+                    <section className='edit_system_change__content-name'>
+                        <span className='edit_system_change__content-title'>Nazwa w DB: </span>
+                        <span className='edit_system_change__content-table'>{col.accessorKey}</span>
+                    </section>
+                    <section className='edit_system_change__content-name'>
+                        <span className='edit_system_change__content-title'>Nazwa w tabeli: </span>
+                        <span className='edit_system_change__content-table'>{col.header}</span>
+                    </section>
+                </section>
+                <section className='edit_system_change__content-item--check'>
+                    <input
+                        className='edit_system_change__content--check'
+                        type='checkbox'
+                        checked={col.checked ? col.checked : false}
+                        onChange={() => {
+                            setColumns(prev => {
+                                const modifiedColumns = prev.map(item => {
+                                    if (col.accessorKey === item.accessorKey) {
+                                        return {
+                                            ...item,
+                                            checked: !item.checked
+                                        };
+                                    } else {
+                                        return item;
+                                    }
+                                });
+                                return modifiedColumns;
+                            });
+                        }}
+                    />
+                </section>
+            </section>
+        );
+    });
+
     const handleChangeDepartments = async () => {
         try {
-            const result = await axiosPrivateIntercept.patch('/user/change-departments', {
-                userlogin: user.userlogin, departments
+            const result = await axiosPrivateIntercept.patch(`/user/change-departments/${user._id}`, {
+                departments
             });
             setErrDepartments(`Sukces.`);
         }
@@ -105,8 +148,8 @@ const EditSystemSettings = ({ user, setEdit }) => {
 
     const handleChangeLogin = async () => {
         try {
-            const result = await axiosPrivateIntercept.patch('/user/change-login', {
-                userlogin: user.userlogin, newUserlogin: login
+            const result = await axiosPrivateIntercept.patch(`/user/change-login/${user._id}`, {
+                newUserlogin: login
             });
             setEdit(false);
         }
@@ -122,8 +165,8 @@ const EditSystemSettings = ({ user, setEdit }) => {
 
     const handleChangeNameSurname = async () => {
         try {
-            const result = await axiosPrivateIntercept.patch('/user/change-name', {
-                userlogin: user.userlogin, name, surname
+            const result = await axiosPrivateIntercept.patch(`/user/change-name/${user._id}`, {
+                name, surname
             });
             setErrName('Sukces.');
         }
@@ -135,8 +178,8 @@ const EditSystemSettings = ({ user, setEdit }) => {
 
     const handleChangePass = async () => {
         try {
-            const result = await axiosPrivateIntercept.patch('/user/another-user-change-pass', {
-                userlogin: user.userlogin, password: pass
+            const result = await axiosPrivateIntercept.patch(`/user/another-user-change-pass/${user._id}`, {
+                password: pass
             });
             setErrPass('Sukces.');
         }
@@ -148,7 +191,7 @@ const EditSystemSettings = ({ user, setEdit }) => {
 
     const handleChangePermission = async () => {
         try {
-            const result = await axiosPrivateIntercept.patch('/user/change-permissions', {
+            const result = await axiosPrivateIntercept.patch(`/user/change-permissions/${user._id}`, {
                 userlogin: user.userlogin, permissions
             });
             setErrPermission('Sukces.');
@@ -188,6 +231,23 @@ const EditSystemSettings = ({ user, setEdit }) => {
         }
     };
 
+    const handleChangeAccessUserColumns = async () => {
+        const modifiedColumns = columns.map(col => {
+            if (col.checked) {
+                const { checked, ...rest } = col;
+                return rest;
+            }
+        }).filter(Boolean);
+
+        try {
+            const result = await axiosPrivateIntercept.patch(`/user/change-columns/${user._id}`, { columns: modifiedColumns });
+            setErrColumns('Sukces.');
+        }
+        catch (err) {
+            setErrColumns('Dane nie zostały zmienione.');
+            console.log(err);
+        }
+    };
 
     useEffect(() => {
         const verifyLogin = MAIL_REGEX.test(login);
@@ -214,36 +274,56 @@ const EditSystemSettings = ({ user, setEdit }) => {
     }, [roles]);
 
     useEffect(() => {
+        setErrColumns('');
+    }, [columns]);
+
+    useEffect(() => {
         setErrName('');
     }, [name, surname]);
 
+
     useEffect(() => {
-        const getGlobalSettings = async () => {
+        const getSettings = async () => {
             const result = await axiosPrivateIntercept.get('/settings/get-settings');
             const filteredRoles = result.data.map(item => item.roles).filter(Boolean)[0];
-
             const roles = filteredRoles.reduce((acc, role, index) => {
                 acc[role] = user?.roles[index] ? true : false;
                 return acc;
             }, {});
             const filteredDepartments = result.data.map(item => item.departments).filter(Boolean)[0];
-
+            const columnsDB = result.data.map(item => item.columns).filter(Boolean)[0];
+            const userColumns = [...user.columns];
             const departments = filteredDepartments.reduce((acc, dep, index) => {
                 acc[dep] = user?.departments[dep] ? true : false;
                 return acc;
             }, {});
+
+            const modifiedColumnsDB = columnsDB.map(col => {
+                const userColMatch = userColumns.find(userCol => isEqual(col, userCol));
+                return { ...col, checked: !!userColMatch };
+            });
+
             setDepartments(departments);
             setRoles(roles);
+            setColumns(modifiedColumnsDB);
         };
-        getGlobalSettings();
+        getSettings();
     }, []);
 
     return (
         <section className='edit_system_settings'>
             <section className='edit_system_change'>
-                <section className='edit_system_settings--data'></section>
-                <section className='edit_system_settings--table'>
+                <section className='edit_system_settings--column'>
+                    <section className='edit_system_change--columns__container'>
+                        <h3 className='edit_system_change--columns__container--title'>{!errColumns ? "Dostęp do danych w tabeli" : errColumns}</h3>
+                        <section className='edit_system_change--columns__container--content'>
+                            {columnsItem}
+                        </section>
+                        <button className='edit_system_change--columns__container--button' onClick={handleChangeAccessUserColumns} >Zmień</button>
+                    </section>
+                </section>
 
+                <section className='edit_system_settings--table'>
                     <section className='edit_system_change--roles__container'>
                         <h3 className='edit_system_change--roles__container--title'>{!errRoles ? "Zmień dostęp użytkownika" : errRoles}</h3>
                         {rolesItem}

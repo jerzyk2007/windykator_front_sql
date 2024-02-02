@@ -230,12 +230,7 @@ const TableSettings = () => {
                 <section className='columns-item'>
                     <span className='columns-item-header'>Wybierz filtr:</span>
                     <span className='columns-item-choice'>
-                        {/* <input
-                            className='item-choice'
-                            type="text"
-                            value={col.filterVariant}
-                            onChange={(e) => handleHeaderChange(index, 'filterVariant', e.target.value)}
-                        /> */}
+
                         <select
                             className='item-choice'
                             value={col.filterVariant}
@@ -333,8 +328,6 @@ const TableSettings = () => {
                     <h3 className='table_settings-table--name'>Ustawienia kolumn tabeli</h3>
                     <TfiSave className='table_settings-table--save' onClick={handleSaveColumnsSetinngs} />
                 </section>
-                {/* <button onClick={handleSaveColumnsSetinngs}>Zapis</button> */}
-                {/* <button onClick={handleGetColumsFromDocuments}>Pobierz</button> */}
                 <section className='table_settings-table__container'>
                     {columnItems}
                 </section>

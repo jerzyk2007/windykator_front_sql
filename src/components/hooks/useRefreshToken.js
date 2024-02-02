@@ -19,7 +19,8 @@ const useRefreshToken = () => {
                     username: response.data.username,
                     usersurname: response.data.usersurname,
                     roles: response.data.roles,
-                    accessToken: response.data.accessToken
+                    accessToken: response.data.accessToken,
+                    _id: response.data._id
                 };
             });
             return response.data.accessToken;
