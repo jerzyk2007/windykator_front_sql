@@ -9,8 +9,7 @@
 
 .header-menu {
     display: none;
-    /* height: 50px; */
-
+    height: 50px;
 }
 
 @media screen and (max-width: 960px) {

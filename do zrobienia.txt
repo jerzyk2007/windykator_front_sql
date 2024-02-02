@@ -1,0 +1,3 @@
+przy zmianie ustawień glabalnych column użytkownik ma wszytskostare - sprawdzić 
+problem z wielokrotnym wyborem, np D8 widzi i D8 i D88, 
+filtr select z jednym wyborem działa prawidłowo, multi-select szuka w rozmyciu

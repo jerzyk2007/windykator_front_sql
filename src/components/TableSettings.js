@@ -239,6 +239,7 @@ const TableSettings = () => {
                             <option value="contains">Dokładne wyszukanie</option>
                             <option value="text">Zbliżone wyszukanie</option>
                             <option value="multi-select">Zaznacz wiele</option>
+                            <option value="select">Zaznacz jeden</option>
                             <option value="range-slider">Suwak do kwot</option>
                         </select>
                     </span>

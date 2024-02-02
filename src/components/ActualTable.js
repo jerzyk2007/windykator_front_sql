@@ -20,7 +20,7 @@ const ActualTable = ({ info }) => {
     const { height } = useWindowSize();
 
     const [documents, setDocuments] = useState([]);
-    const [customFilter, setCustomFilter] = useState({});
+    // const [customFilter, setCustomFilter] = useState({});
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnSizing, setColumnSizing] = useState({});
     const [density, setDensity] = useState('');
@@ -35,11 +35,21 @@ const ActualTable = ({ info }) => {
         const changeColumn = columnsData.map(item => {
             const modifiedItem = { ...item };
 
-            if (item.filterVariant === 'multi-select') {
+            if (item.filterVariant === 'multi-select' || item.filterVariant === 'select') {
                 const uniqueValues = Array.from(new Set(data.map(filtr => filtr[item.accessorKey])));
                 modifiedItem.filterSelectOptions = uniqueValues;
             }
 
+            // if (item.accessorKey === "KONTRAHENT" || item.accessorKey !== "UWAGI") {
+            if (item.accessorKey === "KONTRAHENT" || item.accessorKey === "UWAGI" || item.accessorKey === "KOMENTARZKANCELARIA") {
+                modifiedItem.muiTableBodyCellProps = {
+                    align: 'left',
+                };
+            } else {
+                modifiedItem.muiTableBodyCellProps = {
+                    align: 'center',
+                };
+            }
 
             if (item.filterVariant === "range-slider") {
                 modifiedItem.muiFilterSliderProps = {
@@ -55,13 +65,28 @@ const ActualTable = ({ info }) => {
                 };
             }
 
+            // if (item.type === 'money') {
+            //     modifiedItem.Cell = ({ cell }) => {
+            //         const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
+            //             minimumFractionDigits: 2,
+            //             maximumFractionDigits: 2,
+            //             useGrouping: true,
+            //         });
+            //         return `${formattedSalary}`;
+            //     };
+            // }
+
             if (item.type === 'money') {
                 modifiedItem.Cell = ({ cell }) => {
-                    const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                        useGrouping: true,
-                    });
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00'; // Zastąp puste pola zerem
+
                     return `${formattedSalary}`;
                 };
             }
@@ -74,34 +99,33 @@ const ActualTable = ({ info }) => {
     };
 
 
-    const prepareTable = async () => {
-        try {
-            setPleaseWait(true);
+    // const prepareTable = async () => {
+    //     try {
+    //         setPleaseWait(true);
 
-            const result = await axiosPrivateIntercept.get(`/documents/get-all/${info}`);
-            setDocuments(result.data);
-            const settingsTable = await axiosPrivateIntercept.get('/user/get-table-settings/', { params: { userlogin: auth.userlogin } });
-            setColumnVisibility(settingsTable?.data?.visible ? settingsTable.data.visible : {});
-            setColumnSizing(settingsTable?.data?.size ? settingsTable.data.size : {});
-            setDensity(settingsTable?.data?.density ? settingsTable.data.density : 'comfortable');
-            setColumnOrder(settingsTable?.data?.order ? (settingsTable.data.order).map(order => order) : []);
-            setColumnPinning(settingsTable?.data?.pinning ? (settingsTable.data.pinning) : { left: [], right: [] });
-            setPagination(settingsTable?.data?.pagination ? settingsTable.data.pagination : { pageIndex: 0, pageSize: 10, });
-            const getColumns = await axiosPrivateIntercept.get('/settings/get-columns');
-            const modifiedColumns = prepareColumns(getColumns.data, result.data);
-            setColumns(modifiedColumns);
-            setPleaseWait(false);
-        } catch (err) {
-            console.log(err);
-        }
-    };
+    //         const result = await axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`);
+    //         setDocuments(result.data);
+    //         const settingsUser = await axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`);
+    //         setColumnVisibility(settingsUser?.data?.visible ? settingsUser.data.visible : {});
+    //         setColumnSizing(settingsUser?.data?.size ? settingsUser.data.size : {});
+    //         setDensity(settingsUser?.data?.density ? settingsUser.data.density : 'comfortable');
+    //         setColumnOrder(settingsUser?.data?.order ? (settingsUser.data.order).map(order => order) : []);
+    //         setColumnPinning(settingsUser?.data?.pinning ? (settingsUser.data.pinning) : { left: [], right: [] });
+    //         setPagination(settingsUser?.data?.pagination ? settingsUser.data.pagination : { pageIndex: 0, pageSize: 10, });
+    //         const getColumns = await axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`);
+    //         const modifiedColumns = prepareColumns(getColumns.data, result.data);
+    //         setColumns(modifiedColumns);
+    //         setPleaseWait(false);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
 
     const handleSaveSettings = async () => {
         const tableSettings = { size: { ...columnSizing }, visible: { ...columnVisibility }, density, order: columnOrder, pinning: columnPinning, pagination };
-
         try {
-            const result = await axiosPrivateIntercept.patch('/user/save-table-settings/',
-                { tableSettings, userlogin: auth.userlogin }
+            const result = await axiosPrivateIntercept.patch(`/user/save-table-settings/${auth._id}`,
+                { tableSettings }
             );
         }
         catch (err) {
@@ -115,7 +139,7 @@ const ActualTable = ({ info }) => {
             size: columnSizing?.[column.accessorKey] ? columnSizing[column.accessorKey] : column.size,
             enableHiding: true,
             enablePinning: true,
-            enableColumnFilterModes: false,
+            enableColumnFilterModes: true,
             minSize: 50,
             maxSize: 400,
         })),
@@ -126,9 +150,77 @@ const ActualTable = ({ info }) => {
         setTableSize(height - 220);
     }, [height]);
 
+    // useEffect(() => {
+    //     let isMounted = true;
+
+    //     const prepareTable = async () => {
+    //         try {
+    //             setPleaseWait(true);
+
+    //             const result = await axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`);
+    //             const settingsUser = await axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`);
+    //             const getColumns = await axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`);
+    //             const modifiedColumns = prepareColumns(getColumns.data, result.data);
+    //             if (isMounted) {
+    //                 setDocuments(result.data);
+    //                 setColumnVisibility(settingsUser?.data?.visible ? settingsUser.data.visible : {});
+    //                 setColumnSizing(settingsUser?.data?.size ? settingsUser.data.size : {});
+    //                 setDensity(settingsUser?.data?.density ? settingsUser.data.density : 'comfortable');
+    //                 setColumnOrder(settingsUser?.data?.order ? (settingsUser.data.order).map(order => order) : []);
+    //                 setColumnPinning(settingsUser?.data?.pinning ? (settingsUser.data.pinning) : { left: [], right: [] });
+    //                 setPagination(settingsUser?.data?.pagination ? settingsUser.data.pagination : { pageIndex: 0, pageSize: 10, });
+    //                 setColumns(modifiedColumns);
+    //                 setPleaseWait(false);
+    //             }
+    //         } catch (err) {
+    //             console.log(err);
+    //         }
+    //     };
+    //     prepareTable();
+    //     return () => {
+    //         // Zabezpiecz przed aktualizacją stanu komponentu po odmontowaniu
+    //         isMounted = false;
+    //     };
+    // }, []);
+
     useEffect(() => {
+        let isMounted = true;
+
+        const prepareTable = async () => {
+            try {
+                setPleaseWait(true);
+                const [result, settingsUser, getColumns] = await Promise.all([
+                    axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`),
+                    axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`),
+                    axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`)
+                ]);
+
+                const modifiedColumns = prepareColumns(getColumns.data, result.data);
+
+                if (isMounted) {
+                    setDocuments(result.data);
+                    setColumnVisibility(settingsUser?.data?.visible || {});
+                    setColumnSizing(settingsUser?.data?.size || {});
+                    setDensity(settingsUser?.data?.density || 'comfortable');
+                    setColumnOrder(settingsUser?.data?.order?.map(order => order) || []);
+                    setColumnPinning(settingsUser?.data?.pinning || { left: [], right: [] });
+                    setPagination(settingsUser?.data?.pagination || { pageIndex: 0, pageSize: 10 });
+                    setColumns(modifiedColumns);
+                    setPleaseWait(false);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
         prepareTable();
-    }, [info]);
+
+        return () => {
+            // Zabezpiecz przed aktualizacją stanu komponentu po odmontowaniu
+            isMounted = false;
+        };
+    }, []);
+
 
     return (
         <section className='actual_table'>
@@ -204,9 +296,10 @@ const ActualTable = ({ info }) => {
                             },
                             sx: {
                                 borderRight: "1px solid #c9c7c7", //add a border between columns
-                                fontSize: "16px",
+                                fontSize: "14px",
                                 fontFamily: "Calibri",
                                 padding: "5px",
+                                // textAlign: "center"
                             },
                         })}
                     />
