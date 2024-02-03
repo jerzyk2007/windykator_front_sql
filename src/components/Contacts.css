@@ -1,12 +1,12 @@
 .contacts {
     flex-grow: 1;
     margin: 0px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     width: 100%;
     overflow-y: auto;
     font-family: Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .contacts-search {

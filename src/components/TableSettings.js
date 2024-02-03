@@ -197,9 +197,8 @@ const TableSettings = () => {
 
     const handleHeaderChange = (index, field, newValue) => {
         setColumns((prevColumns) => {
-            const updatedColumns = [...prevColumns]; // Klonuj tablicę, aby nie modyfikować oryginału
+            const updatedColumns = [...prevColumns];
 
-            // Zaktualizuj pole dla konkretnego indeksu
             updatedColumns[index] = {
                 ...updatedColumns[index],
                 [field]: newValue,

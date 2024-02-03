@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import UserTableColumns from './UserTableColumns';
 import { FiX } from "react-icons/fi";
 import isEqual from 'lodash/isEqual';
 import './EditUserSettings.css';
@@ -314,13 +315,14 @@ const EditSystemSettings = ({ user, setEdit }) => {
         <section className='edit_system_settings'>
             <section className='edit_system_change'>
                 <section className='edit_system_settings--column'>
-                    <section className='edit_system_change--columns__container'>
+                    {columns.length && < UserTableColumns user={user} columns={columns} />}
+                    {/* <section className='edit_system_change--columns__container'>
                         <h3 className='edit_system_change--columns__container--title'>{!errColumns ? "Dostęp do danych w tabeli" : errColumns}</h3>
                         <section className='edit_system_change--columns__container--content'>
                             {columnsItem}
                         </section>
                         <button className='edit_system_change--columns__container--button' onClick={handleChangeAccessUserColumns} >Zmień</button>
-                    </section>
+                    </section>*/}
                 </section>
 
                 <section className='edit_system_settings--table'>
@@ -438,4 +440,4 @@ const EditSystemSettings = ({ user, setEdit }) => {
     );
 };
 
-export default EditSystemSettings;;
+export default EditSystemSettings;;;

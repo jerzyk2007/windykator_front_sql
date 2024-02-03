@@ -10,6 +10,7 @@
     flex-grow: 1;
     justify-content: center;
     display: flex;
+    height: 100%;
 }
 
 .edit_system_confirm {
@@ -162,7 +163,10 @@
 .edit_system_change--delete__container--button:active,
 .edit_system_change--roles__container--button:active,
 .edit_system_change--columns__container--button:active {
-    background-color: rgb(0, 51, 255);
+    /* background-color: rgb(0, 51, 255); */
+    background-color: rgb(63, 146, 214);
+    color: #fff;
+    box-shadow: none;
 }
 
 .edit_system_change--permissions__container--choice,
@@ -204,7 +208,7 @@
 .edit_system_change--permissions__container--check,
 .edit_system_change--roles__container--check,
 .edit_system_change--departments__container--check {
-    width: 15px;
+    width: 1rem;
 }
 
 .edit_system_change--delete__container-confirm {
