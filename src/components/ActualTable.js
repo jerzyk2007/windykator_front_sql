@@ -51,6 +51,12 @@ const ActualTable = ({ info }) => {
                 };
             }
 
+            if (item.filterVariant === "none") {
+                modifiedItem.enableColumnFilter = false;
+                delete modifiedItem.filterVariant;
+            }
+            // enableColumnFilters
+
             if (item.filterVariant === "range-slider") {
                 modifiedItem.muiFilterSliderProps = {
                     marks: true,
@@ -196,7 +202,6 @@ const ActualTable = ({ info }) => {
                 ]);
 
                 const modifiedColumns = prepareColumns(getColumns.data, result.data);
-
                 if (isMounted) {
                     setDocuments(result.data);
                     setColumnVisibility(settingsUser?.data?.visible || {});
@@ -216,7 +221,6 @@ const ActualTable = ({ info }) => {
         prepareTable();
 
         return () => {
-            // Zabezpiecz przed aktualizacją stanu komponentu po odmontowaniu
             isMounted = false;
         };
     }, []);
