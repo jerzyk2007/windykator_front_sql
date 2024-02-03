@@ -36,6 +36,7 @@ const AddDataFromFile = () => {
         } catch (error) {
             setErrMsg('Błąd aktualizacji dokumentów');
             console.error('Błąd przesyłania pliku:', error);
+            setPleaseWait(false);
         }
     };
 
