@@ -1,6 +1,7 @@
 .user-table-columns {
     flex-grow: 1;
     height: 100%;
+    margin: 5px 0;
     padding: 5px 10px;
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);

@@ -12,7 +12,7 @@ const UserChangeRoles = ({ user, roles }) => {
     const rolesItem = Object.entries(userRoles).map(([role, isChecked], index) => (
         <section key={index} className='user-change-roles__container'>
             <label className='user-change-roles__container--info' id={`role${index}`}>
-                <span className='edit_system_change--roles__container--text' >{role}
+                <span className='user-change-roles__container--text' >{role}
                     {role === "User" && <span className='edit_system_change--roles__container--information'> - przeglądanie</span>}
                     {role === "Editor" && <span className='edit_system_change--roles__container--information'> - edytowanie tabel i raportów</span>}
                     {role === "Admin" && <span className='edit_system_change--roles__container--information'> - uprawnienia użytkownika</span>}
@@ -70,7 +70,7 @@ const UserChangeRoles = ({ user, roles }) => {
         <section className='user-change-roles'>
             <section className='user-change-roles__title'>
                 <h3 className='user-change-roles__title--name'>
-                    {!errMsg ? 'Zmień dostęp użytkownika' : errMsg}
+                    {!errMsg ? 'Zmień uprawnienia użytkownika' : errMsg}
                 </h3>
             </section>
             {rolesItem}
