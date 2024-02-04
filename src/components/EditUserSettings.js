@@ -5,6 +5,7 @@ import UserChangeRoles from './UserChangeRoles';
 import UserChangeDepartments from './UserChangeDepartments';
 import UserChangePermissions from './UserChangePermissions';
 import UserChangeName from './UserChangeName';
+import UserChangePass from './UserChangePass';
 import { FiX } from "react-icons/fi";
 import isEqual from 'lodash/isEqual';
 import './EditUserSettings.css';
@@ -171,7 +172,7 @@ const EditSystemSettings = ({ user, setEdit }) => {
                 <section className='edit_system_settings--user'>
 
                     <UserChangeName user={user} />
-
+                    <UserChangePass user={user} />
 
                     {/* <section className='edit_system_change--name__container'>
                         <h3 className='edit_system_change--name__container--title'>{!errName ? "Zmień imię i nazwisko użytkownika" : errName}</h3>
