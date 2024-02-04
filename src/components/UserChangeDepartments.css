@@ -1,10 +1,11 @@
 .user_change_departments {
-    flex-grow: 1;
+    /* flex-grow: 1; */
     width: 100%;
     padding: 5px 10px;
     margin: 5px 0;
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -68,16 +69,18 @@
 }
 
 .user_change_departments__container {
-    flex-grow: 1;
+    /* flex-grow: 1; */
     font-size: 1rem;
+    overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
 .user_change_departments__container--info {
-    min-width: 100px;
-    padding: 5px 15px;
+    flex-basis: 33%;
+    min-width: 120px;
+    padding: 5px 25px;
     flex-wrap: wrap;
     display: flex;
     justify-content: space-between;

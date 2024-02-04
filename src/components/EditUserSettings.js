@@ -4,6 +4,7 @@ import UserTableColumns from './UserTableColumns';
 import UserChangeRoles from './UserChangeRoles';
 import UserChangeDepartments from './UserChangeDepartments';
 import UserChangePermissions from './UserChangePermissions';
+import UserChangeName from './UserChangeName';
 import { FiX } from "react-icons/fi";
 import isEqual from 'lodash/isEqual';
 import './EditUserSettings.css';
@@ -24,131 +25,18 @@ const EditSystemSettings = ({ user, setEdit }) => {
     const [errName, setErrName] = useState('');
 
     const [permissions, setPermissions] = useState({});
-    const [errPermission, setErrPermission] = useState('');
 
     const [errDelete, setErrDelete] = useState('');
     const [confirmDelete, setConfirmDelete] = useState(false);
 
     const [roles, setRoles] = useState({});
-    const [errRoles, setErrRoles] = useState('');
 
     const [departments, setDepartments] = useState([]);
-    const [errDepartments, setErrDepartments] = useState('');
 
     const [columns, setColumns] = useState([]);
-    const [errColumns, setErrColumns] = useState('');
 
     const MAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-
-    // const rolesItem = Object.entries(roles).map(([role, isChecked], index) => (
-    //     <form key={index} className='edit_system_change--roles__container--choice'>
-    //         <label className='edit_system_change--roles__container--info' id={`role${index}`}>
-    //             <span className='edit_system_change--roles__container--text' >{role}
-    //                 {role === "User" && <span className='edit_system_change--roles__container--text-information'> - przeglądanie</span>}
-    //                 {role === "Editor" && <span className='edit_system_change--roles__container--text-information'> - edytowanie tabel i raportów</span>}
-    //                 {role === "Admin" && <span className='edit_system_change--roles__container--text-information'> - uprawnienia użytkownika</span>}
-    //             </span>
-    //             <input
-    //                 className='edit_system_change--roles__container--check'
-    //                 name={`role${index}`}
-    //                 type="checkbox"
-    //                 checked={isChecked || role === 'User'}
-    //                 onChange={() => {
-    //                     // Jeśli rola to 'User', nie zmieniaj wartości
-    //                     if (role === 'User') return;
-    //                     setRoles(prevRoles => {
-    //                         const updatedRoles = { ...prevRoles, [role]: !isChecked };
-
-    //                         // Jeśli zaznaczono 'Admin', ustaw także 'Editor' na 'true'
-    //                         if (role === 'Admin' && !isChecked) {
-    //                             updatedRoles['Editor'] = true;
-    //                         }
-
-    //                         // Jeśli odznaczono 'Editor', ustaw także 'Admin' na 'false'
-    //                         if (role === 'Editor' && isChecked) {
-    //                             updatedRoles['Admin'] = false;
-    //                         }
-
-    //                         return updatedRoles;
-    //                     });
-    //                 }}
-    //             />
-    //         </label>
-    //     </form>
-    // ));
-
-    // const departmentsItem = Object.entries(departments).map(([dep, isChecked], index) => (
-    //     <label key={index} className='edit_system_change--departments__container--info' id={`dep${index}`}>
-    //         <span className='edit_system_change--departments__container--text'>{dep}</span>
-    //         <input
-    //             className='edit_system_change--departments__container--check'
-    //             name={`dep${index}`}
-    //             type="checkbox"
-    //             onChange={() => setDepartments(prev => {
-    //                 return {
-    //                     ...prev,
-    //                     [dep]: !isChecked
-    //                 };
-    //             }
-
-    //             )}
-    //             checked={isChecked}
-    //         />
-    //     </label>
-    // ));
-
-    // const columnsItem = columns.map((col, index) => {
-    //     return (
-    //         <section key={index} className='edit_system_change__content-item'>
-    //             <section className='edit_system_change__content-item--name'>
-    //                 <section className='edit_system_change__content-name'>
-    //                     <span className='edit_system_change__content-title'>Nazwa w DB: </span>
-    //                     <span className='edit_system_change__content-table'>{col.accessorKey}</span>
-    //                 </section>
-    //                 <section className='edit_system_change__content-name'>
-    //                     <span className='edit_system_change__content-title'>Nazwa w tabeli: </span>
-    //                     <span className='edit_system_change__content-table'>{col.header}</span>
-    //                 </section>
-    //             </section>
-    //             <section className='edit_system_change__content-item--check'>
-    //                 <input
-    //                     className='edit_system_change__content--check'
-    //                     type='checkbox'
-    //                     checked={col.checked ? col.checked : false}
-    //                     onChange={() => {
-    //                         setColumns(prev => {
-    //                             const modifiedColumns = prev.map(item => {
-    //                                 if (col.accessorKey === item.accessorKey) {
-    //                                     return {
-    //                                         ...item,
-    //                                         checked: !item.checked
-    //                                     };
-    //                                 } else {
-    //                                     return item;
-    //                                 }
-    //                             });
-    //                             return modifiedColumns;
-    //                         });
-    //                     }}
-    //                 />
-    //             </section>
-    //         </section>
-    //     );
-    // });
-
-    // const handleChangeDepartments = async () => {
-    //     try {
-    //         const result = await axiosPrivateIntercept.patch(`/user/change-departments/${user._id}`, {
-    //             departments
-    //         });
-    //         setErrDepartments(`Sukces.`);
-    //     }
-    //     catch (err) {
-    //         setErrDepartments(`Zmiana się nie powiodła.`);
-    //         console.log(err);
-    //     }
-    // };
 
     const handleChangeLogin = async () => {
         try {
@@ -193,19 +81,6 @@ const EditSystemSettings = ({ user, setEdit }) => {
         }
     };
 
-    const handleChangePermission = async () => {
-        try {
-            const result = await axiosPrivateIntercept.patch(`/user/change-permissions/${user._id}`, {
-                userlogin: user.userlogin, permissions
-            });
-            setErrPermission('Sukces.');
-        }
-        catch (err) {
-            setErrPermission('Uprawnienia nie zostały zmienione.');
-            console.log(err);
-        }
-    };
-
     const handleConfirmDeleteUser = async () => {
         try {
             const result = await axiosPrivateIntercept.delete(`/user/delete-user/${user._id}`, {
@@ -219,39 +94,6 @@ const EditSystemSettings = ({ user, setEdit }) => {
         }
     };
 
-    // const handleChangeRoles = async () => {
-    //     try {
-    //         const arrayRoles = Object.entries(roles).map(([role, isChecked], index) => {
-    //             if (isChecked) {
-    //                 return role;
-    //             }
-    //         }).filter(Boolean);
-    //         const result = await axiosPrivateIntercept.patch(`/user/change-roles/${user._id}`, { roles: arrayRoles });
-    //         setErrRoles('Sukces.');
-    //     }
-    //     catch (err) {
-    //         setErrRoles('Dostęp nie został zmieniony.');
-    //         console.log(err);
-    //     }
-    // };
-
-    // const handleChangeAccessUserColumns = async () => {
-    //     const modifiedColumns = columns.map(col => {
-    //         if (col.checked) {
-    //             const { checked, ...rest } = col;
-    //             return rest;
-    //         }
-    //     }).filter(Boolean);
-
-    //     try {
-    //         const result = await axiosPrivateIntercept.patch(`/user/change-columns/${user._id}`, { columns: modifiedColumns });
-    //         setErrColumns('Sukces.');
-    //     }
-    //     catch (err) {
-    //         setErrColumns('Dane nie zostały zmienione.');
-    //         console.log(err);
-    //     }
-    // };
 
     useEffect(() => {
         const verifyLogin = MAIL_REGEX.test(login);
@@ -264,22 +106,6 @@ const EditSystemSettings = ({ user, setEdit }) => {
         setIsValidPass(verifyPass);
         setErrPass('');
     }, [pass]);
-
-    useEffect(() => {
-        setErrPermission('');
-    }, [permissions]);
-
-    useEffect(() => {
-        setErrDepartments('');
-    }, [departments]);
-
-    useEffect(() => {
-        setErrRoles('');
-    }, [roles]);
-
-    useEffect(() => {
-        setErrColumns('');
-    }, [columns]);
 
     useEffect(() => {
         setErrName('');
@@ -322,78 +148,32 @@ const EditSystemSettings = ({ user, setEdit }) => {
         getSettings();
     }, []);
 
+
     return (
         <section className='edit_system_settings'>
             <section className='edit_system_change'>
+
                 <section className='edit_system_settings--column'>
                     {columns.length && < UserTableColumns user={user} columns={columns} />}
-                    {/* <section className='edit_system_change--columns__container'>
-                        <h3 className='edit_system_change--columns__container--title'>{!errColumns ? "Dostęp do danych w tabeli" : errColumns}</h3>
-                        <section className='edit_system_change--columns__container--content'>
-                            {columnsItem}
-                        </section>
-                        <button className='edit_system_change--columns__container--button' onClick={handleChangeAccessUserColumns} >Zmień</button>
-                    </section>*/}
+
                 </section>
 
                 <section className='edit_system_settings--table'>
-                    {/* <section className='edit_system_change--roles__container'>
-                        <h3 className='edit_system_change--roles__container--title'>{!errRoles ? "Zmień dostęp użytkownika" : errRoles}</h3>
-                        {rolesItem}
-                        <button className='edit_system_change--roles__container--button' onClick={handleChangeRoles}>Zmień</button>
-                    </section> */}
-                    {roles && Object.keys(roles).length > 0 && <UserChangeRoles user={user} roles={roles} />}
 
-                    {/* <section className='edit_system_change--permissions__container'>
-                        <h3 className='edit_system_change--permissions__container--title'>{!errPermission ? "Zmień uprawnienia użytkownika" : errPermission}</h3>
-                        <form className='edit_system_change--permissions__container--choice'>
-                            <label className='edit_system_change--permissions__container--info' id='basic'>
-                                <span className='edit_system_change--permissions__container--text' >Doradca - widzi tylko swoje faktury</span>
-                                <input
-                                    className='edit_system_change--permissions__container--check'
-                                    name="basic"
-                                    type="checkbox"
-                                    checked={permissions.Basic}
-                                    onChange={() => setPermissions({
-                                        Basic: true,
-                                        Standard: false
-                                    })}
-                                />
-                            </label>
-                            <label className='edit_system_change--permissions__container--info' id='standard'>
-                                <span className='edit_system_change--permissions__container--text' >Asystent - widzi faktury całego działu</span>
-                                <input
-                                    className='edit_system_change--permissions__container--check'
-                                    name="standard"
-                                    type="checkbox"
-                                    checked={permissions.Standard}
-                                    onChange={() => setPermissions({
-                                        Basic: false,
-                                        Standard: true
-                                    })}
-                                />
-                            </label>
-                        </form>
-                        <button className='edit_system_change--permissions__container--button' onClick={handleChangePermission}>Zmień</button>
-                    </section> */}
+                    {roles && Object.keys(roles).length > 0 && <UserChangeRoles user={user} roles={roles} />}
 
                     {permissions && Object.keys(permissions).length > 0 && <UserChangePermissions user={user} permissions={permissions} />}
 
-                    {/* <section className='edit_system_change--departments__container'>
-                        <h3 className='edit_system_change--departments__container--title'>{!errDepartments ? "Dostęp do działów" : errDepartments}</h3>
-                        <section className='edit_system_change--departments__container--choice'>
-                            {departmentsItem}
-                        </section>
-                        <button className='edit_system_change--departments__container--button' onClick={handleChangeDepartments}>Zmień</button>
-                    </section> */}
-
                     {departments && Object.keys(departments).length > 0 && <UserChangeDepartments user={user} departments={departments} />}
-
 
                 </section>
 
                 <section className='edit_system_settings--user'>
-                    <section className='edit_system_change--name__container'>
+
+                    <UserChangeName user={user} />
+
+
+                    {/* <section className='edit_system_change--name__container'>
                         <h3 className='edit_system_change--name__container--title'>{!errName ? "Zmień imię i nazwisko użytkownika" : errName}</h3>
                         <input
                             className='edit_system_change--name__container--edit'
@@ -409,10 +189,10 @@ const EditSystemSettings = ({ user, setEdit }) => {
                             value={surname}
                             onChange={(e) => setSurname(e.target.value)}
                         />
-                        <button className='edit_system_change--name__container--button' disabled={!name || !surname} onClick={handleChangeNameSurname}>Zmień</button>
-                    </section>
+                        <button className='user-change-roles--button' disabled={!name || !surname} onClick={handleChangeNameSurname}>Zmień</button>
+                    </section> */}
 
-                    <section className='edit_system_change--name__container'>
+                    {/*     <section className='edit_system_change--name__container'>
                         <h3 className='edit_system_change--name__container--title'>{!errLogin ? "Zmień login użytkownika" : errLogin}</h3>
                         <input
                             className='edit_system_change--name__container--edit'
@@ -446,7 +226,7 @@ const EditSystemSettings = ({ user, setEdit }) => {
                                 <button className='edit_system_change--delete__container--button edit_system_change--delete__container--cancel' onClick={() => setConfirmDelete(false)}>Anuluj</button>
                                 <button className='edit_system_change--delete__container--button edit_system_change--delete__container--confirm' onClick={handleConfirmDeleteUser}>Usuń użytkownika</button>
                             </section>}
-                    </section>
+                    </section> */}
                 </section>
             </section>
             {/* <section className='edit_system_confirm'>

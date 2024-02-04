@@ -74,7 +74,6 @@ const UserChangeDepartments = ({ user, departments }) => {
             </section>
             <section className='user_change_departments__container'>
                 {departmentsItem}
-
             </section>
             <button className='user_change_departments--button' onClick={handleSaveUserDepartments}>Zmień</button>
 

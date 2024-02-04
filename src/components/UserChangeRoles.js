@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-
 import './UserChangeRoles.css';
 
 const UserChangeRoles = ({ user, roles }) => {
