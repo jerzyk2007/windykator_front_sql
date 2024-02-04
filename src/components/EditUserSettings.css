@@ -1,241 +1,19 @@
-.edit_system_settings {
+.edit_user_settings {
     position: relative;
     flex-grow: 1;
     width: 100%;
+    padding: 5px;
     display: flex;
-    flex-direction: column;
 }
 
-.edit_system_change {
-    flex-grow: 1;
-    justify-content: center;
-    display: flex;
-    height: 100%;
-}
-
-.edit_system_confirm {
-    flex-basis: 5%;
-    flex-shrink: 0;
-}
-
-.edit_system_settings--user,
-.edit_system_settings--column,
-.edit_system_settings--table {
-    flex-basis: 30%;
-    flex-shrink: 0;
+.edit_user_settings__container {
+    flex-basis: 40%;
     padding: 5px;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-
 }
 
-.edit_system_settings--column {
-    flex-grow: 1;
-}
-
-.edit_system_change--name__container,
-.edit_system_change--pass__container,
-/* .edit_system_change--permissions__container, */
-.edit_system_change--delete__container,
-/* .edit_system_change--roles__container, */
-.edit_system_change--departments__container
-
-/* .edit_system_change--columns__container */
-    {
-    flex-grow: 1;
-    padding: 5px;
-    margin: 5px;
-    font-size: 1rem;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-}
-
-/* do poprawienia,  */
-/* .edit_system_change--columns__container {
-    height: 80vh;
-} */
-
-
-/* .edit_system_change--columns__container--content {
-    width: 100%;
-    overflow-y: auto;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-} */
-
-.edit_system_change__content-item {
-    font-size: 1rem;
-    padding: 5px;
-    margin: 5px 0;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    border-radius: 5px;
-    border: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.edit_system_change__content-item--name {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.edit_system_change__content-name {
-    flex-grow: 1;
-    display: flex;
-
-}
-
-.edit_system_change__content-title {
-    flex-basis: 30%;
-    flex-shrink: 0;
-}
-
-.edit_system_change__content-table {
-    flex-grow: 1;
-}
-
-.edit_system_change__content-title,
-.edit_system_change__content-table {
-    margin: 5px 0;
-}
-
-.edit_system_change__content-item--check {
-    flex-basis: 5%;
-    padding: 10px;
-}
-
-.edit_system_change__content--check {
-    width: 15px;
-    height: 15px;
-}
-
-
-.edit_system_change--name__container--title,
-.edit_system_change--pass__container--title,
-/* .edit_system_change--permissions__container--title, */
-.edit_system_change--delete__container--title
-
-/* .edit_system_change--roles__container--title, */
-/* .edit_system_change--columns__container--title */
-    {
-    margin: 5px auto;
-    text-align: center;
-}
-
-.edit_system_change--name__container--edit,
-.edit_system_change--pass__container--edit,
-.edit_system_change--delete__container--edit {
-    display: block;
-    width: 80%;
-    font-size: 1rem;
-    margin: 5px auto;
-    padding: 5px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    border-radius: 5px;
-    border: none;
-}
-
-.edit_system_change--name__container--button,
-.edit_system_change--pass__container--button,
-/* .edit_system_change--permissions__container--button, */
-.edit_system_change--delete__container--button,
-/* .edit_system_change--roles__container--button, */
-.edit_system_change--departments__container--button
-
-/* .edit_system_change--columns__container--button  */
-    {
-    padding: 5px 10px;
-    margin: 5px auto;
-    background-color: rgb(92, 201, 87);
-    font-size: .9rem;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 2px 2px 3px 2px rgb(106, 132, 134);
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;
-}
-
-.edit_system_change--name__container--button:active,
-.edit_system_change--pass__container--button:active,
-/* .edit_system_change--permissions__container--button:active, */
-.edit_system_change--delete__container--button:active
-
-/* .edit_system_change--roles__container--button:active, */
-/* .edit_system_change--columns__container--button:active */
-    {
-    /* background-color: rgb(0, 51, 255); */
-    background-color: rgb(63, 146, 214);
-    color: #fff;
-    box-shadow: none;
-}
-
-/* .edit_system_change--permissions__container--choice
-    {
-    width: 100%;
-    margin: 5px 0;
-    display: flex;
-    flex-direction: column;
-} */
-
-.edit_system_change--departments__container--choice {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-/* .edit_system_change--permissions__container--text, */
-/* .edit_system_change--roles__container--text, */
-.edit_system_change--departments__container--text {
-    user-select: none;
-
-}
-
-/* .edit_system_change--permissions__container--info, */
-/* .edit_system_change--roles__container--info, */
-.edit_system_change--departments__container--info {
-    padding: 5px;
-    display: flex;
-    justify-content: space-between;
-
-}
-
-.edit_system_change--departments__container--info {
-    min-width: 100px;
-    padding: 5px 15px;
-    flex-wrap: wrap;
-}
-
-/* .edit_system_change--permissions__container--check, */
-/* .edit_system_change--roles__container--check, */
-.edit_system_change--departments__container--check {
-    width: 1rem;
-}
-
-.edit_system_change--delete__container-confirm {
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.edit_system_change--delete__container--cancel {
-    background-color: rgb(123, 182, 234);
-}
-
-.edit_system_change--delete__container--confirm {
-    background-color: red;
-}
-
-.edit_system_settings-close-button {
+.edit_user_settings-button {
     position: absolute;
     top: 0;
     right: 0;
@@ -247,62 +25,13 @@
     margin: 5px;
 }
 
-
-
-
 @media screen and (max-width: 960px) {
-    .edit_system_change {
-        /* flex-grow: 1; */
-        /* display: flex; */
+    .edit_user_settings {
         flex-direction: column;
         justify-content: start;
     }
 
-    .edit_system_settings--user,
-    .edit_system_settings--column,
-    .edit_system_settings--table {
+    .edit_user_settings__container {
         padding: 5px;
     }
-
-    .edit_system_change--name__container,
-    .edit_system_change--pass__container,
-    /* .edit_system_change--permissions__container, */
-    .edit_system_change--delete__container,
-    /* .edit_system_change--roles__container, */
-    .edit_system_change--departments__container
-
-    /* .edit_system_change--columns__container  */
-        {
-        font-size: .9rem;
-    }
-
-    .edit_system_change--name__container--edit,
-    .edit_system_change--pass__container--edit,
-    .edit_system_change--delete__container--edit {
-        font-size: .9rem;
-    }
-
-    .edit_system_change--name__container--button,
-    .edit_system_change--pass__container--button,
-    /* .edit_system_change--permissions__container--button, */
-    .edit_system_change--delete__container--button,
-    /* .edit_system_change--roles__container--button, */
-    .edit_system_change--departments__container--button
-
-    /* .edit_system_change--columns__container--button */
-        {
-        font-size: .9rem;
-    }
-
-    .edit_system_change--name__container--title,
-    .edit_system_change--pass__container--title,
-    /* .edit_system_change--permissions__container--title, */
-    .edit_system_change--delete__container--title
-
-    /* .edit_system_change--roles__container--title, */
-    /* .edit_system_change--columns__container--title  */
-        {
-        font-size: 1rem;
-    }
-
 }

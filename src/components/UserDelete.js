@@ -28,7 +28,7 @@ const UserDelete = ({ user, setEdit }) => {
                 {confirmDelete && <h3 className='user_delete__title--name'>Potwierdź, tej operacji nie można cofnąć !</h3>}
             </section>
             <section className='user_delete__container'>
-                <p className='edit_system_change--delete__container--edit'
+                <p className='user_delete__container--edit'
                 >{user.userlogin}</p>
             </section>
 
