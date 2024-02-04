@@ -7,6 +7,7 @@ import UserChangePermissions from './UserChangePermissions';
 import UserChangeName from './UserChangeName';
 import UserChangePass from './UserChangePass';
 import UserChangeLogin from './UserChangeLogin';
+import UserDelete from './UserDelete';
 import { FiX } from "react-icons/fi";
 import isEqual from 'lodash/isEqual';
 import './EditUserSettings.css';
@@ -15,8 +16,8 @@ const EditSystemSettings = ({ user, setEdit }) => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
     const [login, setLogin] = useState('');
-    const [isValidLogin, setIsValidLogin] = useState(false);
-    const [errLogin, setErrLogin] = useState('');
+    // const [isValidLogin, setIsValidLogin] = useState(false);
+    // const [errLogin, setErrLogin] = useState('');
 
     // const [pass, setPass] = useState('');
 
@@ -35,25 +36,25 @@ const EditSystemSettings = ({ user, setEdit }) => {
 
     const [columns, setColumns] = useState([]);
 
-    const MAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+    // const MAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
-    const handleChangeLogin = async () => {
-        try {
-            const result = await axiosPrivateIntercept.patch(`/user/change-login/${user._id}`, {
-                newUserlogin: login
-            });
-            setEdit(false);
-        }
-        catch (err) {
-            if (err.response.status === 409) {
-                setErrLogin(`Użytkownik ${login} już istnieje.`);
-            } else {
-                setErrLogin(`Zmiana się nie powiodła.`);
-            }
-            console.log(err);
-        }
-    };
+    // const handleChangeLogin = async () => {
+    //     try {
+    //         const result = await axiosPrivateIntercept.patch(`/user/change-login/${user._id}`, {
+    //             newUserlogin: login
+    //         });
+    //         setEdit(false);
+    //     }
+    //     catch (err) {
+    //         if (err.response.status === 409) {
+    //             setErrLogin(`Użytkownik ${login} już istnieje.`);
+    //         } else {
+    //             setErrLogin(`Zmiana się nie powiodła.`);
+    //         }
+    //         console.log(err);
+    //     }
+    // };
 
     // const handleChangeNameSurname = async () => {
     //     try {
@@ -81,25 +82,25 @@ const EditSystemSettings = ({ user, setEdit }) => {
     //     }
     // };
 
-    const handleConfirmDeleteUser = async () => {
-        try {
-            const result = await axiosPrivateIntercept.delete(`/user/delete-user/${user._id}`, {
-                userlogin: user.userlogin
-            });
-            setEdit(false);
-        }
-        catch (err) {
-            setErrDelete('Użytkownik nie został usunięty.');
-            console.log(err);
-        }
-    };
+    // const handleConfirmDeleteUser = async () => {
+    //     try {
+    //         const result = await axiosPrivateIntercept.delete(`/user/delete-user/${user._id}`, {
+    //             userlogin: user.userlogin
+    //         });
+    //         setEdit(false);
+    //     }
+    //     catch (err) {
+    //         setErrDelete('Użytkownik nie został usunięty.');
+    //         console.log(err);
+    //     }
+    // };
 
 
-    useEffect(() => {
-        const verifyLogin = MAIL_REGEX.test(login);
-        setIsValidLogin(verifyLogin);
-        setErrLogin('');
-    }, [login]);
+    // useEffect(() => {
+    //     const verifyLogin = MAIL_REGEX.test(login);
+    //     setIsValidLogin(verifyLogin);
+    //     setErrLogin('');
+    // }, [login]);
 
     // useEffect(() => {
     //     const verifyPass = PASSWORD_REGEX.test(pass);
@@ -173,6 +174,7 @@ const EditSystemSettings = ({ user, setEdit }) => {
                     <UserChangeName user={user} />
                     <UserChangePass user={user} />
                     <UserChangeLogin user={user} />
+                    <UserDelete user={user} setEdit={setEdit} />
                     {/* <section className='edit_system_change--name__container'>
                         <h3 className='edit_system_change--name__container--title'>{!errName ? "Zmień imię i nazwisko użytkownika" : errName}</h3>
                         <input
