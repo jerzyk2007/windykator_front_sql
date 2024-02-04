@@ -6,6 +6,7 @@ import UserChangeDepartments from './UserChangeDepartments';
 import UserChangePermissions from './UserChangePermissions';
 import UserChangeName from './UserChangeName';
 import UserChangePass from './UserChangePass';
+import UserChangeLogin from './UserChangeLogin';
 import { FiX } from "react-icons/fi";
 import isEqual from 'lodash/isEqual';
 import './EditUserSettings.css';
@@ -17,13 +18,11 @@ const EditSystemSettings = ({ user, setEdit }) => {
     const [isValidLogin, setIsValidLogin] = useState(false);
     const [errLogin, setErrLogin] = useState('');
 
-    const [pass, setPass] = useState('');
-    const [isValidPass, setIsValidPass] = useState(false);
-    const [errPass, setErrPass] = useState('');
+    // const [pass, setPass] = useState('');
 
-    const [name, setName] = useState('');
-    const [surname, setSurname] = useState('');
-    const [errName, setErrName] = useState('');
+    // const [name, setName] = useState('');
+    // const [surname, setSurname] = useState('');
+    // const [errName, setErrName] = useState('');
 
     const [permissions, setPermissions] = useState({});
 
@@ -56,31 +55,31 @@ const EditSystemSettings = ({ user, setEdit }) => {
         }
     };
 
-    const handleChangeNameSurname = async () => {
-        try {
-            const result = await axiosPrivateIntercept.patch(`/user/change-name/${user._id}`, {
-                name, surname
-            });
-            setErrName('Sukces.');
-        }
-        catch (err) {
-            setErrName(`Zmiana się nie powiodła.`);
-            console.log(err);
-        }
-    };
+    // const handleChangeNameSurname = async () => {
+    //     try {
+    //         const result = await axiosPrivateIntercept.patch(`/user/change-name/${user._id}`, {
+    //             name, surname
+    //         });
+    //         setErrName('Sukces.');
+    //     }
+    //     catch (err) {
+    //         setErrName(`Zmiana się nie powiodła.`);
+    //         console.log(err);
+    //     }
+    // };
 
-    const handleChangePass = async () => {
-        try {
-            const result = await axiosPrivateIntercept.patch(`/user/another-user-change-pass/${user._id}`, {
-                password: pass
-            });
-            setErrPass('Sukces.');
-        }
-        catch (err) {
-            setErrPass('Hasło nie zostało zmienione.');
-            console.log(err);
-        }
-    };
+    // const handleChangePass = async () => {
+    //     try {
+    //         const result = await axiosPrivateIntercept.patch(`/user/another-user-change-pass/${user._id}`, {
+    //             password: pass
+    //         });
+    //         setErrPass('Sukces.');
+    //     }
+    //     catch (err) {
+    //         setErrPass('Hasło nie zostało zmienione.');
+    //         console.log(err);
+    //     }
+    // };
 
     const handleConfirmDeleteUser = async () => {
         try {
@@ -102,15 +101,15 @@ const EditSystemSettings = ({ user, setEdit }) => {
         setErrLogin('');
     }, [login]);
 
-    useEffect(() => {
-        const verifyPass = PASSWORD_REGEX.test(pass);
-        setIsValidPass(verifyPass);
-        setErrPass('');
-    }, [pass]);
+    // useEffect(() => {
+    //     const verifyPass = PASSWORD_REGEX.test(pass);
+    //     setIsValidPass(verifyPass);
+    //     setErrPass('');
+    // }, [pass]);
 
-    useEffect(() => {
-        setErrName('');
-    }, [name, surname]);
+    // useEffect(() => {
+    //     setErrName('');
+    // }, [name, surname]);
 
 
     useEffect(() => {
@@ -173,7 +172,7 @@ const EditSystemSettings = ({ user, setEdit }) => {
 
                     <UserChangeName user={user} />
                     <UserChangePass user={user} />
-
+                    <UserChangeLogin user={user} />
                     {/* <section className='edit_system_change--name__container'>
                         <h3 className='edit_system_change--name__container--title'>{!errName ? "Zmień imię i nazwisko użytkownika" : errName}</h3>
                         <input
