@@ -1,15 +1,19 @@
 .user-table-columns {
     flex-grow: 1;
     height: 100%;
-    padding: 5px;
+    padding: 5px 10px;
+    /* margin: 10px; */
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .user-table-columns__title {
-    padding: 0 10px;
-    width: 100%;
+    width: 90%;
+    padding: 10px;
+    margin: 0 20px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -97,7 +101,7 @@
     box-shadow: none;
 }
 
-.user-table-columns__container--button {
+.user-table-columns--button {
     padding: 5px 10px;
     margin: 5px auto;
     background-color: rgb(92, 201, 87);
@@ -110,7 +114,7 @@
     cursor: pointer;
 }
 
-.user-table-columns__container--button:active {
+.user-table-columns--button:active {
     background-color: rgb(63, 146, 214);
     color: #fff;
     box-shadow: none;
@@ -118,7 +122,13 @@
 
 @media screen and (max-width: 960px) {
 
+    .user-table-columns {
+        padding: 5px;
+    }
+
     .user-table-columns__container {
+        padding: 10px 5px;
         font-size: .9rem;
     }
+
 }

@@ -23,6 +23,7 @@
 .edit_system_settings--table {
     flex-basis: 30%;
     flex-shrink: 0;
+    padding: 5px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -37,9 +38,11 @@
 .edit_system_change--pass__container,
 .edit_system_change--permissions__container,
 .edit_system_change--delete__container,
-.edit_system_change--roles__container,
-.edit_system_change--departments__container,
-.edit_system_change--columns__container {
+/* .edit_system_change--roles__container, */
+.edit_system_change--departments__container
+
+/* .edit_system_change--columns__container */
+    {
     flex-grow: 1;
     padding: 5px;
     margin: 5px;
@@ -53,18 +56,18 @@
 }
 
 /* do poprawienia,  */
-.edit_system_change--columns__container {
+/* .edit_system_change--columns__container {
     height: 80vh;
-}
+} */
 
 
-.edit_system_change--columns__container--content {
+/* .edit_system_change--columns__container--content {
     width: 100%;
     overflow-y: auto;
     padding: 10px;
     display: flex;
     flex-direction: column;
-}
+} */
 
 .edit_system_change__content-item {
     font-size: 1rem;
@@ -118,9 +121,11 @@
 .edit_system_change--name__container--title,
 .edit_system_change--pass__container--title,
 .edit_system_change--permissions__container--title,
-.edit_system_change--delete__container--title,
-.edit_system_change--roles__container--title,
-.edit_system_change--columns__container--title {
+.edit_system_change--delete__container--title
+
+/* .edit_system_change--roles__container--title, */
+/* .edit_system_change--columns__container--title */
+    {
     margin: 5px auto;
     text-align: center;
 }
@@ -142,9 +147,11 @@
 .edit_system_change--pass__container--button,
 .edit_system_change--permissions__container--button,
 .edit_system_change--delete__container--button,
-.edit_system_change--roles__container--button,
-.edit_system_change--departments__container--button,
-.edit_system_change--columns__container--button {
+/* .edit_system_change--roles__container--button, */
+.edit_system_change--departments__container--button
+
+/* .edit_system_change--columns__container--button  */
+    {
     padding: 5px 10px;
     margin: 5px auto;
     background-color: rgb(92, 201, 87);
@@ -160,17 +167,21 @@
 .edit_system_change--name__container--button:active,
 .edit_system_change--pass__container--button:active,
 .edit_system_change--permissions__container--button:active,
-.edit_system_change--delete__container--button:active,
-.edit_system_change--roles__container--button:active,
-.edit_system_change--columns__container--button:active {
+.edit_system_change--delete__container--button:active
+
+/* .edit_system_change--roles__container--button:active, */
+/* .edit_system_change--columns__container--button:active */
+    {
     /* background-color: rgb(0, 51, 255); */
     background-color: rgb(63, 146, 214);
     color: #fff;
     box-shadow: none;
 }
 
-.edit_system_change--permissions__container--choice,
-.edit_system_change--roles__container--choice {
+.edit_system_change--permissions__container--choice
+
+/* .edit_system_change--roles__container--choice */
+    {
     width: 100%;
     margin: 5px 0;
     display: flex;
@@ -184,14 +195,14 @@
 }
 
 .edit_system_change--permissions__container--text,
-.edit_system_change--roles__container--text,
+/* .edit_system_change--roles__container--text, */
 .edit_system_change--departments__container--text {
     user-select: none;
 
 }
 
 .edit_system_change--permissions__container--info,
-.edit_system_change--roles__container--info,
+/* .edit_system_change--roles__container--info, */
 .edit_system_change--departments__container--info {
     padding: 5px;
     display: flex;
@@ -206,7 +217,7 @@
 }
 
 .edit_system_change--permissions__container--check,
-.edit_system_change--roles__container--check,
+/* .edit_system_change--roles__container--check, */
 .edit_system_change--departments__container--check {
     width: 1rem;
 }
@@ -259,9 +270,11 @@
     .edit_system_change--pass__container,
     .edit_system_change--permissions__container,
     .edit_system_change--delete__container,
-    .edit_system_change--roles__container,
-    .edit_system_change--departments__container,
-    .edit_system_change--columns__container {
+    /* .edit_system_change--roles__container, */
+    .edit_system_change--departments__container
+
+    /* .edit_system_change--columns__container  */
+        {
         font-size: .9rem;
     }
 
@@ -275,18 +288,22 @@
     .edit_system_change--pass__container--button,
     .edit_system_change--permissions__container--button,
     .edit_system_change--delete__container--button,
-    .edit_system_change--roles__container--button,
-    .edit_system_change--departments__container--button,
-    .edit_system_change--columns__container--button {
+    /* .edit_system_change--roles__container--button, */
+    .edit_system_change--departments__container--button
+
+    /* .edit_system_change--columns__container--button */
+        {
         font-size: .9rem;
     }
 
     .edit_system_change--name__container--title,
     .edit_system_change--pass__container--title,
     .edit_system_change--permissions__container--title,
-    .edit_system_change--delete__container--title,
-    .edit_system_change--roles__container--title,
-    .edit_system_change--columns__container--title {
+    .edit_system_change--delete__container--title
+
+    /* .edit_system_change--roles__container--title, */
+    /* .edit_system_change--columns__container--title  */
+        {
         font-size: 1rem;
     }
 

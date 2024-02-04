@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import UserTableColumns from './UserTableColumns';
+import UserChangeRoles from './UserChangeRoles';
 import { FiX } from "react-icons/fi";
 import isEqual from 'lodash/isEqual';
 import './EditUserSettings.css';
@@ -95,44 +96,44 @@ const EditSystemSettings = ({ user, setEdit }) => {
         </label>
     ));
 
-    const columnsItem = columns.map((col, index) => {
-        return (
-            <section key={index} className='edit_system_change__content-item'>
-                <section className='edit_system_change__content-item--name'>
-                    <section className='edit_system_change__content-name'>
-                        <span className='edit_system_change__content-title'>Nazwa w DB: </span>
-                        <span className='edit_system_change__content-table'>{col.accessorKey}</span>
-                    </section>
-                    <section className='edit_system_change__content-name'>
-                        <span className='edit_system_change__content-title'>Nazwa w tabeli: </span>
-                        <span className='edit_system_change__content-table'>{col.header}</span>
-                    </section>
-                </section>
-                <section className='edit_system_change__content-item--check'>
-                    <input
-                        className='edit_system_change__content--check'
-                        type='checkbox'
-                        checked={col.checked ? col.checked : false}
-                        onChange={() => {
-                            setColumns(prev => {
-                                const modifiedColumns = prev.map(item => {
-                                    if (col.accessorKey === item.accessorKey) {
-                                        return {
-                                            ...item,
-                                            checked: !item.checked
-                                        };
-                                    } else {
-                                        return item;
-                                    }
-                                });
-                                return modifiedColumns;
-                            });
-                        }}
-                    />
-                </section>
-            </section>
-        );
-    });
+    // const columnsItem = columns.map((col, index) => {
+    //     return (
+    //         <section key={index} className='edit_system_change__content-item'>
+    //             <section className='edit_system_change__content-item--name'>
+    //                 <section className='edit_system_change__content-name'>
+    //                     <span className='edit_system_change__content-title'>Nazwa w DB: </span>
+    //                     <span className='edit_system_change__content-table'>{col.accessorKey}</span>
+    //                 </section>
+    //                 <section className='edit_system_change__content-name'>
+    //                     <span className='edit_system_change__content-title'>Nazwa w tabeli: </span>
+    //                     <span className='edit_system_change__content-table'>{col.header}</span>
+    //                 </section>
+    //             </section>
+    //             <section className='edit_system_change__content-item--check'>
+    //                 <input
+    //                     className='edit_system_change__content--check'
+    //                     type='checkbox'
+    //                     checked={col.checked ? col.checked : false}
+    //                     onChange={() => {
+    //                         setColumns(prev => {
+    //                             const modifiedColumns = prev.map(item => {
+    //                                 if (col.accessorKey === item.accessorKey) {
+    //                                     return {
+    //                                         ...item,
+    //                                         checked: !item.checked
+    //                                     };
+    //                                 } else {
+    //                                     return item;
+    //                                 }
+    //                             });
+    //                             return modifiedColumns;
+    //                         });
+    //                     }}
+    //                 />
+    //             </section>
+    //         </section>
+    //     );
+    // });
 
     const handleChangeDepartments = async () => {
         try {
@@ -326,11 +327,12 @@ const EditSystemSettings = ({ user, setEdit }) => {
                 </section>
 
                 <section className='edit_system_settings--table'>
-                    <section className='edit_system_change--roles__container'>
+                    {/* <section className='edit_system_change--roles__container'>
                         <h3 className='edit_system_change--roles__container--title'>{!errRoles ? "Zmień dostęp użytkownika" : errRoles}</h3>
                         {rolesItem}
                         <button className='edit_system_change--roles__container--button' onClick={handleChangeRoles}>Zmień</button>
-                    </section>
+                    </section> */}
+                    {roles && Object.keys(roles).length > 0 && <UserChangeRoles user={user} roles={roles} />}
 
                     <section className='edit_system_change--permissions__container'>
                         <h3 className='edit_system_change--permissions__container--title'>{!errPermission ? "Zmień uprawnienia użytkownika" : errPermission}</h3>
@@ -365,13 +367,13 @@ const EditSystemSettings = ({ user, setEdit }) => {
                         <button className='edit_system_change--permissions__container--button' onClick={handleChangePermission}>Zmień</button>
                     </section>
 
-                    <section className='edit_system_change--departments__container'>
+                    {/* <section className='edit_system_change--departments__container'>
                         <h3 className='edit_system_change--departments__container--title'>{!errDepartments ? "Dostęp do działów" : errDepartments}</h3>
                         <section className='edit_system_change--departments__container--choice'>
                             {departmentsItem}
                         </section>
                         <button className='edit_system_change--departments__container--button' onClick={handleChangeDepartments}>Zmień</button>
-                    </section>
+                    </section> */}
 
                 </section>
 

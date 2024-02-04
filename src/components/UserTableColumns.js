@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import './UserTableColumns.css';
 
-const UserTableColumns = ({ user, columns, setColumns }) => {
+const UserTableColumns = ({ user, columns }) => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
     const [userColumns, setUserColumns] = useState(columns);
@@ -87,15 +87,15 @@ const UserTableColumns = ({ user, columns, setColumns }) => {
                 </h3>
                 <section className='user-table-columns__select'>
                     <button className='user-table-columns__select--all'
-                        onClick={() => { handleChangeChecked('all'); }}>Wszystko</button>
+                        onClick={() => { handleChangeChecked('all'); }}>Zaznacz</button>
                     <button className='user-table-columns__select--none'
-                        onClick={() => { handleChangeChecked('none'); }}>Nic</button>
+                        onClick={() => { handleChangeChecked('none'); }}>Odznacz</button>
                 </section>
             </section>
             <section className='user-table-columns__container'>
                 {columnsItem}
             </section>
-            <button className='user-table-columns__container--button' onClick={handleSaveUserColumns}>Zmień</button>
+            <button className='user-table-columns--button' onClick={handleSaveUserColumns}>Zmień</button>
 
         </section>
     );
