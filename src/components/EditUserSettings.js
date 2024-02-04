@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import UserTableColumns from './UserTableColumns';
 import UserChangeRoles from './UserChangeRoles';
+import UserChangeDepartments from './UserChangeDepartments';
 import { FiX } from "react-icons/fi";
 import isEqual from 'lodash/isEqual';
 import './EditUserSettings.css';
@@ -217,39 +218,39 @@ const EditSystemSettings = ({ user, setEdit }) => {
         }
     };
 
-    const handleChangeRoles = async () => {
-        try {
-            const arrayRoles = Object.entries(roles).map(([role, isChecked], index) => {
-                if (isChecked) {
-                    return role;
-                }
-            }).filter(Boolean);
-            const result = await axiosPrivateIntercept.patch(`/user/change-roles/${user._id}`, { roles: arrayRoles });
-            setErrRoles('Sukces.');
-        }
-        catch (err) {
-            setErrRoles('Dostęp nie został zmieniony.');
-            console.log(err);
-        }
-    };
+    // const handleChangeRoles = async () => {
+    //     try {
+    //         const arrayRoles = Object.entries(roles).map(([role, isChecked], index) => {
+    //             if (isChecked) {
+    //                 return role;
+    //             }
+    //         }).filter(Boolean);
+    //         const result = await axiosPrivateIntercept.patch(`/user/change-roles/${user._id}`, { roles: arrayRoles });
+    //         setErrRoles('Sukces.');
+    //     }
+    //     catch (err) {
+    //         setErrRoles('Dostęp nie został zmieniony.');
+    //         console.log(err);
+    //     }
+    // };
 
-    const handleChangeAccessUserColumns = async () => {
-        const modifiedColumns = columns.map(col => {
-            if (col.checked) {
-                const { checked, ...rest } = col;
-                return rest;
-            }
-        }).filter(Boolean);
+    // const handleChangeAccessUserColumns = async () => {
+    //     const modifiedColumns = columns.map(col => {
+    //         if (col.checked) {
+    //             const { checked, ...rest } = col;
+    //             return rest;
+    //         }
+    //     }).filter(Boolean);
 
-        try {
-            const result = await axiosPrivateIntercept.patch(`/user/change-columns/${user._id}`, { columns: modifiedColumns });
-            setErrColumns('Sukces.');
-        }
-        catch (err) {
-            setErrColumns('Dane nie zostały zmienione.');
-            console.log(err);
-        }
-    };
+    //     try {
+    //         const result = await axiosPrivateIntercept.patch(`/user/change-columns/${user._id}`, { columns: modifiedColumns });
+    //         setErrColumns('Sukces.');
+    //     }
+    //     catch (err) {
+    //         setErrColumns('Dane nie zostały zmienione.');
+    //         console.log(err);
+    //     }
+    // };
 
     useEffect(() => {
         const verifyLogin = MAIL_REGEX.test(login);
@@ -304,7 +305,6 @@ const EditSystemSettings = ({ user, setEdit }) => {
                 const userColMatch = userColumns.find(userCol => isEqual(col, userCol));
                 return { ...col, checked: !!userColMatch };
             });
-
             setDepartments(departments);
             setRoles(roles);
             setColumns(modifiedColumnsDB);
@@ -374,6 +374,9 @@ const EditSystemSettings = ({ user, setEdit }) => {
                         </section>
                         <button className='edit_system_change--departments__container--button' onClick={handleChangeDepartments}>Zmień</button>
                     </section> */}
+
+                    {departments && Object.keys(departments).length > 0 && <UserChangeDepartments user={user} departments={departments} />}
+
 
                 </section>
 

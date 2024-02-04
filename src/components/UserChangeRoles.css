@@ -23,6 +23,7 @@
 
 .user-change-roles__container--info {
     padding: 5px;
+    user-select: none;
     display: flex;
     justify-content: space-between;
     align-items: center;

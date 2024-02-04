@@ -1,0 +1,107 @@
+.user_change_departments {
+    flex-grow: 1;
+    width: 100%;
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.user_change_departments__title {
+    width: 90%;
+    padding: 10px;
+    margin: 0 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.user_change_departments__select {
+    flex-grow: 1;
+    padding: 5px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.user_change_departments__select--all,
+.user_change_departments__select--none {
+    min-width: 90px;
+    background-color: #b1afaf;
+    color: #000000;
+    font-weight: bold;
+    padding: 5px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+}
+
+.user_change_departments__select--all:active,
+.user_change_departments__select--none:active {
+    background-color: rgb(92, 201, 87);
+    color: #fff;
+    box-shadow: none;
+}
+
+.user_change_departments--button {
+    padding: 5px 10px;
+    margin: 5px auto;
+    background-color: rgb(92, 201, 87);
+    font-size: .9rem;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 2px rgb(106, 132, 134);
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.user_change_departments--button:active {
+    background-color: rgb(63, 146, 214);
+    color: #fff;
+    box-shadow: none;
+}
+
+.user_change_departments__container {
+    flex-grow: 1;
+    font-size: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.user_change_departments__container--info {
+    min-width: 100px;
+    padding: 5px 15px;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user_change_departments__container--text {
+    user-select: none;
+}
+
+.user_change_departments__container--check {
+    width: 1rem;
+    height: 1rem;
+}
+
+
+@media screen and (max-width: 960px) {
+
+    .user_change_departments {
+        padding: 5px;
+    }
+
+    .user_change_departments__container {
+        /* padding: 10px 5px; */
+        font-size: .9rem;
+    }
+
+}
