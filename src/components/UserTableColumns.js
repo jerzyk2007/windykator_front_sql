@@ -65,7 +65,6 @@ const UserTableColumns = ({ user, columns }) => {
         }).filter(Boolean);
 
         try {
-            console.log(modifiedColumns);
             const result = await axiosPrivateIntercept.patch(`/user/change-columns/${user._id}`, { columns: modifiedColumns });
             setErrMsg('Sukces.');
         }

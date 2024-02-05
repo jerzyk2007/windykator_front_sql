@@ -323,12 +323,25 @@ const ActualTable = ({ info }) => {
                 };
             }
 
-            //sprawdzenie edycji tabeli
+            // sprawdzenie edycji tabeli
             // if (item.accessorKey === "UWAGI") {
             //     modifiedItem.enableEditing = true;
             // } else {
             //     modifiedItem.enableEditing = false;
             // }
+            if (item.accessorKey === "ILEDNIPOTERMINIE") {
+                modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
+                    sx: {
+                        backgroundColor: cell.getValue < number > () > 40 ? 'rgba(22, 184, 44, 0.5)' : undefined,
+                        fontWeight: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue < number > () > 40 ? '700' : '400'
+                    }
+                });
+            }
+
+
+
+
+
 
             if (item.filterVariant === "none") {
                 modifiedItem.enableColumnFilter = false;
@@ -505,9 +518,6 @@ const ActualTable = ({ info }) => {
         };
     }, []);
 
-    // useEffect(() => {
-    //     console.log(columnFilters);
-    // }, [columnFilters]);
 
 
     return (

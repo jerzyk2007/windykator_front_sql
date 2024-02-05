@@ -49,19 +49,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </li>
                         </ul>
                     </div></li>
-                {auth?.roles?.includes(200 || 300) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Kontakty
-                </Link>
-                    <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
-                        <ul className='nav_menu__menu-dropmenu'>
-
-                            <li className='nav_menu-item-dropmenu'><Link to="/contacts" className="nav_menu-link" onClick={handleLinkClick}>Wyszukaj
-                            </Link></li>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Dodaj
-                            </Link></li>
-
-                        </ul>
-                    </div>
-                </li>}
                 <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Raporty
                 </Link>
                     <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
@@ -89,6 +76,22 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         </ul>
                     </div>
                 </li>
+
+                {auth?.roles?.includes(200 || 300) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Kontakty
+                </Link>
+                    <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
+                        <ul className='nav_menu__menu-dropmenu'>
+
+                            <li className='nav_menu-item-dropmenu'><Link to="/contacts" className="nav_menu-link" onClick={handleLinkClick}>Wyszukaj
+                            </Link></li>
+                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Dodaj
+                            </Link></li>
+
+                        </ul>
+                    </div>
+                </li>}
+
+
                 {auth?.roles?.includes(300) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >System
                 </Link>
                     <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
