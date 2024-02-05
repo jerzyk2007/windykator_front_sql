@@ -15,6 +15,277 @@ import './ActualTable.css';
 const ActualTable = ({ info }) => {
     const theme = useTheme();
 
+    const [localization, setLocalization] = useState({
+        actions
+            :
+            "Akcje",
+        and
+            :
+            "i",
+        cancel
+            :
+            "Anuluj",
+        changeFilterMode
+            :
+            "Zmień tryb filtrowania",
+        changeSearchMode
+            :
+            "Zmień tryb wyszukiwania",
+        clearFilter
+            :
+            "Wyczyść filtr",
+        clearSearch
+            :
+            "Wyczyść wyszukiwanie",
+        clearSort
+            :
+            "Wyczyść sortowanie",
+        clickToCopy
+            :
+            "Kliknij, aby skopiować",
+        collapse
+            :
+            "Zwiń",
+        collapseAll
+            :
+            "Zwiń wszystko",
+        columnActions
+            :
+            "Akcje dla kolumny",
+        copiedToClipboard
+            :
+            "Skopiowano do schowka",
+        dropToGroupBy
+            :
+            "Upuść aby zgrupować wg {column}",
+        edit
+            :
+            "Edytuj",
+        expand
+            :
+            "Rozwiń",
+        expandAll
+            :
+            "Rozwiń wszystko",
+        filterArrIncludes
+            :
+            "Zawiera",
+        filterArrIncludesAll
+            :
+            "Zawiera wszystko",
+        filterArrIncludesSome
+            :
+            "Zawiera niektóre",
+        filterBetween
+            :
+            "Pomiędzy (przedział otwarty)",
+        filterBetweenInclusive
+            :
+            "Pomiędzy (przedział domknięty)",
+        filterByColumn
+            :
+            "Filtruj wg {column}",
+        // "",
+        filterContains
+            :
+            "Zawiera",
+        filterEmpty
+            :
+            "Puste",
+        filterEndsWith
+            :
+            "Kończy się na",
+        filterEquals
+            :
+            "Równa się",
+        filterEqualsString
+            :
+            "Równa się",
+        filterFuzzy
+            :
+            "Rozmyte dopasowanie",
+        filterGreaterThan
+            :
+            "Większe niż",
+        filterGreaterThanOrEqualTo
+            :
+            "Większe lub równe",
+        filterInNumberRange
+            :
+            "Pomiędzy",
+        filterIncludesString
+            :
+            "Zawiera",
+        filterIncludesStringSensitive
+            :
+            "Zawiera (istotna wielkość znaków)",
+        filterLessThan
+            :
+            "Mniejsze niż",
+        filterLessThanOrEqualTo
+            :
+            "Mniejsze lub równe",
+        filterMode
+            :
+            "Tryb filtrowania: {filterType}",
+        filterNotEmpty
+            :
+            "Nie jest puste",
+        filterNotEquals
+            :
+            "Nie równa się",
+        filterStartsWith
+            :
+            "Zaczyna się od",
+        filterWeakEquals
+            :
+            "Równa się",
+        filteringByColumn
+            :
+            "Filtrowanie wg {column} - {filterType} {filterValue}",
+        goToFirstPage
+            :
+            "Pierwsza strona",
+        goToLastPage
+            :
+            "Ostatnia strona",
+        goToNextPage
+            :
+            "Następna strona",
+        goToPreviousPage
+            :
+            "Poprzednia strony",
+        grab
+            :
+            "Grab",
+        groupByColumn
+            :
+            "Grupuj wg {column}",
+        groupedBy
+            :
+            "Grupowane wg ",
+        hideAll
+            :
+            "Ukryj wszystko",
+        hideColumn
+            :
+            "Ukryj kolumnę {column}",
+        max
+            :
+            "Maks.",
+        min
+            :
+            "Min.",
+        move
+            :
+            "Przenieś",
+        noRecordsToDisplay
+            :
+            "Brak rekordów do wyświetlenia",
+        noResultsFound
+            :
+            "Brak wyników",
+        of
+            :
+            "z",
+        or
+            :
+            "lub",
+        pin
+            :
+            "Przypnij",
+        pinToLeft
+            :
+            "Przypnij po lewej",
+        pinToRight
+            :
+            "Przypnij po prawej",
+        resetColumnSize
+            :
+            "Resetuj wielkość kolumn",
+        resetOrder
+            :
+            "Resetuj kolejność",
+        rowActions
+            :
+            "Akcje dla rekordu",
+        rowNumber
+            :
+            "#",
+        rowNumbers
+            :
+            "Liczba rekordów",
+        rowsPerPage
+            :
+            "Rekordów na stronę",
+        save
+            :
+            "Zapisz",
+        search
+            :
+            "Szukaj",
+        select
+            :
+            "Wybierz",
+        selectedCountOfRowCountRowsSelected
+            :
+            "Wybrano {selectedCount} z {rowCount} rekordów",
+        showAll
+            :
+            "Pokaż wszystko",
+        showAllColumns
+            :
+            "Pokaż wszystkie kolumny",
+        showHideColumns
+            :
+            "Pokaż/ukryj kolumny",
+        showHideFilters
+            :
+            "Pokaż/ukryj filtry",
+        showHideSearch
+            :
+            "Pokaż/ukryj wyszukiwanie",
+        sortByColumnAsc
+            :
+            "Sortuj wg {column} rosnąco",
+        sortByColumnDesc
+            :
+            "Sortuj wg {column} malejąco",
+        sortedByColumnAsc
+            :
+            "Sortuj wg {column} rosnąco",
+        sortedByColumnDesc
+            :
+            "Sortuj wg {column} malejąco",
+        thenBy
+            :
+            ", następnie wg ",
+        toggleDensity
+            :
+            "Przełącz gęstość rekordów",
+        toggleFullScreen
+            :
+            "Tryb pełnoekranowy",
+        toggleSelectAll
+            :
+            "Zaznacz wszystkie",
+        toggleSelectRow
+            :
+            "Zaznacz rekord",
+        toggleVisibility
+            :
+            "Widoczność",
+        ungroupByColumn
+            :
+            "Rozgrupuj {column}",
+        unpin
+            :
+            "Odepnij",
+        unpinAll
+            :
+            "Odepnij wszystkie"
+    });
+
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
     const { pleaseWait, setPleaseWait, auth } = useData();
     const { height } = useWindowSize();
@@ -30,6 +301,7 @@ const ActualTable = ({ info }) => {
     const [tableSize, setTableSize] = useState(500);
     const [pagination, setPagination] = useState({});
 
+    // const [columnFilters, setColumnFilters] = useState([]);
 
     const prepareColumns = (columnsData, data) => {
         const changeColumn = columnsData.map(item => {
@@ -50,6 +322,13 @@ const ActualTable = ({ info }) => {
                     align: 'center',
                 };
             }
+
+            //sprawdzenie edycji tabeli
+            // if (item.accessorKey === "UWAGI") {
+            //     modifiedItem.enableEditing = true;
+            // } else {
+            //     modifiedItem.enableEditing = false;
+            // }
 
             if (item.filterVariant === "none") {
                 modifiedItem.enableColumnFilter = false;
@@ -145,9 +424,10 @@ const ActualTable = ({ info }) => {
             size: columnSizing?.[column.accessorKey] ? columnSizing[column.accessorKey] : column.size,
             enableHiding: true,
             enablePinning: true,
-            enableColumnFilterModes: true,
+            enableColumnFilterModes: false,
             minSize: 50,
             maxSize: 400,
+            // columnFilterModeOptions: ['fuzzy', 'contains', 'startsWith'],
         })),
         [columnSizing, columnVisibility, density, columnPinning, columns]
     );
@@ -225,6 +505,10 @@ const ActualTable = ({ info }) => {
         };
     }, []);
 
+    // useEffect(() => {
+    //     console.log(columnFilters);
+    // }, [columnFilters]);
+
 
     return (
         <section className='actual_table'>
@@ -253,7 +537,8 @@ const ActualTable = ({ info }) => {
                             showColumnFilters: false,
                             showGlobalFilter: true,
                         }}
-                        localization={MRT_Localization_PL}
+                        localization={localization}
+                        // localization={MRT_Localization_PL}
                         state={{
                             columnVisibility: columnVisibility,
                             density,
@@ -261,14 +546,36 @@ const ActualTable = ({ info }) => {
                             columnPinning,
                             pagination
                         }}
-
+                        // onColumnFiltersChange={setColumnFilters}
                         // icons={{ SearchIcon: () => <input /> }}
 
-                        enableColumnActions={false}
+                        globalFilterModeOptions={['contains']}
+                        positionGlobalFilter="left"
+
+
+
+                        // enableEditing
+
+                        // muiSearchTextFieldProps={{
+                        //     placeholder: `Szukaj ...`,
+                        //     sx: { width: '800px' },
+                        //     variant: 'outlined',
+                        // }}
+                        // enableColumnActions={false}
+
 
                         muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
                         // wyświetla filtry nad komórką - 
-                        // columnFilterDisplayMode={'popover'}
+                        columnFilterDisplayMode={'popover'}
+
+                        //filtr nad headerem - popover
+                        muiFilterTextFieldProps={{
+                            // sx: { m: '0.5rem 0', width: '100%' },
+                            sx: { m: '0', width: '400px' },
+                            variant: 'outlined',
+                        }}
+
+                        // editDisplayMode={'cell'}
 
                         muiPaginationProps={{
                             color: 'secondary',
@@ -284,8 +591,14 @@ const ActualTable = ({ info }) => {
                                 fontSize: "12px",
                                 color: "black",
                                 backgroundColor: "#a5f089",
-                                padding: "15px",
-                                textAlign: "center",
+                                padding: "5px",
+                                paddingTop: "0",
+                                paddingBottom: "0",
+                                // textAlign: "center",
+                                minHeight: "3rem",
+                                display: "flex",
+                                // alignItems: "center",
+                                justifyContent: "center",
                                 // borderRadius: "5px",
                                 // boxShadow: "2px 2px 2px #757575",
                                 // border: ".5px solid #c9c7c7",

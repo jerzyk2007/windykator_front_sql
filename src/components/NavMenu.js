@@ -41,9 +41,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link></li>
                             <li className='nav_menu-item-dropmenu'><Link to="/archive-table" className="nav_menu-link" onClick={handleLinkClick}>Archiwum
                             </Link></li>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Kancelaria
+                            {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Kancelaria
                             </Link>
-                            </li>
+                            </li> */}
                             <li className='nav_menu-item-dropmenu'><Link to="/all-data-table" className="nav_menu-link" onClick={handleLinkClick}>Kpl dane
                             </Link>
                             </li>
@@ -70,7 +70,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link></li>
                             <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Pracownika
                             </Link></li>
-                            <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link">
+                            {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link">
                                 <i className='fas fa-caret-right' ></i>Test
                             </Link>
                                 <div className="nav_menu-dropdown__menu--side">
@@ -85,7 +85,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                                         </Link></li>
                                     </ul>
                                 </div>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
                 </li>

@@ -1,2 +1,2 @@
-przy zmianie ustawień glabalnych column użytkownik ma wszytsko stare - sprawdzić 
-sprawdzić przesyłanie plików z fv - działa tylko po odświeżeniu strony
+
+zrobić logi błędów na serwerze dla każdej funkcji 

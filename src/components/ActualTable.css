@@ -47,20 +47,36 @@
     display: none;
 } */
 
+
+/* ikona w headerze od przesuwania kolumn */
 .Mui-TableHeadCell-Content-Actions.MuiBox-root.css-epvm6 {
     display: none;
 }
 
-.MuiInputBase-root.MuiInput-root.MuiInput-underline.MuiInputBase-colorPrimary.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.css-953pxc-MuiInputBase-root-MuiInput-root {
-    font-size: .7rem;
-    margin: 0 10px;
-}
+/* .MuiInputBase-root.MuiInput-root.MuiInput-underline.MuiInputBase-colorPrimary.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.css-953pxc-MuiInputBase-root-MuiInput-root {
+    font-size: 1rem;
+} */
 
-.MuiButtonBase-root.Mui-disabled.MuiIconButton-root.Mui-disabled.MuiIconButton-sizeSmall.css-1so9ih7-MuiButtonBase-root-MuiIconButton-root {
+/* wielkośc ikon lejek, ukrycie kolumn itp */
+/* .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root {
+    font-size: 1rem;
+    margin: 0;
+} */
+
+/* widok trybu filtra np rozmyte dopsaowanie */
+/* .MuiFormHelperText-root.MuiFormHelperText-sizeMedium.css-jchqo4-MuiFormHelperText-root,
+.MuiFormHelperText-root.MuiFormHelperText-sizeMedium.css-1a8ei4g {
+    display: none;
+} */
+
+/* .MuiFormHelperText-root.MuiFormHelperText-sizeMedium.css-1a8ei4g */
+/* .MuiButtonBase-root.Mui-disabled.MuiIconButton-root.Mui-disabled.MuiIconButton-sizeSmall.css-1so9ih7-MuiButtonBase-root-MuiIconButton-root {
     font-size: .6rem;
-}
+} */
 
 
+/* wyśrodkowanie tekstu w headerze */
+.Mui-TableHeadCell-Content.MuiBox-root.css-c8wlay,
 .Mui-TableHeadCell-Content.MuiBox-root.css-c8wlay {
     padding: 0;
     text-align: center;
@@ -68,5 +84,29 @@
     justify-content: center;
     align-items: center;
 }
+
+/* .MuiInputBase-root.MuiInput-root.MuiInput-underline.MuiInputBase-colorPrimary.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedStart.MuiInputBase-adornedEnd.css-1rrfrxi,
+.MuiInputBase-root.MuiInput-root.MuiInput-underline.MuiInputBase-colorPrimary.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedStart.MuiInputBase-adornedEnd.css-953pxc-MuiInputBase-root-MuiInput-root {
+    font-size: 1rem;
+} */
+
+/* .MuiInputBase-root.MuiInput-root.MuiInput-underline.MuiInputBase-colorPrimary.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedStart.MuiInputBase-adornedEnd.css-1rrfrxi {
+    font-size: .8rem;
+} */
+
+/* .Mui-TableHeadCell-Content.MuiBox-root.css-c8wlay {
+    text-align: center;
+} */
+
+
+/* wielkośc filtra lejek */
+/* .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-vubbuv,
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root {
+    font-size: 2rem;
+} */
+
+/* .MuiTouchRipple-root.css-w0pj6f {
+    font-size: 2rem;
+} */
 
 /* MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd css-953pxc-MuiInputBase-root-MuiInput-root */
