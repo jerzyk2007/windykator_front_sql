@@ -301,6 +301,8 @@ const ActualTable = ({ info }) => {
     const [tableSize, setTableSize] = useState(500);
     const [pagination, setPagination] = useState({});
 
+    const [tableData, setTableData] = useState();
+
     // const [columnFilters, setColumnFilters] = useState([]);
 
     const prepareColumns = (columnsData, data) => {
@@ -313,13 +315,82 @@ const ActualTable = ({ info }) => {
             }
 
             // if (item.accessorKey === "KONTRAHENT" || item.accessorKey !== "UWAGI") {
-            if (item.accessorKey === "KONTRAHENT" || item.accessorKey === "UWAGI" || item.accessorKey === "KOMENTARZKANCELARIA") {
+            if (item.accessorKey === "KONTRAHENT" || item.accessorKey === "UWAGI") {
                 modifiedItem.muiTableBodyCellProps = {
                     align: 'left',
+                    sx: {
+                        // backgroundColor: 'rgba(110, 228, 246, 0.1)',
+                        borderRight: '1px solid rgba(224,224,224,1)',
+                        borderRight: "1px solid #c9c7c7", //add a border between columns
+                        fontSize: "14px",
+                        fontFamily: "Calibri",
+                        padding: "2px"
+                    }
                 };
             } else {
                 modifiedItem.muiTableBodyCellProps = {
                     align: 'center',
+                    sx: {
+                        // backgroundColor: 'rgba(110, 228, 246, 0.1)',
+                        borderRight: '1px solid rgba(224,224,224,1)',
+                        borderRight: "1px solid #c9c7c7", //add a border between columns
+                        fontSize: "14px",
+                        fontFamily: "Calibri",
+                        padding: "2px"
+                    }
+                };
+            }
+
+            if (item.accessorKey === "ILEDNIPOTERMINIE") {
+                modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
+                    sx: {
+                        borderRight: "1px solid #c9c7c7",
+                        textAlign: "center",
+                        backgroundColor: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'rgb(250, 136, 136)' : "white",
+                        // color: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'white' : "black",
+                        // fontWeight: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'bold' : 'normal'
+                        fontSize: "14px",
+                        fontFamily: "Calibri",
+                    },
+                    align: 'center',
+                });
+            }
+
+            if (item.accessorKey === "50VAT") {
+                modifiedItem.muiTableBodyCellProps = ({ cell }) => {
+                    const cellValue = cell.getValue();
+                    const dorozliczValue = cell.row.original.DOROZLICZ;
+
+                    return {
+                        sx: {
+                            borderRight: "1px solid #c9c7c7",
+                            textAlign: "center",
+                            backgroundColor: cell.column.id === '50VAT' && Math.abs(cellValue - dorozliczValue) <= 1
+                                ? 'rgb(250, 136, 136)' : "white",
+                            fontSize: "14px",
+                            fontFamily: "Calibri",
+                        },
+                        align: 'center',
+                    };
+                };
+            }
+
+            if (item.accessorKey === "100VAT") {
+                modifiedItem.muiTableBodyCellProps = ({ cell }) => {
+                    const cellValue = cell.getValue();
+                    const dorozliczValue = cell.row.original.DOROZLICZ;
+
+                    return {
+                        sx: {
+                            borderRight: "1px solid #c9c7c7",
+                            textAlign: "center",
+                            backgroundColor: cell.column.id === '100VAT' && Math.abs(cellValue - dorozliczValue) <= 1
+                                ? 'rgb(250, 136, 136)' : "white",
+                            fontSize: "14px",
+                            fontFamily: "Calibri",
+                        },
+                        align: 'center',
+                    };
                 };
             }
 
@@ -329,14 +400,14 @@ const ActualTable = ({ info }) => {
             // } else {
             //     modifiedItem.enableEditing = false;
             // }
-            if (item.accessorKey === "ILEDNIPOTERMINIE") {
-                modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
-                    sx: {
-                        backgroundColor: cell.getValue < number > () > 40 ? 'rgba(22, 184, 44, 0.5)' : undefined,
-                        fontWeight: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue < number > () > 40 ? '700' : '400'
-                    }
-                });
-            }
+            // if (item.accessorKey === "ILEDNIPOTERMINIE") {
+            //     modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
+            //         sx: {
+            //             backgroundColor: cell.getValue < number > () > 40 ? 'rgba(22, 184, 44, 0.5)' : undefined,
+            //             fontWeight: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue < number > () > 40 ? '700' : '400'
+            //         }
+            //     });
+            // }
 
 
 
@@ -497,6 +568,7 @@ const ActualTable = ({ info }) => {
                 const modifiedColumns = prepareColumns(getColumns.data, result.data);
                 if (isMounted) {
                     setDocuments(result.data);
+                    setTableData(result.data);
                     setColumnVisibility(settingsUser?.data?.visible || {});
                     setColumnSizing(settingsUser?.data?.size || {});
                     setDensity(settingsUser?.data?.density || 'comfortable');
@@ -550,7 +622,7 @@ const ActualTable = ({ info }) => {
                         localization={localization}
                         // localization={MRT_Localization_PL}
                         state={{
-                            columnVisibility: columnVisibility,
+                            columnVisibility,
                             density,
                             columnOrder,
                             columnPinning,
@@ -559,7 +631,13 @@ const ActualTable = ({ info }) => {
                         // onColumnFiltersChange={setColumnFilters}
                         // icons={{ SearchIcon: () => <input /> }}
 
+                        // globalFilterModeOptions={['contains']}
+
+                        enableGlobalFilterModes
                         globalFilterModeOptions={['contains']}
+
+
+
                         positionGlobalFilter="left"
 
 
@@ -604,31 +682,26 @@ const ActualTable = ({ info }) => {
                                 padding: "5px",
                                 paddingTop: "0",
                                 paddingBottom: "0",
-                                // textAlign: "center",
                                 minHeight: "3rem",
                                 display: "flex",
-                                // alignItems: "center",
                                 justifyContent: "center",
-                                // borderRadius: "5px",
-                                // boxShadow: "2px 2px 2px #757575",
-                                // border: ".5px solid #c9c7c7",
                                 border: '1px solid rgba(81, 81, 81, .2)'
                             },
                         })}
 
-                        // odczytanie danych po kliknięciu w wiersz
-                        muiTableBodyCellProps={({ column, cell }) => ({
-                            onClick: () => {
-                                if (column.id === "UWAGI") { console.log(cell.row._valuesCache.UWAGI); }
-                            },
-                            sx: {
-                                borderRight: "1px solid #c9c7c7", //add a border between columns
-                                fontSize: "14px",
-                                fontFamily: "Calibri",
-                                padding: "5px",
-                                // textAlign: "center"
-                            },
-                        })}
+                    // odczytanie danych po kliknięciu w wiersz
+                    // muiTableBodyCellProps={({ column, cell }) => ({
+                    //     onClick: () => {
+                    //         if (column.id === "UWAGI") { console.log(cell.row._valuesCache.UWAGI); }
+                    //     },
+                    //     sx: {
+                    //         borderRight: "1px solid #c9c7c7", //add a border between columns
+                    //         fontSize: "14px",
+                    //         fontFamily: "Calibri",
+                    //         padding: "2px",
+                    //         // textAlign: "center"
+                    //     },
+                    // })}
                     />
                 </ThemeProvider>
                     <TfiSave className='table-save-settings' onClick={handleSaveSettings} />

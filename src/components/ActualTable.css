@@ -5,9 +5,13 @@
 }
 
 
-.actual_table tr:nth-of-type(odd) td {
+/* .actual_table tr:nth-of-type(odd) td {
     background-color: #f1f3ed;
 
+} */
+
+.testowa {
+    background-color: rgba(110, 228, 246, 0.1);
 }
 
 .actual_table td {
