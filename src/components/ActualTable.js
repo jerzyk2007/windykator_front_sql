@@ -8,283 +8,18 @@ import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { TfiSave } from "react-icons/tfi";
 import PleaseWait from './PleaseWait';
 import useWindowSize from './hooks/useWindow';
-
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import 'dayjs/locale/pl';
+import { plPL as plText } from '@mui/x-date-pickers/locales';
 
 import './ActualTable.css';
 
 const ActualTable = ({ info }) => {
-    const theme = useTheme();
 
-    const [localization, setLocalization] = useState({
-        actions
-            :
-            "Akcje",
-        and
-            :
-            "i",
-        cancel
-            :
-            "Anuluj",
-        changeFilterMode
-            :
-            "Zmień tryb filtrowania",
-        changeSearchMode
-            :
-            "Zmień tryb wyszukiwania",
-        clearFilter
-            :
-            "Wyczyść filtr",
-        clearSearch
-            :
-            "Wyczyść wyszukiwanie",
-        clearSort
-            :
-            "Wyczyść sortowanie",
-        clickToCopy
-            :
-            "Kliknij, aby skopiować",
-        collapse
-            :
-            "Zwiń",
-        collapseAll
-            :
-            "Zwiń wszystko",
-        columnActions
-            :
-            "Akcje dla kolumny",
-        copiedToClipboard
-            :
-            "Skopiowano do schowka",
-        dropToGroupBy
-            :
-            "Upuść aby zgrupować wg {column}",
-        edit
-            :
-            "Edytuj",
-        expand
-            :
-            "Rozwiń",
-        expandAll
-            :
-            "Rozwiń wszystko",
-        filterArrIncludes
-            :
-            "Zawiera",
-        filterArrIncludesAll
-            :
-            "Zawiera wszystko",
-        filterArrIncludesSome
-            :
-            "Zawiera niektóre",
-        filterBetween
-            :
-            "Pomiędzy (przedział otwarty)",
-        filterBetweenInclusive
-            :
-            "Pomiędzy (przedział domknięty)",
-        filterByColumn
-            :
-            "Filtruj wg {column}",
-        // "",
-        filterContains
-            :
-            "Zawiera",
-        filterEmpty
-            :
-            "Puste",
-        filterEndsWith
-            :
-            "Kończy się na",
-        filterEquals
-            :
-            "Równa się",
-        filterEqualsString
-            :
-            "Równa się",
-        filterFuzzy
-            :
-            "Rozmyte dopasowanie",
-        filterGreaterThan
-            :
-            "Większe niż",
-        filterGreaterThanOrEqualTo
-            :
-            "Większe lub równe",
-        filterInNumberRange
-            :
-            "Pomiędzy",
-        filterIncludesString
-            :
-            "Zawiera",
-        filterIncludesStringSensitive
-            :
-            "Zawiera (istotna wielkość znaków)",
-        filterLessThan
-            :
-            "Mniejsze niż",
-        filterLessThanOrEqualTo
-            :
-            "Mniejsze lub równe",
-        filterMode
-            :
-            "Tryb filtrowania: {filterType}",
-        filterNotEmpty
-            :
-            "Nie jest puste",
-        filterNotEquals
-            :
-            "Nie równa się",
-        filterStartsWith
-            :
-            "Zaczyna się od",
-        filterWeakEquals
-            :
-            "Równa się",
-        filteringByColumn
-            :
-            "Filtrowanie wg {column} - {filterType} {filterValue}",
-        goToFirstPage
-            :
-            "Pierwsza strona",
-        goToLastPage
-            :
-            "Ostatnia strona",
-        goToNextPage
-            :
-            "Następna strona",
-        goToPreviousPage
-            :
-            "Poprzednia strony",
-        grab
-            :
-            "Grab",
-        groupByColumn
-            :
-            "Grupuj wg {column}",
-        groupedBy
-            :
-            "Grupowane wg ",
-        hideAll
-            :
-            "Ukryj wszystko",
-        hideColumn
-            :
-            "Ukryj kolumnę {column}",
-        max
-            :
-            "Maks.",
-        min
-            :
-            "Min.",
-        move
-            :
-            "Przenieś",
-        noRecordsToDisplay
-            :
-            "Brak rekordów do wyświetlenia",
-        noResultsFound
-            :
-            "Brak wyników",
-        of
-            :
-            "z",
-        or
-            :
-            "lub",
-        pin
-            :
-            "Przypnij",
-        pinToLeft
-            :
-            "Przypnij po lewej",
-        pinToRight
-            :
-            "Przypnij po prawej",
-        resetColumnSize
-            :
-            "Resetuj wielkość kolumn",
-        resetOrder
-            :
-            "Resetuj kolejność",
-        rowActions
-            :
-            "Akcje dla rekordu",
-        rowNumber
-            :
-            "#",
-        rowNumbers
-            :
-            "Liczba rekordów",
-        rowsPerPage
-            :
-            "Rekordów na stronę",
-        save
-            :
-            "Zapisz",
-        search
-            :
-            "Szukaj",
-        select
-            :
-            "Wybierz",
-        selectedCountOfRowCountRowsSelected
-            :
-            "Wybrano {selectedCount} z {rowCount} rekordów",
-        showAll
-            :
-            "Pokaż wszystko",
-        showAllColumns
-            :
-            "Pokaż wszystkie kolumny",
-        showHideColumns
-            :
-            "Pokaż/ukryj kolumny",
-        showHideFilters
-            :
-            "Pokaż/ukryj filtry",
-        showHideSearch
-            :
-            "Pokaż/ukryj wyszukiwanie",
-        sortByColumnAsc
-            :
-            "Sortuj wg {column} rosnąco",
-        sortByColumnDesc
-            :
-            "Sortuj wg {column} malejąco",
-        sortedByColumnAsc
-            :
-            "Sortuj wg {column} rosnąco",
-        sortedByColumnDesc
-            :
-            "Sortuj wg {column} malejąco",
-        thenBy
-            :
-            ", następnie wg ",
-        toggleDensity
-            :
-            "Przełącz gęstość rekordów",
-        toggleFullScreen
-            :
-            "Tryb pełnoekranowy",
-        toggleSelectAll
-            :
-            "Zaznacz wszystkie",
-        toggleSelectRow
-            :
-            "Zaznacz rekord",
-        toggleVisibility
-            :
-            "Widoczność",
-        ungroupByColumn
-            :
-            "Rozgrupuj {column}",
-        unpin
-            :
-            "Odepnij",
-        unpinAll
-            :
-            "Odepnij wszystkie"
-    });
+    const plLocale = plText.components.MuiLocalizationProvider.defaultProps.localeText;
+
+    const theme = useTheme();
 
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
     const { pleaseWait, setPleaseWait, auth } = useData();
@@ -300,9 +35,6 @@ const ActualTable = ({ info }) => {
     const [tableSize, setTableSize] = useState(500);
     const [pagination, setPagination] = useState({});
 
-
-    // const [columnFilters, setColumnFilters] = useState([]);
-
     const prepareColumns = (columnsData, data) => {
         const changeColumn = columnsData.map(item => {
             const modifiedItem = { ...item };
@@ -312,8 +44,49 @@ const ActualTable = ({ info }) => {
                 modifiedItem.filterSelectOptions = uniqueValues;
             }
 
+            if (item.filterVariant === 'date-range') {
+                // const uniqueValues = Array.from(new Set(data.map(filtr => filtr[item.accessorKey])));
+                // delete modifiedItem.accessorKey;
+                modifiedItem.accessorFn = (originalRow) => new Date(originalRow[item.accessorKey]);
+                modifiedItem.Cell = ({ cell }) => cell.getValue().toLocaleDateString('pl-PL', {
+                    useGrouping: true,
+                });
+            }
+
+            // if (item.filterVariant === 'date-range') {
+            //     // const uniqueValues = Array.from(new Set(data.map(filtr => filtr[item.accessorKey])));
+            //     // delete modifiedItem.accessorKey;
+            //     modifiedItem.accessorFn = (originalRow) => new Date(originalRow[item.accessorKey]);
+            //     modifiedItem.Cell = ({ cell }) => cell.getValue().toLocaleDateString('pl-PL', {
+            //         useGrouping: true,
+            //     });
+            // }
+
+
+            // if (item.filterVariant === 'date-range') {
+            //     modifiedItem.accessorFn = (originalRow) => {
+            //         const date = new Date(originalRow[item.accessorKey]);
+            //         return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+            //     };
+            //     modifiedItem.Cell = ({ cell }) => {
+            //         const dateString = cell.getValue();
+            //         const date = new Date(dateString);
+
+            //         if (!isNaN(date.getTime())) {
+            //             // Sprawdzamy, czy data jest poprawna
+            //             return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+            //         } else {
+            //             return ''; // lub inna obsługa w przypadku, gdy wartość nie jest datą
+            //         }
+            //     };
+            // }
+
+            // Cell: ({ cell }) => cell.getValue().toLocaleDateString(),
+
             // if (item.accessorKey === "KONTRAHENT" || item.accessorKey !== "UWAGI") {
             if (item.accessorKey === "KONTRAHENT" || item.accessorKey === "UWAGI") {
+
+                modifiedItem.enableClickToCopy = false;
                 modifiedItem.muiTableBodyCellProps = {
                     align: 'left',
                     sx: {
@@ -322,7 +95,8 @@ const ActualTable = ({ info }) => {
                         borderRight: "1px solid #c9c7c7", //add a border between columns
                         fontSize: "14px",
                         fontFamily: "Calibri",
-                        padding: "2px"
+                        padding: "2px",
+                        maxHeight: "10rem",
                     }
                 };
             } else {
@@ -587,126 +361,107 @@ const ActualTable = ({ info }) => {
         };
     }, []);
 
-
-    useEffect(() => {
-        console.log(columns);
-    }, [columns]);
-
     return (
         <section className='actual_table'>
             {pleaseWait ? <PleaseWait /> :
                 <>  <ThemeProvider
                     theme={createTheme(theme, plPL)} >
-                    <MaterialReactTable
-                        className='actual_table__table'
-                        columns={columnsItem}
-                        data={documents}
-                        enableColumnFilterModes
-                        enableStickyHeader
-                        enableStickyFooter
-                        enableColumnResizing
-                        onColumnSizingChange={setColumnSizing}
-                        onColumnVisibilityChange={setColumnVisibility}
-                        onDensityChange={setDensity}
-                        onColumnOrderChange={setColumnOrder}
-                        enableColumnOrdering
-                        enableColumnPinning
-                        onColumnPinningChange={setColumnPinning}
-                        onPaginationChange={setPagination}
-                        // globalFilterFn={'contains'}
-                        enableSelectAll={false}
-                        initialState={{
-                            showColumnFilters: false,
-                            showGlobalFilter: true,
-                        }}
-                        localization={localization}
-                        // localization={MRT_Localization_PL}
-                        state={{
-                            columnVisibility,
-                            density,
-                            columnOrder,
-                            columnPinning,
-                            pagination
-                        }}
-                        // onColumnFiltersChange={setColumnFilters}
-                        // icons={{ SearchIcon: () => <input /> }}
 
-                        // globalFilterModeOptions={['contains']}
+                    <LocalizationProvider dateAdapter={AdapterDayjs}
+                        adapterLocale="pl"
+                        localeText={plLocale}
+                    >
+                        <MaterialReactTable
+                            className='actual_table__table'
+                            columns={columnsItem}
+                            data={documents}
+                            enableClickToCopy
+                            enableColumnFilterModes
+                            enableStickyHeader
+                            enableStickyFooter
+                            enableColumnResizing
+                            onColumnSizingChange={setColumnSizing}
+                            onColumnVisibilityChange={setColumnVisibility}
+                            onDensityChange={setDensity}
+                            onColumnOrderChange={setColumnOrder}
+                            enableColumnOrdering
+                            enableColumnPinning
+                            onColumnPinningChange={setColumnPinning}
+                            onPaginationChange={setPagination}
+                            enableSelectAll={false}
+                            initialState={{
+                                showColumnFilters: false,
+                                showGlobalFilter: true,
+                            }}
+                            localization={MRT_Localization_PL}
+                            state={{
+                                columnVisibility,
+                                density,
+                                columnOrder,
+                                columnPinning,
+                                pagination
+                            }}
+                            enableGlobalFilterModes
+                            globalFilterModeOptions={['contains']}
+                            positionGlobalFilter="left"
 
-                        enableGlobalFilterModes
-                        globalFilterModeOptions={['contains']}
+                            muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
+                            // wyświetla filtry nad komórką - 
+                            columnFilterDisplayMode={'popover'}
 
+                            //filtr nad headerem - popover
+                            muiFilterTextFieldProps={{
+                                // sx: { m: '0.5rem 0', width: '100%' },
+                                sx: { m: '0', width: '300px' },
+                                variant: 'outlined',
+                            }}
 
+                            // editDisplayMode={'cell'}
 
-                        positionGlobalFilter="left"
+                            muiPaginationProps={{
+                                color: 'secondary',
+                                rowsPerPageOptions: [10, 20, 30, 50, 100],
+                                shape: 'rounded',
+                                variant: 'outlined',
+                            }}
 
+                            muiTableHeadCellProps={() => ({
+                                align: "left",
+                                sx: {
+                                    fontWeight: "bold",
+                                    fontSize: "12px",
+                                    color: "black",
+                                    backgroundColor: "#a5f089",
+                                    padding: "5px",
+                                    paddingTop: "0",
+                                    paddingBottom: "0",
+                                    minHeight: "3rem",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    border: '1px solid rgba(81, 81, 81, .2)'
+                                },
+                            })}
 
+                        // odczytanie danych po kliknięciu w wiersz
+                        // muiTableBodyCellProps={({ column, cell }) => ({
+                        //     onClick: () => {
+                        //         if (column.id === "UWAGI") { console.log(cell.row._valuesCache.UWAGI); }
+                        //     },
+                        //     sx: {
+                        //         borderRight: "1px solid #c9c7c7", //add a border between columns
+                        //         fontSize: "14px",
+                        //         fontFamily: "Calibri",
+                        //         padding: "2px",
+                        //         // textAlign: "center"
+                        //     },
+                        // })}
+                        />
+                    </LocalizationProvider>
 
-                        // enableEditing
-
-                        // muiSearchTextFieldProps={{
-                        //     placeholder: `Szukaj ...`,
-                        //     sx: { width: '800px' },
-                        //     variant: 'outlined',
-                        // }}
-                        // enableColumnActions={false}
-
-
-                        muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
-                        // wyświetla filtry nad komórką - 
-                        columnFilterDisplayMode={'popover'}
-
-                        //filtr nad headerem - popover
-                        muiFilterTextFieldProps={{
-                            // sx: { m: '0.5rem 0', width: '100%' },
-                            sx: { m: '0', width: '400px' },
-                            variant: 'outlined',
-                        }}
-
-                        // editDisplayMode={'cell'}
-
-                        muiPaginationProps={{
-                            color: 'secondary',
-                            rowsPerPageOptions: [10, 20, 30, 50, 100],
-                            shape: 'rounded',
-                            variant: 'outlined',
-                        }}
-
-                        muiTableHeadCellProps={() => ({
-                            align: "left",
-                            sx: {
-                                fontWeight: "bold",
-                                fontSize: "12px",
-                                color: "black",
-                                backgroundColor: "#a5f089",
-                                padding: "5px",
-                                paddingTop: "0",
-                                paddingBottom: "0",
-                                minHeight: "3rem",
-                                display: "flex",
-                                justifyContent: "center",
-                                border: '1px solid rgba(81, 81, 81, .2)'
-                            },
-                        })}
-
-                    // odczytanie danych po kliknięciu w wiersz
-                    // muiTableBodyCellProps={({ column, cell }) => ({
-                    //     onClick: () => {
-                    //         if (column.id === "UWAGI") { console.log(cell.row._valuesCache.UWAGI); }
-                    //     },
-                    //     sx: {
-                    //         borderRight: "1px solid #c9c7c7", //add a border between columns
-                    //         fontSize: "14px",
-                    //         fontFamily: "Calibri",
-                    //         padding: "2px",
-                    //         // textAlign: "center"
-                    //     },
-                    // })}
-                    />
                 </ThemeProvider>
                     <TfiSave className='table-save-settings' onClick={handleSaveSettings} />
                 </>}
-        </section>
+        </section >
     );
 };
 
