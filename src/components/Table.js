@@ -13,7 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/pl';
 import { plPL as plText } from '@mui/x-date-pickers/locales';
 
-import './ActualTable.css';
+import './Table.css';
 
 const ActualTable = ({ info }) => {
 
