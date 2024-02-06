@@ -1,0 +1,5 @@
+.test_table {
+    flex-grow: 1;
+    width: 100vw;
+    overflow-x: auto;
+}

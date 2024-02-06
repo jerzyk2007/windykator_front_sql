@@ -240,7 +240,9 @@ const TableSettings = () => {
                             <option value="multi-select">Zaznacz wiele</option>
                             <option value="select">Zaznacz jeden</option>
                             <option value="range-slider">Suwak do kwot</option>
-                            <option value="none">Brak</option>
+                            <option value="range">Od - do</option>
+                            <option value="date-range">Filtr date-range</option>
+                            <option value="date">Data</option>
                         </select>
                     </span>
                 </section>

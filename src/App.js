@@ -12,6 +12,7 @@ import RequireAuth from './components/RequireAuth';
 import ChangePassword from './components/ChangePassword';
 import UserSettings from './components/UserSettings';
 import TableSettings from './components/TableSettings';
+import TestTable from './components/TestTable';
 import './App.css';
 
 const ROLES = {
@@ -40,7 +41,7 @@ function App() {
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]} />}>
             </Route>
-            <Route path='/archive-table' element={<ActualTable info={"archive"} />} />
+            <Route path='/archive-table' element={<TestTable info={"actual"} />} />
             <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]} />}>
               <Route path='/all-data-table' element={<ActualTable info={"all"} />} />
             </Route>
