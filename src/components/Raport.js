@@ -4,8 +4,8 @@ import useData from "./hooks/useData";
 import useWindowSize from './hooks/useWindow';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_PL } from 'material-react-table/locales/pl';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material';
-import { plPL } from '@mui/material/locale';
+// import { createTheme, ThemeProvider, useTheme } from '@mui/material';
+// import { plPL } from '@mui/material/locale';
 
 import './Raport.css';
 
@@ -91,6 +91,53 @@ const Raport = () => {
     //     // console.log(Brutto);
     // };
 
+    const addedAllToRaports = () => {
+        if (raport.length > 1) {
+            const sumOfAllItems = raport.reduce((acc, currentItem) => {
+                acc.DocumentsCounter += currentItem.DocumentsCounter;
+                acc.DocumentsCounterExpired += currentItem.DocumentsCounterExpired;
+                acc.DocumentsCounterExpiredWithoutPandL += currentItem.DocumentsCounterExpiredWithoutPandL;
+                acc.ExpiredPayments += currentItem.ExpiredPayments;
+                acc.ExpiredPaymentsWithoutPandL += currentItem.ExpiredPaymentsWithoutPandL;
+                acc.NotExpiredPayment += currentItem.NotExpiredPayment;
+                acc.NotExpiredPaymentWithoutPandL += currentItem.NotExpiredPaymentWithoutPandL;
+                acc.TotalDocumentsValue += currentItem.TotalDocumentsValue;
+                acc.UnderPayment += currentItem.UnderPayment;
+                return acc;
+            }, {
+                DocumentsCounter: 0,
+                DocumentsCounterExpired: 0,
+                DocumentsCounterExpiredWithoutPandL: 0,
+                ExpiredPayments: 0,
+                ExpiredPaymentsWithoutPandL: 0,
+                NotExpiredPayment: 0,
+                NotExpiredPaymentWithoutPandL: 0,
+                TotalDocumentsValue: 0,
+                UnderPayment: 0
+            });
+
+            const expiredPaymentsValue = sumOfAllItems.ExpiredPayments;
+            const notExpiredPaymentValue = sumOfAllItems.NotExpiredPayment;
+            sumOfAllItems.Objective = (expiredPaymentsValue / (notExpiredPaymentValue + expiredPaymentsValue) * 100).toFixed(2);
+
+            // Oblicz wartość ObjectiveWithoutPandL
+            const expiredPaymentsWithoutPandLValue = sumOfAllItems.ExpiredPaymentsWithoutPandL;
+            const notExpiredPaymentWithoutPandLValue = sumOfAllItems.NotExpiredPaymentWithoutPandL;
+            sumOfAllItems.ObjectiveWithoutPandL = (expiredPaymentsWithoutPandLValue / (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue) * 100).toFixed(2);
+
+
+
+            for (const key in sumOfAllItems) {
+                if (sumOfAllItems.hasOwnProperty(key)) {
+                    sumOfAllItems[key] = Number(sumOfAllItems[key]).toFixed(2);
+                }
+            }
+
+            setRaport(prevRaport => [...prevRaport, sumOfAllItems]);
+
+        }
+    };
+
     const grossTotal = () => {
         // suma Brutto
         let sumOfGross = new Map();
@@ -100,6 +147,9 @@ const Raport = () => {
 
         //ile faktur przeterminowanych
         let howManyExpiredElements = new Map();
+
+        //ile faktur przeterminowanych bez PZU/LINK4
+        let howManyExpiredElementsWithoutPandL = new Map();
 
         //ile niedopłaty
         let underPayment = new Map();
@@ -122,6 +172,7 @@ const Raport = () => {
             sumOfGross.set(dep, 0);
             howManyElements.set(dep, 0);
             howManyExpiredElements.set(dep, 0);
+            howManyExpiredElementsWithoutPandL.set(dep, 0);
             underPayment.set(dep, 0);
             expiredPayments.set(dep, 0);
             notExpiredPayment.set(dep, 0);
@@ -143,7 +194,6 @@ const Raport = () => {
                 let todayDate = new Date();
 
                 if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate) {
-                    // Jeśli tak, dodajemy wartość klucza BRUTTO do sumy i zwiększamy licznik kluczy BRUTTO
                     sumOfGross.set(dep, sumOfGross.get(dep) + item.BRUTTO);
                     howManyElements.set(dep, howManyElements.get(dep) + 1);
                     underPayment.set(dep, underPayment.get(dep) + item.DOROZLICZ);
@@ -160,6 +210,7 @@ const Raport = () => {
 
                 if (item.DZIAL === dep && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     expiredPaymentsWithoutPandL.set(dep, expiredPaymentsWithoutPandL.get(dep) + item.DOROZLICZ);
+                    howManyExpiredElementsWithoutPandL.set(dep, howManyExpiredElementsWithoutPandL.get(dep) + 1);
                 }
 
                 if (item.DZIAL === dep && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
@@ -195,18 +246,18 @@ const Raport = () => {
                 DocumentsCounter: howManyElements.get(dep),
                 UnderPayment: Number(underPayment.get(dep).toFixed(2)),
                 ExpiredPayments: Number(expiredPaymentsValue.toFixed(2)),
-                NotExpiredPayment: notExpiredPaymentValue.toFixed(2),
-                ExpiredPaymentsWithoutPandL: expiredPaymentsWithoutPandLValue.toFixed(2),
-                NotExpiredPaymentWithoutPandL: notExpiredPaymentWithoutPandLValue.toFixed(2),
+                NotExpiredPayment: Number(notExpiredPaymentValue.toFixed(2)),
+                ExpiredPaymentsWithoutPandL: Number(expiredPaymentsWithoutPandLValue.toFixed(2)),
+                NotExpiredPaymentWithoutPandL: Number(notExpiredPaymentWithoutPandLValue.toFixed(2)),
                 Objective: Number(objective),
                 ObjectiveWithoutPandL: Number(objectiveWithoutPandL),
-                DocumentsCounterExpired: howManyExpiredElements.get(dep)
+                DocumentsCounterExpired: howManyExpiredElements.get(dep),
+                DocumentsCounterExpiredWithoutPandL: howManyExpiredElementsWithoutPandL.get(dep)
             };
             generatingRaport.push(departmentObj);
         });
 
         setRaport(generatingRaport);
-        console.log(generatingRaport);
     };
 
 
@@ -250,56 +301,6 @@ const Raport = () => {
                 size: 150,
             },
             {
-                accessorKey: 'TotalDocumentsValue',
-                header: 'Kwota faktur',
-                size: 150,
-                // Cell: ({ cell }) => cell.getValue()?.toLocaleString(),
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
-                    const formattedSalary = value !== undefined && value !== null
-                        ? value.toLocaleString('pl-PL', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                            useGrouping: true,
-                        })
-                        : '0,00'; // Zastąp puste pola zerem
-
-                    return `${formattedSalary}`;
-                }
-                // Cell: ({ cell }) =>
-                //     cell.getValue().toLocaleString('pl-PL', {
-                //         style: 'currency',
-                //         currency: 'PLN',
-                //     }),
-            },
-            {
-                accessorKey: 'DocumentsCounter',
-                header: 'Ilość faktur',
-                size: 150,
-            },
-            {
-                accessorKey: 'ExpiredPayments',
-                header: 'Przeterminowane',
-                size: 150,
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
-                    const formattedSalary = value !== undefined && value !== null
-                        ? value.toLocaleString('pl-PL', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                            useGrouping: true,
-                        })
-                        : '0,00'; // Zastąp puste pola zerem
-
-                    return `${formattedSalary}`;
-                }
-            },
-            {
-                accessorKey: 'DocumentsCounterExpired',
-                header: 'Ilość faktur przeter.',
-                size: 150,
-            },
-            {
                 accessorKey: 'Objective',
                 header: 'Cel całość',
                 size: 150,
@@ -314,7 +315,7 @@ const Raport = () => {
                         : '0,00'; // Zastąp puste pola zerem
 
                     return `${formattedSalary}`;
-                }
+                },
             },
             {
                 accessorKey: 'ObjectiveWithoutPandL',
@@ -331,7 +332,76 @@ const Raport = () => {
                         : '0,00'; // Zastąp puste pola zerem
 
                     return `${formattedSalary}`;
-                }
+                },
+            },
+            {
+                accessorKey: 'ExpiredPayments',
+                header: 'Przeterminowane',
+                size: 150,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00'; // Zastąp puste pola zerem
+
+                    return `${formattedSalary}`;
+                },
+            },
+
+            {
+                accessorKey: 'DocumentsCounterExpired',
+                header: 'Ilość faktur przeter.',
+                size: 150,
+            },
+            {
+                accessorKey: 'ExpiredPaymentsWithoutPandL',
+                header: 'Przeterminowane bez PZU/LINK4',
+                size: 150,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00'; // Zastąp puste pola zerem
+
+                    return `${formattedSalary}`;
+                },
+            },
+            {
+                accessorKey: 'DocumentsCounterExpiredWithoutPandL',
+                header: 'Ilość faktur przet. bez PZU/LINK4',
+                size: 150,
+            },
+            {
+                accessorKey: 'UnderPayment',
+                header: 'Kwota faktur nierozl.',
+                size: 150,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00';
+
+                    return `${formattedSalary}`;
+                },
+                enableGlobalFilter: false
+
+            },
+            {
+                accessorKey: 'DocumentsCounter',
+                header: 'Ilość faktur',
+                size: 150,
             },
         ],
         [raport]
@@ -340,6 +410,47 @@ const Raport = () => {
         columns,
         data: raport,
         enableStickyHeader: true,
+        enableGlobalFilter: false,
+        enableGlobalFilterModes: false,
+        enableColumnFilters: false,
+        enableColumnPinning: true,
+        enableColumnResizing: true,
+        // layoutMode: "grid",
+        enablePagination: false,
+        localization: MRT_Localization_PL,
+        // wyłącza wszytskie ikonki nad tabelą 
+        // enableToolbarInternalActions: false,
+
+        muiTableHeadCellProps: () => ({
+            align: "left",
+            sx: {
+                fontWeight: "bold",
+                fontSize: "14px",
+                color: "black",
+                backgroundColor: "#a7d3f7",
+                padding: "5px",
+                paddingTop: "0",
+                paddingBottom: "0",
+                minHeight: "3rem",
+                wordWrap: `break-word`,
+                display: "flex",
+                justifyContent: "center",
+                // flesWrap: "wrap",
+                border: '1px solid rgba(81, 81, 81, .2)'
+            },
+        }),
+
+        muiTableBodyCellProps: ({ column, cell }) => ({
+            align: "center",
+            sx: {
+                borderRight: "1px solid #c9c7c7", //add a border between columns
+                fontSize: "14px",
+                // fontFamily: "Calibri",
+                fontWeight: 'bold',
+                padding: "2px",
+                minHeight: '3rem'
+            },
+        }),
         muiTableContainerProps: { sx: { maxHeight: tableSize } }
     });
 
@@ -357,8 +468,15 @@ const Raport = () => {
 
     useEffect(() => {
         setTableSize(height - 335);
-        console.log(tableSize);
     }, [height]);
+
+
+
+
+
+
+
+
 
     return (
         <section className='raport'>
