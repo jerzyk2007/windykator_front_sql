@@ -34,12 +34,12 @@ const Raport = () => {
     });
 
 
-    const checkMinMaxDateGlobal = () => {
-        let maxDate = raportData[0].DATAFV;
-        let minDate = raportData[0].DATAFV;
+    const checkMinMaxDateGlobal = (documents) => {
+        let maxDate = '2024-01-01';
+        let minDate = '2024-01-01';
 
         // Iteracja przez wszystkie obiekty w tablicy;
-        raportData.forEach(obj => {
+        documents.forEach(obj => {
             // Porównanie daty z aktualnymi maksymalną i minimalną datą
             if (obj.DATAFV > maxDate) {
                 maxDate = obj.DATAFV;
@@ -231,7 +231,7 @@ const Raport = () => {
 
 
 
-    const createDataRapor = () => {
+    const createDataRaport = () => {
         if (permission === "Standard") {
             let uniqueDepartments = [];
             raportData.forEach(item => {
@@ -242,7 +242,7 @@ const Raport = () => {
                 }
             });
             setDepartments(uniqueDepartments);
-            checkMinMaxDateGlobal();
+            // checkMinMaxDateGlobal();
             grossTotal();
 
         }
@@ -258,6 +258,7 @@ const Raport = () => {
             const resultData = await axiosPrivateIntercept.get(`/raport/get-data/${auth._id}`);
             setRaportData(resultData.data.data);
             setPermission(resultData.data.permission);
+            checkMinMaxDateGlobal(resultData.data.data);
 
             const [settingsRaportUser] = await Promise.all([
                 axiosPrivateIntercept.get(`/user/get-raport-settings/${auth._id}`),
@@ -461,8 +462,8 @@ const Raport = () => {
     };
 
     useEffect(() => {
-        createDataRapor();
-    }, [raportData, permission]);
+        createDataRaport();
+    }, [raportData, permission, raportDate]);
 
     useEffect(() => {
         getData();
@@ -477,7 +478,7 @@ const Raport = () => {
         <section className='raport'>
             <section className='raport-date'>
                 <h3>Wybierz przedział dat dla raportu</h3>
-                <h4>od: </h4>
+                <h3>od: </h3>
                 <input
                     className='raport-date-select'
                     name='minDate'
@@ -492,7 +493,7 @@ const Raport = () => {
                         };
                     })}
                 />
-                <h4>do: </h4>
+                <h3>do: </h3>
 
                 <input
                     className='raport-date-select'
