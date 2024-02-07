@@ -4,14 +4,21 @@ import useData from "./hooks/useData";
 import useWindowSize from './hooks/useWindow';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_PL } from 'material-react-table/locales/pl';
+import PleaseWait from './PleaseWait';
+import { TfiSave } from "react-icons/tfi";
 
 import './Raport.css';
 
 const Raport = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
-    const { auth } = useData();
+    const { pleaseWait, setPleaseWait, auth } = useData();
     const { height } = useWindowSize();
 
+    const [columnVisibility, setColumnVisibility] = useState({});
+    const [columnSizing, setColumnSizing] = useState({});
+    const [density, setDensity] = useState('');
+    const [columnOrder, setColumnOrder] = useState([]);
+    const [columnPinning, setColumnPinning] = useState({});
     const [tableSize, setTableSize] = useState(400);
     const [raportData, setRaportData] = useState([]);
     const [permission, setPermission] = useState('');
@@ -89,7 +96,11 @@ const Raport = () => {
 
             sumOfAllItems.Department = 'Całość';
 
-            setRaport([...generatingRaport, sumOfAllItems]);
+            //dodaję "Całość" jako pierwszy obiekt, żeby w tabeli wyświetlał się jako pierwszy
+            generatingRaport.unshift(sumOfAllItems);
+
+
+            setRaport(generatingRaport);
 
         } else {
             setRaport(generatingRaport);
@@ -234,17 +245,32 @@ const Raport = () => {
             checkMinMaxDateGlobal();
             grossTotal();
 
-        } else if (permission === "Basic") {
-            console.log(raportData);
         }
+        // else if (permission === "Basic") {
+        //     console.log(raportData);
+        // }
     };
 
 
     const getData = async () => {
         try {
-            const result = await axiosPrivateIntercept.get(`/raport/get-data/${auth._id}`);
-            setRaportData(result.data.data);
-            setPermission(result.data.permission);
+            setPleaseWait(true);
+            const resultData = await axiosPrivateIntercept.get(`/raport/get-data/${auth._id}`);
+            setRaportData(resultData.data.data);
+            setPermission(resultData.data.permission);
+
+            const [settingsRaportUser] = await Promise.all([
+                axiosPrivateIntercept.get(`/user/get-raport-settings/${auth._id}`),
+            ]);
+
+            setColumnVisibility(settingsRaportUser?.data?.visible || {});
+            setColumnSizing(settingsRaportUser?.data?.size || {});
+            setDensity(settingsRaportUser?.data?.density || 'comfortable');
+            setColumnOrder(settingsRaportUser?.data?.order?.map(order => order) || []);
+            setColumnPinning(settingsRaportUser?.data?.pinning || { left: [], right: [] });
+
+            setPleaseWait(false);
+
         }
         catch (err) {
             console.log(err);
@@ -256,12 +282,11 @@ const Raport = () => {
             {
                 accessorKey: 'Department',
                 header: 'Dział',
-                size: 150,
+                size: columnSizing?.Department ? columnSizing.Department : 150
             },
             {
                 accessorKey: 'Objective',
                 header: 'Cel całość',
-                size: 150,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -278,7 +303,6 @@ const Raport = () => {
             {
                 accessorKey: 'ObjectiveWithoutPandL',
                 header: 'Cel bez PZU/LINK4',
-                size: 150,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -295,7 +319,6 @@ const Raport = () => {
             {
                 accessorKey: 'ExpiredPayments',
                 header: 'Przeterminowane',
-                size: 150,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -313,12 +336,10 @@ const Raport = () => {
             {
                 accessorKey: 'DocumentsCounterExpired',
                 header: 'Ilość faktur przeter.',
-                size: 150,
             },
             {
                 accessorKey: 'ExpiredPaymentsWithoutPandL',
                 header: 'Przeterminowane bez PZU/LINK4',
-                size: 150,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -335,12 +356,10 @@ const Raport = () => {
             {
                 accessorKey: 'DocumentsCounterExpiredWithoutPandL',
                 header: 'Ilość faktur przet. bez PZU/LINK4',
-                size: 150,
             },
             {
                 accessorKey: 'UnderPayment',
                 header: 'Kwota faktur nierozl.',
-                size: 150,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -359,7 +378,6 @@ const Raport = () => {
             {
                 accessorKey: 'DocumentsCounter',
                 header: 'Ilość faktur',
-                size: 150,
             },
         ],
         [raport]
@@ -373,12 +391,32 @@ const Raport = () => {
         enableColumnFilters: false,
         enableColumnPinning: true,
         enableColumnResizing: true,
+        enableColumnOrdering: true,
         // layoutMode: "grid",
         enablePagination: false,
         localization: MRT_Localization_PL,
+        onColumnVisibilityChange: setColumnVisibility,
+        onDensityChange: setDensity,
+        onColumnSizingChange: setColumnSizing,
+        onColumnOrderChange: setColumnOrder,
+        onColumnPinningChange: setColumnPinning,
+        state: {
+            columnVisibility,
+            density,
+            columnOrder,
+            columnPinning,
+            columnSizing
+        },
 
+        defaultColumn: {
+            maxSize: 400,
+            minSize: 100,
+            // size: 160, //default size is usually 180
+        },
         // wyłącza wszytskie ikonki nad tabelą 
         // enableToolbarInternalActions: false,
+
+
 
         muiTableHeadCellProps: () => ({
             align: "left",
@@ -387,14 +425,12 @@ const Raport = () => {
                 fontSize: "14px",
                 color: "black",
                 backgroundColor: "#a7d3f7",
-                padding: "5px",
+                padding: "15px",
                 paddingTop: "0",
                 paddingBottom: "0",
-                minHeight: "3rem",
-                wordWrap: `break-word`,
+                minHeight: "2rem",
                 display: "flex",
                 justifyContent: "center",
-                // flesWrap: "wrap",
                 border: '1px solid rgba(81, 81, 81, .2)'
             },
         }),
@@ -412,6 +448,18 @@ const Raport = () => {
         muiTableContainerProps: { sx: { maxHeight: tableSize } }
     });
 
+    const handleSaveSettings = async () => {
+        const raportSettings = { size: { ...columnSizing }, visible: { ...columnVisibility }, density, order: columnOrder, pinning: columnPinning };
+        try {
+            const result = await axiosPrivateIntercept.patch(`/user/save-raport-settings/${auth._id}`,
+                { raportSettings }
+            );
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+
     useEffect(() => {
         createDataRapor();
     }, [raportData, permission]);
@@ -421,21 +469,17 @@ const Raport = () => {
     }, []);
 
     useEffect(() => {
-        setTableSize(height - 335);
+        setTableSize(height - 285);
     }, [height]);
-
-
-
-
-
-
-
 
 
     return (
         <section className='raport'>
             <section className='raport-date'>
+                <h3>Wybierz przedział dat dla raportu</h3>
+                <h4>od: </h4>
                 <input
+                    className='raport-date-select'
                     name='minDate'
                     type="date"
                     min={minMaxDateGlobal.minGlobalDate}
@@ -448,7 +492,10 @@ const Raport = () => {
                         };
                     })}
                 />
+                <h4>do: </h4>
+
                 <input
+                    className='raport-date-select'
                     name='maxDate'
                     type="date"
                     min={minMaxDateGlobal.minGlobalDate}
@@ -462,9 +509,10 @@ const Raport = () => {
                     })}
                 />
             </section>
-            <MaterialReactTable
+            {pleaseWait ? <PleaseWait /> : <MaterialReactTable
                 className="raport-table"
-                table={table} />;
+                table={table} />}
+            <TfiSave className='raport-save-settings' onClick={handleSaveSettings} />
         </section>
     );
 };

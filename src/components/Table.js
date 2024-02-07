@@ -240,32 +240,11 @@ const ActualTable = ({ info }) => {
     };
 
 
-    // const prepareTable = async () => {
-    //     try {
-    //         setPleaseWait(true);
-
-    //         const result = await axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`);
-    //         setDocuments(result.data);
-    //         const settingsUser = await axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`);
-    //         setColumnVisibility(settingsUser?.data?.visible ? settingsUser.data.visible : {});
-    //         setColumnSizing(settingsUser?.data?.size ? settingsUser.data.size : {});
-    //         setDensity(settingsUser?.data?.density ? settingsUser.data.density : 'comfortable');
-    //         setColumnOrder(settingsUser?.data?.order ? (settingsUser.data.order).map(order => order) : []);
-    //         setColumnPinning(settingsUser?.data?.pinning ? (settingsUser.data.pinning) : { left: [], right: [] });
-    //         setPagination(settingsUser?.data?.pagination ? settingsUser.data.pagination : { pageIndex: 0, pageSize: 10, });
-    //         const getColumns = await axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`);
-    //         const modifiedColumns = prepareColumns(getColumns.data, result.data);
-    //         setColumns(modifiedColumns);
-    //         setPleaseWait(false);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
 
     const handleSaveSettings = async () => {
         const tableSettings = { size: { ...columnSizing }, visible: { ...columnVisibility }, density, order: columnOrder, pinning: columnPinning, pagination };
         try {
-            const result = await axiosPrivateIntercept.patch(`/user/save-table-settings/${auth._id}`,
+            const result = await axiosPrivateIntercept.patch(`/user/save-raport-settings/${auth._id}`,
                 { tableSettings }
             );
         }
@@ -283,7 +262,6 @@ const ActualTable = ({ info }) => {
             enableColumnFilterModes: false,
             minSize: 50,
             maxSize: 400,
-            // columnFilterModeOptions: ['fuzzy', 'contains', 'startsWith'],
         })),
         [columnSizing, columnVisibility, density, columnPinning, columns]
     );
@@ -292,38 +270,7 @@ const ActualTable = ({ info }) => {
         setTableSize(height - 220);
     }, [height]);
 
-    // useEffect(() => {
-    //     let isMounted = true;
 
-    //     const prepareTable = async () => {
-    //         try {
-    //             setPleaseWait(true);
-
-    //             const result = await axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`);
-    //             const settingsUser = await axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`);
-    //             const getColumns = await axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`);
-    //             const modifiedColumns = prepareColumns(getColumns.data, result.data);
-    //             if (isMounted) {
-    //                 setDocuments(result.data);
-    //                 setColumnVisibility(settingsUser?.data?.visible ? settingsUser.data.visible : {});
-    //                 setColumnSizing(settingsUser?.data?.size ? settingsUser.data.size : {});
-    //                 setDensity(settingsUser?.data?.density ? settingsUser.data.density : 'comfortable');
-    //                 setColumnOrder(settingsUser?.data?.order ? (settingsUser.data.order).map(order => order) : []);
-    //                 setColumnPinning(settingsUser?.data?.pinning ? (settingsUser.data.pinning) : { left: [], right: [] });
-    //                 setPagination(settingsUser?.data?.pagination ? settingsUser.data.pagination : { pageIndex: 0, pageSize: 10, });
-    //                 setColumns(modifiedColumns);
-    //                 setPleaseWait(false);
-    //             }
-    //         } catch (err) {
-    //             console.log(err);
-    //         }
-    //     };
-    //     prepareTable();
-    //     return () => {
-    //         // Zabezpiecz przed aktualizacją stanu komponentu po odmontowaniu
-    //         isMounted = false;
-    //     };
-    // }, []);
 
     useEffect(() => {
         let isMounted = true;
@@ -340,7 +287,6 @@ const ActualTable = ({ info }) => {
                 const modifiedColumns = prepareColumns(getColumns.data, result.data);
                 if (isMounted) {
                     setDocuments(result.data);
-                    console.log(result.data);
                     setColumnVisibility(settingsUser?.data?.visible || {});
                     setColumnSizing(settingsUser?.data?.size || {});
                     setDensity(settingsUser?.data?.density || 'comfortable');
