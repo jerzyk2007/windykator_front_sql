@@ -93,10 +93,12 @@ const ActualTable = ({ info }) => {
                         // backgroundColor: 'rgba(110, 228, 246, 0.1)',
                         borderRight: '1px solid rgba(224,224,224,1)',
                         borderRight: "1px solid #c9c7c7", //add a border between columns
-                        fontSize: "14px",
-                        fontFamily: "Calibri",
+                        fontSize: "13px",
+                        // fontFamily: "Calibri",
                         padding: "2px",
                         maxHeight: "10rem",
+                        fontWeight: 'bold',
+
                     }
                 };
             } else {
@@ -106,9 +108,11 @@ const ActualTable = ({ info }) => {
                         // backgroundColor: 'rgba(110, 228, 246, 0.1)',
                         borderRight: '1px solid rgba(224,224,224,1)',
                         borderRight: "1px solid #c9c7c7", //add a border between columns
-                        fontSize: "14px",
-                        fontFamily: "Calibri",
-                        padding: "2px"
+                        fontSize: "13px",
+                        // fontFamily: "Calibri",
+                        padding: "2px",
+                        fontWeight: 'bold',
+
                     }
                 };
             }
@@ -379,9 +383,9 @@ const ActualTable = ({ info }) => {
                                     fontSize: "12px",
                                     color: "black",
                                     backgroundColor: "#a5f089",
-                                    padding: "5px",
-                                    paddingTop: "0",
-                                    paddingBottom: "0",
+                                    padding: "15px",
+                                    // paddingTop: "0",
+                                    // paddingBottom: "0",
                                     minHeight: "3rem",
                                     display: "flex",
                                     justifyContent: "center",

@@ -1,2 +1,4 @@
 
 zrobić logi błędów na serwerze dla każdej funkcji 
+
+raport - generuje Nan

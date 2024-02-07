@@ -35,8 +35,8 @@ const Raport = () => {
 
 
     const checkMinMaxDateGlobal = (documents) => {
-        let maxDate = '2024-01-01';
-        let minDate = '2024-01-01';
+        let maxDate = documents[0].DATAFV;
+        let minDate = documents[0].DATAFV;
 
         // Iteracja przez wszystkie obiekty w tablicy;
         documents.forEach(obj => {
@@ -243,7 +243,7 @@ const Raport = () => {
             });
             setDepartments(uniqueDepartments);
             // checkMinMaxDateGlobal();
-            grossTotal();
+
 
         }
         // else if (permission === "Basic") {
@@ -464,6 +464,10 @@ const Raport = () => {
     useEffect(() => {
         createDataRaport();
     }, [raportData, permission, raportDate]);
+
+    useEffect(() => {
+        grossTotal();
+    }, [departments]);
 
     useEffect(() => {
         getData();
