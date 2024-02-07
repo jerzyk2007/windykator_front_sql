@@ -4,8 +4,6 @@ import useData from "./hooks/useData";
 import useWindowSize from './hooks/useWindow';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_PL } from 'material-react-table/locales/pl';
-// import { createTheme, ThemeProvider, useTheme } from '@mui/material';
-// import { plPL } from '@mui/material/locale';
 
 import './Raport.css';
 
@@ -55,45 +53,9 @@ const Raport = () => {
         });
     };
 
-    // suma brutto wszytskich elementów danego działu lub pracownika
-    // const grossTotal = () => {
-    //     let sumOfGross = new Map();
-    //     let howManyElements = new Map();
-    //     let Brutto = [];
-
-    //     departments.forEach(dep => {
-    //         // Inicjalizacja sumy i liczby kluczy BRUTTO dla danego działu
-    //         sumOfGross.set(dep, 0);
-    //         howManyElements.set(dep, 0);
-
-    //         // Iteracja po obiektach w raportData
-    //         raportData.forEach(item => {
-    //             // Sprawdzenie, czy obiekt zawiera klucz DZIAL, który pasuje do aktualnego działu
-    //             if (item.DZIAL === dep) {
-    //                 // Jeśli tak, dodajemy wartość klucza BRUTTO do sumy i zwiększamy licznik kluczy BRUTTO
-    //                 sumOfGross.set(dep, sumOfGross.get(dep) + item.BRUTTO);
-    //                 howManyElements.set(dep, howManyElements.get(dep) + 1);
-    //             }
-    //         });
-    //     });
-    //     // departments.forEach(dep => {
-    //     //     console.log(`Dział: ${dep}, Suma BRUTTO: ${sumOfGross.get(dep)}, Liczba kluczy BRUTTO: ${howManyElements.get(dep)}`);
-    //     // });
-    //     departments.forEach(dep => {
-    //         // Obiekt zawierający sumę i liczbę kluczy BRUTTO dla danego działu
-    //         let departmentObj = {};
-    //         departmentObj[dep] = {
-    //             Brutto: sumOfGross.get(dep).toFixed(2),
-    //             Counter: howManyElements.get(dep)
-    //         };
-    //         Brutto.push(departmentObj);
-    //     });
-    //     // console.log(Brutto);
-    // };
-
-    const addedAllToRaports = () => {
-        if (raport.length > 1) {
-            const sumOfAllItems = raport.reduce((acc, currentItem) => {
+    const addedAllToRaports = (generatingRaport) => {
+        if (generatingRaport.length > 1) {
+            const sumOfAllItems = generatingRaport.reduce((acc, currentItem) => {
                 acc.DocumentsCounter += currentItem.DocumentsCounter;
                 acc.DocumentsCounterExpired += currentItem.DocumentsCounterExpired;
                 acc.DocumentsCounterExpiredWithoutPandL += currentItem.DocumentsCounterExpiredWithoutPandL;
@@ -118,23 +80,19 @@ const Raport = () => {
 
             const expiredPaymentsValue = sumOfAllItems.ExpiredPayments;
             const notExpiredPaymentValue = sumOfAllItems.NotExpiredPayment;
-            sumOfAllItems.Objective = (expiredPaymentsValue / (notExpiredPaymentValue + expiredPaymentsValue) * 100).toFixed(2);
+            sumOfAllItems.Objective = (expiredPaymentsValue / (notExpiredPaymentValue + expiredPaymentsValue) * 100);
 
             // Oblicz wartość ObjectiveWithoutPandL
             const expiredPaymentsWithoutPandLValue = sumOfAllItems.ExpiredPaymentsWithoutPandL;
             const notExpiredPaymentWithoutPandLValue = sumOfAllItems.NotExpiredPaymentWithoutPandL;
-            sumOfAllItems.ObjectiveWithoutPandL = (expiredPaymentsWithoutPandLValue / (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue) * 100).toFixed(2);
+            sumOfAllItems.ObjectiveWithoutPandL = (expiredPaymentsWithoutPandLValue / (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue) * 100);
 
+            sumOfAllItems.Department = 'Całość';
 
+            setRaport([...generatingRaport, sumOfAllItems]);
 
-            for (const key in sumOfAllItems) {
-                if (sumOfAllItems.hasOwnProperty(key)) {
-                    sumOfAllItems[key] = Number(sumOfAllItems[key]).toFixed(2);
-                }
-            }
-
-            setRaport(prevRaport => [...prevRaport, sumOfAllItems]);
-
+        } else {
+            setRaport(generatingRaport);
         }
     };
 
@@ -257,7 +215,7 @@ const Raport = () => {
             generatingRaport.push(departmentObj);
         });
 
-        setRaport(generatingRaport);
+        addedAllToRaports(generatingRaport);
     };
 
 
@@ -296,7 +254,7 @@ const Raport = () => {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'Department', //access nested data with dot notation
+                accessorKey: 'Department',
                 header: 'Dział',
                 size: 150,
             },
@@ -418,6 +376,7 @@ const Raport = () => {
         // layoutMode: "grid",
         enablePagination: false,
         localization: MRT_Localization_PL,
+
         // wyłącza wszytskie ikonki nad tabelą 
         // enableToolbarInternalActions: false,
 
@@ -443,9 +402,8 @@ const Raport = () => {
         muiTableBodyCellProps: ({ column, cell }) => ({
             align: "center",
             sx: {
-                borderRight: "1px solid #c9c7c7", //add a border between columns
+                borderRight: "1px solid #c9c7c7",
                 fontSize: "14px",
-                // fontFamily: "Calibri",
                 fontWeight: 'bold',
                 padding: "2px",
                 minHeight: '3rem'
@@ -453,10 +411,6 @@ const Raport = () => {
         }),
         muiTableContainerProps: { sx: { maxHeight: tableSize } }
     });
-
-    useEffect(() => {
-        grossTotal();
-    }, [raportDate]);
 
     useEffect(() => {
         createDataRapor();
