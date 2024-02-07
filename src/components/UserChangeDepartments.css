@@ -78,9 +78,9 @@
 }
 
 .user_change_departments__container--info {
-    flex-basis: 33%;
+    flex-basis: 40%;
     min-width: 120px;
-    padding: 5px 25px;
+    padding: 5px 5px;
     flex-wrap: wrap;
     display: flex;
     justify-content: space-between;

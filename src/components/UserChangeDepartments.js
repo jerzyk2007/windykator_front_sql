@@ -55,9 +55,23 @@ const UserChangeDepartments = ({ user, departments }) => {
         }
     };
 
+    const handleGetGlobalDepartments = async () => {
+        try {
+            console.log('ok');
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+
     useEffect(() => {
         setErrMsg('');
     }, [userDepartments]);
+
+    useEffect(() => {
+        handleGetGlobalDepartments();
+    }, []);
+
 
     return (
         <section className='user_change_departments'>

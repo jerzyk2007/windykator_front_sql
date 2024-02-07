@@ -340,6 +340,7 @@ const ActualTable = ({ info }) => {
                 const modifiedColumns = prepareColumns(getColumns.data, result.data);
                 if (isMounted) {
                     setDocuments(result.data);
+                    console.log(result.data);
                     setColumnVisibility(settingsUser?.data?.visible || {});
                     setColumnSizing(settingsUser?.data?.size || {});
                     setDensity(settingsUser?.data?.density || 'comfortable');

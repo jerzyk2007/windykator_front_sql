@@ -1,4 +1,15 @@
 .raport {
     flex-grow: 1;
+    position: relative;
     /* background-color: aqua; */
+    display: flex;
+    flex-direction: column;
+}
+
+.raport-date {
+    height: 100px;
+}
+
+.raport-table {
+    flex-grow: 1;
 }

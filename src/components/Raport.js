@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
+import useWindowSize from './hooks/useWindow';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_PL } from 'material-react-table/locales/pl';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material';
@@ -11,7 +12,9 @@ import './Raport.css';
 const Raport = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
     const { auth } = useData();
+    const { height } = useWindowSize();
 
+    const [tableSize, setTableSize] = useState(400);
     const [raportData, setRaportData] = useState([]);
     const [permission, setPermission] = useState('');
     const [departments, setDepartments] = useState([]);
@@ -293,7 +296,7 @@ const Raport = () => {
             },
             {
                 accessorKey: 'DocumentsCounterExpired',
-                header: 'Ilość faktur przeterminowanych',
+                header: 'Ilość faktur przeter.',
                 size: 150,
             },
             {
@@ -335,7 +338,9 @@ const Raport = () => {
     );
     const table = useMaterialReactTable({
         columns,
-        data: raport
+        data: raport,
+        enableStickyHeader: true,
+        muiTableContainerProps: { sx: { maxHeight: tableSize } }
     });
 
     useEffect(() => {
@@ -350,8 +355,13 @@ const Raport = () => {
         getData();
     }, []);
 
+    useEffect(() => {
+        setTableSize(height - 335);
+        console.log(tableSize);
+    }, [height]);
+
     return (
-        <section className='raport'>Raport
+        <section className='raport'>
             <section className='raport-date'>
                 <input
                     name='minDate'
@@ -380,7 +390,9 @@ const Raport = () => {
                     })}
                 />
             </section>
-            <MaterialReactTable table={table} />;
+            <MaterialReactTable
+                className="raport-table"
+                table={table} />;
         </section>
     );
 };
