@@ -359,7 +359,7 @@ const ActualTable = ({ info }) => {
         return () => {
             isMounted = false;
         };
-    }, []);
+    }, [info]);
 
     return (
         <section className='actual_table'>
