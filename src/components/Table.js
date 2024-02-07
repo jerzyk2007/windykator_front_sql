@@ -15,6 +15,7 @@ import { plPL as plText } from '@mui/x-date-pickers/locales';
 
 import './Table.css';
 
+
 const ActualTable = ({ info }) => {
 
     const plLocale = plText.components.MuiLocalizationProvider.defaultProps.localeText;
