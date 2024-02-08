@@ -242,13 +242,7 @@ const Raport = () => {
                 }
             });
             setDepartments(uniqueDepartments);
-            // checkMinMaxDateGlobal();
-
-
         }
-        // else if (permission === "Basic") {
-        //     console.log(raportData);
-        // }
     };
 
 
@@ -493,7 +487,7 @@ const Raport = () => {
                     onChange={(e) => setRaportDate(prev => {
                         return {
                             ...prev,
-                            minRaportDate: e.target.value
+                            minRaportDate: e.target.value ? e.target.value : minMaxDateGlobal.minGlobalDate
                         };
                     })}
                 />
@@ -505,11 +499,11 @@ const Raport = () => {
                     type="date"
                     min={minMaxDateGlobal.minGlobalDate}
                     max={minMaxDateGlobal.maxGlobalDate}
-                    value={raportDate.maxRaportDate}
+                    value={raportDate?.maxRaportDate}
                     onChange={(e) => setRaportDate(prev => {
                         return {
                             ...prev,
-                            maxRaportDate: e.target.value
+                            maxRaportDate: e.target.value ? e.target.value : minMaxDateGlobal.maxGlobalDate
                         };
                     })}
                 />

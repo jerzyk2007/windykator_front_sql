@@ -2,3 +2,11 @@
 zrobić logi błędów na serwerze dla każdej funkcji 
 
 raport - generuje Nan
+
+zabezpieczenie przed pusta datą
+
+data pierwsza nie moze byc wieksza od drugiej, a druga mniejsza od pierwszej
+
+css
+
+sprawdzić w Raport czy funkcje wykonują się w prawidłowej kolejności, po zaktualizowaniu stanów useState
