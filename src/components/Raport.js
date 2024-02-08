@@ -32,6 +32,7 @@ const Raport = () => {
         minRaportDate: '',
         maxRaportDate: ''
     });
+    const [errRaportDate, errSetRaportDate] = useState(false);
 
 
     const checkMinMaxDateGlobal = (documents) => {
@@ -60,6 +61,7 @@ const Raport = () => {
         });
     };
 
+    // w przypadku jeśli Asystentka widzi wiecej niż jeden działa dodawany jest kolejny wiersz "Całość" jako łączny wynik działów które widzi
     const addedAllToRaports = (generatingRaport) => {
         if (generatingRaport.length > 1) {
             const sumOfAllItems = generatingRaport.reduce((acc, currentItem) => {
@@ -87,12 +89,24 @@ const Raport = () => {
 
             const expiredPaymentsValue = sumOfAllItems.ExpiredPayments;
             const notExpiredPaymentValue = sumOfAllItems.NotExpiredPayment;
-            sumOfAllItems.Objective = (expiredPaymentsValue / (notExpiredPaymentValue + expiredPaymentsValue) * 100);
 
-            // Oblicz wartość ObjectiveWithoutPandL
+            // Oblicz wartość Objective
+            //zabezpieczenie przed dzieleniem przez zero
+            let objective = 0;
+            if (notExpiredPaymentValue + expiredPaymentsValue !== 0) {
+                objective = (expiredPaymentsValue / (notExpiredPaymentValue + expiredPaymentsValue) * 100);
+            }
+            sumOfAllItems.Objective = objective;
+
+
             const expiredPaymentsWithoutPandLValue = sumOfAllItems.ExpiredPaymentsWithoutPandL;
             const notExpiredPaymentWithoutPandLValue = sumOfAllItems.NotExpiredPaymentWithoutPandL;
-            sumOfAllItems.ObjectiveWithoutPandL = (expiredPaymentsWithoutPandLValue / (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue) * 100);
+            // Oblicz wartość ObjectiveWithoutPandL
+            let objectiveWithoutPandL = 0;
+            if (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue !== 0) {
+                objectiveWithoutPandL = (expiredPaymentsWithoutPandLValue / (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue) * 100);
+            }
+            sumOfAllItems.ObjectiveWithoutPandL = objectiveWithoutPandL;
 
             sumOfAllItems.Department = 'Całość';
 
@@ -107,6 +121,7 @@ const Raport = () => {
         }
     };
 
+    // funkcja przygotowuje dane do raportu
     const grossTotal = () => {
         // suma Brutto
         let sumOfGross = new Map();
@@ -471,6 +486,18 @@ const Raport = () => {
         setTableSize(height - 285);
     }, [height]);
 
+    useEffect(() => {
+        let minDate = new Date(raportDate.minRaportDate);
+        let maxDate = new Date(raportDate.maxRaportDate);
+        if (minDate > maxDate || maxDate < minDate) {
+            errSetRaportDate(true);
+        } else {
+            errSetRaportDate(false);
+        }
+
+    },
+        [raportDate]);
+
 
     return (
         <section className='raport'>
@@ -479,6 +506,7 @@ const Raport = () => {
                 <h3>od: </h3>
                 <input
                     className='raport-date-select'
+                    style={errRaportDate ? { backgroundColor: "red" } : null}
                     name='minDate'
                     type="date"
                     min={minMaxDateGlobal.minGlobalDate}
@@ -495,6 +523,7 @@ const Raport = () => {
 
                 <input
                     className='raport-date-select'
+                    style={errRaportDate ? { backgroundColor: "red" } : null}
                     name='maxDate'
                     type="date"
                     min={minMaxDateGlobal.minGlobalDate}
