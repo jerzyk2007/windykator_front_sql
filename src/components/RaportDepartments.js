@@ -7,7 +7,7 @@ import { MRT_Localization_PL } from 'material-react-table/locales/pl';
 import PleaseWait from './PleaseWait';
 import { TfiSave } from "react-icons/tfi";
 
-import './Raport.css';
+import './RaportDepartments.css';
 
 const Raport = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
@@ -502,40 +502,44 @@ const Raport = () => {
     return (
         <section className='raport'>
             <section className='raport-date'>
-                <h3>Wybierz przedział dat dla raportu</h3>
-                <h3>od: </h3>
-                <input
-                    className='raport-date-select'
-                    style={errRaportDate ? { backgroundColor: "red" } : null}
-                    name='minDate'
-                    type="date"
-                    min={minMaxDateGlobal.minGlobalDate}
-                    max={minMaxDateGlobal.maxGlobalDate}
-                    value={raportDate.minRaportDate}
-                    onChange={(e) => setRaportDate(prev => {
-                        return {
-                            ...prev,
-                            minRaportDate: e.target.value ? e.target.value : minMaxDateGlobal.minGlobalDate
-                        };
-                    })}
-                />
-                <h3>do: </h3>
+                <section className='raport-date__title'>
+                    <h3>Wybierz przedział dat dla raportu</h3>
+                </section>
+                <section className='raport-date__content'>
+                    <h3 className='raport-date__content-name'>od: </h3>
+                    <input
+                        className='raport-date-select'
+                        style={errRaportDate ? { backgroundColor: "red" } : null}
+                        name='minDate'
+                        type="date"
+                        min={minMaxDateGlobal.minGlobalDate}
+                        max={minMaxDateGlobal.maxGlobalDate}
+                        value={raportDate.minRaportDate}
+                        onChange={(e) => setRaportDate(prev => {
+                            return {
+                                ...prev,
+                                minRaportDate: e.target.value ? e.target.value : minMaxDateGlobal.minGlobalDate
+                            };
+                        })}
+                    />
+                    <h3 className='raport-date__content-name'>do: </h3>
 
-                <input
-                    className='raport-date-select'
-                    style={errRaportDate ? { backgroundColor: "red" } : null}
-                    name='maxDate'
-                    type="date"
-                    min={minMaxDateGlobal.minGlobalDate}
-                    max={minMaxDateGlobal.maxGlobalDate}
-                    value={raportDate?.maxRaportDate}
-                    onChange={(e) => setRaportDate(prev => {
-                        return {
-                            ...prev,
-                            maxRaportDate: e.target.value ? e.target.value : minMaxDateGlobal.maxGlobalDate
-                        };
-                    })}
-                />
+                    <input
+                        className='raport-date-select'
+                        style={errRaportDate ? { backgroundColor: "red" } : null}
+                        name='maxDate'
+                        type="date"
+                        min={minMaxDateGlobal.minGlobalDate}
+                        max={minMaxDateGlobal.maxGlobalDate}
+                        value={raportDate?.maxRaportDate}
+                        onChange={(e) => setRaportDate(prev => {
+                            return {
+                                ...prev,
+                                maxRaportDate: e.target.value ? e.target.value : minMaxDateGlobal.maxGlobalDate
+                            };
+                        })}
+                    />
+                </section>
             </section>
             {pleaseWait ? <PleaseWait /> : <MaterialReactTable
                 className="raport-table"

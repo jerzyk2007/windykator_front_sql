@@ -1,8 +1,9 @@
 
 zrobić logi błędów na serwerze dla każdej funkcji 
 
-data pierwsza nie moze byc wieksza od drugiej, a druga mniejsza od pierwszej
 
-css
+css mobile
 
 Raport - sprawdzić w Raport czy funkcje wykonują się w prawidłowej kolejności, po zaktualizowaniu stanów useState
+
+usunąc na serwerze dostęp przez localhost
