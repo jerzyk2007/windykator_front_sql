@@ -1,9 +1,8 @@
 
 zrobić logi błędów na serwerze dla każdej funkcji 
 
-
-css mobile
-
 Raport - sprawdzić w Raport czy funkcje wykonują się w prawidłowej kolejności, po zaktualizowaniu stanów useState
 
 usunąc na serwerze dostęp przez localhost
+
+poprawić zapis ustawień kolumn w Table

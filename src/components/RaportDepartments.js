@@ -123,6 +123,7 @@ const RaportDepartments = () => {
 
     // funkcja przygotowuje dane do raportu
     const grossTotal = () => {
+
         // suma Brutto
         let sumOfGross = new Map();
 
@@ -273,7 +274,6 @@ const RaportDepartments = () => {
                 axiosPrivateIntercept.get(`/user/get-raport-departments-settings/${auth._id}`),
             ]);
 
-            console.log(settingsRaportUserDepartments.data);
             setColumnVisibility(settingsRaportUserDepartments?.data?.visible || {});
             setColumnSizing(settingsRaportUserDepartments?.data?.size || {});
             setDensity(settingsRaportUserDepartments?.data?.density || 'comfortable');

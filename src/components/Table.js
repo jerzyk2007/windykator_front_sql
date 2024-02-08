@@ -57,29 +57,24 @@ const ActualTable = ({ info }) => {
                 modifiedItem.muiTableBodyCellProps = {
                     align: 'left',
                     sx: {
-                        // backgroundColor: 'rgba(110, 228, 246, 0.1)',
                         borderRight: '1px solid rgba(224,224,224,1)',
-                        borderRight: "1px solid #c9c7c7", //add a border between columns
+                        borderRight: "1px solid #c9c7c7",
                         fontSize: "13px",
-                        // fontFamily: "Calibri",
                         padding: "2px",
                         maxHeight: "10rem",
-                        fontWeight: 'bold',
-
+                        // fontWeight: 'bold',
                     }
                 };
             } else {
                 modifiedItem.muiTableBodyCellProps = {
                     align: 'center',
                     sx: {
-                        // backgroundColor: 'rgba(110, 228, 246, 0.1)',
                         borderRight: '1px solid rgba(224,224,224,1)',
-                        borderRight: "1px solid #c9c7c7", //add a border between columns
+                        borderRight: "1px solid #c9c7c7",
                         fontSize: "13px",
-                        // fontFamily: "Calibri",
                         padding: "2px",
-                        fontWeight: 'bold',
-
+                        maxHeight: "10rem",
+                        // fontWeight: 'bold',
                     }
                 };
             }
@@ -92,8 +87,7 @@ const ActualTable = ({ info }) => {
                         backgroundColor: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'rgb(250, 136, 136)' : "white",
                         // color: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'white' : "black",
                         // fontWeight: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'bold' : 'normal'
-                        fontSize: "14px",
-                        fontFamily: "Calibri",
+                        fontSize: "13px",
                     },
                     align: 'center',
                 });
@@ -110,8 +104,7 @@ const ActualTable = ({ info }) => {
                             textAlign: "center",
                             backgroundColor: cell.column.id === '50VAT' && Math.abs(cellValue - dorozliczValue) <= 1
                                 ? 'rgb(250, 136, 136)' : "white",
-                            fontSize: "14px",
-                            fontFamily: "Calibri",
+                            fontSize: "13px",
                         },
                         align: 'center',
                     };
@@ -129,8 +122,7 @@ const ActualTable = ({ info }) => {
                             textAlign: "center",
                             backgroundColor: cell.column.id === '100VAT' && Math.abs(cellValue - dorozliczValue) <= 1
                                 ? 'rgb(250, 136, 136)' : "white",
-                            fontSize: "14px",
-                            fontFamily: "Calibri",
+                            fontSize: "13px",
                         },
                         align: 'center',
                     };
@@ -183,7 +175,7 @@ const ActualTable = ({ info }) => {
     const handleSaveSettings = async () => {
         const tableSettings = { size: { ...columnSizing }, visible: { ...columnVisibility }, density, order: columnOrder, pinning: columnPinning, pagination };
         try {
-            const result = await axiosPrivateIntercept.patch(`/user/save-raport-settings/${auth._id}`,
+            const result = await axiosPrivateIntercept.patch(`/user/save-table-settings/${auth._id}`,
                 { tableSettings }
             );
         }
@@ -328,19 +320,19 @@ const ActualTable = ({ info }) => {
                                 },
                             })}
 
-                        // odczytanie danych po kliknięciu w wiersz
-                        // muiTableBodyCellProps={({ column, cell }) => ({
-                        //     onClick: () => {
-                        //         if (column.id === "UWAGI") { console.log(cell.row._valuesCache.UWAGI); }
-                        //     },
-                        //     sx: {
-                        //         borderRight: "1px solid #c9c7c7", //add a border between columns
-                        //         fontSize: "14px",
-                        //         fontFamily: "Calibri",
-                        //         padding: "2px",
-                        //         // textAlign: "center"
-                        //     },
-                        // })}
+                            // odczytanie danych po kliknięciu w wiersz
+                            muiTableBodyCellProps={({ column, cell }) => ({
+                                onDoubleClick: () => {
+                                    if (column.id === "UWAGI") { console.log(cell.row._valuesCache.UWAGI); }
+                                },
+                                // sx: {
+                                //     borderRight: "1px solid #c9c7c7", //add a border between columns
+                                //     fontSize: "14px",
+                                //     fontFamily: "Calibri",
+                                //     padding: "2px",
+                                //     // textAlign: "center"
+                                // },
+                            })}
                         />
                     </LocalizationProvider>
 

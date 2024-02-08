@@ -55,8 +55,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         <ul className='nav_menu__menu-dropmenu'>
                             {auth?.permissions?.Standard && <li className='nav_menu-item-dropmenu'><Link to="/raport-departments" className="nav_menu-link" onClick={handleLinkClick}>Raport - Dział
                             </Link></li>}
-                            {auth?.permissions?.Standard && <li className='nav_menu-item-dropmenu'><Link to="/raport-advisers" className="nav_menu-link" onClick={handleLinkClick}>Raport - Doradca
-                            </Link></li>}
+                            <li className='nav_menu-item-dropmenu'><Link to="/raport-advisers" className="nav_menu-link" onClick={handleLinkClick}>Raport - Doradca
+                            </Link></li>
                             {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Pracownika
                             </Link></li> */}
                             {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link">

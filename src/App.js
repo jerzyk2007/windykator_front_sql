@@ -53,11 +53,11 @@ function App() {
               <Route path='/all-data-table' element={<Table info={"all"} />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]} />}>
               <Route path='/raport-departments' element={<RaportDepartments />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]} />}>
               <Route path='/raport-advisers' element={<RaportAdvisers />} />
             </Route>
 
