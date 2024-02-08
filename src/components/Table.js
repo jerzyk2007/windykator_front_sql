@@ -35,6 +35,10 @@ const ActualTable = ({ info }) => {
     const [tableSize, setTableSize] = useState(500);
     const [pagination, setPagination] = useState({});
 
+    const fontSize = 13;
+    const border = "1px solid #c5c5c5";
+    const fontFamily = "Arial";
+
     const prepareColumns = (columnsData, data) => {
         const changeColumn = columnsData.map(item => {
             const modifiedItem = { ...item };
@@ -57,11 +61,13 @@ const ActualTable = ({ info }) => {
                 modifiedItem.muiTableBodyCellProps = {
                     align: 'left',
                     sx: {
-                        borderRight: '1px solid rgba(224,224,224,1)',
-                        borderRight: "1px solid #c9c7c7",
-                        fontSize: "13px",
+                        // borderRight: '2px solid rgba(224,224,224,1)',
+                        border,
+                        fontSize: fontSize,
                         padding: "2px",
                         maxHeight: "10rem",
+                        fontFamily,
+                        padding: "0"
                         // fontWeight: 'bold',
                     }
                 };
@@ -69,11 +75,13 @@ const ActualTable = ({ info }) => {
                 modifiedItem.muiTableBodyCellProps = {
                     align: 'center',
                     sx: {
-                        borderRight: '1px solid rgba(224,224,224,1)',
-                        borderRight: "1px solid #c9c7c7",
-                        fontSize: "13px",
+                        // borderRight: '2px solid rgba(224,224,224,1)',
+                        border,
+                        fontSize: fontSize,
                         padding: "2px",
                         maxHeight: "10rem",
+                        fontFamily,
+                        padding: "0"
                         // fontWeight: 'bold',
                     }
                 };
@@ -82,12 +90,13 @@ const ActualTable = ({ info }) => {
             if (item.accessorKey === "ILEDNIPOTERMINIE") {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
                     sx: {
-                        borderRight: "1px solid #c9c7c7",
+                        border,
                         textAlign: "center",
                         backgroundColor: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'rgb(250, 136, 136)' : "white",
                         // color: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'white' : "black",
                         // fontWeight: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'bold' : 'normal'
-                        fontSize: "13px",
+                        fontSize: fontSize,
+                        fontFamily
                     },
                     align: 'center',
                 });
@@ -100,11 +109,12 @@ const ActualTable = ({ info }) => {
 
                     return {
                         sx: {
-                            borderRight: "1px solid #c9c7c7",
+                            border,
                             textAlign: "center",
                             backgroundColor: cell.column.id === '50VAT' && Math.abs(cellValue - dorozliczValue) <= 1
                                 ? 'rgb(250, 136, 136)' : "white",
-                            fontSize: "13px",
+                            fontSize: fontSize,
+                            fontFamily
                         },
                         align: 'center',
                     };
@@ -118,11 +128,12 @@ const ActualTable = ({ info }) => {
 
                     return {
                         sx: {
-                            borderRight: "1px solid #c9c7c7",
+                            border,
                             textAlign: "center",
                             backgroundColor: cell.column.id === '100VAT' && Math.abs(cellValue - dorozliczValue) <= 1
                                 ? 'rgb(250, 136, 136)' : "white",
-                            fontSize: "13px",
+                            fontSize: fontSize,
+                            fontFamily
                         },
                         align: 'center',
                     };
@@ -198,7 +209,7 @@ const ActualTable = ({ info }) => {
     );
 
     useEffect(() => {
-        setTableSize(height - 220);
+        setTableSize(height - 165);
     }, [height]);
 
 
@@ -316,7 +327,8 @@ const ActualTable = ({ info }) => {
                                     minHeight: "3rem",
                                     display: "flex",
                                     justifyContent: "center",
-                                    border: '1px solid rgba(81, 81, 81, .2)'
+                                    // border: '1px solid rgba(81, 81, 81, .2)'
+                                    border
                                 },
                             })}
 

@@ -5,4 +5,4 @@ Raport - sprawdzić w Raport czy funkcje wykonują się w prawidłowej kolejnoś
 
 usunąc na serwerze dostęp przez localhost
 
-poprawić zapis ustawień kolumn w Table
+usunąć footer
