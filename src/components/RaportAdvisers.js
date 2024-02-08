@@ -177,27 +177,27 @@ const RaportAdvisers = () => {
                 let maxDate = new Date(raportDate.maxRaportDate);
                 let todayDate = new Date();
 
-                if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate) {
+                if (item.ZATWIERDZIL === dep && documentDate >= minDate && documentDate <= maxDate) {
                     sumOfGross.set(dep, sumOfGross.get(dep) + item.BRUTTO);
                     howManyElements.set(dep, howManyElements.get(dep) + 1);
                     underPayment.set(dep, underPayment.get(dep) + item.DOROZLICZ);
                 }
 
-                if (item.DZIAL === dep && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                if (item.ZATWIERDZIL === dep && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     expiredPayments.set(dep, expiredPayments.get(dep) + item.DOROZLICZ);
                     howManyExpiredElements.set(dep, howManyExpiredElements.get(dep) + 1);
                 }
 
-                if (item.DZIAL === dep && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                if (item.ZATWIERDZIL === dep && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     notExpiredPayment.set(dep, notExpiredPayment.get(dep) + item.DOROZLICZ);
                 }
 
-                if (item.DZIAL === dep && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                if (item.ZATWIERDZIL === dep && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     expiredPaymentsWithoutPandL.set(dep, expiredPaymentsWithoutPandL.get(dep) + item.DOROZLICZ);
                     howManyExpiredElementsWithoutPandL.set(dep, howManyExpiredElementsWithoutPandL.get(dep) + 1);
                 }
 
-                if (item.DZIAL === dep && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                if (item.ZATWIERDZIL === dep && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     notExpiredPaymentWithoutPandL.set(dep, notExpiredPaymentWithoutPandL.get(dep) + item.DOROZLICZ);
                 }
             });
@@ -225,7 +225,7 @@ const RaportAdvisers = () => {
 
 
             let departmentObj = {
-                Department: dep,
+                Adviser: dep,
                 TotalDocumentsValue: Number(sumOfGross.get(dep).toFixed(2)),
                 DocumentsCounter: howManyElements.get(dep),
                 UnderPayment: Number(underPayment.get(dep).toFixed(2)),
@@ -241,22 +241,37 @@ const RaportAdvisers = () => {
             generatingRaport.push(departmentObj);
         });
 
-        addedAllToRaports(generatingRaport);
+        // addedAllToRaports(generatingRaport);
+        setRaport(generatingRaport);
+
     };
 
 
 
     const createDataRaport = () => {
+        // if (permission === "Standard") {
+        //     let uniqueDepartments = [];
+        //     raportData.forEach(item => {
+        //         if (item.DZIAL && typeof item.DZIAL === 'string') {
+        //             if (!uniqueDepartments.includes(item.DZIAL)) {
+        //                 uniqueDepartments.push(item.DZIAL);
+        //             }
+        //         }
+        //     });
+        //     setDepartments(uniqueDepartments);
+        //     console.log(uniqueDepartments);
+        // }
         if (permission === "Standard") {
-            let uniqueDepartments = [];
+            let uniqueAdvisers = [];
             raportData.forEach(item => {
-                if (item.DZIAL && typeof item.DZIAL === 'string') {
-                    if (!uniqueDepartments.includes(item.DZIAL)) {
-                        uniqueDepartments.push(item.DZIAL);
+                if (item.ZATWIERDZIL && typeof item.ZATWIERDZIL === 'string') {
+                    if (!uniqueAdvisers.includes(item.ZATWIERDZIL)) {
+                        uniqueAdvisers.push(item.ZATWIERDZIL);
                     }
                 }
             });
-            setDepartments(uniqueDepartments);
+            setDepartments(uniqueAdvisers);
+            console.log(uniqueAdvisers);
         }
     };
 
@@ -267,11 +282,12 @@ const RaportAdvisers = () => {
             const resultData = await axiosPrivateIntercept.get(`/raport/get-data/${auth._id}`);
             setRaportData(resultData.data.data);
             setPermission(resultData.data.permission);
+            // console.log(resultData.data.permission);
             checkMinMaxDateGlobal(resultData.data.data);
 
-            const [settingsRaportUser] = await Promise.all([
-                axiosPrivateIntercept.get(`/user/get-raport-settings/${auth._id}`),
-            ]);
+            // const [settingsRaportUser] = await Promise.all([
+            //     axiosPrivateIntercept.get(`/user/get-raport-settings/${auth._id}`),
+            // ]);
 
             // setColumnVisibility(settingsRaportUser?.data?.visible || {});
             // setColumnSizing(settingsRaportUser?.data?.size || {});
@@ -280,8 +296,8 @@ const RaportAdvisers = () => {
             // setColumnPinning(settingsRaportUser?.data?.pinning || { left: [], right: [] });
 
             setPleaseWait(false);
-            console.log(resultData.data.data);
-            console.log(settingsRaportUser.data);
+            // console.log(resultData.data.data);
+            // console.log(settingsRaportUser.data);
         }
         catch (err) {
             console.log(err);
@@ -291,8 +307,8 @@ const RaportAdvisers = () => {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'Department',
-                header: 'Dział',
+                accessorKey: 'Adviser',
+                header: 'Doradca',
                 size: columnSizing?.Department ? columnSizing.Department : 150
             },
             {
@@ -471,39 +487,43 @@ const RaportAdvisers = () => {
         }
     };
 
-    // useEffect(() => {
-    //     createDataRaport();
-    // }, [raportData, permission, raportDate]);
+    useEffect(() => {
+        createDataRaport();
+    }, [raportData, permission, raportDate]);
 
-    // useEffect(() => {
-    //     grossTotal();
-    // }, [departments]);
+    useEffect(() => {
+        grossTotal();
+    }, [departments]);
 
     useEffect(() => {
         getData();
     }, []);
 
     // useEffect(() => {
+    //     console.log(raport);
+    // }, [raport]);
+
+    // useEffect(() => {
     //     setTableSize(height - 285);
     // }, [height]);
 
-    // useEffect(() => {
-    //     let minDate = new Date(raportDate.minRaportDate);
-    //     let maxDate = new Date(raportDate.maxRaportDate);
-    //     if (minDate > maxDate || maxDate < minDate) {
-    //         errSetRaportDate(true);
-    //     } else {
-    //         errSetRaportDate(false);
-    //     }
+    useEffect(() => {
+        let minDate = new Date(raportDate.minRaportDate);
+        let maxDate = new Date(raportDate.maxRaportDate);
+        if (minDate > maxDate || maxDate < minDate) {
+            errSetRaportDate(true);
+        } else {
+            errSetRaportDate(false);
+        }
 
-    // },
-    //     [raportDate]);
+    },
+        [raportDate]);
 
 
     return (
         <section className='raport_departments'>
             <h3>RAPORT DORADCA</h3>
-            {/* <section className='raport_departments-date'>
+            <section className='raport_departments-date'>
                 <section className='raport_departments-date__title'>
                     <h3>RAPORT DORADCA</h3>
                 </section>
@@ -546,7 +566,7 @@ const RaportAdvisers = () => {
             {pleaseWait ? <PleaseWait /> : <MaterialReactTable
                 className="raport_departments-table"
                 table={table} />}
-            <TfiSave className='raport_departments-save-settings' onClick={handleSaveSettings} /> */}
+            <TfiSave className='raport_departments-save-settings' onClick={handleSaveSettings} />
         </section>
     );
 };
