@@ -74,6 +74,9 @@ const RaportDepartments = () => {
                 acc.NotExpiredPaymentWithoutPandL += currentItem.NotExpiredPaymentWithoutPandL;
                 acc.TotalDocumentsValue += currentItem.TotalDocumentsValue;
                 acc.UnderPayment += currentItem.UnderPayment;
+                acc.LegalExpired += currentItem.LegalExpired;
+                acc.DocumentsCounterLegal += currentItem.DocumentsCounterLegal;
+
                 return acc;
             }, {
                 DocumentsCounter: 0,
@@ -84,7 +87,9 @@ const RaportDepartments = () => {
                 NotExpiredPayment: 0,
                 NotExpiredPaymentWithoutPandL: 0,
                 TotalDocumentsValue: 0,
-                UnderPayment: 0
+                UnderPayment: 0,
+                LegalExpired: 0,
+                DocumentsCounterLegal: 0
             });
 
             const expiredPaymentsValue = sumOfAllItems.ExpiredPayments;
@@ -151,6 +156,12 @@ const RaportDepartments = () => {
         //nieprzeterminowane bez PZU i LINK4
         let notExpiredPaymentWithoutPandL = new Map();
 
+        // przeterminowane kancelaria
+        let legalExpired = new Map();
+
+        // ilość faktur kancelaria
+        let legalCounter = new Map();
+
         let generatingRaport = [];
 
         departments.forEach(dep => {
@@ -163,6 +174,8 @@ const RaportDepartments = () => {
             notExpiredPayment.set(dep, 0);
             expiredPaymentsWithoutPandL.set(dep, 0);
             notExpiredPaymentWithoutPandL.set(dep, 0);
+            legalExpired.set(dep, 0);
+            legalCounter.set(dep, 0);
 
             raportData.forEach(item => {
                 // Sprawdzenie, czy obiekt zawiera klucz DZIAL, który pasuje do aktualnego działu
@@ -196,6 +209,11 @@ const RaportDepartments = () => {
                 if (item.DZIAL === dep && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     expiredPaymentsWithoutPandL.set(dep, expiredPaymentsWithoutPandL.get(dep) + item.DOROZLICZ);
                     howManyExpiredElementsWithoutPandL.set(dep, howManyExpiredElementsWithoutPandL.get(dep) + 1);
+                }
+
+                if (item.DZIAL === dep && !item.JAKAKANCELARIA && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    legalExpired.set(dep, legalExpired.get(dep) + item.DOROZLICZ);
+                    legalCounter.set(dep, legalCounter.get(dep) + 1);
                 }
 
                 if (item.DZIAL === dep && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
@@ -234,10 +252,12 @@ const RaportDepartments = () => {
                 NotExpiredPayment: Number(notExpiredPaymentValue.toFixed(2)),
                 ExpiredPaymentsWithoutPandL: Number(expiredPaymentsWithoutPandLValue.toFixed(2)),
                 NotExpiredPaymentWithoutPandL: Number(notExpiredPaymentWithoutPandLValue.toFixed(2)),
+                LegalExpired: Number(legalExpired.get(dep).toFixed(2)),
                 Objective: Number(objective),
                 ObjectiveWithoutPandL: Number(objectiveWithoutPandL),
                 DocumentsCounterExpired: howManyExpiredElements.get(dep),
-                DocumentsCounterExpiredWithoutPandL: howManyExpiredElementsWithoutPandL.get(dep)
+                DocumentsCounterExpiredWithoutPandL: howManyExpiredElementsWithoutPandL.get(dep),
+                DocumentsCounterLegal: legalCounter.get(dep),
             };
             generatingRaport.push(departmentObj);
         });
@@ -390,6 +410,27 @@ const RaportDepartments = () => {
                 accessorKey: 'DocumentsCounter',
                 header: 'Ilość faktur',
             },
+            {
+                accessorKey: 'LegalExpired',
+                header: 'Przeterm kancelarie',
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00';
+
+                    return `${formattedSalary}`;
+                },
+                enableGlobalFilter: false
+            },
+            {
+                accessorKey: 'DocumentsCounterLegal',
+                header: 'Ilość faktur',
+            },
         ],
         [raport]
     );
@@ -484,7 +525,7 @@ const RaportDepartments = () => {
     }, []);
 
     useEffect(() => {
-        setTableSize(height - 285);
+        setTableSize(height - 215);
     }, [height]);
 
     useEffect(() => {

@@ -204,9 +204,10 @@ const RaportAdvisers = () => {
                     howManyExpiredElementsWithoutPandL.set(dep.merge, howManyExpiredElementsWithoutPandL.get(dep.merge) + 1);
                 }
 
-                if (item.ZATWIERDZIL === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                if (item.ZATWIERDZIL === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKAKANCELARIA && item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     legalExpired.set(dep.merge, legalExpired.get(dep.merge) + item.DOROZLICZ);
                     legalCounter.set(dep.merge, legalCounter.get(dep.merge) + 1);
+                    console.log(item.NUMER);
                 }
 
                 if (item.ZATWIERDZIL === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
@@ -549,7 +550,7 @@ const RaportAdvisers = () => {
     }, []);
 
     useEffect(() => {
-        setTableSize(height - 285);
+        setTableSize(height - 215);
     }, [height]);
 
     useEffect(() => {
