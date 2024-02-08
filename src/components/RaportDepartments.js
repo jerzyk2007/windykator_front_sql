@@ -296,7 +296,7 @@ const RaportDepartments = () => {
             },
             {
                 accessorKey: 'Objective',
-                header: 'Cel całość',
+                header: 'Cel',
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
