@@ -269,15 +269,16 @@ const RaportDepartments = () => {
             setPermission(resultData.data.permission);
             checkMinMaxDateGlobal(resultData.data.data);
 
-            const [settingsRaportUser] = await Promise.all([
-                axiosPrivateIntercept.get(`/user/get-raport-settings/${auth._id}`),
+            const [settingsRaportUserDepartments] = await Promise.all([
+                axiosPrivateIntercept.get(`/user/get-raport-departments-settings/${auth._id}`),
             ]);
 
-            setColumnVisibility(settingsRaportUser?.data?.visible || {});
-            setColumnSizing(settingsRaportUser?.data?.size || {});
-            setDensity(settingsRaportUser?.data?.density || 'comfortable');
-            setColumnOrder(settingsRaportUser?.data?.order?.map(order => order) || []);
-            setColumnPinning(settingsRaportUser?.data?.pinning || { left: [], right: [] });
+            console.log(settingsRaportUserDepartments.data);
+            setColumnVisibility(settingsRaportUserDepartments?.data?.visible || {});
+            setColumnSizing(settingsRaportUserDepartments?.data?.size || {});
+            setDensity(settingsRaportUserDepartments?.data?.density || 'comfortable');
+            setColumnOrder(settingsRaportUserDepartments?.data?.order?.map(order => order) || []);
+            setColumnPinning(settingsRaportUserDepartments?.data?.pinning || { left: [], right: [] });
 
             setPleaseWait(false);
 
@@ -459,10 +460,10 @@ const RaportDepartments = () => {
     });
 
     const handleSaveSettings = async () => {
-        const raportSettings = { size: { ...columnSizing }, visible: { ...columnVisibility }, density, order: columnOrder, pinning: columnPinning };
+        const raportDepartments = { size: { ...columnSizing }, visible: { ...columnVisibility }, density, order: columnOrder, pinning: columnPinning };
         try {
-            const result = await axiosPrivateIntercept.patch(`/user/save-raport-settings/${auth._id}`,
-                { raportSettings }
+            const result = await axiosPrivateIntercept.patch(`/user/save-raport-departments-settings/${auth._id}`,
+                { raportDepartments }
             );
         }
         catch (err) {

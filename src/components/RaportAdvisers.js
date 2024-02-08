@@ -273,14 +273,15 @@ const RaportAdvisers = () => {
                 axiosPrivateIntercept.get(`/user/get-raport-settings/${auth._id}`),
             ]);
 
-            setColumnVisibility(settingsRaportUser?.data?.visible || {});
-            setColumnSizing(settingsRaportUser?.data?.size || {});
-            setDensity(settingsRaportUser?.data?.density || 'comfortable');
-            setColumnOrder(settingsRaportUser?.data?.order?.map(order => order) || []);
-            setColumnPinning(settingsRaportUser?.data?.pinning || { left: [], right: [] });
+            // setColumnVisibility(settingsRaportUser?.data?.visible || {});
+            // setColumnSizing(settingsRaportUser?.data?.size || {});
+            // setDensity(settingsRaportUser?.data?.density || 'comfortable');
+            // setColumnOrder(settingsRaportUser?.data?.order?.map(order => order) || []);
+            // setColumnPinning(settingsRaportUser?.data?.pinning || { left: [], right: [] });
 
             setPleaseWait(false);
-
+            console.log(resultData.data.data);
+            console.log(settingsRaportUser.data);
         }
         catch (err) {
             console.log(err);
@@ -470,40 +471,41 @@ const RaportAdvisers = () => {
         }
     };
 
-    useEffect(() => {
-        createDataRaport();
-    }, [raportData, permission, raportDate]);
+    // useEffect(() => {
+    //     createDataRaport();
+    // }, [raportData, permission, raportDate]);
 
-    useEffect(() => {
-        grossTotal();
-    }, [departments]);
+    // useEffect(() => {
+    //     grossTotal();
+    // }, [departments]);
 
     useEffect(() => {
         getData();
     }, []);
 
-    useEffect(() => {
-        setTableSize(height - 285);
-    }, [height]);
+    // useEffect(() => {
+    //     setTableSize(height - 285);
+    // }, [height]);
 
-    useEffect(() => {
-        let minDate = new Date(raportDate.minRaportDate);
-        let maxDate = new Date(raportDate.maxRaportDate);
-        if (minDate > maxDate || maxDate < minDate) {
-            errSetRaportDate(true);
-        } else {
-            errSetRaportDate(false);
-        }
+    // useEffect(() => {
+    //     let minDate = new Date(raportDate.minRaportDate);
+    //     let maxDate = new Date(raportDate.maxRaportDate);
+    //     if (minDate > maxDate || maxDate < minDate) {
+    //         errSetRaportDate(true);
+    //     } else {
+    //         errSetRaportDate(false);
+    //     }
 
-    },
-        [raportDate]);
+    // },
+    //     [raportDate]);
 
 
     return (
         <section className='raport_departments'>
-            <section className='raport_departments-date'>
+            <h3>RAPORT DORADCA</h3>
+            {/* <section className='raport_departments-date'>
                 <section className='raport_departments-date__title'>
-                    <h3>Wybierz przedział dat dla raportu</h3>
+                    <h3>RAPORT DORADCA</h3>
                 </section>
                 <section className='raport_departments-date__content'>
                     <h3 className='raport_departments-date__content-name'>od: </h3>
@@ -544,7 +546,7 @@ const RaportAdvisers = () => {
             {pleaseWait ? <PleaseWait /> : <MaterialReactTable
                 className="raport_departments-table"
                 table={table} />}
-            <TfiSave className='raport_departments-save-settings' onClick={handleSaveSettings} />
+            <TfiSave className='raport_departments-save-settings' onClick={handleSaveSettings} /> */}
         </section>
     );
 };

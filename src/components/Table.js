@@ -45,45 +45,12 @@ const ActualTable = ({ info }) => {
             }
 
             if (item.filterVariant === 'date-range') {
-                // const uniqueValues = Array.from(new Set(data.map(filtr => filtr[item.accessorKey])));
-                // delete modifiedItem.accessorKey;
                 modifiedItem.accessorFn = (originalRow) => new Date(originalRow[item.accessorKey]);
                 modifiedItem.Cell = ({ cell }) => cell.getValue().toLocaleDateString('pl-PL', {
                     useGrouping: true,
                 });
             }
 
-            // if (item.filterVariant === 'date-range') {
-            //     // const uniqueValues = Array.from(new Set(data.map(filtr => filtr[item.accessorKey])));
-            //     // delete modifiedItem.accessorKey;
-            //     modifiedItem.accessorFn = (originalRow) => new Date(originalRow[item.accessorKey]);
-            //     modifiedItem.Cell = ({ cell }) => cell.getValue().toLocaleDateString('pl-PL', {
-            //         useGrouping: true,
-            //     });
-            // }
-
-
-            // if (item.filterVariant === 'date-range') {
-            //     modifiedItem.accessorFn = (originalRow) => {
-            //         const date = new Date(originalRow[item.accessorKey]);
-            //         return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
-            //     };
-            //     modifiedItem.Cell = ({ cell }) => {
-            //         const dateString = cell.getValue();
-            //         const date = new Date(dateString);
-
-            //         if (!isNaN(date.getTime())) {
-            //             // Sprawdzamy, czy data jest poprawna
-            //             return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
-            //         } else {
-            //             return ''; // lub inna obsługa w przypadku, gdy wartość nie jest datą
-            //         }
-            //     };
-            // }
-
-            // Cell: ({ cell }) => cell.getValue().toLocaleDateString(),
-
-            // if (item.accessorKey === "KONTRAHENT" || item.accessorKey !== "UWAGI") {
             if (item.accessorKey === "KONTRAHENT" || item.accessorKey === "UWAGI") {
 
                 modifiedItem.enableClickToCopy = false;
@@ -170,31 +137,10 @@ const ActualTable = ({ info }) => {
                 };
             }
 
-            // sprawdzenie edycji tabeli
-            // if (item.accessorKey === "UWAGI") {
-            //     modifiedItem.enableEditing = true;
-            // } else {
-            //     modifiedItem.enableEditing = false;
-            // }
-            // if (item.accessorKey === "ILEDNIPOTERMINIE") {
-            //     modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
-            //         sx: {
-            //             backgroundColor: cell.getValue < number > () > 40 ? 'rgba(22, 184, 44, 0.5)' : undefined,
-            //             fontWeight: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue < number > () > 40 ? '700' : '400'
-            //         }
-            //     });
-            // }
-
-
-
-
-
-
             if (item.filterVariant === "none") {
                 modifiedItem.enableColumnFilter = false;
                 delete modifiedItem.filterVariant;
             }
-            // enableColumnFilters
 
             if (item.filterVariant === "range-slider") {
                 modifiedItem.muiFilterSliderProps = {
@@ -209,17 +155,6 @@ const ActualTable = ({ info }) => {
                         }),
                 };
             }
-
-            // if (item.type === 'money') {
-            //     modifiedItem.Cell = ({ cell }) => {
-            //         const formattedSalary = cell.getValue().toLocaleString('pl-PL', {
-            //             minimumFractionDigits: 2,
-            //             maximumFractionDigits: 2,
-            //             useGrouping: true,
-            //         });
-            //         return `${formattedSalary}`;
-            //     };
-            // }
 
             if (item.type === 'money') {
                 modifiedItem.Cell = ({ cell }) => {
