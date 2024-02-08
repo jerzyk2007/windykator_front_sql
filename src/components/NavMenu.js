@@ -53,8 +53,10 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 </Link>
                     <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
-                            <li className='nav_menu-item-dropmenu'><Link to="/raport" className="nav_menu-link" onClick={handleLinkClick}>Raport
-                            </Link></li>
+                            {auth?.permissions?.Standard && <li className='nav_menu-item-dropmenu'><Link to="/raport-departments" className="nav_menu-link" onClick={handleLinkClick}>Raport - Dział
+                            </Link></li>}
+                            {auth?.permissions?.Standard && <li className='nav_menu-item-dropmenu'><Link to="/raport-advisers" className="nav_menu-link" onClick={handleLinkClick}>Raport - Doradca
+                            </Link></li>}
                             {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Pracownika
                             </Link></li> */}
                             {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link">

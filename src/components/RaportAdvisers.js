@@ -7,9 +7,9 @@ import { MRT_Localization_PL } from 'material-react-table/locales/pl';
 import PleaseWait from './PleaseWait';
 import { TfiSave } from "react-icons/tfi";
 
-import './RaportDepartments.css';
+import './RaportAdvisers.css';
 
-const RaportDepartments = () => {
+const RaportAdvisers = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
     const { pleaseWait, setPleaseWait, auth } = useData();
     const { height } = useWindowSize();
@@ -549,4 +549,4 @@ const RaportDepartments = () => {
     );
 };
 
-export default RaportDepartments;
+export default RaportAdvisers;

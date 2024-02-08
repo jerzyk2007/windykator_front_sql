@@ -27,8 +27,8 @@ const Login = () => {
                 }
             );
 
-            const { username, usersurname, roles, _id } = response?.data;
-            setAuth({ username, usersurname, userlogin, roles, _id });
+            const { username, usersurname, roles, _id, permissions } = response?.data;
+            setAuth({ username, usersurname, userlogin, roles, _id, permissions });
             navigate('/');
         }
         catch (err) {
