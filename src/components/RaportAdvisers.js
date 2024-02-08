@@ -153,20 +153,20 @@ const RaportAdvisers = () => {
         let generatingRaport = [];
 
         departments.forEach(dep => {
-            sumOfGross.set(dep, 0);
-            howManyElements.set(dep, 0);
-            howManyExpiredElements.set(dep, 0);
-            howManyExpiredElementsWithoutPandL.set(dep, 0);
-            underPayment.set(dep, 0);
-            expiredPayments.set(dep, 0);
-            notExpiredPayment.set(dep, 0);
-            expiredPaymentsWithoutPandL.set(dep, 0);
-            notExpiredPaymentWithoutPandL.set(dep, 0);
+            sumOfGross.set(dep.adviser, 0);
+            howManyElements.set(dep.adviser, 0);
+            howManyExpiredElements.set(dep.adviser, 0);
+            howManyExpiredElementsWithoutPandL.set(dep.adviser, 0);
+            underPayment.set(dep.adviser, 0);
+            expiredPayments.set(dep.adviser, 0);
+            notExpiredPayment.set(dep.adviser, 0);
+            expiredPaymentsWithoutPandL.set(dep.adviser, 0);
+            notExpiredPaymentWithoutPandL.set(dep.adviser, 0);
+            // console.log(dep.adviser);
 
             raportData.forEach(item => {
                 // Sprawdzenie, czy obiekt zawiera klucz DZIAL, który pasuje do aktualnego działu
                 // oraz czy data mieści się w przedziale
-
                 // pobranie daty dokumnetu
                 let documentDate = new Date(item.DATAFV);
 
@@ -177,28 +177,28 @@ const RaportAdvisers = () => {
                 let maxDate = new Date(raportDate.maxRaportDate);
                 let todayDate = new Date();
 
-                if (item.ZATWIERDZIL === dep && documentDate >= minDate && documentDate <= maxDate) {
-                    sumOfGross.set(dep, sumOfGross.get(dep) + item.BRUTTO);
-                    howManyElements.set(dep, howManyElements.get(dep) + 1);
-                    underPayment.set(dep, underPayment.get(dep) + item.DOROZLICZ);
+                if (item.ZATWIERDZIL === dep.adviser && documentDate >= minDate && documentDate <= maxDate) {
+                    sumOfGross.set(dep.adviser, sumOfGross.get(dep.adviser) + item.BRUTTO);
+                    howManyElements.set(dep.adviser, howManyElements.get(dep.adviser) + 1);
+                    underPayment.set(dep.adviser, underPayment.get(dep.adviser) + item.DOROZLICZ);
                 }
 
-                if (item.ZATWIERDZIL === dep && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
-                    expiredPayments.set(dep, expiredPayments.get(dep) + item.DOROZLICZ);
-                    howManyExpiredElements.set(dep, howManyExpiredElements.get(dep) + 1);
+                if (item.ZATWIERDZIL === dep.adviser && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    expiredPayments.set(dep.adviser, expiredPayments.get(dep.adviser) + item.DOROZLICZ);
+                    howManyExpiredElements.set(dep.adviser, howManyExpiredElements.get(dep.adviser) + 1);
                 }
 
-                if (item.ZATWIERDZIL === dep && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
-                    notExpiredPayment.set(dep, notExpiredPayment.get(dep) + item.DOROZLICZ);
+                if (item.ZATWIERDZIL === dep.adviser && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    notExpiredPayment.set(dep.adviser, notExpiredPayment.get(dep.adviser) + item.DOROZLICZ);
                 }
 
-                if (item.ZATWIERDZIL === dep && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
-                    expiredPaymentsWithoutPandL.set(dep, expiredPaymentsWithoutPandL.get(dep) + item.DOROZLICZ);
-                    howManyExpiredElementsWithoutPandL.set(dep, howManyExpiredElementsWithoutPandL.get(dep) + 1);
+                if (item.ZATWIERDZIL === dep.adviser && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    expiredPaymentsWithoutPandL.set(dep.adviser, expiredPaymentsWithoutPandL.get(dep.adviser) + item.DOROZLICZ);
+                    howManyExpiredElementsWithoutPandL.set(dep.adviser, howManyExpiredElementsWithoutPandL.get(dep.adviser) + 1);
                 }
 
-                if (item.ZATWIERDZIL === dep && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
-                    notExpiredPaymentWithoutPandL.set(dep, notExpiredPaymentWithoutPandL.get(dep) + item.DOROZLICZ);
+                if (item.ZATWIERDZIL === dep.adviser && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    notExpiredPaymentWithoutPandL.set(dep.adviser, notExpiredPaymentWithoutPandL.get(dep.adviser) + item.DOROZLICZ);
                 }
             });
         });
@@ -207,10 +207,10 @@ const RaportAdvisers = () => {
 
         departments.forEach(dep => {
             // zabezpieczenie przed dzieleniem przez zero odtąd 
-            let expiredPaymentsValue = expiredPayments.get(dep);
-            let notExpiredPaymentValue = notExpiredPayment.get(dep);
-            let expiredPaymentsWithoutPandLValue = expiredPaymentsWithoutPandL.get(dep);
-            let notExpiredPaymentWithoutPandLValue = notExpiredPaymentWithoutPandL.get(dep);
+            let expiredPaymentsValue = expiredPayments.get(dep.adviser);
+            let notExpiredPaymentValue = notExpiredPayment.get(dep.adviser);
+            let expiredPaymentsWithoutPandLValue = expiredPaymentsWithoutPandL.get(dep.adviser);
+            let notExpiredPaymentWithoutPandLValue = notExpiredPaymentWithoutPandL.get(dep.adviser);
 
             let objective = 0;
             if (notExpiredPaymentValue + expiredPaymentsValue !== 0) {
@@ -225,18 +225,18 @@ const RaportAdvisers = () => {
 
 
             let departmentObj = {
-                Adviser: dep,
-                TotalDocumentsValue: Number(sumOfGross.get(dep).toFixed(2)),
-                DocumentsCounter: howManyElements.get(dep),
-                UnderPayment: Number(underPayment.get(dep).toFixed(2)),
+                Adviser: dep.adviser,
+                TotalDocumentsValue: Number(sumOfGross.get(dep.adviser).toFixed(2)),
+                DocumentsCounter: howManyElements.get(dep.adviser),
+                UnderPayment: Number(underPayment.get(dep.adviser).toFixed(2)),
                 ExpiredPayments: Number(expiredPaymentsValue.toFixed(2)),
                 NotExpiredPayment: Number(notExpiredPaymentValue.toFixed(2)),
                 ExpiredPaymentsWithoutPandL: Number(expiredPaymentsWithoutPandLValue.toFixed(2)),
                 NotExpiredPaymentWithoutPandL: Number(notExpiredPaymentWithoutPandLValue.toFixed(2)),
                 Objective: Number(objective),
                 ObjectiveWithoutPandL: Number(objectiveWithoutPandL),
-                DocumentsCounterExpired: howManyExpiredElements.get(dep),
-                DocumentsCounterExpiredWithoutPandL: howManyExpiredElementsWithoutPandL.get(dep)
+                DocumentsCounterExpired: howManyExpiredElements.get(dep.adviser),
+                DocumentsCounterExpiredWithoutPandL: howManyExpiredElementsWithoutPandL.get(dep.adviser)
             };
             generatingRaport.push(departmentObj);
         });
@@ -263,15 +263,37 @@ const RaportAdvisers = () => {
         // }
         if (permission === "Standard") {
             let uniqueAdvisers = [];
+            let uniqueAdvisersAndDepartments = [];
             raportData.forEach(item => {
-                if (item.ZATWIERDZIL && typeof item.ZATWIERDZIL === 'string') {
-                    if (!uniqueAdvisers.includes(item.ZATWIERDZIL)) {
-                        uniqueAdvisers.push(item.ZATWIERDZIL);
+                if (item.ZATWIERDZIL && typeof item.ZATWIERDZIL === 'string' && item.DZIAL && typeof item.DZIAL === 'string') {
+                    const addUniqueAdvisersAndDepartments = {
+                        adviser: item.ZATWIERDZIL,
+                        department: item.DZIAL
+                    };
+                    const isObjectExists = uniqueAdvisersAndDepartments.some(item => JSON.stringify(item) === JSON.stringify(addUniqueAdvisersAndDepartments));
+                    if (!isObjectExists) {
+                        uniqueAdvisersAndDepartments.push(addUniqueAdvisersAndDepartments);
                     }
                 }
             });
-            setDepartments(uniqueAdvisers);
-            console.log(uniqueAdvisers);
+            // raportData.forEach(item => {
+            //     if (item.ZATWIERDZIL && typeof item.ZATWIERDZIL === 'string') {
+            //         if (!uniqueAdvisers.includes(item.ZATWIERDZIL)) {
+            //             uniqueAdvisers.push(item.ZATWIERDZIL);
+            //             const addUniqueAdvisersAndDepartments = {
+            //                 adviser: item.ZATWIERDZIL,
+            //                 department: item.DZIAL
+            //             };
+            //             const isObjectExists = uniqueAdvisersAndDepartments.some(item => JSON.stringify(item) === JSON.stringify(addUniqueAdvisersAndDepartments));
+            //             if (!isObjectExists) {
+            //                 uniqueAdvisersAndDepartments.push(addUniqueAdvisersAndDepartments);
+            //             }
+
+            //         }
+            //     }
+            // });
+            setDepartments(uniqueAdvisersAndDepartments);
+            // console.log(uniqueAdvisersAndDepartments);
         }
     };
 
