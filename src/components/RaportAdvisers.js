@@ -207,7 +207,6 @@ const RaportAdvisers = () => {
                 if (item.ZATWIERDZIL === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKAKANCELARIA && item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     legalExpired.set(dep.merge, legalExpired.get(dep.merge) + item.DOROZLICZ);
                     legalCounter.set(dep.merge, legalCounter.get(dep.merge) + 1);
-                    console.log(item.NUMER);
                 }
 
                 if (item.ZATWIERDZIL === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
@@ -333,16 +332,21 @@ const RaportAdvisers = () => {
             {
                 accessorKey: 'Adviser',
                 header: 'Doradca',
-                size: columnSizing?.Department ? columnSizing.Department : 150
+                size: columnSizing?.Department ? columnSizing.Department : 150,
+                filterVariant: 'multi-select',
+                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['Adviser'])))
             },
             {
                 accessorKey: 'Department',
                 header: 'Dział',
-                size: columnSizing?.Department ? columnSizing.Department : 150
+                size: columnSizing?.Department ? columnSizing.Department : 150,
+                filterVariant: 'multi-select',
+                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['Department'])))
             },
             {
                 accessorKey: 'Objective',
                 header: 'Cel całość',
+                enableColumnFilter: false,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -355,10 +359,24 @@ const RaportAdvisers = () => {
 
                     return `${formattedSalary}`;
                 },
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#caff84",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
             {
                 accessorKey: 'ObjectiveWithoutPandL',
                 header: 'Cel bez PZU/LINK4',
+                enableColumnFilter: false,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -371,10 +389,24 @@ const RaportAdvisers = () => {
 
                     return `${formattedSalary}`;
                 },
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#ffe884",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
             {
                 accessorKey: 'ExpiredPayments',
                 header: 'Przeterminowane',
+                enableColumnFilter: false,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -387,15 +419,43 @@ const RaportAdvisers = () => {
 
                     return `${formattedSalary}`;
                 },
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#caff84",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
 
             {
                 accessorKey: 'DocumentsCounterExpired',
                 header: 'Ilość faktur przeter.',
+                enableColumnFilter: false,
+                muiTableBodyCellProps: () => {
+                    return {
+                        sx: {
+                            backgroundColor: "#caff84",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
             {
                 accessorKey: 'ExpiredPaymentsWithoutPandL',
                 header: 'Przeterminowane bez PZU/LINK4',
+                enableColumnFilter: false,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -408,14 +468,42 @@ const RaportAdvisers = () => {
 
                     return `${formattedSalary}`;
                 },
+                muiTableBodyCellProps: () => {
+                    return {
+                        sx: {
+                            backgroundColor: "#ffe884",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
             {
                 accessorKey: 'DocumentsCounterExpiredWithoutPandL',
                 header: 'Ilość faktur przet. bez PZU/LINK4',
+                enableColumnFilter: false,
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#ffe884",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
             {
                 accessorKey: 'UnderPayment',
                 header: 'Kwota faktur nierozl.',
+                enableColumnFilter: false,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -434,10 +522,12 @@ const RaportAdvisers = () => {
             {
                 accessorKey: 'DocumentsCounter',
                 header: 'Ilość faktur',
+                enableColumnFilter: false,
             },
             {
                 accessorKey: 'LegalExpired',
                 header: 'Przeterm kancelarie',
+                enableColumnFilter: false,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -455,6 +545,7 @@ const RaportAdvisers = () => {
             {
                 accessorKey: 'DocumentsCounterLegal',
                 header: 'Ilość faktur',
+                enableColumnFilter: false,
             },
         ],
         [raport]
@@ -465,7 +556,7 @@ const RaportAdvisers = () => {
         enableStickyHeader: true,
         enableGlobalFilter: true,
         enableGlobalFilterModes: false,
-        enableColumnFilters: false,
+        enableColumnFilters: true,
         enableColumnPinning: true,
         enableColumnResizing: true,
         enableColumnOrdering: true,
@@ -523,7 +614,8 @@ const RaportAdvisers = () => {
                 minHeight: '3rem'
             },
         }),
-        muiTableContainerProps: { sx: { maxHeight: tableSize } }
+        muiTableContainerProps: { sx: { maxHeight: tableSize } },
+        columnFilterDisplayMode: 'popover'
     });
 
     const handleSaveSettings = async () => {

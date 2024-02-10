@@ -330,6 +330,19 @@ const RaportDepartments = () => {
 
                     return `${formattedSalary}`;
                 },
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#caff84",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
             {
                 accessorKey: 'ObjectiveWithoutPandL',
@@ -346,6 +359,19 @@ const RaportDepartments = () => {
 
                     return `${formattedSalary}`;
                 },
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#ffe884",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
             {
                 accessorKey: 'ExpiredPayments',
@@ -362,11 +388,37 @@ const RaportDepartments = () => {
 
                     return `${formattedSalary}`;
                 },
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#caff84",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
 
             {
                 accessorKey: 'DocumentsCounterExpired',
                 header: 'Ilość faktur przeter.',
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#caff84",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
             {
                 accessorKey: 'ExpiredPaymentsWithoutPandL',
@@ -383,10 +435,36 @@ const RaportDepartments = () => {
 
                     return `${formattedSalary}`;
                 },
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#ffe884",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
             {
                 accessorKey: 'DocumentsCounterExpiredWithoutPandL',
                 header: 'Ilość faktur przet. bez PZU/LINK4',
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#ffe884",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
             },
             {
                 accessorKey: 'UnderPayment',
@@ -472,7 +550,7 @@ const RaportDepartments = () => {
 
 
         muiTableHeadCellProps: () => ({
-            align: "left",
+            align: "center",
             sx: {
                 fontWeight: "bold",
                 fontSize: "14px",

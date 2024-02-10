@@ -55,7 +55,7 @@ const ActualTable = ({ info }) => {
     const padding = "2px 5px";
     const fontWeight = '500';
     const minHeight = '2rem';
-    const maxHeight = "10rem";
+    const maxHeight = "100%";
 
 
     const prepareColumns = (columnsData, data) => {
@@ -74,7 +74,7 @@ const ActualTable = ({ info }) => {
                 });
             }
 
-            if (item.accessorKey === "KONTRAHENT" || item.accessorKey === "UWAGI") {
+            if (item.accessorKey === "KONTRAHENT") {
 
                 modifiedItem.enableClickToCopy = false;
                 modifiedItem.muiTableBodyCellProps = {
@@ -101,15 +101,38 @@ const ActualTable = ({ info }) => {
                         padding,
                         fontWeight,
                     }
-                    // sx: {
-                    //     border,
-                    //     boxShadow,
-                    //     fontSize,
-                    //     maxHeight: "10rem",
-                    //     fontFamily,
-                    //     padding: "0",
-                    //     fontWeight
+                };
+            }
+            if (item.accessorKey === "UWAGI") {
+
+                modifiedItem.enableClickToCopy = false;
+                modifiedItem.Cell = ({ cell }) => {
+                    const cellValue = cell.getValue();
+                    if (Array.isArray(cellValue) && cellValue.length > 0) {
+                        return (
+                            <div>
+                                {cellValue.map((item, index) => (
+                                    <p key={index}>{item}</p>
+                                ))}
+                            </div>
+                        );
+                    }
+                    // else {
+                    //     return "Brak danych"; // Wyświetl ten komunikat, gdy tablica UWAGI jest pusta
                     // }
+
+                };
+                modifiedItem.muiTableBodyCellProps = {
+                    align: 'left',
+                    sx: {
+                        borderRight,
+                        fontSize,
+                        minHeight,
+                        maxHeight,
+                        fontFamily,
+                        padding,
+                        fontWeight,
+                    }
                 };
             }
 
