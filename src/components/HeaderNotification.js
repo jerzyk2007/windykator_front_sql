@@ -4,7 +4,7 @@ import './HeaderNotification.css';
 const HeaderNotification = () => {
     return (
         <section className="header_notification">
-            <SiReactos className="header_notification-icon" />
+            {/* <SiReactos className="header_notification-icon" /> */}
         </section>
     );
 };

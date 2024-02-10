@@ -52,7 +52,9 @@
 .nav_menu__menu-item:hover,
 .nav_menu-item-dropmenu:hover,
 .nav_menu-item-dropmenu--side:hover {
-    background-color: rgb(197, 247, 147);
+    /* background-color: rgb(197, 247, 147); */
+    background-color: #a7d3f7;
+
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
 }
@@ -68,7 +70,9 @@
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgb(197, 247, 147);
+    /* background-color: rgb(197, 247, 147); */
+    background-color: #a7d3f7;
+
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     z-index: 1;

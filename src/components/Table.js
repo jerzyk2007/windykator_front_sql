@@ -40,12 +40,12 @@ const ActualTable = ({ info }) => {
     // const fontFamily = "Arial";
     // const boxShadow = '0 0 0 1px black';
     // const fontWeight = 300;
-    const fontSize = 13;
+    const fontSize = '13px';
     const borderRight = "1px solid #c9c7c7";
     const border = "1px solid #c8c8c8";
     const fontFamily = "Arial";
     const boxShadow = '0 0 0 1px black';
-    const padding = "2px";
+    const padding = "2px 5px";
     const fontWeight = '500';
     const minHeight = '2rem';
     const maxHeight = "10rem";
@@ -358,7 +358,9 @@ const ActualTable = ({ info }) => {
                                     fontWeight: "700",
                                     fontSize: "12px",
                                     color: "black",
-                                    backgroundColor: "#a5f089",
+                                    // backgroundColor: "#a5f089",
+                                    backgroundColor: "#a7d3f7",
+
                                     // padding: "5",
                                     // paddingTop: "0",
                                     // paddingBottom: "0",
