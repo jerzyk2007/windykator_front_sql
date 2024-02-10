@@ -12,6 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/pl';
 import { plPL as plText } from '@mui/x-date-pickers/locales';
+import QuickTableNote from './QuickTableNote';
 
 import './Table.css';
 
@@ -34,6 +35,12 @@ const ActualTable = ({ info }) => {
     const [columns, setColumns] = useState([]);
     const [tableSize, setTableSize] = useState(500);
     const [pagination, setPagination] = useState({});
+
+    const [manualPagination, setManualPagination] = useState({});
+    const [sorting, setSorting] = useState([]);
+
+
+    const [quickNote, setQuickNote] = useState('');
 
     // const fontSize = 13.5;
     // const border = "1px solid #c8c8c8";
@@ -279,125 +286,162 @@ const ActualTable = ({ info }) => {
     }, [info]);
 
 
+    // useEffect(() => {
+    //     console.log(pagination);
+    // }, [pagination]);
+
+
     return (
         <section className='actual_table'>
+            {/* {quickNote && documents &&
+                <QuickTableNote
+                    quickNote={quickNote}
+                    setQuickNote={setQuickNote}
+                    notePosition={notePosition}
+                    setNotePosition={setNotePosition}
+                    documents={documents}
+                    setDocuments={setDocuments}
+                />} */}
             {pleaseWait ? <PleaseWait /> :
-                <>  <ThemeProvider
-                    theme={theme} >
-                    {/* theme={createTheme(theme, plPL)} > */}
+                <>
+                    <ThemeProvider
+                        theme={theme} >
+                        {/* theme={createTheme(theme, plPL)} > */}
+                        {quickNote &&
+                            <QuickTableNote
+                                quickNote={quickNote}
+                                setQuickNote={setQuickNote}
+                                documents={documents}
+                                setDocuments={setDocuments}
+                            />}
 
-                    <LocalizationProvider dateAdapter={AdapterDayjs}
-                        adapterLocale="pl"
-                        localeText={plLocale}
-                    >
-                        <MaterialReactTable
-                            className='actual_table__table'
-                            columns={columnsItem}
-                            data={documents}
-                            enableClickToCopy
-                            enableColumnFilterModes
-                            enableStickyHeader
-                            enableStickyFooter
-                            enableColumnResizing
-                            onColumnSizingChange={setColumnSizing}
-                            onColumnVisibilityChange={setColumnVisibility}
-                            onDensityChange={setDensity}
-                            onColumnOrderChange={setColumnOrder}
-                            enableColumnOrdering
-                            enableColumnPinning
-                            onColumnPinningChange={setColumnPinning}
-                            onPaginationChange={setPagination}
-                            enableSelectAll={false}
-                            initialState={{
-                                showColumnFilters: false,
-                                showGlobalFilter: true,
-                            }}
-                            localization={MRT_Localization_PL}
-                            state={{
-                                columnVisibility,
-                                density,
-                                columnOrder,
-                                columnPinning,
-                                pagination
-                            }}
-                            enableGlobalFilterModes
-                            globalFilterModeOptions={['contains']}
-                            positionGlobalFilter="left"
+                        <LocalizationProvider dateAdapter={AdapterDayjs}
+                            adapterLocale="pl"
+                            localeText={plLocale}
+                        >
+                            <MaterialReactTable
+                                className='actual_table__table'
+                                columns={columnsItem}
+                                data={documents}
+                                enableClickToCopy
+                                enableColumnFilterModes
+                                enableStickyHeader
+                                enableStickyFooter
+                                enableSorting
+                                enableColumnResizing
+                                onColumnSizingChange={setColumnSizing}
+                                onColumnVisibilityChange={setColumnVisibility}
+                                onDensityChange={setDensity}
+                                onColumnOrderChange={setColumnOrder}
+                                enableColumnOrdering
+                                enableColumnPinning
+                                onColumnPinningChange={setColumnPinning}
+                                onPaginationChange={setPagination}
+                                onSortingChange={setSorting}
+                                enableSelectAll={false}
+                                initialState={{
+                                    showColumnFilters: false,
+                                    showGlobalFilter: true,
+                                    // pagination: { pageIndex: 2, pageSize: 30 }
+                                    // pagination: manualPagination
 
-                            // wyłącza filtr (3 kropki) w kolumnie
-                            enableColumnActions={false}
+                                }}
+                                localization={MRT_Localization_PL}
+                                state={{
+                                    columnVisibility,
+                                    density,
+                                    columnOrder,
+                                    columnPinning,
+                                    pagination,
+                                    sorting,
+                                }}
+                                enableGlobalFilterModes
+                                globalFilterModeOptions={['contains']}
+                                positionGlobalFilter="left"
+
+                                // wyłącza filtr (3 kropki) w kolumnie
+                                enableColumnActions={false}
+
+                                // nie odświeża tabeli po zmianie danych
+                                autoResetPageIndex={false}
+
+                                // enableColumnVirtualization
+
+                                muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
+                                // wyświetla filtry nad komórką - 
+                                columnFilterDisplayMode={'popover'}
+
+                                //filtr nad headerem - popover
+                                muiFilterTextFieldProps={{
+                                    // sx: { m: '0.5rem 0', width: '100%' },
+                                    sx: { m: '0', width: '300px' },
+                                    variant: 'outlined',
+                                }}
+
+                                // editDisplayMode={'cell'}
+                                layoutMode="grid"
+
+                                muiPaginationProps={{
+                                    rowsPerPageOptions: [10, 20, 30, 50, 100],
+                                    shape: 'rounded',
+                                    variant: 'outlined',
+                                }}
 
 
-                            // enableColumnVirtualization
+                                muiTableHeadCellProps={() => ({
+                                    align: "left",
+                                    sx: {
+                                        fontWeight: "700",
+                                        fontSize: "12px",
+                                        color: "black",
+                                        // backgroundColor: "#a5f089",
+                                        backgroundColor: "#a7d3f7",
 
-                            muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
-                            // wyświetla filtry nad komórką - 
-                            columnFilterDisplayMode={'popover'}
-
-                            //filtr nad headerem - popover
-                            muiFilterTextFieldProps={{
-                                // sx: { m: '0.5rem 0', width: '100%' },
-                                sx: { m: '0', width: '300px' },
-                                variant: 'outlined',
-                            }}
-
-                            // editDisplayMode={'cell'}
-                            layoutMode="grid"
-
-                            muiPaginationProps={{
-                                color: 'secondary',
-                                rowsPerPageOptions: [10, 20, 30, 50, 100],
-                                shape: 'rounded',
-                                variant: 'outlined',
-                            }}
-
-
-                            muiTableHeadCellProps={() => ({
-                                align: "left",
-                                sx: {
-                                    fontWeight: "700",
-                                    fontSize: "12px",
-                                    color: "black",
-                                    // backgroundColor: "#a5f089",
-                                    backgroundColor: "#a7d3f7",
-
-                                    // padding: "5",
-                                    // paddingTop: "0",
-                                    // paddingBottom: "0",
-                                    // minHeight: "3rem",
-                                    // display: "flex",
-                                    // justifyContent: "center",
-                                    // alignItems: "center",
-                                    // border: '1px solid rgba(81, 81, 81, .2)'
-                                    borderRight,
-                                    '& .Mui-TableHeadCell-Content': {
-                                        justifyContent: 'center',
-                                        // flexDirection: "column",
                                         // padding: "5",
-                                        textWrap: "balance"
+                                        // paddingTop: "0",
+                                        // paddingBottom: "0",
+                                        // minHeight: "3rem",
+                                        // display: "flex",
+                                        // justifyContent: "center",
+                                        // alignItems: "center",
+                                        // border: '1px solid rgba(81, 81, 81, .2)'
+                                        borderRight,
+                                        '& .Mui-TableHeadCell-Content': {
+                                            justifyContent: 'center',
+                                            // flexDirection: "column",
+                                            // padding: "5",
+                                            textWrap: "balance"
+                                        },
                                     },
-                                },
-                            })}
+                                })}
 
 
 
-                            // odczytanie danych po kliknięciu w wiersz
-                            muiTableBodyCellProps={({ column, cell }) => ({
-                                onDoubleClick: () => {
-                                    if (column.id === "UWAGI") { console.log(cell.row._valuesCache.UWAGI); }
-                                },
-                                // sx: {
-                                //     borderRight: "1px solid #c9c7c7", //add a border between columns
-                                //     fontSize: "14px",
-                                //     fontFamily: "Calibri",
-                                //     padding: "2px",
-                                //     // textAlign: "center"
-                                // },
-                            })}
-                        />
-                    </LocalizationProvider>
+                                // odczytanie danych po kliknięciu w wiersz
+                                muiTableBodyCellProps={({ column, row, cell }) => ({
+                                    onDoubleClick: () => {
+                                        // if (column.id === "UWAGI") { console.log(cell.row._valuesCache.UWAGI); }
+                                        if (column.id === "UWAGI") {
+                                            // console.log(e);
+                                            // setNotePosition(e);
+                                            setQuickNote(row.original);
+                                        }
+                                    },
+                                    sx: {
+                                        position: "relative"
+                                    }
+                                    // sx: {
+                                    //     borderRight: "1px solid #c9c7c7", //add a border between columns
+                                    //     fontSize: "14px",
+                                    //     fontFamily: "Calibri",
+                                    //     padding: "2px",
+                                    //     // textAlign: "center"
+                                    // },
+                                })}
+                            />
+                        </LocalizationProvider>
 
-                </ThemeProvider>
+                    </ThemeProvider>
                     <TfiSave className='table-save-settings' onClick={handleSaveSettings} />
                 </>}
         </section >

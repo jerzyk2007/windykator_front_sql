@@ -1,0 +1,23 @@
+.quick_table_note {
+    flex-grow: 1;
+    position: absolute;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    /* background-color: aqua; */
+}
+
+.quick_table_note__container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 30px;
+    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    background-color: #fff;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
