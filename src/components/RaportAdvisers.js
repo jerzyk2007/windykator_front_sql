@@ -469,6 +469,7 @@ const RaportAdvisers = () => {
         enableColumnPinning: true,
         enableColumnResizing: true,
         enableColumnOrdering: true,
+        enableColumnActions: false,
         // layoutMode: "grid",
         enablePagination: false,
         localization: MRT_Localization_PL,

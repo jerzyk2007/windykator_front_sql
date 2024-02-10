@@ -56,6 +56,8 @@ const Login = () => {
     //     }
     // }, []);
 
+    // backgroundColor: "#a7d3f7",
+
     return (
         <section className="login__fixed">
             <section className="login">
@@ -70,7 +72,7 @@ const Login = () => {
                         placeholder="userlogin"
                         ref={userRef}
                         value={userlogin}
-                        onChange={(e) => setUserlogin(e.target.value)}
+                        onChange={(e) => setUserlogin((e.target.value).toLocaleLowerCase())}
                         required
                     />
                     <label htmlFor="password" className="login__container-title">Hasło:</label>

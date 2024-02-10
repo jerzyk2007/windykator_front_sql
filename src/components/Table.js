@@ -35,9 +35,21 @@ const ActualTable = ({ info }) => {
     const [tableSize, setTableSize] = useState(500);
     const [pagination, setPagination] = useState({});
 
+    // const fontSize = 13.5;
+    // const border = "1px solid #c8c8c8";
+    // const fontFamily = "Arial";
+    // const boxShadow = '0 0 0 1px black';
+    // const fontWeight = 300;
     const fontSize = 13;
-    const border = "1px solid #c5c5c5";
+    const borderRight = "1px solid #c9c7c7";
+    const border = "1px solid #c8c8c8";
     const fontFamily = "Arial";
+    const boxShadow = '0 0 0 1px black';
+    const padding = "2px";
+    const fontWeight = '500';
+    const minHeight = '2rem';
+    const maxHeight = "10rem";
+
 
     const prepareColumns = (columnsData, data) => {
         const changeColumn = columnsData.map(item => {
@@ -61,42 +73,51 @@ const ActualTable = ({ info }) => {
                 modifiedItem.muiTableBodyCellProps = {
                     align: 'left',
                     sx: {
-                        // borderRight: '2px solid rgba(224,224,224,1)',
-                        border,
-                        fontSize: fontSize,
-                        padding: "2px",
-                        maxHeight: "10rem",
+                        borderRight,
+                        fontSize,
+                        minHeight,
+                        maxHeight,
                         fontFamily,
-                        padding: "0"
-                        // fontWeight: 'bold',
+                        padding,
+                        fontWeight,
                     }
                 };
             } else {
                 modifiedItem.muiTableBodyCellProps = {
                     align: 'center',
                     sx: {
-                        // borderRight: '2px solid rgba(224,224,224,1)',
-                        border,
-                        fontSize: fontSize,
-                        padding: "2px",
-                        maxHeight: "10rem",
+                        borderRight,
+                        fontSize,
+                        minHeight,
+                        maxHeight,
                         fontFamily,
-                        padding: "0"
-                        // fontWeight: 'bold',
+                        padding,
+                        fontWeight,
                     }
+                    // sx: {
+                    //     border,
+                    //     boxShadow,
+                    //     fontSize,
+                    //     maxHeight: "10rem",
+                    //     fontFamily,
+                    //     padding: "0",
+                    //     fontWeight
+                    // }
                 };
             }
 
             if (item.accessorKey === "ILEDNIPOTERMINIE") {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
                     sx: {
-                        border,
-                        textAlign: "center",
+                        borderRight,
+                        fontSize,
+                        minHeight,
+                        maxHeight,
+                        fontFamily,
+                        padding,
+                        fontWeight,
                         backgroundColor: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'rgb(250, 136, 136)' : "white",
-                        // color: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'white' : "black",
-                        // fontWeight: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'bold' : 'normal'
-                        fontSize: fontSize,
-                        fontFamily
+
                     },
                     align: 'center',
                 });
@@ -109,12 +130,15 @@ const ActualTable = ({ info }) => {
 
                     return {
                         sx: {
-                            border,
-                            textAlign: "center",
+                            borderRight,
+                            fontSize,
+                            minHeight,
+                            maxHeight,
+                            fontFamily,
+                            padding,
+                            fontWeight,
                             backgroundColor: cell.column.id === '50VAT' && Math.abs(cellValue - dorozliczValue) <= 1
                                 ? 'rgb(250, 136, 136)' : "white",
-                            fontSize: fontSize,
-                            fontFamily
                         },
                         align: 'center',
                     };
@@ -128,12 +152,16 @@ const ActualTable = ({ info }) => {
 
                     return {
                         sx: {
-                            border,
-                            textAlign: "center",
+                            borderRight,
+                            fontSize,
+                            minHeight,
+                            maxHeight,
+                            fontFamily,
+                            padding,
+                            fontWeight,
                             backgroundColor: cell.column.id === '100VAT' && Math.abs(cellValue - dorozliczValue) <= 1
                                 ? 'rgb(250, 136, 136)' : "white",
-                            fontSize: fontSize,
-                            fontFamily
+
                         },
                         align: 'center',
                     };
@@ -250,11 +278,13 @@ const ActualTable = ({ info }) => {
         };
     }, [info]);
 
+
     return (
         <section className='actual_table'>
             {pleaseWait ? <PleaseWait /> :
                 <>  <ThemeProvider
-                    theme={createTheme(theme, plPL)} >
+                    theme={theme} >
+                    {/* theme={createTheme(theme, plPL)} > */}
 
                     <LocalizationProvider dateAdapter={AdapterDayjs}
                         adapterLocale="pl"
@@ -294,6 +324,12 @@ const ActualTable = ({ info }) => {
                             globalFilterModeOptions={['contains']}
                             positionGlobalFilter="left"
 
+                            // wyłącza filtr (3 kropki) w kolumnie
+                            enableColumnActions={false}
+
+
+                            // enableColumnVirtualization
+
                             muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
                             // wyświetla filtry nad komórką - 
                             columnFilterDisplayMode={'popover'}
@@ -306,6 +342,7 @@ const ActualTable = ({ info }) => {
                             }}
 
                             // editDisplayMode={'cell'}
+                            layoutMode="grid"
 
                             muiPaginationProps={{
                                 color: 'secondary',
@@ -314,23 +351,33 @@ const ActualTable = ({ info }) => {
                                 variant: 'outlined',
                             }}
 
+
                             muiTableHeadCellProps={() => ({
                                 align: "left",
                                 sx: {
-                                    fontWeight: "bold",
+                                    fontWeight: "700",
                                     fontSize: "12px",
                                     color: "black",
                                     backgroundColor: "#a5f089",
-                                    padding: "15px",
+                                    // padding: "5",
                                     // paddingTop: "0",
                                     // paddingBottom: "0",
-                                    minHeight: "3rem",
-                                    display: "flex",
-                                    justifyContent: "center",
+                                    // minHeight: "3rem",
+                                    // display: "flex",
+                                    // justifyContent: "center",
+                                    // alignItems: "center",
                                     // border: '1px solid rgba(81, 81, 81, .2)'
-                                    border
+                                    borderRight,
+                                    '& .Mui-TableHeadCell-Content': {
+                                        justifyContent: 'center',
+                                        // flexDirection: "column",
+                                        // padding: "5",
+                                        textWrap: "balance"
+                                    },
                                 },
                             })}
+
+
 
                             // odczytanie danych po kliknięciu w wiersz
                             muiTableBodyCellProps={({ column, cell }) => ({

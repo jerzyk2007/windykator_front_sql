@@ -5,4 +5,9 @@ Raport - sprawdzić w Raport czy funkcje wykonują się w prawidłowej kolejnoś
 
 usunąc na serwerze dostęp przez localhost
 
-usunąć footer
+
+
+Poprawić liczenie po kancelariach
+
+
+

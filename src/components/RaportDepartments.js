@@ -445,6 +445,7 @@ const RaportDepartments = () => {
         enableColumnResizing: true,
         enableColumnOrdering: true,
         // layoutMode: "grid",
+        enableColumnActions: false,
         enablePagination: false,
         localization: MRT_Localization_PL,
         onColumnVisibilityChange: setColumnVisibility,
@@ -497,6 +498,7 @@ const RaportDepartments = () => {
                 minHeight: '3rem'
             },
         }),
+
         muiTableContainerProps: { sx: { maxHeight: tableSize } }
     });
 
