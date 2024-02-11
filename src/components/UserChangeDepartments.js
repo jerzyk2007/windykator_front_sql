@@ -55,22 +55,22 @@ const UserChangeDepartments = ({ user, departments }) => {
         }
     };
 
-    const handleGetGlobalDepartments = async () => {
-        try {
-            console.log('ok');
-        }
-        catch (err) {
-            console.log(err);
-        }
-    };
+    // const handleGetGlobalDepartments = async () => {
+    //     try {
+    //         console.log('ok');
+    //     }
+    //     catch (err) {
+    //         console.log(err);
+    //     }
+    // };
 
     useEffect(() => {
         setErrMsg('');
     }, [userDepartments]);
 
-    useEffect(() => {
-        handleGetGlobalDepartments();
-    }, []);
+    // useEffect(() => {
+    //     handleGetGlobalDepartments();
+    // }, []);
 
 
     return (
