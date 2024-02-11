@@ -41,7 +41,7 @@ const ActualTable = ({ info }) => {
 
 
     const [quickNote, setQuickNote] = useState('');
-    const [editRowTable, setEditRowTable] = useState('');
+    const [dataRowTable, setDataRowTable] = useState('');
 
     // const fontSize = 13.5;
     // const border = "1px solid #c8c8c8";
@@ -113,7 +113,7 @@ const ActualTable = ({ info }) => {
                     const cellValue = cell.getValue();
                     if (Array.isArray(cellValue) && cellValue.length > 0) {
                         return (
-                            <div>
+                            <div style={{ whiteSpace: "pre-wrap" }}>
                                 {cellValue.map((item, index) => (
                                     <p key={index}>{item}</p>
                                 ))}
@@ -304,7 +304,7 @@ const ActualTable = ({ info }) => {
             }
         };
         setQuickNote('');
-        setEditRowTable('');
+        setDataRowTable('');
         prepareTable();
 
         return () => {
@@ -342,10 +342,10 @@ const ActualTable = ({ info }) => {
                                 setDocuments={setDocuments}
                             />}
 
-                        {editRowTable &&
+                        {dataRowTable &&
                             <EditRowTable
-                                editRowTable={editRowTable}
-                                setEditRowTable={setEditRowTable}
+                                dataRowTable={dataRowTable}
+                                setDataRowTable={setDataRowTable}
                                 documents={documents}
                                 setDocuments={setDocuments}
                             />}
@@ -461,7 +461,7 @@ const ActualTable = ({ info }) => {
                                             // setNotePosition(e);
                                             setQuickNote(row.original);
                                         } else {
-                                            setEditRowTable(row.original);
+                                            setDataRowTable(row.original);
                                         }
                                     },
                                     sx: {
