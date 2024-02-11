@@ -13,6 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/pl';
 import { plPL as plText } from '@mui/x-date-pickers/locales';
 import QuickTableNote from './QuickTableNote';
+import EditRowTable from './EditRowTable';
 
 import './Table.css';
 
@@ -40,6 +41,7 @@ const ActualTable = ({ info }) => {
 
 
     const [quickNote, setQuickNote] = useState('');
+    const [editRowTable, setEditRowTable] = useState('');
 
     // const fontSize = 13.5;
     // const border = "1px solid #c8c8c8";
@@ -73,9 +75,11 @@ const ActualTable = ({ info }) => {
                 });
             }
 
+
+            // poprawić, żeby to były defaultowe ustawienia dla wszytskich
             if (item.accessorKey === "KONTRAHENT") {
 
-                modifiedItem.enableClickToCopy = false;
+                // modifiedItem.enableClickToCopy = true;
                 modifiedItem.muiTableBodyCellProps = {
                     align: 'left',
                     sx: {
@@ -104,7 +108,7 @@ const ActualTable = ({ info }) => {
             }
             if (item.accessorKey === "UWAGI") {
 
-                modifiedItem.enableClickToCopy = false;
+                modifiedItem.enableClickToCopy = true;
                 modifiedItem.Cell = ({ cell }) => {
                     const cellValue = cell.getValue();
                     if (Array.isArray(cellValue) && cellValue.length > 0) {
@@ -300,6 +304,7 @@ const ActualTable = ({ info }) => {
             }
         };
         setQuickNote('');
+        setEditRowTable('');
         prepareTable();
 
         return () => {
@@ -333,6 +338,14 @@ const ActualTable = ({ info }) => {
                             <QuickTableNote
                                 quickNote={quickNote}
                                 setQuickNote={setQuickNote}
+                                documents={documents}
+                                setDocuments={setDocuments}
+                            />}
+
+                        {editRowTable &&
+                            <EditRowTable
+                                editRowTable={editRowTable}
+                                setEditRowTable={setEditRowTable}
                                 documents={documents}
                                 setDocuments={setDocuments}
                             />}
@@ -447,6 +460,8 @@ const ActualTable = ({ info }) => {
                                             // console.log(e);
                                             // setNotePosition(e);
                                             setQuickNote(row.original);
+                                        } else {
+                                            setEditRowTable(row.original);
                                         }
                                     },
                                     sx: {

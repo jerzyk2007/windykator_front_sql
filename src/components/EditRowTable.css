@@ -1,0 +1,10 @@
+.edit_row_table {
+    flex-grow: 1;
+    position: absolute;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, .5);
+}
