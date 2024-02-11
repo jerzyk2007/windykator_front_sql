@@ -36,7 +36,6 @@ const ActualTable = ({ info }) => {
     const [tableSize, setTableSize] = useState(500);
     const [pagination, setPagination] = useState({});
 
-    const [manualPagination, setManualPagination] = useState({});
     const [sorting, setSorting] = useState([]);
 
 
@@ -300,7 +299,7 @@ const ActualTable = ({ info }) => {
                 console.error(err);
             }
         };
-
+        setQuickNote('');
         prepareTable();
 
         return () => {
