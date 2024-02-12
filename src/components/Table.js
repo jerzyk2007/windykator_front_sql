@@ -77,7 +77,7 @@ const ActualTable = ({ info }) => {
 
             if (item.accessorKey === "UWAGI") {
 
-                modifiedItem.enableClickToCopy = true;
+                // modifiedItem.enableClickToCopy = true;
                 modifiedItem.Cell = ({ cell }) => {
                     const cellValue = cell.getValue();
                     if (Array.isArray(cellValue) && cellValue.length > 0) {
@@ -96,8 +96,16 @@ const ActualTable = ({ info }) => {
                 modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
             }
 
+            if (item.accessorKey === "KONTRAHENT") {
+
+                const changeMuiTableBodyCellProps = { ...muiTableBodyCellProps };
+                changeMuiTableBodyCellProps.align = "left";
+                modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
+            }
+
             if (item.accessorKey === "ILEDNIPOTERMINIE") {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
+                    ...muiTableBodyCellProps,
                     sx: {
                         ...muiTableBodyCellProps.sx,
                         backgroundColor: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'rgb(250, 136, 136)' : 'white',
@@ -175,8 +183,6 @@ const ActualTable = ({ info }) => {
         });
         return changeColumn;
     };
-
-
 
     const handleSaveSettings = async () => {
         const tableSettings = { size: { ...columnSizing }, visible: { ...columnVisibility }, density, order: columnOrder, pinning: columnPinning, pagination };
