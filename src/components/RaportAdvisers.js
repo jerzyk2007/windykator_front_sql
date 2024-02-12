@@ -561,7 +561,6 @@ const RaportAdvisers = () => {
         enableColumnResizing: true,
         enableColumnOrdering: true,
         enableColumnActions: false,
-        // layoutMode: "grid",
         enablePagination: false,
         localization: MRT_Localization_PL,
         onColumnVisibilityChange: setColumnVisibility,
@@ -580,12 +579,9 @@ const RaportAdvisers = () => {
         defaultColumn: {
             maxSize: 400,
             minSize: 100,
-            // size: 160, //default size is usually 180
         },
         // wyłącza wszytskie ikonki nad tabelą 
         // enableToolbarInternalActions: false,
-
-
 
         muiTableHeadCellProps: () => ({
             align: "center",

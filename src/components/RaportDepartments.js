@@ -326,7 +326,7 @@ const RaportDepartments = () => {
                             maximumFractionDigits: 2,
                             useGrouping: true,
                         }) + " %"
-                        : '0,00'; // Zastąp puste pola zerem
+                        : '0,00'; // Zastąpuje puste pola zerem
 
                     return `${formattedSalary}`;
                 },

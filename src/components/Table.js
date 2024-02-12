@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { MaterialReactTable } from 'material-react-table';
 import { MRT_Localization_PL } from 'material-react-table/locales/pl';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material';
-import { plPL } from '@mui/material/locale';
+import { ThemeProvider, useTheme } from '@mui/material';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
 import { TfiSave } from "react-icons/tfi";
@@ -11,7 +10,7 @@ import useWindowSize from './hooks/useWindow';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/pl';
-import { plPL as plText } from '@mui/x-date-pickers/locales';
+import { plPL } from '@mui/x-date-pickers/locales';
 import QuickTableNote from './QuickTableNote';
 import EditRowTable from './EditRowTable';
 
@@ -41,26 +40,27 @@ const ActualTable = ({ info }) => {
     const [quickNote, setQuickNote] = useState('');
     const [dataRowTable, setDataRowTable] = useState('');
 
-    // const fontSize = 13.5;
-    // const border = "1px solid #c8c8c8";
-    // const fontFamily = "Arial";
-    // const boxShadow = '0 0 0 1px black';
-    // const fontWeight = 300;
-    const fontSize = '13px';
-    const borderRight = "1px solid #c9c7c7";
-    const border = "1px solid #c8c8c8";
-    const fontFamily = "Arial";
-    const boxShadow = '0 0 0 1px black';
-    const padding = "2px 5px";
-    const fontWeight = '500';
-    const minHeight = '2rem';
-    const maxHeight = "100%";
 
-    const plLocale = plText.components.MuiLocalizationProvider.defaultProps.localeText;
+    const muiTableBodyCellProps = {
+        align: "center",
+        sx: {
+            fontSize: '13px',
+            borderRight: "1px solid #c9c7c7",
+            fontFamily: "Arial",
+            padding: "2px 5px",
+            fontWeight: '500',
+            minHeight: '2rem',
+            maxHeight: "100%"
+        }
+    };
+
+    const plLocale = plPL.components.MuiLocalizationProvider.defaultProps.localeText;
 
     const prepareColumns = (columnsData, data) => {
         const changeColumn = columnsData.map(item => {
             const modifiedItem = { ...item };
+
+            modifiedItem.muiTableBodyCellProps = muiTableBodyCellProps;
 
             if (item.filterVariant === 'multi-select' || item.filterVariant === 'select') {
                 const uniqueValues = Array.from(new Set(data.map(filtr => filtr[item.accessorKey])));
@@ -75,36 +75,6 @@ const ActualTable = ({ info }) => {
             }
 
 
-            // poprawić, żeby to były defaultowe ustawienia dla wszytskich
-            if (item.accessorKey === "KONTRAHENT") {
-
-                // modifiedItem.enableClickToCopy = true;
-                modifiedItem.muiTableBodyCellProps = {
-                    align: 'left',
-                    sx: {
-                        borderRight,
-                        fontSize,
-                        minHeight,
-                        maxHeight,
-                        fontFamily,
-                        padding,
-                        fontWeight,
-                    }
-                };
-            } else {
-                modifiedItem.muiTableBodyCellProps = {
-                    align: 'center',
-                    sx: {
-                        borderRight,
-                        fontSize,
-                        minHeight,
-                        maxHeight,
-                        fontFamily,
-                        padding,
-                        fontWeight,
-                    }
-                };
-            }
             if (item.accessorKey === "UWAGI") {
 
                 modifiedItem.enableClickToCopy = true;
@@ -119,41 +89,22 @@ const ActualTable = ({ info }) => {
                             </div>
                         );
                     }
-                    // else {
-                    //     return "Brak danych"; // Wyświetl ten komunikat, gdy tablica UWAGI jest pusta
-                    // }
+                };
 
-                };
-                modifiedItem.muiTableBodyCellProps = {
-                    align: 'left',
-                    sx: {
-                        borderRight,
-                        fontSize,
-                        minHeight,
-                        maxHeight,
-                        fontFamily,
-                        padding,
-                        fontWeight,
-                    }
-                };
+                const changeMuiTableBodyCellProps = { ...muiTableBodyCellProps };
+                changeMuiTableBodyCellProps.align = "left";
+                modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
             }
 
             if (item.accessorKey === "ILEDNIPOTERMINIE") {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
                     sx: {
-                        borderRight,
-                        fontSize,
-                        minHeight,
-                        maxHeight,
-                        fontFamily,
-                        padding,
-                        fontWeight,
-                        backgroundColor: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'rgb(250, 136, 136)' : "white",
-
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'rgb(250, 136, 136)' : 'white',
                     },
-                    align: 'center',
                 });
             }
+
 
             if (item.accessorKey === "50VAT") {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => {
@@ -161,18 +112,11 @@ const ActualTable = ({ info }) => {
                     const dorozliczValue = cell.row.original.DOROZLICZ;
 
                     return {
+                        ...muiTableBodyCellProps,
                         sx: {
-                            borderRight,
-                            fontSize,
-                            minHeight,
-                            maxHeight,
-                            fontFamily,
-                            padding,
-                            fontWeight,
-                            backgroundColor: cell.column.id === '50VAT' && Math.abs(cellValue - dorozliczValue) <= 1
-                                ? 'rgb(250, 136, 136)' : "white",
+                            ...muiTableBodyCellProps.sx,
+                            backgroundColor: cell.column.id === '50VAT' && Math.abs(cellValue - dorozliczValue) <= 1 ? 'rgb(250, 136, 136)' : "white",
                         },
-                        align: 'center',
                     };
                 };
             }
@@ -181,21 +125,12 @@ const ActualTable = ({ info }) => {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => {
                     const cellValue = cell.getValue();
                     const dorozliczValue = cell.row.original.DOROZLICZ;
-
                     return {
+                        ...muiTableBodyCellProps,
                         sx: {
-                            borderRight,
-                            fontSize,
-                            minHeight,
-                            maxHeight,
-                            fontFamily,
-                            padding,
-                            fontWeight,
-                            backgroundColor: cell.column.id === '100VAT' && Math.abs(cellValue - dorozliczValue) <= 1
-                                ? 'rgb(250, 136, 136)' : "white",
-
+                            ...muiTableBodyCellProps.sx,
+                            backgroundColor: cell.column.id === '100VAT' && Math.abs(cellValue - dorozliczValue) <= 1 ? 'rgb(250, 136, 136)' : "white",
                         },
-                        align: 'center',
                     };
                 };
             }
@@ -311,28 +246,12 @@ const ActualTable = ({ info }) => {
         };
     }, [info]);
 
-
-    // useEffect(() => {
-    //     console.log(pagination);
-    // }, [pagination]);
-
-
     return (
         <section className='actual_table'>
-            {/* {quickNote && documents &&
-                <QuickTableNote
-                    quickNote={quickNote}
-                    setQuickNote={setQuickNote}
-                    notePosition={notePosition}
-                    setNotePosition={setNotePosition}
-                    documents={documents}
-                    setDocuments={setDocuments}
-                />} */}
             {pleaseWait ? <PleaseWait /> :
                 <>
                     <ThemeProvider
                         theme={theme} >
-                        {/* theme={createTheme(theme, plPL)} > */}
                         {quickNote &&
                             <QuickTableNote
                                 quickNote={quickNote}
@@ -376,9 +295,6 @@ const ActualTable = ({ info }) => {
                                 initialState={{
                                     showColumnFilters: false,
                                     showGlobalFilter: true,
-                                    // pagination: { pageIndex: 2, pageSize: 30 }
-                                    // pagination: manualPagination
-
                                 }}
                                 localization={MRT_Localization_PL}
                                 state={{
@@ -428,51 +344,28 @@ const ActualTable = ({ info }) => {
                                         fontWeight: "700",
                                         fontSize: "12px",
                                         color: "black",
-                                        // backgroundColor: "#a5f089",
                                         backgroundColor: "#a7d3f7",
-
-                                        // padding: "5",
-                                        // paddingTop: "0",
-                                        // paddingBottom: "0",
-                                        // minHeight: "3rem",
-                                        // display: "flex",
-                                        // justifyContent: "center",
-                                        // alignItems: "center",
-                                        // border: '1px solid rgba(81, 81, 81, .2)'
-                                        borderRight,
+                                        borderRight: "1px solid #c9c7c7",
                                         '& .Mui-TableHeadCell-Content': {
                                             justifyContent: 'center',
-                                            // flexDirection: "column",
-                                            // padding: "5",
                                             textWrap: "balance"
                                         },
                                     },
                                 })}
 
-
-
                                 // odczytanie danych po kliknięciu w wiersz
                                 muiTableBodyCellProps={({ column, row, cell }) => ({
                                     onDoubleClick: () => {
-                                        // if (column.id === "UWAGI") { console.log(cell.row._valuesCache.UWAGI); }
                                         if (column.id === "UWAGI") {
-                                            // console.log(e);
-                                            // setNotePosition(e);
+
                                             setQuickNote(row.original);
                                         } else {
                                             setDataRowTable(row.original);
                                         }
                                     },
                                     sx: {
-                                        position: "relative"
+                                        // position: "relative"
                                     }
-                                    // sx: {
-                                    //     borderRight: "1px solid #c9c7c7", //add a border between columns
-                                    //     fontSize: "14px",
-                                    //     fontFamily: "Calibri",
-                                    //     padding: "2px",
-                                    //     // textAlign: "center"
-                                    // },
                                 })}
                             />
                         </LocalizationProvider>
