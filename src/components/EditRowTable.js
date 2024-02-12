@@ -166,13 +166,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
 
                                     <textarea
                                         className='edit_row_table-section-data__chat-content'
-                                        // name=""
-                                        // id=""
-                                        // cols="30"
-                                        // rows="10"
                                         readOnly
                                         value={rowData.UWAGI ? rowData.UWAGI.join('\n') : ''}
-                                    // value={rowData.UWAGI ? rowData.UWAGI : ''}
                                     >
                                     </textarea>
                                     <textarea
@@ -267,14 +262,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                     Zatwierdź
                 </Button>
             </section>
-            {/* <section className="section-button"> */}
-            {/* <SectionButton
-                    closePanel={(e) => closePanel(e)}
-                /> */}
-            {/* ok */}
-            {/* </section> */}
-
-
         </section >
     );
 };

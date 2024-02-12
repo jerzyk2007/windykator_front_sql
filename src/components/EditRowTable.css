@@ -1,6 +1,6 @@
 .edit_row_table {
     flex-grow: 1;
-    position: absolute;
+    position: fixed;
     top: 50px;
     bottom: 0;
     left: 0;
@@ -12,10 +12,8 @@
     flex-direction: column;
 }
 
-
 .edit_row_table__container {
     flex-grow: 1;
-    /* margin: 10px; */
     display: flex;
     flex-direction: column;
 }
@@ -205,18 +203,11 @@ button {
 
 @media screen and (max-width: 960px) {
 
-    /* do poprawienia height */
     .edit_row_table {
-        flex-grow: 1;
-        bottom: -50vh;
-        z-index: 10;
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
+        overflow: auto;
     }
 
     .edit_row_table__container {
-        /* margin: 10px; */
         display: flex;
     }
 
@@ -249,6 +240,4 @@ button {
         width: 100%;
         justify-content: space-evenly;
     }
-
-
 }
