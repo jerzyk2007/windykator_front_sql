@@ -57,7 +57,7 @@ const QuickTableNote = ({ quickNote, setQuickNote, documents, setDocuments }) =>
         <section className='quick_table_note'>
             <section className='quick_table_note__container'>
                 <section className='quick_table_note__container-title'>
-                    <span className='quick_table_note__container-title--document'>Dotyczy faktury: </span>
+                    <span className='quick_table_note__container-title--document'>Faktura: </span>
                     <span className='quick_table_note__container-title--document'>{quickNote.NUMER}</span>
 
                 </section>

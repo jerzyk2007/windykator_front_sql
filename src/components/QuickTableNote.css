@@ -25,6 +25,7 @@
 .quick_table_note__container-title {
     padding: 5px;
     display: flex;
+    align-items: center;
 }
 
 .quick_table_note__container-title--document {

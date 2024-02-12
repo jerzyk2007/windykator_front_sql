@@ -588,7 +588,7 @@ const RaportAdvisers = () => {
 
 
         muiTableHeadCellProps: () => ({
-            align: "left",
+            align: "center",
             sx: {
                 fontWeight: "bold",
                 fontSize: "14px",

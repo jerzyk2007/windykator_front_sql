@@ -3,7 +3,7 @@
     background-color: #a7d3f7;
     display: flex;
     position: relative;
-    z-index: 999;
+    z-index: 6;
 }
 
 .header-menu {

@@ -3,8 +3,8 @@ import { MaterialReactTable } from 'material-react-table';
 import { MRT_Localization_PL } from 'material-react-table/locales/pl';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material';
 import { plPL } from '@mui/material/locale';
-import useData from './hooks/useData';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useData from "./hooks/useData";
 import { TfiSave } from "react-icons/tfi";
 import PleaseWait from './PleaseWait';
 import useWindowSize from './hooks/useWindow';
@@ -15,11 +15,10 @@ import { plPL as plText } from '@mui/x-date-pickers/locales';
 import QuickTableNote from './QuickTableNote';
 import EditRowTable from './EditRowTable';
 
+
 import './Table.css';
 
 const ActualTable = ({ info }) => {
-
-    const plLocale = plText.components.MuiLocalizationProvider.defaultProps.localeText;
 
     const theme = useTheme();
 
@@ -39,7 +38,6 @@ const ActualTable = ({ info }) => {
 
     const [sorting, setSorting] = useState([]);
 
-
     const [quickNote, setQuickNote] = useState('');
     const [dataRowTable, setDataRowTable] = useState('');
 
@@ -58,6 +56,7 @@ const ActualTable = ({ info }) => {
     const minHeight = '2rem';
     const maxHeight = "100%";
 
+    const plLocale = plText.components.MuiLocalizationProvider.defaultProps.localeText;
 
     const prepareColumns = (columnsData, data) => {
         const changeColumn = columnsData.map(item => {
@@ -342,7 +341,7 @@ const ActualTable = ({ info }) => {
                                 setDocuments={setDocuments}
                             />}
 
-                        {dataRowTable &&
+                        {auth?.roles?.includes(200 || 300 || 500) && dataRowTable &&
                             <EditRowTable
                                 dataRowTable={dataRowTable}
                                 setDataRowTable={setDataRowTable}
