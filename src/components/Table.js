@@ -76,8 +76,6 @@ const ActualTable = ({ info }) => {
 
 
             if (item.accessorKey === "UWAGI") {
-
-                // modifiedItem.enableClickToCopy = true;
                 modifiedItem.Cell = ({ cell }) => {
                     const cellValue = cell.getValue();
                     if (Array.isArray(cellValue) && cellValue.length > 0) {
