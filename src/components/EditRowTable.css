@@ -7,7 +7,8 @@
     right: 0;
     z-index: 5;
     background-color: #fff;
-    padding: 10px;
+    overflow-y: auto;
+    padding: 5px;
     display: flex;
     flex-direction: column;
 }
@@ -26,7 +27,7 @@
     flex-grow: 1;
     flex-basis: 34%;
     min-width: 350px;
-    padding: 15px 0;
+    padding: 5px 0;
     text-align: center;
     background: rgba(63, 93, 48, 0.075);
     cursor: pointer;
@@ -60,7 +61,7 @@
 
 button {
     border: none;
-    font-size: 20px;
+    font-size: 1.2rem;
 
 }
 
@@ -83,15 +84,15 @@ button {
 .edit_row_table-section-content {
     display: flex;
     justify-content: center;
-    align-items: first baseline;
+    /* align-items: first baseline; */
 }
 
 .edit_row_table-section-data {
     flex-basis: 34%;
-    min-height: 400px;
-    padding: 10px;
+    /* min-height: 400px; */
+    padding: 5px;
     display: flex;
-    /* flex-direction: column; */
+    flex-direction: column;
 }
 
 .edit_row_table-section-data__documents {
@@ -102,22 +103,33 @@ button {
 
 
 .edit_row_table-section-data--document {
-    flex-grow: 1;
-    flex-basis: 100%;
+    /* flex-grow: 1; */
+    /* flex-basis: 100%; */
     display: flex;
     justify-content: space-between;
 }
 
-.edit_row_table-section-data--document span {
+
+.edit_row_table-section-data--document span,
+.edit_row_table-section-data--document--input {
     flex-shrink: 0;
     flex-grow: 0;
     flex-basis: 48%;
-    margin: 2px;
-    padding: 5px;
+    margin: 3px;
+    padding: 3px;
     border-radius: 5px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     display: flex;
     align-items: center;
+}
+
+.edit_row_table-section-data--document--input {
+    max-width: 48%;
+    text-align: center;
+    border: none;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    background-color: #dfdede
 }
 
 .edit_row_table-section-data--document span:last-child {
@@ -175,14 +187,18 @@ button {
     justify-content: space-evenly;
 }
 
-.edit_row_table-section-data-law {
-    flex-grow: 1;
+.edit_row_table-section-data-law,
+.edit_row_table-section-data-actions {
+    /* flex-grow: 1; */
+    /* padding: 5px; */
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: baseline;
+    align-items: baseline;
+    /* flex-direction: column; */
 }
 
-.edit_row_table-section-data-law--title {
+.edit_row_table-section-data-law--title,
+.edit_row_table-section-data-actions--title {
     width: 100%;
     text-align: center;
     padding: 5px;
@@ -192,8 +208,10 @@ button {
     box-shadow: 2px 2px 2px #757575;
 }
 
-.edit_row_table-section-data-law--select {
+.edit_row_table-section-data-law--select,
+.edit_row_table-section-data-actions--select {
     width: 100%;
+    font-size: 1rem;
     text-align: center;
     padding: 5px;
     margin: 5px;

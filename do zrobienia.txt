@@ -11,7 +11,12 @@ ma wyskoczyć błąd w przypadku błednego zapisu
 
 dodac dane, i konta
 
-poprawić css mobulny w edit_row_table
-żeby c=kontener był na całą wysokosć ekranu
+poprawić EditRowTable - dopsaowac do nowych zmian
+
+poprawić Model DB na nowe dane, 
+
+wprowadzić tylko Brutto, resztę liczyc z tego
+
+dodać korekty
 
 

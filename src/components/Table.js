@@ -250,6 +250,7 @@ const ActualTable = ({ info }) => {
         };
     }, [info]);
 
+
     return (
         <section className='actual_table'>
             {pleaseWait ? <PleaseWait /> :
