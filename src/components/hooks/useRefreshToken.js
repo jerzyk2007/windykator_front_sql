@@ -20,6 +20,7 @@ const useRefreshToken = () => {
                     usersurname: response.data.usersurname,
                     roles: response.data.roles,
                     accessToken: response.data.accessToken,
+                    permissions: response.data.permissions,
                     _id: response.data._id
                 };
             });

@@ -12,7 +12,8 @@ import RequireAuth from './components/RequireAuth';
 import ChangePassword from './components/ChangePassword';
 import UserSettings from './components/UserSettings';
 import TableSettings from './components/TableSettings';
-import Raport from './components/Raport';
+import RaportDepartments from './components/RaportDepartments';
+import RaportAdvisers from './components/RaportAdvisers';
 import './App.css';
 
 const ROLES = {
@@ -53,7 +54,11 @@ function App() {
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]} />}>
-              <Route path='/raport' element={<Raport />} />
+              <Route path='/raport-departments' element={<RaportDepartments />} />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]} />}>
+              <Route path='/raport-advisers' element={<RaportAdvisers />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
@@ -78,7 +83,7 @@ function App() {
 
           </Route>
         </Routes>
-        <Footer />
+        {/* <Footer /> */}
       </Router>
     </div>
   );

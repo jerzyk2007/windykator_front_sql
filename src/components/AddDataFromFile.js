@@ -29,6 +29,8 @@ const AddDataFromFile = () => {
                     }
                 });
 
+            console.log(response.data);
+
             setErrMsg('Dokumenty zaktualizowane.');
 
             setPleaseWait(false);

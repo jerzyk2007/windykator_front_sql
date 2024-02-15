@@ -5,6 +5,7 @@ import './UserChangeDepartments.css';
 const UserChangeDepartments = ({ user, departments }) => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
+
     const [userDepartments, setUserDepartments] = useState(departments);
     const [errMsg, setErrMsg] = useState('');
 
@@ -21,7 +22,6 @@ const UserChangeDepartments = ({ user, departments }) => {
                         [dep]: !isChecked
                     };
                 }
-
                 )}
                 checked={isChecked}
             />
@@ -55,9 +55,23 @@ const UserChangeDepartments = ({ user, departments }) => {
         }
     };
 
+    // const handleGetGlobalDepartments = async () => {
+    //     try {
+    //         console.log('ok');
+    //     }
+    //     catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+
     useEffect(() => {
         setErrMsg('');
     }, [userDepartments]);
+
+    // useEffect(() => {
+    //     handleGetGlobalDepartments();
+    // }, []);
+
 
     return (
         <section className='user_change_departments'>

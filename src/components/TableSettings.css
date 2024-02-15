@@ -30,7 +30,7 @@
 }
 
 .table_settings-table--name {
-    background-color: rgb(174, 245, 146);
+    background-color: #a7d3f7;
     margin: 10px;
     padding: 10px;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
@@ -63,7 +63,7 @@
     width: 100%;
     margin: 15px;
     padding: 10px;
-    background-color: rgb(174, 245, 146);
+    background-color: #a7d3f7;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     border-radius: 5px;
     border: none;

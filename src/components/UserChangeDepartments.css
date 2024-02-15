@@ -36,6 +36,7 @@
     background-color: #b1afaf;
     color: #000000;
     font-weight: bold;
+    font-size: 1rem;
     padding: 5px;
     border: none;
     border-radius: 10px;
@@ -78,9 +79,9 @@
 }
 
 .user_change_departments__container--info {
-    flex-basis: 33%;
+    flex-basis: 40%;
     min-width: 120px;
-    padding: 5px 25px;
+    padding: 5px 5px;
     flex-wrap: wrap;
     display: flex;
     justify-content: space-between;

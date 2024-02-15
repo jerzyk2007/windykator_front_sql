@@ -5,15 +5,6 @@
 }
 
 
-/* .actual_table tr:nth-of-type(odd) td {
-    background-color: #f1f3ed;
-
-} */
-
-.testowa {
-    background-color: rgba(110, 228, 246, 0.1);
-}
-
 .actual_table td {
     cursor: pointer;
 }
@@ -22,7 +13,7 @@
     position: absolute;
     top: 10px;
     left: 20px;
-    z-index: 5;
+    z-index: 6;
     font-size: 2rem;
     cursor: pointer;
 }
@@ -31,63 +22,45 @@
     color: red;
 }
 
-/* .css-i4bv87-MuiSvgIcon-root {
+/* .MuiButtonBase-root.MuiTableSortLabel-root.Mui-active css-118d58w-MuiButtonBase-root-MuiTableSortLabel-root */
+/* .MuiButtonBase-root.MuiTableSortLabel-root.Mui-active {
     display: none;
 } */
-
-/* .MuiSvgIcon-root {
-    display: none;
-} */
-
-/* .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root {
-    display: none;
-} */
-
-/* class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" */
-
-/* MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiTableSortLabel-icon MuiTableSortLabel-iconDirectionAsc css-1vweko9-MuiSvgIcon-root-MuiTableSortLabel-icon */
-
-/* .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiTableSortLabel-icon {
-    display: none;
-} */
-
 
 /* ikona w headerze od przesuwania kolumn */
 .Mui-TableHeadCell-Content-Actions.MuiBox-root.css-epvm6 {
     display: none;
 }
 
-/* .MuiInputBase-root.MuiInput-root.MuiInput-underline.MuiInputBase-colorPrimary.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.css-953pxc-MuiInputBase-root-MuiInput-root {
-    font-size: 1rem;
-} */
-
-/* wielkośc ikon lejek, ukrycie kolumn itp */
-/* .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root {
-    font-size: 1rem;
-    margin: 0;
-} */
-
-/* widok trybu filtra np rozmyte dopsaowanie */
-/* .MuiFormHelperText-root.MuiFormHelperText-sizeMedium.css-jchqo4-MuiFormHelperText-root,
-.MuiFormHelperText-root.MuiFormHelperText-sizeMedium.css-1a8ei4g {
-    display: none;
-} */
-
-/* .MuiFormHelperText-root.MuiFormHelperText-sizeMedium.css-1a8ei4g */
-/* .MuiButtonBase-root.Mui-disabled.MuiIconButton-root.Mui-disabled.MuiIconButton-sizeSmall.css-1so9ih7-MuiButtonBase-root-MuiIconButton-root {
-    font-size: .6rem;
-} */
-
-
 /* wyśrodkowanie tekstu w headerze */
-.Mui-TableHeadCell-Content.MuiBox-root.css-c8wlay,
+/* .Mui-TableHeadCell-Content.MuiBox-root.css-c8wlay,
 .Mui-TableHeadCell-Content.MuiBox-root.css-c8wlay {
     padding: 0;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
-}
+} */
+
+/* usunięcie filtra strzałki w headerze */
+/* .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiTableSortLabel-icon.MuiTableSortLabel-iconDirectionAsc.css-1vweko9-MuiSvgIcon-root-MuiTableSortLabel-icon {
+    display: none;
+} */
+
+/* .Mui-TableHeadCell-ResizeHandle-Wrapper {
+    padding: 10px;
+} */
+
+/* .MuiTableCell-root.MuiTableCell-head.MuiTableCell-stickyHeader,
+.css-1m1ml0w {
+    padding: 10px 0;
+} */
+
+/* suwak do przesuwania kolumn */
+/* .Mui-TableHeadCell-ResizeHandle-Wrapper.MuiBox-root.css-1m1ml0w {
+    margin-right: -5px;
+} */
+
 
 /* .MuiInputBase-root.MuiInput-root.MuiInput-underline.MuiInputBase-colorPrimary.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedStart.MuiInputBase-adornedEnd.css-1rrfrxi,
 .MuiInputBase-root.MuiInput-root.MuiInput-underline.MuiInputBase-colorPrimary.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedStart.MuiInputBase-adornedEnd.css-953pxc-MuiInputBase-root-MuiInput-root {
