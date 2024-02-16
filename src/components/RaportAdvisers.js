@@ -567,7 +567,7 @@ const RaportAdvisers = () => {
         enableColumnResizing: true,
         enableColumnOrdering: true,
         enableColumnActions: false,
-        enablePagination: false,
+        enablePagination: true,
         localization: MRT_Localization_PL,
         onColumnVisibilityChange: setColumnVisibility,
         onDensityChange: setDensity,
@@ -617,7 +617,7 @@ const RaportAdvisers = () => {
             },
         }),
         muiTableContainerProps: { sx: { maxHeight: tableSize } },
-        columnFilterDisplayMode: 'popover'
+        columnFilterDisplayMode: 'popover',
     });
 
     const handleSaveSettings = async () => {
