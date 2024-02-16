@@ -567,7 +567,7 @@ const RaportAdvisers = () => {
         enableColumnResizing: true,
         enableColumnOrdering: true,
         enableColumnActions: false,
-        enablePagination: true,
+        enablePagination: false,
         localization: MRT_Localization_PL,
         onColumnVisibilityChange: setColumnVisibility,
         onDensityChange: setDensity,
