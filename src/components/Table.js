@@ -225,7 +225,6 @@ const ActualTable = ({ info }) => {
                     axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`),
                     axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`)
                 ]);
-
                 const modifiedColumns = prepareColumns(getColumns.data, result.data);
                 if (isMounted) {
                     setDocuments(result.data);
@@ -250,6 +249,7 @@ const ActualTable = ({ info }) => {
             isMounted = false;
         };
     }, [info]);
+
 
 
     return (

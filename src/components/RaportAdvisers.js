@@ -61,64 +61,64 @@ const RaportAdvisers = () => {
     };
 
     // w przypadku jeśli Asystentka widzi wiecej niż jeden działa dodawany jest kolejny wiersz "Całość" jako łączny wynik doradców których widzi
-    const addedAllToRaports = (generatingRaport) => {
-        if (generatingRaport.length > 1) {
-            const sumOfAllItems = generatingRaport.reduce((acc, currentItem) => {
-                acc.DocumentsCounter += currentItem.DocumentsCounter;
-                acc.DocumentsCounterExpired += currentItem.DocumentsCounterExpired;
-                acc.DocumentsCounterExpiredWithoutPandL += currentItem.DocumentsCounterExpiredWithoutPandL;
-                acc.ExpiredPayments += currentItem.ExpiredPayments;
-                acc.ExpiredPaymentsWithoutPandL += currentItem.ExpiredPaymentsWithoutPandL;
-                acc.NotExpiredPayment += currentItem.NotExpiredPayment;
-                acc.NotExpiredPaymentWithoutPandL += currentItem.NotExpiredPaymentWithoutPandL;
-                acc.TotalDocumentsValue += currentItem.TotalDocumentsValue;
-                acc.UnderPayment += currentItem.UnderPayment;
-                return acc;
-            }, {
-                DocumentsCounter: 0,
-                DocumentsCounterExpired: 0,
-                DocumentsCounterExpiredWithoutPandL: 0,
-                ExpiredPayments: 0,
-                ExpiredPaymentsWithoutPandL: 0,
-                NotExpiredPayment: 0,
-                NotExpiredPaymentWithoutPandL: 0,
-                TotalDocumentsValue: 0,
-                UnderPayment: 0
-            });
+    // const addedAllToRaports = (generatingRaport) => {
+    //     if (generatingRaport.length > 1) {
+    //         const sumOfAllItems = generatingRaport.reduce((acc, currentItem) => {
+    //             acc.DocumentsCounter += currentItem.DocumentsCounter;
+    //             acc.DocumentsCounterExpired += currentItem.DocumentsCounterExpired;
+    //             acc.DocumentsCounterExpiredWithoutPandL += currentItem.DocumentsCounterExpiredWithoutPandL;
+    //             acc.ExpiredPayments += currentItem.ExpiredPayments;
+    //             acc.ExpiredPaymentsWithoutPandL += currentItem.ExpiredPaymentsWithoutPandL;
+    //             acc.NotExpiredPayment += currentItem.NotExpiredPayment;
+    //             acc.NotExpiredPaymentWithoutPandL += currentItem.NotExpiredPaymentWithoutPandL;
+    //             acc.TotalDocumentsValue += currentItem.TotalDocumentsValue;
+    //             acc.UnderPayment += currentItem.UnderPayment;
+    //             return acc;
+    //         }, {
+    //             DocumentsCounter: 0,
+    //             DocumentsCounterExpired: 0,
+    //             DocumentsCounterExpiredWithoutPandL: 0,
+    //             ExpiredPayments: 0,
+    //             ExpiredPaymentsWithoutPandL: 0,
+    //             NotExpiredPayment: 0,
+    //             NotExpiredPaymentWithoutPandL: 0,
+    //             TotalDocumentsValue: 0,
+    //             UnderPayment: 0
+    //         });
 
-            const expiredPaymentsValue = sumOfAllItems.ExpiredPayments;
-            const notExpiredPaymentValue = sumOfAllItems.NotExpiredPayment;
+    //         const expiredPaymentsValue = sumOfAllItems.ExpiredPayments;
+    //         const notExpiredPaymentValue = sumOfAllItems.NotExpiredPayment;
 
-            // Oblicz wartość Objective
-            //zabezpieczenie przed dzieleniem przez zero
-            let objective = 0;
-            if (notExpiredPaymentValue + expiredPaymentsValue !== 0) {
-                objective = (expiredPaymentsValue / (notExpiredPaymentValue + expiredPaymentsValue) * 100);
-            }
-            sumOfAllItems.Objective = objective;
-
-
-            const expiredPaymentsWithoutPandLValue = sumOfAllItems.ExpiredPaymentsWithoutPandL;
-            const notExpiredPaymentWithoutPandLValue = sumOfAllItems.NotExpiredPaymentWithoutPandL;
-            // Oblicz wartość ObjectiveWithoutPandL
-            let objectiveWithoutPandL = 0;
-            if (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue !== 0) {
-                objectiveWithoutPandL = (expiredPaymentsWithoutPandLValue / (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue) * 100);
-            }
-            sumOfAllItems.ObjectiveWithoutPandL = objectiveWithoutPandL;
-
-            sumOfAllItems.Department = 'Całość';
-
-            //dodaję "Całość" jako pierwszy obiekt, żeby w tabeli wyświetlał się jako pierwszy
-            generatingRaport.unshift(sumOfAllItems);
+    //         // Oblicz wartość Objective
+    //         //zabezpieczenie przed dzieleniem przez zero
+    //         let objective = 0;
+    //         if (notExpiredPaymentValue + expiredPaymentsValue !== 0) {
+    //             objective = (expiredPaymentsValue / (notExpiredPaymentValue + expiredPaymentsValue) * 100);
+    //         }
+    //         sumOfAllItems.Objective = objective;
 
 
-            setRaport(generatingRaport);
+    //         const expiredPaymentsWithoutPandLValue = sumOfAllItems.ExpiredPaymentsWithoutPandL;
+    //         const notExpiredPaymentWithoutPandLValue = sumOfAllItems.NotExpiredPaymentWithoutPandL;
+    //         // Oblicz wartość ObjectiveWithoutPandL
+    //         let objectiveWithoutPandL = 0;
+    //         if (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue !== 0) {
+    //             objectiveWithoutPandL = (expiredPaymentsWithoutPandLValue / (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue) * 100);
+    //         }
+    //         sumOfAllItems.ObjectiveWithoutPandL = objectiveWithoutPandL;
 
-        } else {
-            setRaport(generatingRaport);
-        }
-    };
+    //         sumOfAllItems.Department = 'Całość';
+
+    //         //dodaję "Całość" jako pierwszy obiekt, żeby w tabeli wyświetlał się jako pierwszy
+    //         generatingRaport.unshift(sumOfAllItems);
+
+
+    //         setRaport(generatingRaport);
+
+    //     } else {
+    //         setRaport(generatingRaport);
+    //     }
+    // };
 
     // funkcja przygotowuje dane do raportu
     const grossTotal = () => {
@@ -278,8 +278,14 @@ const RaportAdvisers = () => {
                     }
                 }
             });
-
-            setDepartments(uniqueAdvisersAndDepartments);
+            const sortedData = [...uniqueAdvisersAndDepartments].sort((a, b) => {
+                const adviserA = a.adviser.toLowerCase();
+                const adviserB = b.adviser.toLowerCase();
+                if (adviserA < adviserB) return -1;
+                if (adviserA > adviserB) return 1;
+                return 0;
+            });
+            setDepartments(sortedData);
 
         } else if (permission === "Basic") {
             let uniqueAdvisersAndDepartments = [];
