@@ -315,6 +315,8 @@ const ActualTable = ({ info }) => {
                                 globalFilterModeOptions={['contains']}
                                 positionGlobalFilter="left"
 
+                                // rowCount={data.length}
+
                                 // wyłącza filtr (3 kropki) w kolumnie
                                 enableColumnActions={false}
 
