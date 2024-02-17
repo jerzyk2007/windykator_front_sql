@@ -19,21 +19,92 @@
     flex-direction: column;
 }
 
+.edit_row_table__bloc-tabs {
+    display: flex;
+}
+
+.edit_row_table-tabs {
+    flex-grow: 1;
+    flex-basis: 34%;
+    min-width: 350px;
+    padding: 5px 0;
+    text-align: center;
+    background: rgba(63, 93, 48, 0.075);
+    cursor: pointer;
+    border-bottom: 10px solid rgba(0, 0, 0, 0.274);
+    box-sizing: content-box;
+    position: relative;
+    outline: none;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px #000;
+}
+
+.edit_row_table-tabs-tabs:not(:last-child) {
+    border-right: 1px solid rgba(106, 104, 104, 0.274);
+}
+
+.active-tabs {
+    background: rgb(153, 170, 238);
+    border-bottom: 1px solid transparent;
+}
+
+.active-tabs::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% + 2px);
+    height: 5px;
+}
+
+button {
+    border: none;
+    font-size: 1.2rem;
+
+}
+
+.edit_row_table-content-tabs {
+    flex-grow: 1;
+    display: flex;
+}
+
+.edit_row_table-content {
+    flex-grow: 1;
+    margin: 0 auto;
+    padding: 5px;
+    display: none;
+}
+
+.active-content {
+    display: block;
+}
+
 .edit_row_table-section-content {
-    /* flex-grow: 1; */
     display: flex;
     justify-content: center;
+    /* align-items: first baseline; */
 }
 
 .edit_row_table-section-data {
-    /* flex-grow: 1; */
     flex-basis: 34%;
+    /* min-height: 400px; */
     padding: 5px;
     display: flex;
     flex-direction: column;
 }
 
+.edit_row_table-section-data__documents {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
 .edit_row_table-section-data--document {
+    /* flex-grow: 1; */
+    /* flex-basis: 100%; */
     display: flex;
     justify-content: space-between;
 }
@@ -150,13 +221,41 @@
 
 @media screen and (max-width: 960px) {
 
+    .edit_row_table {
+        overflow: auto;
+    }
+
+    .edit_row_table__container {
+        display: flex;
+    }
+
+    .edit_row_table-tabs {
+        min-width: 33%;
+    }
+
+    .edit_row_table-content-tabs {
+        flex-grow: 1;
+        display: flex;
+    }
+
     .edit_row_table-section-content {
         flex-direction: column;
     }
 
+    .edit_row_table-tabs {
+        min-width: 50px;
+        padding: 5px;
+        font-size: 1rem;
+    }
+
+    .edit_row_table-section-data {
+        width: 100%;
+        min-height: 0px;
+
+    }
+
     .edit_row_table-panel {
         width: 100%;
-        margin-top: 20px;
         justify-content: space-evenly;
     }
 }

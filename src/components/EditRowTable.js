@@ -9,12 +9,12 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
     const [rowData, setRowData] = useState(dataRowTable);
-    const [toggleState, setToggleState] = useState(1);
+    // const [toggleState, setToggleState] = useState(1);
     const [note, setNote] = useState('');
 
-    const toggleTab = (index) => {
-        setToggleState(index);
-    };
+    // const toggleTab = (index) => {
+    //     setToggleState(index);
+    // };
     const handleAddNote = () => {
         const oldNote = rowData.UWAGI;
         const date = new Date();
@@ -71,7 +71,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
 
                 <section className='edit_row_table-section-content'>
                     <section className='edit_row_table-section-data'>
-                        {/* <section className='edit_row_table-section-data__documents'> */}
                         <section className='edit_row_table-section-data--document'>
                             <span>Faktura:</span>
                             <span>{rowData.NUMER}</span>
