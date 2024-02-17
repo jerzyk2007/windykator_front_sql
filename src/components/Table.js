@@ -2,18 +2,19 @@ import { useEffect, useMemo, useState } from 'react';
 import { MaterialReactTable } from 'material-react-table';
 import { MRT_Localization_PL } from 'material-react-table/locales/pl';
 import { ThemeProvider, useTheme } from '@mui/material';
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import useData from "./hooks/useData";
-import { TfiSave } from "react-icons/tfi";
-import PleaseWait from './PleaseWait';
-import useWindowSize from './hooks/useWindow';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/pl';
 import { plPL } from '@mui/x-date-pickers/locales';
+import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useData from "./hooks/useData";
+import useWindowSize from './hooks/useWindow';
+import { TfiSave } from "react-icons/tfi";
+import { SiMicrosoftexcel } from "react-icons/si";
 import QuickTableNote from './QuickTableNote';
 import EditRowTable from './EditRowTable';
-
+import PleaseWait from './PleaseWait';
+import * as xlsx from 'xlsx';
 
 import './Table.css';
 
@@ -193,6 +194,24 @@ const ActualTable = ({ info }) => {
         catch (err) {
             console.log(err);
         }
+    };
+
+    const handleExportExcel = async () => {
+
+        const result = await axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`);
+
+        const cleanData = (result.data).map(doc => {
+            const { _id, __v, UWAGI, ...cleanDoc } = doc;
+            if (Array.isArray(UWAGI)) {
+                cleanDoc.UWAGI = UWAGI.join(', ');
+            }
+            return cleanDoc;
+        });
+
+        const wb = xlsx.utils.book_new();
+        const ws = xlsx.utils.json_to_sheet(cleanData);
+        xlsx.utils.book_append_sheet(wb, ws, "Faktury");
+        xlsx.writeFile(wb, "Faktury.xlsx");
     };
 
     const columnsItem = useMemo(
@@ -379,7 +398,11 @@ const ActualTable = ({ info }) => {
                         </LocalizationProvider>
 
                     </ThemeProvider>
-                    <TfiSave className='table-save-settings' onClick={handleSaveSettings} />
+                    <section className='table-icons-panel'>
+                        <TfiSave className='table-save-settings' onClick={handleSaveSettings} />
+                        <SiMicrosoftexcel className='table-export-excel' onClick={handleExportExcel} />
+                    </section>
+
                 </>}
         </section >
     );

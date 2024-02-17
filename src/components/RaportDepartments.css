@@ -27,16 +27,28 @@
     cursor: pointer;
 }
 
-.raport_departments-save-settings {
+
+.raport_departments-panel {
     position: absolute;
     top: 10px;
     left: 20px;
     z-index: 6;
     font-size: 2rem;
+    display: flex;
+}
+
+.raport_departments-save-settings,
+.raport_departments-export-excel {
+    margin: 0 20px;
     cursor: pointer;
 }
 
-.raport_departments-save-settings:active {
+.raport_departments-export-excel {
+    color: #018f25;
+}
+
+.raport_departments-save-settings:active,
+.raport_departments-export-excel:active {
     color: red;
 }
 

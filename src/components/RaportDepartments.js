@@ -6,6 +6,9 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { MRT_Localization_PL } from 'material-react-table/locales/pl';
 import PleaseWait from './PleaseWait';
 import { TfiSave } from "react-icons/tfi";
+import { SiMicrosoftexcel } from "react-icons/si";
+import * as xlsx from 'xlsx';
+
 
 import './RaportDepartments.css';
 
@@ -592,6 +595,13 @@ const RaportDepartments = () => {
         }
     };
 
+    const handleExportExcel = async () => {
+        const wb = xlsx.utils.book_new();
+        const ws = xlsx.utils.json_to_sheet(raport);
+        xlsx.utils.book_append_sheet(wb, ws, "Dział");
+        xlsx.writeFile(wb, "Raport-Dział.xlsx");
+    };
+
     useEffect(() => {
         createDataRaport();
     }, [raportData, permission, raportDate]);
@@ -666,7 +676,10 @@ const RaportDepartments = () => {
             {pleaseWait ? <PleaseWait /> : <MaterialReactTable
                 className="raport_departments-table"
                 table={table} />}
-            <TfiSave className='raport_departments-save-settings' onClick={handleSaveSettings} />
+            <section className='raport_departments-panel'>
+                <TfiSave className='raport_departments-save-settings' onClick={handleSaveSettings} />
+                <SiMicrosoftexcel className='raport_departments-export-excel' onClick={handleExportExcel} />
+            </section>
         </section>
     );
 };

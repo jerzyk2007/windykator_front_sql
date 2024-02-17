@@ -6,6 +6,8 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { MRT_Localization_PL } from 'material-react-table/locales/pl';
 import PleaseWait from './PleaseWait';
 import { TfiSave } from "react-icons/tfi";
+import { SiMicrosoftexcel } from "react-icons/si";
+import * as xlsx from 'xlsx';
 
 import './RaportAdvisers.css';
 
@@ -632,6 +634,19 @@ const RaportAdvisers = () => {
         }
     };
 
+    const handleExportExcel = async () => {
+
+        const cleanData = (raport).map(doc => {
+            const { AdviserMerge, ...cleanDoc } = doc;
+            return cleanDoc;
+        });
+
+        const wb = xlsx.utils.book_new();
+        const ws = xlsx.utils.json_to_sheet(cleanData);
+        xlsx.utils.book_append_sheet(wb, ws, "Doradcy");
+        xlsx.writeFile(wb, "Raport-Doradca.xlsx");
+    };
+
     useEffect(() => {
         createDataRaport();
     }, [raportData, permission, raportDate]);
@@ -705,7 +720,10 @@ const RaportAdvisers = () => {
             {pleaseWait ? <PleaseWait /> : <MaterialReactTable
                 className="raport_advisers-table"
                 table={table} />}
-            <TfiSave className='raport_advisers-save-settings' onClick={handleSaveSettings} />
+            <section className='raport_advisers-panel'>
+                <TfiSave className='raport_advisers-save-settings' onClick={handleSaveSettings} />
+                <SiMicrosoftexcel className='raport_advisers-export-excel' onClick={handleExportExcel} />
+            </section>
         </section>
     );
 };

@@ -27,16 +27,27 @@
     cursor: pointer;
 }
 
-.raport_advisers-save-settings {
+.raport_advisers-panel {
     position: absolute;
     top: 10px;
     left: 20px;
     z-index: 6;
     font-size: 2rem;
+    display: flex;
+}
+
+.raport_advisers-save-settings,
+.raport_advisers-export-excel {
+    margin: 0 20px;
     cursor: pointer;
 }
 
-.raport_advisers-save-settings:active {
+.raport_advisers-export-excel {
+    color: #018f25;
+}
+
+.raport_advisers-save-settings:active,
+.raport_advisers-export-excel:active {
     color: red;
 }
 

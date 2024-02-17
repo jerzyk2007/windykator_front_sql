@@ -9,16 +9,27 @@
     cursor: pointer;
 }
 
-.table-save-settings {
+.table-icons-panel {
     position: absolute;
     top: 10px;
     left: 20px;
     z-index: 6;
     font-size: 2rem;
+    display: flex;
+}
+
+.table-save-settings,
+.table-export-excel {
+    margin: 0 20px;
     cursor: pointer;
 }
 
-.table-save-settings:active {
+.table-export-excel {
+    color: #018f25;
+}
+
+.table-save-settings:active,
+.table-get-excel:active {
     color: red;
 }
 
