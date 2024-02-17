@@ -359,7 +359,8 @@ const ActualTable = ({ info }) => {
                                 layoutMode="grid"
 
                                 muiPaginationProps={{
-                                    rowsPerPageOptions: [10, 20, 30, 50, 100, { value: 10000, label: 'Całość' }],
+                                    rowsPerPageOptions: [10, 20, 30, 50, 100],
+                                    // rowsPerPageOptions: [10, 20, 30, 50, 100, { value: 10000, label: 'Całość' }],
                                     shape: 'rounded',
                                     variant: 'outlined',
                                 }}
