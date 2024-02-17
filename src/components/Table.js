@@ -356,7 +356,7 @@ const ActualTable = ({ info }) => {
                                 }}
 
                                 // editDisplayMode={'cell'}
-                                layoutMode="grid"
+                                // layoutMode="grid"
 
                                 muiPaginationProps={{
                                     rowsPerPageOptions: [10, 20, 30, 50, 100],
