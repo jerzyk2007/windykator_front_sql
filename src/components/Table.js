@@ -77,7 +77,7 @@ const ActualTable = ({ info }) => {
             }
 
 
-            if (item.accessorKey === "UWAGI") {
+            if (item.accessorKey === "UWAGI_ASYSTENT") {
                 modifiedItem.Cell = ({ cell }) => {
                     const cellValue = cell.getValue();
                     if (Array.isArray(cellValue) && cellValue.length > 0) {
@@ -103,41 +103,41 @@ const ActualTable = ({ info }) => {
                 modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
             }
 
-            if (item.accessorKey === "ILEDNIPOTERMINIE") {
+            if (item.accessorKey === "ILE_DNI_PO_TERMINIE") {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
                     ...muiTableBodyCellProps,
                     sx: {
                         ...muiTableBodyCellProps.sx,
-                        backgroundColor: cell.column.id === 'ILEDNIPOTERMINIE' && cell.getValue() > 0 ? 'rgb(250, 136, 136)' : 'white',
+                        backgroundColor: cell.column.id === 'ILE_DNI_PO_TERMINIE' && cell.getValue() > 0 ? 'rgb(250, 136, 136)' : 'white',
                     },
                 });
             }
 
 
-            if (item.accessorKey === "50VAT") {
+            if (item.accessorKey === "50_VAT") {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => {
                     const cellValue = cell.getValue();
-                    const dorozliczValue = cell.row.original.DOROZLICZ;
+                    const dorozliczValue = cell.row.original.DO_ROZLICZENIA;
 
                     return {
                         ...muiTableBodyCellProps,
                         sx: {
                             ...muiTableBodyCellProps.sx,
-                            backgroundColor: cell.column.id === '50VAT' && Math.abs(cellValue - dorozliczValue) <= 1 ? 'rgb(250, 136, 136)' : "white",
+                            backgroundColor: cell.column.id === '50_VAT' && Math.abs(cellValue - dorozliczValue) <= 1 ? 'rgb(250, 136, 136)' : "white",
                         },
                     };
                 };
             }
 
-            if (item.accessorKey === "100VAT") {
+            if (item.accessorKey === "100_VAT") {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => {
                     const cellValue = cell.getValue();
-                    const dorozliczValue = cell.row.original.DOROZLICZ;
+                    const dorozliczValue = cell.row.original.DO_ROZLICZENIA;
                     return {
                         ...muiTableBodyCellProps,
                         sx: {
                             ...muiTableBodyCellProps.sx,
-                            backgroundColor: cell.column.id === '100VAT' && Math.abs(cellValue - dorozliczValue) <= 1 ? 'rgb(250, 136, 136)' : "white",
+                            backgroundColor: cell.column.id === '100_VAT' && Math.abs(cellValue - dorozliczValue) <= 1 ? 'rgb(250, 136, 136)' : "white",
                         },
                     };
                 };
@@ -384,7 +384,7 @@ const ActualTable = ({ info }) => {
                                 // odczytanie danych po kliknięciu w wiersz
                                 muiTableBodyCellProps={({ column, row, cell }) => ({
                                     onDoubleClick: () => {
-                                        if (column.id === "UWAGI") {
+                                        if (column.id === "UWAGI_ASYSTENT") {
 
                                             setQuickNote(row.original);
                                         } else {

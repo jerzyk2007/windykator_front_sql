@@ -13,7 +13,7 @@ const QuickTableNote = ({ quickNote, setQuickNote, documents, setDocuments }) =>
     const [note, setNote] = useState('');
 
     const handleAddNote = async () => {
-        const { _id, UWAGI } = quickNote;
+        const { _id, UWAGI_ASYSTENT } = quickNote;
         const date = new Date();
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -22,13 +22,13 @@ const QuickTableNote = ({ quickNote, setQuickNote, documents, setDocuments }) =>
 
         let newNote = [];
         let addNote = `${formattedDate} - ${auth.usersurname} - ${note}`;
-        if (UWAGI) {
-            newNote = [...UWAGI, addNote];
+        if (UWAGI_ASYSTENT) {
+            newNote = [...UWAGI_ASYSTENT, addNote];
         } else {
             newNote = [addNote];
         }
 
-        const newRow = { ...quickNote, UWAGI: newNote };
+        const newRow = { ...quickNote, UWAGI_ASYSTENT: newNote };
         const newDocuments = documents.map(item => {
             if (item._id === _id) {
                 return newRow;
@@ -58,7 +58,7 @@ const QuickTableNote = ({ quickNote, setQuickNote, documents, setDocuments }) =>
             <section className='quick_table_note__container'>
                 <section className='quick_table_note__container-title'>
                     <span className='quick_table_note__container-title--document'>Faktura: </span>
-                    <span className='quick_table_note__container-title--document'>{quickNote.NUMER}</span>
+                    <span className='quick_table_note__container-title--document'>{quickNote.NUMER_FV}</span>
 
                 </section>
 

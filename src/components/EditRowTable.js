@@ -9,14 +9,10 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
     const [rowData, setRowData] = useState(dataRowTable);
-    // const [toggleState, setToggleState] = useState(1);
     const [note, setNote] = useState('');
 
-    // const toggleTab = (index) => {
-    //     setToggleState(index);
-    // };
     const handleAddNote = () => {
-        const oldNote = rowData.UWAGI;
+        const oldNote = rowData.UWAGI_ASYSTENT;
         const date = new Date();
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -34,7 +30,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
         setRowData(prev => {
             return {
                 ...prev,
-                UWAGI: newNote
+                UWAGI_ASYSTENT: newNote
             };
         });
         setNote('');
@@ -73,12 +69,12 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                     <section className='edit_row_table-section-data'>
                         <section className='edit_row_table-section-data--document'>
                             <span>Faktura:</span>
-                            <span>{rowData.NUMER}</span>
+                            <span>{rowData.NUMER_FV}</span>
                         </section>
 
                         <section className='edit_row_table-section-data--document'>
                             <span>Data wystawienia:</span>
-                            <span>{rowData.DATAFV}</span>
+                            <span>{rowData.DATA_FV}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
                             <span>Termin płatności:</span>
@@ -87,8 +83,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                         <section className='edit_row_table-section-data--document'>
                             <span>Po terminie:</span>
                             <span
-                                style={rowData.ILEDNIPOTERMINIE > 0 ? { backgroundColor: "#f04545" } : null}
-                            >{rowData.ILEDNIPOTERMINIE
+                                style={rowData.ILE_DNI_PO_TERMINIE > 0 ? { backgroundColor: "#f04545" } : null}
+                            >{rowData.ILE_DNI_PO_TERMINIE
                                 }</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
@@ -102,8 +98,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                                         ...prev,
                                         BRUTTO: Number(e.target.value),
                                         NETTO: Number((e.target.value) / 1.23),
-                                        "100VAT": Number(e.target.value) - Number((e.target.value) / 1.23),
-                                        "50VAT": (Number(e.target.value) - Number((e.target.value) / 1.23)) / 2
+                                        "100_VAT": Number(e.target.value) - Number((e.target.value) / 1.23),
+                                        "50_VAT": (Number(e.target.value) - Number((e.target.value) / 1.23)) / 2
                                     };
                                 })}
                             />
@@ -126,7 +122,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                         </section>
                         <section className='edit_row_table-section-data--document'>
                             <span>Do rozliczenia:</span>
-                            <span>{(rowData.DOROZLICZ).toLocaleString('pl-PL', {
+                            <span>{(rowData.DO_ROZLICZENIA).toLocaleString('pl-PL', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
                                 useGrouping: true,
@@ -135,7 +131,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                         <section className='edit_row_table-section-data--document'>
                             <span>100% VAT:</span>
                             <span
-                                style={Math.abs((rowData.BRUTTO - rowData.NETTO) - rowData.DOROZLICZ) <= 1 ? { backgroundColor: "#f04545" } : null}
+                                style={Math.abs((rowData.BRUTTO - rowData.NETTO) - rowData.DO_ROZLICZENIA) <= 1 ? { backgroundColor: "#f04545" } : null}
                             >{(rowData.BRUTTO - rowData.NETTO).toLocaleString('pl-PL', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
@@ -145,7 +141,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                         <section className='edit_row_table-section-data--document'>
                             <span>50% VAT:</span>
                             <span
-                                style={Math.abs((rowData.BRUTTO - rowData.NETTO) / 1.23 - rowData.DOROZLICZ) <= 1 ? { backgroundColor: "#f04545" } : null}
+                                style={Math.abs((rowData.BRUTTO - rowData.NETTO) / 1.23 - rowData.DO_ROZLICZENIA) <= 1 ? { backgroundColor: "#f04545" } : null}
                             >{((rowData.BRUTTO - rowData.NETTO) / 1.23).toLocaleString('pl-PL', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
@@ -154,15 +150,15 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                         </section>
                         <section className='edit_row_table-section-data--document'>
                             <span>Nr szkody:</span>
-                            <span>{rowData.NRSZKODY}</span>
+                            <span>{rowData.NR_SZKODY}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
                             <span>Nr rejestracyjny:</span>
-                            <span>{rowData.NRREJESTRACYJNY}</span>
+                            <span>{rowData.NR_REJESTRACYJNY}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
                             <span>Doradca:</span>
-                            <span>{rowData.ZATWIERDZIL}</span>
+                            <span>{rowData.DORADCA}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
                             <span>Kontrahent:</span>
@@ -176,7 +172,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                             <textarea
                                 className='edit_row_table-section-data__chat-content'
                                 readOnly
-                                value={rowData.UWAGI ? rowData.UWAGI.join('\n') : ''}
+                                value={rowData.UWAGI_ASYSTENT ? rowData.UWAGI_ASYSTENT.join('\n') : ''}
                             >
                             </textarea>
                             <textarea
@@ -209,11 +205,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
 
                             <select
                                 className='edit_row_table-section-data-law--select'
-                                value={rowData.JAKAKANCELARIA ? rowData.JAKAKANCELARIA : ''}
+                                value={rowData.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : ''}
                                 onChange={(e) => setRowData(prev => {
                                     return {
                                         ...prev,
-                                        JAKAKANCELARIA: e.target.value
+                                        JAKA_KANCELARIA: e.target.value
                                     };
                                 })}
                             >
@@ -260,11 +256,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
 
                             <select
                                 className='edit_row_table-section-data-actions--select'
-                                value={rowData.ADVISERMISTAKE ? rowData.ADVISERMISTAKE : ''}
+                                value={rowData.BLAD_DORADCY ? rowData.BLAD_DORADCY : ''}
                                 onChange={(e) => setRowData(prev => {
                                     return {
                                         ...prev,
-                                        ADVISERMISTAKE: e.target.value
+                                        BLAD_DORADCY: e.target.value
                                     };
                                 })}
                             >
@@ -279,11 +275,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
 
                             <select
                                 className='edit_row_table-section-data-actions--select'
-                                value={rowData.DOCUMENTSERROR ? rowData.DOCUMENTSERROR : ''}
+                                value={rowData.BLAD_W_DOKUMENTACJI ? rowData.BLAD_W_DOKUMENTACJI : ''}
                                 onChange={(e) => setRowData(prev => {
                                     return {
                                         ...prev,
-                                        DOCUMENTSERROR: e.target.value
+                                        BLAD_W_DOKUMENTACJI: e.target.value
                                     };
                                 })}
                             >
@@ -298,11 +294,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
 
                             <select
                                 className='edit_row_table-section-data-actions--select'
-                                value={rowData.GETTAX ? rowData.GETTAX : ''}
+                                value={rowData.POBRANO_VAT ? rowData.POBRANO_VAT : ''}
                                 onChange={(e) => setRowData(prev => {
                                     return {
                                         ...prev,
-                                        GETTAX: e.target.value
+                                        POBRANO_VAT: e.target.value
                                     };
                                 })}
                             >

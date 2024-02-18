@@ -277,7 +277,8 @@ const TableSettings = () => {
     const handleGetColums = async () => {
         try {
             const documentsColumn = await axiosPrivateIntercept.get('/documents/get-columns');
-            setColumnsName(documentsColumn.data);
+            const filteredArray = (documentsColumn.data).filter(item => item !== '__v');
+            setColumnsName(filteredArray);
         }
         catch (err) {
             console.log(err);
