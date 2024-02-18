@@ -38,16 +38,16 @@ const RaportAdvisers = () => {
 
 
     const checkMinMaxDateGlobal = (documents) => {
-        let maxDate = documents[0].DATAFV;
-        let minDate = documents[0].DATAFV;
+        let maxDate = documents[0].DATA_FV;
+        let minDate = documents[0].DATA_FV;
 
         documents.forEach(obj => {
             // Porównanie daty z aktualnymi maksymalną i minimalną datą
-            if (obj.DATAFV > maxDate) {
-                maxDate = obj.DATAFV;
+            if (obj.DATA_FV > maxDate) {
+                maxDate = obj.DATA_FV;
             }
-            if (obj.DATAFV < minDate) {
-                minDate = obj.DATAFV;
+            if (obj.DATA_FV < minDate) {
+                minDate = obj.DATA_FV;
             }
         });
         setMinMaxDateGlobal(
@@ -177,7 +177,7 @@ const RaportAdvisers = () => {
                 // Sprawdzenie, czy obiekt zawiera klucz DZIAL, który pasuje do aktualnego działu
                 // oraz czy data mieści się w przedziale
                 // pobranie daty dokumnetu
-                let documentDate = new Date(item.DATAFV);
+                let documentDate = new Date(item.DATA_FV);
 
                 // pobranie daty terminu płatności
                 let afterDeadlineDate = new Date(item.TERMIN);
@@ -186,33 +186,33 @@ const RaportAdvisers = () => {
                 let maxDate = new Date(raportDate.maxRaportDate);
                 let todayDate = new Date();
 
-                if (item.ZATWIERDZIL === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate) {
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate) {
                     sumOfGross.set(dep.merge, sumOfGross.get(dep.merge) + item.BRUTTO);
                     howManyElements.set(dep.merge, howManyElements.get(dep.merge) + 1);
-                    underPayment.set(dep.merge, underPayment.get(dep.merge) + item.DOROZLICZ);
+                    underPayment.set(dep.merge, underPayment.get(dep.merge) + item.DO_ROZLICZENIA);
                 }
 
-                if (item.ZATWIERDZIL === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
-                    expiredPayments.set(dep.merge, expiredPayments.get(dep.merge) + item.DOROZLICZ);
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    expiredPayments.set(dep.merge, expiredPayments.get(dep.merge) + item.DO_ROZLICZENIA);
                     howManyExpiredElements.set(dep.merge, howManyExpiredElements.get(dep.merge) + 1);
                 }
 
-                if (item.ZATWIERDZIL === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
-                    notExpiredPayment.set(dep.merge, notExpiredPayment.get(dep.merge) + item.DOROZLICZ);
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    notExpiredPayment.set(dep.merge, notExpiredPayment.get(dep.merge) + item.DO_ROZLICZENIA);
                 }
 
-                if (item.ZATWIERDZIL === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
-                    expiredPaymentsWithoutPandL.set(dep.merge, expiredPaymentsWithoutPandL.get(dep.merge) + item.DOROZLICZ);
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKA_KANCELARIA !== "ROK-KONOPA" && item.JAKA_KANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    expiredPaymentsWithoutPandL.set(dep.merge, expiredPaymentsWithoutPandL.get(dep.merge) + item.DO_ROZLICZENIA);
                     howManyExpiredElementsWithoutPandL.set(dep.merge, howManyExpiredElementsWithoutPandL.get(dep.merge) + 1);
                 }
 
-                if (item.ZATWIERDZIL === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKAKANCELARIA && item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
-                    legalExpired.set(dep.merge, legalExpired.get(dep.merge) + item.DOROZLICZ);
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKA_KANCELARIA && item.JAKA_KANCELARIA !== "ROK-KONOPA" && item.JAKA_KANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    legalExpired.set(dep.merge, legalExpired.get(dep.merge) + item.DO_ROZLICZENIA);
                     legalCounter.set(dep.merge, legalCounter.get(dep.merge) + 1);
                 }
 
-                if (item.ZATWIERDZIL === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKAKANCELARIA !== "ROK-KONOPA" && item.JAKAKANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
-                    notExpiredPaymentWithoutPandL.set(dep.merge, notExpiredPaymentWithoutPandL.get(dep.merge) + item.DOROZLICZ);
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKA_KANCELARIA !== "ROK-KONOPA" && item.JAKA_KANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    notExpiredPaymentWithoutPandL.set(dep.merge, notExpiredPaymentWithoutPandL.get(dep.merge) + item.DO_ROZLICZENIA);
                 }
             });
         });
@@ -237,26 +237,26 @@ const RaportAdvisers = () => {
             // zabezpieczenie przed dzieleniem przez zero dodtąd 
 
             let departmentObj = {
-                AdviserMerge: dep.merge,
-                Adviser: dep.adviser,
-                Department: dep.department,
-                TotalDocumentsValue: Number(sumOfGross.get(dep.merge)),
-                UnderPayment: Number(underPayment.get(dep.merge).toFixed(2)),
-                ExpiredPayments: Number(expiredPaymentsValue.toFixed(2)),
-                NotExpiredPayment: Number(notExpiredPaymentValue.toFixed(2)),
-                ExpiredPaymentsWithoutPandL: Number(expiredPaymentsWithoutPandLValue.toFixed(2)),
-                NotExpiredPaymentWithoutPandL: Number(notExpiredPaymentWithoutPandLValue.toFixed(2)),
-                LegalExpired: Number(legalExpired.get(dep.merge).toFixed(2)),
-                Objective: Number(objective),
-                ObjectiveWithoutPandL: Number(objectiveWithoutPandL),
-                DocumentsCounter: howManyElements.get(dep.merge),
-                DocumentsCounterExpired: howManyExpiredElements.get(dep.merge),
-                DocumentsCounterExpiredWithoutPandL: howManyExpiredElementsWithoutPandL.get(dep.merge),
-                DocumentsCounterLegal: legalCounter.get(dep.merge),
+                DORADCA_DZIAL: dep.merge,
+                DORADCA: dep.adviser,
+                DZIAL: dep.department,
+                CALKOWITA_WARTOSC_FV_BRUTTO: Number(sumOfGross.get(dep.merge)),
+                KWOTA_NIEROZLICZONYCH_FV: Number(underPayment.get(dep.merge).toFixed(2)),
+                PRZETERMINOWANE_FV: Number(expiredPaymentsValue.toFixed(2)),
+                NIEPRZETERMINOWANE_FV: Number(notExpiredPaymentValue.toFixed(2)),
+                PRZETERMINOWANE_BEZ_PZU_LINK4: Number(expiredPaymentsWithoutPandLValue.toFixed(2)),
+                NIEPRZETERMINOWANE_FV_BEZ_PZU_LINK4: Number(notExpiredPaymentWithoutPandLValue.toFixed(2)),
+                PRZETERMINOWANE_KANCELARIA: Number(legalExpired.get(dep.merge).toFixed(2)),
+                CEL_CALOSC: Number(objective),
+                CEL_BEZ_PZU_LINK4: Number(objectiveWithoutPandL),
+                ILOSC_NIEROZLICZONYCH_FV: howManyElements.get(dep.merge),
+                ILOSC_PRZETERMINOWANYCH_FV: howManyExpiredElements.get(dep.merge),
+                ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4: howManyExpiredElementsWithoutPandL.get(dep.merge),
+                ILOSC_FV_KANCELARIA: legalCounter.get(dep.merge),
             };
 
             if (
-                departmentObj.TotalDocumentsValue
+                departmentObj.CALKOWITA_WARTOSC_FV_BRUTTO
             ) {
                 generatingRaport.push(departmentObj);
             }
@@ -268,10 +268,10 @@ const RaportAdvisers = () => {
         if (permission === "Standard") {
             let uniqueAdvisersAndDepartments = [];
             raportData.forEach(item => {
-                if (item.ZATWIERDZIL && typeof item.ZATWIERDZIL === 'string' && item.DZIAL && typeof item.DZIAL === 'string') {
+                if (item.DORADCA && typeof item.DORADCA === 'string' && item.DZIAL && typeof item.DZIAL === 'string') {
                     const addUniqueAdvisersAndDepartments = {
-                        merge: `${item.ZATWIERDZIL}-${item.DZIAL}`,
-                        adviser: item.ZATWIERDZIL,
+                        merge: `${item.DORADCA}-${item.DZIAL}`,
+                        adviser: item.DORADCA,
                         department: item.DZIAL
                     };
                     const isObjectExists = uniqueAdvisersAndDepartments.some(item => JSON.stringify(item) === JSON.stringify(addUniqueAdvisersAndDepartments));
@@ -292,10 +292,10 @@ const RaportAdvisers = () => {
         } else if (permission === "Basic") {
             let uniqueAdvisersAndDepartments = [];
             raportData.forEach(item => {
-                if (item.ZATWIERDZIL && typeof item.ZATWIERDZIL === 'string' && item.DZIAL && typeof item.DZIAL === 'string') {
+                if (item.DORADCA && typeof item.DORADCA === 'string' && item.DZIAL && typeof item.DZIAL === 'string') {
                     const addUniqueAdvisersAndDepartments = {
-                        merge: `${item.ZATWIERDZIL}-${item.DZIAL}`,
-                        adviser: item.ZATWIERDZIL,
+                        merge: `${item.DORADCA}-${item.DZIAL}`,
+                        adviser: item.DORADCA,
                         department: item.DZIAL
                     };
                     const isObjectExists = uniqueAdvisersAndDepartments.some(item => JSON.stringify(item) === JSON.stringify(addUniqueAdvisersAndDepartments));
@@ -338,51 +338,22 @@ const RaportAdvisers = () => {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'Adviser',
+                accessorKey: 'DORADCA',
                 header: 'Doradca',
                 size: columnSizing?.Department ? columnSizing.Department : 150,
                 filterVariant: 'multi-select',
-                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['Adviser'])))
+                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DORADCA'])))
             },
             {
-                accessorKey: 'Department',
+                accessorKey: 'DZIAL',
                 header: 'Dział',
                 size: columnSizing?.Department ? columnSizing.Department : 150,
                 filterVariant: 'multi-select',
-                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['Department'])))
+                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DZIAL'])))
             },
-            {
-                accessorKey: 'Objective',
-                header: 'Cel całość',
-                enableColumnFilter: false,
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
-                    const formattedSalary = value !== undefined && value !== null
-                        ? value.toLocaleString('pl-PL', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                            useGrouping: true,
-                        }) + " %"
-                        : '0,00'; // Zastąp puste pola zerem
 
-                    return `${formattedSalary}`;
-                },
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#caff84",
-                            borderRight: "1px solid #c9c7c7",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
-            },
             {
-                accessorKey: 'ObjectiveWithoutPandL',
+                accessorKey: 'CEL_BEZ_PZU_LINK4',
                 header: 'Cel bez PZU/LINK4',
                 enableColumnFilter: false,
                 Cell: ({ cell }) => {
@@ -412,56 +383,7 @@ const RaportAdvisers = () => {
                 }
             },
             {
-                accessorKey: 'ExpiredPayments',
-                header: 'Przeterminowane',
-                enableColumnFilter: false,
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
-                    const formattedSalary = value !== undefined && value !== null
-                        ? value.toLocaleString('pl-PL', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                            useGrouping: true,
-                        })
-                        : '0,00'; // Zastąp puste pola zerem
-
-                    return `${formattedSalary}`;
-                },
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#caff84",
-                            borderRight: "1px solid #c9c7c7",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
-            },
-
-            {
-                accessorKey: 'DocumentsCounterExpired',
-                header: 'Ilość faktur przeter.',
-                enableColumnFilter: false,
-                muiTableBodyCellProps: () => {
-                    return {
-                        sx: {
-                            backgroundColor: "#caff84",
-                            borderRight: "1px solid #c9c7c7",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
-            },
-            {
-                accessorKey: 'ExpiredPaymentsWithoutPandL',
+                accessorKey: 'PRZETERMINOWANE_BEZ_PZU_LINK4',
                 header: 'Przeterminowane bez PZU/LINK4',
                 enableColumnFilter: false,
                 Cell: ({ cell }) => {
@@ -491,7 +413,7 @@ const RaportAdvisers = () => {
                 }
             },
             {
-                accessorKey: 'DocumentsCounterExpiredWithoutPandL',
+                accessorKey: 'ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4',
                 header: 'Ilość faktur przet. bez PZU/LINK4',
                 enableColumnFilter: false,
                 muiTableBodyCellProps: ({ cell }) => {
@@ -509,7 +431,87 @@ const RaportAdvisers = () => {
                 }
             },
             {
-                accessorKey: 'UnderPayment',
+                accessorKey: 'CEL_CALOSC',
+                header: 'Cel całość',
+                enableColumnFilter: false,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        }) + " %"
+                        : '0,00'; // Zastąp puste pola zerem
+
+                    return `${formattedSalary}`;
+                },
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#caff84",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
+            },
+            {
+                accessorKey: 'PRZETERMINOWANE_FV',
+                header: 'Przeterminowane fv',
+                enableColumnFilter: false,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00'; // Zastąp puste pola zerem
+
+                    return `${formattedSalary}`;
+                },
+                muiTableBodyCellProps: ({ cell }) => {
+                    return {
+                        sx: {
+                            backgroundColor: "#caff84",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
+            },
+
+            {
+                accessorKey: 'ILOSC_PRZETERMINOWANYCH_FV',
+                header: 'Ilość faktur przeter.',
+                enableColumnFilter: false,
+                muiTableBodyCellProps: () => {
+                    return {
+                        sx: {
+                            backgroundColor: "#caff84",
+                            borderRight: "1px solid #c9c7c7",
+                            fontSize: "14px",
+                            fontWeight: 'bold',
+                            padding: "2px",
+                            minHeight: '3rem'
+                        },
+                        align: 'center',
+                    };
+                }
+            },
+
+            {
+                accessorKey: 'KWOTA_NIEROZLICZONYCH_FV',
                 header: 'Kwota faktur nierozl.',
                 enableColumnFilter: false,
                 Cell: ({ cell }) => {
@@ -528,12 +530,12 @@ const RaportAdvisers = () => {
 
             },
             {
-                accessorKey: 'DocumentsCounter',
-                header: 'Ilość faktur',
+                accessorKey: 'ILOSC_NIEROZLICZONYCH_FV',
+                header: 'Ilość faktur nierozliczonych',
                 enableColumnFilter: false,
             },
             {
-                accessorKey: 'LegalExpired',
+                accessorKey: 'PRZETERMINOWANE_KANCELARIA',
                 header: 'Przeterm kancelarie',
                 enableColumnFilter: false,
                 Cell: ({ cell }) => {
@@ -551,7 +553,7 @@ const RaportAdvisers = () => {
                 enableGlobalFilter: false
             },
             {
-                accessorKey: 'DocumentsCounterLegal',
+                accessorKey: 'ILOSC_FV_KANCELARIA',
                 header: 'Ilość faktur',
                 enableColumnFilter: false,
             },
@@ -637,7 +639,7 @@ const RaportAdvisers = () => {
     const handleExportExcel = async () => {
 
         const cleanData = (raport).map(doc => {
-            const { AdviserMerge, ...cleanDoc } = doc;
+            const { DORADCA_DZIAL, ...cleanDoc } = doc;
             return cleanDoc;
         });
 
