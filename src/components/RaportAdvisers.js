@@ -176,15 +176,26 @@ const RaportAdvisers = () => {
 
                 // Sprawdzenie, czy obiekt zawiera klucz DZIAL, który pasuje do aktualnego działu
                 // oraz czy data mieści się w przedziale
+
                 // pobranie daty dokumnetu
                 let documentDate = new Date(item.DATA_FV);
+                documentDate.setHours(0, 0, 0, 0);
 
-                // pobranie daty terminu płatności
+                // // pobranie daty terminu płatności
                 let afterDeadlineDate = new Date(item.TERMIN);
+                afterDeadlineDate.setHours(0, 0, 0, 0);
 
+                // najmniejsza data z danych
                 let minDate = new Date(raportDate.minRaportDate);
+                minDate.setHours(0, 0, 0, 0);
+
+                // największa data z danych
                 let maxDate = new Date(raportDate.maxRaportDate);
+                minDate.setHours(0, 0, 0, 0);
+
+                // dzisiejsza data
                 let todayDate = new Date();
+                todayDate.setHours(0, 0, 0, 0);
 
                 if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate) {
                     sumOfGross.set(dep.merge, sumOfGross.get(dep.merge) + item.BRUTTO);

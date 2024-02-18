@@ -20,3 +20,6 @@ dodać korekty
 Do paginacji dodac opcję Wszytsko
 
 Uwagi na fakturze osobno I komentarze windykacji osobno - dorobić wyświetlanie w tabeli - jest problem - bo nie ma skąd pobrac UWAG z AS
+
+
+1 083 374,92

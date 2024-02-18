@@ -8,9 +8,11 @@ const AddDataFromFile = () => {
     const { pleaseWait, setPleaseWait } = useData();
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
+    const [errSharepoint, setErrSharepoint] = useState('');
+    const [errPowerBI, setErrPowerBI] = useState('');
     const [errMsg, setErrMsg] = useState('');
 
-    const handleSendFile = async (e) => {
+    const handleSendFile = async (e, type) => {
         setPleaseWait(true);
         const file = e.target.files[0];
         if (!file) return console.log('Brak pliku');
@@ -22,21 +24,36 @@ const AddDataFromFile = () => {
             const formData = new FormData();
             formData.append('excelFile', file);
 
-            const response = await axiosPrivateIntercept.post('/documents/send-documents', formData,
+            console.log(type);
+            console.log(file);
+
+            const response = await axiosPrivateIntercept.post(`/documents/send-documents/${type}`, formData,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     }
                 });
 
-            console.log(response.data);
+            if (type === 'sharepoint') {
+                setErrSharepoint('Dokumenty zaktualizowane.');
+            }
+            else
+                if (type === 'powerbi') {
+                    setErrPowerBI('Dokumenty zaktualizowane.');
+                }
 
-            setErrMsg('Dokumenty zaktualizowane.');
+
 
             setPleaseWait(false);
 
         } catch (error) {
-            setErrMsg('Błąd aktualizacji dokumentów');
+            if (type === 'sharepoint') {
+                setErrSharepoint('Błąd aktualizacji dokumentów.');
+            }
+            else
+                if (type === 'powerbi') {
+                    setErrPowerBI('Błąd aktualizacji dokumentów.');
+                }
             console.error('Błąd przesyłania pliku:', error);
             setPleaseWait(false);
         }
@@ -46,26 +63,40 @@ const AddDataFromFile = () => {
         pleaseWait ? <PleaseWait /> :
             <section className='add_data_from_file'>
                 <section className='add_data_from_file__container'>
-                    {!errMsg ?
+                    {!errSharepoint ?
                         <section className='add_data_from_file__container-documents'>
                             <input
-                                // ref={fileInputRef}
                                 type="file"
                                 name="uploadfile"
-                                id="xlsx"
+                                id="sharepoint"
                                 style={{ display: "none" }}
-                                onChange={handleSendFile}
+                                onChange={(e) => handleSendFile(e, 'sharepoint')}
                             />
-                            <label htmlFor="xlsx" className="add_data_file-click-me">Prześlij wszytskie faktury xlsx</label>
+                            <label htmlFor="sharepoint" className="add_data_file-click-me">Prześlij faktury sharepoint</label>
                         </section> :
                         <section className='add_data_from_file__container-documents'>
-                            <span className="add_data_file-click-me">{errMsg}</span>
+                            <span className="add_data_file-click-me">{errSharepoint}</span>
                         </section>
                     }
-                    <section className='add_data_from_file__container-contacts'>
-                    </section>
+
+                    {!errPowerBI ?
+                        <section className='add_data_from_file__container-documents'>
+                            <input
+                                type="file"
+                                name="uploadfile"
+                                id="powerbi"
+                                style={{ display: "none" }}
+                                onChange={(e) => handleSendFile(e, 'powerbi')}
+                            />
+                            <label htmlFor="powerbi" className="add_data_file-click-me">Prześlij faktury Power BI</label>
+                        </section> :
+                        <section className='add_data_from_file__container-documents'>
+                            <span className="add_data_file-click-me">{errPowerBI}</span>
+                        </section>
+                    }
                     <section className='add_data_from_file__container-settlements'>
-                    </section>    <section className='add_data_from_file__container-corrections'>
+                    </section>
+                    <section className='add_data_from_file__container-corrections'>
                     </section>
                 </section>
             </section>
