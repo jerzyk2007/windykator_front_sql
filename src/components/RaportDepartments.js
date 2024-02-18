@@ -121,7 +121,6 @@ const RaportDepartments = () => {
             //dodaję "Całość" jako pierwszy obiekt, żeby w tabeli wyświetlał się jako pierwszy
             generatingRaport.unshift(sumOfAllItems);
 
-
             setRaport(generatingRaport);
 
         } else {
@@ -248,18 +247,18 @@ const RaportDepartments = () => {
 
             let departmentObj = {
                 DZIALY: dep,
+                CEL_BEZ_PZU_LINK4: Number(objectiveWithoutPandL),
+                PRZETERMINOWANE_BEZ_PZU_LINK4: Number(expiredPaymentsWithoutPandLValue.toFixed(2)),
+                ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4: howManyExpiredElementsWithoutPandL.get(dep),
                 CALKOWITA_WARTOSC_FV_BRUTTO: Number(sumOfGross.get(dep).toFixed(2)),
                 ILOSC_NIEROZLICZONYCH_FV: howManyElements.get(dep),
                 KWOTA_NIEROZLICZONYCH_FV: Number(underPayment.get(dep).toFixed(2)),
                 PRZETERMINOWANE_FV: Number(expiredPaymentsValue.toFixed(2)),
                 NIEPRZETERMINOWANE_FV: Number(notExpiredPaymentValue.toFixed(2)),
-                PRZETERMINOWANE_BEZ_PZU_LINK4: Number(expiredPaymentsWithoutPandLValue.toFixed(2)),
                 NIEPRZETERMINOWANE_FV_BEZ_PZU_LINK4: Number(notExpiredPaymentWithoutPandLValue.toFixed(2)),
                 PRZETERMINOWANE_KANCELARIA: Number(legalExpired.get(dep).toFixed(2)),
                 CEL_CALOSC: Number(objective),
-                CEL_BEZ_PZU_LINK4: Number(objectiveWithoutPandL),
                 ILOSC_PRZETERMINOWANYCH_FV: howManyExpiredElements.get(dep),
-                ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4: howManyExpiredElementsWithoutPandL.get(dep),
                 ILOSC_FV_KANCELARIA: legalCounter.get(dep),
             };
             generatingRaport.push(departmentObj);
