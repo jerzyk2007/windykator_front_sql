@@ -201,9 +201,14 @@ const ActualTable = ({ info }) => {
         const result = await axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`);
 
         const cleanData = (result.data).map(doc => {
-            const { _id, __v, UWAGI, ...cleanDoc } = doc;
-            if (Array.isArray(UWAGI)) {
-                cleanDoc.UWAGI = UWAGI.join(', ');
+            const { _id, __v, UWAGI_ASYSTENT, UWAGI_Z_FAKTURY, ...cleanDoc } = doc;
+            if (Array.isArray(UWAGI_ASYSTENT)) {
+                cleanDoc.UWAGI_ASYSTENT = UWAGI_ASYSTENT.join(', ');
+
+            }
+            if (Array.isArray(UWAGI_Z_FAKTURY)) {
+                cleanDoc.UWAGI_Z_FAKTURY = UWAGI_Z_FAKTURY.join(', ');
+
             }
             return cleanDoc;
         });
