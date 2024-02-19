@@ -51,8 +51,8 @@ const ActualTable = ({ info }) => {
             fontFamily: "Arial",
             padding: "2px 5px",
             fontWeight: '500',
-            minHeight: '2rem',
-            maxHeight: "100%"
+            minHeight: '1rem',
+            maxHeight: "8rem"
         }
     };
 

@@ -10,6 +10,7 @@ const AddDataFromFile = () => {
 
     const [errSharepoint, setErrSharepoint] = useState('');
     const [errPowerBI, setErrPowerBI] = useState('');
+    const [errRubicon, setErrRubicon] = useState('');
     const [errMsg, setErrMsg] = useState('');
 
     const handleSendFile = async (e, type) => {
@@ -24,8 +25,6 @@ const AddDataFromFile = () => {
             const formData = new FormData();
             formData.append('excelFile', file);
 
-            console.log(type);
-            console.log(file);
 
             const response = await axiosPrivateIntercept.post(`/documents/send-documents/${type}`, formData,
                 {
@@ -51,9 +50,13 @@ const AddDataFromFile = () => {
                 setErrSharepoint('Błąd aktualizacji dokumentów.');
             }
             else
-                if (type === 'powerbi') {
+                if (type === 'rubicon') {
                     setErrPowerBI('Błąd aktualizacji dokumentów.');
                 }
+                else
+                    if (type === 'powerbi') {
+                        setErrPowerBI('Błąd aktualizacji dokumentów.');
+                    }
             console.error('Błąd przesyłania pliku:', error);
             setPleaseWait(false);
         }
@@ -79,6 +82,22 @@ const AddDataFromFile = () => {
                         </section>
                     }
 
+                    {!errRubicon ?
+                        <section className='add_data_from_file__container-documents'>
+                            <input
+                                type="file"
+                                name="uploadfile"
+                                id="rubicon"
+                                style={{ display: "none" }}
+                                onChange={(e) => handleSendFile(e, 'rubicon')}
+                            />
+                            <label htmlFor="rubicon" className="add_data_file-click-me">Prześlij faktury Rubicon</label>
+                        </section> :
+                        <section className='add_data_from_file__container-documents'>
+                            <span className="add_data_file-click-me">{errRubicon}</span>
+                        </section>
+                    }
+
                     {!errPowerBI ?
                         <section className='add_data_from_file__container-documents'>
                             <input
@@ -88,14 +107,13 @@ const AddDataFromFile = () => {
                                 style={{ display: "none" }}
                                 onChange={(e) => handleSendFile(e, 'powerbi')}
                             />
-                            <label htmlFor="powerbi" className="add_data_file-click-me">Prześlij faktury Power BI</label>
+                            <label htmlFor="powerbi" className="add_data_file-click-me">Prześlij faktury PowerBI</label>
                         </section> :
                         <section className='add_data_from_file__container-documents'>
                             <span className="add_data_file-click-me">{errPowerBI}</span>
                         </section>
                     }
-                    <section className='add_data_from_file__container-settlements'>
-                    </section>
+
                     <section className='add_data_from_file__container-corrections'>
                     </section>
                 </section>
