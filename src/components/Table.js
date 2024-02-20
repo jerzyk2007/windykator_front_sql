@@ -64,10 +64,10 @@ const ActualTable = ({ info }) => {
 
             modifiedItem.muiTableBodyCellProps = muiTableBodyCellProps;
 
-            if (item.filterVariant === 'multi-select' || item.filterVariant === 'select') {
-                const uniqueValues = Array.from(new Set(data.map(filtr => filtr[item.accessorKey])));
-                modifiedItem.filterSelectOptions = uniqueValues;
-            }
+            // if (item.filterVariant === 'multi-select' || item.filterVariant === 'select') {
+            //     const uniqueValues = Array.from(new Set(data.map(filtr => filtr[item.accessorKey])));
+            //     modifiedItem.filterSelectOptions = uniqueValues;
+            // }
 
             if (item.filterVariant === 'date-range') {
                 modifiedItem.accessorFn = (originalRow) => new Date(originalRow[item.accessorKey]);
@@ -338,6 +338,9 @@ const ActualTable = ({ info }) => {
                                 enableGlobalFilterModes
                                 globalFilterModeOptions={['contains']}
                                 positionGlobalFilter="left"
+
+                                // opcja wyszukuje zbiory do select i multi-select
+                                enableFacetedValues
 
                                 // rowCount={data.length}
 
