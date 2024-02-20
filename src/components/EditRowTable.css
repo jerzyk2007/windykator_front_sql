@@ -148,6 +148,16 @@
     box-shadow: 2px 2px 2px #757575;
 }
 
+.edit_row_table-section-data-actions--check {
+    width: 100%;
+    margin: 0 auto;
+    height: 1.5rem;
+    padding: 5px;
+    margin: 5px;
+    /* background-color: #7fffd4; */
+}
+
+
 @media screen and (max-width: 960px) {
 
     .edit_row_table-section-content {

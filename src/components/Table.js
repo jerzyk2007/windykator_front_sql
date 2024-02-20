@@ -96,11 +96,36 @@ const ActualTable = ({ info }) => {
                 modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
             }
 
-            if (item.accessorKey === "KONTRAHENT") {
+            // if (item.accessorKey === "KONTRAHENT") {
+            //     const changeMuiTableBodyCellProps = { ...muiTableBodyCellProps };
+            //     changeMuiTableBodyCellProps.align = "left";
+            //     modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
+            // }
 
-                const changeMuiTableBodyCellProps = { ...muiTableBodyCellProps };
-                changeMuiTableBodyCellProps.align = "left";
-                modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
+            if (item.accessorKey === "KONTRAHENT") {
+                modifiedItem.muiTableBodyCellProps = ({ cell }) => {
+                    const cellValue = cell.getValue();
+                    const checkClient = cell.row.original.ZAZNACZ_KONTRAHENTA;
+
+                    return {
+                        align: "left",
+                        sx: {
+                            ...muiTableBodyCellProps.sx,
+                            backgroundColor: cell.column.id === 'KONTRAHENT' && checkClient ? '#7fffd4' : "white",
+                        },
+                    };
+                };
+            }
+
+            if (item.accessorKey === "ZAZNACZ_KONTRAHENTA") {
+                modifiedItem.Cell = ({ cell, row }) => {
+                    const cellValue = cell.getValue();
+
+                    return (
+                        <span>{cellValue ? "TAK" : "NIE"}</span>
+
+                    );
+                };
             }
 
             if (item.accessorKey === "ILE_DNI_PO_TERMINIE") {
@@ -113,6 +138,16 @@ const ActualTable = ({ info }) => {
                 });
             }
 
+
+            // if (item.accessorKey === "ZAZNACZ_KONTRAHENTA") {
+            //     modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
+            //         ...muiTableBodyCellProps,
+            //         sx: {
+            //             ...muiTableBodyCellProps.sx,
+            //             backgroundColor: cell.column.id === 'KONTRAHENT' && cell.getValue() ? 'rgb(250, 136, 136)' : 'white',
+            //         },
+            //     });
+            // }
 
             if (item.accessorKey === "50_VAT") {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => {

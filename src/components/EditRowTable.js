@@ -36,6 +36,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
         setNote('');
     };
 
+    console.log(dataRowTable);
+
     const handleSaveData = async () => {
         const { _id } = rowData;
 
@@ -46,7 +48,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                 return item;
             }
         });
-
+        console.log(rowData);
         try {
             const result = await axiosPrivateIntercept.patch(`/documents/change-single-document/${auth._id}`, {
                 _id, documentItem: rowData
@@ -308,6 +310,21 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                                 <option value="100">Nie pobrano 100%</option>
                             </select>
                         </section>
+                        <section className='edit_row_table-section-data-actions'>
+                            <h4 className='edit_row_table-section-data-actions--title'>Wyróżnij kontrahenta</h4>
+                            <input
+                                className='edit_row_table-section-data-actions--check'
+                                type="checkbox"
+                                checked={rowData.ZAZNACZ_KONTRAHENTA ? rowData.ZAZNACZ_KONTRAHENTA : false}
+                                onChange={(e) => setRowData(prev => {
+                                    return {
+                                        ...prev,
+                                        ZAZNACZ_KONTRAHENTA: e.target.checked
+                                    };
+                                })}
+                            />
+                        </section>
+
                     </section>
 
                 </section>
