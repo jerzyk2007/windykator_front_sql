@@ -51,10 +51,11 @@ const ActualTable = ({ info }) => {
             fontSize: '13px',
             borderRight: "1px solid #c9c7c7",
             fontFamily: "Arial",
-            padding: "2px 5px",
+            padding: "5px 2px",
             fontWeight: '500',
-            minHeight: '1rem',
-            maxHeight: "8rem"
+            minHeight: '2rem',
+            maxHeight: "8rem",
+            textWrap: "balance"
         }
     };
 
@@ -109,7 +110,6 @@ const ActualTable = ({ info }) => {
                             backgroundColor: cell.column.id === 'KONTRAHENT' && checkClient ? '#7fffd4' : "white",
                             // whiteSpace: "pre-wrap",
                             // whiteSpace: 'pre-line'
-                            // textWrap: "balance"
 
                         },
                     };
@@ -288,7 +288,7 @@ const ActualTable = ({ info }) => {
                     setDocuments(result.data);
                     setColumnVisibility(settingsUser?.data?.visible || {});
                     setColumnSizing(settingsUser?.data?.size || {});
-                    setDensity(settingsUser?.data?.density || 'comfortable');
+                    // setDensity(settingsUser?.data?.density || 'comfortable');
                     setColumnOrder(settingsUser?.data?.order?.map(order => order) || []);
                     setColumnPinning(settingsUser?.data?.pinning || { left: [], right: [] });
                     setPagination(settingsUser?.data?.pagination || { pageIndex: 0, pageSize: 10 });
@@ -348,22 +348,24 @@ const ActualTable = ({ info }) => {
                                 enableColumnResizing
                                 onColumnSizingChange={setColumnSizing}
                                 onColumnVisibilityChange={setColumnVisibility}
-                                onDensityChange={setDensity}
+                                // onDensityChange={setDensity}
                                 onColumnOrderChange={setColumnOrder}
                                 enableColumnOrdering
                                 enableColumnPinning
                                 onColumnPinningChange={setColumnPinning}
                                 onPaginationChange={setPagination}
                                 onSortingChange={setSorting}
+                                enableDensityToggle={false}
                                 enableSelectAll={false}
                                 initialState={{
                                     showColumnFilters: false,
                                     showGlobalFilter: true,
+                                    density: 'compact'
                                 }}
                                 localization={MRT_Localization_PL}
                                 state={{
                                     columnVisibility,
-                                    density,
+                                    // density,
                                     columnOrder,
                                     columnPinning,
                                     pagination,
@@ -412,14 +414,16 @@ const ActualTable = ({ info }) => {
                                     align: "left",
                                     sx: {
                                         fontWeight: "700",
-                                        fontSize: "12px",
+                                        fontSize: "13px",
                                         color: "black",
                                         backgroundColor: "#a7d3f7",
                                         borderRight: "1px solid #c9c7c7",
-                                        // '& .Mui-TableHeadCell-Content': {
-                                        //     justifyContent: 'center',
-                                        //     textWrap: "balance"
-                                        // },
+                                        height: "3rem",
+                                        lineHeight: "2.5rem",
+                                        '& .Mui-TableHeadCell-Content': {
+                                            // justifyContent: 'center',
+                                            textWrap: "balance"
+                                        },
                                     },
                                 })}
 
