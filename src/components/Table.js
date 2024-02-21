@@ -37,7 +37,9 @@ const ActualTable = ({ info }) => {
     const [tableSize, setTableSize] = useState(500);
     const [pagination, setPagination] = useState({});
 
-    const [sorting, setSorting] = useState([]);
+    const [sorting, setSorting] = useState([
+        { id: 'DATA_FV', desc: true }
+    ]);
 
     const [quickNote, setQuickNote] = useState('');
     const [dataRowTable, setDataRowTable] = useState('');
@@ -76,7 +78,6 @@ const ActualTable = ({ info }) => {
                 });
             }
 
-
             if (item.accessorKey === "UWAGI_ASYSTENT") {
                 modifiedItem.Cell = ({ cell }) => {
                     const cellValue = cell.getValue();
@@ -96,12 +97,6 @@ const ActualTable = ({ info }) => {
                 modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
             }
 
-            // if (item.accessorKey === "KONTRAHENT") {
-            //     const changeMuiTableBodyCellProps = { ...muiTableBodyCellProps };
-            //     changeMuiTableBodyCellProps.align = "left";
-            //     modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
-            // }
-
             if (item.accessorKey === "KONTRAHENT") {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => {
                     const cellValue = cell.getValue();
@@ -112,6 +107,10 @@ const ActualTable = ({ info }) => {
                         sx: {
                             ...muiTableBodyCellProps.sx,
                             backgroundColor: cell.column.id === 'KONTRAHENT' && checkClient ? '#7fffd4' : "white",
+                            // whiteSpace: "pre-wrap",
+                            // whiteSpace: 'pre-line'
+                            // textWrap: "balance"
+
                         },
                     };
                 };
@@ -417,10 +416,10 @@ const ActualTable = ({ info }) => {
                                         color: "black",
                                         backgroundColor: "#a7d3f7",
                                         borderRight: "1px solid #c9c7c7",
-                                        '& .Mui-TableHeadCell-Content': {
-                                            justifyContent: 'center',
-                                            textWrap: "balance"
-                                        },
+                                        // '& .Mui-TableHeadCell-Content': {
+                                        //     justifyContent: 'center',
+                                        //     textWrap: "balance"
+                                        // },
                                     },
                                 })}
 
