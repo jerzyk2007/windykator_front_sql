@@ -107,7 +107,7 @@ const ActualTable = ({ info }) => {
                         align: "left",
                         sx: {
                             ...muiTableBodyCellProps.sx,
-                            backgroundColor: cell.column.id === 'KONTRAHENT' && checkClient ? '#7fffd4' : "white",
+                            backgroundColor: cell.column.id === 'KONTRAHENT' && checkClient === "TAK" ? '#7fffd4' : "white",
                             // whiteSpace: "pre-wrap",
                             // whiteSpace: 'pre-line'
 
@@ -121,7 +121,7 @@ const ActualTable = ({ info }) => {
                     const cellValue = cell.getValue();
 
                     return (
-                        <span>{cellValue ? "TAK" : "NIE"}</span>
+                        <span>{cellValue}</span>
 
                     );
                 };
@@ -418,10 +418,13 @@ const ActualTable = ({ info }) => {
                                         color: "black",
                                         backgroundColor: "#a7d3f7",
                                         borderRight: "1px solid #c9c7c7",
-                                        height: "3rem",
-                                        lineHeight: "2.5rem",
+                                        minHeight: "3rem",
+                                        // lineHeight: "2.5rem",
                                         '& .Mui-TableHeadCell-Content': {
+                                            // display: "flex",
+                                            // alignItems: "center",
                                             // justifyContent: 'center',
+                                            textAlign: "center",
                                             textWrap: "balance"
                                         },
                                     },

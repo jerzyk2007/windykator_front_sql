@@ -266,8 +266,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                                     };
                                 })}
                             >
-                                <option value="false">Nie</option>
-                                <option value="true">Tak</option>
+                                <option value="NIE">Nie</option>
+                                <option value="TAK">Tak</option>
                             </select>
                         </section>
 
@@ -285,8 +285,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                                     };
                                 })}
                             >
-                                <option value="false">Nie</option>
-                                <option value="true">Tak</option>
+                                <option value="NIE">Nie</option>
+                                <option value="TAK">Tak</option>
                             </select>
                         </section>
 
@@ -304,13 +304,13 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                                     };
                                 })}
                             >
-                                <option value="false">Nie dotyczy</option>
-                                <option value="true">Tak</option>
+                                <option value="Nie dotyczy">Nie dotyczy</option>
+                                <option value="TAK">Tak</option>
                                 <option value="50">Nie pobrano 50%</option>
                                 <option value="100">Nie pobrano 100%</option>
                             </select>
                         </section>
-                        <section className='edit_row_table-section-data-actions'>
+                        {/* <section className='edit_row_table-section-data-actions'>
                             <h4 className='edit_row_table-section-data-actions--title'>Wyróżnij kontrahenta</h4>
                             <input
                                 className='edit_row_table-section-data-actions--check'
@@ -320,6 +320,21 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                                     return {
                                         ...prev,
                                         ZAZNACZ_KONTRAHENTA: e.target.checked
+                                    };
+                                })}
+                            />
+                        </section> */}
+                        <section className='edit_row_table-section-data-actions'>
+                            <h4 className='edit_row_table-section-data-actions--title'>Wyróżnij kontrahenta</h4>
+                            <input
+                                className='edit_row_table-section-data-actions--check'
+                                type="checkbox"
+                                checked={rowData.ZAZNACZ_KONTRAHENTA === "TAK"}
+                                onChange={(e) => setRowData(prev => {
+                                    const newValue = e.target.checked ? "TAK" : "NIE";
+                                    return {
+                                        ...prev,
+                                        ZAZNACZ_KONTRAHENTA: newValue
                                     };
                                 })}
                             />
