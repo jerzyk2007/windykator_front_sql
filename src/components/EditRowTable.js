@@ -36,8 +36,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
         setNote('');
     };
 
-    console.log(dataRowTable);
-
     const handleSaveData = async () => {
         const { _id } = rowData;
 
@@ -329,9 +327,9 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                             <input
                                 className='edit_row_table-section-data-actions--check'
                                 type="checkbox"
-                                checked={rowData.ZAZNACZ_KONTRAHENTA === "TAK"}
+                                checked={rowData.ZAZNACZ_KONTRAHENTA === "Tak"}
                                 onChange={(e) => setRowData(prev => {
-                                    const newValue = e.target.checked ? "TAK" : "NIE";
+                                    const newValue = e.target.checked ? "Tak" : "Nie";
                                     return {
                                         ...prev,
                                         ZAZNACZ_KONTRAHENTA: newValue

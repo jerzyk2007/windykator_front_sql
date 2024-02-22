@@ -10,7 +10,7 @@ const AddDataFromFile = () => {
 
     const [errSharepoint, setErrSharepoint] = useState('');
     const [errPowerBI, setErrPowerBI] = useState('');
-    const [errRubicon, setErrRubicon] = useState('');
+    const [errAS, setErrAS] = useState('');
     const [errMsg, setErrMsg] = useState('');
 
     const handleSendFile = async (e, type) => {
@@ -50,8 +50,8 @@ const AddDataFromFile = () => {
                 setErrSharepoint('Błąd aktualizacji dokumentów.');
             }
             else
-                if (type === 'rubicon') {
-                    setErrPowerBI('Błąd aktualizacji dokumentów.');
+                if (type === 'AS') {
+                    setErrAS('Błąd aktualizacji dokumentów.');
                 }
                 else
                     if (type === 'powerbi') {
@@ -82,19 +82,19 @@ const AddDataFromFile = () => {
                         </section>
                     }
 
-                    {!errRubicon ?
+                    {!errAS ?
                         <section className='add_data_from_file__container-documents'>
                             <input
                                 type="file"
                                 name="uploadfile"
-                                id="rubicon"
+                                id="AS"
                                 style={{ display: "none" }}
-                                onChange={(e) => handleSendFile(e, 'rubicon')}
+                                onChange={(e) => handleSendFile(e, 'AS')}
                             />
-                            <label htmlFor="rubicon" className="add_data_file-click-me">Prześlij faktury Rubicon</label>
+                            <label htmlFor="AS" className="add_data_file-click-me">Prześlij faktury AS</label>
                         </section> :
                         <section className='add_data_from_file__container-documents'>
-                            <span className="add_data_file-click-me">{errRubicon}</span>
+                            <span className="add_data_file-click-me">{errAS}</span>
                         </section>
                     }
 

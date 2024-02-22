@@ -67,10 +67,9 @@ const ActualTable = ({ info }) => {
 
             modifiedItem.muiTableBodyCellProps = muiTableBodyCellProps;
 
-            // if (item.filterVariant === 'multi-select' || item.filterVariant === 'select') {
-            //     const uniqueValues = Array.from(new Set(data.map(filtr => filtr[item.accessorKey])));
-            //     modifiedItem.filterSelectOptions = uniqueValues;
-            // }
+            if (item.filterVariant === "startsWith") {
+                modifiedItem.filterFn = "startsWith";
+            }
 
             if (item.filterVariant === 'date-range') {
                 modifiedItem.accessorFn = (originalRow) => new Date(originalRow[item.accessorKey]);
@@ -107,7 +106,7 @@ const ActualTable = ({ info }) => {
                         align: "left",
                         sx: {
                             ...muiTableBodyCellProps.sx,
-                            backgroundColor: cell.column.id === 'KONTRAHENT' && checkClient === "TAK" ? '#7fffd4' : "white",
+                            backgroundColor: cell.column.id === 'KONTRAHENT' && checkClient === "Tak" ? '#7fffd4' : "white",
                             // whiteSpace: "pre-wrap",
                             // whiteSpace: 'pre-line'
 
@@ -309,7 +308,6 @@ const ActualTable = ({ info }) => {
     }, [info]);
 
 
-
     return (
         <section className='actual_table'>
             {pleaseWait ? <PleaseWait /> :
@@ -363,6 +361,7 @@ const ActualTable = ({ info }) => {
                                     density: 'compact'
                                 }}
                                 localization={MRT_Localization_PL}
+
                                 state={{
                                     columnVisibility,
                                     // density,
@@ -371,8 +370,11 @@ const ActualTable = ({ info }) => {
                                     pagination,
                                     sorting,
                                 }}
+                                // filterFns={'equals'}
                                 enableGlobalFilterModes
-                                globalFilterModeOptions={['contains']}
+                                globalFilterModeOptions={['contains', 'fuzzy', 'startsWith']}
+                                globalFilterFn='startsWith'
+
                                 positionGlobalFilter="left"
 
                                 // opcja wyszukuje zbiory do select i multi-select
