@@ -391,6 +391,7 @@ const ActualTable = ({ info }) => {
                                 // enableColumnVirtualization
 
                                 muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
+
                                 // wyświetla filtry nad komórką - 
                                 columnFilterDisplayMode={'popover'}
 

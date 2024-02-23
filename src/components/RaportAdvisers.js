@@ -353,14 +353,14 @@ const RaportAdvisers = () => {
                 header: 'Doradca',
                 size: columnSizing?.Department ? columnSizing.Department : 150,
                 filterVariant: 'multi-select',
-                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DORADCA'])))
+                // filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DORADCA'])))
             },
             {
                 accessorKey: 'DZIAL',
                 header: 'Dział',
                 size: columnSizing?.Department ? columnSizing.Department : 150,
                 filterVariant: 'multi-select',
-                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DZIAL'])))
+                // filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DZIAL'])))
             },
 
             {
@@ -583,6 +583,7 @@ const RaportAdvisers = () => {
         enableColumnOrdering: true,
         enableColumnActions: false,
         enablePagination: false,
+        enableFacetedValues: true,
         localization: MRT_Localization_PL,
         onColumnVisibilityChange: setColumnVisibility,
         onDensityChange: setDensity,
