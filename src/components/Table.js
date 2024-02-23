@@ -373,7 +373,7 @@ const ActualTable = ({ info }) => {
                                 // filterFns={'equals'}
                                 enableGlobalFilterModes
                                 globalFilterModeOptions={['contains', 'fuzzy', 'startsWith']}
-                                globalFilterFn='startsWith'
+                                globalFilterFn='contains'
 
                                 positionGlobalFilter="left"
 
