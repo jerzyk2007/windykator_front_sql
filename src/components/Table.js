@@ -71,6 +71,7 @@ const ActualTable = ({ info }) => {
                 modifiedItem.filterFn = "startsWith";
             }
 
+
             if (item.filterVariant === 'date-range') {
                 modifiedItem.accessorFn = (originalRow) => new Date(originalRow[item.accessorKey]);
                 modifiedItem.Cell = ({ cell }) => cell.getValue().toLocaleDateString('pl-PL', {
@@ -422,13 +423,19 @@ const ActualTable = ({ info }) => {
                                         backgroundColor: "#a7d3f7",
                                         borderRight: "1px solid #c9c7c7",
                                         minHeight: "3rem",
+                                        padding: "5px",
+                                        overflow: "none",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: 'center',
                                         // lineHeight: "2.5rem",
                                         '& .Mui-TableHeadCell-Content': {
-                                            // display: "flex",
-                                            // alignItems: "center",
-                                            // justifyContent: 'center',
+                                            flexGrow: 1,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: 'center',
                                             textAlign: "center",
-                                            textWrap: "balance"
+                                            // textWrap: "balance"
                                         },
                                     },
                                 })}

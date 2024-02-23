@@ -309,7 +309,7 @@ const RaportDepartments = () => {
 
             setColumnVisibility(settingsRaportUserDepartments?.data?.visible || {});
             setColumnSizing(settingsRaportUserDepartments?.data?.size || {});
-            setDensity(settingsRaportUserDepartments?.data?.density || 'comfortable');
+            // setDensity(settingsRaportUserDepartments?.data?.density || 'comfortable');
             setColumnOrder(settingsRaportUserDepartments?.data?.order?.map(order => order) || []);
             setColumnPinning(settingsRaportUserDepartments?.data?.pinning || { left: [], right: [] });
 
@@ -537,18 +537,21 @@ const RaportDepartments = () => {
         enableColumnPinning: true,
         enableColumnResizing: true,
         enableColumnOrdering: true,
-        // layoutMode: "grid",
+        enableDensityToggle: false,
         enableColumnActions: false,
         enablePagination: false,
         localization: MRT_Localization_PL,
         onColumnVisibilityChange: setColumnVisibility,
-        onDensityChange: setDensity,
+        // onDensityChange: setDensity,
         onColumnSizingChange: setColumnSizing,
         onColumnOrderChange: setColumnOrder,
         onColumnPinningChange: setColumnPinning,
+        initialState: {
+            density: 'compact'
+        },
         state: {
             columnVisibility,
-            density,
+            // density,
             columnOrder,
             columnPinning,
             columnSizing
@@ -571,13 +574,25 @@ const RaportDepartments = () => {
                 fontSize: "14px",
                 color: "black",
                 backgroundColor: "#a7d3f7",
-                padding: "15px",
-                paddingTop: "0",
-                paddingBottom: "0",
-                minHeight: "2rem",
+                // textAlign: "center",
+                padding: "5px",
+                // paddingTop: "0",
+                // paddingBottom: "0",
+                // minHeight: "2rem",
+                overflow: "none",
+                whiteSpace: "pre-wrap",
                 display: "flex",
                 justifyContent: "center",
-                border: '1px solid rgba(81, 81, 81, .2)'
+                // alignItems: "start",
+                border: '1px solid rgba(81, 81, 81, .2)',
+                '& .Mui-TableHeadCell-Content': {
+                    flexGrow: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: 'center',
+                    textAlign: "center",
+                    // textWrap: "balance"
+                },
             },
         }),
 

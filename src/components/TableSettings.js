@@ -243,6 +243,7 @@ const TableSettings = () => {
                             <option value="range">Od - do</option>
                             <option value="date-range">Filtr date-range</option>
                             <option value="date">Data</option>
+                            <option value="none">Brak</option>
                         </select>
                     </span>
                 </section>
