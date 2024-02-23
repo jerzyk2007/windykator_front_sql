@@ -605,7 +605,7 @@ const RaportAdvisers = () => {
         // enableToolbarInternalActions: false,
 
         muiTableHeadCellProps: () => ({
-            align: "center",
+            align: "left",
             sx: {
                 fontWeight: "bold",
                 fontSize: "14px",
@@ -615,9 +615,31 @@ const RaportAdvisers = () => {
                 paddingTop: "0",
                 paddingBottom: "0",
                 minHeight: "2rem",
+                // textWrap: "wrap",
+                // wordBreak: "break-word",
+                // overflowWrap: "break-word",
+                whiteSpace: "wrap",
+                textAlign: "center",
                 display: "flex",
                 justifyContent: "center",
-                border: '1px solid rgba(81, 81, 81, .2)'
+                alignItems: "center",
+                border: '1px solid rgba(81, 81, 81, .2)',
+                '& .Mui-TableHeadCell-Content': {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: 'center',
+                    textAlign: "center",
+                    // textWrap: "wrap"
+                    whiteSpace: "wrap",
+                },
+                '& .Mui-TableHeadCell-Content-Wrapper': {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: 'center',
+                    textAlign: "center",
+                    // textWrap: "wrap"
+                    whiteSpace: "wrap",
+                },
             },
         }),
 

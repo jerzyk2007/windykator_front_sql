@@ -66,21 +66,7 @@ const AddDataFromFile = () => {
         pleaseWait ? <PleaseWait /> :
             <section className='add_data_from_file'>
                 <section className='add_data_from_file__container'>
-                    {!errSharepoint ?
-                        <section className='add_data_from_file__container-documents'>
-                            <input
-                                type="file"
-                                name="uploadfile"
-                                id="sharepoint"
-                                style={{ display: "none" }}
-                                onChange={(e) => handleSendFile(e, 'sharepoint')}
-                            />
-                            <label htmlFor="sharepoint" className="add_data_file-click-me">Prześlij faktury sharepoint</label>
-                        </section> :
-                        <section className='add_data_from_file__container-documents'>
-                            <span className="add_data_file-click-me">{errSharepoint}</span>
-                        </section>
-                    }
+
 
                     {!errAS ?
                         <section className='add_data_from_file__container-documents'>
@@ -116,6 +102,21 @@ const AddDataFromFile = () => {
 
                     <section className='add_data_from_file__container-corrections'>
                     </section>
+                    {!errSharepoint ?
+                        <section className='add_data_from_file__container-documents'>
+                            <input
+                                type="file"
+                                name="uploadfile"
+                                id="sharepoint"
+                                style={{ display: "none" }}
+                                onChange={(e) => handleSendFile(e, 'sharepoint')}
+                            />
+                            <label htmlFor="sharepoint" className="add_data_file-click-me">Prześlij faktury sharepoint</label>
+                        </section> :
+                        <section className='add_data_from_file__container-documents'>
+                            <span className="add_data_file-click-me">{errSharepoint}</span>
+                        </section>
+                    }
                 </section>
             </section>
     );

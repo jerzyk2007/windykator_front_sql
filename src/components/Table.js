@@ -421,16 +421,58 @@ const ActualTable = ({ info }) => {
                                         backgroundColor: "#a7d3f7",
                                         borderRight: "1px solid #c9c7c7",
                                         minHeight: "3rem",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
                                         // lineHeight: "2.5rem",
                                         '& .Mui-TableHeadCell-Content': {
-                                            // display: "flex",
-                                            // alignItems: "center",
-                                            // justifyContent: 'center',
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: 'center',
                                             textAlign: "center",
                                             textWrap: "balance"
                                         },
                                     },
                                 })}
+
+                                // muiTableHeadCellProps={() => ({
+                                //     align: "left",
+                                //     sx: {
+                                //         fontWeight: "bold",
+                                //         fontSize: "14px",
+                                //         color: "black",
+                                //         backgroundColor: "#a7d3f7",
+                                //         // padding: "15px",
+                                //         // paddingTop: "0",
+                                //         // paddingBottom: "0",
+                                //         minHeight: "2rem",
+                                //         // textWrap: "wrap",
+                                //         // wordBreak: "break-word",
+                                //         // overflowWrap: "break-word",
+                                //         textAlign: "center",
+                                //         whiteSpace: "balance",
+                                //         display: "flex",
+                                //         justifyContent: "center",
+                                //         alignItems: "center",
+                                //         border: '1px solid rgba(81, 81, 81, .2)',
+                                //         '& .Mui-TableHeadCell-Content': {
+                                //             display: "flex",
+                                //             alignItems: "center",
+                                //             justifyContent: 'center',
+                                //             textAlign: "center",
+                                //             // textWrap: "wrap"
+                                //             whiteSpace: "balance",
+                                //         },
+                                //         '& .Mui-TableHeadCell-Content-Wrapper': {
+                                //             display: "flex",
+                                //             alignItems: "center",
+                                //             justifyContent: 'center',
+                                //             textAlign: "center",
+                                //             // textWrap: "wrap"
+                                //             whiteSpace: "balance",
+                                //         },
+                                //     },
+                                // })}
 
                                 // odczytanie danych po kliknięciu w wiersz
                                 muiTableBodyCellProps={({ column, row, cell }) => ({
