@@ -9,7 +9,7 @@ const AddDataFromFile = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
     const [errSharepoint, setErrSharepoint] = useState('');
-    const [errPowerBI, setErrPowerBI] = useState('');
+    const [errSettlements, setSettlements] = useState('');
     const [errAS, setErrAS] = useState('');
     const [errMsg, setErrMsg] = useState('');
 
@@ -37,11 +37,13 @@ const AddDataFromFile = () => {
                 setErrSharepoint('Dokumenty zaktualizowane.');
             }
             else
-                if (type === 'powerbi') {
-                    setErrPowerBI('Dokumenty zaktualizowane.');
+                if (type === 'settlements') {
+                    setSettlements('Dokumenty zaktualizowane.');
                 }
-
-
+                else
+                    if (type === 'AS') {
+                        setErrAS('Dokumenty zaktualizowane.');
+                    }
 
             setPleaseWait(false);
 
@@ -54,8 +56,8 @@ const AddDataFromFile = () => {
                     setErrAS('Błąd aktualizacji dokumentów.');
                 }
                 else
-                    if (type === 'powerbi') {
-                        setErrPowerBI('Błąd aktualizacji dokumentów.');
+                    if (type === 'settlements') {
+                        setSettlements('Błąd aktualizacji dokumentów.');
                     }
             console.error('Błąd przesyłania pliku:', error);
             setPleaseWait(false);
@@ -67,6 +69,24 @@ const AddDataFromFile = () => {
             <section className='add_data_from_file'>
                 <section className='add_data_from_file__container'>
 
+
+
+
+                    {!errSettlements ?
+                        <section className='add_data_from_file__container-documents'>
+                            <input
+                                type="file"
+                                name="uploadfile"
+                                id="settlements"
+                                style={{ display: "none" }}
+                                onChange={(e) => handleSendFile(e, 'settlements')}
+                            />
+                            <label htmlFor="settlements" className="add_data_file-click-me">Prześlij rozrachunki</label>
+                        </section> :
+                        <section className='add_data_from_file__container-documents'>
+                            <span className="add_data_file-click-me">{errSettlements}</span>
+                        </section>
+                    }
 
                     {!errAS ?
                         <section className='add_data_from_file__container-documents'>
@@ -81,22 +101,6 @@ const AddDataFromFile = () => {
                         </section> :
                         <section className='add_data_from_file__container-documents'>
                             <span className="add_data_file-click-me">{errAS}</span>
-                        </section>
-                    }
-
-                    {!errPowerBI ?
-                        <section className='add_data_from_file__container-documents'>
-                            <input
-                                type="file"
-                                name="uploadfile"
-                                id="powerbi"
-                                style={{ display: "none" }}
-                                onChange={(e) => handleSendFile(e, 'powerbi')}
-                            />
-                            <label htmlFor="powerbi" className="add_data_file-click-me">Prześlij faktury PowerBI</label>
-                        </section> :
-                        <section className='add_data_from_file__container-documents'>
-                            <span className="add_data_file-click-me">{errPowerBI}</span>
                         </section>
                     }
 

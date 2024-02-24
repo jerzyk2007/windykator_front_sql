@@ -14,6 +14,7 @@ import UserSettings from './components/UserSettings';
 import TableSettings from './components/TableSettings';
 import RaportDepartments from './components/RaportDepartments';
 import RaportAdvisers from './components/RaportAdvisers';
+import Home from './components/Home';
 import './App.css';
 
 const ROLES = {

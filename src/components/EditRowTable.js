@@ -214,15 +214,13 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                                 })}
                             >
                                 <option value=""></option>
+                                <option value="M_LEGAL">M_LEGAL</option>
+                                <option value="INWEST INKASO">INWEST INKASO</option>
+                                <option value="KANCELARIA KROTOSKI">KANCELARIA KROTOSKI</option>
+                                <option value="KRAUZE">KRAUZE</option>
+                                <option value="POSTEPOWANIE SANACYJNE">POSTEPOWANIE SANACYJNE</option>
                                 <option value="ROK-KONOPA">ROK-KONOPA</option>
                                 <option value="CNP">CNP</option>
-                                <option value="MLEGAL">MLEGAL</option>
-                                <option value="INKASO">INKASO</option>
-                                <option value="Kancelaria Krotoski">Kancelaria Krotoski</option>
-                                <option value="Krauze">Krauze</option>
-                                <option value="Nie przekazano do RK">Nie przekazano do RK</option>
-                                <option value="PZU-UGODA">Przekazano do PZU-UGODA</option>
-                                <option value="Postępowanie Sanacyjne">Postępowanie Sanacyjne</option>
                             </select>
                         </section>
                         <section className='edit_row_table-section-data-actions'>
@@ -239,14 +237,13 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                                 })}
                             >
                                 <option value=""></option>
-                                <option value="W koszty działu">W koszty działu</option>
-                                <option value="Do korekty">Do korekty</option>
-                                <option value="Przygotować wezwanie">Przygotować wezwanie</option>
-                                <option value="Wysłano wezwanie">Wysłano wezwanie</option>
-                                <option value="Do decyzji kierownika">Do decyzji kierownika</option>
-                                <option value="Działania windykacja BL">Działania windykacja BL</option>
-                                <option value="Do ugody PZU">Do ugody PZU</option>
-                                <option value="Przekazano do ugody PZU">Przekazano do ugody PZU</option>
+                                <option value="W KOSZTY DZIAŁU">W KOSZTY DZIAŁU</option>
+                                <option value="DO KOREKTY">DO KOREKTY</option>
+                                <option value="DO DECYZJI KIEROWNIKA">DO DECYZJI KIEROWNIKA</option>
+                                <option value="WYSŁANO WEZWANIE DO ZAPŁATY">WYSŁANO WEZWANIE DO ZAPŁATY</option>
+                                <option value="GREEN PARTS">GREEN PARTS</option>
+                                <option value="ROK- KONOPA">ROK- KONOPA</option>
+                                <option value="CNP">CNP</option>
                             </select>
                         </section>
 

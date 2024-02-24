@@ -111,6 +111,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 </Link>
                     {menuActive && <div className='nav_menu-dropdown__menu' >
                         <ul className='nav_menu__menu-dropmenu'>
+                            <li className='nav_menu-item-dropmenu'><Link to="/" className="nav_menu-link" onClick={handleLinkClick}>Informacje
+                            </Link></li>
                             {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link to="/register" className="nav_menu-link" onClick={handleLinkClick}>Dodaj użytkownika
                             </Link></li>}
                             {/* {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zmień uprawnienia
