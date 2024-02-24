@@ -610,31 +610,24 @@ const RaportAdvisers = () => {
         // enableToolbarInternalActions: false,
 
         muiTableHeadCellProps: () => ({
-            align: "center",
+            align: "left",
             sx: {
                 fontWeight: "bold",
                 fontSize: "14px",
                 color: "black",
                 backgroundColor: "#a7d3f7",
-                // textAlign: "center",
-                padding: "5px",
-                // paddingTop: "0",
-                // paddingBottom: "0",
-                // minHeight: "2rem",
-                overflow: "none",
-                whiteSpace: "pre-wrap",
+                padding: "15px",
+                paddingTop: "0",
+                paddingBottom: "0",
+                minHeight: "2rem",
+                // textWrap: "wrap",
+                // wordBreak: "break-word",
+                // overflowWrap: "break-word",
+                whiteSpace: "wrap",
+                textAlign: "center",
                 display: "flex",
                 justifyContent: "center",
-                // alignItems: "start",
-                border: '1px solid rgba(81, 81, 81, .2)',
-                '& .Mui-TableHeadCell-Content': {
-                    flexGrow: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: 'center',
-                    textAlign: "center",
-                    // textWrap: "balance"
-                },
+                border: '1px solid rgba(81, 81, 81, .2)'
             },
         }),
 
