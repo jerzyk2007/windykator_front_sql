@@ -71,7 +71,6 @@ const ActualTable = ({ info }) => {
                 modifiedItem.filterFn = "startsWith";
             }
 
-
             if (item.filterVariant === 'date-range') {
                 modifiedItem.accessorFn = (originalRow) => new Date(originalRow[item.accessorKey]);
                 modifiedItem.Cell = ({ cell }) => cell.getValue().toLocaleDateString('pl-PL', {
@@ -392,7 +391,6 @@ const ActualTable = ({ info }) => {
                                 // enableColumnVirtualization
 
                                 muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
-
                                 // wyświetla filtry nad komórką - 
                                 columnFilterDisplayMode={'popover'}
 
@@ -423,18 +421,13 @@ const ActualTable = ({ info }) => {
                                         display: "flex",
                                         justifyContent: "center",
                                         alignItems: "center",
-                                        padding: "5px",
-                                        overflow: "none",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: 'center',
                                         // lineHeight: "2.5rem",
                                         '& .Mui-TableHeadCell-Content': {
-                                            // display: "flex",
-                                            // alignItems: "center",
-                                            // justifyContent: 'center',
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: 'center',
                                             textAlign: "center",
-                                            // textWrap: "balance"
+                                            textWrap: "balance"
                                         },
                                     },
                                 })}

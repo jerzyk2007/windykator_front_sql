@@ -335,7 +335,7 @@ const RaportAdvisers = () => {
 
             setColumnVisibility(settingsRaportUserAdvisers?.data?.visible || {});
             setColumnSizing(settingsRaportUserAdvisers?.data?.size || {});
-            // setDensity(settingsRaportUserAdvisers?.data?.density || 'comfortable');
+            setDensity(settingsRaportUserAdvisers?.data?.density || 'comfortable');
             setColumnOrder(settingsRaportUserAdvisers?.data?.order?.map(order => order) || []);
             setColumnPinning(settingsRaportUserAdvisers?.data?.pinning || { left: [], right: [] });
 
@@ -353,14 +353,14 @@ const RaportAdvisers = () => {
                 header: 'Doradca',
                 size: columnSizing?.Department ? columnSizing.Department : 150,
                 filterVariant: 'multi-select',
-                // filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DORADCA'])))
+                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DORADCA'])))
             },
             {
                 accessorKey: 'DZIAL',
                 header: 'Dział',
                 size: columnSizing?.Department ? columnSizing.Department : 150,
                 filterVariant: 'multi-select',
-                // filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DZIAL'])))
+                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DZIAL'])))
             },
 
             {
@@ -583,20 +583,15 @@ const RaportAdvisers = () => {
         enableColumnOrdering: true,
         enableColumnActions: false,
         enablePagination: false,
-        enableFacetedValues: true,
-        enableDensityToggle: false,
         localization: MRT_Localization_PL,
         onColumnVisibilityChange: setColumnVisibility,
-        // onDensityChange: setDensity,
+        onDensityChange: setDensity,
         onColumnSizingChange: setColumnSizing,
         onColumnOrderChange: setColumnOrder,
         onColumnPinningChange: setColumnPinning,
-        initialState: {
-            density: 'compact'
-        },
         state: {
             columnVisibility,
-            // density,
+            density,
             columnOrder,
             columnPinning,
             columnSizing
@@ -627,7 +622,24 @@ const RaportAdvisers = () => {
                 textAlign: "center",
                 display: "flex",
                 justifyContent: "center",
-                border: '1px solid rgba(81, 81, 81, .2)'
+                alignItems: "center",
+                border: '1px solid rgba(81, 81, 81, .2)',
+                '& .Mui-TableHeadCell-Content': {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: 'center',
+                    textAlign: "center",
+                    // textWrap: "wrap"
+                    whiteSpace: "wrap",
+                },
+                '& .Mui-TableHeadCell-Content-Wrapper': {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: 'center',
+                    textAlign: "center",
+                    // textWrap: "wrap"
+                    whiteSpace: "wrap",
+                },
             },
         }),
 
