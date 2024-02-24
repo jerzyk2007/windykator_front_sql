@@ -403,9 +403,6 @@ const ActualTable = ({ info }) => {
                                     variant: 'outlined',
                                 }}
 
-                                // editDisplayMode={'cell'}
-                                // layoutMode="grid"
-
                                 muiPaginationProps={{
                                     rowsPerPageOptions: [10, 20, 30, 50, 100],
                                     // rowsPerPageOptions: [10, 20, 30, 50, 100, { value: 10000, label: 'Całość' }],
@@ -441,45 +438,6 @@ const ActualTable = ({ info }) => {
                                         },
                                     },
                                 })}
-
-                                // muiTableHeadCellProps={() => ({
-                                //     align: "left",
-                                //     sx: {
-                                //         fontWeight: "bold",
-                                //         fontSize: "14px",
-                                //         color: "black",
-                                //         backgroundColor: "#a7d3f7",
-                                //         // padding: "15px",
-                                //         // paddingTop: "0",
-                                //         // paddingBottom: "0",
-                                //         minHeight: "2rem",
-                                //         // textWrap: "wrap",
-                                //         // wordBreak: "break-word",
-                                //         // overflowWrap: "break-word",
-                                //         textAlign: "center",
-                                //         whiteSpace: "balance",
-                                //         display: "flex",
-                                //         justifyContent: "center",
-                                //         alignItems: "center",
-                                //         border: '1px solid rgba(81, 81, 81, .2)',
-                                //         '& .Mui-TableHeadCell-Content': {
-                                //             display: "flex",
-                                //             alignItems: "center",
-                                //             justifyContent: 'center',
-                                //             textAlign: "center",
-                                //             // textWrap: "wrap"
-                                //             whiteSpace: "balance",
-                                //         },
-                                //         '& .Mui-TableHeadCell-Content-Wrapper': {
-                                //             display: "flex",
-                                //             alignItems: "center",
-                                //             justifyContent: 'center',
-                                //             textAlign: "center",
-                                //             // textWrap: "wrap"
-                                //             whiteSpace: "balance",
-                                //         },
-                                //     },
-                                // })}
 
                                 // odczytanie danych po kliknięciu w wiersz
                                 muiTableBodyCellProps={({ column, row, cell }) => ({
