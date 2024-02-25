@@ -94,6 +94,9 @@ const ActualTable = ({ info }) => {
 
                 const changeMuiTableBodyCellProps = { ...muiTableBodyCellProps };
                 changeMuiTableBodyCellProps.align = "left";
+                const updatedSx = { ...changeMuiTableBodyCellProps.sx };
+                updatedSx.backgroundColor = 'rgba(248, 255, 152, .2)';
+                changeMuiTableBodyCellProps.sx = updatedSx;
                 modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
             }
 
@@ -136,16 +139,15 @@ const ActualTable = ({ info }) => {
                 });
             }
 
-
-            // if (item.accessorKey === "ZAZNACZ_KONTRAHENTA") {
-            //     modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
-            //         ...muiTableBodyCellProps,
-            //         sx: {
-            //             ...muiTableBodyCellProps.sx,
-            //             backgroundColor: cell.column.id === 'KONTRAHENT' && cell.getValue() ? 'rgb(250, 136, 136)' : 'white',
-            //         },
-            //     });
-            // }
+            if (item.accessorKey === "DO_ROZLICZENIA") {
+                modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: 'rgba(248, 255, 152, .2)',
+                    },
+                });
+            }
 
             if (item.accessorKey === "50_VAT") {
                 modifiedItem.muiTableBodyCellProps = ({ cell }) => {
