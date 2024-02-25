@@ -242,8 +242,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                                 <option value="DO DECYZJI KIEROWNIKA">DO DECYZJI KIEROWNIKA</option>
                                 <option value="WYSŁANO WEZWANIE DO ZAPŁATY">WYSŁANO WEZWANIE DO ZAPŁATY</option>
                                 <option value="GREEN PARTS">GREEN PARTS</option>
-                                <option value="ROK- KONOPA">ROK- KONOPA</option>
-                                <option value="CNP">CNP</option>
                             </select>
                         </section>
 
