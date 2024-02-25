@@ -9,31 +9,31 @@ export const EditDocBeCared = ({ rowData, setRowData, setBeCared }) => {
     return (
         <section className='edit_doc_becared-section-data'>
             <section className='edit_doc_becared-section-data-becared'>
-                <h4 className='edit_doc_becared-section-data-becared--title'>Nr sprawy BeCared:</h4>
+                <span className='edit_doc_becared-section-data-becared--title'>Nr sprawy BeCared:</span>
                 <span className='edit_doc_becared-section-data-becared--content'>{rowData.NUMER_SPRAWY_BECARED}</span>
             </section>
             <section className='edit_doc_becared-section-data-becared'>
-                <h4 className='edit_doc_becared-section-data-becared--title'>Data komentarza BeCared:</h4>
+                <span className='edit_doc_becared-section-data-becared--title'>Data komentarza BeCared:</span>
                 <span className='edit_doc_becared-section-data-becared--content'>{rowData.DATA_KOMENTARZA_BECARED
                 }</span>
             </section>
             <section className='edit_doc_becared-section-data-becared'>
-                <h4 className='edit_doc_becared-section-data-becared--title'>Status sprawy kancelaria:</h4>
+                <span className='edit_doc_becared-section-data-becared--title'>Status sprawy kancelaria:</span>
                 <span className='edit_doc_becared-section-data-becared--content'>{rowData.STATUS_SPRAWY_KANCELARIA
                 }</span>
             </section>
             <section className='edit_doc_becared-section-data-becared'>
-                <h4 className='edit_doc_becared-section-data-becared--title'>Status sprawy windykacja:</h4>
+                <span className='edit_doc_becared-section-data-becared--title'>Status sprawy windykacja:</span>
                 <span className='edit_doc_becared-section-data-becared--content'>{rowData.STATUS_SPRAWY_WINDYKACJA
                 }</span>
             </section>
             <section className='edit_doc_becared-section-data-becared'>
-                <h4 className='edit_doc_becared-section-data-becared--title'>Komentarz kancelaria BeCared:</h4>
+                <span className='edit_doc_becared-section-data-becared--title'>Komentarz kancelaria BeCared:</span>
                 <span className='edit_doc_becared-section-data-becared--content'>{rowData.KOMENTARZ_KANCELARIA_BECARED
                 }</span>
             </section>
             <section className='edit_doc_becared-section-data-becared'>
-                <h4 className='edit_doc_becared-section-data-becared--title'>Kwota windykowana BeCared:</h4>
+                <span className='edit_doc_becared-section-data-becared--title'>Kwota windykowana BeCared:</span>
                 <span className='edit_doc_becared-section-data-becared--content'>
                     {rowData.KWOTA_WINDYKOWANA_BECARED && rowData.KWOTA_WINDYKOWANA_BECARED.toLocaleString('pl-PL', {
                         minimumFractionDigits: 2,
@@ -43,11 +43,12 @@ export const EditDocBeCared = ({ rowData, setRowData, setBeCared }) => {
                 </span>
             </section>
 
-
-            <Button
-                variant="outlined"
-                onClick={() => setBeCared(false)}
-            >Działania</Button>
+            <section className='edit_doc_becared-section-data-becared--button'>
+                <Button
+                    variant="outlined"
+                    onClick={() => setBeCared(false)}
+                >Działania</Button>
+            </section>
         </section>
     );
 };

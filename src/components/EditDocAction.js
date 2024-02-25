@@ -7,7 +7,7 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
     return (
         <section className='edit_doc_action-section-data'>
             <section className='edit_doc_action-section-data-law'>
-                <h4 className='edit_doc_action-section-data-law--title'>Wybierz kancelarię:</h4>
+                <span className='edit_doc_action-section-data-law--title'>Wybierz kancelarię:</span>
 
                 <select
                     className='edit_doc_action-section-data-law--select'
@@ -30,7 +30,7 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
                 </select>
             </section>
             <section className='edit_doc_action-section-data-actions'>
-                <h4 className='edit_doc_action-section-data-actions--title'>Rodzaj działania:</h4>
+                <span className='edit_doc_action-section-data-actions--title'>Rodzaj działania:</span>
 
                 <select
                     className='edit_doc_action-section-data-actions--select'
@@ -53,7 +53,7 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
 
             {/* poprawić klasy, value i onChange */}
             <section className='edit_doc_action-section-data-actions'>
-                <h4 className='edit_doc_action-section-data-actions--title'>Błąd doradcy:</h4>
+                <span className='edit_doc_action-section-data-actions--title'>Błąd doradcy:</span>
 
                 <select
                     className='edit_doc_action-section-data-actions--select'
@@ -72,7 +72,7 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
 
             {/* poprawić klasy, value i onChange */}
             <section className='edit_doc_action-section-data-actions'>
-                <h4 className='edit_doc_action-section-data-actions--title'>Błędy w dokumentacji:</h4>
+                <span className='edit_doc_action-section-data-actions--title'>Błędy w dokumentacji:</span>
 
                 <select
                     className='edit_doc_action-section-data-actions--select'
@@ -91,7 +91,7 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
 
             {/* poprawić klasy, value i onChange */}
             <section className='edit_doc_action-section-data-actions'>
-                <h4 className='edit_doc_action-section-data-actions--title'>Pobrany VAT ?</h4>
+                <span className='edit_doc_action-section-data-actions--title'>Pobrany VAT ?</span>
 
                 <select
                     className='edit_doc_action-section-data-actions--select'
@@ -110,7 +110,7 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
                 </select>
             </section>
             <section className='edit_doc_action-section-data-actions'>
-                <h4 className='edit_doc_action-section-data-actions--title'>Wyróżnij kontrahenta</h4>
+                <span className='edit_doc_action-section-data-actions--title'>Wyróżnij kontrahenta</span>
                 <input
                     className='edit_doc_action-section-data-actions--check'
                     type="checkbox"
@@ -124,10 +124,12 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
                     })}
                 />
             </section>
-            <Button
-                variant="outlined"
-                onClick={() => setBeCared(true)}
-            >BeCared</Button>
+            <section className='edit_doc_action-section-data-becared--button'>
+                <Button
+                    variant="outlined"
+                    onClick={() => setBeCared(true)}
+                >BeCared</Button>
+            </section>
         </section>
     );
 };
