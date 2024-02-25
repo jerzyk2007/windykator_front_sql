@@ -51,11 +51,12 @@ const ActualTable = ({ info }) => {
             fontSize: '13px',
             borderRight: "1px solid #c9c7c7",
             fontFamily: "Arial",
-            padding: "5px 2px",
+            padding: "5px",
             fontWeight: '500',
             minHeight: '2rem',
             maxHeight: "8rem",
-            textWrap: "balance"
+            textWrap: "balance",
+            whiteSpace: "pre-wrap",
         }
     };
 
@@ -96,7 +97,26 @@ const ActualTable = ({ info }) => {
                 changeMuiTableBodyCellProps.align = "left";
                 const updatedSx = { ...changeMuiTableBodyCellProps.sx };
                 updatedSx.backgroundColor = 'rgba(248, 255, 152, .2)';
+                // updatedSx.padding = '5px';
                 changeMuiTableBodyCellProps.sx = updatedSx;
+                modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
+            }
+
+            if (item.accessorKey === "UWAGI_Z_FAKTURY") {
+                modifiedItem.Cell = ({ cell }) => {
+                    const cellValue = cell.getValue();
+                    if (Array.isArray(cellValue) && cellValue.length > 0) {
+                        return (
+                            <div style={{ whiteSpace: "pre-wrap" }}>
+                                {cellValue.map((item, index) => (
+                                    <p key={index}>{item}</p>
+                                ))}
+                            </div>
+                        );
+                    }
+                };
+                const changeMuiTableBodyCellProps = { ...muiTableBodyCellProps };
+                changeMuiTableBodyCellProps.align = "left";
                 modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
             }
 
