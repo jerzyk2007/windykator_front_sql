@@ -86,7 +86,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                         <section className='edit_row_table-section-data--document'>
                             <span>Po terminie:</span>
                             <span
-                                style={rowData.ILE_DNI_PO_TERMINIE > 0 ? { backgroundColor: "#f04545" } : null}
+                                style={rowData.ILE_DNI_PO_TERMINIE > 0 ? { backgroundColor: "rgba(240, 69, 69, .7)" } : null}
                             >{rowData.ILE_DNI_PO_TERMINIE
                                 }</span>
                         </section>
@@ -123,18 +123,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                                 useGrouping: true,
                             })}</span>
                         </section>
-                        <section className='edit_row_table-section-data--document'>
-                            <span>Do rozliczenia:</span>
-                            <span>{(rowData.DO_ROZLICZENIA).toLocaleString('pl-PL', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                                useGrouping: true,
-                            })}</span>
-                        </section>
+
                         <section className='edit_row_table-section-data--document'>
                             <span>100% VAT:</span>
                             <span
-                                style={Math.abs((rowData.BRUTTO - rowData.NETTO) - rowData.DO_ROZLICZENIA) <= 1 ? { backgroundColor: "#f04545" } : null}
+                                style={Math.abs((rowData.BRUTTO - rowData.NETTO) - rowData.DO_ROZLICZENIA) <= 1 ? { backgroundColor: "rgba(240, 69, 69, .7)" } : null}
                             >{(rowData.BRUTTO - rowData.NETTO).toLocaleString('pl-PL', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
@@ -144,8 +137,16 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                         <section className='edit_row_table-section-data--document'>
                             <span>50% VAT:</span>
                             <span
-                                style={Math.abs((rowData.BRUTTO - rowData.NETTO) / 1.23 - rowData.DO_ROZLICZENIA) <= 1 ? { backgroundColor: "#f04545" } : null}
-                            >{((rowData.BRUTTO - rowData.NETTO) / 1.23).toLocaleString('pl-PL', {
+                                style={Math.abs((rowData.BRUTTO - rowData.NETTO) / 2 - rowData.DO_ROZLICZENIA) <= 1 ? { backgroundColor: "rgba(240, 69, 69, .7)" } : null}
+                            >{((rowData.BRUTTO - rowData.NETTO) / 2).toLocaleString('pl-PL', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                                useGrouping: true,
+                            })}</span>
+                        </section>
+                        <section className='edit_row_table-section-data--document'>
+                            <span>Do rozliczenia:</span>
+                            <span style={{ backgroundColor: 'rgba(248, 255, 152, .6)' }}>{(rowData.DO_ROZLICZENIA).toLocaleString('pl-PL', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
                                 useGrouping: true,
