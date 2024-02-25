@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import useData from "./hooks/useData";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
+import EditDocAction from './EditDocAction';
+import EditDocBeCared from './EditDocBeCared';
 import './EditRowTable.css';
 
 const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }) => {
@@ -10,6 +12,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
 
     const [rowData, setRowData] = useState(dataRowTable);
     const [note, setNote] = useState('');
+    const [beCared, setBeCared] = useState(false);
 
     const handleAddNote = () => {
         const oldNote = rowData.UWAGI_ASYSTENT;
@@ -199,141 +202,18 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                         </section>
 
                     </section>
-                    <section className='edit_row_table-section-data'>
-                        <section className='edit_row_table-section-data-law'>
-                            <h4 className='edit_row_table-section-data-law--title'>Wybierz kancelarię:</h4>
 
-                            <select
-                                className='edit_row_table-section-data-law--select'
-                                value={rowData.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : ''}
-                                onChange={(e) => setRowData(prev => {
-                                    return {
-                                        ...prev,
-                                        JAKA_KANCELARIA: e.target.value
-                                    };
-                                })}
-                            >
-                                <option value=""></option>
-                                <option value="M_LEGAL">M_LEGAL</option>
-                                <option value="INWEST INKASO">INWEST INKASO</option>
-                                <option value="KANCELARIA KROTOSKI">KANCELARIA KROTOSKI</option>
-                                <option value="KRAUZE">KRAUZE</option>
-                                <option value="POSTEPOWANIE SANACYJNE">POSTEPOWANIE SANACYJNE</option>
-                                <option value="ROK-KONOPA">ROK-KONOPA</option>
-                                <option value="CNP">CNP</option>
-                            </select>
-                        </section>
-                        <section className='edit_row_table-section-data-actions'>
-                            <h4 className='edit_row_table-section-data-actions--title'>Rodzaj działania:</h4>
 
-                            <select
-                                className='edit_row_table-section-data-actions--select'
-                                value={rowData.DZIALANIA ? rowData.DZIALANIA : ''}
-                                onChange={(e) => setRowData(prev => {
-                                    return {
-                                        ...prev,
-                                        DZIALANIA: e.target.value
-                                    };
-                                })}
-                            >
-                                <option value=""></option>
-                                <option value="W KOSZTY DZIAŁU">W KOSZTY DZIAŁU</option>
-                                <option value="DO KOREKTY">DO KOREKTY</option>
-                                <option value="DO DECYZJI KIEROWNIKA">DO DECYZJI KIEROWNIKA</option>
-                                <option value="WYSŁANO WEZWANIE DO ZAPŁATY">WYSŁANO WEZWANIE DO ZAPŁATY</option>
-                                <option value="GREEN PARTS">GREEN PARTS</option>
-                            </select>
-                        </section>
-
-                        {/* poprawić klasy, value i onChange */}
-                        <section className='edit_row_table-section-data-actions'>
-                            <h4 className='edit_row_table-section-data-actions--title'>Błąd doradcy:</h4>
-
-                            <select
-                                className='edit_row_table-section-data-actions--select'
-                                value={rowData.BLAD_DORADCY ? rowData.BLAD_DORADCY : ''}
-                                onChange={(e) => setRowData(prev => {
-                                    return {
-                                        ...prev,
-                                        BLAD_DORADCY: e.target.value
-                                    };
-                                })}
-                            >
-                                <option value="NIE">Nie</option>
-                                <option value="TAK">Tak</option>
-                            </select>
-                        </section>
-
-                        {/* poprawić klasy, value i onChange */}
-                        <section className='edit_row_table-section-data-actions'>
-                            <h4 className='edit_row_table-section-data-actions--title'>Błędy w dokumentacji:</h4>
-
-                            <select
-                                className='edit_row_table-section-data-actions--select'
-                                value={rowData.BLAD_W_DOKUMENTACJI ? rowData.BLAD_W_DOKUMENTACJI : ''}
-                                onChange={(e) => setRowData(prev => {
-                                    return {
-                                        ...prev,
-                                        BLAD_W_DOKUMENTACJI: e.target.value
-                                    };
-                                })}
-                            >
-                                <option value="NIE">Nie</option>
-                                <option value="TAK">Tak</option>
-                            </select>
-                        </section>
-
-                        {/* poprawić klasy, value i onChange */}
-                        <section className='edit_row_table-section-data-actions'>
-                            <h4 className='edit_row_table-section-data-actions--title'>Pobrany VAT ?</h4>
-
-                            <select
-                                className='edit_row_table-section-data-actions--select'
-                                value={rowData.POBRANO_VAT ? rowData.POBRANO_VAT : ''}
-                                onChange={(e) => setRowData(prev => {
-                                    return {
-                                        ...prev,
-                                        POBRANO_VAT: e.target.value
-                                    };
-                                })}
-                            >
-                                <option value="Nie dotyczy">Nie dotyczy</option>
-                                <option value="TAK">Tak</option>
-                                <option value="50">Nie pobrano 50%</option>
-                                <option value="100">Nie pobrano 100%</option>
-                            </select>
-                        </section>
-                        {/* <section className='edit_row_table-section-data-actions'>
-                            <h4 className='edit_row_table-section-data-actions--title'>Wyróżnij kontrahenta</h4>
-                            <input
-                                className='edit_row_table-section-data-actions--check'
-                                type="checkbox"
-                                checked={rowData.ZAZNACZ_KONTRAHENTA ? rowData.ZAZNACZ_KONTRAHENTA : false}
-                                onChange={(e) => setRowData(prev => {
-                                    return {
-                                        ...prev,
-                                        ZAZNACZ_KONTRAHENTA: e.target.checked
-                                    };
-                                })}
-                            />
-                        </section> */}
-                        <section className='edit_row_table-section-data-actions'>
-                            <h4 className='edit_row_table-section-data-actions--title'>Wyróżnij kontrahenta</h4>
-                            <input
-                                className='edit_row_table-section-data-actions--check'
-                                type="checkbox"
-                                checked={rowData.ZAZNACZ_KONTRAHENTA === "Tak"}
-                                onChange={(e) => setRowData(prev => {
-                                    const newValue = e.target.checked ? "Tak" : "Nie";
-                                    return {
-                                        ...prev,
-                                        ZAZNACZ_KONTRAHENTA: newValue
-                                    };
-                                })}
-                            />
-                        </section>
-
-                    </section>
+                    {!beCared && <EditDocAction
+                        rowData={rowData}
+                        setRowData={setRowData}
+                        setBeCared={setBeCared}
+                    />}
+                    {beCared && <EditDocBeCared
+                        rowData={rowData}
+                        setRowData={setRowData}
+                        setBeCared={setBeCared}
+                    />}
 
                 </section>
 

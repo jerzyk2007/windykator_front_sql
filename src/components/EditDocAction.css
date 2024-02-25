@@ -1,0 +1,43 @@
+.edit_doc_action-section-data {
+    flex-basis: 34%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.edit_doc_action-section-data-law,
+.edit_doc_action-section-data-actions {
+    display: flex;
+    justify-content: baseline;
+    align-items: center;
+}
+
+.edit_doc_action-section-data-law--title,
+.edit_doc_action-section-data-actions--title {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+    background-color: rgb(135, 207, 255);
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px #757575;
+}
+
+.edit_doc_action-section-data-law--select,
+.edit_doc_action-section-data-actions--select {
+    width: 100%;
+    font-size: 1rem;
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px #757575;
+}
+
+.edit_doc_action-section-data-actions--check {
+    width: 100%;
+    margin: 0 auto;
+    height: 1.5rem;
+    padding: 5px;
+    margin: 5px;
+}
