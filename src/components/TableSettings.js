@@ -289,7 +289,6 @@ const TableSettings = () => {
     const createColumns = async () => {
         try {
             const settingsColumn = await axiosPrivateIntercept.get('/settings/get-columns');
-
             const newColumns = columnsName.map(colName => {
                 const matchingColumn = settingsColumn.data.find(column => column.accessorKey === colName);
 

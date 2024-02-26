@@ -10,16 +10,4 @@ ma wyskoczyć błąd w przypadku błednego zapisu
 dodać korekty
 Do paginacji dodac opcję Wszytsko
 
-
-
-Do poprawienia:
-
-- tak jak wspomniałem rano- data wystawienia i termin jest przesunięta dzień do przodu – dzisiaj poprawie
-
-- jeżeli nie ma w komórce Podjęte działania nie ma żadnych wpisów, to pierwszy wpis jest w drugim wierszu – dzisiaj poprawie
-
-- do każdej kolumny: Jaka kancelaria, Działania – zamiast pustego miejsca muszę dodać „Brak” jeżeli ma być nic nie zaznaczone, puste miejsce źle się filtruje – dzisiaj poprawie
-
- - usunać pusty string z tablicy UWAGI_ASYSTENT
- - poprawić daty fv i termin
- - dodac brak do Działania i Jaka kancelaria
+znaleźć - jak się dodaja nowe kolumny, jesli coś dodałem nowego

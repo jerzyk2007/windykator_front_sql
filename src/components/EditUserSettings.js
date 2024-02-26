@@ -23,7 +23,6 @@ const EditUserSettings = ({ user, setEdit }) => {
     useEffect(() => {
         const getSettings = async () => {
             const result = await axiosPrivateIntercept.get('/settings/get-settings');
-
             const filteredRoles = result.data.map(item => item.roles).filter(Boolean)[0];
             const roles = filteredRoles.reduce((acc, role, index) => {
                 acc[role] = user?.roles[index] ? true : false;
