@@ -49,7 +49,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                 return item;
             }
         });
-        console.log(rowData);
         try {
             const result = await axiosPrivateIntercept.patch(`/documents/change-single-document/${auth._id}`, {
                 _id, documentItem: rowData

@@ -45,6 +45,11 @@ const AddDataFromFile = () => {
                         setErrAS('Dokumenty zaktualizowane.');
                     }
 
+                    else
+                        if (type === 'test') {
+                            setErrMsg('Dokumenty zaktualizowane.');
+                        }
+
             setPleaseWait(false);
 
         } catch (error) {
@@ -59,6 +64,10 @@ const AddDataFromFile = () => {
                     if (type === 'settlements') {
                         setSettlements('Błąd aktualizacji dokumentów.');
                     }
+                    else
+                        if (type === 'test') {
+                            setErrMsg('Błąd aktualizacji dokumentów.');
+                        }
             console.error('Błąd przesyłania pliku:', error);
             setPleaseWait(false);
         }
@@ -68,9 +77,6 @@ const AddDataFromFile = () => {
         pleaseWait ? <PleaseWait /> :
             <section className='add_data_from_file'>
                 <section className='add_data_from_file__container'>
-
-
-
 
                     {!errSettlements ?
                         <section className='add_data_from_file__container-documents'>
@@ -104,8 +110,28 @@ const AddDataFromFile = () => {
                         </section>
                     }
 
-                    <section className='add_data_from_file__container-corrections'>
-                    </section>
+                    {/* <section className='add_data_from_file__container-corrections'>
+                   
+                    </section> */}
+
+
+                    {!errMsg ?
+                        <section className='add_data_from_file__container-documents'>
+                            <input
+                                type="file"
+                                name="uploadfile"
+                                id="test"
+                                style={{ display: "none" }}
+                                onChange={(e) => handleSendFile(e, 'test')}
+                            />
+                            <label htmlFor="test" className="add_data_file-click-me">Napraw</label>
+                        </section> :
+                        <section className='add_data_from_file__container-documents'>
+                            <span className="add_data_file-click-me">{errMsg}</span>
+                        </section>
+                    }
+
+
                     {!errSharepoint ?
                         <section className='add_data_from_file__container-documents'>
                             <input

@@ -19,7 +19,7 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
                         };
                     })}
                 >
-                    <option value=""></option>
+                    <option value="BRAK">BRAK</option>
                     <option value="M_LEGAL">M_LEGAL</option>
                     <option value="INWEST INKASO">INWEST INKASO</option>
                     <option value="KANCELARIA KROTOSKI">KANCELARIA KROTOSKI</option>
@@ -42,7 +42,7 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
                         };
                     })}
                 >
-                    <option value=""></option>
+                    <option value="BRAK">BRAK</option>
                     <option value="W KOSZTY DZIAŁU">W KOSZTY DZIAŁU</option>
                     <option value="DO KOREKTY">DO KOREKTY</option>
                     <option value="DO DECYZJI KIEROWNIKA">DO DECYZJI KIEROWNIKA</option>
