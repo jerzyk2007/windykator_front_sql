@@ -17,9 +17,28 @@ poprawić Model DB na nowe dane,
 dodać korekty
 
 
+
+
 Do paginacji dodac opcję Wszytsko
 
-Uwagi na fakturze osobno I komentarze windykacji osobno - dorobić wyświetlanie w tabeli - jest problem - bo nie ma skąd pobrac UWAG z AS
+Do poprawienia:
 
+- tak jak wspomniałem rano- data wystawienia i termin jest przesunięta dzień do przodu – dzisiaj poprawie
 
-1 083 374,92
+- jeżeli nie ma w komórce Podjęte działania nie ma żadnych wpisów, to pierwszy wpis jest w drugim wierszu – dzisiaj poprawie
+
+- linie tabelki – zrobię wyraźne, na czarno – dzisiaj
+
+- do każdej kolumny: Jaka kancelaria, Działania – zamiast pustego miejsca muszę dodać „Brak” jeżeli ma być nic nie zaznaczone, puste miejsce źle się filtruje – dzisiaj poprawie
+
+ 
+
+czy można z automatu kolumnę ILE -ustawić:  na górze najbardziej aktualne , a na dole najbardziej przeterminowane , oczywiście zostawiając filtr do indywidualnej zmiany.
+
+ 
+
+Dorobić BRAK FILTRA
+
+ 
+
+Raport Doradca – dorobić automatyczne pobieranie danych dla multi-select

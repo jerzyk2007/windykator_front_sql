@@ -353,14 +353,14 @@ const RaportAdvisers = () => {
                 header: 'Doradca',
                 size: columnSizing?.Department ? columnSizing.Department : 150,
                 filterVariant: 'multi-select',
-                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DORADCA'])))
+                // filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DORADCA'])))
             },
             {
                 accessorKey: 'DZIAL',
                 header: 'Dział',
                 size: columnSizing?.Department ? columnSizing.Department : 150,
                 filterVariant: 'multi-select',
-                filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DZIAL'])))
+                // filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DZIAL'])))
             },
 
             {
@@ -589,6 +589,10 @@ const RaportAdvisers = () => {
         onColumnSizingChange: setColumnSizing,
         onColumnOrderChange: setColumnOrder,
         onColumnPinningChange: setColumnPinning,
+
+        // automatycznie pobiera dane dla select i multi- select
+        enableFacetedValues: true,
+
         state: {
             columnVisibility,
             density,
