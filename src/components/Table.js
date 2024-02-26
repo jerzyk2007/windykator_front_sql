@@ -38,7 +38,7 @@ const ActualTable = ({ info }) => {
     const [pagination, setPagination] = useState({});
 
     const [sorting, setSorting] = useState([
-        { id: 'DATA_FV', desc: true }
+        { id: 'ILE_DNI_PO_TERMINIE', desc: false }
     ]);
 
     const [quickNote, setQuickNote] = useState('');
@@ -49,7 +49,9 @@ const ActualTable = ({ info }) => {
         align: "center",
         sx: {
             fontSize: '13px',
-            borderRight: "1px solid #c9c7c7",
+            // borderRight: "1px solid #c9c7c7",
+            borderRight: "1px solid #000",
+            borderBottom: "1px solid #000",
             fontFamily: "Arial",
             padding: "5px",
             fontWeight: '500',
@@ -97,7 +99,6 @@ const ActualTable = ({ info }) => {
                 changeMuiTableBodyCellProps.align = "left";
                 const updatedSx = { ...changeMuiTableBodyCellProps.sx };
                 updatedSx.backgroundColor = 'rgba(248, 255, 152, .2)';
-                // updatedSx.padding = '5px';
                 changeMuiTableBodyCellProps.sx = updatedSx;
                 modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
             }
@@ -130,9 +131,6 @@ const ActualTable = ({ info }) => {
                         sx: {
                             ...muiTableBodyCellProps.sx,
                             backgroundColor: cell.column.id === 'KONTRAHENT' && checkClient === "Tak" ? '#7fffd4' : "white",
-                            // whiteSpace: "pre-wrap",
-                            // whiteSpace: 'pre-line'
-
                         },
                     };
                 };
@@ -278,13 +276,13 @@ const ActualTable = ({ info }) => {
         () => columns.map(column => ({
             ...column,
             size: columnSizing?.[column.accessorKey] ? columnSizing[column.accessorKey] : column.size,
-            enableHiding: true,
-            enablePinning: true,
+            // enableHiding: true,
+            // enablePinning: true,
             enableColumnFilterModes: false,
             minSize: 50,
             maxSize: 400,
         })),
-        [columnSizing, columnVisibility, density, columnPinning, columns]
+        [columns, columnSizing]
     );
 
     useEffect(() => {
@@ -328,7 +326,6 @@ const ActualTable = ({ info }) => {
             isMounted = false;
         };
     }, [info]);
-
 
     return (
         <section className='actual_table'>

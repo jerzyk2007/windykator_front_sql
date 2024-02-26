@@ -235,6 +235,7 @@ const TableSettings = () => {
                             value={col.filterVariant}
                             onChange={(e) => handleHeaderChange(index, 'filterVariant', e.target.value)}
                         >
+                            <option value="none">Brak</option>
                             <option value="startsWith">Dokładne wyszukanie</option>
                             <option value="text">Zbliżone wyszukanie</option>
                             <option value="multi-select">Zaznacz wiele</option>

@@ -383,7 +383,9 @@ const RaportAdvisers = () => {
                     return {
                         sx: {
                             backgroundColor: "#ffe884",
-                            borderRight: "1px solid #c9c7c7",
+                            // borderRight: "1px solid #c9c7c7",
+                            borderRight: "1px solid #000",
+                            borderBottom: "1px solid #000",
                             fontSize: "14px",
                             fontWeight: 'bold',
                             padding: "2px",
@@ -413,7 +415,9 @@ const RaportAdvisers = () => {
                     return {
                         sx: {
                             backgroundColor: "#ffe884",
-                            borderRight: "1px solid #c9c7c7",
+                            // borderRight: "1px solid #c9c7c7",
+                            borderRight: "1px solid #000",
+                            borderBottom: "1px solid #000",
                             fontSize: "14px",
                             fontWeight: 'bold',
                             padding: "2px",
@@ -431,7 +435,9 @@ const RaportAdvisers = () => {
                     return {
                         sx: {
                             backgroundColor: "#ffe884",
-                            borderRight: "1px solid #c9c7c7",
+                            // borderRight: "1px solid #c9c7c7",
+                            borderRight: "1px solid #000",
+                            borderBottom: "1px solid #000",
                             fontSize: "14px",
                             fontWeight: 'bold',
                             padding: "2px",
@@ -461,7 +467,9 @@ const RaportAdvisers = () => {
                     return {
                         sx: {
                             backgroundColor: "#caff84",
-                            borderRight: "1px solid #c9c7c7",
+                            // borderRight: "1px solid #c9c7c7",
+                            borderRight: "1px solid #000",
+                            borderBottom: "1px solid #000",
                             fontSize: "14px",
                             fontWeight: 'bold',
                             padding: "2px",
@@ -491,7 +499,9 @@ const RaportAdvisers = () => {
                     return {
                         sx: {
                             backgroundColor: "#caff84",
-                            borderRight: "1px solid #c9c7c7",
+                            // borderRight: "1px solid #c9c7c7",
+                            borderRight: "1px solid #000",
+                            borderBottom: "1px solid #000",
                             fontSize: "14px",
                             fontWeight: 'bold',
                             padding: "2px",
@@ -510,7 +520,9 @@ const RaportAdvisers = () => {
                     return {
                         sx: {
                             backgroundColor: "#caff84",
-                            borderRight: "1px solid #c9c7c7",
+                            // borderRight: "1px solid #c9c7c7",
+                            borderRight: "1px solid #000",
+                            borderBottom: "1px solid #000",
                             fontSize: "14px",
                             fontWeight: 'bold',
                             padding: "2px",
@@ -650,7 +662,9 @@ const RaportAdvisers = () => {
         muiTableBodyCellProps: ({ column, cell }) => ({
             align: "center",
             sx: {
-                borderRight: "1px solid #c9c7c7",
+                // borderRight: "1px solid #c9c7c7",
+                borderRight: "1px solid #000",
+                borderBottom: "1px solid #000",
                 fontSize: "14px",
                 fontWeight: 'bold',
                 padding: "2px",
