@@ -9,8 +9,8 @@ import { plPL } from '@mui/x-date-pickers/locales';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
 import useWindowSize from './hooks/useWindow';
-import { TfiSave } from "react-icons/tfi";
-import { SiMicrosoftexcel } from "react-icons/si";
+// import { TfiSave } from "react-icons/tfi";
+// import { SiMicrosoftexcel } from "react-icons/si";
 import QuickTableNote from './QuickTableNote';
 import EditRowTable from './EditRowTable';
 import PleaseWait from './PleaseWait';
@@ -48,11 +48,11 @@ const ActualTable = ({ info }) => {
     const muiTableBodyCellProps = {
         align: "center",
         sx: {
-            fontSize: '13px',
+            fontSize: '16px',
             // borderRight: "1px solid #c9c7c7",
             borderRight: "1px solid #000",
             borderBottom: "1px solid #000",
-            fontFamily: "Arial",
+            fontFamily: "Calibri",
             padding: "5px",
             fontWeight: '500',
             minHeight: '2rem',
@@ -432,7 +432,8 @@ const ActualTable = ({ info }) => {
                                     align: "left",
                                     sx: {
                                         fontWeight: "700",
-                                        fontSize: "13px",
+                                        fontFamily: "Calibri",
+                                        fontSize: "15px",
                                         color: "black",
                                         backgroundColor: "#a7d3f7",
                                         borderRight: "1px solid #c9c7c7",
@@ -470,8 +471,9 @@ const ActualTable = ({ info }) => {
 
                     </ThemeProvider>
                     <section className='table-icons-panel'>
-                        <TfiSave className='table-save-settings' onClick={handleSaveSettings} />
-                        <SiMicrosoftexcel className='table-export-excel' onClick={handleExportExcel} />
+                        <i class="fas fa-save table-save-settings" onClick={handleSaveSettings}></i>
+                        <i class="fa-regular fa-file-excel table-export-excel" onClick={handleExportExcel}></i>
+
                     </section>
 
                 </>}

@@ -114,9 +114,9 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
                 <input
                     className='edit_doc_action-section-data-actions--check'
                     type="checkbox"
-                    checked={rowData.ZAZNACZ_KONTRAHENTA === "TAK"}
+                    checked={rowData.ZAZNACZ_KONTRAHENTA === "Tak"}
                     onChange={(e) => setRowData(prev => {
-                        const newValue = e.target.checked ? "TAK" : "NIE";
+                        const newValue = e.target.checked ? "Tak" : "Nie";
                         return {
                             ...prev,
                             ZAZNACZ_KONTRAHENTA: newValue

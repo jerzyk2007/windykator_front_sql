@@ -774,8 +774,8 @@ const RaportAdvisers = () => {
                 className="raport_advisers-table"
                 table={table} />}
             <section className='raport_advisers-panel'>
-                <TfiSave className='raport_advisers-save-settings' onClick={handleSaveSettings} />
-                <SiMicrosoftexcel className='raport_advisers-export-excel' onClick={handleExportExcel} />
+                <i class="fas fa-save raport_advisers-save-settings" onClick={handleSaveSettings}></i>
+                <i class="fa-regular fa-file-excel raport_advisers-export-excel" onClick={handleExportExcel}></i>
             </section>
         </section>
     );

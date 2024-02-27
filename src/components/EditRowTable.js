@@ -70,27 +70,28 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                 <section className='edit_row_table-section-content'>
                     <section className='edit_row_table-section-data'>
                         <section className='edit_row_table-section-data--document'>
-                            <span>Faktura:</span>
-                            <span>{rowData.NUMER_FV}</span>
+                            <span className='edit_row_table-section-data--title'>Faktura:</span>
+                            <span className='edit_row_table-section-data--content'>{rowData.NUMER_FV}</span>
                         </section>
 
                         <section className='edit_row_table-section-data--document'>
-                            <span>Data wystawienia:</span>
-                            <span>{rowData.DATA_FV}</span>
+                            <span className='edit_row_table-section-data--title'>Data wystawienia:</span>
+                            <span className='edit_row_table-section-data--content'>{rowData.DATA_FV}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
-                            <span>Termin płatności:</span>
-                            <span>{rowData.TERMIN}</span>
+                            <span className='edit_row_table-section-data--title'>Termin płatności:</span>
+                            <span className='edit_row_table-section-data--content'>{rowData.TERMIN}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
-                            <span>Po terminie:</span>
+                            <span className='edit_row_table-section-data--title'>Po terminie:</span>
                             <span
+                                className='edit_row_table-section-data--content'
                                 style={rowData.ILE_DNI_PO_TERMINIE > 0 ? { backgroundColor: "rgba(240, 69, 69, .7)" } : null}
                             >{rowData.ILE_DNI_PO_TERMINIE
                                 }</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
-                            <span>Wprowadź kwotę brutto:</span>
+                            <span className='edit_row_table-section-data--title'>Wprowadź kwotę brutto:</span>
                             <input
                                 className='edit_row_table-section-data--document--input'
                                 type="number"
@@ -107,16 +108,16 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                             />
                         </section>
                         <section className='edit_row_table-section-data--document'>
-                            <span>Kwota Brutto:</span>
-                            <span>{(rowData.BRUTTO).toLocaleString('pl-PL', {
+                            <span className='edit_row_table-section-data--title'>Kwota Brutto:</span>
+                            <span className='edit_row_table-section-data--content'>{(rowData.BRUTTO).toLocaleString('pl-PL', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
                                 useGrouping: true,
                             })}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
-                            <span>Kwota netto:</span>
-                            <span>{(rowData.NETTO).toLocaleString('pl-PL', {
+                            <span className='edit_row_table-section-data--title'>Kwota netto:</span>
+                            <span className='edit_row_table-section-data--content'>{(rowData.NETTO).toLocaleString('pl-PL', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
                                 useGrouping: true,
@@ -124,8 +125,9 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                         </section>
 
                         <section className='edit_row_table-section-data--document'>
-                            <span>100% VAT:</span>
+                            <span className='edit_row_table-section-data--title'>100% VAT:</span>
                             <span
+                                className='edit_row_table-section-data--content'
                                 style={Math.abs((rowData.BRUTTO - rowData.NETTO) - rowData.DO_ROZLICZENIA) <= 1 ? { backgroundColor: "rgba(240, 69, 69, .7)" } : null}
                             >{(rowData.BRUTTO - rowData.NETTO).toLocaleString('pl-PL', {
                                 minimumFractionDigits: 2,
@@ -134,8 +136,9 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                             })}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
-                            <span>50% VAT:</span>
+                            <span className='edit_row_table-section-data--title'>50% VAT:</span>
                             <span
+                                className='edit_row_table-section-data--content'
                                 style={Math.abs((rowData.BRUTTO - rowData.NETTO) / 2 - rowData.DO_ROZLICZENIA) <= 1 ? { backgroundColor: "rgba(240, 69, 69, .7)" } : null}
                             >{((rowData.BRUTTO - rowData.NETTO) / 2).toLocaleString('pl-PL', {
                                 minimumFractionDigits: 2,
@@ -144,33 +147,35 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                             })}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
-                            <span>Do rozliczenia:</span>
-                            <span style={{ backgroundColor: 'rgba(248, 255, 152, .6)' }}>{(rowData.DO_ROZLICZENIA).toLocaleString('pl-PL', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                                useGrouping: true,
-                            })}</span>
+                            <span className='edit_row_table-section-data--title'>Do rozliczenia:</span>
+                            <span
+                                className='edit_row_table-section-data--content'
+                                style={{ backgroundColor: 'rgba(248, 255, 152, .6)' }}>{(rowData.DO_ROZLICZENIA).toLocaleString('pl-PL', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                    useGrouping: true,
+                                })}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
-                            <span>Nr szkody:</span>
-                            <span>{rowData.NR_SZKODY}</span>
+                            <span className='edit_row_table-section-data--title'>Nr szkody:</span>
+                            <span className='edit_row_table-section-data--content'>{rowData.NR_SZKODY}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
-                            <span>Nr rejestracyjny:</span>
-                            <span>{rowData.NR_REJESTRACYJNY}</span>
+                            <span className='edit_row_table-section-data--title'>Nr rejestracyjny:</span>
+                            <span className='edit_row_table-section-data--content'>{rowData.NR_REJESTRACYJNY}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
-                            <span>Doradca:</span>
-                            <span>{rowData.DORADCA}</span>
+                            <span className='edit_row_table-section-data--title'>Doradca:</span>
+                            <span className='edit_row_table-section-data--content'>{rowData.DORADCA}</span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
-                            <span>Kontrahent:</span>
-                            <span>{rowData.KONTRAHENT}</span>
+                            <span className='edit_row_table-section-data--title'>Kontrahent:</span>
+                            <span className='edit_row_table-section-data--content'>{rowData.KONTRAHENT}</span>
                         </section>
                     </section>
                     <section className='edit_row_table-section-data'>
                         <section className='edit_row_table-section-data__chat'>
-                            <h4 className='edit_row_table-section-data__chat-title'>Działanie podjęte przez {rowData.DZIAL}</h4>
+                            <span className='edit_row_table-section-data__chat-title'>Działanie podjęte przez {rowData.DZIAL}</span>
 
                             <textarea
                                 className='edit_row_table-section-data__chat-content'

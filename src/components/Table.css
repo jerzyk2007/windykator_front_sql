@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Calibri;
+    src: url('./font/Calibri.ttf') format('truetype');
+}
+
 .actual_table {
     flex-grow: 1;
     width: 100vw;
@@ -29,7 +34,7 @@
 }
 
 .table-save-settings:active,
-.table-get-excel:active {
+.table-export-excel:active {
     color: red;
 }
 

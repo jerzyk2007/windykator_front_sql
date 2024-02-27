@@ -139,7 +139,7 @@ const AddDataFromFile = () => {
                                 name="uploadfile"
                                 id="sharepoint"
                                 style={{ display: "none" }}
-                                onChange={(e) => handleSendFile(e, 'sharepoint')}
+                            // onChange={(e) => handleSendFile(e, 'sharepoint')}
                             />
                             <label htmlFor="sharepoint" className="add_data_file-click-me">Prześlij faktury sharepoint</label>
                         </section> :

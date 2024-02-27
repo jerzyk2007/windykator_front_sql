@@ -1,6 +1,12 @@
+@font-face {
+    font-family: Calibri;
+    src: url('./font/Calibri.ttf') format('truetype');
+}
+
 .edit_doc_becared-section-data {
     flex-basis: 34%;
     padding: 5px;
+    font-family: Calibri, sans-serif;
     display: flex;
     flex-direction: column;
 }
@@ -8,7 +14,8 @@
 .edit_doc_becared-section-data-becared {
     display: flex;
     justify-content: baseline;
-    align-items: center;
+    /* justify-content: center; */
+    /* align-items: center; */
 }
 
 .edit_doc_becared-section-data-becared--title {
@@ -16,19 +23,26 @@
     text-align: center;
     padding: 5px;
     margin: 5px;
-    background-color: rgba(135, 207, 255, .5);
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px #757575;
+    background-color: rgba(135, 207, 255, .2);
+    border: 1px solid rgba(0, 0, 0, .5);
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .edit_doc_becared-section-data-becared--content {
     width: 100%;
+    font-family: Calibri, sans-serif;
     font-size: 1rem;
     text-align: center;
     padding: 5px;
     margin: 5px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px #757575;
+    border: 1px solid rgba(0, 0, 0, .5);
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .edit_doc_becared-section-data-becared--button {
