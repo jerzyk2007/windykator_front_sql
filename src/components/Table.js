@@ -56,7 +56,7 @@ const ActualTable = ({ info }) => {
             padding: "5px",
             fontWeight: '500',
             minHeight: '2rem',
-            maxHeight: "8rem",
+            // maxHeight: "8rem",
             textWrap: "balance",
             whiteSpace: "pre-wrap",
         }
@@ -85,10 +85,19 @@ const ActualTable = ({ info }) => {
                 modifiedItem.Cell = ({ cell }) => {
                     const cellValue = cell.getValue();
                     if (Array.isArray(cellValue) && cellValue.length > 0) {
+                        let numberOfObjects = cellValue.length;
                         return (
                             <div style={{ whiteSpace: "pre-wrap" }}>
+                                {numberOfObjects > 1 && <p>{`Liczba wpisów wcześniejszych: ${numberOfObjects - 1}`}</p>}
                                 {cellValue.map((item, index) => (
-                                    <p key={index}>{item}</p>
+                                    <p key={index}>
+                                        {index === cellValue.length - 1 ? // Sprawdzanie czy to ostatni element w tablicy
+                                            item.length > 200 ? // Sprawdzenie długości tekstu
+                                                item.slice(0, 200) + "..." // Jeśli tekst jest dłuższy niż 150 znaków, obetnij i dodaj trzy kropki na końcu
+                                                : item // W przeciwnym razie, wyświetl pełny tekst
+                                            : null // W przeciwnym razie, nie wyświetlaj nic
+                                        }
+                                    </p>
                                 ))}
                             </div>
                         );
