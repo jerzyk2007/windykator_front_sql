@@ -109,43 +109,60 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                         </section>
                         <section className='edit_row_table-section-data--document'>
                             <span className='edit_row_table-section-data--title'>Kwota Brutto:</span>
-                            <span className='edit_row_table-section-data--content'>{(rowData.BRUTTO).toLocaleString('pl-PL', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                                useGrouping: true,
-                            })}</span>
+                            <span className='edit_row_table-section-data--content'>
+                                {(rowData.BRUTTO).toLocaleString('pl-PL', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                    useGrouping: true,
+                                })}
+                            </span>
                         </section>
                         <section className='edit_row_table-section-data--document'>
                             <span className='edit_row_table-section-data--title'>Kwota netto:</span>
-                            <span className='edit_row_table-section-data--content'>{(rowData.NETTO).toLocaleString('pl-PL', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                                useGrouping: true,
-                            })}</span>
+                            <span className='edit_row_table-section-data--content'>
+                                {rowData.NETTO.toLocaleString('pl-PL', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                    useGrouping: true,
+                                })}
+                            </span>
+                        </section>
+
+                        <section className='edit_row_table-section-data--document'>
+                            <span className='edit_row_table-section-data--title'>Kwota netto + 50% VAT:</span>
+                            <span className='edit_row_table-section-data--content'>
+                                {(
+                                    (rowData.NETTO + parseFloat(((rowData.BRUTTO - rowData.NETTO) / 2).toFixed(2)))
+                                ).toLocaleString('pl-PL', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                    useGrouping: true,
+                                })}
+                            </span>
                         </section>
 
                         <section className='edit_row_table-section-data--document'>
                             <span className='edit_row_table-section-data--title'>100% VAT:</span>
-                            <span
-                                className='edit_row_table-section-data--content'
-                                style={Math.abs((rowData.BRUTTO - rowData.NETTO) - rowData.DO_ROZLICZENIA) <= 1 ? { backgroundColor: "rgba(240, 69, 69, .7)" } : null}
-                            >{(rowData.BRUTTO - rowData.NETTO).toLocaleString('pl-PL', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                                useGrouping: true,
-                            })}</span>
+                            <span className='edit_row_table-section-data--content' style={{ backgroundColor: Math.abs(rowData.BRUTTO - rowData.NETTO - rowData.DO_ROZLICZENIA) <= 1 ? "rgba(240, 69, 69, .7)" : null }}>
+                                {(rowData.BRUTTO - rowData.NETTO).toLocaleString('pl-PL', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                    useGrouping: true,
+                                })}
+                            </span>
                         </section>
+
                         <section className='edit_row_table-section-data--document'>
                             <span className='edit_row_table-section-data--title'>50% VAT:</span>
-                            <span
-                                className='edit_row_table-section-data--content'
-                                style={Math.abs((rowData.BRUTTO - rowData.NETTO) / 2 - rowData.DO_ROZLICZENIA) <= 1 ? { backgroundColor: "rgba(240, 69, 69, .7)" } : null}
-                            >{((rowData.BRUTTO - rowData.NETTO) / 2).toLocaleString('pl-PL', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                                useGrouping: true,
-                            })}</span>
+                            <span className='edit_row_table-section-data--content' style={{ backgroundColor: Math.abs((rowData.BRUTTO - rowData.NETTO) / 2 - rowData.DO_ROZLICZENIA) <= 1 ? "rgba(240, 69, 69, .7)" : null }}>
+                                {((rowData.BRUTTO - rowData.NETTO) / 2).toLocaleString('pl-PL', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                    useGrouping: true,
+                                })}
+                            </span>
                         </section>
+
                         <section className='edit_row_table-section-data--document'>
                             <span className='edit_row_table-section-data--title'>Do rozliczenia:</span>
                             <span
