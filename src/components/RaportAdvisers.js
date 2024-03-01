@@ -217,7 +217,7 @@ const RaportAdvisers = () => {
                     howManyExpiredElementsWithoutPandL.set(dep.merge, howManyExpiredElementsWithoutPandL.get(dep.merge) + 1);
                 }
 
-                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKA_KANCELARIA && item.JAKA_KANCELARIA !== "ROK-KONOPA" && item.JAKA_KANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKA_KANCELARIA !== "BRAK" && item.JAKA_KANCELARIA !== "ROK-KONOPA" && item.JAKA_KANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     legalExpired.set(dep.merge, legalExpired.get(dep.merge) + item.DO_ROZLICZENIA);
                     legalCounter.set(dep.merge, legalCounter.get(dep.merge) + 1);
                 }

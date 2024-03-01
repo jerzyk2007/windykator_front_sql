@@ -225,7 +225,7 @@ const RaportDepartments = () => {
                     howManyExpiredElementsWithoutPandL.set(dep, howManyExpiredElementsWithoutPandL.get(dep) + 1);
                 }
 
-                if (item.DZIAL === dep && !item.JAKA_KANCELARIA && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                if (item.DZIAL === dep && (item.JAKA_KANCELARIA !== "BRAK" && item.JAKA_KANCELARIA !== "ROK-KONOPA" && item.JAKA_KANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     legalExpired.set(dep, legalExpired.get(dep) + item.DO_ROZLICZENIA);
                     legalCounter.set(dep, legalCounter.get(dep) + 1);
                 }
