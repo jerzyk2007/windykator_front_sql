@@ -189,13 +189,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, documents, setDocuments }
                             <span className='edit_row_table-section-data--title'>Kontrahent:</span>
                             <span className='edit_row_table-section-data--content'>{rowData.KONTRAHENT}</span>
                         </section>
+
                     </section>
                     <section className='edit_row_table-section-data'>
                         <section className='edit_row_table-section-data__chat'>
-                            <section className='edit_row_table-section-data--document'>
-                                <span className='edit_row_table-section-data--title'>Uwagi z faktury:</span>
-                                <span className='edit_row_table-section-data--content'>{rowData.UWAGI_Z_FAKTURY}</span>
-                            </section>
+
                             <span className='edit_row_table-section-data__chat-title'>Działanie podjęte przez {rowData.DZIAL}</span>
 
                             <textarea

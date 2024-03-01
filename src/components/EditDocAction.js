@@ -6,6 +6,13 @@ import './EditDocAction.css';
 const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
     return (
         <section className='edit_doc_action-section-data'>
+
+            <section className='edit_row_table-section-data--document'>
+                <span className='edit_row_table-section-data--title'>Uwagi z faktury:</span>
+
+                <span className='edit_row_table-section-data--content'>{rowData.UWAGI_Z_FAKTURY}</span>
+            </section>
+
             <section className='edit_doc_action-section-data-law'>
                 <span className='edit_doc_action-section-data-law--title'>Wybierz kancelarię:</span>
 
