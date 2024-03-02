@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import { Button } from "@mui/material";
 import './UserChangePermissions.css';
 
 const UserChangePermissions = ({ user, permissions }) => {
@@ -61,8 +62,11 @@ const UserChangePermissions = ({ user, permissions }) => {
                 </h3>
             </section>
             {permissionsItem}
-            <button className='user_change_permissions--button'
-                onClick={handleChangePermission}>Zmień</button>
+            <Button
+                variant='contained'
+                onClick={handleChangePermission}
+                size='small'
+            >Zmień</Button>
         </section>
     );
 };

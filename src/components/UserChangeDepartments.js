@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import { Button } from "@mui/material";
 import './UserChangeDepartments.css';
 
 const UserChangeDepartments = ({ user, departments }) => {
@@ -55,23 +56,9 @@ const UserChangeDepartments = ({ user, departments }) => {
         }
     };
 
-    // const handleGetGlobalDepartments = async () => {
-    //     try {
-    //         console.log('ok');
-    //     }
-    //     catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-
     useEffect(() => {
         setErrMsg('');
     }, [userDepartments]);
-
-    // useEffect(() => {
-    //     handleGetGlobalDepartments();
-    // }, []);
-
 
     return (
         <section className='user_change_departments'>
@@ -80,17 +67,29 @@ const UserChangeDepartments = ({ user, departments }) => {
                     {!errMsg ? 'Dostęp do działów' : errMsg}
                 </h3>
                 <section className='user_change_departments__select'>
-                    <button className='user_change_departments__select--all'
-                        onClick={() => { handleChangeChecked('all'); }}>Zaznacz</button>
-                    <button className='user_change_departments__select--none'
-                        onClick={() => { handleChangeChecked('none'); }}>Odznacz</button>
+                    <Button
+                        variant='contained'
+                        onClick={() => handleChangeChecked('all')}
+                        size='small'
+                        color='secondary'
+                    >Zaznacz</Button>
+
+                    <Button
+                        variant='outlined'
+                        onClick={() => handleChangeChecked('none')}
+                        size='small'
+                        color='secondary'
+                    >Odznacz</Button>
                 </section>
             </section>
             <section className='user_change_departments__container'>
                 {departmentsItem}
             </section>
-            <button className='user_change_departments--button' onClick={handleSaveUserDepartments}>Zmień</button>
-
+            <Button
+                variant='contained'
+                onClick={handleSaveUserDepartments}
+                size='small'
+            >Zmień</Button>
         </section>
     );
 };

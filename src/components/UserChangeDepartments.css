@@ -3,8 +3,7 @@
     width: 100%;
     padding: 5px 10px;
     margin: 5px 0;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    border: 1px solid rgba(0, 0, 0, .5);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -30,47 +29,14 @@
     align-items: center;
 }
 
-.user_change_departments__select--all,
-.user_change_departments__select--none {
-    min-width: 90px;
-    background-color: #b1afaf;
-    color: #000000;
-    font-weight: bold;
-    font-size: 1rem;
-    padding: 5px;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-}
 
-.user_change_departments__select--all:active,
-.user_change_departments__select--none:active {
-    background-color: rgb(92, 201, 87);
-    color: #fff;
-    box-shadow: none;
-}
-
-.user_change_departments--button {
-    padding: 5px 10px;
-    margin: 5px auto;
-    background-color: rgb(92, 201, 87);
-    font-size: .9rem;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 2px 2px 3px 2px rgb(106, 132, 134);
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;
-}
-
-.user_change_departments--button:active {
-    background-color: rgb(63, 146, 214);
-    color: #fff;
-    box-shadow: none;
+.user_change_departments Button {
+    width: 30%;
+    margin: 0px auto;
 }
 
 .user_change_departments__container {
-    /* flex-grow: 1; */
+    padding: 5px;
     font-size: 1rem;
     overflow-y: auto;
     display: flex;

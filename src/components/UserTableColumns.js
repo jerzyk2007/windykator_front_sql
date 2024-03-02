@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import { Button } from "@mui/material";
 import './UserTableColumns.css';
 
 const UserTableColumns = ({ user, columns }) => {
@@ -85,17 +86,29 @@ const UserTableColumns = ({ user, columns }) => {
                     {!errMsg ? 'Dostęp do danych w tabeli' : errMsg}
                 </h3>
                 <section className='user-table-columns__select'>
-                    <button className='user-table-columns__select--all'
-                        onClick={() => { handleChangeChecked('all'); }}>Zaznacz</button>
-                    <button className='user-table-columns__select--none'
-                        onClick={() => { handleChangeChecked('none'); }}>Odznacz</button>
+                    <Button
+                        variant='contained'
+                        onClick={() => handleChangeChecked('all')}
+                        size='small'
+                        color='secondary'
+                    >Zaznacz</Button>
+
+                    <Button
+                        variant='outlined'
+                        onClick={() => handleChangeChecked('none')}
+                        size='small'
+                        color='secondary'
+                    >Odznacz</Button>
                 </section>
             </section>
             <section className='user-table-columns__container'>
                 {columnsItem}
             </section>
-            <button className='user-table-columns--button' onClick={handleSaveUserColumns}>Zmień</button>
-
+            <Button
+                variant='contained'
+                onClick={handleSaveUserColumns}
+                size='small'
+            >Zmień</Button>
         </section>
     );
 };
