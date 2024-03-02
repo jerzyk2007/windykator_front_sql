@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import { Button } from "@mui/material";
 import './UserChangePass.css';
 
 const UserChangePass = ({ user }) => {
@@ -11,7 +12,7 @@ const UserChangePass = ({ user }) => {
 
     const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
-    const handleChangeRoles = async () => {
+    const handleChangePass = async () => {
         try {
             const result = await axiosPrivateIntercept.patch(`/user/another-user-change-pass/${user._id}`, {
                 password: userPass
@@ -49,11 +50,13 @@ const UserChangePass = ({ user }) => {
                     onChange={handleInputChange}
                 />
             </section>
-            <button className='user_change_pass--button'
-                onClick={handleChangeRoles}
-                disabled={!isValidPass}
-            >Zmień</button>
 
+            <Button
+                variant='contained'
+                onClick={handleChangePass}
+                disabled={!isValidPass}
+                size='small'
+            >Zmień</Button>
         </section>
     );
 };

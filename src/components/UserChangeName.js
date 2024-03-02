@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import { Button } from "@mui/material";
 import './UserChangeName.css';
 
 const UserChangeName = ({ user }) => {
@@ -49,7 +50,13 @@ const UserChangeName = ({ user }) => {
                     onChange={(e) => setUsersurname(e.target.value)}
                 />
             </section>
-            <button className='user_change_name--button' disabled={!username || !usersurname} onClick={handleChangeNameSurname}>Zmień</button>
+            {/* <button className='user_change_name--button' disabled={!username || !usersurname} onClick={handleChangeNameSurname}>Zmień</button> */}
+            <Button
+                variant='contained'
+                onClick={handleChangeNameSurname}
+                disabled={!username || !usersurname}
+                size='small'
+            >Zmień</Button>
         </section>
     );
 };
