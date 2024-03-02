@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import { Button } from "@mui/material";
 import './UserChangeRoles.css';
 
 const UserChangeRoles = ({ user, roles }) => {
@@ -12,12 +13,15 @@ const UserChangeRoles = ({ user, roles }) => {
         <section key={index} className='user-change-roles__container'>
             <label className='user-change-roles__container--info' id={`role${index}`}>
                 <span className='user-change-roles__container--text' >{role}
-                    {role === "User" && <span className='edit_system_change--roles__container--information'> - przeglądanie</span>}
-                    {role === "Editor" && <span className='edit_system_change--roles__container--information'> - edytowanie tabel i raportów</span>}
-                    {role === "Admin" && <span className='edit_system_change--roles__container--information'> - uprawnienia użytkownika</span>}
+                    {role === "User" &&
+                        <span className='user-change-roles--information'> - przeglądanie</span>}
+                    {role === "Editor" &&
+                        <span className='user-change-roles--information'> - edytowanie tabel i raportów</span>}
+                    {role === "Admin" &&
+                        <span className='user-change-roles--information'> - uprawnienia użytkownika</span>}
                 </span>
                 <input
-                    className='edit_system_change--roles__container--check'
+                    className='user-change-roles--check'
                     name={`role${index}`}
                     type="checkbox"
                     checked={isChecked || role === 'User'}
@@ -73,8 +77,12 @@ const UserChangeRoles = ({ user, roles }) => {
                 </h3>
             </section>
             {rolesItem}
-            <button className='user-change-roles--button' onClick={handleChangeRoles} >Zmień</button>
-
+            {/* <button className='user-change-roles--button' onClick={handleChangeRoles} >Zmień</button> */}
+            <Button
+                variant='contained'
+                onClick={handleChangeRoles}
+                size='small'
+            >Zmień</Button>
         </section>
     );
 };

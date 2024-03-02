@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import { Button } from "@mui/material";
 import './UserDelete.css';
 
 const UserDelete = ({ user, setEdit }) => {
@@ -33,10 +34,26 @@ const UserDelete = ({ user, setEdit }) => {
             </section>
 
             {!confirmDelete ?
-                <button className='user_delete--button' onClick={() => setConfirmDelete(true)}>Usuń użytkownika</button>
+                <Button
+                    className='user_delete--button'
+                    variant='contained'
+                    onClick={() => setConfirmDelete(true)}
+                    size='small'
+                >Usuń użytkownika</Button>
                 : <section className='user_delete__confirm'>
-                    <button className='user_delete__confirm--cancel' onClick={() => setConfirmDelete(false)}>Anuluj</button>
-                    <button className='user_delete__confirm--confirm' onClick={handleConfirmDeleteUser}>Usuń użytkownika</button>
+                    <Button
+                        className='user_delete__confirm--cancel'
+                        variant='contained'
+                        onClick={() => setConfirmDelete(false)}
+                        size='small'
+                    >Anuluj</Button>
+                    <Button
+                        className='user_delete__confirm--confirm'
+                        variant='contained'
+                        onClick={handleConfirmDeleteUser}
+                        size='small'
+                        color='error'
+                    >Usuń użytkownika</Button>
                 </section>}
         </section>
     );
