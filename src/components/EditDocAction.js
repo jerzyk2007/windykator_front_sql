@@ -31,7 +31,7 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
                     <option value="INWEST INKASO">INWEST INKASO</option>
                     <option value="KANCELARIA KROTOSKI">KANCELARIA KROTOSKI</option>
                     <option value="KRAUZE">KRAUZE</option>
-                    <option value="POSTEPOWANIE SANACYJNE">POSTEPOWANIE SANACYJNE</option>
+                    <option value="POSTEPOWANIE SANACYJNE">POSTĘPOWANIE SANACYJNE</option>
                     <option value="ROK-KONOPA">ROK-KONOPA</option>
                     <option value="CNP">CNP</option>
                 </select>

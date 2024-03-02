@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import { TfiSave } from "react-icons/tfi";
-
 import './TableSettings.css';
 
 const TableSettings = () => {
@@ -330,7 +328,8 @@ const TableSettings = () => {
             <section className='table_settings-table'>
                 <section className='table_settings-table--title'>
                     <h3 className='table_settings-table--name'>Ustawienia kolumn tabeli</h3>
-                    <TfiSave className='table_settings-table--save' onClick={handleSaveColumnsSetinngs} />
+                    <i class="fas fa-save table_settings-table--save" onClick={handleSaveColumnsSetinngs}></i>
+
                 </section>
                 <section className='table_settings-table__container'>
                     {columnItems}
@@ -339,7 +338,7 @@ const TableSettings = () => {
             <section className='table_settings-raport'>
                 <section className='table_settings-table--title'>
                     <h3 className='table_settings-table--name'>Ustawienia kolumn raportu</h3>
-                    <TfiSave className='table_settings-table--save' />
+                    <i class="fas fa-save table_settings-table--save" ></i>
                 </section>
 
             </section>
