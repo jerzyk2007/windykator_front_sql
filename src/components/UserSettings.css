@@ -1,9 +1,10 @@
 .user_settings {
     flex-grow: 1;
-    display: flex;
-    justify-content: center;
+    font-family: Calibri, sans-serif;
     width: 100%;
     overflow-y: auto;
+    display: flex;
+    justify-content: center;
 }
 
 .user_settings__container {
@@ -34,13 +35,11 @@
     font-size: 1.2rem;
     margin: 10px auto;
     padding: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    border-radius: 5px;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, .5);
 }
 
 
-.user_settings__search-button {
+/* .user_settings__search-button {
     flex-grow: 0;
     padding: 10px;
     margin-left: 10px;
@@ -49,6 +48,8 @@
     border: none;
     border-radius: 5px;
     box-shadow: 2px 2px 3px 2px rgb(106, 132, 134);
+    border: 1px solid rgba(0, 0, 0, .5);
+
     font-weight: bold;
     letter-spacing: 1px;
     cursor: pointer;
@@ -56,7 +57,7 @@
 
 .search-button:active {
     background-color: #43c752;
-}
+} */
 
 .user_settings__result {
     width: 90%;
@@ -64,9 +65,7 @@
     display: flex;
     padding: 10px;
     font-size: 1.2rem;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 2px 2px 3px 2px rgb(106, 132, 134);
+    border: 1px solid rgba(0, 0, 0, .5);
 }
 
 .user_settings__result--edit {

@@ -17,13 +17,11 @@
     min-width: 300px;
     margin: auto;
     padding: 1.2rem;
-    /* background-color: rgb(193, 250, 187); */
     background-color: #a7d3f7;
-    font-family: Helvetica, sans-serif;
+    font-family: Calibri, sans-serif;
     font-size: 1.2rem;
     color: #000000;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    border: 1px solid rgba(0, 0, 0, .5);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -52,9 +50,7 @@
 .login__container-text {
     margin: 10px 0;
     padding: 10px;
-    border-radius: 5px;
-    border: none;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    border: 1px solid rgba(0, 0, 0, .5);
     font-size: 1.2rem;
     background-color: #fff;
 }
@@ -73,7 +69,12 @@
     padding: 10px 20px;
 }
 
-.login__container-button {
+.login Button {
+    width: 50%;
+    margin: 10px auto;
+}
+
+/* .login__container-button {
     padding: 10px 20px;
     border-radius: 10px;
     border: none;
@@ -82,14 +83,13 @@
     margin: 20px auto;
     box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
     background-color: rgb(127, 240, 134);
-    /* background-color: #a7d3f7; */
 
 }
 
 .login__container-button:active {
     background-color: rgb(22, 171, 81);
     color: #fff;
-}
+} */
 
 @media screen and (max-width: 960px) {
     .login {

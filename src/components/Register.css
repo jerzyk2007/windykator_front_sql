@@ -101,6 +101,11 @@
     margin: 5px;
 }
 
+.register Button {
+    width: 50%;
+    margin: 10px auto;
+}
+
 @media screen and (max-width: 960px) {
     .register {
         width: 90%;

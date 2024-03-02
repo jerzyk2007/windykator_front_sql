@@ -3,6 +3,7 @@ import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { LiaEditSolid } from "react-icons/lia";
 import PleaseWait from './PleaseWait';
 import EditUserSettings from './EditUserSettings';
+import { Button } from "@mui/material";
 import './UserSettings.css';
 
 const UserSetting = () => {
@@ -59,7 +60,14 @@ const UserSetting = () => {
                             value={search}
                             onChange={(e) => setSearch((e.target.value).toLocaleLowerCase())}
                         />
-                        <button className="user_settings__search-button" type="submit" disabled={search.length < 5 ? true : false}>Szukaj</button>
+
+                        <Button
+                            variant='contained'
+                            type="submit"
+                            disabled={search.length < 5 ? true : false}
+                            size='large'
+                            color="success"
+                        >Szukaj</Button>
                     </form>
                 </section>
                 {search && userItem}

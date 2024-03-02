@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import useData from "./hooks/useData";
 import { axiosPrivate } from "../api/axios";
+import { Button } from "@mui/material";
 import './Login.css';
 
 const Login = () => {
@@ -50,14 +51,6 @@ const Login = () => {
         setErrMsg('');
     }, [userlogin, password]);
 
-    // useEffect(() => {
-    //     if (!localStorage?.getItem("username")) {
-    //         userRef.current.focus();
-    //     }
-    // }, []);
-
-    // backgroundColor: "#a7d3f7",
-
     return (
         <section className="login__fixed">
             <section className="login">
@@ -85,7 +78,13 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button className="login__container-button">Zaloguj</button>
+                    <Button
+                        variant='contained'
+                        type="submit"
+                        size='large'
+                    >
+                        Zaloguj
+                    </Button>
                 </form>
             </section>
         </section>
