@@ -104,7 +104,15 @@ const Register = () => {
             {success ?
                 (<section className="register">
                     <h3 className="register-title">{success}</h3>
-                    <button className="register__container-button" onClick={handleExit}>Wyjście</button>
+                    <Button
+                        variant='contained'
+                        type="submit"
+                        size='large'
+                        onClick={handleExit}
+                    >
+                        Wyjście
+                    </Button>
+
                 </section>) :
                 (<section className="register">
                     {errMsg && <p className="register-error-message" ref={errRef}>{errMsg}</p>}
@@ -122,7 +130,7 @@ const Register = () => {
                             id="username"
                             autoComplete="new-userlogin"
                             name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
-                            // ref={userRef}
+                            ref={userRef}
                             value={userlogin}
                             onChange={(e) => setUserlogin((e.target.value).toLowerCase())}
                             required
@@ -144,7 +152,7 @@ const Register = () => {
                             id="user"
                             autoComplete="new-username"
                             name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
-                            ref={userRef}
+                            // ref={userRef}
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required
@@ -212,10 +220,11 @@ const Register = () => {
                             <FontAwesomeIcon icon={faInfoCircle} />
                             Hasła musza być takie same.
                         </p>}
-                        <button className="register__container-button" disabled={!validUserlogin || !validPassword || !validMatchPassword}>Zarejestruj</button>
-                        <Button variant='contained'
+                        <Button
+                            variant='contained'
                             type="submit"
                             disabled={!validUserlogin || !validPassword || !validMatchPassword}
+                            size='large'
                         >
                             Zarejestruj
                         </Button>

@@ -4,13 +4,10 @@
     min-width: 300px;
     margin: auto;
     padding: 1.2rem;
-    /* background-color: rgb(193, 250, 187); */
     background-color: #a7d3f7;
-    font-family: Helvetica, sans-serif;
+    font-family: Calibri, sans-serif;
     font-size: 1.2rem;
     color: #000000;
-    /* border-radius: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134); */
     border: 1px solid rgba(0, 0, 0, .5);
     display: flex;
     flex-direction: column;
@@ -19,7 +16,7 @@
 }
 
 .register-title {
-    /* font-size: 1.7rem; */
+    margin-bottom: 20px;
     text-align: center;
 }
 
@@ -62,9 +59,6 @@
     margin: 10px 0;
     padding: 10px;
     border: 1px solid rgba(0, 0, 0, .5);
-    /* border-radius: 5px;
-    border: none;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134); */
     font-size: 1.2rem;
 }
 
@@ -83,10 +77,6 @@
     padding: 10px 20px;
 }
 
-/* .register-error-message--offscreen {
-    position: absolute;
-    left: -9999px;
-} */
 
 .register__container-instructions {
     font-size: 0.9rem;
@@ -96,25 +86,8 @@
     color: #fff;
     padding: 0.25rem;
     position: relative;
-    /* bottom: -5px; */
 }
 
-.register__container-button {
-    padding: 10px 20px;
-    /* border-radius: 10px;
-    border: none;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134); */
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin: 20px auto;
-    border: 1px solid rgba(0, 0, 0, .5);
-    background-color: rgb(127, 240, 134);
-}
-
-.register-button:active {
-    background-color: rgb(22, 171, 81);
-    color: #fff;
-}
 
 .register-close-button {
     position: absolute;
