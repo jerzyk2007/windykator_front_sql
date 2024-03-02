@@ -6,6 +6,7 @@ import useData from "./hooks/useData";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FiX } from "react-icons/fi";
+import { Button } from "@mui/material";
 import './ChangePassword.css';
 
 const ChangePassword = () => {
@@ -131,7 +132,14 @@ const ChangePassword = () => {
                     <FontAwesomeIcon icon={faInfoCircle} />
                     Hasła musza być takie same.
                 </p>}
-                <button className="change_password-button" disabled={!validPassword || !validMatchPassword}>Zmień hasło</button>
+                <Button
+                    variant='contained'
+                    type="submit"
+                    disabled={!validPassword || !validMatchPassword}
+                    size='large'
+                >
+                    Zmień hasło
+                </Button>
             </form>
             <FiX className='change_password-close-button' onClick={() => navigate(-1)} />
         </section>
