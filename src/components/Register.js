@@ -4,6 +4,7 @@ import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FiX } from "react-icons/fi";
+import { Button } from "@mui/material";
 import './Register.css';
 
 const Register = () => {
@@ -212,6 +213,12 @@ const Register = () => {
                             Hasła musza być takie same.
                         </p>}
                         <button className="register__container-button" disabled={!validUserlogin || !validPassword || !validMatchPassword}>Zarejestruj</button>
+                        <Button variant='contained'
+                            type="submit"
+                            disabled={!validUserlogin || !validPassword || !validMatchPassword}
+                        >
+                            Zarejestruj
+                        </Button>
                     </form>
                     <FiX className='register-close-button' onClick={() => navigate(-1)} />
                 </section>)}
