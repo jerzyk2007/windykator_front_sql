@@ -2,8 +2,7 @@
     width: 100%;
     margin: 5px 0;
     padding: 5px 10px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+    border: 1px solid rgba(0, 0, 0, .5);
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -22,24 +21,6 @@
     flex-direction: column;
 }
 
-.user_change_login--button {
-    padding: 5px 10px;
-    margin: 5px auto;
-    background-color: rgb(92, 201, 87);
-    font-size: .9rem;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 2px 2px 3px 2px rgb(106, 132, 134);
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;
-}
-
-.user_change_login--button:active {
-    background-color: rgb(63, 146, 214);
-    color: #fff;
-    box-shadow: none;
-}
 
 .user_change_login__container--edit {
     display: block;
@@ -47,10 +28,14 @@
     font-size: 1rem;
     margin: 5px auto;
     padding: 5px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    border-radius: 5px;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, .5);
 }
+
+.user_change_login Button {
+    width: 30%;
+    margin: 5px auto;
+}
+
 
 @media screen and (max-width: 960px) {
     .user_change_login__container--edit {

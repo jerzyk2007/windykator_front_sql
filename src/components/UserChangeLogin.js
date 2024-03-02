@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import { Button } from "@mui/material";
 import './UserChangeLogin.css';
 
 const UserChangeLogin = ({ user }) => {
@@ -48,12 +49,13 @@ const UserChangeLogin = ({ user }) => {
                     onChange={(e) => setUserLogin((e.target.value).toLocaleLowerCase())}
                 />
             </section>
-
-            <button className='user_change_login--button'
+            <Button
+                variant='contained'
+                onClick={handleChangeLogin}
                 disabled={!isValidLogin}
-                onClick={handleChangeLogin}>
-                Zmień login
-            </button>
+                size='small'
+            >Zmień login</Button>
+
         </section>
     );
 };
