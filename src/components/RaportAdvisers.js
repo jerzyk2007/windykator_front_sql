@@ -5,8 +5,6 @@ import useWindowSize from './hooks/useWindow';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_PL } from 'material-react-table/locales/pl';
 import PleaseWait from './PleaseWait';
-import { TfiSave } from "react-icons/tfi";
-import { SiMicrosoftexcel } from "react-icons/si";
 import * as xlsx from 'xlsx';
 
 import './RaportAdvisers.css';
@@ -36,6 +34,18 @@ const RaportAdvisers = () => {
     });
     const [errRaportDate, errSetRaportDate] = useState(false);
 
+    const muiTableBodyCellProps = {
+        align: "center",
+        sx: {
+            backgroundColor: "#fff",
+            borderRight: "1px solid #000",
+            borderBottom: "1px solid #000",
+            fontSize: "14px",
+            fontWeight: 'bold',
+            padding: "2px",
+            minHeight: '3rem'
+        },
+    };
 
     const checkMinMaxDateGlobal = (documents) => {
         let maxDate = documents[0].DATA_FV;
@@ -62,65 +72,6 @@ const RaportAdvisers = () => {
         });
     };
 
-    // w przypadku jeśli Asystentka widzi wiecej niż jeden działa dodawany jest kolejny wiersz "Całość" jako łączny wynik doradców których widzi
-    // const addedAllToRaports = (generatingRaport) => {
-    //     if (generatingRaport.length > 1) {
-    //         const sumOfAllItems = generatingRaport.reduce((acc, currentItem) => {
-    //             acc.DocumentsCounter += currentItem.DocumentsCounter;
-    //             acc.DocumentsCounterExpired += currentItem.DocumentsCounterExpired;
-    //             acc.DocumentsCounterExpiredWithoutPandL += currentItem.DocumentsCounterExpiredWithoutPandL;
-    //             acc.ExpiredPayments += currentItem.ExpiredPayments;
-    //             acc.ExpiredPaymentsWithoutPandL += currentItem.ExpiredPaymentsWithoutPandL;
-    //             acc.NotExpiredPayment += currentItem.NotExpiredPayment;
-    //             acc.NotExpiredPaymentWithoutPandL += currentItem.NotExpiredPaymentWithoutPandL;
-    //             acc.TotalDocumentsValue += currentItem.TotalDocumentsValue;
-    //             acc.UnderPayment += currentItem.UnderPayment;
-    //             return acc;
-    //         }, {
-    //             DocumentsCounter: 0,
-    //             DocumentsCounterExpired: 0,
-    //             DocumentsCounterExpiredWithoutPandL: 0,
-    //             ExpiredPayments: 0,
-    //             ExpiredPaymentsWithoutPandL: 0,
-    //             NotExpiredPayment: 0,
-    //             NotExpiredPaymentWithoutPandL: 0,
-    //             TotalDocumentsValue: 0,
-    //             UnderPayment: 0
-    //         });
-
-    //         const expiredPaymentsValue = sumOfAllItems.ExpiredPayments;
-    //         const notExpiredPaymentValue = sumOfAllItems.NotExpiredPayment;
-
-    //         // Oblicz wartość Objective
-    //         //zabezpieczenie przed dzieleniem przez zero
-    //         let objective = 0;
-    //         if (notExpiredPaymentValue + expiredPaymentsValue !== 0) {
-    //             objective = (expiredPaymentsValue / (notExpiredPaymentValue + expiredPaymentsValue) * 100);
-    //         }
-    //         sumOfAllItems.Objective = objective;
-
-
-    //         const expiredPaymentsWithoutPandLValue = sumOfAllItems.ExpiredPaymentsWithoutPandL;
-    //         const notExpiredPaymentWithoutPandLValue = sumOfAllItems.NotExpiredPaymentWithoutPandL;
-    //         // Oblicz wartość ObjectiveWithoutPandL
-    //         let objectiveWithoutPandL = 0;
-    //         if (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue !== 0) {
-    //             objectiveWithoutPandL = (expiredPaymentsWithoutPandLValue / (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue) * 100);
-    //         }
-    //         sumOfAllItems.ObjectiveWithoutPandL = objectiveWithoutPandL;
-
-    //         sumOfAllItems.Department = 'Całość';
-
-    //         //dodaję "Całość" jako pierwszy obiekt, żeby w tabeli wyświetlał się jako pierwszy
-    //         generatingRaport.unshift(sumOfAllItems);
-
-
-    //         setRaport(generatingRaport);
-
-    //     } else {
-    //         setRaport(generatingRaport);
-    //     }
-    // };
 
     // funkcja przygotowuje dane do raportu
     const grossTotal = () => {
@@ -351,21 +302,17 @@ const RaportAdvisers = () => {
             {
                 accessorKey: 'DORADCA',
                 header: 'Doradca',
-                size: columnSizing?.Department ? columnSizing.Department : 150,
                 filterVariant: 'multi-select',
-                // filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DORADCA'])))
             },
             {
                 accessorKey: 'DZIAL',
                 header: 'Dział',
-                size: columnSizing?.Department ? columnSizing.Department : 150,
                 filterVariant: 'multi-select',
-                // filterSelectOptions: Array.from(new Set(raport.map(filtr => filtr['DZIAL'])))
             },
 
             {
                 accessorKey: 'CEL_BEZ_PZU_LINK4',
-                header: 'Cel bez PZU/LINK4',
+                header: 'Stan należności w % bez R-K i CNP',
                 enableColumnFilter: false,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
@@ -374,30 +321,22 @@ const RaportAdvisers = () => {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                             useGrouping: true,
-                        }) + " %"
+                        }) + "%"
                         : '0,00'; // Zastąp puste pola zerem
 
                     return `${formattedSalary}`;
                 },
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#ffe884",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#ffe884",
+                    },
+                },
             },
             {
                 accessorKey: 'PRZETERMINOWANE_BEZ_PZU_LINK4',
-                header: 'Przeterminowane bez PZU/LINK4',
+                header: 'Kwota przeterminowanych FV bez R-K i CNP',
                 enableColumnFilter: false,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
@@ -411,77 +350,29 @@ const RaportAdvisers = () => {
 
                     return `${formattedSalary}`;
                 },
-                muiTableBodyCellProps: () => {
-                    return {
-                        sx: {
-                            backgroundColor: "#ffe884",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#ffe884",
+                    },
+                },
             },
             {
                 accessorKey: 'ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4',
-                header: 'Ilość faktur przet. bez PZU/LINK4',
+                header: 'Ilość przeterminowanych FV bez R-K i CNP',
                 enableColumnFilter: false,
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#ffe884",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
-            },
-            {
-                accessorKey: 'CEL_CALOSC',
-                header: 'Cel całość',
-                enableColumnFilter: false,
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
-                    const formattedSalary = value !== undefined && value !== null
-                        ? value.toLocaleString('pl-PL', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                            useGrouping: true,
-                        }) + " %"
-                        : '0,00'; // Zastąp puste pola zerem
-
-                    return `${formattedSalary}`;
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#ffe884",
+                    },
                 },
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#caff84",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
             },
             {
-                accessorKey: 'PRZETERMINOWANE_FV',
-                header: 'Przeterminowane fv',
+                accessorKey: 'NIEPRZETERMINOWANE_FV_BEZ_PZU_LINK4',
+                header: 'Kwota nieprzeterminowanych FV bez R-K i CNP',
                 enableColumnFilter: false,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
@@ -495,90 +386,13 @@ const RaportAdvisers = () => {
 
                     return `${formattedSalary}`;
                 },
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#caff84",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
-            },
-
-            {
-                accessorKey: 'ILOSC_PRZETERMINOWANYCH_FV',
-                header: 'Ilość faktur przeter.',
-                enableColumnFilter: false,
-                muiTableBodyCellProps: () => {
-                    return {
-                        sx: {
-                            backgroundColor: "#caff84",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
-            },
-
-            {
-                accessorKey: 'KWOTA_NIEROZLICZONYCH_FV',
-                header: 'Kwota faktur nierozl.',
-                enableColumnFilter: false,
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
-                    const formattedSalary = value !== undefined && value !== null
-                        ? value.toLocaleString('pl-PL', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                            useGrouping: true,
-                        })
-                        : '0,00';
-
-                    return `${formattedSalary}`;
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#ffe884",
+                    },
                 },
-                enableGlobalFilter: false
-
-            },
-            {
-                accessorKey: 'ILOSC_NIEROZLICZONYCH_FV',
-                header: 'Ilość faktur nierozliczonych',
-                enableColumnFilter: false,
-            },
-            {
-                accessorKey: 'PRZETERMINOWANE_KANCELARIA',
-                header: 'Przeterm kancelarie',
-                enableColumnFilter: false,
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
-                    const formattedSalary = value !== undefined && value !== null
-                        ? value.toLocaleString('pl-PL', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                            useGrouping: true,
-                        })
-                        : '0,00';
-
-                    return `${formattedSalary}`;
-                },
-                enableGlobalFilter: false
-            },
-            {
-                accessorKey: 'ILOSC_FV_KANCELARIA',
-                header: 'Ilość faktur',
-                enableColumnFilter: false,
             },
         ],
         [raport]
@@ -623,7 +437,7 @@ const RaportAdvisers = () => {
         muiTableHeadCellProps: () => ({
             align: "left",
             sx: {
-                fontWeight: "bold",
+                fontWeight: "700",
                 fontSize: "14px",
                 color: "black",
                 backgroundColor: "#a7d3f7",
@@ -631,9 +445,6 @@ const RaportAdvisers = () => {
                 paddingTop: "0",
                 paddingBottom: "0",
                 minHeight: "2rem",
-                // textWrap: "wrap",
-                // wordBreak: "break-word",
-                // overflowWrap: "break-word",
                 whiteSpace: "wrap",
                 textAlign: "center",
                 display: "flex",
@@ -645,7 +456,6 @@ const RaportAdvisers = () => {
                     alignItems: "center",
                     justifyContent: 'center',
                     textAlign: "center",
-                    // textWrap: "wrap"
                     whiteSpace: "wrap",
                 },
                 '& .Mui-TableHeadCell-Content-Wrapper': {
@@ -653,7 +463,6 @@ const RaportAdvisers = () => {
                     alignItems: "center",
                     justifyContent: 'center',
                     textAlign: "center",
-                    // textWrap: "wrap"
                     whiteSpace: "wrap",
                 },
                 '& .Mui-TableHeadCell-Content-Actions': {
@@ -777,8 +586,8 @@ const RaportAdvisers = () => {
                 className="raport_advisers-table"
                 table={table} />}
             <section className='raport_advisers-panel'>
-                <i class="fas fa-save raport_advisers-save-settings" onClick={handleSaveSettings}></i>
-                <i class="fa-regular fa-file-excel raport_advisers-export-excel" onClick={handleExportExcel}></i>
+                <i className="fas fa-save raport_advisers-save-settings" onClick={handleSaveSettings}></i>
+                <i className="fa-regular fa-file-excel raport_advisers-export-excel" onClick={handleExportExcel}></i>
             </section>
         </section>
     );

@@ -699,7 +699,7 @@ const RaportDepartments = () => {
             align: "left",
             sx: {
                 fontFamily: "Calibri, sans-serif",
-                fontWeight: "bold",
+                fontWeight: "700",
                 fontSize: "16px",
                 color: "black",
                 backgroundColor: "#a7d3f7",
