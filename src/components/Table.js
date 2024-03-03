@@ -454,7 +454,7 @@ const Table = ({ info }) => {
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: 'center',
-                                            textAlign: "justify",
+                                            textAlign: "center",
                                             textWrap: "balance"
                                         },
                                         '& .Mui-TableHeadCell-Content-Actions': {
