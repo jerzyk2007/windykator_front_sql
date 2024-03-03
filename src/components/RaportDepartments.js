@@ -48,18 +48,6 @@ const RaportDepartments = () => {
         },
     };
 
-    // const departmentsObjective = {
-    //     "Całość": '',
-    //     "D08": 30,
-    //     "D38": 30,
-    //     "D48/D58": 30,
-    //     "D68/D78": 30,
-    //     "D88": 30,
-    //     "D98": 30,
-    //     "D118/D148": 23,
-    //     "D308/D318": 30,
-
-    // };
     const departmentsObjective = {
         time: {
             Q: 1
@@ -120,6 +108,10 @@ const RaportDepartments = () => {
                 acc.KWOTA_NIEROZLICZONYCH_FV += currentItem.KWOTA_NIEROZLICZONYCH_FV;
                 acc.PRZETERMINOWANE_KANCELARIA += currentItem.PRZETERMINOWANE_KANCELARIA;
                 acc.ILOSC_FV_KANCELARIA += currentItem.ILOSC_FV_KANCELARIA;
+                acc.ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII += currentItem.ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII;
+                acc.NIEPRZETERMINOWANE_FV_BEZ_KANCELARII += currentItem.NIEPRZETERMINOWANE_FV_BEZ_KANCELARII;
+                acc.PRZETERMINOWANE_BEZ_KANCELARII += currentItem.PRZETERMINOWANE_BEZ_KANCELARII;
+
 
                 return acc;
             }, {
@@ -133,12 +125,14 @@ const RaportDepartments = () => {
                 CALKOWITA_WARTOSC_FV_BRUTTO: 0,
                 KWOTA_NIEROZLICZONYCH_FV: 0,
                 PRZETERMINOWANE_KANCELARIA: 0,
-                ILOSC_FV_KANCELARIA: 0
+                ILOSC_FV_KANCELARIA: 0,
+                ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII: 0,
+                NIEPRZETERMINOWANE_FV_BEZ_KANCELARII: 0,
+                PRZETERMINOWANE_BEZ_KANCELARII: 0
             });
 
             const expiredPaymentsValue = sumOfAllItems.PRZETERMINOWANE_FV;
             const notExpiredPaymentValue = sumOfAllItems.NIEPRZETERMINOWANE_FV;
-
             // Oblicz wartość Objective - cel całość
             //zabezpieczenie przed dzieleniem przez zero
             let objective = 0;
@@ -151,11 +145,25 @@ const RaportDepartments = () => {
             const expiredPaymentsWithoutPandLValue = sumOfAllItems.PRZETERMINOWANE_BEZ_PZU_LINK4;
             const notExpiredPaymentWithoutPandLValue = sumOfAllItems.NIEPRZETERMINOWANE_FV_BEZ_PZU_LINK4;
             // Oblicz wartość ObjectiveWithoutPandL
+            //zabezpieczenie przed dzieleniem przez zero
             let objectiveWithoutPandL = 0;
             if (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue !== 0) {
                 objectiveWithoutPandL = (expiredPaymentsWithoutPandLValue / (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue) * 100);
             }
             sumOfAllItems.CEL_BEZ_PZU_LINK4 = objectiveWithoutPandL;
+
+
+            const expiredPaymentsWithoutLegal = sumOfAllItems.PRZETERMINOWANE_BEZ_KANCELARII;
+            const notExpiredPaymentWithoutLegal = sumOfAllItems.NIEPRZETERMINOWANE_FV_BEZ_KANCELARII;
+            // Oblicz wartość ObjectiveWithoutPandL
+            //zabezpieczenie przed dzieleniem przez zero
+            let objectiveWithoutLegal = 0;
+            if (notExpiredPaymentWithoutLegal + expiredPaymentsWithoutLegal !== 0) {
+                objectiveWithoutLegal = (expiredPaymentsWithoutLegal / (notExpiredPaymentWithoutLegal + expiredPaymentsWithoutLegal) * 100);
+            }
+
+            sumOfAllItems.CEL_BEZ_KANCELARII = objectiveWithoutLegal;
+
 
             sumOfAllItems.DZIALY = 'Całość';
 
@@ -206,6 +214,15 @@ const RaportDepartments = () => {
         // ilość faktur kancelaria
         let legalCounter = new Map();
 
+        // przeterminowane bez kancelarii
+        let expiredWithoutLegal = new Map();
+
+        // nieprzeterminowane bez kancelarii
+        let notExpiredWithoutLegal = new Map();
+
+        // ilość faktur bez kancelarii
+        let withoutLegalCounter = new Map();
+
         let generatingRaport = [];
 
         departments.forEach(dep => {
@@ -220,6 +237,9 @@ const RaportDepartments = () => {
             notExpiredPaymentWithoutPandL.set(dep, 0);
             legalExpired.set(dep, 0);
             legalCounter.set(dep, 0);
+            expiredWithoutLegal.set(dep, 0);
+            withoutLegalCounter.set(dep, 0);
+            notExpiredWithoutLegal.set(dep, 0);
 
             raportData.forEach(item => {
                 // Sprawdzenie, czy obiekt zawiera klucz DZIAL, który pasuje do aktualnego działu
@@ -265,18 +285,27 @@ const RaportDepartments = () => {
                     howManyExpiredElementsWithoutPandL.set(dep, howManyExpiredElementsWithoutPandL.get(dep) + 1);
                 }
 
+                if (item.DZIAL === dep && (item.JAKA_KANCELARIA !== "ROK-KONOPA" && item.JAKA_KANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    notExpiredPaymentWithoutPandL.set(dep, notExpiredPaymentWithoutPandL.get(dep) + item.DO_ROZLICZENIA);
+                }
+
                 if (item.DZIAL === dep && (item.JAKA_KANCELARIA !== "BRAK" && item.JAKA_KANCELARIA !== "ROK-KONOPA" && item.JAKA_KANCELARIA !== "CNP") && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     legalExpired.set(dep, legalExpired.get(dep) + item.DO_ROZLICZENIA);
                     legalCounter.set(dep, legalCounter.get(dep) + 1);
                 }
 
-                if (item.DZIAL === dep && (item.JAKA_KANCELARIA !== "ROK-KONOPA" && item.JAKA_KANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
-                    notExpiredPaymentWithoutPandL.set(dep, notExpiredPaymentWithoutPandL.get(dep) + item.DO_ROZLICZENIA);
+                if (item.DZIAL === dep && item.JAKA_KANCELARIA === "BRAK" && afterDeadlineDate < todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    expiredWithoutLegal.set(dep, expiredWithoutLegal.get(dep) + item.DO_ROZLICZENIA);
+                    withoutLegalCounter.set(dep, withoutLegalCounter.get(dep) + 1);
                 }
+
+                if (item.DZIAL === dep && item.JAKA_KANCELARIA === "BRAK" && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
+                    notExpiredWithoutLegal.set(dep, notExpiredWithoutLegal.get(dep) + item.DO_ROZLICZENIA);
+
+                }
+
             });
         });
-
-
 
         departments.forEach(dep => {
             // zabezpieczenie przed dzieleniem przez zero odtąd 
@@ -284,6 +313,8 @@ const RaportDepartments = () => {
             let notExpiredPaymentValue = notExpiredPayment.get(dep);
             let expiredPaymentsWithoutPandLValue = expiredPaymentsWithoutPandL.get(dep);
             let notExpiredPaymentWithoutPandLValue = notExpiredPaymentWithoutPandL.get(dep);
+            let expiredWithoutLegalValue = expiredWithoutLegal.get(dep);
+            let notExpiredWithoutLegalValue = notExpiredWithoutLegal.get(dep);
 
             let objective = 0;
             if (notExpiredPaymentValue + expiredPaymentsValue !== 0) {
@@ -294,7 +325,11 @@ const RaportDepartments = () => {
             if (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue !== 0) {
                 objectiveWithoutPandL = (((expiredPaymentsWithoutPandLValue) / (notExpiredPaymentWithoutPandLValue + expiredPaymentsWithoutPandLValue)) * 100).toFixed(2);
             }
-            // zabezpieczenie przed dzieleniem przez zero dodtąd 
+
+            let objectiveWithoutLegal = 0;
+            if (notExpiredWithoutLegalValue + expiredWithoutLegalValue !== 0) {
+                objectiveWithoutLegal = (((expiredWithoutLegalValue) / (notExpiredWithoutLegalValue + expiredWithoutLegalValue)) * 100).toFixed(2);
+            }
 
             let departmentObj = {
                 DZIALY: dep,
@@ -312,14 +347,16 @@ const RaportDepartments = () => {
                 CEL_CALOSC: Number(objective),
                 ILOSC_PRZETERMINOWANYCH_FV: howManyExpiredElements.get(dep),
                 ILOSC_FV_KANCELARIA: legalCounter.get(dep),
+                CEL_BEZ_KANCELARII: Number(objectiveWithoutLegal),
+                ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII: withoutLegalCounter.get(dep),
+                NIEPRZETERMINOWANE_FV_BEZ_KANCELARII: Number(notExpiredWithoutLegalValue.toFixed(2)),
+                PRZETERMINOWANE_BEZ_KANCELARII: Number(expiredWithoutLegalValue.toFixed(2)),
             };
             generatingRaport.push(departmentObj);
         });
 
         addedAllToRaports(generatingRaport);
     };
-
-
 
     const createDataRaport = () => {
         if (permission === "Standard") {
@@ -334,7 +371,6 @@ const RaportDepartments = () => {
             setDepartments(uniqueDepartments);
         }
     };
-
 
     const getData = async () => {
         try {
@@ -371,7 +407,7 @@ const RaportDepartments = () => {
             },
             {
                 accessorKey: 'CEL',
-                header: `Cele na ${departmentsObjective.time.Q}Q bez R-K i CNP`,
+                header: `Cele na ${departmentsObjective.time.Q}-Q bez R-K i CNP`,
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedValue = value !== undefined && value !== '' ? `${value}%` : ''; // Dodanie znaku procent do wartości, jeśli nie jest to pusty string
@@ -540,10 +576,9 @@ const RaportDepartments = () => {
                     },
                 },
             },
-
             {
-                accessorKey: 'KWOTA_NIEROZLICZONYCH_FV',
-                header: 'Kwota faktur nierozl.',
+                accessorKey: 'CEL_BEZ_KANCELARII',
+                header: 'Stan  należności bez kancelarii w %',
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -551,21 +586,22 @@ const RaportDepartments = () => {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                             useGrouping: true,
-                        })
-                        : '0,00';
+                        }) + "%"
+                        : '0,00'; // Zastąpuje puste pola zerem
 
                     return `${formattedSalary}`;
                 },
-                enableGlobalFilter: false
-
-            },
-            {
-                accessorKey: 'ILOSC_NIEROZLICZONYCH_FV',
-                header: 'Ilość faktur nierozliczonych',
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#9fdcff",
+                    },
+                },
             },
             {
                 accessorKey: 'PRZETERMINOWANE_KANCELARIA',
-                header: 'Przeterm kancelarie',
+                header: 'Kwota przeterminowanych fv bez kancelarii',
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -574,15 +610,51 @@ const RaportDepartments = () => {
                             maximumFractionDigits: 2,
                             useGrouping: true,
                         })
-                        : '0,00';
+                        : '0,00'; // Zastąp puste pola zerem
 
                     return `${formattedSalary}`;
                 },
-                enableGlobalFilter: false
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#9fdcff",
+                    },
+                },
             },
             {
-                accessorKey: 'ILOSC_FV_KANCELARIA',
-                header: 'Ilość faktur kancelaria',
+                accessorKey: 'ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII',
+                header: 'Ilość faktur przeterminowanych bez kancelarii',
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#9fdcff",
+                    },
+                },
+            },
+            {
+                accessorKey: 'NIEPRZETERMINOWANE_FV_BEZ_KANCELARII',
+                header: 'Kwota wszytskich nieprzeterminowanych fv bez kancelarii',
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00'; // Zastąp puste pola zerem
+
+                    return `${formattedSalary}`;
+                },
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#9fdcff",
+                    },
+                },
             },
         ],
         [raport]
@@ -725,11 +797,6 @@ const RaportDepartments = () => {
 
     },
         [raportDate]);
-
-
-    useEffect(() => {
-        console.log(raport);
-    }, [raport]);
 
     return (
         <section className='raport_departments'>
