@@ -19,7 +19,7 @@ import * as xlsx from 'xlsx';
 import './Table.css';
 
 
-const ActualTable = ({ info }) => {
+const Table = ({ info }) => {
 
     const theme = useTheme();
 
@@ -450,14 +450,17 @@ const ActualTable = ({ info }) => {
                                         display: "flex",
                                         justifyContent: "center",
                                         alignItems: "center",
-                                        // lineHeight: "2.5rem",
                                         '& .Mui-TableHeadCell-Content': {
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: 'center',
-                                            textAlign: "center",
+                                            textAlign: "justify",
                                             textWrap: "balance"
                                         },
+                                        '& .Mui-TableHeadCell-Content-Actions': {
+                                            display: "none",
+                                        },
+
                                     },
                                 })}
 
@@ -490,4 +493,4 @@ const ActualTable = ({ info }) => {
     );
 };
 
-export default ActualTable;
+export default Table;

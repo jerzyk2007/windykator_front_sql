@@ -1,8 +1,3 @@
-@font-face {
-    font-family: Calibri;
-    src: url('./font/Calibri.ttf') format('truetype');
-}
-
 .edit_doc_becared-section-data {
     flex-basis: 34%;
     padding: 5px;

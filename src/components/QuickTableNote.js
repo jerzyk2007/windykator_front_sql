@@ -68,7 +68,7 @@ const QuickTableNote = ({ quickNote, setQuickNote, documents, setDocuments }) =>
                     id=""
                     cols="15"
                     rows="6"
-                    value={note}
+                    value={quickNote.UWAGI_ASYSTENT ? quickNote.UWAGI_ASYSTENT.join('\n') : ''}
                     readOnly
                 ></textarea>
 
@@ -79,6 +79,7 @@ const QuickTableNote = ({ quickNote, setQuickNote, documents, setDocuments }) =>
                     id=""
                     cols="15"
                     rows="3"
+                    placeholder='Dodaj'
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                 ></textarea>
