@@ -33,7 +33,7 @@
     display: block;
     width: 80%;
     font-size: 1.2rem;
-    margin: 10px auto;
+    margin: 10px;
     padding: 10px;
     border: 1px solid rgba(0, 0, 0, .5);
     overflow-y: auto;
@@ -76,6 +76,10 @@
 
     .user_settings__result {
         width: 100%;
+    }
+
+    .user_settings__search-form {
+        width: 85%;
     }
 
     .user_settings__result--name {

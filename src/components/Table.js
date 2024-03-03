@@ -480,8 +480,8 @@ const ActualTable = ({ info }) => {
 
                     </ThemeProvider>
                     <section className='table-icons-panel'>
-                        <i class="fas fa-save table-save-settings" onClick={handleSaveSettings}></i>
-                        <i class="fa-regular fa-file-excel table-export-excel" onClick={handleExportExcel}></i>
+                        <i className="fas fa-save table-save-settings" onClick={handleSaveSettings}></i>
+                        <i className="fa-regular fa-file-excel table-export-excel" onClick={handleExportExcel}></i>
 
                     </section>
 

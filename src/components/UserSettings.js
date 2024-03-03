@@ -65,7 +65,7 @@ const UserSetting = () => {
                             variant='contained'
                             type="submit"
                             disabled={search.length < 5 ? true : false}
-                            size='large'
+                            size='medium'
                             color="success"
                         >Szukaj</Button>
                     </form>

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import useData from "./hooks/useData";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-
+import { Button } from "@mui/material";
 import './QuickTableNote.css';
 
 const QuickTableNote = ({ quickNote, setQuickNote, documents, setDocuments }) => {
@@ -64,21 +64,40 @@ const QuickTableNote = ({ quickNote, setQuickNote, documents, setDocuments }) =>
 
                 <textarea
                     className='quick_table_note__container-edit'
+                    name=""
+                    id=""
+                    cols="15"
+                    rows="6"
+                    value={note}
+                    readOnly
+                ></textarea>
+
+                <textarea
+                    className='quick_table_note__container-edit'
                     ref={noteRef}
                     name=""
                     id=""
-                    cols="10"
-                    rows="10"
+                    cols="15"
+                    rows="3"
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                 ></textarea>
+
                 <section className='quick_table_note__container-button'>
-                    <button className='quick_table_note__container-button--cancel' onClick={() => setQuickNote('')}>Anuluj</button>
-                    <button
-                        className='quick_table_note__container-button--confirm'
+
+                    <Button
+                        variant='contained'
+                        onClick={() => setQuickNote('')}
+                        size='small'
+                        color='error'
+                    >Anuluj</Button>
+
+                    <Button
+                        variant='contained'
                         onClick={handleAddNote}
-                        disabled={!note ? true : false}
-                    >Zapisz</button>
+                        size='small'
+                    >Zapisz</Button>
+
                 </section>
             </section>
         </section>
