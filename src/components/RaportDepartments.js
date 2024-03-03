@@ -5,8 +5,6 @@ import useWindowSize from './hooks/useWindow';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_PL } from 'material-react-table/locales/pl';
 import PleaseWait from './PleaseWait';
-import { TfiSave } from "react-icons/tfi";
-import { SiMicrosoftexcel } from "react-icons/si";
 import * as xlsx from 'xlsx';
 
 
@@ -36,6 +34,48 @@ const RaportDepartments = () => {
         maxRaportDate: ''
     });
     const [errRaportDate, errSetRaportDate] = useState(false);
+
+    const muiTableBodyCellProps = {
+        align: "center",
+        sx: {
+            backgroundColor: "#fff",
+            borderRight: "1px solid #000",
+            borderBottom: "1px solid #000",
+            fontSize: "14px",
+            fontWeight: 'bold',
+            padding: "2px",
+            minHeight: '3rem'
+        },
+    };
+
+    // const departmentsObjective = {
+    //     "Całość": '',
+    //     "D08": 30,
+    //     "D38": 30,
+    //     "D48/D58": 30,
+    //     "D68/D78": 30,
+    //     "D88": 30,
+    //     "D98": 30,
+    //     "D118/D148": 23,
+    //     "D308/D318": 30,
+
+    // };
+    const departmentsObjective = {
+        time: {
+            Q: 1
+        },
+        departments: {
+            "Całość": '',
+            "D08": 30,
+            "D38": 30,
+            "D48/D58": 30,
+            "D68/D78": 30,
+            "D88": 30,
+            "D98": 30,
+            "D118/D148": 23,
+            "D308/D318": 30,
+        }
+    };
 
 
     const checkMinMaxDateGlobal = (documents) => {
@@ -258,6 +298,7 @@ const RaportDepartments = () => {
 
             let departmentObj = {
                 DZIALY: dep,
+                CEL: departmentsObjective.departments[dep],
                 CEL_BEZ_PZU_LINK4: Number(objectiveWithoutPandL),
                 PRZETERMINOWANE_BEZ_PZU_LINK4: Number(expiredPaymentsWithoutPandLValue.toFixed(2)),
                 ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4: howManyExpiredElementsWithoutPandL.get(dep),
@@ -326,11 +367,20 @@ const RaportDepartments = () => {
             {
                 accessorKey: 'DZIALY',
                 header: 'Dział',
-                size: columnSizing?.Department ? columnSizing.Department : 150
+                // size: columnSizing?.Department ? columnSizing.Department : 150
+            },
+            {
+                accessorKey: 'CEL',
+                header: `Cele na ${departmentsObjective.time.Q}Q bez R-K i CNP`,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedValue = value !== undefined && value !== '' ? `${value}%` : ''; // Dodanie znaku procent do wartości, jeśli nie jest to pusty string
+                    return formattedValue;
+                },
             },
             {
                 accessorKey: 'CEL_BEZ_PZU_LINK4',
-                header: 'Cel bez PZU/LINK4',
+                header: 'Stan należności w % bez R-K i CNP',
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -338,30 +388,22 @@ const RaportDepartments = () => {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                             useGrouping: true,
-                        }) + " %"
+                        }) + "%"
                         : '0,00'; // Zastąp puste pola zerem
 
                     return `${formattedSalary}`;
                 },
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#ffe884",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#ffe884",
+                    },
+                },
             },
             {
                 accessorKey: 'PRZETERMINOWANE_BEZ_PZU_LINK4',
-                header: 'Przeterminowane bez PZU/LINK4',
+                header: 'Kwota przeterminowanych bez R-K i CNP',
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -374,44 +416,28 @@ const RaportDepartments = () => {
 
                     return `${formattedSalary}`;
                 },
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#ffe884",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#ffe884",
+                    },
+                },
             },
             {
                 accessorKey: 'ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4',
-                header: 'Ilość faktur przet. bez PZU/LINK4',
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#ffe884",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
+                header: 'Ilość przeterminowanych FV bez R-K i CNP',
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#ffe884",
+                    },
+                },
             },
             {
-                accessorKey: 'CEL_CALOSC',
-                header: 'Cel',
+                accessorKey: 'NIEPRZETERMINOWANE_FV_BEZ_PZU_LINK4',
+                header: 'Kwota nieprzeterminowanych FV bez R-K i CNP',
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -419,31 +445,46 @@ const RaportDepartments = () => {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                             useGrouping: true,
-                        }) + " %"
+                        })
+                        : '0,00'; // Zastąp puste pola zerem
+
+                    return `${formattedSalary}`;
+                },
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#ffe884",
+                    },
+                },
+            },
+            {
+                accessorKey: 'CEL_CALOSC',
+                header: 'Stan wszytskich należności w %',
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        }) + "%"
                         : '0,00'; // Zastąpuje puste pola zerem
 
                     return `${formattedSalary}`;
                 },
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#caff84",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#caff84",
+                    },
+                },
             },
 
             {
                 accessorKey: 'PRZETERMINOWANE_FV',
-                header: 'Przeterminowane',
+                header: 'Kwota wszytskich przeterminowanych fv',
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -456,41 +497,48 @@ const RaportDepartments = () => {
 
                     return `${formattedSalary}`;
                 },
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#caff84",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#caff84",
+                    },
+                },
             },
 
             {
                 accessorKey: 'ILOSC_PRZETERMINOWANYCH_FV',
-                header: 'Ilość faktur przeter.',
-                muiTableBodyCellProps: ({ cell }) => {
-                    return {
-                        sx: {
-                            backgroundColor: "#caff84",
-                            // borderRight: "1px solid #c9c7c7",
-                            borderRight: "1px solid #000",
-                            borderBottom: "1px solid #000",
-                            fontSize: "14px",
-                            fontWeight: 'bold',
-                            padding: "2px",
-                            minHeight: '3rem'
-                        },
-                        align: 'center',
-                    };
-                }
+                header: 'Ilość wszytskich faktur przeterminowanych',
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#caff84",
+                    },
+                },
+            },
+            {
+                accessorKey: 'NIEPRZETERMINOWANE_FV',
+                header: 'Kwota wszytskich nieprzeterminowanych fv',
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00'; // Zastąp puste pola zerem
+
+                    return `${formattedSalary}`;
+                },
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "#caff84",
+                    },
+                },
             },
 
             {
@@ -578,17 +626,15 @@ const RaportDepartments = () => {
         muiTableHeadCellProps: () => ({
             align: "left",
             sx: {
+                fontFamily: "Calibri, sans-serif",
                 fontWeight: "bold",
-                fontSize: "14px",
+                fontSize: "16px",
                 color: "black",
                 backgroundColor: "#a7d3f7",
                 padding: "15px",
                 paddingTop: "0",
                 paddingBottom: "0",
                 minHeight: "2rem",
-                // textWrap: "wrap",
-                // wordBreak: "break-word",
-                // overflowWrap: "break-word",
                 whiteSpace: "wrap",
                 textAlign: "center",
                 display: "flex",
@@ -600,16 +646,18 @@ const RaportDepartments = () => {
                     alignItems: "center",
                     justifyContent: 'center',
                     textAlign: "center",
-                    // textWrap: "wrap"
-                    whiteSpace: "wrap",
+                    textWrap: "balance",
+                    // whiteSpace: "wrap",
                 },
                 '& .Mui-TableHeadCell-Content-Wrapper': {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: 'center',
                     textAlign: "center",
-                    // textWrap: "wrap"
                     whiteSpace: "wrap",
+                },
+                '& .Mui-TableHeadCell-Content-Actions': {
+                    display: "none",
                 },
             },
         }),
@@ -617,7 +665,6 @@ const RaportDepartments = () => {
         muiTableBodyCellProps: ({ column, cell }) => ({
             align: "center",
             sx: {
-                // borderRight: "1px solid #c9c7c7",
                 borderRight: "1px solid #000",
                 borderBottom: "1px solid #000",
                 fontSize: "14px",
@@ -680,6 +727,10 @@ const RaportDepartments = () => {
         [raportDate]);
 
 
+    useEffect(() => {
+        console.log(raport);
+    }, [raport]);
+
     return (
         <section className='raport_departments'>
             <section className='raport_departments-date'>
@@ -726,8 +777,8 @@ const RaportDepartments = () => {
                 className="raport_departments-table"
                 table={table} />}
             <section className='raport_departments-panel'>
-                <i class="fas fa-save raport_departments-save-settings" onClick={handleSaveSettings}></i>
-                <i class="fa-regular fa-file-excel raport_departments-export-excel" onClick={handleExportExcel}></i>
+                <i className="fas fa-save raport_departments-save-settings" onClick={handleSaveSettings}></i>
+                <i className="fa-regular fa-file-excel raport_departments-export-excel" onClick={handleExportExcel}></i>
             </section>
         </section>
     );

@@ -49,7 +49,6 @@ const Table = ({ info }) => {
         align: "center",
         sx: {
             fontSize: '16px',
-            // borderRight: "1px solid #c9c7c7",
             borderRight: "1px solid #000",
             borderBottom: "1px solid #000",
             fontFamily: "Calibri",
@@ -441,7 +440,7 @@ const Table = ({ info }) => {
                                     align: "left",
                                     sx: {
                                         fontWeight: "700",
-                                        fontFamily: "Calibri",
+                                        fontFamily: "Calibri, sans-serif",
                                         fontSize: "15px",
                                         color: "black",
                                         backgroundColor: "#a7d3f7",

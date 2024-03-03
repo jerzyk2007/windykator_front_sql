@@ -656,6 +656,9 @@ const RaportAdvisers = () => {
                     // textWrap: "wrap"
                     whiteSpace: "wrap",
                 },
+                '& .Mui-TableHeadCell-Content-Actions': {
+                    display: "none",
+                },
             },
         }),
 
