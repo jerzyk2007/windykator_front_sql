@@ -111,6 +111,8 @@ const RaportDepartments = () => {
                 acc.ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII += currentItem.ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII;
                 acc.NIEPRZETERMINOWANE_FV_BEZ_KANCELARII += currentItem.NIEPRZETERMINOWANE_FV_BEZ_KANCELARII;
                 acc.PRZETERMINOWANE_BEZ_KANCELARII += currentItem.PRZETERMINOWANE_BEZ_KANCELARII;
+                acc.ILE_NIEPOBRANYCH_VAT += currentItem.ILE_NIEPOBRANYCH_VAT;
+                acc.KWOTA_NIEPOBRANYCH_VAT += currentItem.KWOTA_NIEPOBRANYCH_VAT;
 
 
                 return acc;
@@ -128,7 +130,9 @@ const RaportDepartments = () => {
                 ILOSC_FV_KANCELARIA: 0,
                 ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII: 0,
                 NIEPRZETERMINOWANE_FV_BEZ_KANCELARII: 0,
-                PRZETERMINOWANE_BEZ_KANCELARII: 0
+                PRZETERMINOWANE_BEZ_KANCELARII: 0,
+                ILE_NIEPOBRANYCH_VAT: 0,
+                KWOTA_NIEPOBRANYCH_VAT: 0
             });
 
             const expiredPaymentsValue = sumOfAllItems.PRZETERMINOWANE_FV;
@@ -223,6 +227,12 @@ const RaportDepartments = () => {
         // ilość faktur bez kancelarii
         let withoutLegalCounter = new Map();
 
+        // kwota niepobranych VATów
+        let VATPayment = new Map();
+
+        // ilość niepobranych VATów
+        let VATCounter = new Map();
+
         let generatingRaport = [];
 
         departments.forEach(dep => {
@@ -240,6 +250,8 @@ const RaportDepartments = () => {
             expiredWithoutLegal.set(dep, 0);
             withoutLegalCounter.set(dep, 0);
             notExpiredWithoutLegal.set(dep, 0);
+            VATPayment.set(dep, 0);
+            VATCounter.set(dep, 0);
 
             raportData.forEach(item => {
                 // Sprawdzenie, czy obiekt zawiera klucz DZIAL, który pasuje do aktualnego działu
@@ -304,6 +316,17 @@ const RaportDepartments = () => {
 
                 }
 
+                if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "100") {
+
+                    VATCounter.set(dep, VATCounter.get(dep) + 1);
+                    VATPayment.set(dep, VATPayment.get(dep) + item['100_VAT']);
+                }
+                if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "50") {
+
+                    VATCounter.set(dep, VATCounter.get(dep) + 1);
+                    VATPayment.set(dep, VATPayment.get(dep) + item['50_VAT']);
+                }
+
             });
         });
 
@@ -351,6 +374,8 @@ const RaportDepartments = () => {
                 ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII: withoutLegalCounter.get(dep),
                 NIEPRZETERMINOWANE_FV_BEZ_KANCELARII: Number(notExpiredWithoutLegalValue.toFixed(2)),
                 PRZETERMINOWANE_BEZ_KANCELARII: Number(expiredWithoutLegalValue.toFixed(2)),
+                ILE_NIEPOBRANYCH_VAT: VATCounter.get(dep),
+                KWOTA_NIEPOBRANYCH_VAT: Number(VATPayment.get(dep).toFixed(2))
             };
             generatingRaport.push(departmentObj);
         });
@@ -656,6 +681,41 @@ const RaportDepartments = () => {
                     },
                 },
             },
+
+            {
+                accessorKey: 'KWOTA_NIEPOBRANYCH_VAT',
+                header: "Kwota niepobranych VAT'ów",
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00'; // Zastąp puste pola zerem
+
+                    return `${formattedSalary}`;
+                },
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "rgba(255, 0, 255, .2)",
+                    },
+                },
+            },
+            {
+                accessorKey: 'ILE_NIEPOBRANYCH_VAT',
+                header: "Ilość niepobranych VAT'ów",
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "rgba(255, 0, 255, .2)",
+                    },
+                },
+            },
         ],
         [raport]
     );
@@ -785,6 +845,7 @@ const RaportDepartments = () => {
     useEffect(() => {
         setTableSize(height - 215);
     }, [height]);
+
 
     useEffect(() => {
         let minDate = new Date(raportDate.minRaportDate);
