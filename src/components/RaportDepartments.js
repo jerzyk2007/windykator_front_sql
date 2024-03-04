@@ -113,6 +113,8 @@ const RaportDepartments = () => {
                 acc.PRZETERMINOWANE_BEZ_KANCELARII += currentItem.PRZETERMINOWANE_BEZ_KANCELARII;
                 acc.ILE_NIEPOBRANYCH_VAT += currentItem.ILE_NIEPOBRANYCH_VAT;
                 acc.KWOTA_NIEPOBRANYCH_VAT += currentItem.KWOTA_NIEPOBRANYCH_VAT;
+                acc.ILE_BLEDOW_DORADCY_I_DOKUMENTACJI += currentItem.ILE_BLEDOW_DORADCY_I_DOKUMENTACJI;
+                acc.KWOTA_BLEDOW_DORADCY_I_DOKUMENTACJI += currentItem.KWOTA_BLEDOW_DORADCY_I_DOKUMENTACJI;
 
 
                 return acc;
@@ -132,7 +134,9 @@ const RaportDepartments = () => {
                 NIEPRZETERMINOWANE_FV_BEZ_KANCELARII: 0,
                 PRZETERMINOWANE_BEZ_KANCELARII: 0,
                 ILE_NIEPOBRANYCH_VAT: 0,
-                KWOTA_NIEPOBRANYCH_VAT: 0
+                KWOTA_NIEPOBRANYCH_VAT: 0,
+                ILE_BLEDOW_DORADCY_I_DOKUMENTACJI: 0,
+                KWOTA_BLEDOW_DORADCY_I_DOKUMENTACJI: 0
             });
 
             const expiredPaymentsValue = sumOfAllItems.PRZETERMINOWANE_FV;
@@ -233,6 +237,12 @@ const RaportDepartments = () => {
         // ilość niepobranych VATów
         let VATCounter = new Map();
 
+        // kwota nierozliczonych faktur wskutek błedów doradcy
+        let adviserMistakePayment = new Map();
+
+        // liczba nierozliczonych faktur wskutek błedów doradcy
+        let adviserMistakeCounter = new Map();
+
         let generatingRaport = [];
 
         departments.forEach(dep => {
@@ -252,6 +262,8 @@ const RaportDepartments = () => {
             notExpiredWithoutLegal.set(dep, 0);
             VATPayment.set(dep, 0);
             VATCounter.set(dep, 0);
+            adviserMistakePayment.set(dep, 0);
+            adviserMistakeCounter.set(dep, 0);
 
             raportData.forEach(item => {
                 // Sprawdzenie, czy obiekt zawiera klucz DZIAL, który pasuje do aktualnego działu
@@ -322,9 +334,13 @@ const RaportDepartments = () => {
                     VATPayment.set(dep, VATPayment.get(dep) + item['100_VAT']);
                 }
                 if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "50") {
-
                     VATCounter.set(dep, VATCounter.get(dep) + 1);
                     VATPayment.set(dep, VATPayment.get(dep) + item['50_VAT']);
+                }
+
+                if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate && (item.BLAD_DORADCY === "TAK" || item.BLAD_W_DOKUMENTACJI === "TAK")) {
+                    adviserMistakeCounter.set(dep, adviserMistakeCounter.get(dep) + 1);
+                    adviserMistakePayment.set(dep, adviserMistakePayment.get(dep) + item.DO_ROZLICZENIA);
                 }
 
             });
@@ -375,7 +391,10 @@ const RaportDepartments = () => {
                 NIEPRZETERMINOWANE_FV_BEZ_KANCELARII: Number(notExpiredWithoutLegalValue.toFixed(2)),
                 PRZETERMINOWANE_BEZ_KANCELARII: Number(expiredWithoutLegalValue.toFixed(2)),
                 ILE_NIEPOBRANYCH_VAT: VATCounter.get(dep),
-                KWOTA_NIEPOBRANYCH_VAT: Number(VATPayment.get(dep).toFixed(2))
+                KWOTA_NIEPOBRANYCH_VAT: Number(VATPayment.get(dep).toFixed(2)),
+                ILE_BLEDOW_DORADCY_I_DOKUMENTACJI: adviserMistakeCounter.get(dep),
+                KWOTA_BLEDOW_DORADCY_I_DOKUMENTACJI: Number(adviserMistakePayment.get(dep).toFixed(2)),
+
             };
             generatingRaport.push(departmentObj);
         });
@@ -716,6 +735,41 @@ const RaportDepartments = () => {
                     },
                 },
             },
+            {
+                accessorKey: 'KWOTA_BLEDOW_DORADCY_I_DOKUMENTACJI',
+                header: "Kwota nierozliczonych fv - błedy Doradcy i dokumentacji",
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00'; // Zastąp puste pola zerem
+
+                    return `${formattedSalary}`;
+                },
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "rgba(255, 0, 255, .2)",
+                    },
+                },
+            },
+
+            {
+                accessorKey: 'ILE_BLEDOW_DORADCY_I_DOKUMENTACJI',
+                header: "Ilość nierozliczonych fv - błedy Doradcy i dokumentacji",
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "rgba(255, 0, 255, .2)",
+                    },
+                },
+            },
         ],
         [raport]
     );
@@ -828,8 +882,6 @@ const RaportDepartments = () => {
         xlsx.writeFile(wb, "Raport-Dział.xlsx");
     };
 
-
-
     useEffect(() => {
         createDataRaport();
     }, [raportData, permission, raportDate]);
@@ -855,7 +907,6 @@ const RaportDepartments = () => {
         } else {
             errSetRaportDate(false);
         }
-
     },
         [raportDate]);
 
