@@ -329,7 +329,6 @@ const RaportDepartments = () => {
                 }
 
                 if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "100") {
-
                     VATCounter.set(dep, VATCounter.get(dep) + 1);
                     VATPayment.set(dep, VATPayment.get(dep) + item['100_VAT']);
                 }
@@ -737,7 +736,7 @@ const RaportDepartments = () => {
             },
             {
                 accessorKey: 'KWOTA_BLEDOW_DORADCY_I_DOKUMENTACJI',
-                header: "Kwota nierozliczonych fv - błedy Doradcy i dokumentacji",
+                header: "Kwota nierozliczonych fv - błędy Doradcy i dokumentacji",
                 Cell: ({ cell }) => {
                     const value = cell.getValue();
                     const formattedSalary = value !== undefined && value !== null
@@ -761,7 +760,7 @@ const RaportDepartments = () => {
 
             {
                 accessorKey: 'ILE_BLEDOW_DORADCY_I_DOKUMENTACJI',
-                header: "Ilość nierozliczonych fv - błedy Doradcy i dokumentacji",
+                header: "Ilość nierozliczonych fv - błędy Doradcy i dokumentacji",
                 muiTableBodyCellProps: {
                     ...muiTableBodyCellProps,
                     sx: {

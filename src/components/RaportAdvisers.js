@@ -108,6 +108,18 @@ const RaportAdvisers = () => {
         // ilość faktur kancelaria
         let legalCounter = new Map();
 
+        // kwota niepobranych VATów
+        let VATPayment = new Map();
+
+        // ilość niepobranych VATów
+        let VATCounter = new Map();
+
+        // kwota nierozliczonych faktur wskutek błedów doradcy
+        let adviserMistakePayment = new Map();
+
+        // liczba nierozliczonych faktur wskutek błedów doradcy
+        let adviserMistakeCounter = new Map();
+
         let generatingRaport = [];
 
         departments.forEach(dep => {
@@ -122,6 +134,10 @@ const RaportAdvisers = () => {
             notExpiredPaymentWithoutPandL.set(dep.merge, 0);
             legalExpired.set(dep.merge, 0);
             legalCounter.set(dep.merge, 0);
+            VATPayment.set(dep.merge, 0);
+            VATCounter.set(dep.merge, 0);
+            adviserMistakePayment.set(dep.merge, 0);
+            adviserMistakeCounter.set(dep.merge, 0);
 
             raportData.forEach(item => {
 
@@ -176,6 +192,21 @@ const RaportAdvisers = () => {
                 if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && (item.JAKA_KANCELARIA !== "ROK-KONOPA" && item.JAKA_KANCELARIA !== "CNP") && afterDeadlineDate > todayDate && documentDate >= minDate && documentDate <= maxDate) {
                     notExpiredPaymentWithoutPandL.set(dep.merge, notExpiredPaymentWithoutPandL.get(dep.merge) + item.DO_ROZLICZENIA);
                 }
+
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "100") {
+                    VATCounter.set(dep.merge, VATCounter.get(dep.merge) + 1);
+                    VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item['100_VAT']);
+                }
+
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "50") {
+                    VATCounter.set(dep.merge, VATCounter.get(dep.merge) + 1);
+                    VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item['50_VAT']);
+                }
+
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate && (item.BLAD_DORADCY === "TAK" || item.BLAD_W_DOKUMENTACJI === "TAK")) {
+                    adviserMistakeCounter.set(dep.merge, adviserMistakeCounter.get(dep.merge) + 1);
+                    adviserMistakePayment.set(dep.merge, adviserMistakePayment.get(dep.merge) + item.DO_ROZLICZENIA);
+                }
             });
         });
 
@@ -215,6 +246,10 @@ const RaportAdvisers = () => {
                 ILOSC_PRZETERMINOWANYCH_FV: howManyExpiredElements.get(dep.merge),
                 ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4: howManyExpiredElementsWithoutPandL.get(dep.merge),
                 ILOSC_FV_KANCELARIA: legalCounter.get(dep.merge),
+                ILE_NIEPOBRANYCH_VAT: VATCounter.get(dep.merge),
+                KWOTA_NIEPOBRANYCH_VAT: Number(VATPayment.get(dep.merge).toFixed(2)),
+                ILE_BLEDOW_DORADCY_I_DOKUMENTACJI: adviserMistakeCounter.get(dep.merge),
+                KWOTA_BLEDOW_DORADCY_I_DOKUMENTACJI: Number(adviserMistakePayment.get(dep.merge).toFixed(2)),
             };
 
             if (
@@ -391,6 +426,80 @@ const RaportAdvisers = () => {
                     sx: {
                         ...muiTableBodyCellProps.sx,
                         backgroundColor: "#ffe884",
+                    },
+                },
+            },
+
+            {
+                accessorKey: 'KWOTA_NIEPOBRANYCH_VAT',
+                header: "Kwota niepobranych VAT'ów",
+                enableColumnFilter: false,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00'; // Zastąp puste pola zerem
+
+                    return `${formattedSalary}`;
+                },
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "rgba(255, 0, 255, .2)",
+                    },
+                },
+            },
+            {
+                accessorKey: 'ILE_NIEPOBRANYCH_VAT',
+                header: "Ilość niepobranych VAT'ów",
+                enableColumnFilter: false,
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "rgba(255, 0, 255, .2)",
+                    },
+                },
+            },
+            {
+                accessorKey: 'KWOTA_BLEDOW_DORADCY_I_DOKUMENTACJI',
+                header: "Kwota nierozliczonych fv - błędy Doradcy i dokumentacji",
+                enableColumnFilter: false,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    const formattedSalary = value !== undefined && value !== null
+                        ? value.toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })
+                        : '0,00'; // Zastąp puste pola zerem
+
+                    return `${formattedSalary}`;
+                },
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "rgba(255, 0, 255, .2)",
+                    },
+                },
+            },
+
+            {
+                accessorKey: 'ILE_BLEDOW_DORADCY_I_DOKUMENTACJI',
+                header: "Ilość nierozliczonych fv - błędy Doradcy i dokumentacji",
+                enableColumnFilter: false,
+                muiTableBodyCellProps: {
+                    ...muiTableBodyCellProps,
+                    sx: {
+                        ...muiTableBodyCellProps.sx,
+                        backgroundColor: "rgba(255, 0, 255, .2)",
                     },
                 },
             },
