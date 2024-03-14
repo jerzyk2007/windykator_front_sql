@@ -13,10 +13,13 @@ const UserChangeRoles = ({ user, roles }) => {
         <section key={index} className='user-change-roles__container'>
             <label className='user-change-roles__container--info' id={`role${index}`}>
                 <span className='user-change-roles__container--text' >{role}
+                    {role === "FK" &&
+                        <span className='user-change-roles--information'> - dodatkowy Raport DW</span>}
                     {role === "User" &&
                         <span className='user-change-roles--information'> - przeglądanie</span>}
                     {role === "Editor" &&
                         <span className='user-change-roles--information'> - edytowanie tabel i raportów</span>}
+
                     {role === "Admin" &&
                         <span className='user-change-roles--information'> - uprawnienia użytkownika</span>}
                 </span>
@@ -56,6 +59,7 @@ const UserChangeRoles = ({ user, roles }) => {
                     return role;
                 }
             }).filter(Boolean);
+
             const result = await axiosPrivateIntercept.patch(`/user/change-roles/${user._id}`, { roles: arrayRoles });
             setErrMsg('Sukces.');
         }

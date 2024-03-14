@@ -193,17 +193,17 @@ const RaportAdvisers = () => {
                     notExpiredPaymentWithoutPandL.set(dep.merge, notExpiredPaymentWithoutPandL.get(dep.merge) + item.DO_ROZLICZENIA);
                 }
 
-                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "100") {
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "100" && item.DO_ROZLICZENIA !== 0) {
                     VATCounter.set(dep.merge, VATCounter.get(dep.merge) + 1);
                     VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item['100_VAT']);
                 }
 
-                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "50") {
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "50" && item.DO_ROZLICZENIA !== 0) {
                     VATCounter.set(dep.merge, VATCounter.get(dep.merge) + 1);
                     VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item['50_VAT']);
                 }
 
-                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate && (item.BLAD_DORADCY === "TAK" || item.BLAD_W_DOKUMENTACJI === "TAK")) {
+                if (item.DORADCA === dep.adviser && dep.merge === `${dep.adviser}-${item.DZIAL}` && documentDate >= minDate && documentDate <= maxDate && (item.BLAD_DORADCY === "TAK" || item.BLAD_W_DOKUMENTACJI === "TAK") && item.DO_ROZLICZENIA !== 0) {
                     adviserMistakeCounter.set(dep.merge, adviserMistakeCounter.get(dep.merge) + 1);
                     adviserMistakePayment.set(dep.merge, adviserMistakePayment.get(dep.merge) + item.DO_ROZLICZENIA);
                 }

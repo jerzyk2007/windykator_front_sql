@@ -328,16 +328,16 @@ const RaportDepartments = () => {
 
                 }
 
-                if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "100") {
+                if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "100" && item.DO_ROZLICZENIA !== 0) {
                     VATCounter.set(dep, VATCounter.get(dep) + 1);
                     VATPayment.set(dep, VATPayment.get(dep) + item['100_VAT']);
                 }
-                if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "50") {
+                if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate && item.POBRANO_VAT === "50" && item.DO_ROZLICZENIA !== 0) {
                     VATCounter.set(dep, VATCounter.get(dep) + 1);
                     VATPayment.set(dep, VATPayment.get(dep) + item['50_VAT']);
                 }
 
-                if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate && (item.BLAD_DORADCY === "TAK" || item.BLAD_W_DOKUMENTACJI === "TAK")) {
+                if (item.DZIAL === dep && documentDate >= minDate && documentDate <= maxDate && (item.BLAD_DORADCY === "TAK" || item.BLAD_W_DOKUMENTACJI === "TAK") && item.DO_ROZLICZENIA !== 0) {
                     adviserMistakeCounter.set(dep, adviserMistakeCounter.get(dep) + 1);
                     adviserMistakePayment.set(dep, adviserMistakePayment.get(dep) + item.DO_ROZLICZENIA);
                 }

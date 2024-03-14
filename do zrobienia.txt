@@ -11,3 +11,6 @@ dodać korekty
 Do paginacji dodac opcję Wszytsko
 
 znaleźć - jak się dodaja nowe kolumny, jesli coś dodałem nowego
+
+
+raport o błedach i VAT - jesli faktura się spłaci to ma nie liczyć

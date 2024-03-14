@@ -240,7 +240,7 @@ const TableSettings = () => {
                             <option value="select">Zaznacz jeden</option>
                             <option value="range-slider">Suwak do kwot</option>
                             <option value="range">Od - do</option>
-                            <option value="date-range">Filtr date-range</option>
+                            <option value="date-range">Data od - do</option>
                             <option value="date">Data</option>
                         </select>
                     </span>
@@ -328,7 +328,7 @@ const TableSettings = () => {
             <section className='table_settings-table'>
                 <section className='table_settings-table--title'>
                     <h3 className='table_settings-table--name'>Ustawienia kolumn tabeli</h3>
-                    <i class="fas fa-save table_settings-table--save" onClick={handleSaveColumnsSetinngs}></i>
+                    <i className="fas fa-save table_settings-table--save" onClick={handleSaveColumnsSetinngs}></i>
 
                 </section>
                 <section className='table_settings-table__container'>
@@ -338,7 +338,7 @@ const TableSettings = () => {
             <section className='table_settings-raport'>
                 <section className='table_settings-table--title'>
                     <h3 className='table_settings-table--name'>Ustawienia kolumn raportu</h3>
-                    <i class="fas fa-save table_settings-table--save" ></i>
+                    <i className="fas fa-save table_settings-table--save" ></i>
                 </section>
 
             </section>

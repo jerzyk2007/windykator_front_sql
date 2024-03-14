@@ -14,11 +14,13 @@ import UserSettings from './components/UserSettings';
 import TableSettings from './components/TableSettings';
 import RaportDepartments from './components/RaportDepartments';
 import RaportAdvisers from './components/RaportAdvisers';
+import FKSettings from './components/FKSettings';
 import './App.css';
 
 const ROLES = {
   'User': 100,
   'Editor': 200,
+  'FK': 220,
   'Admin': 300
 };
 
@@ -59,6 +61,10 @@ function App() {
 
             <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]} />}>
               <Route path='/raport-advisers' element={<RaportAdvisers />} />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={[ROLES.FK, ROLES.Admin]} />}>
+              <Route path='/fk-raport' element={<FKSettings />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>

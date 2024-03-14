@@ -25,7 +25,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
         await logout();
         navigate('/login');
     };
-
     return (
         <nav className='nav_menu'>
 
@@ -78,6 +77,17 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         </ul>
                     </div>
                 </li>
+
+                {auth?.roles?.includes(220) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >FK
+                </Link>
+                    <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
+                        <ul className='nav_menu__menu-dropmenu'>
+
+                            <li className='nav_menu-item-dropmenu'><Link to="/fk-raport" className="nav_menu-link" onClick={handleLinkClick}>Tabela FK
+                            </Link></li>
+                        </ul>
+                    </div>
+                </li>}
 
                 {auth?.roles?.includes(500) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Kontakty
                 </Link>
