@@ -124,7 +124,7 @@ const AddDataFromFile = () => {
                                 style={{ display: "none" }}
                             // onChange={(e) => handleSendFile(e, 'test')}
                             />
-                            <label htmlFor="test" className="add_data_file-click-me">Napraw</label>
+                            {/* <label htmlFor="test" className="add_data_file-click-me">Napraw</label> */}
                         </section> :
                         <section className='add_data_from_file__container-documents'>
                             <span className="add_data_file-click-me">{errMsg}</span>
@@ -141,7 +141,7 @@ const AddDataFromFile = () => {
                                 style={{ display: "none" }}
                             // onChange={(e) => handleSendFile(e, 'sharepoint')}
                             />
-                            <label htmlFor="sharepoint" className="add_data_file-click-me">Prześlij faktury sharepoint</label>
+                            {/* <label htmlFor="sharepoint" className="add_data_file-click-me">Prześlij faktury sharepoint</label> */}
                         </section> :
                         <section className='add_data_from_file__container-documents'>
                             <span className="add_data_file-click-me">{errSharepoint}</span>
