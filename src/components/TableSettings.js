@@ -273,6 +273,8 @@ const TableSettings = () => {
         }
     };
 
+
+    // pobiera wszytskie nazwy kolumn z pierwszego dokumnetu w DB
     const handleGetColums = async () => {
         try {
             const documentsColumn = await axiosPrivateIntercept.get('/documents/get-columns');
@@ -284,6 +286,7 @@ const TableSettings = () => {
         }
     };
 
+    //tworzy kolumny na podstawie już zapisanych danych w DB i sprawdza czy są jakies nowe kolumny dzięki handleGetColums
     const createColumns = async () => {
         try {
             const settingsColumn = await axiosPrivateIntercept.get('/settings/get-columns');

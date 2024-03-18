@@ -9,7 +9,6 @@ const UserTableColumns = ({ user, columns }) => {
     const [userColumns, setUserColumns] = useState(columns);
     const [errMsg, setErrMsg] = useState('');
 
-
     const columnsItem = userColumns.map((col, index) => {
         return (
             <section key={index} className='user-table-columns__item'>
