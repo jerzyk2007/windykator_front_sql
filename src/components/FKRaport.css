@@ -24,6 +24,7 @@
 }
 
 .fk_raport-title--business,
+.fk_raport-title--business--header,
 .fk_raport-business--select {
     flex-grow: 1;
     display: flex;
@@ -36,7 +37,18 @@
     user-select: none;
 }
 
+.fk_raport-business--select,
+.fk_raport-title--doc-counter {
+    cursor: pointer;
+}
+
+.fk_raport-business--select:hover,
+.fk_raport-title--doc-counter:hover {
+    background-color: #a7e3ff;
+}
+
 .fk_raport-business--arrow {
+    margin-right: 10px;
     color: rgb(255, 0, 0);
     font-size: 1.5rem;
 }
@@ -57,10 +69,11 @@
 .fk_raport-w201 label {
     height: 100%;
     flex-basis: 25%;
-    border: 1px solid black;
+    border-left: 1px solid black;
+    /* border-bottom: 1px solid black; */
     text-align: center;
     padding: 3px;
-    background-color: #efffc3;
+    background-color: rgba(248, 255, 228, .5);
     user-select: none;
 }
 
@@ -73,8 +86,13 @@
 }
 
 .fk_raport-w201--doc-counter,
-.fk_raport-title--doc-counter {
+.fk_raport-w201--arrow {
     cursor: pointer;
+}
+
+.fk_raport-w201--doc-counter:hover,
+.fk_raport-w201--arrow:hover {
+    background-color: #a7e3ff;
 }
 
 .fk_raport-business .fk_raport-business--all {

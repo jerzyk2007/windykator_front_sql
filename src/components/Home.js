@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useData from "./hooks/useData";
 
 import './Home.css';
 
 const Home = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
+    const { auth } = useData();
 
     const [updateTime, setUpdateTime] = useState({
         date: '',
@@ -39,7 +41,7 @@ const Home = () => {
 
     return (
         <section className='home'>
-            {updateTime.date && updateTime.time && <section className='home-update'>
+            {auth?.roles?.includes(100) && updateTime.date && updateTime.time && <section className='home-update'>
                 <span>Data i czas aktualizacji rozrachunków:</span>
                 <section className='home-update-time'>
                     <span className='home-update-time--date'>{updateTime.date}</span>

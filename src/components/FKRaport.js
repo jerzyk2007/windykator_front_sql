@@ -75,7 +75,8 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
 
             return (
                 <section key={index} className="fk_raport-w201 fk_raport-w201--owner">
-                    <label className="fk_raport-w201--arrow fk_raport-w201--arrow--owner">
+                    <label className="fk_raport-w201--arrow fk_raport-w201--arrow--owner"
+                        onDoubleClick={handleClickOwner}>
                         {own}</label>
                     <label className="fk_raport-w201--doc-counter" onDoubleClick={handleClickOwner}>{counterOwner}</label>
                     <label className="fk_raport-w201--doc-sum">{(ownerSum).toLocaleString('pl-PL', {
@@ -223,6 +224,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
             <section className='fk_raport-business' >
                 <label
                     className='fk_raport-business--select fk_raport-business--all'
+                    onDoubleClick={handleClick}
                 >Suma końcowa
                 </label >
                 <label
@@ -264,9 +266,9 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
     return (
         <section className='fk_raport' >
             <section className='fk_raport-title' >
-                <label className='fk_raport-title--business'>Obszar biznesu</label>
-                <label className='fk_raport-title--doc-counter'>Liczba dokumentów</label>
-                <label className='fk_raport-title--doc-sum'>Kwota do rozliczenia</label>
+                <label className='fk_raport-title--business--header'>Obszar biznesu</label>
+                <label className='fk_raport-title--doc-counter--header'>Liczba dokumentów</label>
+                <label className='fk_raport-title--doc-sum--header'>Kwota do rozliczenia</label>
             </section>
 
             {generateArea(201)}
