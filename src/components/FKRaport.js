@@ -268,7 +268,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
             if (account === "201203") {
                 acc++;
             } else {
-                if (item['RODZAJ KONTA'] === account) {
+                if (item['RODZAJ KONTA'] === Number(account)) {
                     acc++;
                 }
             }
@@ -281,7 +281,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                 sum += item[' KWOTA DO ROZLICZENIA FK '];
             }
             else {
-                if (item['RODZAJ KONTA'] === account) {
+                if (item['RODZAJ KONTA'] === Number(account)) {
                     sum += item[' KWOTA DO ROZLICZENIA FK '];
                 }
             }
@@ -294,7 +294,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                 filteredObjects = [...filteredDataRaport];
             }
             else {
-                filteredObjects = filteredDataRaport.filter(obj => obj['RODZAJ KONTA'] === account);
+                filteredObjects = filteredDataRaport.filter(obj => obj['RODZAJ KONTA'] === Number(account));
             }
 
             setTableData(filteredObjects);
@@ -435,15 +435,15 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                 <label className='fk_raport-title--doc-sum--header'>Kwota do rozliczenia</label>
             </section>
 
-            {/* {generateAccount(`${filter.business}`)} */}
+            {generateAccount(`${filter.business}`)}
 
-            {filter.business === '201203' && generateAccount("201203")}
+            {/* {filter.business === '201203' && generateAccount("201203")} */}
             {filter.business === '201203' && arrow.account[filter.business] && generateAccountItems("201203")}
 
-            {filter.business === '201' && generateAccount(201)}
+            {/* {filter.business === '201' && generateAccount(201)} */}
             {filter.business === '201' && arrow.account[filter.business] && generateAccountItems(201)}
 
-            {filter.business === '203' && generateAccount(203)}
+            {/* {filter.business === '203' && generateAccount(203)} */}
             {filter.business === '203' && arrow.account[filter.business] && generateAccountItems(203)}
 
             {/* {filter.business === '203' && generateArea(203)} */}
