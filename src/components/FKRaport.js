@@ -19,7 +19,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                 }
             }
             else {
-                if (item['OBSZAR'] === area && item['RODZAJ KONTA'] === account) {
+                if (item['OBSZAR'] === area && item['RODZAJ KONTA'] === Number(account)) {
                     acc++;
                 }
             }
@@ -39,7 +39,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
             }
             else {
 
-                if (item['OBSZAR'] === area && item['RODZAJ KONTA'] === account) {
+                if (item['OBSZAR'] === area && item['RODZAJ KONTA'] === Number(account)) {
                     sum += item[' KWOTA DO ROZLICZENIA FK '];
                 }
             }
@@ -56,7 +56,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
             department = [...new Set(filteredDataRaport.filter(dep => dep['OBSZAR'] === area && dep['OWNER'] === own).map(dep => dep['DZIAŁ']))];
         }
         else {
-            department = [...new Set(filteredDataRaport.filter(dep => dep['OBSZAR'] === area && dep['RODZAJ KONTA'] === account && dep['OWNER'] === own).map(dep => dep['DZIAŁ']))];
+            department = [...new Set(filteredDataRaport.filter(dep => dep['OBSZAR'] === area && dep['RODZAJ KONTA'] === Number(account) && dep['OWNER'] === own).map(dep => dep['DZIAŁ']))];
         }
 
         const departmentItems = department.map((dep, index) => {
@@ -67,7 +67,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                     }
                 }
                 else {
-                    if (doc['DZIAŁ'] === dep && doc['RODZAJ KONTA'] === account && doc['OWNER'] === own) {
+                    if (doc['DZIAŁ'] === dep && doc['RODZAJ KONTA'] === Number(account) && doc['OWNER'] === own) {
                         acc++;
                     }
                 }
@@ -83,7 +83,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                     }
                 }
                 else {
-                    if (dataSum['DZIAŁ'] === dep && dataSum['OWNER'] === own && dataSum['RODZAJ KONTA'] === account) {
+                    if (dataSum['DZIAŁ'] === dep && dataSum['OWNER'] === own && dataSum['RODZAJ KONTA'] === Number(account)) {
                         departmentSum += dataSum[' KWOTA DO ROZLICZENIA FK '];
                     }
                 }
@@ -94,7 +94,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                     filteredObjects = filteredDataRaport.filter(obj => obj['DZIAŁ'] === dep && obj['OWNER'] === own);
                 }
                 else {
-                    filteredObjects = filteredDataRaport.filter(obj => obj['DZIAŁ'] === dep && obj['OWNER'] === own && obj['RODZAJ KONTA'] === account);
+                    filteredObjects = filteredDataRaport.filter(obj => obj['DZIAŁ'] === dep && obj['OWNER'] === own && obj['RODZAJ KONTA'] === Number(account));
                 }
                 setTableData(filteredObjects);
                 setShowTable(true);
@@ -122,7 +122,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
         if (account === '201203') {
             owner = [...new Set(filteredDataRaport.filter(own => own['OBSZAR'] === area).map(own => own['OWNER']))];
         } else {
-            owner = [...new Set(filteredDataRaport.filter(own => own['RODZAJ KONTA'] === account && own['OBSZAR'] === area).map(own => own['OWNER']))];
+            owner = [...new Set(filteredDataRaport.filter(own => own['RODZAJ KONTA'] === Number(account) && own['OBSZAR'] === area).map(own => own['OWNER']))];
         }
 
         const ownerItems = owner.map((own, index) => {
@@ -133,7 +133,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                     }
                 }
                 else {
-                    if (doc['OBSZAR'] === area && doc['RODZAJ KONTA'] === account && doc['OWNER'] === own) {
+                    if (doc['OBSZAR'] === area && doc['RODZAJ KONTA'] === Number(account) && doc['OWNER'] === own) {
                         acc++;
                     }
                 }
@@ -149,7 +149,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                     }
                 }
                 else {
-                    if (dataSum['OBSZAR'] === area && dataSum['RODZAJ KONTA'] === account && dataSum['OWNER'] === own) {
+                    if (dataSum['OBSZAR'] === area && dataSum['RODZAJ KONTA'] === Number(account) && dataSum['OWNER'] === own) {
                         ownerSum += dataSum[' KWOTA DO ROZLICZENIA FK '];
                     }
                 }
@@ -160,12 +160,13 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                     filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === area && obj['OWNER'] === own);
                 }
                 else {
-                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === area && obj['RODZAJ KONTA'] === account && obj['OWNER'] === own);
+                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === area && obj['RODZAJ KONTA'] === Number(account) && obj['OWNER'] === own);
                 }
                 setTableData(filteredObjects);
                 setShowTable(true);
             };
             const departments = generateDepartments(own, account, area);
+
             return (
                 <React.Fragment key={index}>
                     <section className="fk_raport-w201 fk_raport-w201--owner"
@@ -217,13 +218,14 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                     filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === item);
                 }
                 else {
-                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === item && obj['RODZAJ KONTA'] === account);
+                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === item && obj['RODZAJ KONTA'] === Number(account));
                 }
                 setTableData(filteredObjects);
                 setShowTable(true);
             };
 
             const owners = generateOwner(item, account);
+
 
             return (
                 <React.Fragment key={index}>
@@ -255,6 +257,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                     </section>
                     {/* {arrow[`W${filter.business}`][item] && owners} */}
                     {arrow.area[item] && owners}
+                    {/* {owners} */}
 
                 </React.Fragment >
             );
@@ -422,10 +425,14 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
             });
         }
         setBusinessAccount({
-            // [`W${filter.business}`]: accountArray
             [filter.business]: accountArray
         });
     }, []);
+
+    // useEffect(() => {
+    //     console.log(arrow);
+    //     console.log(arrow.account[filter.business]);
+    // }, [arrow]);
 
     return (
         <section className='fk_raport' >
@@ -436,15 +443,17 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
             </section>
 
             {generateAccount(`${filter.business}`)}
+            {arrow.account[filter.business] && generateAccountItems(`${filter.business}`)}
+
 
             {/* {filter.business === '201203' && generateAccount("201203")} */}
-            {filter.business === '201203' && arrow.account[filter.business] && generateAccountItems("201203")}
+            {/* {filter.business === '201203' && arrow.account[filter.business] && generateAccountItems("201203")} */}
 
             {/* {filter.business === '201' && generateAccount(201)} */}
-            {filter.business === '201' && arrow.account[filter.business] && generateAccountItems(201)}
+            {/* {filter.business === '201' && arrow.account[filter.business] && generateAccountItems(201)} */}
 
             {/* {filter.business === '203' && generateAccount(203)} */}
-            {filter.business === '203' && arrow.account[filter.business] && generateAccountItems(203)}
+            {/* {filter.business === '203' && arrow.account[filter.business] && generateAccountItems(203)} */}
 
             {/* {filter.business === '203' && generateArea(203)} */}
             {/* {generateArea(203)} */}
