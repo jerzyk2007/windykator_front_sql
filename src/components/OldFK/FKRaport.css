@@ -31,10 +31,6 @@
     align-items: center;
 }
 
-.fk_raport-title--business--header {
-    justify-content: center;
-}
-
 .fk_raport-business .fk_raport-business--select {
     padding-left: 20px;
     text-align: left;
@@ -47,8 +43,7 @@
 }
 
 .fk_raport-business--select:hover,
-.fk_raport-title--doc-counter:hover,
-.fk_raport-w201:hover {
+.fk_raport-title--doc-counter:hover {
     background-color: #a7e3ff;
 }
 
@@ -111,13 +106,4 @@
 
 .fk_raport-w201 .fk_raport-w201--arrow--owner {
     padding-left: 70px;
-}
-
-.fk_raport-w201 {
-    border-bottom: 1px solid black;
-}
-
-.fk_raport-w201--doc-sum {
-    border-right: 1px solid black;
-
 }

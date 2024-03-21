@@ -17,7 +17,7 @@ const FKSettings = () => {
     const [data, setData] = useState([]);
     const [filteredDataRaport, setFilteredDataRaport] = useState([]);
     const [filter, setFilter] = useState({
-        business: "201203",
+        business: "owner",
         payment: "Wszystko",
     });
     const [showRaport, setShowRaport] = useState(false);
@@ -28,16 +28,8 @@ const FKSettings = () => {
     // zmienna przeniesiona tutaj, zeby po zamknięciu tabeli nie gubiło rozwiajnych list
     const [showData, setShowData] = useState({
         W201: false,
-        W203: false,
-        W201203: false
+        W203: false
     });
-    const [arrow, setArrow] = useState(
-        {
-            account: {},
-            area: {},
-            owner: {}
-        }
-    );
 
     const sendDataFromExcel = async (e) => {
         const file = e.target.files[0];
@@ -67,13 +59,13 @@ const FKSettings = () => {
 
         let filteredData = data;
 
-        if (filter.business !== "201_203") {
-            if (filter.business === "201") {
-                filteredData = filteredData.filter(item => item['RODZAJ KONTA'] === 201);
-            } else if (filter.business === "203") {
-                filteredData = filteredData.filter(item => item['RODZAJ KONTA'] === 203);
-            }
-        }
+        // if (filter.business !== "Wszystko") {
+        //     if (filter.business === "201") {
+        //         filteredData = filteredData.filter(item => item['RODZAJ KONTA'] === 201);
+        //     } else if (filter.business === "203") {
+        //         filteredData = filteredData.filter(item => item['RODZAJ KONTA'] === 203);
+        //     }
+        // }
 
         if (filter.payment !== "Wszystko") {
             if (filter.payment === "Przeterminowane") {
@@ -93,13 +85,7 @@ const FKSettings = () => {
         setShowRaport(false);
         setShowData({
             W201: false,
-            W203: false,
-            W201203: false
-        });
-        setArrow({
-            account: [],
-            area: {},
-            owner: {}
+            W203: false
         });
     }, [filter]);
 
@@ -110,10 +96,6 @@ const FKSettings = () => {
         };
         getDataFromDB();
     }, []);
-
-    // useEffect(() => {
-    //     console.log(filter);
-    // }, [filter]);
 
     return (
         <section className='fk_settings'>
@@ -132,9 +114,9 @@ const FKSettings = () => {
                             })}
                             name="radio-buttons-group"
                         >
-                            <FormControlLabel value="201203" control={<Radio />} label="201 + 203" />
-                            <FormControlLabel value="201" control={<Radio />} label="201" />
-                            <FormControlLabel value="203" control={<Radio />} label="203" />
+                            <FormControlLabel value="owner" control={<Radio />} label="Owner" />
+                            <FormControlLabel value="aging" control={<Radio />} label="Wiekowanie" />
+                            {/* <FormControlLabel value="law" control={<Radio />} label="Kancelaria" /> */}
                         </RadioGroup>
                     </FormControl>
                 </section>
@@ -176,8 +158,6 @@ const FKSettings = () => {
                     filteredDataRaport={filteredDataRaport}
                     showData={showData}
                     setShowData={setShowData}
-                    arrow={arrow}
-                    setArrow={setArrow}
                 />}
 
             {/* <section className='fk_settings'>
