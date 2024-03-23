@@ -33,6 +33,8 @@
 
 .fk_raport-title--business--header {
     justify-content: center;
+    font-size: 1.2rem;
+    border: 1px solid black;
 }
 
 .fk_raport-business .fk_raport-business--select {

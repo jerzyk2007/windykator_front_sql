@@ -2,14 +2,11 @@ import React, { useState, useEffect } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import './FKRaport.css';
 
-const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, showData, setShowData, arrow, setArrow }) => {
+const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, arrow, setArrow }) => {
 
     const [businessAccount, setBusinessAccount] = useState({
         [filter.business]: [],
     });
-
-
-
 
     const wCounter = (area, account) => {
         const count = filteredDataRaport.reduce((acc, item) => {
@@ -95,6 +92,73 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                 }
                 else {
                     filteredObjects = filteredDataRaport.filter(obj => obj['DZIAŁ'] === dep && obj['OWNER'] === own && obj['RODZAJ KONTA'] === Number(account));
+                }
+                setTableData(filteredObjects);
+                setShowTable(true);
+            };
+            return (
+                <section key={index} className="fk_raport-w201 fk_raport-w201--owner">
+                    <label className="fk_raport-w201--arrow fk_raport-w201--arrow--owner"
+                        onDoubleClick={handleClickOwner}>
+                        {dep}</label>
+                    <label className="fk_raport-w201--doc-counter" onDoubleClick={handleClickOwner} >{counterDepartment}</label>
+                    <label className="fk_raport-w201--doc-sum" onDoubleClick={handleClickOwner}>{(departmentSum).toLocaleString('pl-PL', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                        useGrouping: true,
+                    })}</label>
+                </section>
+            );
+        });
+        return departmentItems;
+    };
+
+    const generateDepartmentsCar = (own, account, area, car) => {
+
+        let department = [];
+        if (account === '201203') {
+            department = [...new Set(filteredDataRaport.filter(dep => dep['OBSZAR'] === area && dep['OWNER'] === own && dep['CZY SAMOCHÓD WYDANY (dane As3)'] === car).map(dep => dep['DZIAŁ']))];
+        }
+        else {
+            department = [...new Set(filteredDataRaport.filter(dep => dep['OBSZAR'] === area && dep['RODZAJ KONTA'] === Number(account) && dep['OWNER'] === own && dep['CZY SAMOCHÓD WYDANY (dane As3)'] === car).map(dep => dep['DZIAŁ']))];
+        }
+
+        const departmentItems = department.map((dep, index) => {
+            const counterDepartment = filteredDataRaport.reduce((acc, doc) => {
+                if (account === '201203') {
+                    if (doc['DZIAŁ'] === dep && doc['OWNER'] === own && doc['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        acc++;
+                    }
+                }
+                else {
+                    if (doc['DZIAŁ'] === dep && doc['RODZAJ KONTA'] === Number(account) && doc['OWNER'] === own && doc['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        acc++;
+                    }
+                }
+                return acc;
+            }, 0);
+
+            // pokazuje zsumowana wartość ownera
+            let departmentSum = 0;
+            const docSum = filteredDataRaport.map(dataSum => {
+                if (account === '201203') {
+                    if (dataSum['DZIAŁ'] === dep && dataSum['OWNER'] === own && dataSum['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        departmentSum += dataSum[' KWOTA DO ROZLICZENIA FK '];
+                    }
+                }
+                else {
+                    if (dataSum['DZIAŁ'] === dep && dataSum['OWNER'] === own && dataSum['RODZAJ KONTA'] === Number(account) && dataSum['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        departmentSum += dataSum[' KWOTA DO ROZLICZENIA FK '];
+                    }
+                }
+            });
+            const handleClickOwner = () => {
+                let filteredObjects = [];
+                if (account === '201203') {
+                    filteredObjects = filteredDataRaport.filter(obj => obj['DZIAŁ'] === dep && obj['OWNER'] === own && obj['CZY SAMOCHÓD WYDANY (dane As3)'] === car);
+                }
+                else {
+                    filteredObjects = filteredDataRaport.filter(obj => obj['DZIAŁ'] === dep && obj['OWNER'] === own && obj['RODZAJ KONTA'] === Number(account) && obj['CZY SAMOCHÓD WYDANY (dane As3)'] === car);
                 }
                 setTableData(filteredObjects);
                 setShowTable(true);
@@ -205,26 +269,219 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
         return ownerItems;
     };
 
+    const generateOwnerCar = (area, account, car) => {
+        let owner = [];
+        if (account === '201203') {
+            owner = [...new Set(filteredDataRaport.filter(own => own['OBSZAR'] === area && own['CZY SAMOCHÓD WYDANY (dane As3)'] === car).map(own => own['OWNER']))];
+        } else {
+            owner = [...new Set(filteredDataRaport.filter(own => own['RODZAJ KONTA'] === Number(account) && own['OBSZAR'] === area && own['CZY SAMOCHÓD WYDANY (dane As3)'] === car).map(own => own['OWNER']))];
+        }
 
-
-    const generateAccountItems = (account) => {
-        const generateItems = (businessAccount[account]).map((item, index) => {
-            const counter = wCounter(item, account);
-            const sum = sumOfCount(item, account);
-
-            const handleClick = () => {
-                let filteredObjects = [];
+        const ownerItems = owner.map((own, index) => {
+            const counterOwner = filteredDataRaport.reduce((acc, doc) => {
                 if (account === '201203') {
-                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === item);
+                    if (doc['OBSZAR'] === area && doc['OWNER'] === own && doc['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        acc++;
+                    }
                 }
                 else {
-                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === item && obj['RODZAJ KONTA'] === Number(account));
+                    if (doc['OBSZAR'] === area && doc['RODZAJ KONTA'] === Number(account) && doc['OWNER'] === own && doc['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        acc++;
+                    }
+                }
+                return acc;
+            }, 0);
+
+
+            // pokazuje zsumowana wartość ownera
+            let ownerSum = 0;
+            const docSum = filteredDataRaport.map(dataSum => {
+                if (account === '201203') {
+                    if (dataSum['OBSZAR'] === area && dataSum['OWNER'] === own && dataSum['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        ownerSum += dataSum[' KWOTA DO ROZLICZENIA FK '];
+                    }
+                }
+                else {
+                    if (dataSum['OBSZAR'] === area && dataSum['RODZAJ KONTA'] === Number(account) && dataSum['OWNER'] === own && dataSum['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        ownerSum += dataSum[' KWOTA DO ROZLICZENIA FK '];
+                    }
+                }
+            });
+
+            const handleClickOwner = () => {
+                let filteredObjects = [];
+                if (account === '201203') {
+                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === area && obj['OWNER'] === own && obj['CZY SAMOCHÓD WYDANY (dane As3)'] === car);
+                }
+                else {
+                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === area && obj['RODZAJ KONTA'] === Number(account) && obj['OWNER'] === own && obj['CZY SAMOCHÓD WYDANY (dane As3)'] === car);
                 }
                 setTableData(filteredObjects);
                 setShowTable(true);
             };
+            const departments = generateDepartmentsCar(own, account, area, car);
 
-            const owners = generateOwner(item, account);
+            return (
+                <React.Fragment key={index}>
+                    <section className="fk_raport-w201 fk_raport-w201--owner"
+                        style={counterOwner === 0 ? { display: "none" } : null}
+                    >
+
+                        <label
+                            className="fk_raport-w201--arrow fk_raport-w201--arrow--owner"
+                            onClick={() => setArrow(prev => {
+                                return {
+                                    ...prev,
+                                    owner: {
+                                        ...prev.owner,
+                                        [own]: !arrow.owner[own]
+                                    }
+                                };
+                            })}
+                        >
+                            <IoIosArrowDown
+                                className='fk_raport-business--arrow'
+                                style={!arrow.owner[own] ? null : { rotate: "180deg" }}
+                            />
+                            {own}</label>
+                        <label className="fk_raport-w201--doc-counter" onDoubleClick={handleClickOwner} >{counterOwner}</label>
+                        <label className="fk_raport-w201--doc-sum" onDoubleClick={handleClickOwner}>{(ownerSum).toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })}</label>
+                    </section>
+                    {arrow.owner[own] && departments}
+
+                </React.Fragment>
+            );
+        });
+        return ownerItems;
+    };
+
+    // funkcja generuje auta wydanie i niewydane
+    const generateCars = (area, account) => {
+        const cars = ["TAK", "NIE"];
+        // if (account === '201203') {
+        //     owner = [...new Set(filteredDataRaport.filter(own => own['OBSZAR'] === area).map(own => own['OWNER']))];
+        // } else {
+        //     owner = [...new Set(filteredDataRaport.filter(own => own['RODZAJ KONTA'] === Number(account) && own['OBSZAR'] === area).map(own => own['OWNER']))];
+        // }
+
+        const carItems = cars.map((car, index) => {
+            const counterCar = filteredDataRaport.reduce((acc, doc) => {
+                if (account === '201203') {
+                    if (doc['OBSZAR'] === area && doc['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        acc++;
+                    }
+                }
+                else {
+                    if (doc['OBSZAR'] === area && doc['RODZAJ KONTA'] === Number(account) && doc['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        acc++;
+                    }
+                }
+                return acc;
+            }, 0);
+
+            // pokazuje zsumowana wartość aut wydanych i niewydanych
+            let carSum = 0;
+            const docSum = filteredDataRaport.map(dataSum => {
+                if (account === '201203') {
+                    if (dataSum['OBSZAR'] === area && dataSum['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        carSum += dataSum[' KWOTA DO ROZLICZENIA FK '];
+                    }
+                }
+                else {
+                    if (dataSum['OBSZAR'] === area && dataSum['RODZAJ KONTA'] === Number(account) && dataSum['CZY SAMOCHÓD WYDANY (dane As3)'] === car) {
+                        carSum += dataSum[' KWOTA DO ROZLICZENIA FK '];
+                    }
+                }
+            });
+
+
+            const handleClickCar = () => {
+                let filteredObjects = [];
+                if (account === '201203') {
+                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === area && obj['CZY SAMOCHÓD WYDANY (dane As3)'] === car);
+                }
+                else {
+                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === area && obj['RODZAJ KONTA'] === Number(account) && obj['CZY SAMOCHÓD WYDANY (dane As3)'] === car);
+                }
+                setTableData(filteredObjects);
+                setShowTable(true);
+            };
+            //     const departments = generateDepartments(own, account, area);
+
+            const owners = generateOwnerCar(area, account, car);
+
+
+            const keyArrow = area === "SAMOCHODY NOWE" ? "areaNewCars" : "areaUsedCars";
+
+            return (
+                <React.Fragment key={index}>
+                    <section className="fk_raport-w201 fk_raport-w201--owner"
+                        style={counterCar === 0 ? { display: "none" } : null}
+                    >
+
+                        <label
+                            className="fk_raport-w201--arrow fk_raport-w201--arrow--owner"
+                            onClick={() => setArrow(prev => {
+                                return {
+                                    ...prev,
+                                    [keyArrow]: {
+                                        ...prev[keyArrow],
+                                        [car]: !arrow[keyArrow][car],
+                                    }
+                                };
+                            })}
+                        >
+                            <IoIosArrowDown
+                                className='fk_raport-business--arrow'
+                                style={!arrow[keyArrow][car] ? null : { rotate: "180deg" }}
+                            />
+                            {car === "TAK" ? "AUTA WYDANE" : "AUTA NIEWYDANE"}</label>
+                        <label className="fk_raport-w201--doc-counter" onDoubleClick={handleClickCar} >{counterCar}</label>
+                        <label className="fk_raport-w201--doc-sum" onDoubleClick={handleClickCar}>{(carSum).toLocaleString('pl-PL', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                            useGrouping: true,
+                        })}</label>
+                    </section>
+                    {arrow[keyArrow][car] && owners}
+                </React.Fragment>
+            );
+        });
+        return carItems;
+    };
+
+
+    const generateAccountItems = (account) => {
+        const generateItems = (businessAccount[account]).map((area, index) => {
+            const counter = wCounter(area, account);
+            const sum = sumOfCount(area, account);
+            let data = [];
+
+            const handleClick = () => {
+                let filteredObjects = [];
+                if (account === '201203') {
+                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === area);
+                }
+                else {
+                    filteredObjects = filteredDataRaport.filter(obj => obj['OBSZAR'] === area && obj['RODZAJ KONTA'] === Number(account));
+                }
+                setTableData(filteredObjects);
+                setShowTable(true);
+                console.log(filteredObjects);
+
+            };
+
+            let owners;
+            if (area === 'SAMOCHODY NOWE' || area === 'SAMOCHODY UŻYWANE') {
+                owners = generateCars(area, account);
+            }
+            else {
+                owners = generateOwner(area, account);
+            }
 
 
             return (
@@ -237,7 +494,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                                     ...prev,
                                     area: {
                                         ...prev.area,
-                                        [item]: !arrow.area[item]
+                                        [area]: !arrow.area[area]
                                     }
                                 };
                             })
@@ -245,9 +502,9 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                         >
                             <IoIosArrowDown
                                 className='fk_raport-business--arrow'
-                                style={!arrow.area[item] ? null : { rotate: "180deg" }}
+                                style={!arrow.area[area] ? null : { rotate: "180deg" }}
                             />
-                            {item}</label>
+                            {area}</label>
                         <label className="fk_raport-w201--doc-counter" onDoubleClick={handleClick}>{counter}</label>
                         <label className="fk_raport-w201--doc-sum">{(sum).toLocaleString('pl-PL', {
                             minimumFractionDigits: 2,
@@ -256,7 +513,7 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
                         })}</label>
                     </section>
                     {/* {arrow[`W${filter.business}`][item] && owners} */}
-                    {arrow.area[item] && owners}
+                    {arrow.area[area] && owners}
                     {/* {owners} */}
 
                 </React.Fragment >
@@ -446,20 +703,6 @@ const FKRaport = ({ filteredDataRaport, setTableData, setShowTable, filter, show
             {arrow.account[filter.business] && generateAccountItems(`${filter.business}`)}
 
 
-            {/* {filter.business === '201203' && generateAccount("201203")} */}
-            {/* {filter.business === '201203' && arrow.account[filter.business] && generateAccountItems("201203")} */}
-
-            {/* {filter.business === '201' && generateAccount(201)} */}
-            {/* {filter.business === '201' && arrow.account[filter.business] && generateAccountItems(201)} */}
-
-            {/* {filter.business === '203' && generateAccount(203)} */}
-            {/* {filter.business === '203' && arrow.account[filter.business] && generateAccountItems(203)} */}
-
-            {/* {filter.business === '203' && generateArea(203)} */}
-            {/* {generateArea(203)} */}
-            {/* {showData.W203 && generateW201Items(203)} */}
-
-            {/* {generateSumArea()} */}
         </section >
     );
 };

@@ -25,16 +25,12 @@ const FKSettings = () => {
     const [tableData, setTableData] = useState([]);
 
 
-    // zmienna przeniesiona tutaj, zeby po zamknięciu tabeli nie gubiło rozwiajnych list
-    const [showData, setShowData] = useState({
-        W201: false,
-        W203: false,
-        W201203: false
-    });
     const [arrow, setArrow] = useState(
         {
             account: {},
             area: {},
+            areaNewCars: {},
+            areaUsedCars: {},
             owner: {}
         }
     );
@@ -91,15 +87,17 @@ const FKSettings = () => {
 
     useEffect(() => {
         setShowRaport(false);
-        setShowData({
-            W201: false,
-            W203: false,
-            W201203: false
-        });
+        // setShowData({
+        //     W201: false,
+        //     W203: false,
+        //     W201203: false
+        // });
         setArrow({
             account: [],
             area: {},
-            owner: {}
+            owner: {},
+            areaNewCars: {},
+            areaUsedCars: {},
         });
     }, [filter]);
 
@@ -174,8 +172,8 @@ const FKSettings = () => {
                     setShowTable={setShowTable}
                     filter={filter}
                     filteredDataRaport={filteredDataRaport}
-                    showData={showData}
-                    setShowData={setShowData}
+                    // showData={showData}
+                    // setShowData={setShowData}
                     arrow={arrow}
                     setArrow={setArrow}
                 />}
