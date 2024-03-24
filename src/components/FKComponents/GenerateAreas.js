@@ -4,7 +4,7 @@ import GenerateCars from './GenerateCars';
 import GenerateOwners from './GenerateOwners';
 import './GenerateAreas.css';
 
-const GenerateAreas = ({ showTable, area, filteredData, setTableData, setShowTable, style }) => {
+const GenerateAreas = ({ showTable, area, filteredData, setTableData, setShowTable, style, setButtonArea }) => {
     const [arrow, setArrow] = useState({
         [area]: false
     });
@@ -27,6 +27,7 @@ const GenerateAreas = ({ showTable, area, filteredData, setTableData, setShowTab
     const percent = "do ustalenia";
 
     const filteredObjects = filteredData.filter(obj => obj['OBSZAR'] === area);
+
 
 
     const handleClick = () => {
@@ -72,6 +73,46 @@ const GenerateAreas = ({ showTable, area, filteredData, setTableData, setShowTab
             });
         }
     }
+
+    // useEffect(() => {
+    //     // console.log(area);
+    //     setButtonArea(prev => {
+    //         return [
+    //             ...prev,
+    //             [area]:
+    //             {
+    //                 name: area,
+    //                 data: filteredObjects
+    //             }
+    //         ];
+    //     });
+
+    // }, [area]);
+
+    useEffect(() => {
+        setButtonArea(prev => {
+            // Sprawdź, czy area już istnieje w tablicy
+            const existingAreaIndex = prev.findIndex(item => item.name === area);
+
+            if (existingAreaIndex !== -1) {
+                // Jeśli area już istnieje, zaktualizuj tylko jego dane
+                const updatedArea = { ...prev[existingAreaIndex], data: filteredObjects };
+                const updatedAreas = [...prev];
+                updatedAreas[existingAreaIndex] = updatedArea;
+                return updatedAreas;
+            } else {
+                // Jeśli area nie istnieje, dodaj nowy obiekt do tablicy
+                return [
+                    ...prev,
+                    {
+                        name: area,
+                        data: filteredObjects
+                    }
+                ];
+            }
+        });
+    }, [area,]);
+
 
     return (
         <>

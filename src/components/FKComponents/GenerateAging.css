@@ -13,7 +13,7 @@
     flex-basis: 15%;
     text-align: center;
     padding: 3px;
-    background-color: #ebe4e4;
+    background-color: #ffffff;
     border-right: 1px solid black;
     cursor: pointer;
     display: flex;
@@ -27,7 +27,7 @@
 
 .generate_aging .generate_aging--select {
     min-width: 500px;
-    padding-left: 85px;
+    padding-left: 95px;
     flex-grow: 1;
     display: flex;
     align-items: center;
@@ -41,7 +41,7 @@
 }
 
 .generate_aging .generate_aging--select--car {
-    padding-left: 100px;
+    padding-left: 110px;
 }
 
 .generate_aging .generate_aging--percent {

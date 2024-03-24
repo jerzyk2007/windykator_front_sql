@@ -5,6 +5,24 @@
     flex-direction: column;
 }
 
+.fk_raport-panel {
+    padding: 10px;
+    display: flex;
+}
+
+.fk_raport-panel--item {
+    flex-grow: 1;
+    font-size: .8rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.fk_raport-panel--item Button {
+    margin: 0 5px;
+    font-size: 1rem;
+    background-color: rgba(178, 255, 255, .5);
+}
+
 .fk_raport-title {
     border: 1px solid black;
     display: flex;
