@@ -27,11 +27,30 @@ const FKSettings = () => {
 
     const [arrow, setArrow] = useState(
         {
+            // account: {
+            //     area: {
+            //         cars: {
+            //             newCars: {
+            //                 owner: {
+            //                     department: {}
+            //                 },
+            //             },
+            //             usedCars: {
+            //                 owner: {
+            //                     department: {}
+            //                 },
+            //             }
+            //         },
+            //         owner: {
+            //             department: {}
+            //         },
+            //     },
+            // },
             account: {},
             area: {},
+            owner: {},
             areaNewCars: {},
             areaUsedCars: {},
-            owner: {}
         }
     );
 
@@ -92,12 +111,27 @@ const FKSettings = () => {
         //     W203: false,
         //     W201203: false
         // });
+        // setArrow({
+        //     account: {
+        //         area: {
+        //             cars: {
+        //                 owner: {
+        //                     department: {}
+        //                 },
+        //             },
+
+        //             owner: {
+        //                 department: {}
+        //             },
+        //         },
+        //     },
+        //     area: {},
+        //     owner: {},
+        //     areaNewCars: {},
+        //     areaUsedCars: {},
+        // });
         setArrow({
-            account: [],
-            area: {},
-            owner: {},
-            areaNewCars: {},
-            areaUsedCars: {},
+            account: {}
         });
     }, [filter]);
 
@@ -165,17 +199,22 @@ const FKSettings = () => {
                 </section>
             </section>
 
-            {showTable && <FKTable tableData={tableData} setShowTable={setShowTable} />}
-            {showRaport && !showTable &&
+            {/* {showTable && <FKTable tableData={tableData} setShowTable={setShowTable} />} */}
+            {showRaport &&
                 < FKRaport
                     setTableData={setTableData}
+                    showTable={showTable}
                     setShowTable={setShowTable}
                     filter={filter}
                     filteredDataRaport={filteredDataRaport}
+
                     // showData={showData}
                     // setShowData={setShowData}
                     arrow={arrow}
                     setArrow={setArrow}
+
+
+                    tableData={tableData}
                 />}
 
             {/* <section className='fk_settings'>

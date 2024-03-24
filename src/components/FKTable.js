@@ -35,7 +35,7 @@ const FKTable = ({ tableData, setShowTable }) => {
 
 
     useEffect(() => {
-        setTableSize(height - 110);
+        setTableSize(height - 107);
     }, [height]);
 
     const table = useMaterialReactTable({
