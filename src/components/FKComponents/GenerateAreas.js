@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { IoIosArrowDown } from "react-icons/io";
 import GenerateCars from './GenerateCars';
 import GenerateOwners from './GenerateOwners';
+import './GenerateAreas.css';
 
-const GenerateAreas = ({ showTable, area, filteredData, setTableData, setShowTable }) => {
-
+const GenerateAreas = ({ showTable, area, filteredData, setTableData, setShowTable, style }) => {
     const [arrow, setArrow] = useState({
         [area]: false
     });
@@ -24,6 +24,8 @@ const GenerateAreas = ({ showTable, area, filteredData, setTableData, setShowTab
         return sum;
     });
 
+    const percent = "do ustalenia";
+
     const filteredObjects = filteredData.filter(obj => obj['OBSZAR'] === area);
 
 
@@ -42,6 +44,7 @@ const GenerateAreas = ({ showTable, area, filteredData, setTableData, setShowTab
                 return (
                     < GenerateCars
                         key={index}
+                        style={style}
                         filteredData={filteredObjects}
                         area={area}
                         carsIssued={car}
@@ -58,8 +61,8 @@ const GenerateAreas = ({ showTable, area, filteredData, setTableData, setShowTab
                 return (
                     < GenerateOwners
                         key={index}
+                        style={style}
                         filteredData={filteredObjects}
-                        area={area}
                         own={own}
                         setTableData={setTableData}
                         showTable={showTable}
@@ -71,12 +74,12 @@ const GenerateAreas = ({ showTable, area, filteredData, setTableData, setShowTab
     }
 
     return (
-        < >
-            <section className="fk_raport-w201"
+        <>
+            <section className="generate_areas"
                 style={counter === 0 || showTable ? { display: "none" } : null}
             >
                 <label
-                    className="fk_raport-w201--arrow"
+                    className={style === "car" ? 'generate_areas--select generate_areas--select--car' : "generate_areas--select"}
                     onClick={() => setArrow(
                         {
                             [area]: !arrow[area]
@@ -84,20 +87,20 @@ const GenerateAreas = ({ showTable, area, filteredData, setTableData, setShowTab
                     )}
                 >
                     <IoIosArrowDown
-                        className='fk_raport-business--arrow'
+                        className='generate_areas--arrow'
                         style={!arrow[area] ? null : { rotate: "180deg" }}
                     />
                     {area}</label>
-                <label className="fk_raport-w201--doc-counter" onDoubleClick={handleClick}>{counter}</label>
-                <label className="fk_raport-w201--doc-sum">{(sum).toLocaleString('pl-PL', {
+                <label className="generate_areas--doc-counter" onDoubleClick={handleClick}>{counter}</label>
+                <label className="generate_areas--doc-sum" onDoubleClick={handleClick}>{(sum).toLocaleString('pl-PL', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                     useGrouping: true,
                 })}</label>
+                <label className='generate-areas--percent' onDoubleClick={handleClick}>{percent}</label>
             </section>
             {generateItems}
-
-        </ >
+        </>
     );
 
 };

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { IoIosArrowDown } from "react-icons/io";
 import GenerateOwners from './GenerateOwners';
+import './GenerateCars.css';
 
 
-const GenerateCars = ({ area, filteredData, carsIssued, setTableData, showTable, setShowTable }) => {
+const GenerateCars = ({ area, filteredData, carsIssued, setTableData, showTable, setShowTable, style }) => {
     const [arrow, setArrow] = useState({
         car: false
     });
@@ -23,6 +24,8 @@ const GenerateCars = ({ area, filteredData, carsIssued, setTableData, showTable,
         return sum;
     });
 
+    const percent = "do ustalenia";
+
     const filteredObjects = filteredData.filter(obj => obj['CZY SAMOCHÓD WYDANY (dane As3)'] === carsIssued);
 
     const handleClick = () => {
@@ -37,6 +40,7 @@ const GenerateCars = ({ area, filteredData, carsIssued, setTableData, showTable,
             return (
                 < GenerateOwners
                     key={index}
+                    style="car"
                     filteredData={filteredObjects}
                     area={area}
                     own={own}
@@ -50,31 +54,33 @@ const GenerateCars = ({ area, filteredData, carsIssued, setTableData, showTable,
     }
 
     return (
-        < >
-            <section className="fk_raport-w201 fk_raport-w201--owner"
+        <>
+            <section className="generate_cars"
                 style={counter === 0 || showTable ? { display: "none" } : null}
             >
-
                 <label
-                    className="fk_raport-w201--arrow fk_raport-w201--arrow--owner"
-                    onClick={() => setArrow({ car: !arrow.car })}
-
-
+                    // className="generate_cars--select"
+                    className={style === "car" ? 'generate_cars--select generate_cars--select--car' : "generate_cars--select"}
+                    onClick={() => setArrow(
+                        {
+                            car: !arrow.car
+                        }
+                    )}
                 >
                     <IoIosArrowDown
-                        className='fk_raport-business--arrow'
+                        className='generate_cars--arrow'
                         style={!arrow.car ? null : { rotate: "180deg" }}
                     />
                     {carsIssued === "TAK" ? "AUTA WYDANE" : "AUTA NIEWYDANE"}</label>
-                <label className="fk_raport-w201--doc-counter" onDoubleClick={handleClick} >{counter}</label>
-                <label className="fk_raport-w201--doc-sum" onDoubleClick={handleClick}>{(sum).toLocaleString('pl-PL', {
+                <label className="generate_cars--doc-counter" onDoubleClick={handleClick}>{counter}</label>
+                <label className="generate_cars--doc-sum" onDoubleClick={handleClick}>{(sum).toLocaleString('pl-PL', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                     useGrouping: true,
                 })}</label>
-            </section >
+                <label className='generate-areas--percent' onDoubleClick={handleClick}>{percent}</label>
+            </section>
             {generateItems}
-
         </>
     );
 };

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { IoIosArrowDown } from "react-icons/io";
 import GenerateAging from './GenerateAging';
+import './GenerateDepartments.css';
 
-const GenerateDepartments = ({ dep, filteredData, setTableData, setShowTable, showTable }) => {
+const GenerateDepartments = ({ dep, filteredData, setTableData, setShowTable, showTable, style }) => {
     const [arrow, setArrow] = useState({
         [dep]: false
     });
@@ -21,6 +22,8 @@ const GenerateDepartments = ({ dep, filteredData, setTableData, setShowTable, sh
         }
         return sum;
     });
+
+    const percent = "do ustalenia";
 
     const filteredObjects = filteredData.filter(obj => obj['DZIAŁ'] === dep);
 
@@ -42,6 +45,7 @@ const GenerateDepartments = ({ dep, filteredData, setTableData, setShowTable, sh
             return (
                 <GenerateAging
                     key={index}
+                    style={style}
                     age={age}
                     filteredData={filteredObjects}
                     setTableData={setTableData}
@@ -53,10 +57,11 @@ const GenerateDepartments = ({ dep, filteredData, setTableData, setShowTable, sh
 
     return (
         <>
-            <section className="fk_raport-w201 fk_raport-w201--owner"
-                style={counter === 0 || showTable ? { display: "none" } : null}>
+            <section className="generate_departments"
+                style={counter === 0 || showTable ? { display: "none" } : null}
+            >
                 <label
-                    className="fk_raport-w201--arrow"
+                    className={style === "car" ? 'generate_departments--select generate_departments--select--car' : "generate_departments--select"}
                     onClick={() => setArrow(
                         {
                             [dep]: !arrow[dep]
@@ -64,16 +69,18 @@ const GenerateDepartments = ({ dep, filteredData, setTableData, setShowTable, sh
                     )}
                 >
                     <IoIosArrowDown
-                        className='fk_raport-business--arrow'
+                        // className='generate_departments--arrow'
+                        className='generate_departments--arrow'
                         style={!arrow[dep] ? null : { rotate: "180deg" }}
                     />
                     {dep}</label>
-                <label className="fk_raport-w201--doc-counter" onDoubleClick={handleClick}>{counter}</label>
-                <label className="fk_raport-w201--doc-sum">{(sum).toLocaleString('pl-PL', {
+                <label className="generate_departments--doc-counter" onDoubleClick={handleClick}>{counter}</label>
+                <label className="generate_departments--doc-sum" onDoubleClick={handleClick}>{(sum).toLocaleString('pl-PL', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                     useGrouping: true,
                 })}</label>
+                <label className='generate-areas--percent' onDoubleClick={handleClick}>{percent}</label>
             </section>
             {generateItems}
         </>

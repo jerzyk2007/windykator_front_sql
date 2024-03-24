@@ -1,0 +1,54 @@
+.generate_owners {
+    border: 1px solid black;
+    border-top: none;
+    display: flex;
+    align-items: center;
+    user-select: none;
+}
+
+.generate_owners label {
+    min-width: 100px;
+    font-size: 1.2rem;
+    height: 100%;
+    flex-basis: 15%;
+    text-align: center;
+    padding: 3px;
+    background-color: #faf5fa;
+    border-right: 1px solid black;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.generate_owners label:hover {
+    background-color: rgba(0, 255, 255, .5);
+}
+
+
+.generate_owners .generate_owners--select {
+    min-width: 500px;
+    padding-left: 40px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.generate_owners--arrow {
+    color: rgb(218, 28, 192);
+    margin-right: 5px;
+    font-size: 1.5rem;
+}
+
+.generate_owners .generate_owners--select--car {
+    padding-left: 60px;
+}
+
+.generate_owners--car-arrow {
+    margin: 0 10px 0 65px;
+}
+
+.generate_owners .generate_owners--percent {
+    border: none;
+}

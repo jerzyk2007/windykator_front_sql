@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { IoIosArrowDown } from "react-icons/io";
 import GenerateDepartments from './GenerateDepartments';
+import './GenerateOwners.css';
 
-const GenerateOwners = ({ owner, filteredData, own, setTableData, showTable, setShowTable }) => {
+const GenerateOwners = ({ filteredData, own, setTableData, showTable, setShowTable, style }) => {
     const [arrow, setArrow] = useState({
-        [owner]: false
+        [own]: false
     });
-
 
     const counter = filteredData.reduce((acc, doc) => {
         if (doc['OWNER'] === own) {
@@ -26,51 +26,55 @@ const GenerateOwners = ({ owner, filteredData, own, setTableData, showTable, set
 
     const filteredObjects = filteredData.filter(obj => obj['OWNER'] === own);
 
+    const percent = "do ustalenia";
+
     const handleClick = () => {
         setTableData(filteredObjects);
         setShowTable(true);
     };
 
     let generateItems = [];
-    if (arrow[owner]) {
+    if (arrow[own]) {
         const departments = [...new Set(filteredObjects.filter(dep => dep['OWNER'] === own).map(dep => dep['DZIAŁ']))];
         generateItems = departments.map((dep, index) => {
             return (
                 <GenerateDepartments
                     key={index}
                     dep={dep}
+                    style={style}
                     filteredData={filteredObjects}
                     setTableData={setTableData}
                     showTable={showTable}
                     setShowTable={setShowTable}
                 />);
         });
-
     }
 
     return (
         <>
-            <section className="fk_raport-w201 fk_raport-w201--owner"
-                style={counter === 0 || showTable ? { display: "none" } : null}>
+            <section className="generate_owners"
+                style={counter === 0 || showTable ? { display: "none" } : null}
+            >
                 <label
-                    className="fk_raport-w201--arrow"
+                    className={style === "car" ? 'generate_owners--select generate_owners--select--car' : "generate_owners--select"}
                     onClick={() => setArrow(
                         {
-                            [owner]: !arrow[owner]
+                            [own]: !arrow[own]
                         }
                     )}
                 >
                     <IoIosArrowDown
-                        className='fk_raport-business--arrow'
-                        style={!arrow[owner] ? null : { rotate: "180deg" }}
+                        className='generate_owners--arrow'
+                        style={!arrow[own] ? null : { rotate: "180deg" }}
                     />
                     {own}</label>
-                <label className="fk_raport-w201--doc-counter" onDoubleClick={handleClick}>{counter}</label>
-                <label className="fk_raport-w201--doc-sum">{(sum).toLocaleString('pl-PL', {
+                <label className="generate_owners--doc-counter" onDoubleClick={handleClick}>{counter}</label>
+                <label className="generate_owners--doc-sum" onDoubleClick={handleClick}>{(sum).toLocaleString('pl-PL', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                     useGrouping: true,
                 })}</label>
+                <label className='generate-areas--percent' onDoubleClick={handleClick}>{percent}</label>
             </section>
             {generateItems}
         </>

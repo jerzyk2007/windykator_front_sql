@@ -48,9 +48,10 @@ const FKSettings = () => {
         }
     };
 
-    const getFilteredData = () => {
+    const getFilteredData = async () => {
+        const response = await axiosPrivateIntercept.get('/fk/get-data');
 
-        let filteredData = data;
+        let filteredData = [...response.data];
 
         if (filter.payment !== "Wszystko") {
             if (filter.payment === "Przeterminowane") {
@@ -71,19 +72,13 @@ const FKSettings = () => {
         setSettingsSelect(true);
     };
 
-    // useEffect(() => {
-    //     const getDataFromDB = async () => {
-    //         const response = await axiosPrivateIntercept.get('/fk/get-data');
-    //         setData(response.data);
-    //     };
-    //     getDataFromDB();
-    // }, []);
+
     useEffect(() => {
-        const getDataFromDB = async () => {
-            const response = await axiosPrivateIntercept.get('/fk/get-data');
-            setData(response.data);
-        };
-        getDataFromDB();
+        setFilteredDataRaport([]);
+    }, [filter]);
+
+    useEffect(() => {
+        getFilteredData();
     }, []);
 
 
@@ -100,8 +95,6 @@ const FKSettings = () => {
                     {filter.payment === "Wszystko" && <label className='fk_settings-container-info--text'>Termin:<span>Wszystko</span></label>}
                     {filter.payment === "Przeterminowane" && <label className='fk_settings-container-info--text'>Termin:<span>{filter.payment}</span></label>}
                     {filter.payment === "Nieprzeterminowane" && <label className='fk_settings-container-info--text'>Termin:<span>{filter.payment}</span></label>}
-
-
                 </section>
                 <Button
                     variant="contained"
@@ -172,13 +165,13 @@ const FKSettings = () => {
                     <Button
                         variant="contained"
                         color="secondary"
-                        disabled={data.length > 0 ? false : true}
+                        // disabled={data.length > 0 ? false : true}
                         onClick={getFilteredData}
                     >Generuj raport</Button>
                 </section>
             </section>}
 
-            {showRaport &&
+            {showRaport && filteredDataRaport.length > 0 &&
                 < FKRaport
                     setTableData={setTableData}
                     showTable={showTable}

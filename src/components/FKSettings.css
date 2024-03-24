@@ -5,11 +5,6 @@
     flex-direction: column;
 }
 
-.fk_settings-container {
-    flex-grow: 1;
-    display: flex;
-}
-
 .fk_settings-container-panel {
     font-size: 1.2rem;
     display: flex;
@@ -29,6 +24,11 @@
     font-weight: bold;
     margin: 0 5px;
     color: blue;
+}
+
+.fk_settings-container {
+    flex-grow: 1;
+    display: flex;
 }
 
 .fk_settings-container-select {

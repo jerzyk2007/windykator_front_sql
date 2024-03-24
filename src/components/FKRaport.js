@@ -705,7 +705,6 @@ const FKRaport = ({ filteredDataRaport, showTable, setTableData, tableData, setS
         setBusinessAccount({
             [filter.business]: accountArray
         });
-        console.log(filter);
     }, [filter]);
 
 
@@ -716,14 +715,17 @@ const FKRaport = ({ filteredDataRaport, showTable, setTableData, tableData, setS
                     <label className='fk_raport-title--business--header'>Obszar </label>
                     <label className='fk_raport-title--doc-counter--header'>Liczba dokumentów</label>
                     <label className='fk_raport-title--doc-sum--header'>Kwota do rozliczenia</label>
+                    <label className='fk_raport-title--percent--header'>Procent</label>
                 </section>
-                {filter.raport === "accountRaport" && <GenerateAccount
-                    account={filter.business}
-                    filteredDataRaport={filteredDataRaport}
-                    setTableData={setTableData}
-                    showTable={showTable}
-                    setShowTable={setShowTable}
-                />}
+                {filter.raport === "accountRaport" &&
+                    <GenerateAccount
+                        style=""
+                        account={filter.business}
+                        filteredDataRaport={filteredDataRaport}
+                        setTableData={setTableData}
+                        showTable={showTable}
+                        setShowTable={setShowTable}
+                    />}
 
 
             </section >

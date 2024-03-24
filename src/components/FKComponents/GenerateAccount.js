@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { IoIosArrowDown } from "react-icons/io";
 import GenerateAreas from './GenerateAreas';
+import './GenerateAccount.css';
 
 
-const GenerateAccount = ({ account, showTable, filteredDataRaport, setTableData, setShowTable }) => {
+const GenerateAccount = ({ account, showTable, filteredDataRaport, setTableData, setShowTable, style }) => {
     const [arrow, setArrow] = useState({
         [account]: true
     });
-
     const [businessAccount, setBusinessAccount] = useState({
         accountArea: [],
     });
@@ -34,6 +34,9 @@ const GenerateAccount = ({ account, showTable, filteredDataRaport, setTableData,
             }
         }
     });
+
+    const percent = "do ustalenia";
+
     let filteredObjects = [];
     if (account === '201203') {
         filteredObjects = [...filteredDataRaport];
@@ -52,6 +55,7 @@ const GenerateAccount = ({ account, showTable, filteredDataRaport, setTableData,
         return (
             <GenerateAreas
                 key={index}
+                style={style}
                 area={area}
                 filteredData={filteredObjects}
                 setTableData={setTableData}
@@ -71,30 +75,33 @@ const GenerateAccount = ({ account, showTable, filteredDataRaport, setTableData,
     }, [account]);
 
 
-    return (<>
-        <section className='fk_raport-business' >
-            <label
-                className='fk_raport-business--select'
-                onClick={() => setArrow({
-                    [account]: !arrow[account]
-                })}
-            >
-                <IoIosArrowDown
-                    className='fk_raport-business--arrow'
-                    style={!arrow[account] ? null : { rotate: "180deg" }}
-                />
-                {account === "201203" ? "201 + 203" : account}</label >
-            <label className='fk_raport-title--doc-counter' onDoubleClick={handleClick}>
-                {counter}
-            </label>
-            <label className='fk_raport-title--doc-sum'>{sum.toLocaleString('pl-PL', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-                useGrouping: true,
-            })}</label>
-        </section >
-        {arrow[account] && generateItems}
-    </>
+
+    return (
+        <>
+            <section className='generate_account' >
+                <label
+                    className={style === "car" ? 'generate_account--select generate_account--select--car' : "generate_account--select "}
+                    onClick={() => setArrow({
+                        [account]: !arrow[account]
+                    })}
+                >
+                    <IoIosArrowDown
+                        className={'generate_account--arrow'}
+                        style={!arrow[account] ? null : { rotate: "180deg" }}
+                    />
+                    {account === "201203" ? "201 + 203" : account}</label >
+                <label className='generate_account--doc-counter' onDoubleClick={handleClick}>
+                    {counter}
+                </label>
+                <label className='generate_account--doc-sum' onDoubleClick={handleClick}>{sum.toLocaleString('pl-PL', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                    useGrouping: true,
+                })}</label>
+                <label className='generate_account--percent' onDoubleClick={handleClick}>{percent}</label>
+            </section >
+            {arrow[account] && generateItems}
+        </>
     );
 };
 
