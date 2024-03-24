@@ -5,7 +5,7 @@ import GenerateAreas from './GenerateAreas';
 
 const GenerateAccount = ({ account, showTable, filteredDataRaport, setTableData, setShowTable }) => {
     const [arrow, setArrow] = useState({
-        [account]: false
+        [account]: true
     });
 
     const [businessAccount, setBusinessAccount] = useState({
@@ -83,7 +83,7 @@ const GenerateAccount = ({ account, showTable, filteredDataRaport, setTableData,
                     className='fk_raport-business--arrow'
                     style={!arrow[account] ? null : { rotate: "180deg" }}
                 />
-                {account === "201203" ? "201 - 203" : account}</label >
+                {account === "201203" ? "201 + 203" : account}</label >
             <label className='fk_raport-title--doc-counter' onDoubleClick={handleClick}>
                 {counter}
             </label>
