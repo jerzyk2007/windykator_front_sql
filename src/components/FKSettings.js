@@ -89,9 +89,9 @@ const FKSettings = () => {
                     {filter.raport === "accountRaport" && <label className='fk_settings-container-info--text'>Raport:<span>Konta</span></label>}
                     {filter.raport === "agingRaport" && <label className='fk_settings-container-info--text'>Raport:<span>Wiekowanie</span></label>}
                     {filter.raport === "lawyerRaport" && <label className='fk_settings-container-info--text'>Raport:<span>Kancelarie</span></label>}
-                    {filter.business === "201203" && filter.raport !== "lawyerRaport" && <label className='fk_settings-container-info--text'>Obszar:<span>201 + 203</span></label>}
-                    {filter.business === "201" && filter.raport !== "lawyerRaport" && <label className='fk_settings-container-info--text'>Obszar:<span>201</span></label>}
-                    {filter.business === "203" && filter.raport !== "lawyerRaport" && <label className='fk_settings-container-info--text'>Obszar:<span>203</span></label>}
+                    {filter.business === "201203" && filter.raport === "accountRaport" && <label className='fk_settings-container-info--text'>Obszar:<span>201 + 203</span></label>}
+                    {filter.business === "201" && filter.raport === "accountRaport" && <label className='fk_settings-container-info--text'>Obszar:<span>201</span></label>}
+                    {filter.business === "203" && filter.raport === "accountRaport" && <label className='fk_settings-container-info--text'>Obszar:<span>203</span></label>}
                     {filter.payment === "Wszystko" && <label className='fk_settings-container-info--text'>Termin:<span>Wszystko</span></label>}
                     {filter.payment === "Przeterminowane" && <label className='fk_settings-container-info--text'>Termin:<span>{filter.payment}</span></label>}
                     {filter.payment === "Nieprzeterminowane" && <label className='fk_settings-container-info--text'>Termin:<span>{filter.payment}</span></label>}
@@ -119,11 +119,11 @@ const FKSettings = () => {
                         >
                             <FormControlLabel value="accountRaport" control={<Radio />} label="Konta" />
                             <FormControlLabel value="agingRaport" control={<Radio />} label="Wiekowanie" />
-                            <FormControlLabel value="lawyerRaport" control={<Radio />} label="Kancelarie" />
+                            <FormControlLabel value="lawyerRaport" control={<Radio />} label="Kancelarie" disabled />
                         </RadioGroup>
                     </FormControl>
                 </section>
-                {filter.raport !== "lawyerRaport" && <section className='fk_settings-container-select'>
+                {filter.raport === "accountRaport" && <section className='fk_settings-container-select'>
                     <FormControl>
                         <FormLabel >Obszar biznesu</FormLabel>
                         <RadioGroup

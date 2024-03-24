@@ -2,13 +2,10 @@ import React, { useState, useEffect } from "react";
 import FKTable from "./FKTable";
 import GenerateAccount from "./FKComponents/GenerateAccount";
 import Button from '@mui/material/Button';
+import AgingAccount from "./FKAgingComponents/AgingAccount";
 import './FKRaport.css';
 
 const FKRaport = ({ filteredDataRaport, showTable, setTableData, tableData, setShowTable, filter }) => {
-
-    const [businessAccount, setBusinessAccount] = useState({
-        [filter.business]: [],
-    });
 
     const [buttonArea, setButtonArea] = useState([]);
 
@@ -16,21 +13,6 @@ const FKRaport = ({ filteredDataRaport, showTable, setTableData, tableData, setS
         setTableData(data);
         setShowTable(true);
     };
-
-    useEffect(() => {
-        let accountArray = [];
-        if (filter.business === "201203") {
-            accountArray = [...new Set(filteredDataRaport.filter(item => item['RODZAJ KONTA']).map(item => item['OBSZAR']))].sort();
-        } else {
-            accountArray = [...new Set(filteredDataRaport.filter(item => item['RODZAJ KONTA'] === Number(filter.business)).map(item => item['OBSZAR']))].sort();
-
-        }
-        setBusinessAccount({
-            [filter.business]: accountArray
-        });
-    }, [filter]);
-
-
 
     const buttonItems = buttonArea.map((item, index) => {
         return (
@@ -40,15 +22,9 @@ const FKRaport = ({ filteredDataRaport, showTable, setTableData, tableData, setS
                     color="secondary"
                     onClick={() => handleButtonClick(item.data)}
                 >{item.name}</Button>
-
             </section>
         );
     });
-
-    // useEffect(() => {
-    //     console.log(buttonArea);
-    // }, [buttonArea]);
-
 
     return (
         <>
@@ -68,6 +44,17 @@ const FKRaport = ({ filteredDataRaport, showTable, setTableData, tableData, setS
                     <GenerateAccount
                         style=""
                         account={filter.business}
+                        filteredDataRaport={filteredDataRaport}
+                        setTableData={setTableData}
+                        showTable={showTable}
+                        setShowTable={setShowTable}
+                        buttonArea={buttonArea}
+                        setButtonArea={setButtonArea}
+                    />}
+
+                {filter.raport === "agingRaport" &&
+                    <AgingAccount
+                        style=""
                         filteredDataRaport={filteredDataRaport}
                         setTableData={setTableData}
                         showTable={showTable}

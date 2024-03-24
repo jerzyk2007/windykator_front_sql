@@ -5,6 +5,7 @@ import './GenerateAccount.css';
 
 
 const GenerateAccount = ({ account, showTable, filteredDataRaport, setTableData, setShowTable, style, setButtonArea }) => {
+
     const [arrow, setArrow] = useState({
         [account]: true
     });
