@@ -32,12 +32,11 @@ function App() {
         <Routes>
           <Route path='/login' element={<Login />} />
           {/* protected routes */}
-          <Route path='/' element={<Home />} />
           <Route element={<PersistLogin />}>
 
-            {/* <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.FK]} />}>
               <Route path='/' element={<Home />} />
-            </Route> */}
+            </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
               <Route path='/register' element={<Register />} />
