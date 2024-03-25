@@ -27,14 +27,15 @@ const Login = () => {
                     withCredentials: true
                 }
             );
-            // console.log(response.data);
-            const { username, usersurname, roles, _id, permissions } = response?.data;
-            setAuth({ username, usersurname, userlogin, roles, _id, permissions });
+            console.log(response.data);
+            // const { username, usersurname, roles, _id, permissions } = response?.data;
+            // setAuth({ username, usersurname, userlogin, roles, _id, permissions });
             navigate('/');
         }
         catch (err) {
             if (!err?.response) {
                 setErrMsg('Brak odpowiedzi z serwera.');
+                console.log({ errorJurek: err });
             } else if (err.response?.status === 400) {
                 setErrMsg('Błedny login lub hasło.');
             }
