@@ -84,7 +84,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
 
-                            <li className='nav_menu-item-dropmenu'><Link to="/fk-raport" className="nav_menu-link" onClick={handleLinkClick}>Tabela FK
+                            <li className='nav_menu-item-dropmenu'><Link to="/fk-raport" className="nav_menu-link" onClick={handleLinkClick}>Raport
                             </Link></li>
                         </ul>
                     </div>

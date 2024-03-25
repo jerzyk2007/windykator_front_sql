@@ -1,0 +1,51 @@
+.aging_departments {
+    border: 1px solid black;
+    border-top: none;
+    display: flex;
+    align-items: center;
+    user-select: none;
+}
+
+.aging_departments label {
+    min-width: 100px;
+    font-size: 1.2rem;
+    height: 100%;
+    flex-basis: 15%;
+    text-align: center;
+    padding: 3px;
+    background-color: #ffffff;
+    border-right: 1px solid black;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.aging_departments label:hover {
+    background-color: rgba(0, 255, 255, .5);
+}
+
+.aging_departments .aging_departments--select {
+    min-width: 500px;
+    padding-left: 55px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.aging_departments--arrow {
+    color: rgb(255, 0, 0);
+    margin-right: 5px;
+    font-size: 1.5rem;
+}
+
+.aging_departments .aging_departments--select--car {
+    padding-left: 75px;
+
+
+}
+
+.aging_departments .aging_departments--percent {
+    border: none;
+}

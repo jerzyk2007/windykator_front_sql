@@ -1,0 +1,48 @@
+.aging_cars {
+    border: 1px solid black;
+    border-top: none;
+    display: flex;
+    align-items: center;
+    user-select: none;
+}
+
+.aging_cars label {
+    min-width: 100px;
+    font-size: 1.2rem;
+    height: 100%;
+    flex-basis: 15%;
+    text-align: center;
+    padding: 3px;
+    background-color: #ffffff;
+    border-right: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.aging_cars label:hover {
+    background-color: rgba(0, 255, 255, .5);
+}
+
+.aging_cars .aging_cars--select {
+    min-width: 500px;
+    padding-left: 60px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.aging_cars--arrow {
+    color: rgb(255, 0, 0);
+    margin-right: 5px;
+    font-size: 1.5rem;
+}
+
+.aging_cars .aging_cars--select--car {
+    padding-left: 55px;
+}
+
+.aging_cars .aging_cars--percent {
+    border: none;
+}
