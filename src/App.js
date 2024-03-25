@@ -32,10 +32,9 @@ function App() {
         <Routes>
           <Route path='/login' element={<Login />} />
           {/* protected routes */}
-
           <Route element={<PersistLogin />}>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.FK]} />}>
               <Route path='/' element={<Home />} />
             </Route>
 

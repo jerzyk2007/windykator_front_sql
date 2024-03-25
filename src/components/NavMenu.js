@@ -32,7 +32,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 onClick={width && width >= 960 ? () => setMenuActive(!menuActive) : () => setMenuActive(true)}
                 onMouseLeave={width && width >= 960 ? () => setMenuActive(false) : undefined}
             >
-                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Tabelka
+                {auth?.roles?.includes(100) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Tabelka
                 </Link>
                     <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'}  >
                         <ul className='nav_menu__menu-dropmenu' >
@@ -47,8 +47,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                             </li>
                         </ul>
-                    </div></li>
-                <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Raporty
+                    </div></li>}
+
+                {auth?.roles?.includes(100) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Raporty
                 </Link>
                     <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
@@ -76,14 +77,14 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </li> */}
                         </ul>
                     </div>
-                </li>
+                </li>}
 
-                {auth?.roles?.includes(220) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >FK
+                {auth?.roles?.includes(220) && <li className='nav_menu__menu-item'><Link className="nav_menu-link" >Raport FK
                 </Link>
                     <div className={menuActive ? 'nav_menu-dropdown__menu' : 'nav_menu-dropdown__menu-disabled'} >
                         <ul className='nav_menu__menu-dropmenu'>
 
-                            <li className='nav_menu-item-dropmenu'><Link to="/fk-raport" className="nav_menu-link" onClick={handleLinkClick}>Tabela FK
+                            <li className='nav_menu-item-dropmenu'><Link to="/fk-raport" className="nav_menu-link" onClick={handleLinkClick}>Raport
                             </Link></li>
                         </ul>
                     </div>
@@ -121,8 +122,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 </Link>
                     {menuActive && <div className='nav_menu-dropdown__menu' >
                         <ul className='nav_menu__menu-dropmenu'>
-                            <li className='nav_menu-item-dropmenu'><Link to="/" className="nav_menu-link" onClick={handleLinkClick}>Informacje
-                            </Link></li>
+                            {auth?.roles?.includes(100) && <li className='nav_menu-item-dropmenu'><Link to="/" className="nav_menu-link" onClick={handleLinkClick}>Informacje
+                            </Link></li>}
                             {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link to="/register" className="nav_menu-link" onClick={handleLinkClick}>Dodaj użytkownika
                             </Link></li>}
                             {/* {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zmień uprawnienia
