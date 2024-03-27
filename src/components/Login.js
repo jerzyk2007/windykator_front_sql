@@ -27,9 +27,8 @@ const Login = () => {
                     withCredentials: true
                 }
             );
-            console.log(response.data);
-            // const { username, usersurname, roles, _id, permissions } = response?.data;
-            // setAuth({ username, usersurname, userlogin, roles, _id, permissions });
+            const { username, usersurname, roles, _id, permissions } = response?.data;
+            setAuth({ username, usersurname, userlogin, roles, _id, permissions });
             navigate('/');
         }
         catch (err) {
