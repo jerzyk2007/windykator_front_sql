@@ -1,0 +1,53 @@
+.lawyer_name {
+  border: 1px solid black;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+
+.lawyer_name label {
+  min-width: 100px;
+  font-size: 1.2rem;
+  height: 100%;
+  flex-basis: 15%;
+  text-align: center;
+  padding: 3px;
+  background-color: #ffffff;
+  border-right: 1px solid black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lawyer_name label:hover {
+  background-color: rgba(0, 255, 255, 0.5);
+}
+
+.lawyer_name .lawyer_name--select {
+  min-width: 500px;
+  padding-left: 70px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.lawyer_name--arrow {
+  color: rgb(255, 0, 0);
+  margin-right: 5px;
+  font-size: 1.5rem;
+}
+
+.lawyer_name .lawyer_name--select--car {
+  padding-left: 110px;
+}
+
+.lawyer_name--car-arrow {
+  margin: 0 10px 0 65px;
+}
+
+.lawyer_name .lawyer_name--percent {
+  border: none;
+}

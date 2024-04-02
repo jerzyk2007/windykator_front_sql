@@ -1,0 +1,49 @@
+.lawyer_account {
+  border: 1px solid black;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+
+.lawyer_account label {
+  min-width: 100px;
+  font-size: 1.2rem;
+  height: 100%;
+  flex-basis: 15%;
+  text-align: center;
+  padding: 3px;
+  background-color: #ffffff;
+  border-right: 1px solid black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lawyer_account label:hover {
+  background-color: rgba(0, 255, 255, 0.5);
+}
+
+.lawyer_account .lawyer_account--select {
+  min-width: 500px;
+  padding-left: 10px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.lawyer_account--arrow {
+  color: rgb(255, 0, 0);
+  margin-right: 5px;
+  font-size: 1.5rem;
+}
+
+.lawyer_account .lawyer_account--select--car {
+  padding-left: 25px;
+}
+
+.lawyer_account .lawyer_account--percent {
+  border: none;
+}

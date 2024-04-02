@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import "./AgingOwners.css";
+import "./LawyerName.css";
 
-const AgingOwners = ({
+const LawyerName = ({
   filteredData,
-  own,
+  name,
   setTableData,
   showTable,
   setShowTable,
   style,
 }) => {
   const [arrow, setArrow] = useState({
-    [own]: false,
+    [name]: false,
   });
 
   const counter = filteredData.reduce((acc, doc) => {
-    if (doc["OWNER"] === own) {
+    if (doc["JAKA KANCELARIA"] === name) {
       acc++;
     }
 
@@ -24,13 +24,15 @@ const AgingOwners = ({
 
   let sum = 0;
   const docSum = filteredData.map((item) => {
-    if (item["OWNER"] === own) {
+    if (item["JAKA KANCELARIA"] === name) {
       sum += item[" KWOTA DO ROZLICZENIA FK "];
     }
     return sum;
   });
 
-  const filteredObjects = filteredData.filter((obj) => obj["OWNER"] === own);
+  const filteredObjects = filteredData.filter(
+    (obj) => obj["JAKA KANCELARIA"] === name
+  );
 
   const percent = "do ustalenia";
 
@@ -42,41 +44,38 @@ const AgingOwners = ({
   return (
     <>
       <section
-        className="aging_owners"
+        className="lawyer_name"
         style={counter === 0 || showTable ? { display: "none" } : null}
       >
         <label
           className={
             style === "car"
-              ? "aging_owners--select aging_owners--select--car"
-              : "aging_owners--select"
+              ? "lawyer_name--select lawyer_name--select--car"
+              : "lawyer_name--select"
           }
           onClick={() =>
             setArrow({
-              [own]: !arrow[own],
+              [name]: !arrow[name],
             })
           }
         >
           {/* <IoIosArrowDown
-                        className='aging_owners--arrow'
+                        className='lawyer_name--arrow'
                         style={!arrow[own] ? null : { rotate: "180deg" }}
                     /> */}
-          {own}
+          {name}
         </label>
-        <label
-          className="aging_owners--doc-counter"
-          onDoubleClick={handleClick}
-        >
+        <label className="lawyer_name--doc-counter" onDoubleClick={handleClick}>
           {counter}
         </label>
-        <label className="aging_owners--doc-sum" onDoubleClick={handleClick}>
+        <label className="lawyer_name--doc-sum" onDoubleClick={handleClick}>
           {sum.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
           })}
         </label>
-        <label className="aging_owners--percent" onDoubleClick={handleClick}>
+        <label className="lawyer_name--percent" onDoubleClick={handleClick}>
           {percent}
         </label>
       </section>
@@ -84,4 +83,4 @@ const AgingOwners = ({
   );
 };
 
-export default AgingOwners;
+export default LawyerName;

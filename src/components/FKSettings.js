@@ -57,6 +57,16 @@ const FKSettings = () => {
 
     let filteredData = [...response.data];
 
+    if (filter.raport === "lawyerRaport") {
+      filteredData = filteredData.filter(
+        (item) => item["CZY KANCELARIA\r\nTAK/ NIE"] === "TAK"
+      );
+    }
+
+    // const filterLawyer = filteredDataRaport.filter(
+    //     (obj) => obj["CZY KANCELARIA\r\nTAK/ NIE"] === "TAK"
+    //   );
+
     if (filter.payment !== "Wszystko") {
       if (filter.payment === "Przeterminowane") {
         filteredData = filteredData.filter(
@@ -188,7 +198,6 @@ const FKSettings = () => {
                       value="lawyerRaport"
                       control={<Radio />}
                       label="Kancelarie"
-                      disabled
                     />
                   </RadioGroup>
                 </FormControl>
