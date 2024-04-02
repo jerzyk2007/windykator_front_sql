@@ -25,12 +25,18 @@ const GenerateAreas = ({
   }, 0);
 
   let sum = 0;
-  const docSum = filteredData.map((item) => {
+  filteredData.forEach((item) => {
     if (item["OBSZAR"] === area) {
       sum += item[" KWOTA DO ROZLICZENIA FK "];
     }
     return sum;
   });
+  // const docSum = filteredData.map((item) => {
+  //   if (item["OBSZAR"] === area) {
+  //     sum += item[" KWOTA DO ROZLICZENIA FK "];
+  //   }
+  //   return sum;
+  // });
 
   const percent = "do ustalenia";
 
@@ -82,21 +88,6 @@ const GenerateAreas = ({
       });
     }
   }
-
-  // useEffect(() => {
-  //     // console.log(area);
-  //     setButtonArea(prev => {
-  //         return [
-  //             ...prev,
-  //             [area]:
-  //             {
-  //                 name: area,
-  //                 data: filteredObjects
-  //             }
-  //         ];
-  //     });
-
-  // }, [area]);
 
   useEffect(() => {
     setButtonArea((prev) => {

@@ -15,7 +15,7 @@ const FKSettings = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { pleaseWait, setPleaseWait } = useData();
 
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [filteredDataRaport, setFilteredDataRaport] = useState([]);
   const [filter, setFilter] = useState({
     raport: "accountRaport",
@@ -27,61 +27,38 @@ const FKSettings = () => {
   const [showTable, setShowTable] = useState(false);
   const [tableData, setTableData] = useState([]);
 
-  const sendDataFromExcel = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return console.log("Brak pliku");
-    if (!file.name.endsWith(".xlsx")) {
-      console.log("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
-      return;
-    }
-    try {
-      const formData = new FormData();
-      formData.append("excelFile", file);
-      const response = await axiosPrivateIntercept.post(
-        "/fk/send-documents",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-    } catch (err) {
-      console.error("Błąd przesyłania pliku:", err);
-    }
-  };
+  // dodawanie danych do DB
+  // const sendDataFromExcel = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return console.log("Brak pliku");
+  //   if (!file.name.endsWith(".xlsx")) {
+  //     console.log("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
+  //     return;
+  //   }
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("excelFile", file);
+  //     const response = await axiosPrivateIntercept.post(
+  //       "/fk/send-documents",
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+  //   } catch (err) {
+  //     console.error("Błąd przesyłania pliku:", err);
+  //   }
+  // };
 
   const getFilteredData = async () => {
     setPleaseWait(true);
-    const response = await axiosPrivateIntercept.get("/fk/get-data");
+    const response = await axiosPrivateIntercept.post("/fk/get-data", {
+      filter,
+    });
 
-    let filteredData = [...response.data];
-
-    if (filter.raport === "lawyerRaport") {
-      filteredData = filteredData.filter(
-        (item) => item["CZY KANCELARIA\r\nTAK/ NIE"] === "TAK"
-      );
-    }
-
-    // const filterLawyer = filteredDataRaport.filter(
-    //     (obj) => obj["CZY KANCELARIA\r\nTAK/ NIE"] === "TAK"
-    //   );
-
-    if (filter.payment !== "Wszystko") {
-      if (filter.payment === "Przeterminowane") {
-        filteredData = filteredData.filter(
-          (item) =>
-            item["PRZETERMINOWANE/NIEPRZETERMINOWANE"] === "PRZETERMINOWANE"
-        );
-      } else if (filter.payment === "Nieprzeterminowane") {
-        filteredData = filteredData.filter(
-          (item) =>
-            item["PRZETERMINOWANE/NIEPRZETERMINOWANE"] === "NIEPRZETERMINOWANE"
-        );
-      }
-    }
-
-    setFilteredDataRaport(filteredData);
+    setFilteredDataRaport(response.data);
     setSettingsSelect(false);
     setShowRaport(true);
     setShowTable(false);
