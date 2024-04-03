@@ -743,6 +743,7 @@ const Table = ({ info }) => {
   const [columns, setColumns] = useState([]);
   const [tableSize, setTableSize] = useState(500);
   const [pagination, setPagination] = useState({});
+  const [filteredColumns, setFilteredColumns] = useState([]);
 
   const [sorting, setSorting] = useState([
     { id: "ILE_DNI_PO_TERMINIE", desc: false },
@@ -971,6 +972,10 @@ const Table = ({ info }) => {
       }
 
       delete modifiedItem.type;
+      //   console.log(modifiedItem);
+      //   setFilteredColumns((prev) => {
+      //     return { ...prev, modifiedItem };
+      //   });
 
       return modifiedItem;
     });
@@ -1080,11 +1085,117 @@ const Table = ({ info }) => {
     };
   }, [info]);
 
+  // Funkcja do usuwania niepotrzebnych kluczy z obiektów JSON
+  //   const filterKeys = (data, keys) => {
+  //     return data.map((obj) => {
+  //       return Object.keys(obj)
+  //         .filter((key) => keys.includes(key))
+  //         .reduce((acc, key) => {
+  //           acc[key] = obj[key];
+  //           return acc;
+  //         }, {});
+  //     });
+  //   };
+
+  // Funkcja sortująca
+  const sortColumns = (columns, pinning) => {
+    const leftPinned = pinning.left || [];
+    const rightPinned = pinning.right || [];
+
+    const sortedColumns = [...columns];
+
+    // Sortowanie kolumn przypiętych z lewej strony
+    sortedColumns.sort((a, b) => {
+      const aIndex = leftPinned.indexOf(a);
+      const bIndex = leftPinned.indexOf(b);
+      if (aIndex !== -1 && bIndex !== -1) {
+        return aIndex - bIndex;
+      } else if (aIndex !== -1) {
+        return -1;
+      } else if (bIndex !== -1) {
+        return 1;
+      }
+      return 0;
+    });
+
+    // Sortowanie kolumn przypiętych z prawej strony
+    sortedColumns.sort((a, b) => {
+      const aIndex = rightPinned.indexOf(a);
+      const bIndex = rightPinned.indexOf(b);
+      if (aIndex !== -1 && bIndex !== -1) {
+        return aIndex - bIndex;
+      } else if (aIndex !== -1) {
+        return 1;
+      } else if (bIndex !== -1) {
+        return -1;
+      }
+      return 0;
+    });
+
+    return sortedColumns;
+  };
+
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);
-    console.log(rowData);
-    // console.log(rows);
+
+    const orderColumns = [...columnOrder].filter(
+      (item) => item !== "mrt-row-spacer"
+    );
+
+    const arrayColumns = orderColumns.filter(
+      (item) => columnVisibility[item] !== false
+    );
+
+    // wywołanie funkcji która posortuje kolumny wg ustaiweń usera, order/pining
+    const sortedColumns = sortColumns(arrayColumns, columnPinning);
+
+    const filteredData = rowData.map((obj) => {
+      return Object.keys(obj)
+        .filter((key) => arrayColumns.includes(key))
+        .reduce((acc, key) => {
+          // Sprawdź, czy klucz znajduje się w mapowaniu
+          const mappedKey = columns.find((col) => col.accessorKey === key);
+          // Jeśli klucz został znaleziony, użyj nowej nazwy klucza (header)
+          const newKey = mappedKey ? mappedKey.header : key;
+
+          acc[newKey] = obj[key];
+          return acc;
+        }, {});
+    });
+
+    console.log(filteredData);
+    console.log(sortedColumns);
+
+    // const filteredData = rowData.map((obj) => {
+    //   const orderedObj = {};
+    //   arrayColumns.forEach((key) => {
+    //     if (obj.hasOwnProperty(key)) {
+    //       orderedObj[key] = obj[key];
+    //     }
+    //   });
+    //   return orderedObj;
+    // });
+
+    // const cleanData = filteredData.map((doc) => {
+    //   const { _id, __v, UWAGI_ASYSTENT, UWAGI_Z_FAKTURY, ...cleanDoc } = doc;
+    //   if (Array.isArray(UWAGI_ASYSTENT)) {
+    //     cleanDoc.UWAGI_ASYSTENT = UWAGI_ASYSTENT.join(", ");
+    //   }
+    //   if (Array.isArray(UWAGI_Z_FAKTURY)) {
+    //     cleanDoc.UWAGI_Z_FAKTURY = UWAGI_Z_FAKTURY.join(", ");
+    //   }
+    //   return cleanDoc;
+    // });
+
+    // const wb = xlsx.utils.book_new();
+    // const ws = xlsx.utils.json_to_sheet(cleanData);
+    // xlsx.utils.book_append_sheet(wb, ws, "Tabela");
+    // xlsx.writeFile(wb, "Tabela.xlsx");
   };
+
+  //   useEffect(() => {
+  //     console.log(columnOrder);
+  //   }, [columnOrder, columns]);
 
   return (
     <section className="actual_table">
