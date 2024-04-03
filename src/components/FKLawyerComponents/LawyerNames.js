@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { IoIosArrowDown } from "react-icons/io";
-import "./LawyerName.css";
+import React, { useState } from "react";
+// import { IoIosArrowDown } from "react-icons/io";
+import "./LawyerNames.css";
 
-const LawyerName = ({
+const LawyerNames = ({
   filteredData,
   name,
   setTableData,
@@ -23,7 +23,7 @@ const LawyerName = ({
   }, 0);
 
   let sum = 0;
-  const docSum = filteredData.map((item) => {
+  filteredData.forEach((item) => {
     if (item["JAKA KANCELARIA"] === name) {
       sum += item[" KWOTA DO ROZLICZENIA FK "];
     }
@@ -44,14 +44,14 @@ const LawyerName = ({
   return (
     <>
       <section
-        className="lawyer_name"
+        className="lawyer_names"
         style={counter === 0 || showTable ? { display: "none" } : null}
       >
         <label
           className={
             style === "car"
-              ? "lawyer_name--select lawyer_name--select--car"
-              : "lawyer_name--select"
+              ? "lawyer_names--select lawyer_names--select--car"
+              : "lawyer_names--select"
           }
           onClick={() =>
             setArrow({
@@ -60,22 +60,25 @@ const LawyerName = ({
           }
         >
           {/* <IoIosArrowDown
-                        className='lawyer_name--arrow'
+                        className='lawyer_names--arrow'
                         style={!arrow[own] ? null : { rotate: "180deg" }}
                     /> */}
           {name}
         </label>
-        <label className="lawyer_name--doc-counter" onDoubleClick={handleClick}>
+        <label
+          className="lawyer_names--doc-counter"
+          onDoubleClick={handleClick}
+        >
           {counter}
         </label>
-        <label className="lawyer_name--doc-sum" onDoubleClick={handleClick}>
+        <label className="lawyer_names--doc-sum" onDoubleClick={handleClick}>
           {sum.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
           })}
         </label>
-        <label className="lawyer_name--percent" onDoubleClick={handleClick}>
+        <label className="lawyer_names--percent" onDoubleClick={handleClick}>
           {percent}
         </label>
       </section>
@@ -83,4 +86,4 @@ const LawyerName = ({
   );
 };
 
-export default LawyerName;
+export default LawyerNames;

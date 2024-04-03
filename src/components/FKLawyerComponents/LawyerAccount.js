@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import LawyerStage from "./LawyerStage";
+import LawyerStages from "./LawyerStages";
 import "./LawyerAccount.css";
 
 const LawyerAccount = ({
@@ -19,7 +19,7 @@ const LawyerAccount = ({
   const counter = filteredDataRaport.length;
 
   let sum = 0;
-  const docSum = filteredDataRaport.map((item) => {
+  filteredDataRaport.forEach((item) => {
     sum += item[" KWOTA DO ROZLICZENIA FK "];
   });
 
@@ -32,7 +32,7 @@ const LawyerAccount = ({
 
   const generateItems = lawyerArray.map((item, index) => {
     return (
-      <LawyerStage
+      <LawyerStages
         key={index}
         style=""
         stage={item}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import LawyerName from "./LawyerName";
-import "./LawyerStage.css";
+import LawyerDepartments from "./LawyerDepartments";
+import "./LawyerStages.css";
 
-const LawyerStage = ({
+const LawyerStages = ({
   stage,
   filteredData,
   setTableData,
@@ -15,7 +15,7 @@ const LawyerStage = ({
     [stage]: false,
   });
 
-  const [lawItems, setLawItems] = useState([]);
+  const [depItems, setDepItems] = useState([]);
 
   const counter = filteredData.reduce((acc, doc) => {
     if (doc["ETAP SPRAWY"] === stage) {
@@ -25,7 +25,7 @@ const LawyerStage = ({
   }, 0);
 
   let sum = 0;
-  const docSum = filteredData.map((item) => {
+  filteredData.forEach((item) => {
     if (item["ETAP SPRAWY"] === stage) {
       sum += item[" KWOTA DO ROZLICZENIA FK "];
     }
@@ -43,12 +43,12 @@ const LawyerStage = ({
     setShowTable(true);
   };
 
-  const generateItems = lawItems.map((item, index) => {
+  const generateItems = depItems.map((item, index) => {
     return (
-      <LawyerName
+      <LawyerDepartments
         key={index}
         style={style}
-        name={item}
+        dep={item}
         filteredData={filteredObjects}
         setTableData={setTableData}
         showTable={showTable}
@@ -58,28 +58,27 @@ const LawyerStage = ({
   });
 
   useEffect(() => {
-    const lawArray = [
+    const depArray = [
       ...new Set(
         filteredObjects
           .filter((item) => item["ETAP SPRAWY"])
-          .map((item) => item["JAKA KANCELARIA"])
+          .map((item) => item["DZIAŁ"])
       ),
     ].sort();
-
-    setLawItems(lawArray);
+    setDepItems(depArray);
   }, [stage]);
 
   return (
     <>
       <section
-        className="lawyer_stage"
+        className="lawyer_stages"
         style={counter === 0 || showTable ? { display: "none" } : null}
       >
         <label
           className={
             style === "car"
-              ? "lawyer_stage--select lawyer_stage--select--car"
-              : "lawyer_stage--select"
+              ? "lawyer_stages--select lawyer_stages--select--car"
+              : "lawyer_stages--select"
           }
           onClick={() =>
             setArrow({
@@ -88,25 +87,25 @@ const LawyerStage = ({
           }
         >
           <IoIosArrowDown
-            className="lawyer_stage--arrow"
+            className="lawyer_stages--arrow"
             style={!arrow[stage] ? null : { rotate: "180deg" }}
           />
           {stage}
         </label>
         <label
-          className="lawyer_stage--doc-counter"
+          className="lawyer_stages--doc-counter"
           onDoubleClick={handleClick}
         >
           {counter}
         </label>
-        <label className="lawyer_stage--doc-sum" onDoubleClick={handleClick}>
+        <label className="lawyer_stages--doc-sum" onDoubleClick={handleClick}>
           {sum.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
           })}
         </label>
-        <label className="lawyer_stage--percent" onDoubleClick={handleClick}>
+        <label className="lawyer_stages--percent" onDoubleClick={handleClick}>
           {percent}
         </label>
       </section>
@@ -115,4 +114,4 @@ const LawyerStage = ({
   );
 };
 
-export default LawyerStage;
+export default LawyerStages;

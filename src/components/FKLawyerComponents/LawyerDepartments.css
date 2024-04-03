@@ -1,4 +1,4 @@
-.lawyer_stage {
+.lawyer_departments {
   border: 1px solid black;
   border-top: none;
   display: flex;
@@ -6,14 +6,14 @@
   user-select: none;
 }
 
-.lawyer_stage label {
+.lawyer_departments label {
   min-width: 100px;
   font-size: 1.2rem;
   height: 100%;
   flex-basis: 15%;
   text-align: center;
   padding: 3px;
-  background-color: #ffffff;
+  background-color: #dcffe7;
   border-right: 1px solid black;
   cursor: pointer;
   display: flex;
@@ -21,29 +21,34 @@
   justify-content: center;
 }
 
-.lawyer_stage label:hover {
-  background-color: rgba(0, 255, 255, 0.5);
+.lawyer_departments:hover label {
+  background-color: rgba(0, 255, 255, 0.3);
+  color: red;
+  font-weight: 600;
+}
+.lawyer_departments label:hover {
+  background-color: rgba(0, 255, 255, 0.7);
 }
 
-.lawyer_stage .lawyer_stage--select {
+.lawyer_departments .lawyer_departments--select {
   min-width: 500px;
-  padding-left: 25px;
+  padding-left: 40px;
   flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: start;
 }
 
-.lawyer_stage--arrow {
+.lawyer_departments--arrow {
   color: rgb(255, 0, 0);
   margin-right: 5px;
   font-size: 1.5rem;
 }
 
-.lawyer_stage .lawyer_stage--select--car {
+.lawyer_departments .lawyer_departments--select--car {
   padding-left: 40px;
 }
 
-.lawyer_stage .lawyer_stage--percent {
+.lawyer_departments .lawyer_departments--percent {
   border: none;
 }
