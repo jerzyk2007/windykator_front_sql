@@ -21,6 +21,7 @@ const FKSettings = () => {
     raport: "accountRaport",
     business: "201203",
     payment: "Przeterminowane",
+    actions: "Tak",
   });
   const [showRaport, setShowRaport] = useState(false);
   const [showSettingsSelect, setSettingsSelect] = useState(false);
@@ -70,6 +71,7 @@ const FKSettings = () => {
   };
 
   useEffect(() => {
+    console.log(filter);
     setFilteredDataRaport([]);
   }, [filter]);
 
@@ -101,6 +103,7 @@ const FKSettings = () => {
                     Raport:<span>Kancelarie</span>
                   </label>
                 )}
+
                 {filter.business === "201203" &&
                   filter.raport === "accountRaport" && (
                     <label className="fk_settings-container-info--text">
@@ -119,6 +122,7 @@ const FKSettings = () => {
                       Obszar:<span>203</span>
                     </label>
                   )}
+
                 {filter.payment === "Wszystko" && (
                   <label className="fk_settings-container-info--text">
                     Termin:<span>Wszystko</span>
@@ -132,6 +136,22 @@ const FKSettings = () => {
                 {filter.payment === "Nieprzeterminowane" && (
                   <label className="fk_settings-container-info--text">
                     Termin:<span>{filter.payment}</span>
+                  </label>
+                )}
+
+                {filter.actions === "All" && (
+                  <label className="fk_settings-container-info--text">
+                    Podjęte działania:<span>Całość</span>
+                  </label>
+                )}
+                {filter.actions === "Tak" && (
+                  <label className="fk_settings-container-info--text">
+                    Podjęte działania:<span>{filter.actions}</span>
+                  </label>
+                )}
+                {filter.actions === "Nie" && (
+                  <label className="fk_settings-container-info--text">
+                    Podjęte działania:<span>{filter.actions}</span>
                   </label>
                 )}
               </section>
@@ -153,9 +173,15 @@ const FKSettings = () => {
                     value={filter.raport}
                     onChange={(e) =>
                       setFilter((prev) => {
+                        const updatedRaport = e.target.value;
+                        const updatedActions =
+                          updatedRaport === "lawyerRaport"
+                            ? "Tak"
+                            : prev.actions;
                         return {
                           ...prev,
-                          raport: e.target.value,
+                          raport: updatedRaport,
+                          actions: updatedActions,
                         };
                       })
                     }
@@ -247,6 +273,42 @@ const FKSettings = () => {
                   </RadioGroup>
                 </FormControl>
               </section>
+
+              {filter.raport !== "lawyerRaport" && (
+                <section className="fk_settings-container-select">
+                  <FormControl>
+                    <FormLabel>Podjęte działania</FormLabel>
+                    <RadioGroup
+                      value={filter.actions}
+                      onChange={(e) =>
+                        setFilter((prev) => {
+                          return {
+                            ...prev,
+                            actions: e.target.value,
+                          };
+                        })
+                      }
+                      name="radio-buttons-group"
+                    >
+                      <FormControlLabel
+                        value="All"
+                        control={<Radio />}
+                        label="Całość"
+                      />
+                      <FormControlLabel
+                        value="Tak"
+                        control={<Radio />}
+                        label="Tak"
+                      />
+                      <FormControlLabel
+                        value="Nie"
+                        control={<Radio />}
+                        label="Nie"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </section>
+              )}
               <section className="fk_settings-container-generate">
                 <Button
                   variant="contained"
