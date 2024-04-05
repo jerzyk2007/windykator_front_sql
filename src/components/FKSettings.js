@@ -28,6 +28,12 @@ const FKSettings = () => {
   const [showTable, setShowTable] = useState(false);
   const [tableData, setTableData] = useState([]);
 
+  const raportLabels = {
+    accountRaport: "Konta",
+    agingRaport: "Wiekowanie",
+    lawyerRaport: "Kancelarie",
+  };
+
   // dodawanie danych do DB
   // const sendDataFromExcel = async (e) => {
   //   const file = e.target.files[0];
@@ -67,11 +73,11 @@ const FKSettings = () => {
   };
 
   const handleSettingsSelect = () => {
+    setFilteredDataRaport([]);
     setSettingsSelect(true);
   };
 
   useEffect(() => {
-    console.log(filter);
     setFilteredDataRaport([]);
   }, [filter]);
 
@@ -88,72 +94,31 @@ const FKSettings = () => {
           {!showSettingsSelect && (
             <section className="fk_settings-container-panel">
               <section className="fk_settings-container-info">
+                <label className="fk_settings-container-info--text">
+                  Raport:<span>{raportLabels[filter.raport]}</span>
+                </label>
+
                 {filter.raport === "accountRaport" && (
                   <label className="fk_settings-container-info--text">
-                    Raport:<span>Konta</span>
-                  </label>
-                )}
-                {filter.raport === "agingRaport" && (
-                  <label className="fk_settings-container-info--text">
-                    Raport:<span>Wiekowanie</span>
-                  </label>
-                )}
-                {filter.raport === "lawyerRaport" && (
-                  <label className="fk_settings-container-info--text">
-                    Raport:<span>Kancelarie</span>
+                    Obszar:
+                    <span>
+                      {filter.business === "201203"
+                        ? "201 + 203"
+                        : filter.business}
+                    </span>
                   </label>
                 )}
 
-                {filter.business === "201203" &&
-                  filter.raport === "accountRaport" && (
-                    <label className="fk_settings-container-info--text">
-                      Obszar:<span>201 + 203</span>
-                    </label>
-                  )}
-                {filter.business === "201" &&
-                  filter.raport === "accountRaport" && (
-                    <label className="fk_settings-container-info--text">
-                      Obszar:<span>201</span>
-                    </label>
-                  )}
-                {filter.business === "203" &&
-                  filter.raport === "accountRaport" && (
-                    <label className="fk_settings-container-info--text">
-                      Obszar:<span>203</span>
-                    </label>
-                  )}
+                <label className="fk_settings-container-info--text">
+                  Termin:<span>{filter.payment}</span>
+                </label>
 
-                {filter.payment === "Wszystko" && (
-                  <label className="fk_settings-container-info--text">
-                    Termin:<span>Wszystko</span>
-                  </label>
-                )}
-                {filter.payment === "Przeterminowane" && (
-                  <label className="fk_settings-container-info--text">
-                    Termin:<span>{filter.payment}</span>
-                  </label>
-                )}
-                {filter.payment === "Nieprzeterminowane" && (
-                  <label className="fk_settings-container-info--text">
-                    Termin:<span>{filter.payment}</span>
-                  </label>
-                )}
-
-                {filter.actions === "All" && (
-                  <label className="fk_settings-container-info--text">
-                    Podjęte działania:<span>Całość</span>
-                  </label>
-                )}
-                {filter.actions === "Tak" && (
-                  <label className="fk_settings-container-info--text">
-                    Podjęte działania:<span>{filter.actions}</span>
-                  </label>
-                )}
-                {filter.actions === "Nie" && (
-                  <label className="fk_settings-container-info--text">
-                    Podjęte działania:<span>{filter.actions}</span>
-                  </label>
-                )}
+                <label className="fk_settings-container-info--text">
+                  Podjęte działania:
+                  <span>
+                    {filter.actions === "All" ? "Całość" : filter.actions}
+                  </span>
+                </label>
               </section>
               <Button
                 variant="contained"
