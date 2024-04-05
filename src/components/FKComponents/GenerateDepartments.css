@@ -1,51 +1,49 @@
 .generate_departments {
-    border: 1px solid black;
-    border-top: none;
-    display: flex;
-    align-items: center;
-    user-select: none;
+  border: 1px solid black;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  user-select: none;
 }
 
 .generate_departments label {
-    min-width: 100px;
-    font-size: 1.2rem;
-    height: 100%;
-    flex-basis: 15%;
-    text-align: center;
-    padding: 3px;
-    background-color: #cdf3fa;
-    border-right: 1px solid black;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  min-width: 100px;
+  font-size: 1.2rem;
+  height: 100%;
+  flex-basis: 15%;
+  text-align: center;
+  padding: 3px;
+  background-color: #fff0ff;
+  border-right: 1px solid black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .generate_departments label:hover {
-    background-color: rgba(0, 255, 255, .5);
+  background-color: rgba(0, 255, 255, 0.5);
 }
 
 .generate_departments .generate_departments--select {
-    min-width: 500px;
-    padding-left: 60px;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: start;
+  min-width: 500px;
+  padding-left: 40px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: start;
 }
 
 .generate_departments--arrow {
-    color: rgb(10, 120, 223);
-    margin-right: 5px;
-    font-size: 1.5rem;
+  color: rgb(10, 120, 223);
+  margin-right: 5px;
+  font-size: 1.5rem;
 }
 
 .generate_departments .generate_departments--select--car {
-    padding-left: 80px;
-
-
+  padding-left: 55px;
 }
 
 .generate_departments .generate_departments--percent {
-    border: none;
+  border: none;
 }

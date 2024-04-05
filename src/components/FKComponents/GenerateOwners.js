@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import GenerateDepartments from "./GenerateDepartments";
+import GenerateAging from "./GenerateAging";
 import "./GenerateOwners.css";
 
 const GenerateOwners = ({
@@ -24,7 +25,7 @@ const GenerateOwners = ({
   }, 0);
 
   let sum = 0;
-  const docSum = filteredData.map((item) => {
+  filteredData.forEach((item) => {
     if (item["OWNER"] === own) {
       sum += item[" KWOTA DO ROZLICZENIA FK "];
     }
@@ -42,19 +43,25 @@ const GenerateOwners = ({
 
   let generateItems = [];
   if (arrow[own]) {
-    const departments = [
+    const aging = [
       ...new Set(
         filteredObjects
-          .filter((dep) => dep["OWNER"] === own)
-          .map((dep) => dep["DZIAŁ"])
+          .filter((age) => age["OWNER"] === own)
+          .map((age) => age["Przedział"])
       ),
     ];
-    generateItems = departments.map((dep, index) => {
+
+    const ageArray = ["< 1", " 1 - 30", " 31 - 90", " 91 - 180", "> 360"];
+
+    // Utwórz nową tablicę, zachowując kolejność z ageArray
+    const sortedAging = ageArray.filter((item) => aging.includes(item));
+
+    generateItems = sortedAging.map((age, index) => {
       return (
-        <GenerateDepartments
+        <GenerateAging
           key={index}
-          dep={dep}
           style={style}
+          age={age}
           filteredData={filteredObjects}
           setTableData={setTableData}
           showTable={showTable}

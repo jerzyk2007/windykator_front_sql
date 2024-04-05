@@ -109,7 +109,6 @@ const FKTable = ({ tableData, setShowTable }) => {
     const keys = Object.keys(firstObject);
 
     const generatedColumns = keys.map((key) => {
-      console.log(key);
       return {
         accessorKey: [key],
         header: [key],

@@ -25,9 +25,6 @@ const GenerateAccount = ({
   filteredDataRaport.forEach((item) => {
     sum += item[" KWOTA DO ROZLICZENIA FK "];
   });
-  //   const docSum = filteredDataRaport.map((item) => {
-  //     sum += item[" KWOTA DO ROZLICZENIA FK "];
-  //   });
 
   const percent = "do ustalenia";
 

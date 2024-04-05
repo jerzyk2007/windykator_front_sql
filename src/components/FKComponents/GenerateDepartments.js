@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import GenerateAging from "./GenerateAging";
+import GenerateOwners from "./GenerateOwners";
 import "./GenerateDepartments.css";
 
 const GenerateDepartments = ({
@@ -41,26 +42,20 @@ const GenerateDepartments = ({
 
   let generateItems = [];
   if (arrow[dep]) {
-    const aging = [
+    const owner = [
       ...new Set(
         filteredObjects
-          .filter((age) => age["DZIAŁ"] === dep)
-          .map((age) => age["Przedział"])
+          .filter((own) => own["DZIAŁ"] === dep)
+          .map((own) => own["OWNER"])
       ),
     ];
-
-    const ageArray = ["< 1", " 1 - 30", " 31 - 90", " 91 - 180", "> 360"];
-
-    // Utwórz nową tablicę, zachowując kolejność z ageArray
-    const sortedAging = ageArray.filter((item) => aging.includes(item));
-
-    generateItems = sortedAging.map((age, index) => {
+    generateItems = owner.map((own, index) => {
       return (
-        <GenerateAging
+        <GenerateOwners
           key={index}
           style={style}
-          age={age}
           filteredData={filteredObjects}
+          own={own}
           setTableData={setTableData}
           showTable={showTable}
           setShowTable={setShowTable}
@@ -88,7 +83,6 @@ const GenerateDepartments = ({
           }
         >
           <IoIosArrowDown
-            // className='generate_departments--arrow'
             className="generate_departments--arrow"
             style={!arrow[dep] ? null : { rotate: "180deg" }}
           />

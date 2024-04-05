@@ -1,49 +1,49 @@
 .generate_aging {
-    border: 1px solid black;
-    border-top: none;
-    display: flex;
-    align-items: center;
-    user-select: none;
+  border: 1px solid black;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  user-select: none;
 }
 
 .generate_aging label {
-    min-width: 100px;
-    font-size: 1.2rem;
-    height: 100%;
-    flex-basis: 15%;
-    text-align: center;
-    padding: 3px;
-    background-color: #ffffff;
-    border-right: 1px solid black;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  min-width: 100px;
+  font-size: 1.2rem;
+  height: 100%;
+  flex-basis: 15%;
+  text-align: center;
+  padding: 3px;
+  background-color: #ffffff;
+  border-right: 1px solid black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .generate_aging label:hover {
-    background-color: rgba(0, 255, 255, .5);
+  background-color: rgba(0, 255, 255, 0.5);
 }
 
 .generate_aging .generate_aging--select {
-    min-width: 500px;
-    padding-left: 95px;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: start;
+  min-width: 500px;
+  padding-left: 85px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: start;
 }
 
 .generate_aging--arrow {
-    color: rgb(189, 192, 8);
-    margin-right: 5px;
-    font-size: 1.5rem;
+  color: rgb(189, 192, 8);
+  margin-right: 5px;
+  font-size: 1.5rem;
 }
 
 .generate_aging .generate_aging--select--car {
-    padding-left: 110px;
+  padding-left: 100px;
 }
 
 .generate_aging .generate_aging--percent {
-    border: none;
+  border: none;
 }

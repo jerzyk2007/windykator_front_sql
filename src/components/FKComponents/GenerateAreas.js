@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import GenerateCars from "./GenerateCars";
-import GenerateOwners from "./GenerateOwners";
+import GenerateDepartments from "./GenerateDepartments";
 import "./GenerateAreas.css";
 
 const GenerateAreas = ({
@@ -31,12 +31,6 @@ const GenerateAreas = ({
     }
     return sum;
   });
-  // const docSum = filteredData.map((item) => {
-  //   if (item["OBSZAR"] === area) {
-  //     sum += item[" KWOTA DO ROZLICZENIA FK "];
-  //   }
-  //   return sum;
-  // });
 
   const percent = "do ustalenia";
 
@@ -66,20 +60,22 @@ const GenerateAreas = ({
         );
       });
     } else {
-      const owner = [
+      const departments = [
         ...new Set(
           filteredObjects
-            .filter((own) => own["OBSZAR"] === area)
-            .map((own) => own["OWNER"])
+            .filter((dep) => dep["OBSZAR"] === area)
+            .map((dep) => dep["DZIAŁ"])
+            .sort()
         ),
       ];
-      generateItems = owner.map((own, index) => {
+
+      generateItems = departments.map((dep, index) => {
         return (
-          <GenerateOwners
+          <GenerateDepartments
             key={index}
+            dep={dep}
             style={style}
             filteredData={filteredObjects}
-            own={own}
             setTableData={setTableData}
             showTable={showTable}
             setShowTable={setShowTable}

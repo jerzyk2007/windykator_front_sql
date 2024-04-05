@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import GenerateOwners from "./GenerateOwners";
+import GenerateDepartments from "./GenerateDepartments";
 import "./GenerateCars.css";
 
 const GenerateCars = ({
@@ -44,21 +45,22 @@ const GenerateCars = ({
 
   let generateItems = [];
   if (arrow.car) {
-    const owner = [
+    const departments = [
       ...new Set(
         filteredObjects
-          .filter((own) => own["OBSZAR"] === area)
-          .map((own) => own["OWNER"])
+          .filter((dep) => dep["OBSZAR"] === area)
+          .map((dep) => dep["DZIAŁ"])
+          .sort()
       ),
     ];
-    generateItems = owner.map((own, index) => {
+
+    generateItems = departments.map((dep, index) => {
       return (
-        <GenerateOwners
+        <GenerateDepartments
           key={index}
+          dep={dep}
           style="car"
           filteredData={filteredObjects}
-          area={area}
-          own={own}
           setTableData={setTableData}
           showTable={showTable}
           setShowTable={setShowTable}
