@@ -22,12 +22,12 @@
 }
 
 .lawyer_stages:hover label {
-  background-color: rgba(0, 255, 255, 0.3);
+  background-color: rgba(94, 94, 94, 0.3);
   color: red;
-  font-weight: 600;
 }
+
 .lawyer_stages label:hover {
-  background-color: rgba(0, 255, 255, 0.7);
+  background-color: rgba(94, 94, 94, 0.2);
 }
 
 .lawyer_stages .lawyer_stages--select {

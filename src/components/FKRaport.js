@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FKTable from "./FKTable";
-import GenerateAccount from "./FKComponents/GenerateAccount";
+import GenerateAccount from "./FKAccountComponents/GenerateAccount";
 import Button from "@mui/material/Button";
 import AgingAccount from "./FKAgingComponents/AgingAccount";
 import LawyerAccount from "./FKLawyerComponents/LawyerAccount";

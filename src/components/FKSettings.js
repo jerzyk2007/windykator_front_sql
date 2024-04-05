@@ -20,7 +20,7 @@ const FKSettings = () => {
   const [filter, setFilter] = useState({
     raport: "accountRaport",
     business: "201203",
-    payment: "Wszystko",
+    payment: "Przeterminowane",
   });
   const [showRaport, setShowRaport] = useState(false);
   const [showSettingsSelect, setSettingsSelect] = useState(false);

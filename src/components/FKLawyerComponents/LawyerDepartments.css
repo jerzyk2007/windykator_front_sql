@@ -13,7 +13,7 @@
   flex-basis: 15%;
   text-align: center;
   padding: 3px;
-  background-color: #dcffe7;
+  background-color: #fff0ff;
   border-right: 1px solid black;
   cursor: pointer;
   display: flex;
@@ -22,12 +22,12 @@
 }
 
 .lawyer_departments:hover label {
-  background-color: rgba(0, 255, 255, 0.3);
+  background-color: rgba(94, 94, 94, 0.3);
   color: red;
-  font-weight: 600;
 }
+
 .lawyer_departments label:hover {
-  background-color: rgba(0, 255, 255, 0.7);
+  background-color: rgba(94, 94, 94, 0.2);
 }
 
 .lawyer_departments .lawyer_departments--select {
