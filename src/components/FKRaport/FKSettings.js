@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -7,8 +7,8 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
 import FKRaport from "./FKRaport";
-import PleaseWait from "./PleaseWait";
-import useData from "./hooks/useData";
+import PleaseWait from "../PleaseWait";
+import useData from "../hooks/useData";
 import "./FKSettings.css";
 
 const FKSettings = () => {

@@ -4,7 +4,7 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { MRT_Localization_PL } from "material-react-table/locales/pl";
-import useWindowSize from "./hooks/useWindow";
+import useWindowSize from "../hooks/useWindow";
 import Button from "@mui/material/Button";
 import "./FKTable.css";
 
