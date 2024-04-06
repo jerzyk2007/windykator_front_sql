@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-// import { IoIosArrowDown } from "react-icons/io";
+import React, { useState, useEffect } from "react";
+import { IoIosArrowDown } from "react-icons/io";
+import LawyerStages from "./LawyerStages";
 import "./LawyerNames.css";
 
 const LawyerNames = ({
@@ -15,7 +16,7 @@ const LawyerNames = ({
   });
 
   const counter = filteredData.reduce((acc, doc) => {
-    if (doc["JAKA KANCELARIA"] === name) {
+    if (doc.JAKA_KANCELARIA === name) {
       acc++;
     }
 
@@ -24,14 +25,14 @@ const LawyerNames = ({
 
   let sum = 0;
   filteredData.forEach((item) => {
-    if (item["JAKA KANCELARIA"] === name) {
-      sum += item[" KWOTA DO ROZLICZENIA FK "];
+    if (item.JAKA_KANCELARIA === name) {
+      sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
     return sum;
   });
 
   const filteredObjects = filteredData.filter(
-    (obj) => obj["JAKA KANCELARIA"] === name
+    (obj) => obj.JAKA_KANCELARIA === name
   );
 
   const percent = "do ustalenia";
@@ -40,6 +41,32 @@ const LawyerNames = ({
     setTableData(filteredObjects);
     setShowTable(true);
   };
+
+  let generateItems = [];
+
+  if (arrow[name]) {
+    const namesArray = [
+      ...new Set(
+        filteredObjects
+          .filter((item) => item.JAKA_KANCELARIA)
+          .map((item) => item.ETAP_SPRAWY)
+      ),
+    ].sort();
+
+    generateItems = namesArray.map((item, index) => {
+      return (
+        <LawyerStages
+          key={index}
+          style={style}
+          stage={item}
+          filteredData={filteredObjects}
+          setTableData={setTableData}
+          showTable={showTable}
+          setShowTable={setShowTable}
+        />
+      );
+    });
+  }
 
   return (
     <>
@@ -59,10 +86,10 @@ const LawyerNames = ({
             })
           }
         >
-          {/* <IoIosArrowDown
-                        className='lawyer_names--arrow'
-                        style={!arrow[own] ? null : { rotate: "180deg" }}
-                    /> */}
+          <IoIosArrowDown
+            className="lawyer_names--arrow"
+            style={!arrow[name] ? null : { rotate: "180deg" }}
+          />
           {name}
         </label>
         <label
@@ -82,6 +109,7 @@ const LawyerNames = ({
           {percent}
         </label>
       </section>
+      {generateItems}
     </>
   );
 };

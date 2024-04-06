@@ -1,48 +1,73 @@
 .add_data_from_file {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  flex-grow: 1;
+  display: flex;
+  /* justify-content: center; */
+  /* align-items: center; */
 }
 
 .add_data_from_file__container {
-    width: 50%;
-    height: 50%;
-    min-height: 400px;
-    min-width: 400px;
-    text-align: center;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+  flex-grow: 1;
+  flex-basis: 50%;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid black;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.add_data_from_file__container--title {
+  padding: 10px;
+  font-weight: bold;
+}
+
+.add_data_from_file__container--title p {
+  font-size: 1.5rem;
+}
+
+.add_data_from_file__container--data {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .add_data_from_file__container-documents,
 .add_data_from_file__container-contacts,
 .add_data_from_file__container-settlements,
 .add_data_from_file__container-corrections {
-    flex-basis: 45%;
-    flex-shrink: 0;
-    margin: 10px;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  flex-basis: 20%;
+  margin: 10px;
+  width: 70%;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .add_data_from_file__container-documents:active,
 .add_data_from_file__container-contacts:active,
 .add_data_from_file__container-settlements:active,
 .add_data_from_file__container-corrections:active {
-    background-color: rgb(22, 171, 81);
-    color: #fff;
+  background-color: rgb(22, 171, 81);
+  color: #fff;
 }
 
 .add_data_file-click-me {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add_data_file-click-me:hover {
+  background-color: rgba(22, 171, 81, 0.3);
+  /* color: #fff; */
 }

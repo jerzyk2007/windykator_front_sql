@@ -17,23 +17,23 @@ const GenerateDepartments = ({
   });
 
   const counter = filteredData.reduce((acc, doc) => {
-    if (doc["DZIAŁ"] === dep) {
+    if (doc.DZIAL === dep) {
       acc++;
     }
     return acc;
   }, 0);
 
   let sum = 0;
-  const docSum = filteredData.map((item) => {
-    if (item["DZIAŁ"] === dep) {
-      sum += item[" KWOTA DO ROZLICZENIA FK "];
+  filteredData.forEach((item) => {
+    if (item.DZIAL === dep) {
+      sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
     return sum;
   });
 
   const percent = "do ustalenia";
 
-  const filteredObjects = filteredData.filter((obj) => obj["DZIAŁ"] === dep);
+  const filteredObjects = filteredData.filter((obj) => obj.DZIAL === dep);
 
   const handleClick = () => {
     setTableData(filteredObjects);
@@ -45,8 +45,8 @@ const GenerateDepartments = ({
     const owner = [
       ...new Set(
         filteredObjects
-          .filter((own) => own["DZIAŁ"] === dep)
-          .map((own) => own["OWNER"])
+          .filter((own) => own.DZIAL === dep)
+          .map((own) => own.OWNER)
       ),
     ];
     generateItems = owner.map((own, index) => {

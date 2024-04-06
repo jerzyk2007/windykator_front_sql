@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import GenerateCars from "./GenerateCars";
-import GenerateDepartments from "./GenerateDepartments";
-import "./GenerateAreas.css";
+import LawyerCars from "./LawyerCars";
+import LawyerNames from "./LawyerNames";
+import "./LawyerAreas.css";
 
-const GenerateAreas = ({
-  showTable,
+const LawyerAreas = ({
   area,
   filteredData,
   setTableData,
   setShowTable,
+  showTable,
   style,
-  setButtonArea,
 }) => {
   const [arrow, setArrow] = useState({
     [area]: false,
   });
 
-  const counter = filteredData.reduce((acc, item) => {
-    if (item.OBSZAR === area) {
+  const [lawNameItems, setLawNameItems] = useState([]);
+
+  const counter = filteredData.reduce((acc, doc) => {
+    if (doc.OBSZAR === area) {
       acc++;
     }
     return acc;
@@ -41,15 +42,41 @@ const GenerateAreas = ({
     setShowTable(true);
   };
 
+  // const generateItems = lawNameItems.map((item, index) => {
+  //   return (
+  //     <LawyerNames
+  //       key={index}
+  //       style={style}
+  //       name={item}
+  //       filteredData={filteredObjects}
+  //       setTableData={setTableData}
+  //       showTable={showTable}
+  //       setShowTable={setShowTable}
+  //     />
+  //   );
+  // });
+
+  // useEffect(() => {
+  //   const lawArray = [
+  //     ...new Set(
+  //       filteredObjects
+  //         .filter((item) => item.OBSZAR)
+  //         .map((item) => item.JAKA_KANCELARIA)
+  //     ),
+  //   ].sort();
+  //   console.group(lawArray);
+  //   setLawNameItems(lawArray);
+  // }, [area]);
+
   let generateItems = [];
   if (arrow[area]) {
     if (area === "SAMOCHODY NOWE" || area === "SAMOCHODY UŻYWANE") {
       const carsIssued = ["TAK", "NIE"];
       generateItems = carsIssued.map((car, index) => {
         return (
-          <GenerateCars
+          <LawyerCars
             key={index}
-            style={style}
+            style="car"
             filteredData={filteredObjects}
             area={area}
             carsIssued={car}
@@ -60,21 +87,19 @@ const GenerateAreas = ({
         );
       });
     } else {
-      const departments = [
+      const lawArray = [
         ...new Set(
           filteredObjects
-            .filter((dep) => dep.OBSZAR === area)
-            .map((dep) => dep.DZIAL)
-            .sort()
+            .filter((item) => item.OBSZAR)
+            .map((item) => item.JAKA_KANCELARIA)
         ),
-      ];
-
-      generateItems = departments.map((dep, index) => {
+      ].sort();
+      generateItems = lawArray.map((item, index) => {
         return (
-          <GenerateDepartments
+          <LawyerNames
             key={index}
-            dep={dep}
             style={style}
+            name={item}
             filteredData={filteredObjects}
             setTableData={setTableData}
             showTable={showTable}
@@ -85,44 +110,17 @@ const GenerateAreas = ({
     }
   }
 
-  useEffect(() => {
-    setButtonArea((prev) => {
-      // Sprawdź, czy area już istnieje w tablicy
-      const existingAreaIndex = prev.findIndex((item) => item.name === area);
-
-      if (existingAreaIndex !== -1) {
-        // Jeśli area już istnieje, zaktualizuj tylko jego dane
-        const updatedArea = {
-          ...prev[existingAreaIndex],
-          data: filteredObjects,
-        };
-        const updatedAreas = [...prev];
-        updatedAreas[existingAreaIndex] = updatedArea;
-        return updatedAreas;
-      } else {
-        // Jeśli area nie istnieje, dodaj nowy obiekt do tablicy
-        return [
-          ...prev,
-          {
-            name: area,
-            data: filteredObjects,
-          },
-        ];
-      }
-    });
-  }, [area]);
-
   return (
     <>
       <section
-        className="generate_areas"
+        className="lawyer_areas"
         style={counter === 0 || showTable ? { display: "none" } : null}
       >
         <label
           className={
             style === "car"
-              ? "generate_areas--select generate_areas--select--car"
-              : "generate_areas--select"
+              ? "lawyer_areas--select lawyer_areas--select--car"
+              : "lawyer_areas--select"
           }
           onClick={() =>
             setArrow({
@@ -131,25 +129,25 @@ const GenerateAreas = ({
           }
         >
           <IoIosArrowDown
-            className="generate_areas--arrow"
+            className="lawyer_areas--arrow"
             style={!arrow[area] ? null : { rotate: "180deg" }}
           />
           {area}
         </label>
         <label
-          className="generate_areas--doc-counter"
+          className="lawyer_areas--doc-counter"
           onDoubleClick={handleClick}
         >
           {counter}
         </label>
-        <label className="generate_areas--doc-sum" onDoubleClick={handleClick}>
+        <label className="lawyer_areas--doc-sum" onDoubleClick={handleClick}>
           {sum.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
           })}
         </label>
-        <label className="generate_areas--percent" onDoubleClick={handleClick}>
+        <label className="lawyer_areas--percent" onDoubleClick={handleClick}>
           {percent}
         </label>
       </section>
@@ -158,4 +156,4 @@ const GenerateAreas = ({
   );
 };
 
-export default GenerateAreas;
+export default LawyerAreas;

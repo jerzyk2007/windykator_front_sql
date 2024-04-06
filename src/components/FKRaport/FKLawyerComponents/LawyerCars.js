@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import GenerateOwners from "./GenerateOwners";
-import GenerateDepartments from "./GenerateDepartments";
-import "./GenerateCars.css";
+import LawyerNames from "./LawyerNames";
+import "./LawyerCars.css";
 
-const GenerateCars = ({
+const LawyerCars = ({
   area,
   filteredData,
   carsIssued,
@@ -25,7 +24,7 @@ const GenerateCars = ({
   }, 0);
 
   let sum = 0;
-  const docSum = filteredData.map((item) => {
+  filteredData.forEach((item) => {
     if (item.CZY_SAMOCHOD_WYDANY_AS === carsIssued) {
       sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
@@ -45,22 +44,21 @@ const GenerateCars = ({
 
   let generateItems = [];
   if (arrow.car) {
-    const departments = [
+    const lawArray = [
       ...new Set(
         filteredObjects
-          .filter((dep) => dep.OBSZAR === area)
-          .map((dep) => dep.DZIAL)
-          .sort()
+          .filter((item) => item.OBSZAR === area)
+          .map((item) => item.JAKA_KANCELARIA)
       ),
-    ];
+    ].sort();
 
-    generateItems = departments.map((dep, index) => {
+    generateItems = lawArray.map((item, index) => {
       return (
-        <GenerateDepartments
+        <LawyerNames
           key={index}
-          dep={dep}
           style="car"
           filteredData={filteredObjects}
+          name={item}
           setTableData={setTableData}
           showTable={showTable}
           setShowTable={setShowTable}
@@ -72,15 +70,15 @@ const GenerateCars = ({
   return (
     <>
       <section
-        className="generate_cars"
+        className="lawyer_cars"
         style={counter === 0 || showTable ? { display: "none" } : null}
       >
         <label
-          // className="generate_cars--select"
+          // className="lawyer_cars--select"
           className={
             style === "car"
-              ? "generate_cars--select generate_cars--select--car"
-              : "generate_cars--select"
+              ? "lawyer_cars--select lawyer_cars--select--car"
+              : "lawyer_cars--select"
           }
           onClick={() =>
             setArrow({
@@ -89,25 +87,22 @@ const GenerateCars = ({
           }
         >
           <IoIosArrowDown
-            className="generate_cars--arrow"
+            className="lawyer_cars--arrow"
             style={!arrow.car ? null : { rotate: "180deg" }}
           />
           {carsIssued === "TAK" ? "AUTA WYDANE" : "AUTA NIEWYDANE"}
         </label>
-        <label
-          className="generate_cars--doc-counter"
-          onDoubleClick={handleClick}
-        >
+        <label className="lawyer_cars--doc-counter" onDoubleClick={handleClick}>
           {counter}
         </label>
-        <label className="generate_cars--doc-sum" onDoubleClick={handleClick}>
+        <label className="lawyer_cars--doc-sum" onDoubleClick={handleClick}>
           {sum.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
           })}
         </label>
-        <label className="generate_cars--percent" onDoubleClick={handleClick}>
+        <label className="lawyer_cars--percent" onDoubleClick={handleClick}>
           {percent}
         </label>
       </section>
@@ -116,4 +111,4 @@ const GenerateCars = ({
   );
 };
 
-export default GenerateCars;
+export default LawyerCars;

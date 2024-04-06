@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import LawyerStages from "./LawyerStages";
+import LawyerAreas from "./LawyerAreas";
 import "./LawyerAccount.css";
 
 const LawyerAccount = ({
@@ -14,13 +15,13 @@ const LawyerAccount = ({
     lawyer: true,
   });
 
-  const [lawyerArray, setLawyerArray] = useState([]);
+  const [areasArray, setAreasArray] = useState([]);
 
   const counter = filteredDataRaport.length;
 
   let sum = 0;
   filteredDataRaport.forEach((item) => {
-    sum += item[" KWOTA DO ROZLICZENIA FK "];
+    sum += item.KWOTA_DO_ROZLICZENIA_FK;
   });
 
   const percent = "do ustalenia";
@@ -30,12 +31,12 @@ const LawyerAccount = ({
     setShowTable(true);
   };
 
-  const generateItems = lawyerArray.map((item, index) => {
+  const generateItems = areasArray.map((item, index) => {
     return (
-      <LawyerStages
+      <LawyerAreas
         key={index}
         style=""
-        stage={item}
+        area={item}
         filteredData={filteredDataRaport}
         setTableData={setTableData}
         showTable={showTable}
@@ -43,15 +44,41 @@ const LawyerAccount = ({
       />
     );
   });
-  useEffect(() => {
-    const lawyerArray = [
-      ...new Set(filteredDataRaport.map((age) => age["ETAP SPRAWY"])),
-    ];
-    const lawArray = ["POLUBOWNY", "POZEW W SĄDZIE", "ROZLICZONE", "WYGRANA"];
-    const sortedAging = lawArray.filter((item) => lawyerArray.includes(item));
+  // const generateItems = lawyerArray.map((item, index) => {
+  //   return (
+  //     <LawyerStages
+  //       key={index}
+  //       style=""
+  //       stage={item}
+  //       filteredData={filteredDataRaport}
+  //       setTableData={setTableData}
+  //       showTable={showTable}
+  //       setShowTable={setShowTable}
+  //     />
+  //   );
+  // });
 
-    setLawyerArray(sortedAging);
+  useEffect(() => {
+    const areasArray = [
+      ...new Set(filteredDataRaport.map((item) => item.OBSZAR)),
+    ].sort();
+    setAreasArray(areasArray);
   }, [filteredDataRaport]);
+  // useEffect(() => {
+  //   const lawyerArray = [
+  //     ...new Set(filteredDataRaport.map((age) => age.ETAP_SPRAWY)),
+  //   ];
+  //   const lawArray = [
+  //     "Blokada na 10 dni oddziału",
+  //     "POLUBOWNA",
+  //     "POZEW W SĄDZIE",
+  //     "UMORZENIE EPU",
+  //     "WYGRANA",
+  //   ];
+  //   const sortedAging = lawArray.filter((item) => lawyerArray.includes(item));
+
+  //   setLawyerArray(sortedAging);
+  // }, [filteredDataRaport]);
 
   return (
     <>

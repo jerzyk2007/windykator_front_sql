@@ -17,16 +17,16 @@ const AgingCars = ({
   });
 
   const counter = filteredData.reduce((acc, item) => {
-    if (item["CZY SAMOCHÓD WYDANY (dane As3)"] === carsIssued) {
+    if (item.CZY_SAMOCHOD_WYDANY_AS === carsIssued) {
       acc++;
     }
     return acc;
   }, 0);
 
   let sum = 0;
-  const docSum = filteredData.map((item) => {
-    if (item["CZY SAMOCHÓD WYDANY (dane As3)"] === carsIssued) {
-      sum += item[" KWOTA DO ROZLICZENIA FK "];
+  filteredData.forEach((item) => {
+    if (item.CZY_SAMOCHOD_WYDANY_AS === carsIssued) {
+      sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
     return sum;
   });
@@ -34,7 +34,7 @@ const AgingCars = ({
   const percent = "do ustalenia";
 
   const filteredObjects = filteredData.filter(
-    (obj) => obj["CZY SAMOCHÓD WYDANY (dane As3)"] === carsIssued
+    (obj) => obj.CZY_SAMOCHOD_WYDANY_AS === carsIssued
   );
 
   const handleClick = () => {
@@ -47,8 +47,8 @@ const AgingCars = ({
     const departments = [
       ...new Set(
         filteredObjects
-          .filter((dep) => dep["OBSZAR"] === area)
-          .map((dep) => dep["DZIAŁ"])
+          .filter((dep) => dep.OBSZAR === area)
+          .map((dep) => dep.DZIAL)
       ),
     ].sort();
     generateItems = departments.map((dep, index) => {

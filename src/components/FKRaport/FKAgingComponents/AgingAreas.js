@@ -17,7 +17,7 @@ const AgingAreas = ({
   });
 
   const counter = filteredData.reduce((acc, item) => {
-    if (item["OBSZAR"] === area) {
+    if (item.OBSZAR === area) {
       acc++;
     }
     return acc;
@@ -25,15 +25,15 @@ const AgingAreas = ({
 
   let sum = 0;
   const docSum = filteredData.map((item) => {
-    if (item["OBSZAR"] === area) {
-      sum += item[" KWOTA DO ROZLICZENIA FK "];
+    if (item.OBSZAR === area) {
+      sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
     return sum;
   });
 
   const percent = "do ustalenia";
 
-  const filteredObjects = filteredData.filter((obj) => obj["OBSZAR"] === area);
+  const filteredObjects = filteredData.filter((obj) => obj.OBSZAR === area);
 
   const handleClick = () => {
     setTableData(filteredObjects);
@@ -62,8 +62,8 @@ const AgingAreas = ({
       const departments = [
         ...new Set(
           filteredObjects
-            .filter((dep) => dep["OBSZAR"] === area)
-            .map((dep) => dep["DZIAŁ"])
+            .filter((dep) => dep.OBSZAR === area)
+            .map((dep) => dep.DZIAL)
         ),
       ].sort();
       generateItems = departments.map((dep, index) => {

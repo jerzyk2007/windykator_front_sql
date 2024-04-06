@@ -1,155 +1,218 @@
-import { useState } from 'react';
+import { useState } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import useData from './hooks/useData';
-import PleaseWait from './PleaseWait';
-import './AddDataFromFile.css';
+import useData from "./hooks/useData";
+import PleaseWait from "./PleaseWait";
+import "./AddDataFromFile.css";
 
 const AddDataFromFile = () => {
-    const { pleaseWait, setPleaseWait } = useData();
-    const axiosPrivateIntercept = useAxiosPrivateIntercept();
+  const { pleaseWait, setPleaseWait } = useData();
+  const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
-    const [errSharepoint, setErrSharepoint] = useState('');
-    const [errSettlements, setSettlements] = useState('');
-    const [errAS, setErrAS] = useState('');
-    const [errMsg, setErrMsg] = useState('');
+  const [errSharepoint, setErrSharepoint] = useState("");
+  const [errSettlements, setSettlements] = useState("");
+  const [errAS, setErrAS] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  const [errDataFK, setErrDataFK] = useState("");
 
-    const handleSendFile = async (e, type) => {
-        setPleaseWait(true);
-        const file = e.target.files[0];
-        if (!file) return console.log('Brak pliku');
-        if (!file.name.endsWith('.xlsx')) {
-            console.log('Akceptowany jest tylko plik z rozszerzeniem .xlsx');
-            return;
+  const handleSendFileBL = async (e, type) => {
+    setPleaseWait(true);
+    const file = e.target.files[0];
+    if (!file) return console.log("Brak pliku");
+    if (!file.name.endsWith(".xlsx")) {
+      console.log("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
+      return;
+    }
+    try {
+      const formData = new FormData();
+      formData.append("excelFile", file);
+
+      const response = await axiosPrivateIntercept.post(
+        `/documents/send-documents/${type}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-        try {
-            const formData = new FormData();
-            formData.append('excelFile', file);
+      );
 
+      if (type === "sharepoint") {
+        setErrSharepoint("Dokumenty zaktualizowane.");
+      } else if (type === "settlements") {
+        setSettlements("Dokumenty zaktualizowane.");
+      } else if (type === "AS") {
+        setErrAS("Dokumenty zaktualizowane.");
+      } else if (type === "test") {
+        setErrMsg("Dokumenty zaktualizowane.");
+      }
 
-            const response = await axiosPrivateIntercept.post(`/documents/send-documents/${type}`, formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    }
-                });
+      setPleaseWait(false);
+    } catch (error) {
+      if (type === "sharepoint") {
+        setErrSharepoint("Błąd aktualizacji dokumentów.");
+      } else if (type === "AS") {
+        setErrAS("Błąd aktualizacji dokumentów.");
+      } else if (type === "settlements") {
+        setSettlements("Błąd aktualizacji dokumentów.");
+      } else if (type === "test") {
+        setErrMsg("Błąd aktualizacji dokumentów.");
+      }
+      console.error("Błąd przesyłania pliku:", error);
+      setPleaseWait(false);
+    }
+  };
 
-            if (type === 'sharepoint') {
-                setErrSharepoint('Dokumenty zaktualizowane.');
-            }
-            else
-                if (type === 'settlements') {
-                    setSettlements('Dokumenty zaktualizowane.');
-                }
-                else
-                    if (type === 'AS') {
-                        setErrAS('Dokumenty zaktualizowane.');
-                    }
+  const handleSendFileFK = async (e, type) => {
+    setPleaseWait(true);
+    const file = e.target.files[0];
+    if (!file) return console.log("Brak pliku");
+    if (!file.name.endsWith(".xlsx")) {
+      console.log("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
+      return;
+    }
+    try {
+      const formData = new FormData();
+      formData.append("excelFile", file);
 
-                    else
-                        if (type === 'test') {
-                            setErrMsg('Dokumenty zaktualizowane.');
-                        }
-
-            setPleaseWait(false);
-
-        } catch (error) {
-            if (type === 'sharepoint') {
-                setErrSharepoint('Błąd aktualizacji dokumentów.');
-            }
-            else
-                if (type === 'AS') {
-                    setErrAS('Błąd aktualizacji dokumentów.');
-                }
-                else
-                    if (type === 'settlements') {
-                        setSettlements('Błąd aktualizacji dokumentów.');
-                    }
-                    else
-                        if (type === 'test') {
-                            setErrMsg('Błąd aktualizacji dokumentów.');
-                        }
-            console.error('Błąd przesyłania pliku:', error);
-            setPleaseWait(false);
+      const response = await axiosPrivateIntercept.post(
+        "/fk/send-data-fk",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-    };
+      );
 
-    return (
-        pleaseWait ? <PleaseWait /> :
-            <section className='add_data_from_file'>
-                <section className='add_data_from_file__container'>
+      if (type === "dataFK") {
+        setErrDataFK("Dokumenty zaktualizowane.");
+      }
 
-                    {!errSettlements ?
-                        <section className='add_data_from_file__container-documents'>
-                            <input
-                                type="file"
-                                name="uploadfile"
-                                id="settlements"
-                                style={{ display: "none" }}
-                                onChange={(e) => handleSendFile(e, 'settlements')}
-                            />
-                            <label htmlFor="settlements" className="add_data_file-click-me">Prześlij rozrachunki</label>
-                        </section> :
-                        <section className='add_data_from_file__container-documents'>
-                            <span className="add_data_file-click-me">{errSettlements}</span>
-                        </section>
-                    }
+      setPleaseWait(false);
+    } catch (error) {
+      if (type === "dataFK") {
+        setErrDataFK("Błąd aktualizacji dokumentów.");
+      }
+      console.error("Błąd przesyłania pliku:", error);
+      setPleaseWait(false);
+    }
+  };
 
-                    {!errAS ?
-                        <section className='add_data_from_file__container-documents'>
-                            <input
-                                type="file"
-                                name="uploadfile"
-                                id="AS"
-                                style={{ display: "none" }}
-                                onChange={(e) => handleSendFile(e, 'AS')}
-                            />
-                            <label htmlFor="AS" className="add_data_file-click-me">Prześlij faktury AS</label>
-                        </section> :
-                        <section className='add_data_from_file__container-documents'>
-                            <span className="add_data_file-click-me">{errAS}</span>
-                        </section>
-                    }
+  return pleaseWait ? (
+    <PleaseWait />
+  ) : (
+    <section className="add_data_from_file">
+      <section className="add_data_from_file__container">
+        <section className="add_data_from_file__container--title">
+          <p>Dane dla windykacji BL</p>
+        </section>
+        <section className="add_data_from_file__container--data">
+          {!errSettlements ? (
+            <section className="add_data_from_file__container-documents">
+              <input
+                type="file"
+                name="uploadfile"
+                id="settlements"
+                style={{ display: "none" }}
+                onChange={(e) => handleSendFileBL(e, "settlements")}
+              />
+              <label htmlFor="settlements" className="add_data_file-click-me">
+                Prześlij rozrachunki
+              </label>
+            </section>
+          ) : (
+            <section className="add_data_from_file__container-documents">
+              <span className="add_data_file-click-me">{errSettlements}</span>
+            </section>
+          )}
 
-                    {/* <section className='add_data_from_file__container-corrections'>
+          {!errAS ? (
+            <section className="add_data_from_file__container-documents">
+              <input
+                type="file"
+                name="uploadfile"
+                id="AS"
+                style={{ display: "none" }}
+                onChange={(e) => handleSendFileBL(e, "AS")}
+              />
+              <label htmlFor="AS" className="add_data_file-click-me">
+                Prześlij faktury AS
+              </label>
+            </section>
+          ) : (
+            <section className="add_data_from_file__container-documents">
+              <span className="add_data_file-click-me">{errAS}</span>
+            </section>
+          )}
+
+          {/* <section className='add_data_from_file__container-corrections'>
                    
                     </section> */}
 
-                    {/* chwilowa funckja do naprawiania, nadpisywania danych */}
-                    {!errMsg ?
-                        <section className='add_data_from_file__container-documents'>
-                            <input
-                                type="file"
-                                name="uploadfile"
-                                id="test"
-                                style={{ display: "none" }}
-                            // onChange={(e) => handleSendFile(e, 'test')}
-                            />
-                            {/* <label htmlFor="test" className="add_data_file-click-me">Napraw</label> */}
-                        </section> :
-                        <section className='add_data_from_file__container-documents'>
-                            <span className="add_data_file-click-me">{errMsg}</span>
-                        </section>
-                    }
-
-
-                    {!errSharepoint ?
-                        <section className='add_data_from_file__container-documents'>
-                            <input
-                                type="file"
-                                name="uploadfile"
-                                id="sharepoint"
-                                style={{ display: "none" }}
-                            // onChange={(e) => handleSendFile(e, 'sharepoint')}
-                            />
-                            {/* <label htmlFor="sharepoint" className="add_data_file-click-me">Prześlij faktury sharepoint</label> */}
-                        </section> :
-                        <section className='add_data_from_file__container-documents'>
-                            <span className="add_data_file-click-me">{errSharepoint}</span>
-                        </section>
-                    }
-                </section>
+          {/* chwilowa funckja do naprawiania, nadpisywania danych */}
+          {!errMsg ? (
+            <section className="add_data_from_file__container-documents">
+              <input
+                type="file"
+                name="uploadfile"
+                id="test"
+                style={{ display: "none" }}
+                // onChange={(e) => handleSendFileBL(e, 'test')}
+              />
+              {/* <label htmlFor="test" className="add_data_file-click-me">Napraw</label> */}
             </section>
-    );
+          ) : (
+            <section className="add_data_from_file__container-documents">
+              <span className="add_data_file-click-me">{errMsg}</span>
+            </section>
+          )}
+
+          {!errSharepoint ? (
+            <section className="add_data_from_file__container-documents">
+              <input
+                type="file"
+                name="uploadfile"
+                id="sharepoint"
+                style={{ display: "none" }}
+                // onChange={(e) => handleSendFileBL(e, 'sharepoint')}
+              />
+              {/* <label htmlFor="sharepoint" className="add_data_file-click-me">Prześlij faktury sharepoint</label> */}
+            </section>
+          ) : (
+            <section className="add_data_from_file__container-documents">
+              <span className="add_data_file-click-me">{errSharepoint}</span>
+            </section>
+          )}
+        </section>
+      </section>
+
+      <section className="add_data_from_file__container ">
+        <section className="add_data_from_file__container--title">
+          <p>Dane dla Raportu FK</p>
+        </section>
+        <section className="add_data_from_file__container--data">
+          {!errDataFK ? (
+            <section className="add_data_from_file__container-documents">
+              <input
+                type="file"
+                name="uploadfile"
+                id="dataFK"
+                style={{ display: "none" }}
+                onChange={(e) => handleSendFileFK(e, "dataFK")}
+              />
+              <label htmlFor="dataFK" className="add_data_file-click-me">
+                Prześlij dane
+              </label>
+            </section>
+          ) : (
+            <section className="add_data_from_file__container-documents">
+              <span className="add_data_file-click-me">{errDataFK}</span>
+            </section>
+          )}
+        </section>
+      </section>
+    </section>
+  );
 };
 
 export default AddDataFromFile;

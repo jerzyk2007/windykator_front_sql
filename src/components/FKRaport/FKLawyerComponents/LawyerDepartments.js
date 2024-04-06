@@ -18,7 +18,7 @@ const LawyerDepartments = ({
   const [ownerItems, setOwnerItems] = useState([]);
 
   const counter = filteredData.reduce((acc, doc) => {
-    if (doc["DZIAŁ"] === dep) {
+    if (doc.DZIAL === dep) {
       acc++;
     }
     return acc;
@@ -26,15 +26,15 @@ const LawyerDepartments = ({
 
   let sum = 0;
   filteredData.forEach((item) => {
-    if (item["DZIAŁ"] === dep) {
-      sum += item[" KWOTA DO ROZLICZENIA FK "];
+    if (item.DZIAL === dep) {
+      sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
     return sum;
   });
 
   const percent = "do ustalenia";
 
-  const filteredObjects = filteredData.filter((obj) => obj["DZIAŁ"] === dep);
+  const filteredObjects = filteredData.filter((obj) => obj.DZIAL === dep);
 
   const handleClick = () => {
     setTableData(filteredObjects);
@@ -58,9 +58,7 @@ const LawyerDepartments = ({
   useEffect(() => {
     const ownerArray = [
       ...new Set(
-        filteredObjects
-          .filter((item) => item["DZIAŁ"])
-          .map((item) => item["OWNER"])
+        filteredObjects.filter((item) => item.DZIAL).map((item) => item.OWNER)
       ),
     ].sort();
     setOwnerItems(ownerArray);

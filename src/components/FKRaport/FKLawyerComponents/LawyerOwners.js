@@ -18,7 +18,7 @@ const LawyerOwners = ({
   const [lawNameItems, setLawNameItems] = useState([]);
 
   const counter = filteredData.reduce((acc, doc) => {
-    if (doc["OWNER"] === own) {
+    if (doc.OWNER === own) {
       acc++;
     }
     return acc;
@@ -26,45 +26,45 @@ const LawyerOwners = ({
 
   let sum = 0;
   filteredData.forEach((item) => {
-    if (item["OWNER"] === own) {
-      sum += item[" KWOTA DO ROZLICZENIA FK "];
+    if (item.OWNER === own) {
+      sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
     return sum;
   });
 
   const percent = "do ustalenia";
 
-  const filteredObjects = filteredData.filter((obj) => obj["OWNER"] === own);
+  const filteredObjects = filteredData.filter((obj) => obj.OWNER === own);
 
   const handleClick = () => {
     setTableData(filteredObjects);
     setShowTable(true);
   };
 
-  const generateItems = lawNameItems.map((item, index) => {
-    return (
-      <LawyerNames
-        key={index}
-        style={style}
-        name={item}
-        filteredData={filteredObjects}
-        setTableData={setTableData}
-        showTable={showTable}
-        setShowTable={setShowTable}
-      />
-    );
-  });
+  // const generateItems = lawNameItems.map((item, index) => {
+  //   return (
+  //     <LawyerNames
+  //       key={index}
+  //       style={style}
+  //       name={item}
+  //       filteredData={filteredObjects}
+  //       setTableData={setTableData}
+  //       showTable={showTable}
+  //       setShowTable={setShowTable}
+  //     />
+  //   );
+  // });
 
-  useEffect(() => {
-    const lawNameArray = [
-      ...new Set(
-        filteredObjects
-          .filter((item) => item["DZIAŁ"])
-          .map((item) => item["JAKA KANCELARIA"])
-      ),
-    ].sort();
-    setLawNameItems(lawNameArray);
-  }, [own]);
+  // useEffect(() => {
+  //   const lawNameArray = [
+  //     ...new Set(
+  //       filteredObjects
+  //         .filter((item) => item.OBSZAR)
+  //         .map((item) => item.JAKA_KANCELARIA)
+  //     ),
+  //   ].sort();
+  //   setLawNameItems(lawNameArray);
+  // }, [own]);
 
   return (
     <>
@@ -84,10 +84,10 @@ const LawyerOwners = ({
             })
           }
         >
-          <IoIosArrowDown
+          {/* <IoIosArrowDown
             className="lawyer_owners--arrow"
             style={!arrow[own] ? null : { rotate: "180deg" }}
-          />
+          /> */}
           {own}
         </label>
         <label
@@ -107,7 +107,7 @@ const LawyerOwners = ({
           {percent}
         </label>
       </section>
-      {arrow[own] && generateItems}
+      {/* {arrow[own] && generateItems} */}
     </>
   );
 };

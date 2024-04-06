@@ -15,7 +15,7 @@ const AgingOwners = ({
   });
 
   const counter = filteredData.reduce((acc, doc) => {
-    if (doc["OWNER"] === own) {
+    if (doc.OWNER === own) {
       acc++;
     }
 
@@ -23,14 +23,14 @@ const AgingOwners = ({
   }, 0);
 
   let sum = 0;
-  const docSum = filteredData.map((item) => {
-    if (item["OWNER"] === own) {
-      sum += item[" KWOTA DO ROZLICZENIA FK "];
+  filteredData.forEach((item) => {
+    if (item.OWNER === own) {
+      sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
     return sum;
   });
 
-  const filteredObjects = filteredData.filter((obj) => obj["OWNER"] === own);
+  const filteredObjects = filteredData.filter((obj) => obj.OWNER === own);
 
   const percent = "do ustalenia";
 

@@ -13,7 +13,7 @@
   flex-basis: 15%;
   text-align: center;
   padding: 3px;
-  background-color: #fdffe1;
+  background-color: #ffe1fd;
   border-right: 1px solid black;
   cursor: pointer;
   display: flex;
@@ -32,7 +32,7 @@
 
 .lawyer_stages .lawyer_stages--select {
   min-width: 500px;
-  padding-left: 25px;
+  padding-left: 55px;
   flex-grow: 1;
   display: flex;
   align-items: center;
@@ -46,7 +46,7 @@
 }
 
 .lawyer_stages .lawyer_stages--select--car {
-  padding-left: 40px;
+  padding-left: 80px;
 }
 
 .lawyer_stages .lawyer_stages--percent {

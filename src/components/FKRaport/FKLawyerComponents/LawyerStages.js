@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import LawyerDepartments from "./LawyerDepartments";
+import LawyerOwners from "./LawyerOwners";
 import "./LawyerStages.css";
 
 const LawyerStages = ({
@@ -18,7 +19,7 @@ const LawyerStages = ({
   const [depItems, setDepItems] = useState([]);
 
   const counter = filteredData.reduce((acc, doc) => {
-    if (doc["ETAP SPRAWY"] === stage) {
+    if (doc.ETAP_SPRAWY === stage) {
       acc++;
     }
     return acc;
@@ -26,47 +27,55 @@ const LawyerStages = ({
 
   let sum = 0;
   filteredData.forEach((item) => {
-    if (item["ETAP SPRAWY"] === stage) {
-      sum += item[" KWOTA DO ROZLICZENIA FK "];
+    if (item.ETAP_SPRAWY === stage) {
+      sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
     return sum;
   });
-
   const percent = "do ustalenia";
 
   const filteredObjects = filteredData.filter(
-    (obj) => obj["ETAP SPRAWY"] === stage
+    (obj) => obj.ETAP_SPRAWY === stage
   );
 
   const handleClick = () => {
     setTableData(filteredObjects);
     setShowTable(true);
   };
+  let generateItems = [];
 
-  const generateItems = depItems.map((item, index) => {
-    return (
-      <LawyerDepartments
-        key={index}
-        style={style}
-        dep={item}
-        filteredData={filteredObjects}
-        setTableData={setTableData}
-        showTable={showTable}
-        setShowTable={setShowTable}
-      />
-    );
-  });
-
-  useEffect(() => {
-    const depArray = [
+  if (arrow[stage]) {
+    const ownerArray = [
       ...new Set(
         filteredObjects
-          .filter((item) => item["ETAP SPRAWY"])
-          .map((item) => item["DZIAŁ"])
+          .filter((item) => item.ETAP_SPRAWY)
+          .map((item) => item.OWNER)
       ),
     ].sort();
-    setDepItems(depArray);
-  }, [stage]);
+    generateItems = ownerArray.map((item, index) => {
+      return (
+        <LawyerOwners
+          key={index}
+          style={style}
+          own={item}
+          filteredData={filteredObjects}
+          setTableData={setTableData}
+          showTable={showTable}
+          setShowTable={setShowTable}
+        />
+      );
+    });
+  }
+  // useEffect(() => {
+  //   const depArray = [
+  //     ...new Set(
+  //       filteredObjects
+  //         .filter((item) => item.ETAP_SPRAWY)
+  //         .map((item) => item.DZIAL)
+  //     ),
+  //   ].sort();
+  //   setDepItems(depArray);
+  // }, [stage]);
 
   return (
     <>
@@ -109,7 +118,7 @@ const LawyerStages = ({
           {percent}
         </label>
       </section>
-      {arrow[stage] && generateItems}
+      {generateItems}
     </>
   );
 };

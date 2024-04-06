@@ -18,12 +18,11 @@ const GenerateAccount = ({
   const [businessAccount, setBusinessAccount] = useState({
     accountArea: [],
   });
-
   const counter = filteredDataRaport.length;
 
   let sum = 0;
   filteredDataRaport.forEach((item) => {
-    sum += item[" KWOTA DO ROZLICZENIA FK "];
+    sum += item.KWOTA_DO_ROZLICZENIA_FK;
   });
 
   const percent = "do ustalenia";
@@ -52,8 +51,8 @@ const GenerateAccount = ({
     const accountArray = [
       ...new Set(
         filteredDataRaport
-          .filter((item) => item["RODZAJ KONTA"])
-          .map((item) => item["OBSZAR"])
+          .filter((item) => item.RODZAJ_KONTA)
+          .map((item) => item.OBSZAR)
       ),
     ].sort();
     setBusinessAccount({

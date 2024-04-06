@@ -34,31 +34,6 @@ const FKSettings = () => {
     lawyerRaport: "Kancelarie",
   };
 
-  // dodawanie danych do DB
-  // const sendDataFromExcel = async (e) => {
-  //   const file = e.target.files[0];
-  //   if (!file) return console.log("Brak pliku");
-  //   if (!file.name.endsWith(".xlsx")) {
-  //     console.log("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
-  //     return;
-  //   }
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("excelFile", file);
-  //     const response = await axiosPrivateIntercept.post(
-  //       "/fk/send-documents",
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       }
-  //     );
-  //   } catch (err) {
-  //     console.error("Błąd przesyłania pliku:", err);
-  //   }
-  // };
-
   const getFilteredData = async () => {
     setPleaseWait(true);
     const response = await axiosPrivateIntercept.post("/fk/get-data", {
@@ -78,6 +53,7 @@ const FKSettings = () => {
   };
 
   useEffect(() => {
+    console.log(filter);
     setFilteredDataRaport([]);
   }, [filter]);
 
@@ -98,27 +74,27 @@ const FKSettings = () => {
                   Raport:<span>{raportLabels[filter.raport]}</span>
                 </label>
 
-                {filter.raport === "accountRaport" && (
-                  <label className="fk_settings-container-info--text">
-                    Obszar:
-                    <span>
-                      {filter.business === "201203"
-                        ? "201 + 203"
-                        : filter.business}
-                    </span>
-                  </label>
-                )}
+                <label className="fk_settings-container-info--text">
+                  Obszar:
+                  <span>
+                    {filter.business === "201203"
+                      ? "201 + 203"
+                      : filter.business}
+                  </span>
+                </label>
 
                 <label className="fk_settings-container-info--text">
                   Termin:<span>{filter.payment}</span>
                 </label>
 
-                <label className="fk_settings-container-info--text">
-                  Podjęte działania:
-                  <span>
-                    {filter.actions === "All" ? "Całość" : filter.actions}
-                  </span>
-                </label>
+                {filter.raport !== "lawyerRaport" && (
+                  <label className="fk_settings-container-info--text">
+                    Podjęte działania:
+                    <span>
+                      {filter.actions === "All" ? "Całość" : filter.actions}
+                    </span>
+                  </label>
+                )}
               </section>
               <Button
                 variant="contained"
@@ -138,15 +114,9 @@ const FKSettings = () => {
                     value={filter.raport}
                     onChange={(e) =>
                       setFilter((prev) => {
-                        const updatedRaport = e.target.value;
-                        const updatedActions =
-                          updatedRaport === "lawyerRaport"
-                            ? "Tak"
-                            : prev.actions;
                         return {
                           ...prev,
-                          raport: updatedRaport,
-                          actions: updatedActions,
+                          raport: e.target.value,
                         };
                       })
                     }
@@ -170,41 +140,41 @@ const FKSettings = () => {
                   </RadioGroup>
                 </FormControl>
               </section>
-              {filter.raport === "accountRaport" && (
-                <section className="fk_settings-container-select">
-                  <FormControl>
-                    <FormLabel>Obszar biznesu</FormLabel>
-                    <RadioGroup
-                      value={filter.business}
-                      onChange={(e) =>
-                        setFilter((prev) => {
-                          return {
-                            ...prev,
-                            business: e.target.value,
-                          };
-                        })
-                      }
-                      name="radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="201203"
-                        control={<Radio />}
-                        label="201 + 203"
-                      />
-                      <FormControlLabel
-                        value="201"
-                        control={<Radio />}
-                        label="201"
-                      />
-                      <FormControlLabel
-                        value="203"
-                        control={<Radio />}
-                        label="203"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </section>
-              )}
+
+              <section className="fk_settings-container-select">
+                <FormControl>
+                  <FormLabel>Obszar biznesu</FormLabel>
+                  <RadioGroup
+                    value={filter.business}
+                    onChange={(e) =>
+                      setFilter((prev) => {
+                        return {
+                          ...prev,
+                          business: e.target.value,
+                        };
+                      })
+                    }
+                    name="radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="201203"
+                      control={<Radio />}
+                      label="201 + 203"
+                    />
+                    <FormControlLabel
+                      value="201"
+                      control={<Radio />}
+                      label="201"
+                    />
+                    <FormControlLabel
+                      value="203"
+                      control={<Radio />}
+                      label="203"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </section>
+
               <section className="fk_settings-container-select">
                 <FormControl>
                   <FormLabel>Termin płatności</FormLabel>
@@ -274,6 +244,7 @@ const FKSettings = () => {
                   </FormControl>
                 </section>
               )}
+
               <section className="fk_settings-container-generate">
                 <Button
                   variant="contained"
@@ -297,17 +268,6 @@ const FKSettings = () => {
               tableData={tableData}
             />
           )}
-
-          {/* <section className='fk_settings'>
-                <input
-                    type="file"
-                    name="uploadfile"
-                    id="fk"
-                    style={{ display: "none" }}
-                    onChange={(e) => sendDataFromExcel(e)}
-                />
-                <label htmlFor="fk" className="fk_settings-click-me">Prześlij rozrachunki</label>
-            </section> */}
         </section>
       )}
     </>

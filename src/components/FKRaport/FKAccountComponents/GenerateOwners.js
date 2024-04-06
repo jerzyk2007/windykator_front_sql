@@ -17,7 +17,7 @@ const GenerateOwners = ({
   });
 
   const counter = filteredData.reduce((acc, doc) => {
-    if (doc["OWNER"] === own) {
+    if (doc.OWNER === own) {
       acc++;
     }
 
@@ -26,13 +26,13 @@ const GenerateOwners = ({
 
   let sum = 0;
   filteredData.forEach((item) => {
-    if (item["OWNER"] === own) {
-      sum += item[" KWOTA DO ROZLICZENIA FK "];
+    if (item.OWNER === own) {
+      sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
     return sum;
   });
 
-  const filteredObjects = filteredData.filter((obj) => obj["OWNER"] === own);
+  const filteredObjects = filteredData.filter((obj) => obj.OWNER === own);
 
   const percent = "do ustalenia";
 
@@ -46,12 +46,19 @@ const GenerateOwners = ({
     const aging = [
       ...new Set(
         filteredObjects
-          .filter((age) => age["OWNER"] === own)
-          .map((age) => age["Przedział"])
+          .filter((age) => age.OWNER === own)
+          .map((age) => age.PRZEDZIAL_WIEKOWANIE)
       ),
     ];
 
-    const ageArray = ["< 1", " 1 - 30", " 31 - 90", " 91 - 180", "> 360"];
+    const ageArray = [
+      "< 1",
+      " 1 - 30",
+      " 31 - 90",
+      " 91 - 180",
+      " 181 - 360",
+      "> 360",
+    ];
 
     // Utwórz nową tablicę, zachowując kolejność z ageArray
     const sortedAging = ageArray.filter((item) => aging.includes(item));

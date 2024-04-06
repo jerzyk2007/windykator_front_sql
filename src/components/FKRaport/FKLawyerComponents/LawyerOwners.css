@@ -32,7 +32,7 @@
 
 .lawyer_owners .lawyer_owners--select {
   min-width: 500px;
-  padding-left: 55px;
+  padding-left: 85px;
   flex-grow: 1;
   display: flex;
   align-items: center;
@@ -46,7 +46,7 @@
 }
 
 .lawyer_owners .lawyer_owners--select--car {
-  padding-left: 40px;
+  padding-left: 110px;
 }
 
 .lawyer_owners .lawyer_owners--percent {
