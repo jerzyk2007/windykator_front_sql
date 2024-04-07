@@ -15,6 +15,7 @@ import TableSettings from "./components/TableSettings";
 import RaportDepartments from "./components/RaportDepartments";
 import RaportAdvisers from "./components/RaportAdvisers";
 import FKSettings from "./components/FKRaport/FKSettings";
+import FKTableSettings from "./components/FKRaport/FKTableSettings";
 import "./App.css";
 
 const ROLES = {
@@ -99,10 +100,14 @@ function App() {
               <Route path="/raport-advisers" element={<RaportAdvisers />} />
             </Route>
 
+            <Route element={<RequireAuth allowedRoles={[ROLES.FK]} />}>
+              <Route path="/fk-raport" element={<FKSettings />} />
+            </Route>
+
             <Route
               element={<RequireAuth allowedRoles={[ROLES.FK, ROLES.Admin]} />}
             >
-              <Route path="/fk-raport" element={<FKSettings />} />
+              <Route path="/fk-table-settings" element={<FKTableSettings />} />
             </Route>
 
             <Route
