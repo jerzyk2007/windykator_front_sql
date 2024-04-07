@@ -59,7 +59,7 @@ const FKRaport = ({
             setTableData={setTableData}
             showTable={showTable}
             setShowTable={setShowTable}
-            buttonArea={buttonArea}
+            // buttonArea={buttonArea}
             setButtonArea={setButtonArea}
           />
         )}
@@ -71,7 +71,7 @@ const FKRaport = ({
             setTableData={setTableData}
             showTable={showTable}
             setShowTable={setShowTable}
-            buttonArea={buttonArea}
+            // buttonArea={buttonArea}
             setButtonArea={setButtonArea}
           />
         )}
@@ -83,7 +83,7 @@ const FKRaport = ({
             setTableData={setTableData}
             showTable={showTable}
             setShowTable={setShowTable}
-            buttonArea={buttonArea}
+            // buttonArea={buttonArea}
             setButtonArea={setButtonArea}
           />
         )}

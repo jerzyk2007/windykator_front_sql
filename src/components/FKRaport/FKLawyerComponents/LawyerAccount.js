@@ -10,6 +10,7 @@ const LawyerAccount = ({
   setTableData,
   setShowTable,
   style,
+  setButtonArea,
 }) => {
   const [arrow, setArrow] = useState({
     lawyer: true,
@@ -41,22 +42,10 @@ const LawyerAccount = ({
         setTableData={setTableData}
         showTable={showTable}
         setShowTable={setShowTable}
+        setButtonArea={setButtonArea}
       />
     );
   });
-  // const generateItems = lawyerArray.map((item, index) => {
-  //   return (
-  //     <LawyerStages
-  //       key={index}
-  //       style=""
-  //       stage={item}
-  //       filteredData={filteredDataRaport}
-  //       setTableData={setTableData}
-  //       showTable={showTable}
-  //       setShowTable={setShowTable}
-  //     />
-  //   );
-  // });
 
   useEffect(() => {
     const areasArray = [
@@ -64,21 +53,6 @@ const LawyerAccount = ({
     ].sort();
     setAreasArray(areasArray);
   }, [filteredDataRaport]);
-  // useEffect(() => {
-  //   const lawyerArray = [
-  //     ...new Set(filteredDataRaport.map((age) => age.ETAP_SPRAWY)),
-  //   ];
-  //   const lawArray = [
-  //     "Blokada na 10 dni oddziału",
-  //     "POLUBOWNA",
-  //     "POZEW W SĄDZIE",
-  //     "UMORZENIE EPU",
-  //     "WYGRANA",
-  //   ];
-  //   const sortedAging = lawArray.filter((item) => lawyerArray.includes(item));
-
-  //   setLawyerArray(sortedAging);
-  // }, [filteredDataRaport]);
 
   return (
     <>

@@ -11,6 +11,7 @@ const LawyerAreas = ({
   setShowTable,
   showTable,
   style,
+  setButtonArea,
 }) => {
   const [arrow, setArrow] = useState({
     [area]: false,
@@ -41,32 +42,6 @@ const LawyerAreas = ({
     setTableData(filteredObjects);
     setShowTable(true);
   };
-
-  // const generateItems = lawNameItems.map((item, index) => {
-  //   return (
-  //     <LawyerNames
-  //       key={index}
-  //       style={style}
-  //       name={item}
-  //       filteredData={filteredObjects}
-  //       setTableData={setTableData}
-  //       showTable={showTable}
-  //       setShowTable={setShowTable}
-  //     />
-  //   );
-  // });
-
-  // useEffect(() => {
-  //   const lawArray = [
-  //     ...new Set(
-  //       filteredObjects
-  //         .filter((item) => item.OBSZAR)
-  //         .map((item) => item.JAKA_KANCELARIA)
-  //     ),
-  //   ].sort();
-  //   console.group(lawArray);
-  //   setLawNameItems(lawArray);
-  // }, [area]);
 
   let generateItems = [];
   if (arrow[area]) {
@@ -109,6 +84,33 @@ const LawyerAreas = ({
       });
     }
   }
+
+  useEffect(() => {
+    setButtonArea((prev) => {
+      // Sprawdź, czy area już istnieje w tablicy
+      const existingAreaIndex = prev.findIndex((item) => item.name === area);
+
+      if (existingAreaIndex !== -1) {
+        // Jeśli area już istnieje, zaktualizuj tylko jego dane
+        const updatedArea = {
+          ...prev[existingAreaIndex],
+          data: filteredObjects,
+        };
+        const updatedAreas = [...prev];
+        updatedAreas[existingAreaIndex] = updatedArea;
+        return updatedAreas;
+      } else {
+        // Jeśli area nie istnieje, dodaj nowy obiekt do tablicy
+        return [
+          ...prev,
+          {
+            name: area,
+            data: filteredObjects,
+          },
+        ];
+      }
+    });
+  }, [area]);
 
   return (
     <>
