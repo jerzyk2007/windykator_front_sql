@@ -227,11 +227,13 @@ const Table = ({ info }) => {
 
                 // wyłącza filtr (3 kropki) w kolumnie
                 enableColumnActions={false}
+
                 // nie odświeża tabeli po zmianie danych
                 autoResetPageIndex={false}
                 // enableColumnVirtualization
 
                 muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
+                
                 // wyświetla filtry nad komórką -
                 columnFilterDisplayMode={"popover"}
                 //filtr nad headerem - popover

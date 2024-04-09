@@ -116,7 +116,6 @@ const FKTableSettings = () => {
         const matchingColumn = settingsColumn.data.find(
           (column) => column.accessorKey === colName
         );
-
         if (matchingColumn) {
           return {
             accessorKey: matchingColumn.accessorKey,

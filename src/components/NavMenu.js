@@ -158,7 +158,18 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     Raport
                   </Link>
                 </li>
-                {auth?.roles?.includes(300) && (
+                {auth?.roles?.includes(220) && auth?.roles?.includes(300) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link
+                      to="/fk-add-data"
+                      className="nav_menu-link"
+                      onClick={handleLinkClick}
+                    >
+                      Dodaj dane
+                    </Link>
+                  </li>
+                )}
+                {auth?.roles?.includes(220) && auth?.roles?.includes(300) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/fk-table-settings"
