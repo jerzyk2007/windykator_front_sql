@@ -1,0 +1,38 @@
+.fk_localization {
+  flex-grow: 1;
+  display: flex;
+}
+
+.fk_localization__container {
+  flex-grow: 1;
+  margin: 5px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+}
+
+.fk_localization-title__container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fk_localization--title--save {
+  position: absolute;
+  right: 5%;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.fk_localization--title--save:active {
+  color: red;
+}
+
+.fk_localization--title {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 5px 0;
+  user-select: none;
+}

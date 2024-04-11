@@ -9,9 +9,9 @@ import Button from "@mui/material/Button";
 import FKRaport from "./FKRaport";
 import PleaseWait from "../PleaseWait";
 import useData from "../hooks/useData";
-import "./FKSettings.css";
+import "./FKRaportSettings.css";
 
-const FKSettings = () => {
+const FKRaportSettings = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { pleaseWait, setPleaseWait } = useData();
 
@@ -273,4 +273,4 @@ const FKSettings = () => {
   );
 };
 
-export default FKSettings;
+export default FKRaportSettings;

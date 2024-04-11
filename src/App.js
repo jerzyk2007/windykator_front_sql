@@ -14,9 +14,11 @@ import UserSettings from "./components/UserSettings";
 import TableSettings from "./components/TableSettings";
 import RaportDepartments from "./components/RaportDepartments";
 import RaportAdvisers from "./components/RaportAdvisers";
-import FKSettings from "./components/FKRaport/FKSettings";
+import FKRaportSettings from "./components/FKRaport/FKRaportSettings";
 import FKTableSettings from "./components/FKRaport/FKTableSettings";
 import FKAddData from "./components/FKRaport/FKAddData";
+import FKDataSettings from "./components/FKRaport/FKDataSettings";
+import FKItems from "./components/FKRaport/FKItems";
 import "./App.css";
 
 const ROLES = {
@@ -102,7 +104,7 @@ function App() {
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLES.FK]} />}>
-              <Route path="/fk-raport" element={<FKSettings />} />
+              <Route path="/fk-raport" element={<FKRaportSettings />} />
             </Route>
 
             <Route
@@ -115,6 +117,18 @@ function App() {
               element={<RequireAuth allowedRoles={[ROLES.FK, ROLES.Admin]} />}
             >
               <Route path="/fk-table-settings" element={<FKTableSettings />} />
+            </Route>
+
+            <Route
+              element={<RequireAuth allowedRoles={[ROLES.FK, ROLES.Admin]} />}
+            >
+              <Route path="/fk-data-settings" element={<FKDataSettings />} />
+            </Route>
+
+            <Route
+              element={<RequireAuth allowedRoles={[ROLES.FK, ROLES.Admin]} />}
+            >
+              <Route path="/fk-change-items" element={<FKItems />} />
             </Route>
 
             <Route
