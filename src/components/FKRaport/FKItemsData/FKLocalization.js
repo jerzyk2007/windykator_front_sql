@@ -23,7 +23,7 @@ const FKLocalizaton = ({ data }) => {
   };
 
   const handleEdit = (e, index) => {
-    const newValue = e.target.value.toUpperCase();
+    const newValue = e.target.value;
     const update = [...localization];
     update[index] = newValue;
     setUpdateDep(update);
@@ -47,7 +47,7 @@ const FKLocalizaton = ({ data }) => {
   };
 
   const handleAddDep = (e) => {
-    const newValue = e.target.value.toUpperCase();
+    const newValue = e.target.value;
     setAddDep(newValue);
     if (!localization.includes(newValue)) {
       setDuplicate(false);
