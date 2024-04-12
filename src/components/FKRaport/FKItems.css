@@ -1,9 +1,10 @@
 .fk_items {
   flex-grow: 1;
   display: flex;
+  overflow: hidden;
 }
 
-.fk_items__container {
+/* .fk_items__container {
   flex-grow: 1;
   margin: 5px;
   border: 1px solid black;
@@ -35,4 +36,4 @@
   letter-spacing: 1px;
   padding: 5px 0;
   user-select: none;
-}
+} */
