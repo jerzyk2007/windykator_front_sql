@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
+
 import "./FKDepartments.css";
 
 const FKDepartments = ({ data }) => {
+  const axiosPrivateIntercept = useAxiosPrivateIntercept();
+
   const [departments, setDepartments] = useState([]);
   const [duplicate, setDuplicate] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
@@ -63,7 +67,12 @@ const FKDepartments = ({ data }) => {
   };
 
   const saveDepartments = async () => {
-    console.log("save");
+    const result = await axiosPrivateIntercept.patch(
+      `/fk/save-items-data/departments`,
+      {
+        departments,
+      }
+    );
   };
 
   const depItems = departments.map((dep, index) => {

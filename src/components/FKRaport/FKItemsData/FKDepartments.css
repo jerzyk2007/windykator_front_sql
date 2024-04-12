@@ -47,7 +47,7 @@
 }
 .fk_departments-items__container {
   flex-grow: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin: 10px 0;
   padding: 5px 0;
   display: flex;
@@ -94,12 +94,12 @@
 }
 
 .fk_departments--edit {
-  width: 7em;
+  /* width: 7em; */
   border: none;
   background-color: antiquewhite;
   text-align: center;
   color: blue;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .fk_departments-title__container-add {
@@ -110,10 +110,11 @@
 }
 
 .fk_departments-title__container-add--edit {
-  width: 70%;
-  font-size: 1.2rem;
+  /* max-width: 80%; */
+  /* font-size: 1.1rem; */
+  flex-grow: 1;
   padding: 5px;
-  margin: 0 auto;
+  margin: 0px 4px;
   border: none;
   background-color: antiquewhite;
   text-align: center;

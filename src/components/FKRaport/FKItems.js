@@ -11,6 +11,16 @@ const FKItems = () => {
   const { pleaseWait, setPleaseWait } = useData();
 
   const [dataItems, setDataItems] = useState([]);
+  // const localization = [
+  //   "Niciarniana",
+  //   "Częstochowa",
+  //   "Wolica",
+  //   "Bartoszewskiego",
+  //   "Buyback",
+  //   "Flota",
+  //   "Warszawa - Radzymińska",
+  //   "WDT",
+  // ];
 
   const getData = async () => {
     try {
@@ -18,6 +28,7 @@ const FKItems = () => {
 
       const result = await axiosPrivateIntercept.get("/fk/get-items-data");
 
+      console.log(result.data.data);
       setDataItems(result.data.data);
 
       setPleaseWait(false);
@@ -41,7 +52,7 @@ const FKItems = () => {
       ) : (
         <section className="fk_items">
           <FKDepartments data={dataItems.departments} />
-          <FKLocalization />
+          <FKLocalization data={dataItems.localization} />
           <section className="fk_items__container">
             <section className="fk_items-title__container">
               <span className="fk_items--title">Obszar</span>
