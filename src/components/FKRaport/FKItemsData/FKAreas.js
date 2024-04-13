@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 
-import "./FKLocalization.css";
+import "./FKAreas.css";
 
-const FKLocalizaton = ({ data }) => {
+const FKAreas = ({ data }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [dataItem, setDataItem] = useState([]);
@@ -68,9 +68,9 @@ const FKLocalizaton = ({ data }) => {
 
   const saveData = async () => {
     const result = await axiosPrivateIntercept.patch(
-      `/fk/save-items-data/localization`,
+      `/fk/save-items-data/areas`,
       {
-        localization: dataItem,
+        areas: dataItem,
       }
     );
   };
@@ -140,7 +140,7 @@ const FKLocalizaton = ({ data }) => {
   return (
     <section className="fk_localization">
       <section className="fk_localization-title__container">
-        <span className="fk_localization--title">Lokalizacje</span>
+        <span className="fk_localization--title">Obszary</span>
         <span className="fk_localization--counter">
           {dataItem ? dataItem.length : ""}
         </span>
@@ -187,4 +187,4 @@ const FKLocalizaton = ({ data }) => {
   );
 };
 
-export default FKLocalizaton;
+export default FKAreas;

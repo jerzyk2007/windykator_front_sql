@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 
-import "./FKLocalization.css";
+import "./FKItemComponent.css";
 
-const FKLocalizaton = ({ data }) => {
+const FKItemComponent = ({ data, type, title }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [dataItem, setDataItem] = useState([]);
@@ -27,7 +27,11 @@ const FKLocalizaton = ({ data }) => {
     const update = [...dataItem];
     update[index] = newValue;
     setUpdateItem(update);
-    if (!dataItem.includes(newValue)) {
+    if (
+      !dataItem
+        .map((item) => item.toLowerCase())
+        .includes(newValue.toLowerCase())
+    ) {
       setDuplicate(false);
     } else {
       setDuplicate(true);
@@ -47,16 +51,17 @@ const FKLocalizaton = ({ data }) => {
   };
 
   const handleAddItem = (e) => {
-    const newValue = e.target.value;
-    setAddItem(newValue);
-    if (!dataItem.includes(newValue)) {
+    setAddItem(e.target.value);
+    const newValue = e.target.value.toLowerCase(); // Konwersja na małe litery
+    if (!dataItem.map((item) => item.toLowerCase()).includes(newValue)) {
+      // Konwersja wszystkich elementów tablicy do małych liter
       setDuplicate(false);
     } else {
       setDuplicate(true);
     }
   };
 
-  const updateLocalization = (info) => {
+  const changeItem = (info) => {
     if (info === "add") {
       const update = [...dataItem, addItem];
       update.sort();
@@ -68,30 +73,32 @@ const FKLocalizaton = ({ data }) => {
 
   const saveData = async () => {
     const result = await axiosPrivateIntercept.patch(
-      `/fk/save-items-data/localization`,
+      `/fk/save-items-data/${type}`,
       {
-        localization: dataItem,
+        [type]: dataItem,
       }
     );
   };
 
   const arrayItems = dataItem.map((item, index) => {
     return (
-      <section key={index} className="fk_localization-items__columns">
-        <span className="fk_localization-items__columns--counter">
+      <section key={index} className="fk_item_component-items__columns">
+        <span className="fk_item_component-items__columns--counter">
           {index + 1}.
         </span>
         {editIndex !== index && (
           <>
-            <span className="fk_localization-items__columns--item">{item}</span>
+            <span className="fk_item_component-items__columns--item">
+              {item}
+            </span>
             {!addActive && (
               <>
                 <i
-                  className="fa-regular fa-pen-to-square fk_localization--fa-pen-to-square"
+                  className="fa-regular fa-pen-to-square fk_item_component--fa-pen-to-square"
                   onClick={() => handleActiveItem(index)}
                 ></i>
                 <i
-                  className="fa-regular fa-trash-can fk_localization--fa-trash-can"
+                  className="fa-regular fa-trash-can fk_item_component--fa-trash-can"
                   onDoubleClick={() => handleDelete(item)}
                 ></i>
               </>
@@ -103,17 +110,17 @@ const FKLocalizaton = ({ data }) => {
           <>
             <input
               style={duplicate ? { color: "red", fontWeight: "bold" } : null}
-              className="fk_localization--edit"
+              className="fk_item_component--edit"
               type="text"
               value={updateItem.length ? updateItem[index] : ""}
               onChange={(e) => handleEdit(e, index)}
             />
             <i
-              className="fa-solid fa-xmark fk_localization--fa-xmark"
+              className="fa-solid fa-xmark fk_item_component--fa-xmark"
               onClick={handleCancel}
             ></i>
             <i
-              className="fa-solid fa-check fk_localization--fa-check"
+              className="fa-solid fa-check fk_item_component--fa-check"
               onClick={handleChangeItem}
               style={duplicate ? { display: "none" } : null}
             ></i>
@@ -138,53 +145,53 @@ const FKLocalizaton = ({ data }) => {
   }, [addActive]);
 
   return (
-    <section className="fk_localization">
-      <section className="fk_localization-title__container">
-        <span className="fk_localization--title">Lokalizacje</span>
-        <span className="fk_localization--counter">
+    <section className="fk_item_component">
+      <section className="fk_item_component-title__container">
+        <span className="fk_item_component--title">{title}</span>
+        <span className="fk_item_component--counter">
           {dataItem ? dataItem.length : ""}
         </span>
         {!addActive && (
           <>
             <i
-              className="fa-solid fa-plus fk_localization--title--fa-plus"
+              className="fa-solid fa-plus fk_item_component--title--fa-plus"
               onClick={() => setAddActive(true)}
             ></i>
             <i
-              className="fas fa-save fk_localization--title--fa-save"
+              className="fas fa-save fk_item_component--title--fa-save"
               onClick={saveData}
             ></i>
           </>
         )}
       </section>
       {addActive && (
-        <section className="fk_localization-title__container-add">
+        <section className="fk_item_component-title__container-add">
           <input
             style={duplicate ? { color: "red", fontWeight: "bold" } : null}
-            className="fk_localization-title__container-add--edit"
+            className="fk_item_component-title__container-add--edit"
             type="text"
             value={addItem}
             onChange={(e) => handleAddItem(e)}
           />
-          <section className="fk_localization-title__container-add--panel">
+          <section className="fk_item_component-title__container-add--panel">
             <i
-              className="fa-solid fa-xmark fk_localization--fa-xmark"
+              className="fa-solid fa-xmark fk_item_component--fa-xmark"
               onClick={() => setAddActive(false)}
             ></i>
             {!duplicate && (
               <i
-                className="fa-solid fa-check fk_localization--fa-check"
-                onClick={() => updateLocalization("add")}
+                className="fa-solid fa-check fk_item_component--fa-check"
+                onClick={() => changeItem("add")}
               ></i>
             )}
           </section>
         </section>
       )}
-      <section className="fk_localization-items__container">
+      <section className="fk_item_component-items__container">
         {arrayItems.sort()}
       </section>
     </section>
   );
 };
 
-export default FKLocalizaton;
+export default FKItemComponent;
