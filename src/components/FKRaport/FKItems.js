@@ -2,10 +2,8 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
 import useData from "../hooks/useData";
-import FKDepartments from "./FKItemsData/FKDepartments";
-import FKLocalization from "./FKItemsData/FKLocalization";
-import FKAreas from "./FKItemsData/FKAreas";
 import FKItemComponent from "./FKItemsData/FKItemComponent";
+import FKItemAging from "./FKItemsData/FKItemAging";
 import "./FKItems.css";
 
 const FKItems = () => {
@@ -13,17 +11,13 @@ const FKItems = () => {
   const { pleaseWait, setPleaseWait } = useData();
 
   const [dataItems, setDataItems] = useState([]);
+  const [toggleState, setToggleState] = useState(1);
 
-  const areas = [
-    "BLACHARNIA",
-    "CZĘŚCI",
-    "SERWIS",
-    "F&I",
-    "KSIĘGOWOŚĆ",
-    "SAMOCHODY NOWE",
-    "SAMOCHODY UŻYWANE",
-    "WDT",
-  ];
+  const aging = ["<1", "1-30", "31-60", "180-360", ">360"];
+
+  const toggleTab = (index) => {
+    setToggleState(index);
+  };
 
   const getData = async () => {
     try {
@@ -32,7 +26,7 @@ const FKItems = () => {
       const result = await axiosPrivateIntercept.get("/fk/get-items-data");
 
       setDataItems(result.data.data);
-      console.log(result.data.data);
+      // console.log(result.data.data);
 
       setPleaseWait(false);
     } catch (error) {
@@ -50,10 +44,108 @@ const FKItems = () => {
         <PleaseWait />
       ) : (
         <section className="fk_items">
-          {/* <FKDepartments data={dataItems.departments} /> */}
-          {/* <FKLocalization data={dataItems.localization} /> */}
-          {/* <FKAreas data={dataItems.areas} /> */}
-          <FKItemComponent
+          <section className="fk_items-wrapper">
+            <section className="fk_items__container">
+              <section className="fk_items--bloc-tabs">
+                <button
+                  className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => toggleTab(1)}
+                ></button>
+                <button
+                  className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => toggleTab(2)}
+                ></button>
+                <button
+                  className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+                  onClick={() => toggleTab(3)}
+                ></button>
+              </section>
+
+              <section className="content-tabs">
+                <section
+                  className={
+                    toggleState === 1 ? "content  active-content" : "content"
+                  }
+                >
+                  <section className="section-content">
+                    <section className="section-content-data">
+                      <FKItemComponent
+                        data={dataItems.departments}
+                        type="departments"
+                        title="Działy"
+                      />
+                    </section>
+                    <section className="section-content-data">
+                      <FKItemComponent
+                        data={dataItems.localization}
+                        type="localization"
+                        title="Lokalizacje"
+                      />
+                    </section>
+                    <section className="section-content-data">
+                      <FKItemComponent
+                        data={dataItems.areas}
+                        type="areas"
+                        title="Obszary"
+                      />
+                    </section>
+                  </section>
+                </section>
+                <section
+                  className={
+                    toggleState === 2 ? "content  active-content" : "content"
+                  }
+                >
+                  <section className="section-content">
+                    <section className="section-content-data">
+                      <FKItemComponent
+                        data={dataItems.owners}
+                        type="owners"
+                        title="Ownerzy"
+                      />
+                    </section>
+                    <section className="section-content-data">
+                      <FKItemComponent
+                        data={dataItems.guardians}
+                        type="guardians"
+                        title="Opiekun"
+                      />
+                    </section>
+                    <section className="section-content-data">
+                      <FKItemAging
+                        data={dataItems.aging}
+                        type="aging"
+                        title="Wiekowanie"
+                      />
+                    </section>
+                  </section>
+                </section>
+                <section
+                  className={
+                    toggleState === 3 ? "content  active-content" : "content"
+                  }
+                >
+                  <section className="section-content">
+                    <section className="section-data"></section>
+                    <section className="section-data"></section>
+                    <section className="section-data"></section>
+                  </section>
+                </section>
+              </section>
+            </section>
+          </section>
+          */
+        </section>
+      )}
+    </>
+  );
+};
+
+export default FKItems;
+
+{
+  {
+    /* <FKItemComponent
             data={dataItems.departments}
             type="departments"
             title="Działy"
@@ -67,24 +159,73 @@ const FKItems = () => {
             data={dataItems.areas}
             type="areas"
             title="Obszary"
-          />
+          /> */
+  }
 
-          {/* <section className="fk_items__container">
-            <section className="fk_items-title__container">
-              <span className="fk_items--title">Owner</span>
-              <i className="fas fa-save fk_items--title--save"></i>
-            </section>
-          </section> */}
-          {/* <section className="fk_items__container">
-            <section className="fk_items-title__container">
-              <span className="fk_items--title">Opiekun</span>
-              <i className="fas fa-save fk_items--title--save"></i>
-            </section>
-          </section> */}
-        </section>
-      )}
-    </>
-  );
-};
+  /* <section className="fk_items-wrapper">
+<section className="fk_items__container">
+  <section className="fk_items--bloc-tabs">
+    <button
+      className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+      onClick={() => toggleTab(1)}
+    ></button>
+    <button
+      className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+      onClick={() => toggleTab(2)}
+    ></button>
+    <button
+      className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+      onClick={() => toggleTab(3)}
+    ></button>
+  </section>
 
-export default FKItems;
+  <section className="content-tabs">
+    <section
+      className={
+        toggleState === 1 ? "content  active-content" : "content"
+      }
+    >
+      <section className="section-content">
+        <FKItemComponent
+          data={dataItems.departments}
+          type="departments"
+          title="Działy"
+        />
+        <FKItemComponent
+          data={dataItems.localization}
+          type="localization"
+          title="Lokalizacje"
+        />
+        <FKItemComponent
+          data={dataItems.areas}
+          type="areas"
+          title="Obszary"
+        />
+      </section>
+    </section>
+    <section
+      className={
+        toggleState === 2 ? "content  active-content" : "content"
+      }
+    >
+      <section className="section-content">
+        <section className="section-data"></section>
+        <section className="section-data"></section>
+        <section className="section-data"></section>
+      </section>
+    </section>
+    <section
+      className={
+        toggleState === 3 ? "content  active-content" : "content"
+      }
+    >
+      <section className="section-content">
+        <section className="section-data"></section>
+        <section className="section-data"></section>
+        <section className="section-data"></section>
+      </section>
+    </section>
+  </section>
+</section>
+</section> */
+}

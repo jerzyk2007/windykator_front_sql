@@ -1,7 +1,99 @@
 .fk_items {
   flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.fk_items-wrapper {
+  flex-grow: 1;
   background-color: rgb(205, 255, 238);
   display: flex;
   justify-content: space-evenly;
-  overflow: hidden;
+}
+
+.fk_items__container {
+  flex-grow: 1;
+  position: relative;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fk_items--bloc-tabs {
+  display: flex;
+  min-width: 300px;
+}
+
+.tabs {
+  padding: 5px;
+  text-align: center;
+  width: 50%;
+  background-color: #fff;
+  cursor: pointer;
+  border-bottom: 10px solid rgba(0, 0, 0, 0.274);
+  box-sizing: content-box;
+  position: relative;
+  outline: none;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px #000;
+}
+
+.tabs:not(:last-child) {
+  border-right: 1px solid rgba(106, 104, 104, 0.274);
+}
+
+.active-tabs {
+  background: rgb(188, 201, 255);
+  border-bottom: 1px solid transparent;
+}
+
+.active-tabs::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% + 2px);
+  height: 5px;
+}
+
+.fk_items--bloc-tabs button {
+  border: none;
+  padding: 10px 0;
+  margin: 0px 80px;
+}
+
+.content-tabs {
+  flex-grow: 1;
+  display: flex;
+}
+
+.content {
+  margin: 0 auto;
+  padding: 5px;
+  width: 100%;
+  display: none;
+}
+
+.content h2 {
+  padding: 0px 0 5px 0px;
+}
+
+.active-content {
+  display: block;
+}
+
+.section-content {
+  max-height: 85vh;
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-around;
+}
+
+.section-content-data {
+  flex-basis: 35%;
+  display: flex;
+  justify-content: center;
 }

@@ -1,4 +1,4 @@
-.fk_item_component {
+.fk_item_aging {
   flex-grow: 1;
   position: relative;
   width: 30%;
@@ -10,13 +10,13 @@
   flex-direction: column;
 }
 
-.fk_item_component-title__container {
+.fk_item_aging-title__container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.fk_item_component--counter {
+.fk_item_aging--counter {
   position: absolute;
   top: 1%;
   left: 5%;
@@ -31,24 +31,24 @@
   align-items: center;
 }
 
-.fk_item_component--title--fa-save,
-.fk_item_component--title--fa-plus {
+.fk_item_aging--title--fa-save,
+.fk_item_aging--title--fa-plus {
   position: absolute;
   right: 5%;
   font-size: 1.5rem;
   cursor: pointer;
 }
 
-.fk_item_component--title--fa-plus {
+.fk_item_aging--title--fa-plus {
   right: 20%;
 }
 
-.fk_item_component--title--fa-save:active,
-.fk_item_component--title--fa-plus:active {
+.fk_item_aging--title--fa-save:active,
+.fk_item_aging--title--fa-plus:active {
   color: red;
 }
 
-.fk_item_component--title {
+.fk_item_aging--title {
   text-align: center;
   font-size: 1.2rem;
   color: rgb(255, 0, 0);
@@ -57,7 +57,7 @@
   padding: 5px 0;
   user-select: none;
 }
-.fk_item_component-items__container {
+.fk_item_aging-items__container {
   flex-grow: 1;
   overflow-y: auto;
   margin: 10px 0;
@@ -65,7 +65,7 @@
   display: flex;
   flex-direction: column;
 }
-.fk_item_component-items__columns {
+.fk_item_aging-items__columns {
   min-width: 250px;
   text-align: center;
   padding: 5px;
@@ -73,20 +73,20 @@
   border: 1px solid black;
   display: flex;
 }
-.fk_item_component-items__columns--counter {
+.fk_item_aging-items__columns--counter {
   margin: 0 5px;
   flex-basis: 10%;
 }
 
-.fk_item_component-items__columns--item {
+.fk_item_aging-items__columns--item {
   margin: 0 auto;
   cursor: pointer;
 }
 
-.fk_item_component--fa-pen-to-square,
-.fk_item_component--fa-trash-can,
-.fk_item_component--fa-xmark,
-.fk_item_component--fa-check {
+.fk_item_aging--fa-pen-to-square,
+.fk_item_aging--fa-trash-can,
+.fk_item_aging--fa-xmark,
+.fk_item_aging--fa-check {
   font-size: 1.2rem;
   margin: 0 5px;
   color: rgb(92, 133, 32);
@@ -94,19 +94,19 @@
   cursor: pointer;
 }
 
-.fk_item_component--fa-trash-can,
-.fk_item_component--fa-check {
+.fk_item_aging--fa-trash-can,
+.fk_item_aging--fa-check {
   color: blueviolet;
 }
 
-.fk_item_component--fa-pen-to-square:active,
-.fk_item_component--fa-trash-can:active,
-.fk_item_component--fa-xmark:active,
-.fk_item_component--fa-check:active {
+.fk_item_aging--fa-pen-to-square:active,
+.fk_item_aging--fa-trash-can:active,
+.fk_item_aging--fa-xmark:active,
+.fk_item_aging--fa-check:active {
   color: red;
 }
 
-.fk_item_component--edit {
+.fk_item_aging--edit {
   border: none;
   background-color: antiquewhite;
   text-align: center;
@@ -114,7 +114,7 @@
   font-size: 1.1rem;
 }
 
-.fk_item_component-title__container-add {
+.fk_item_aging-title__container-add {
   border: 1px solid black;
   margin-top: 20px;
   padding: 10px 0;
@@ -122,8 +122,15 @@
   align-items: center;
 }
 
-.fk_item_component-title__container-add--edit {
+.fk_item_aging-title__container-number {
   flex-grow: 1;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.fk_item_aging-title__container-add--edit {
+  /* flex-grow: 1; */
+  width: 40%;
   padding: 5px;
   margin: 0px 4px;
   border: none;
@@ -131,7 +138,7 @@
   text-align: center;
 }
 
-.fk_item_component-title__container-add--panel {
+.fk_item_aging-title__container-add--panel {
   width: 20%;
   display: flex;
 }

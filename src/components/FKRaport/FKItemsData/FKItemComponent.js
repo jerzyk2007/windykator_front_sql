@@ -13,15 +13,24 @@ const FKItemComponent = ({ data, type, title }) => {
   const [addActive, setAddActive] = useState(false);
   const [addItem, setAddItem] = useState("");
 
+  const sorted = (items) => {
+    const collator = new Intl.Collator("pl", { sensitivity: "base" });
+    const dataSort = items.sort(collator.compare);
+    return dataSort;
+  };
+
+  //włącza możliwość edycji
   const handleActiveItem = (index) => {
     setEditIndex(index);
     setUpdateItem(dataItem);
   };
 
-  const handleCancel = () => {
+  // wyjście z edycji
+  const handleEditCancel = () => {
     setEditIndex(null);
   };
 
+  // funkcja wywoływana podczas pisania w input - edycja tekstu
   const handleEdit = (e, index) => {
     const newValue = e.target.value;
     const update = [...dataItem];
@@ -38,18 +47,22 @@ const FKItemComponent = ({ data, type, title }) => {
     }
   };
 
+  // usuwa dane pole
   const handleDelete = (name) => {
     const deleteItem = dataItem.filter((item) => item !== name);
     setDataItem(deleteItem);
   };
 
-  const handleChangeItem = () => {
+  // zatwierdzenie danych po edycji
+  const handleUpdateItem = () => {
     if (updateItem.length && !duplicate) {
-      setDataItem(updateItem);
+      const sortedData = sorted(updateItem);
+      setDataItem(sortedData);
     }
     setEditIndex(null);
   };
 
+  // funkcja wywoływana w inpucie dodawania nowego wpisu
   const handleAddItem = (e) => {
     setAddItem(e.target.value);
     const newValue = e.target.value.toLowerCase(); // Konwersja na małe litery
@@ -61,16 +74,20 @@ const FKItemComponent = ({ data, type, title }) => {
     }
   };
 
-  const changeItem = (info) => {
-    if (info === "add") {
+  // funkcja zatwierdzająca nowe dane
+  const handleAcceptNewItem = () => {
+    if (addItem) {
       const update = [...dataItem, addItem];
-      update.sort();
-      setDataItem(update);
-      setAddItem("");
-      setAddActive(false);
+      const sortedData = sorted(update);
+
+      setDataItem(sortedData);
     }
+
+    setAddItem("");
+    setAddActive(false);
   };
 
+  // zapis do bazy danych
   const saveData = async () => {
     const result = await axiosPrivateIntercept.patch(
       `/fk/save-items-data/${type}`,
@@ -117,11 +134,11 @@ const FKItemComponent = ({ data, type, title }) => {
             />
             <i
               className="fa-solid fa-xmark fk_item_component--fa-xmark"
-              onClick={handleCancel}
+              onClick={handleEditCancel}
             ></i>
             <i
               className="fa-solid fa-check fk_item_component--fa-check"
-              onClick={handleChangeItem}
+              onClick={handleUpdateItem}
               style={duplicate ? { display: "none" } : null}
             ></i>
           </>
@@ -132,9 +149,8 @@ const FKItemComponent = ({ data, type, title }) => {
 
   useEffect(() => {
     if (data?.length) {
-      const collator = new Intl.Collator("pl", { sensitivity: "base" });
-      const dataSort = data.sort(collator.compare);
-      setDataItem(dataSort);
+      const update = sorted(data);
+      setDataItem(update);
     }
   }, [data]);
 
@@ -181,7 +197,7 @@ const FKItemComponent = ({ data, type, title }) => {
             {!duplicate && (
               <i
                 className="fa-solid fa-check fk_item_component--fa-check"
-                onClick={() => changeItem("add")}
+                onClick={handleAcceptNewItem}
               ></i>
             )}
           </section>
