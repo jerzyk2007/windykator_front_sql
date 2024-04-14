@@ -30,6 +30,12 @@ const FKItemComponent = ({ data, type, title }) => {
     setEditIndex(null);
   };
 
+  // wyjście z dodawanie nowych danych
+  const handleAddCancel = () => {
+    setAddActive(false);
+    setAddItem("");
+  };
+
   // funkcja wywoływana podczas pisania w input - edycja tekstu
   const handleEdit = (e, index) => {
     const newValue = e.target.value;
@@ -192,7 +198,7 @@ const FKItemComponent = ({ data, type, title }) => {
           <section className="fk_item_component-title__container-add--panel">
             <i
               className="fa-solid fa-xmark fk_item_component--fa-xmark"
-              onClick={() => setAddActive(false)}
+              onClick={handleAddCancel}
             ></i>
             {!duplicate && (
               <i
