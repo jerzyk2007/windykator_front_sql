@@ -3,17 +3,21 @@ import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 
-const FKItemSettings = ({ id, dep, dataItem, settings, style }) => {
+const FKItemSettings = ({
+  id,
+  dep,
+  dataItem,
+  settings,
+  style,
+  handleSaveToDB,
+}) => {
   const [settingsItem, setSettingsItem] = useState([]);
   const [itemsValue, setItemsValue] = useState({});
   const [activeSave, setActiveSave] = useState(false);
 
-  //   console.log(dataItem);
-
   const handleLocalization = (e, info) => {
-    // console.log(info);
     const newValue = e.target.value;
     setItemsValue((prev) => {
       return {
@@ -23,6 +27,7 @@ const FKItemSettings = ({ id, dep, dataItem, settings, style }) => {
     });
   };
 
+  // tworzy dla listy rozwijanej wszytskie nazwy lokalizacji
   const localizationItems = settingsItem.localization?.map((loc, index) => {
     return (
       <MenuItem value={loc} key={index}>
@@ -31,6 +36,7 @@ const FKItemSettings = ({ id, dep, dataItem, settings, style }) => {
     );
   });
 
+  // tworzy dla listy rozwijanej wszytskie nazwy obszarów
   const areaItems = settingsItem.areas?.map((area, index) => {
     return (
       <MenuItem value={area} key={index}>
@@ -78,6 +84,7 @@ const FKItemSettings = ({ id, dep, dataItem, settings, style }) => {
     });
   };
 
+  // tworzy obiekt ownera, z listą, dodawaniem, usuwaniem
   const ownerItems = itemsValue?.owner?.map((own, index) => {
     const menuItems = settingsItem.owners?.map((ownItem, id) => {
       return (
@@ -160,6 +167,7 @@ const FKItemSettings = ({ id, dep, dataItem, settings, style }) => {
     });
   };
 
+  // tworzy obiekt opiekuna, z listą, dodawaniem, usuwaniem
   const guardianItems = itemsValue?.guardian?.map((guard, index) => {
     const menuItems = settingsItem.guardians?.map((guardItem, id) => {
       return (
@@ -212,16 +220,15 @@ const FKItemSettings = ({ id, dep, dataItem, settings, style }) => {
 
   useEffect(() => {
     if (
-      itemsValue.localization &&
-      itemsValue.area &&
-      !itemsValue.owner.includes("") &&
-      !itemsValue.guardian.includes("")
+      itemsValue?.localization &&
+      itemsValue?.area &&
+      !itemsValue?.owner.includes("") &&
+      !itemsValue?.guardian.includes("")
     ) {
       setActiveSave(true);
     } else {
       setActiveSave(false);
     }
-    console.log(itemsValue);
   }, [itemsValue]);
 
   return (
@@ -229,17 +236,26 @@ const FKItemSettings = ({ id, dep, dataItem, settings, style }) => {
       <section className="fk_data_settings-counter__container">
         <span
           className="fk_data_settings-counter"
-          style={style === "exist" ? { backgroundColor: "#aeffe4" } : null}
+          style={
+            style === "exist"
+              ? { backgroundColor: "#aeffe4" }
+              : { backgroundColor: "red", color: "white", padding: "5px" }
+          }
         >
           {id + 1}
         </span>
         {activeSave && (
-          <i className="fas fa-save fk_data_settings--fa-save"></i>
+          <i
+            className="fas fa-save fk_data_settings--fa-save"
+            onClick={() => {
+              handleSaveToDB(itemsValue);
+            }}
+          ></i>
         )}
       </section>
 
       <span className="fk_data_settings-department">
-        {itemsValue.department}
+        {itemsValue?.department}
       </span>
       <section className="fk_data_settings-localization">
         <Box>
@@ -248,7 +264,7 @@ const FKItemSettings = ({ id, dep, dataItem, settings, style }) => {
             <Select
               labelId="simple-select-label"
               id="simple-select"
-              value={itemsValue.localization ? itemsValue.localization : ""}
+              value={itemsValue?.localization ? itemsValue.localization : ""}
               label="Lokalizacja"
               onChange={(e) => handleLocalization(e, "localization")}
             >
@@ -264,7 +280,7 @@ const FKItemSettings = ({ id, dep, dataItem, settings, style }) => {
             <Select
               labelId="simple-select-label"
               id="simple-select"
-              value={itemsValue.area ? itemsValue.area : ""}
+              value={itemsValue?.area ? itemsValue.area : ""}
               label="Obszar"
               onChange={(e) => handleLocalization(e, "area")}
             >

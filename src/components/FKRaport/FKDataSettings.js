@@ -12,27 +12,8 @@ const FKDataSettings = () => {
   const [data, setData] = useState([]);
   const [raportDep, setRaportDep] = useState([]);
   const [mergeDep, setMergeDep] = useState([]);
-  const [testData, setTestData] = useState([]);
-
-  const uniqeDep = [
-    "D001",
-    "D002",
-    "D003",
-    "D004",
-    "D005",
-    "D006",
-    "D007",
-    "D008",
-    "D009",
-    "D014",
-    "D017",
-    "D027",
-    "D031",
-    "D034",
-    "D536",
-    "D537",
-    "KSIĘGOWOŚĆ",
-  ];
+  const [createItem, setCreateItem] = useState([]);
+  const [itemsDB, setItemsDB] = useState([]);
 
   const getData = async () => {
     try {
@@ -40,8 +21,12 @@ const FKDataSettings = () => {
       const result = await axiosPrivateIntercept.get("/fk/get-fksettings-data");
       setData(result.data);
       const uniqueDep = await axiosPrivateIntercept.get("/fk/get-uniques-dep");
-
       setRaportDep(uniqueDep.data.departments);
+
+      const preparedItems = await axiosPrivateIntercept.get(
+        "/fk/get-prepared-items"
+      );
+      setItemsDB(preparedItems.data[0].preparedItemsData);
 
       setPleaseWait(false);
     } catch (error) {
@@ -49,66 +34,104 @@ const FKDataSettings = () => {
     }
   };
 
-  const itemsArray = uniqeDep.map((dep, index) => {
+  const handleSaveToDB = async (itemData) => {
+    try {
+      // Tworzymy kopię tablicy stanu itemsDB
+      const dataArray = [...itemsDB];
+
+      // Sprawdzamy, czy istnieje już obiekt o danym department
+      const existingItemIndex = dataArray.findIndex(
+        (item) => item.department === itemData.department
+      );
+
+      if (existingItemIndex !== -1) {
+        // Jeśli istnieje, aktualizujemy istniejący obiekt
+        dataArray[existingItemIndex] = {
+          ...dataArray[existingItemIndex],
+          localization: itemData.localization,
+          area: itemData.area,
+          owner: itemData.owner,
+          guardian: itemData.guardian,
+        };
+      } else {
+        // Jeśli nie istnieje, dodajemy nowy obiekt na koniec tablicy
+        dataArray.push({
+          department: itemData.department,
+          localization: itemData.localization,
+          area: itemData.area,
+          owner: itemData.owner,
+          guardian: itemData.guardian,
+        });
+      }
+
+      // Aktualizujemy stan itemsDB
+      setItemsDB(dataArray);
+
+      const result = await axiosPrivateIntercept.patch(
+        "/fk/save-prepared-items",
+        {
+          dataItems: dataArray,
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const itemsArray = mergeDep?.map((dep, index) => {
+    // sprawdzam czy działy potrzebne do raportu są zapisane w "zmień stałe"
+    const checkDepStyle = raportDep.find((item) => item === dep);
+
     return (
       <FKItemSettings
         key={index}
         id={index}
         dep={dep}
-        dataItem={testData ? testData[index] : {}}
+        dataItem={createItem ? createItem[index] : {}}
         settings={data}
-        style="exist"
-        testData={testData}
+        style={checkDepStyle ? "exist" : "noexist"}
+        // testData={createItem}
+        handleSaveToDB={handleSaveToDB}
       />
     );
   });
 
-  // funkcja która ma sprawdzić które działy są w pliku przygotowanym do generowania raportu, a które działy sa zapisane a nie będą uzyte w raporcie
-  const checkDep = (depDB, depRaport) => {
-    const resultArray = [];
+  const createMergeDep = (uniqueArray) => {
+    const createDataDep = uniqueArray.map((item) => {
+      //sprawdz czy jakieś dane są zapisane w DB
+      const dbItem = itemsDB.find((dbItem) => dbItem.department === item);
 
-    depDB.forEach((item) => {
-      const obj = { dep: item, exist: false };
-      resultArray.push(obj);
-    });
-
-    resultArray.forEach((item) => {
-      if (uniqeDep.includes(item.dep)) {
-        item.exist = true;
+      if (dbItem) {
+        return {
+          department: item,
+          localization: dbItem.localization || "",
+          area: dbItem.area || "",
+          owner: dbItem.owner || [""],
+          guardian: dbItem.guardian || [""],
+        };
+      } else {
+        // Jeśli nie znaleziono obiektu w tablicy itemsDB, utwórz pusty obiekt
+        return {
+          department: item,
+          localization: "",
+          area: "",
+          owner: [""],
+          guardian: [""],
+        };
       }
     });
-    // depRaport.forEach((item) => {
-    //   if (!depDB.includes(item)) {
-    //     resultArray.push({ dep: item, exist: true });
-    //   }
-    // });
-
-    // setMergeDep(resultArray);
-    // console.log(resultArray);
-    // console.log(resultArray);
+    setCreateItem(createDataDep);
   };
 
   useEffect(() => {
-    if (data?.departments && raportDep) {
-      checkDep(data.departments, raportDep);
+    if (data?.departments && raportDep.length && itemsDB.length) {
+      const combinedArray = data.departments.concat(raportDep);
+      const uniqueArray = [...new Set(combinedArray)];
+      setMergeDep(uniqueArray);
+
+      createMergeDep(uniqueArray);
     }
-    const createDataDep = uniqeDep.map((item) => {
-      const test = {
-        department: item,
-        localization: "",
-        area: "",
-        owner: [""],
-        guardian: [""],
-      };
-
-      return test;
-    });
-    setTestData(createDataDep);
-  }, [data, raportDep]);
-
-  useEffect(() => {
-    // console.log(testData);
-  }, [testData]);
+  }, [data, raportDep, itemsDB]);
 
   useEffect(() => {
     getData();
@@ -135,14 +158,6 @@ const FKDataSettings = () => {
               <span className="fk_data_settings-guardian">Opiekun</span>
             </section>
 
-            {/* <section className="fk_data_settings__container-item">
-              <span className="fk_data_settings-counter">LP</span>
-              <span className="fk_data_settings-department">Dział</span>
-              <span className="fk_data_settings-localization">Lokalizacja</span>
-              <span className="fk_data_settings-area">Obszar</span>
-              <span className="fk_data_settings-owner">Owner</span>
-              <span className="fk_data_settings-guardian">Opiekun</span>
-            </section> */}
             {itemsArray}
           </section>
         </section>

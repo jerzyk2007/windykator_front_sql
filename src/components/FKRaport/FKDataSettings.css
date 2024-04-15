@@ -97,6 +97,7 @@
 }
 .fk_data_settings--fa-plus,
 .fk_data_settings--fa-minus {
+  margin-left: 4px;
   font-size: 1.4rem;
   cursor: pointer;
 }
