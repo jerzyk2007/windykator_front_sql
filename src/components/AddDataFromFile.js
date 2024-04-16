@@ -12,7 +12,7 @@ const AddDataFromFile = () => {
   const [errSettlements, setSettlements] = useState("");
   const [errAS, setErrAS] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [errDataFK, setErrDataFK] = useState("");
+  // const [errDataFK, setErrDataFK] = useState("");
 
   const handleSendFileBL = async (e, type) => {
     setPleaseWait(true);
@@ -62,41 +62,42 @@ const AddDataFromFile = () => {
     }
   };
 
-  const handleSendFileFK = async (e, type) => {
-    setPleaseWait(true);
-    const file = e.target.files[0];
-    if (!file) return console.log("Brak pliku");
-    if (!file.name.endsWith(".xlsx")) {
-      console.log("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
-      return;
-    }
-    try {
-      const formData = new FormData();
-      formData.append("excelFile", file);
+  // funkcja dla przesłania gotowych danych, już przygotowanych i obrobionych da raportu FK
+  // const handleSendFileFK = async (e, type) => {
+  //   setPleaseWait(true);
+  //   const file = e.target.files[0];
+  //   if (!file) return console.log("Brak pliku");
+  //   if (!file.name.endsWith(".xlsx")) {
+  //     console.log("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
+  //     return;
+  //   }
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("excelFile", file);
 
-      const response = await axiosPrivateIntercept.post(
-        "/fk/send-data-fk",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+  //     const response = await axiosPrivateIntercept.post(
+  //       "/fk/send-data-fk",
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
 
-      if (type === "dataFK") {
-        setErrDataFK("Dokumenty zaktualizowane.");
-      }
+  //     if (type === "dataFK") {
+  //       setErrDataFK("Dokumenty zaktualizowane.");
+  //     }
 
-      setPleaseWait(false);
-    } catch (error) {
-      if (type === "dataFK") {
-        setErrDataFK("Błąd aktualizacji dokumentów.");
-      }
-      console.error("Błąd przesyłania pliku:", error);
-      setPleaseWait(false);
-    }
-  };
+  //     setPleaseWait(false);
+  //   } catch (error) {
+  //     if (type === "dataFK") {
+  //       setErrDataFK("Błąd aktualizacji dokumentów.");
+  //     }
+  //     console.error("Błąd przesyłania pliku:", error);
+  //     setPleaseWait(false);
+  //   }
+  // };
 
   return pleaseWait ? (
     <PleaseWait />
@@ -186,7 +187,7 @@ const AddDataFromFile = () => {
         </section>
       </section>
 
-      <section className="add_data_from_file__container ">
+      {/* <section className="add_data_from_file__container ">
         <section className="add_data_from_file__container--title">
           <p>Dane dla Raportu FK</p>
         </section>
@@ -210,7 +211,7 @@ const AddDataFromFile = () => {
             </section>
           )}
         </section>
-      </section>
+      </section> */}
     </section>
   );
 };

@@ -41,10 +41,6 @@
   font-weight: bold;
 }
 
-/* .fk_data_settings__container-item span {
-  flex-basis: 35%;
-} */
-
 .fk_data_settings-counter__container {
   display: flex;
   flex-direction: column;

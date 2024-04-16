@@ -157,7 +157,6 @@ const FKDataSettings = () => {
               <span className="fk_data_settings-owner">Owner</span>
               <span className="fk_data_settings-guardian">Opiekun</span>
             </section>
-
             {itemsArray}
           </section>
         </section>

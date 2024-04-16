@@ -253,7 +253,6 @@ const FKItemSettings = ({
           ></i>
         )}
       </section>
-
       <span className="fk_data_settings-department">
         {itemsValue?.department}
       </span>
