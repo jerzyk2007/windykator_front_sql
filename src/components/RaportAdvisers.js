@@ -757,7 +757,7 @@ const RaportAdvisers = () => {
 
   useEffect(() => {
     grossTotal();
-  }, [departments, grossTotal]);
+  }, [departments]);
 
   useEffect(() => {
     const getData = async () => {

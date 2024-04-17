@@ -94,14 +94,14 @@ const FKItemAging = ({ data, type, title }) => {
           return {
             ...item,
             firstValue: newValue,
-            title: `${newValue} - ${item.secondValue}`,
+            title: `${newValue}-${item.secondValue}`,
           };
         }
         if (info === "second") {
           return {
             ...item,
             secondValue: newValue,
-            title: `${item.firstValue} - ${newValue}`,
+            title: `${item.firstValue}-${newValue}`,
           };
         }
       } else {
@@ -128,7 +128,7 @@ const FKItemAging = ({ data, type, title }) => {
           return {
             ...item,
             secondValue: newValue,
-            title: `> - ${newValue}`,
+            title: `> ${newValue}`,
           };
         }
       } else {

@@ -33,7 +33,11 @@ const FKAddData = () => {
     const wb = xlsx.utils.book_new();
 
     // Obsługa kluczy z tablicami stringów
-    const stringArrayKeys = ["błedy_dzial", "fv_rozliczone"];
+    const stringArrayKeys = [
+      "błedy_dzial",
+      "fv_rozliczone",
+      "błędy_wiekowania",
+    ];
     stringArrayKeys.forEach((key) => {
       if (excelData[key]) {
         const data = excelData[key].map((string) => [string]); // Tworzenie tablicy dwuwymiarowej, gdzie każdy string jest w osobnej tablicy
@@ -109,9 +113,11 @@ const FKAddData = () => {
       const result = await axiosPrivateIntercept.get("/fk/generate-raport");
       const excelData = {
         błedy_dzial: result.data.errorDepartments,
+        błędy_wiekowania: result.data.errorAging,
         fv_rozliczone: result.data.errorSettlements,
         przygotowane_dok: result.data.preparedDataDep,
         nierozliczone_dok: result.data.preparedDataSettlements,
+        wiekowanie_nierozliczone: result.data.preparedDataAging,
       };
       handleExportExcel(excelData);
       console.log(result.data);

@@ -1025,7 +1025,7 @@ const RaportDepartments = () => {
 
   useEffect(() => {
     grossTotal();
-  }, [departments, grossTotal]);
+  }, [departments]);
 
   useEffect(() => {
     setTableSize(height - 215);
