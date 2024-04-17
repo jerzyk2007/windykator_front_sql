@@ -8,7 +8,7 @@ const AddDataFromFile = () => {
   const { pleaseWait, setPleaseWait } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
-  const [errSharepoint, setErrSharepoint] = useState("");
+  const [errBecared, setErrBecared] = useState("");
   const [errSettlements, setSettlements] = useState("");
   const [errAS, setErrAS] = useState("");
   const [errMsg, setErrMsg] = useState("");
@@ -26,7 +26,8 @@ const AddDataFromFile = () => {
       const formData = new FormData();
       formData.append("excelFile", file);
 
-      const response = await axiosPrivateIntercept.post(
+      // const response = await axiosPrivateIntercept.post(
+      await axiosPrivateIntercept.post(
         `/documents/send-documents/${type}`,
         formData,
         {
@@ -36,8 +37,8 @@ const AddDataFromFile = () => {
         }
       );
 
-      if (type === "sharepoint") {
-        setErrSharepoint("Dokumenty zaktualizowane.");
+      if (type === "becared") {
+        setErrBecared("Dokumenty zaktualizowane.");
       } else if (type === "settlements") {
         setSettlements("Dokumenty zaktualizowane.");
       } else if (type === "AS") {
@@ -48,8 +49,8 @@ const AddDataFromFile = () => {
 
       setPleaseWait(false);
     } catch (error) {
-      if (type === "sharepoint") {
-        setErrSharepoint("Błąd aktualizacji dokumentów.");
+      if (type === "becared") {
+        setErrBecared("Błąd aktualizacji dokumentów.");
       } else if (type === "AS") {
         setErrAS("Błąd aktualizacji dokumentów.");
       } else if (type === "settlements") {
@@ -146,6 +147,25 @@ const AddDataFromFile = () => {
             </section>
           )}
 
+          {!errBecared ? (
+            <section className="add_data_from_file__container-documents">
+              <input
+                type="file"
+                name="uploadfile"
+                id="sharepoint"
+                style={{ display: "none" }}
+                onChange={(e) => handleSendFileBL(e, "becared")}
+              />
+              <label htmlFor="sharepoint" className="add_data_file-click-me">
+                Prześlij plik Becared
+              </label>
+            </section>
+          ) : (
+            <section className="add_data_from_file__container-documents">
+              <span className="add_data_file-click-me">{errBecared}</span>
+            </section>
+          )}
+
           {/* <section className='add_data_from_file__container-corrections'>
                    
                     </section> */}
@@ -165,23 +185,6 @@ const AddDataFromFile = () => {
           ) : (
             <section className="add_data_from_file__container-documents">
               <span className="add_data_file-click-me">{errMsg}</span>
-            </section>
-          )}
-
-          {!errSharepoint ? (
-            <section className="add_data_from_file__container-documents">
-              <input
-                type="file"
-                name="uploadfile"
-                id="sharepoint"
-                style={{ display: "none" }}
-                // onChange={(e) => handleSendFileBL(e, 'sharepoint')}
-              />
-              {/* <label htmlFor="sharepoint" className="add_data_file-click-me">Prześlij faktury sharepoint</label> */}
-            </section>
-          ) : (
-            <section className="add_data_from_file__container-documents">
-              <span className="add_data_file-click-me">{errSharepoint}</span>
             </section>
           )}
         </section>

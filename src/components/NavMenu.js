@@ -180,51 +180,53 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )} */}
-                <li className="nav_menu-item-dropmenu">
-                  <Link className="nav_menu-link">
-                    <i className="fas fa-caret-right"></i>Ustawienia
-                  </Link>
-                  <div className="nav_menu-dropdown__menu--side">
-                    <ul className="nav_menu__menu--side">
-                      {auth?.roles?.includes(220) &&
-                        auth?.roles?.includes(300) && (
-                          <li className="nav_menu-item-dropmenu">
-                            <Link
-                              to="/fk-table-settings"
-                              className="nav_menu-link"
-                              onClick={handleLinkClick}
-                            >
-                              Tabela
-                            </Link>
-                          </li>
-                        )}
-                      {auth?.roles?.includes(220) &&
-                        auth?.roles?.includes(300) && (
-                          <li className="nav_menu-item-dropmenu">
-                            <Link
-                              to="/fk-change-items"
-                              className="nav_menu-link"
-                              onClick={handleLinkClick}
-                            >
-                              Zmień stałe
-                            </Link>
-                          </li>
-                        )}
-                      {auth?.roles?.includes(220) &&
-                        auth?.roles?.includes(300) && (
-                          <li className="nav_menu-item-dropmenu">
-                            <Link
-                              to="/fk-data-settings"
-                              className="nav_menu-link"
-                              onClick={handleLinkClick}
-                            >
-                              Dopasuj dane
-                            </Link>
-                          </li>
-                        )}
-                    </ul>
-                  </div>
-                </li>
+                {auth?.roles?.includes(220) && auth?.roles?.includes(300) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link className="nav_menu-link">
+                      <i className="fas fa-caret-right"></i>Ustawienia
+                    </Link>
+                    <div className="nav_menu-dropdown__menu--side">
+                      <ul className="nav_menu__menu--side">
+                        {auth?.roles?.includes(220) &&
+                          auth?.roles?.includes(300) && (
+                            <li className="nav_menu-item-dropmenu">
+                              <Link
+                                to="/fk-table-settings"
+                                className="nav_menu-link"
+                                onClick={handleLinkClick}
+                              >
+                                Tabela
+                              </Link>
+                            </li>
+                          )}
+                        {auth?.roles?.includes(220) &&
+                          auth?.roles?.includes(300) && (
+                            <li className="nav_menu-item-dropmenu">
+                              <Link
+                                to="/fk-change-items"
+                                className="nav_menu-link"
+                                onClick={handleLinkClick}
+                              >
+                                Zmień stałe
+                              </Link>
+                            </li>
+                          )}
+                        {auth?.roles?.includes(220) &&
+                          auth?.roles?.includes(300) && (
+                            <li className="nav_menu-item-dropmenu">
+                              <Link
+                                to="/fk-data-settings"
+                                className="nav_menu-link"
+                                onClick={handleLinkClick}
+                              >
+                                Dopasuj dane
+                              </Link>
+                            </li>
+                          )}
+                      </ul>
+                    </div>
+                  </li>
+                )}
               </ul>
             </div>
           </li>
