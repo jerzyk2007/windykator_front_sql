@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import LawyerDepartments from "./LawyerDepartments";
+// import LawyerDepartments from "./LawyerDepartments";
 import LawyerOwners from "./LawyerOwners";
 import "./LawyerStages.css";
 
@@ -10,13 +10,13 @@ const LawyerStages = ({
   setTableData,
   setShowTable,
   showTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     [stage]: false,
   });
 
-  const [depItems, setDepItems] = useState([]);
+  // const [depItems, setDepItems] = useState([]);
 
   const counter = filteredData.reduce((acc, doc) => {
     if (doc.ETAP_SPRAWY === stage) {
@@ -56,7 +56,7 @@ const LawyerStages = ({
       return (
         <LawyerOwners
           key={index}
-          style={style}
+          styleCar={styleCar}
           own={item}
           filteredData={filteredObjects}
           setTableData={setTableData}
@@ -66,16 +66,6 @@ const LawyerStages = ({
       );
     });
   }
-  // useEffect(() => {
-  //   const depArray = [
-  //     ...new Set(
-  //       filteredObjects
-  //         .filter((item) => item.ETAP_SPRAWY)
-  //         .map((item) => item.DZIAL)
-  //     ),
-  //   ].sort();
-  //   setDepItems(depArray);
-  // }, [stage]);
 
   return (
     <>
@@ -85,7 +75,7 @@ const LawyerStages = ({
       >
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "lawyer_stages--select lawyer_stages--select--car"
               : "lawyer_stages--select"
           }

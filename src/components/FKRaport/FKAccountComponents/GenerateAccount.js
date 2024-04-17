@@ -9,7 +9,7 @@ const GenerateAccount = ({
   filteredDataRaport,
   setTableData,
   setShowTable,
-  style,
+  styleCar,
   setButtonArea,
 }) => {
   const [arrow, setArrow] = useState({
@@ -36,7 +36,7 @@ const GenerateAccount = ({
     return (
       <GenerateAreas
         key={index}
-        style={style}
+        styleCar={styleCar}
         area={area}
         filteredData={filteredDataRaport}
         setTableData={setTableData}
@@ -58,14 +58,14 @@ const GenerateAccount = ({
     setBusinessAccount({
       accountArea: accountArray,
     });
-  }, [account]);
+  }, [account, filteredDataRaport]);
 
   return (
     <>
       <section className="generate_account">
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "generate_account--select generate_account--select--car"
               : "generate_account--select "
           }

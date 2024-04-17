@@ -9,7 +9,7 @@ const LawyerDepartments = ({
   setTableData,
   setShowTable,
   showTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     [dep]: false,
@@ -45,7 +45,7 @@ const LawyerDepartments = ({
     return (
       <LawyerOwners
         key={index}
-        style={style}
+        styleCar={styleCar}
         own={item}
         filteredData={filteredObjects}
         setTableData={setTableData}
@@ -72,7 +72,7 @@ const LawyerDepartments = ({
       >
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "lawyer_departments--select lawyer_departments--select--car"
               : "lawyer_departments--select"
           }

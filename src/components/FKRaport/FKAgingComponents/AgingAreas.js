@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import AgingCars from "./AgingCars";
 import AgingDepartments from "./AgingDepartments";
@@ -10,7 +10,7 @@ const AgingAreas = ({
   filteredData,
   setTableData,
   setShowTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     [area]: false,
@@ -24,7 +24,7 @@ const AgingAreas = ({
   }, 0);
 
   let sum = 0;
-  const docSum = filteredData.map((item) => {
+  filteredData.forEach((item) => {
     if (item.OBSZAR === area) {
       sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
@@ -48,7 +48,7 @@ const AgingAreas = ({
         return (
           <AgingCars
             key={index}
-            style={style}
+            styleCar={styleCar}
             filteredData={filteredObjects}
             area={area}
             carsIssued={car}
@@ -70,7 +70,7 @@ const AgingAreas = ({
         return (
           <AgingDepartments
             key={index}
-            style={style}
+            styleCar={styleCar}
             filteredData={filteredObjects}
             dep={dep}
             setTableData={setTableData}
@@ -90,7 +90,7 @@ const AgingAreas = ({
       >
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "aging_areas--select aging_areas--select--car"
               : "aging_areas--select"
           }

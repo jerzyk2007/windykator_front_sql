@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import AgingDepartments from "./AgingDepartments";
 import "./AgingCars.css";
@@ -10,7 +10,7 @@ const AgingCars = ({
   setTableData,
   showTable,
   setShowTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     car: false,
@@ -55,7 +55,7 @@ const AgingCars = ({
       return (
         <AgingDepartments
           key={index}
-          style="car"
+          styleCar="car"
           filteredData={filteredObjects}
           dep={dep}
           setTableData={setTableData}
@@ -75,7 +75,7 @@ const AgingCars = ({
         <label
           // className="aging_cars--select"
           className={
-            style === "car"
+            styleCar === "car"
               ? "aging_cars--select aging_cars--select--car"
               : "aging_cars--select"
           }

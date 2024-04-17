@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import LawyerStages from "./LawyerStages";
+// import LawyerStages from "./LawyerStages";
 import LawyerAreas from "./LawyerAreas";
 import "./LawyerAccount.css";
 
@@ -9,7 +9,7 @@ const LawyerAccount = ({
   filteredDataRaport,
   setTableData,
   setShowTable,
-  style,
+  styleCar,
   setButtonArea,
 }) => {
   const [arrow, setArrow] = useState({
@@ -36,7 +36,7 @@ const LawyerAccount = ({
     return (
       <LawyerAreas
         key={index}
-        style=""
+        styleCar=""
         area={item}
         filteredData={filteredDataRaport}
         setTableData={setTableData}
@@ -59,7 +59,7 @@ const LawyerAccount = ({
       <section className="lawyer_account">
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "lawyer_account--select lawyer_account--select--car"
               : "lawyer_account--select "
           }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IoIosArrowDown } from "react-icons/io";
+// import { IoIosArrowDown } from "react-icons/io";
 import "./GenerateAging.css";
 
 const GenerateAging = ({
@@ -8,7 +8,7 @@ const GenerateAging = ({
   setTableData,
   setShowTable,
   showTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     [age]: false,
@@ -46,7 +46,7 @@ const GenerateAging = ({
         <label
           // className='generate_aging--select'
           className={
-            style === "car"
+            styleCar === "car"
               ? "generate_aging--select generate_aging--select--car"
               : "generate_aging--select"
           }

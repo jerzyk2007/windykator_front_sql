@@ -8,7 +8,7 @@ const AgingAccount = ({
   filteredDataRaport,
   setTableData,
   setShowTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     aging: true,
@@ -19,7 +19,7 @@ const AgingAccount = ({
   const counter = filteredDataRaport.length;
 
   let sum = 0;
-  const docSum = filteredDataRaport.map((item) => {
+  filteredDataRaport.forEach((item) => {
     sum += item.KWOTA_DO_ROZLICZENIA_FK;
   });
 
@@ -34,7 +34,7 @@ const AgingAccount = ({
     return (
       <AgingComponent
         key={index}
-        style=""
+        sstyleCartyle=""
         age={item}
         filteredData={filteredDataRaport}
         setTableData={setTableData}
@@ -65,7 +65,7 @@ const AgingAccount = ({
       <section className="aging_account">
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "aging_account--select aging_account--select--car"
               : "aging_account--select "
           }

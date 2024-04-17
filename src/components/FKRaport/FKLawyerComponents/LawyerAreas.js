@@ -10,14 +10,14 @@ const LawyerAreas = ({
   setTableData,
   setShowTable,
   showTable,
-  style,
+  styleCar,
   setButtonArea,
 }) => {
   const [arrow, setArrow] = useState({
     [area]: false,
   });
 
-  const [lawNameItems, setLawNameItems] = useState([]);
+  // const [lawNameItems, setLawNameItems] = useState([]);
 
   const counter = filteredData.reduce((acc, doc) => {
     if (doc.OBSZAR === area) {
@@ -51,7 +51,7 @@ const LawyerAreas = ({
         return (
           <LawyerCars
             key={index}
-            style="car"
+            styleCar="car"
             filteredData={filteredObjects}
             area={area}
             carsIssued={car}
@@ -73,7 +73,7 @@ const LawyerAreas = ({
         return (
           <LawyerNames
             key={index}
-            style={style}
+            styleCar={styleCar}
             name={item}
             filteredData={filteredObjects}
             setTableData={setTableData}
@@ -110,7 +110,7 @@ const LawyerAreas = ({
         ];
       }
     });
-  }, [area]);
+  }, [filteredObjects, setButtonArea, area]);
 
   return (
     <>
@@ -120,7 +120,7 @@ const LawyerAreas = ({
       >
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "lawyer_areas--select lawyer_areas--select--car"
               : "lawyer_areas--select"
           }

@@ -9,7 +9,7 @@ const AgingDepartments = ({
   setTableData,
   setShowTable,
   showTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     [dep]: false,
@@ -51,7 +51,7 @@ const AgingDepartments = ({
       return (
         <AgingOwners
           key={index}
-          style={style}
+          styleCar={styleCar}
           filteredData={filteredObjects}
           own={own}
           setTableData={setTableData}
@@ -70,7 +70,7 @@ const AgingDepartments = ({
       >
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "aging_departments--select aging_departments--select--car"
               : "aging_departments--select"
           }

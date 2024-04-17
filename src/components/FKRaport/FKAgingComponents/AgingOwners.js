@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { IoIosArrowDown } from "react-icons/io";
+import React, { useState } from "react";
+// import { IoIosArrowDown } from "react-icons/io";
 import "./AgingOwners.css";
 
 const AgingOwners = ({
@@ -8,7 +8,7 @@ const AgingOwners = ({
   setTableData,
   showTable,
   setShowTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     [own]: false,
@@ -47,7 +47,7 @@ const AgingOwners = ({
       >
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "aging_owners--select aging_owners--select--car"
               : "aging_owners--select"
           }

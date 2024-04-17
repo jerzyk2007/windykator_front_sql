@@ -10,7 +10,7 @@ const GenerateAreas = ({
   filteredData,
   setTableData,
   setShowTable,
-  style,
+  styleCar,
   setButtonArea,
 }) => {
   const [arrow, setArrow] = useState({
@@ -49,7 +49,7 @@ const GenerateAreas = ({
         return (
           <GenerateCars
             key={index}
-            style={style}
+            styleCar={styleCar}
             filteredData={filteredObjects}
             area={area}
             carsIssued={car}
@@ -74,7 +74,7 @@ const GenerateAreas = ({
           <GenerateDepartments
             key={index}
             dep={dep}
-            style={style}
+            styleCar={styleCar}
             filteredData={filteredObjects}
             setTableData={setTableData}
             showTable={showTable}
@@ -110,7 +110,7 @@ const GenerateAreas = ({
         ];
       }
     });
-  }, [area]);
+  }, [filteredObjects, area, setButtonArea]);
 
   return (
     <>
@@ -120,7 +120,7 @@ const GenerateAreas = ({
       >
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "generate_areas--select generate_areas--select--car"
               : "generate_areas--select"
           }

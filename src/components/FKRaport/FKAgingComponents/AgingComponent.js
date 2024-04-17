@@ -9,7 +9,7 @@ const AgingComponent = ({
   setTableData,
   setShowTable,
   showTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     [age]: false,
@@ -47,7 +47,7 @@ const AgingComponent = ({
     return (
       <AgingAreas
         key={index}
-        style={style}
+        styleCar={styleCar}
         area={item}
         filteredData={filteredObjects}
         setTableData={setTableData}
@@ -67,14 +67,14 @@ const AgingComponent = ({
     ].sort();
 
     setAreaItems(areaArray);
-  }, [age]);
+  }, [age, filteredObjects]);
 
   return (
     <>
       <section className="aging_component">
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "aging_component--select aging_component--select--car"
               : "aging_component--select"
           }

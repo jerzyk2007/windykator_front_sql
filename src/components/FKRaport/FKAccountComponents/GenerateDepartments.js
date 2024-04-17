@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import GenerateAging from "./GenerateAging";
+// import GenerateAging from "./GenerateAging";
 import GenerateOwners from "./GenerateOwners";
 import "./GenerateDepartments.css";
 
@@ -10,7 +10,7 @@ const GenerateDepartments = ({
   setTableData,
   setShowTable,
   showTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     [dep]: false,
@@ -53,7 +53,7 @@ const GenerateDepartments = ({
       return (
         <GenerateOwners
           key={index}
-          style={style}
+          styleCar={styleCar}
           filteredData={filteredObjects}
           own={own}
           setTableData={setTableData}
@@ -72,7 +72,7 @@ const GenerateDepartments = ({
       >
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "generate_departments--select generate_departments--select--car"
               : "generate_departments--select"
           }

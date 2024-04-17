@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { IoIosArrowDown } from "react-icons/io";
-import LawyerNames from "./LawyerNames";
+import React, { useState } from "react";
+// import { IoIosArrowDown } from "react-icons/io";
+// import LawyerNames from "./LawyerNames";
 import "./LawyerOwners.css";
 
 const LawyerOwners = ({
@@ -9,13 +9,13 @@ const LawyerOwners = ({
   setTableData,
   setShowTable,
   showTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     [own]: false,
   });
 
-  const [lawNameItems, setLawNameItems] = useState([]);
+  // const [lawNameItems, setLawNameItems] = useState([]);
 
   const counter = filteredData.reduce((acc, doc) => {
     if (doc.OWNER === own) {
@@ -45,7 +45,7 @@ const LawyerOwners = ({
   //   return (
   //     <LawyerNames
   //       key={index}
-  //       style={style}
+  //       styleCar={styleCar}
   //       name={item}
   //       filteredData={filteredObjects}
   //       setTableData={setTableData}
@@ -74,7 +74,7 @@ const LawyerOwners = ({
       >
         <label
           className={
-            style === "car"
+            styleCar === "car"
               ? "lawyer_owners--select lawyer_owners--select--car"
               : "lawyer_owners--select"
           }

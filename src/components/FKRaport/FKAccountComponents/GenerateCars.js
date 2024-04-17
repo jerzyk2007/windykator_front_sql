@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import GenerateOwners from "./GenerateOwners";
+// import GenerateOwners from "./GenerateOwners";
 import GenerateDepartments from "./GenerateDepartments";
 import "./GenerateCars.css";
 
@@ -11,7 +11,7 @@ const GenerateCars = ({
   setTableData,
   showTable,
   setShowTable,
-  style,
+  styleCar,
 }) => {
   const [arrow, setArrow] = useState({
     car: false,
@@ -25,7 +25,7 @@ const GenerateCars = ({
   }, 0);
 
   let sum = 0;
-  const docSum = filteredData.map((item) => {
+  filteredData.forEach((item) => {
     if (item.CZY_SAMOCHOD_WYDANY_AS === carsIssued) {
       sum += item.KWOTA_DO_ROZLICZENIA_FK;
     }
@@ -59,7 +59,7 @@ const GenerateCars = ({
         <GenerateDepartments
           key={index}
           dep={dep}
-          style="car"
+          styleCar="car"
           filteredData={filteredObjects}
           setTableData={setTableData}
           showTable={showTable}
@@ -78,7 +78,7 @@ const GenerateCars = ({
         <label
           // className="generate_cars--select"
           className={
-            style === "car"
+            styleCar === "car"
               ? "generate_cars--select generate_cars--select--car"
               : "generate_cars--select"
           }

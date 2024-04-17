@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import FKTable from "./FKTable";
 import GenerateAccount from "./FKAccountComponents/GenerateAccount";
 import Button from "@mui/material/Button";
@@ -53,7 +53,7 @@ const FKRaport = ({
 
         {filter.raport === "accountRaport" && (
           <GenerateAccount
-            style=""
+            styleCar=""
             account={filter.business}
             filteredDataRaport={filteredDataRaport}
             setTableData={setTableData}
@@ -66,7 +66,7 @@ const FKRaport = ({
 
         {filter.raport === "agingRaport" && (
           <AgingAccount
-            style=""
+            styleCar=""
             filteredDataRaport={filteredDataRaport}
             setTableData={setTableData}
             showTable={showTable}
@@ -78,7 +78,7 @@ const FKRaport = ({
 
         {filter.raport === "lawyerRaport" && (
           <LawyerAccount
-            style=""
+            styleCar=""
             filteredDataRaport={filteredDataRaport}
             setTableData={setTableData}
             showTable={showTable}
