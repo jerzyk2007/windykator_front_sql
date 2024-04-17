@@ -110,7 +110,7 @@ const LawyerAreas = ({
         ];
       }
     });
-  }, [filteredObjects, setButtonArea, area]);
+  }, []);
 
   return (
     <>

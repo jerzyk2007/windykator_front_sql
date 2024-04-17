@@ -67,7 +67,7 @@ const AgingComponent = ({
     ].sort();
 
     setAreaItems(areaArray);
-  }, [age, filteredObjects]);
+  }, [age]);
 
   return (
     <>

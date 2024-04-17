@@ -110,7 +110,7 @@ const GenerateAreas = ({
         ];
       }
     });
-  }, [filteredObjects, area, setButtonArea]);
+  }, []);
 
   return (
     <>

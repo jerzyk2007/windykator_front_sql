@@ -31,7 +31,7 @@ const Table = ({ info }) => {
   const [documents, setDocuments] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [columnSizing, setColumnSizing] = useState({});
-  const [density, setDensity] = useState("");
+  // const [density, setDensity] = useState("");
   const [columnOrder, setColumnOrder] = useState([]);
   const [columnPinning, setColumnPinning] = useState({});
   const [columns, setColumns] = useState([]);
@@ -52,13 +52,13 @@ const Table = ({ info }) => {
     const tableSettings = {
       size: { ...columnSizing },
       visible: { ...columnVisibility },
-      density,
+      // density,
       order: columnOrder,
       pinning: columnPinning,
       pagination,
     };
     try {
-      const result = await axiosPrivateIntercept.patch(
+      await axiosPrivateIntercept.patch(
         `/user/save-table-settings/${auth._id}`,
         { tableSettings }
       );
@@ -106,7 +106,7 @@ const Table = ({ info }) => {
   );
 
   useEffect(() => {
-    setTableSize(height - 165);
+    setTableSize(height - 180);
   }, [height]);
 
   useEffect(() => {
@@ -149,7 +149,7 @@ const Table = ({ info }) => {
     return () => {
       isMounted = false;
     };
-  }, [info]);
+  }, [info, auth._id, setPleaseWait, axiosPrivateIntercept]);
 
   return (
     <section className="actual_table">
@@ -227,13 +227,11 @@ const Table = ({ info }) => {
 
                 // wyłącza filtr (3 kropki) w kolumnie
                 enableColumnActions={false}
-
                 // nie odświeża tabeli po zmianie danych
                 autoResetPageIndex={false}
                 // enableColumnVirtualization
 
                 muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
-                
                 // wyświetla filtry nad komórką -
                 columnFilterDisplayMode={"popover"}
                 //filtr nad headerem - popover
