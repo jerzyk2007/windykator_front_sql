@@ -218,7 +218,8 @@ const Table = ({ info }) => {
                 }}
                 // filterFns={'equals'}
                 enableGlobalFilterModes
-                globalFilterModeOptions={["contains", "fuzzy", "startsWith"]}
+                // globalFilterModeOptions={["fuzzy", "contains", "startsWith"]}
+                // globalFilterFn={info === "actual" ? "contains" : "fuzzy"}
                 globalFilterFn="contains"
                 positionGlobalFilter="left"
                 // opcja wyszukuje zbiory do select i multi-select
