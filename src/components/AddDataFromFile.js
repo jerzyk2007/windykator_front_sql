@@ -178,7 +178,7 @@ const AddDataFromFile = () => {
                 name="uploadfile"
                 id="test"
                 style={{ display: "none" }}
-                onChange={(e) => handleSendFileBL(e, "repair")}
+                onChange={(e) => handleSendFileBL(e, "test")}
               />
               <label htmlFor="test" className="add_data_file-click-me">
                 Napraw

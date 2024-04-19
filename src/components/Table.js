@@ -218,7 +218,7 @@ const Table = ({ info }) => {
                 }}
                 // filterFns={'equals'}
                 enableGlobalFilterModes
-                // globalFilterModeOptions={["fuzzy", "contains", "startsWith"]}
+                globalFilterModeOptions={["fuzzy", "contains", "startsWith"]}
                 // globalFilterFn={info === "actual" ? "contains" : "fuzzy"}
                 globalFilterFn="contains"
                 positionGlobalFilter="left"
