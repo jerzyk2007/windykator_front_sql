@@ -104,9 +104,8 @@ const FKItemAging = ({ data, type, title }) => {
             title: `${item.firstValue}-${newValue}`,
           };
         }
-      } else {
-        return item;
       }
+      return item;
     });
     const sortedUpdate = sorted(update);
     setUpdateItem(sortedUpdate);
@@ -121,19 +120,18 @@ const FKItemAging = ({ data, type, title }) => {
           return {
             ...item,
             firstValue: newValue,
-            title: `< ${newValue}`,
+            title: `<${newValue}`,
           };
         }
         if (info === "last") {
           return {
             ...item,
             secondValue: newValue,
-            title: `> ${newValue}`,
+            title: `>${newValue}`,
           };
         }
-      } else {
-        return item;
       }
+      return item;
     });
     setUpdateItem(update);
   };
@@ -268,12 +266,9 @@ const FKItemAging = ({ data, type, title }) => {
   };
 
   const saveData = async () => {
-    const result = await axiosPrivateIntercept.patch(
-      `/fk/save-items-data/${type}`,
-      {
-        [type]: dataItem,
-      }
-    );
+    await axiosPrivateIntercept.patch(`/fk/save-items-data/${type}`, {
+      [type]: dataItem,
+    });
   };
 
   useEffect(() => {

@@ -12,54 +12,44 @@ const FKAddData = () => {
   const { pleaseWait, setPleaseWait } = useData();
 
   const [errFKAccountancy, setErrFKAccountancy] = useState("");
+  const [carReleased, setCarReleased] = useState("");
+  const [settlementNames, setSettlementNames] = useState("");
+  const [rubiconData, setRubiconData] = useState("");
+  const [deleteRaport, setDeleteRaport] = useState("");
   const [dateCounter, setDateCounter] = useState({});
+  const [raportErrors, setRaportErrors] = useState("");
 
-  // const handleExportExcel = (excelData) => {
-  //   const wb = xlsx.utils.book_new();
-
-  //   // Iteracja po kluczach obiektu excelData
-  //   for (const key in excelData) {
-  //     if (Object.hasOwnProperty.call(excelData, key)) {
-  //       const sheetData = excelData[key];
-  //       const ws = xlsx.utils.json_to_sheet(sheetData);
-  //       xlsx.utils.book_append_sheet(wb, ws, key); // Dodanie arkusza z danymi dla danego klucza
-  //     }
-  //   }
-
-  //   xlsx.writeFile(wb, "Faktury.xlsx"); // Zapisanie pliku Excel
-  // };
-
-  const handleExportExcel = (excelData) => {
+  const handleExportExcel = (excelData, type) => {
     const wb = xlsx.utils.book_new();
-
-    // Obsługa kluczy z tablicami stringów
-    const stringArrayKeys = [
-      "błedy_dzial",
-      "fv_rozliczone",
-      "błędy_wiekowania",
-    ];
-    stringArrayKeys.forEach((key) => {
-      if (excelData[key]) {
-        const data = excelData[key].map((string) => [string]); // Tworzenie tablicy dwuwymiarowej, gdzie każdy string jest w osobnej tablicy
-        const ws = xlsx.utils.aoa_to_sheet(data); // Konwersja tablicy na arkusz
-        xlsx.utils.book_append_sheet(wb, ws, key); // Dodanie arkusza z danymi dla danego klucza
-      }
-    });
-
-    // Obsługa kluczy z tablicami obiektów
-    const objectArrayKeys = Object.keys(excelData).filter(
-      (key) => !stringArrayKeys.includes(key)
-    );
-    objectArrayKeys.forEach((key) => {
-      const ws = xlsx.utils.json_to_sheet(excelData[key]);
-      xlsx.utils.book_append_sheet(wb, ws, key); // Dodanie arkusza z danymi dla danego klucza
-    });
-
-    xlsx.writeFile(wb, "RaportFK.xlsx"); // Zapisanie pliku Excel
+    if (type === "errors") {
+      // Obsługa kluczy z tablicami stringów
+      const stringArrayKeys = [
+        "dzial",
+        "wiekowanie",
+        "obszar",
+        "lokalizacja",
+        "owner",
+      ];
+      stringArrayKeys.forEach((key) => {
+        if (excelData[key]) {
+          const data = excelData[key].map((string) => [string]); // Tworzenie tablicy dwuwymiarowej, gdzie każdy string jest w osobnej tablicy
+          const ws = xlsx.utils.aoa_to_sheet(data); // Konwersja tablicy na arkusz
+          xlsx.utils.book_append_sheet(wb, ws, key); // Dodanie arkusza z danymi dla danego klucza
+        }
+      });
+      xlsx.writeFile(wb, "Błędy.xlsx"); // Zapisanie pliku Excel
+    }
+    if (type === "generate") {
+      const wb = xlsx.utils.book_new();
+      const ws = xlsx.utils.json_to_sheet(excelData);
+      xlsx.utils.book_append_sheet(wb, ws, "Raport");
+      xlsx.writeFile(wb, "Raport.xlsx");
+    }
   };
 
   const handleSendFile = async (e, type) => {
     setPleaseWait(true);
+    setDeleteRaport("");
     const file = e.target.files[0];
     if (!file) return console.log("Brak pliku");
     if (!file.name.endsWith(".xlsx")) {
@@ -80,9 +70,19 @@ const FKAddData = () => {
           },
         }
       );
+      console.log(response.data);
 
       if (type === "accountancy") {
         setErrFKAccountancy("Dokumenty zaktualizowane.");
+      }
+      if (type === "car") {
+        setCarReleased("Dokumenty zaktualizowane.");
+      }
+      if (type === "rubicon") {
+        setRubiconData("Dokumenty zaktualizowane.");
+      }
+      if (type === "settlement") {
+        setSettlementNames("Dokumenty zaktualizowane.");
       }
 
       setPleaseWait(false);
@@ -90,20 +90,17 @@ const FKAddData = () => {
       if (type === "accountancy") {
         setErrFKAccountancy("Błąd aktualizacji dokumentów.");
       }
+      if (type === "car") {
+        setCarReleased("Błąd aktualizacji dokumentów.");
+      }
+      if (type === "rubicon") {
+        setRubiconData("Błąd aktualizacji dokumentów.");
+      }
+      if (type === "settlement") {
+        setSettlementNames("Błąd aktualizacji dokumentów.");
+      }
       console.error("Błąd przesyłania pliku:", error);
       setPleaseWait(false);
-    }
-  };
-
-  const getDateAndCounter = async () => {
-    try {
-      setPleaseWait(true);
-      const result = await axiosPrivateIntercept.get("/fk/get-date-counter");
-
-      setDateCounter(result.data);
-      setPleaseWait(false);
-    } catch (err) {
-      console.error(err);
     }
   };
 
@@ -111,15 +108,33 @@ const FKAddData = () => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/fk/generate-raport");
-      const excelData = {
-        błedy_dzial: result.data.errorDepartments,
-        błędy_wiekowania: result.data.errorAging,
-        fv_rozliczone: result.data.errorSettlements,
-        przygotowane_dok: result.data.preparedDataDep,
-        nierozliczone_dok: result.data.preparedDataSettlements,
-        wiekowanie_nierozliczone: result.data.preparedDataAging,
-      };
-      handleExportExcel(excelData);
+
+      handleExportExcel(result.data, "generate");
+      setPleaseWait(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const checkRaportErrors = async () => {
+    try {
+      setPleaseWait(true);
+
+      const result = await axiosPrivateIntercept.get("/fk/check-error-raport");
+      if (result.data.check === "OK") {
+        setRaportErrors("Brak błędów :)");
+      } else {
+        const excelData = {
+          dzial: result.data.check.departments,
+          wiekowanie: result.data.check.aging,
+          obszar: result.data.check.areas,
+          lokalizacja: result.data.check.localizations,
+          owner: result.data.check.owners,
+        };
+        handleExportExcel(excelData, "errors");
+        setRaportErrors("Znaleziono błędy podczas przygotowania raportu");
+      }
+
       console.log(result.data);
       setPleaseWait(false);
     } catch (err) {
@@ -127,9 +142,35 @@ const FKAddData = () => {
     }
   };
 
+  const deleteDataRaport = async () => {
+    try {
+      setPleaseWait(true);
+      const result = await axiosPrivateIntercept.get("/fk/delete-data-raport");
+      if (result.data.result === "delete") {
+        setDateCounter({});
+        setDeleteRaport("Dane usunięte.");
+        setPleaseWait(false);
+      } else {
+        setDeleteRaport("Wystąpił błąd podczas usuwania danych");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
+    const getDateAndCounter = async () => {
+      try {
+        setPleaseWait(true);
+        const result = await axiosPrivateIntercept.get("/fk/get-date-counter");
+        setDateCounter(result.data.updateDate);
+        setPleaseWait(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
     getDateAndCounter();
-  }, []);
+  }, [axiosPrivateIntercept, setPleaseWait]);
 
   return (
     <>
@@ -152,23 +193,27 @@ const FKAddData = () => {
               {!errFKAccountancy ? (
                 <>
                   <span>Wiekowanie - plik księgowość</span>
-                  <span>{dateCounter?.updateDate?.accountancy?.date}</span>
-                  <span>{dateCounter?.updateDate?.accountancy?.counter}</span>
-                  <section className="fk_add_data__container-file">
-                    <input
-                      type="file"
-                      name="uploadfile"
-                      id="accountancy"
-                      style={{ display: "none" }}
-                      onChange={(e) => handleSendFile(e, "accountancy")}
-                    />
-                    <label
-                      htmlFor="accountancy"
-                      className="fk_add_data-click-me"
-                    >
-                      DODAJ
-                    </label>
-                  </section>
+                  <span>{dateCounter?.accountancy?.date}</span>
+                  <span>{dateCounter?.accountancy?.counter}</span>
+                  {!dateCounter?.accountancy ? (
+                    <section className="fk_add_data__container-file">
+                      <input
+                        type="file"
+                        name="uploadfile"
+                        id="accountancy"
+                        style={{ display: "none" }}
+                        onChange={(e) => handleSendFile(e, "accountancy")}
+                      />
+                      <label
+                        htmlFor="accountancy"
+                        className="fk_add_data-click-me"
+                      >
+                        DODAJ
+                      </label>
+                    </section>
+                  ) : (
+                    <span></span>
+                  )}
                 </>
               ) : (
                 <p className="fk_add_data-error">{errFKAccountancy}</p>
@@ -176,46 +221,176 @@ const FKAddData = () => {
             </section>
 
             <section className="fk_add_data__container-item">
-              <span>Rozrachunki - przelewy bankowe</span>
-              <span></span>
-              <span></span>
+              {!carReleased ? (
+                <>
+                  <span>Auta wydane - plik wydane</span>
+                  <span>{dateCounter?.carReleased?.date}</span>
+                  <span>{dateCounter?.carReleased?.counter}</span>
+                  {dateCounter?.accountancy && !dateCounter?.carReleased ? (
+                    <section className="fk_add_data__container-file">
+                      <input
+                        type="file"
+                        name="uploadfile"
+                        id="car"
+                        style={{ display: "none" }}
+                        onChange={(e) => handleSendFile(e, "car")}
+                      />
+                      <label htmlFor="car" className="fk_add_data-click-me">
+                        DODAJ
+                      </label>
+                    </section>
+                  ) : (
+                    <span></span>
+                  )}
+                </>
+              ) : (
+                <p className="fk_add_data-error">{carReleased}</p>
+              )}
+            </section>
+
+            <section className="fk_add_data__container-item">
+              {!rubiconData ? (
+                <>
+                  <span>Status sprawy - plik Rubicon</span>
+                  <span>{dateCounter?.caseStatus?.date}</span>
+                  <span>{dateCounter?.caseStatus?.counter}</span>
+
+                  {dateCounter?.accountancy &&
+                  dateCounter?.carReleased &&
+                  !dateCounter?.caseStatus ? (
+                    <section className="fk_add_data__container-file">
+                      <input
+                        type="file"
+                        name="uploadfile"
+                        id="rubicon"
+                        style={{ display: "none" }}
+                        onChange={(e) => handleSendFile(e, "rubicon")}
+                      />
+                      <label htmlFor="rubicon" className="fk_add_data-click-me">
+                        DODAJ
+                      </label>
+                    </section>
+                  ) : (
+                    <span></span>
+                  )}
+                </>
+              ) : (
+                <p className="fk_add_data-error">{rubiconData}</p>
+              )}
+            </section>
+
+            <section className="fk_add_data__container-item">
+              {!settlementNames ? (
+                <>
+                  <span>Opisy rozrachunków - plik rozlas</span>
+                  <span>{dateCounter?.settlementNames?.date}</span>
+                  <span>{dateCounter?.settlementNames?.counter}</span>
+
+                  {dateCounter?.accountancy &&
+                  dateCounter?.carReleased &&
+                  dateCounter?.caseStatus &&
+                  !dateCounter?.settlementNames ? (
+                    <section className="fk_add_data__container-file">
+                      <input
+                        type="file"
+                        name="uploadfile"
+                        id="settlement"
+                        style={{ display: "none" }}
+                        onChange={(e) => handleSendFile(e, "settlement")}
+                      />
+                      <label
+                        htmlFor="settlement"
+                        className="fk_add_data-click-me"
+                      >
+                        DODAJ
+                      </label>
+                    </section>
+                  ) : (
+                    <span></span>
+                  )}
+                </>
+              ) : (
+                <p className="fk_add_data-error">{settlementNames}</p>
+              )}
+            </section>
+
+            <section className="fk_add_data__container-item">
               <section className="fk_add_data__container-file">
-                {/* <input
-                  type="file"
-                  name="uploadfile"
-                  id="bank"
-                  style={{ display: "none" }}
-                  onChange={(e) => handleSendFile(e, "bank")}
-                />
-                <label htmlFor="bank" className="fk_add_data-click-me">
-                  DODAJ
-                </label> */}
+                <Button
+                  variant="contained"
+                  color="error"
+                  disableElevation
+                  onClick={deleteDataRaport}
+                >
+                  Usuń dane
+                  <br />
+                  Raportu FK
+                </Button>
+              </section>
+
+              {!deleteRaport ? (
+                <span className="fk_add_data__container-item--title">
+                  Jeśli chcesz dodać nowe pliki, skasuj poprzedni raport
+                </span>
+              ) : (
+                <span style={{ color: "red", fontWeight: "bold" }}>
+                  {deleteRaport}
+                </span>
+              )}
+            </section>
+
+            <section className="fk_add_data__container-item">
+              {!raportErrors ? (
+                <span className="fk_add_data__container-item--title">
+                  Sprawdź dane przed wygenerowaniem raportu
+                </span>
+              ) : (
+                <span
+                  className="fk_add_data__container-item--title"
+                  style={
+                    raportErrors !== "Brak błędów :)"
+                      ? { color: "red", fontWeight: "bold" }
+                      : null
+                  }
+                >
+                  {raportErrors}
+                </span>
+              )}
+              <section className="fk_add_data__container-file">
+                {dateCounter?.accountancy &&
+                  dateCounter?.carReleased &&
+                  dateCounter?.caseStatus &&
+                  dateCounter?.settlementNames && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      disableElevation
+                      onClick={checkRaportErrors}
+                    >
+                      Sprawdź błędy
+                    </Button>
+                  )}
               </section>
             </section>
 
             <section className="fk_add_data__container-item">
-              <span></span>
-              <span>Generuj raport FK</span>
-              <span></span>
+              <span className="fk_add_data__container-item--title">
+                Generuj raport FK
+              </span>
               <section className="fk_add_data__container-file">
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  disableElevation
-                  onClick={generateRaport}
-                >
-                  Generuj Raport FK
-                </Button>
-                {/* <input
-                  type="file"
-                  name="uploadfile"
-                  id="bank"
-                  style={{ display: "none" }}
-                  onChange={(e) => handleSendFile(e, "bank")}
-                />
-                <label htmlFor="bank" className="fk_add_data-click-me">
-                  DODAJ
-                </label> */}
+                {dateCounter?.accountancy &&
+                  dateCounter?.carReleased &&
+                  dateCounter?.caseStatus &&
+                  dateCounter?.settlementNames && (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      disableElevation
+                      onClick={generateRaport}
+                    >
+                      Generuj Raport FK
+                    </Button>
+                  )}
               </section>
             </section>
           </section>

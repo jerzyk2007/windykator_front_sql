@@ -13,7 +13,7 @@
 }
 
 .fk_add_data__container {
-  width: 90%;
+  width: 95%;
   border: 1px solid black;
   /* padding: 10px; */
   display: flex;
@@ -27,7 +27,6 @@
   flex-grow: 1;
   display: flex;
   align-items: center;
-  /* justify-content: space-between; */
 }
 
 .fk_add_data__container-item:first-child {
@@ -46,6 +45,18 @@
 .fk_add_data__container-item span:last-child {
   flex-basis: 15%;
 }
+.fk_add_data__container-item--title {
+  flex-grow: 1;
+}
+
+.fk_add_data__container-item .fk_add_data__container-file {
+  width: 20%;
+}
+
+.fk_add_data__container-item .fk_add_data__container-file Button {
+  width: 100%;
+}
+
 .fk_add_data-click-me {
   border: none;
   padding: 8px 10px;
