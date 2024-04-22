@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import AgingCars from "./AgingCars";
-import AgingDepartments from "./AgingDepartments";
+import AgingComponent from "./AgingComponent";
 import "./AgingAreas.css";
 
 const AgingAreas = ({
@@ -11,6 +11,8 @@ const AgingAreas = ({
   setTableData,
   setShowTable,
   styleCar,
+  setButtonArea,
+  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     [area]: false,
@@ -23,15 +25,25 @@ const AgingAreas = ({
     return acc;
   }, 0);
 
-  let sum = 0;
+  // let sum = 0;
+  // filteredData.forEach((item) => {
+  //   if (item.OBSZAR === area) {
+  //     sum += item.KWOTA_DO_ROZLICZENIA_FK;
+  //   }
+  //   return sum;
+  // });
+
+  let sumFK = 0;
+  let sumAS = 0;
   filteredData.forEach((item) => {
     if (item.OBSZAR === area) {
-      sum += item.KWOTA_DO_ROZLICZENIA_FK;
+      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
+      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
     }
-    return sum;
+    return { sumFK, sumAS };
   });
 
-  const percent = "do ustalenia";
+  // const percent = "do ustalenia";
 
   const filteredObjects = filteredData.filter((obj) => obj.OBSZAR === area);
 
@@ -55,32 +67,60 @@ const AgingAreas = ({
             setTableData={setTableData}
             showTable={showTable}
             setShowTable={setShowTable}
+            // filter={filter}
           />
         );
       });
     } else {
-      const departments = [
+      const aging = [
         ...new Set(
           filteredObjects
-            .filter((dep) => dep.OBSZAR === area)
-            .map((dep) => dep.DZIAL)
+            .filter((age) => age.OBSZAR === area)
+            .map((age) => age.PRZEDZIAL_WIEKOWANIE)
         ),
-      ].sort();
-      generateItems = departments.map((dep, index) => {
+      ];
+      generateItems = aging.map((age, index) => {
         return (
-          <AgingDepartments
+          <AgingComponent
             key={index}
             styleCar={styleCar}
             filteredData={filteredObjects}
-            dep={dep}
+            age={age}
             setTableData={setTableData}
             showTable={showTable}
             setShowTable={setShowTable}
+            // filter={filter}
           />
         );
       });
     }
   }
+  useEffect(() => {
+    setButtonArea((prev) => {
+      // Sprawdź, czy area już istnieje w tablicy
+      const existingAreaIndex = prev.findIndex((item) => item.name === area);
+
+      if (existingAreaIndex !== -1) {
+        // Jeśli area już istnieje, zaktualizuj tylko jego dane
+        const updatedArea = {
+          ...prev[existingAreaIndex],
+          data: filteredObjects,
+        };
+        const updatedAreas = [...prev];
+        updatedAreas[existingAreaIndex] = updatedArea;
+        return updatedAreas;
+      } else {
+        // Jeśli area nie istnieje, dodaj nowy obiekt do tablicy
+        return [
+          ...prev,
+          {
+            name: area,
+            data: filteredObjects,
+          },
+        ];
+      }
+    });
+  }, [filteredData]);
 
   return (
     <>
@@ -110,15 +150,24 @@ const AgingAreas = ({
           {counter}
         </label>
         <label className="aging_areas--doc-sum" onDoubleClick={handleClick}>
-          {sum.toLocaleString("pl-PL", {
+          {sumFK.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
           })}
         </label>
-        <label className="aging_areas--percent" onDoubleClick={handleClick}>
-          {percent}
+        <label className="aging_areas--doc-sum" onDoubleClick={handleClick}>
+          {sumAS.toLocaleString("pl-PL", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })}
         </label>
+        {/* {filter.payment !== "Wszystko" && (
+          <label className="aging_areas--percent" onDoubleClick={handleClick}>
+            {percent}
+          </label>
+        )} */}
       </section>
       {generateItems}
     </>

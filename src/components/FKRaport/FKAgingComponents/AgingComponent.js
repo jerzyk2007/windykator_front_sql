@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import AgingAreas from "./AgingAreas";
+import AgingDepartments from "./AgingDepartments";
 import "./AgingComponent.css";
 
 const AgingComponent = ({
@@ -10,12 +10,13 @@ const AgingComponent = ({
   setShowTable,
   showTable,
   styleCar,
+  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     [age]: false,
   });
 
-  const [areaItems, setAreaItems] = useState([]);
+  const [depItems, setDepItems] = useState([]);
 
   const counter = filteredData.reduce((acc, doc) => {
     if (doc.PRZEDZIAL_WIEKOWANIE === age) {
@@ -24,15 +25,25 @@ const AgingComponent = ({
     return acc;
   }, 0);
 
-  let sum = 0;
+  // let sum = 0;
+  // filteredData.forEach((item) => {
+  //   if (item.PRZEDZIAL_WIEKOWANIE === age) {
+  //     sum += item.KWOTA_DO_ROZLICZENIA_FK;
+  //   }
+  //   return sum;
+  // });
+
+  let sumFK = 0;
+  let sumAS = 0;
   filteredData.forEach((item) => {
     if (item.PRZEDZIAL_WIEKOWANIE === age) {
-      sum += item.KWOTA_DO_ROZLICZENIA_FK;
+      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
+      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
     }
-    return sum;
+    return { sumFK, sumAS };
   });
 
-  const percent = "do ustalenia";
+  // const percent = "do ustalenia";
 
   const filteredObjects = filteredData.filter(
     (obj) => obj.PRZEDZIAL_WIEKOWANIE === age
@@ -43,30 +54,31 @@ const AgingComponent = ({
     setShowTable(true);
   };
 
-  const generateItems = areaItems.map((item, index) => {
+  const generateItems = depItems.map((item, index) => {
     return (
-      <AgingAreas
+      <AgingDepartments
         key={index}
         styleCar={styleCar}
-        area={item}
+        dep={item}
         filteredData={filteredObjects}
         setTableData={setTableData}
         showTable={showTable}
         setShowTable={setShowTable}
+        // filter={filter}
       />
     );
   });
 
   useEffect(() => {
-    const areaArray = [
+    const depArray = [
       ...new Set(
         filteredObjects
           .filter((item) => item.PRZEDZIAL_WIEKOWANIE)
-          .map((item) => item.OBSZAR)
+          .map((item) => item.DZIAL)
       ),
     ].sort();
 
-    setAreaItems(areaArray);
+    setDepItems(depArray);
   }, [age]);
 
   return (
@@ -97,15 +109,27 @@ const AgingComponent = ({
           {counter}
         </label>
         <label className="aging_component--doc-sum" onDoubleClick={handleClick}>
-          {sum.toLocaleString("pl-PL", {
+          {sumFK.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
           })}
         </label>
-        <label className="aging_component--percent" onDoubleClick={handleClick}>
-          {percent}
+        <label className="aging_component--doc-sum" onDoubleClick={handleClick}>
+          {sumAS.toLocaleString("pl-PL", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })}
         </label>
+        {/* {filter.payment !== "Wszystko" && (
+          <label
+            className="aging_component--percent"
+            onDoubleClick={handleClick}
+          >
+            {percent}
+          </label>
+        )} */}
       </section>
       {arrow[age] && generateItems}
     </>

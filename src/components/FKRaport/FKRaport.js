@@ -46,9 +46,14 @@ const FKRaport = ({
             Liczba dokumentów
           </label>
           <label className="fk_raport-title--doc-sum--header">
-            Kwota do rozliczenia
+            Kwota do rozliczenia FK
           </label>
-          <label className="fk_raport-title--percent--header">Procent</label>
+          <label className="fk_raport-title--doc-sum--header">
+            Kwota do rozliczenia AS
+          </label>
+          {/* {filter.payment !== "Wszystko" && (
+            <label className="fk_raport-title--percent--header">Procent</label>
+          )} */}
         </section>
 
         {filter.raport === "accountRaport" && (
@@ -60,6 +65,7 @@ const FKRaport = ({
             showTable={showTable}
             setShowTable={setShowTable}
             setButtonArea={setButtonArea}
+            filter={filter}
           />
         )}
 
@@ -71,6 +77,7 @@ const FKRaport = ({
             showTable={showTable}
             setShowTable={setShowTable}
             setButtonArea={setButtonArea}
+            filter={filter}
           />
         )}
 
@@ -82,6 +89,7 @@ const FKRaport = ({
             showTable={showTable}
             setShowTable={setShowTable}
             setButtonArea={setButtonArea}
+            filter={filter}
           />
         )}
       </section>

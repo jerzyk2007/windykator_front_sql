@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import AgingComponent from "./AgingComponent";
+import AgingAreas from "./AgingAreas";
 import "./AgingAccount.css";
 
 const AgingAccount = ({
@@ -9,55 +9,58 @@ const AgingAccount = ({
   setTableData,
   setShowTable,
   styleCar,
+  setButtonArea,
+  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     aging: true,
   });
 
-  const [ageArray, setAgeArray] = useState([]);
+  const [areasArray, setAreasArray] = useState([]);
 
   const counter = filteredDataRaport.length;
 
-  let sum = 0;
+  // let sum = 0;
+  // filteredDataRaport.forEach((item) => {
+  //   sum += item.KWOTA_DO_ROZLICZENIA_FK;
+  // });
+
+  let sumFK = 0;
+  let sumAS = 0;
+
   filteredDataRaport.forEach((item) => {
-    sum += item.KWOTA_DO_ROZLICZENIA_FK;
+    sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
+    sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
   });
 
-  const percent = "do ustalenia";
+  // const percent = "do ustalenia";
 
   const handleClick = () => {
     setTableData(filteredDataRaport);
     setShowTable(true);
   };
 
-  const generateItems = ageArray.map((item, index) => {
+  const generateItems = areasArray.map((item, index) => {
     return (
-      <AgingComponent
+      <AgingAreas
         key={index}
-        sstyleCartyle=""
-        age={item}
+        styleCar=""
+        area={item}
         filteredData={filteredDataRaport}
         setTableData={setTableData}
         showTable={showTable}
         setShowTable={setShowTable}
+        setButtonArea={setButtonArea}
+        // filter={filter}
       />
     );
   });
 
   useEffect(() => {
-    const agingArray = [
-      ...new Set(filteredDataRaport.map((age) => age.PRZEDZIAL_WIEKOWANIE)),
-    ];
-    const ageArray = [
-      "< 1",
-      " 1 - 30",
-      " 31 - 90",
-      " 91 - 180",
-      " 181 - 360",
-      "> 360",
-    ];
-    const sortedAging = ageArray.filter((item) => agingArray.includes(item));
-    setAgeArray(sortedAging);
+    const itemsArray = [
+      ...new Set(filteredDataRaport.map((age) => age.OBSZAR)),
+    ].sort();
+    setAreasArray(itemsArray);
   }, [filteredDataRaport]);
 
   return (
@@ -88,15 +91,24 @@ const AgingAccount = ({
           {counter}
         </label>
         <label className="aging_account--doc-sum" onDoubleClick={handleClick}>
-          {sum.toLocaleString("pl-PL", {
+          {sumFK.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
           })}
         </label>
-        <label className="aging_account--percent" onDoubleClick={handleClick}>
-          {percent}
+        <label className="aging_account--doc-sum" onDoubleClick={handleClick}>
+          {sumAS.toLocaleString("pl-PL", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })}
         </label>
+        {/* {filter.payment !== "Wszystko" && (
+          <label className="aging_account--percent" onDoubleClick={handleClick}>
+            {percent}
+          </label>
+        )} */}
       </section>
       {arrow.aging && generateItems}
     </>
@@ -104,3 +116,113 @@ const AgingAccount = ({
 };
 
 export default AgingAccount;
+// import React, { useEffect, useState } from "react";
+// import { IoIosArrowDown } from "react-icons/io";
+// import AgingComponent from "./AgingComponent";
+// import "./AgingAccount.css";
+
+// const AgingAccount = ({
+//   showTable,
+//   filteredDataRaport,
+//   setTableData,
+//   setShowTable,
+//   styleCar,
+//   filter,
+// }) => {
+//   const [arrow, setArrow] = useState({
+//     aging: true,
+//   });
+
+//   const [ageArray, setAgeArray] = useState([]);
+
+//   const counter = filteredDataRaport.length;
+
+//   let sum = 0;
+//   filteredDataRaport.forEach((item) => {
+//     sum += item.KWOTA_DO_ROZLICZENIA_FK;
+//   });
+
+//   const percent = "do ustalenia";
+
+//   const handleClick = () => {
+//     setTableData(filteredDataRaport);
+//     setShowTable(true);
+//   };
+
+//   const generateItems = ageArray.map((item, index) => {
+//     return (
+//       <AgingComponent
+//         key={index}
+//         styleCar=""
+//         age={item}
+//         filteredData={filteredDataRaport}
+//         setTableData={setTableData}
+//         showTable={showTable}
+//         setShowTable={setShowTable}
+//         filter={filter}
+//       />
+//     );
+//   });
+
+//   useEffect(() => {
+//     const agingArray = [
+//       ...new Set(filteredDataRaport.map((age) => age.PRZEDZIAL_WIEKOWANIE)),
+//     ];
+//     // const ageArray = [
+//     //   "< 1",
+//     //   " 1 - 30",
+//     //   " 31 - 90",
+//     //   " 91 - 180",
+//     //   " 181 - 360",
+//     //   "> 360",
+//     // ];
+//     // const sortedAging = ageArray.filter((item) => agingArray.includes(item));
+//     setAgeArray(agingArray);
+//   }, [filteredDataRaport]);
+
+//   return (
+//     <>
+//       <section className="aging_account">
+//         <label
+//           className={
+//             styleCar === "car"
+//               ? "aging_account--select aging_account--select--car"
+//               : "aging_account--select "
+//           }
+//           onClick={() =>
+//             setArrow({
+//               aging: !arrow.aging,
+//             })
+//           }
+//         >
+//           <IoIosArrowDown
+//             className={"aging_account--arrow"}
+//             style={!arrow.aging ? null : { rotate: "180deg" }}
+//           />
+//           Wiekowanie
+//         </label>
+//         <label
+//           className="aging_account--doc-counter"
+//           onDoubleClick={handleClick}
+//         >
+//           {counter}
+//         </label>
+//         <label className="aging_account--doc-sum" onDoubleClick={handleClick}>
+//           {sum.toLocaleString("pl-PL", {
+//             minimumFractionDigits: 2,
+//             maximumFractionDigits: 2,
+//             useGrouping: true,
+//           })}
+//         </label>
+//         {filter.payment !== "Wszystko" && (
+//           <label className="aging_account--percent" onDoubleClick={handleClick}>
+//             {percent}
+//           </label>
+//         )}
+//       </section>
+//       {arrow.aging && generateItems}
+//     </>
+//   );
+// };
+
+// export default AgingAccount;

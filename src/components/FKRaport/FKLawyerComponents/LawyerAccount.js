@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-// import LawyerStages from "./LawyerStages";
 import LawyerAreas from "./LawyerAreas";
 import "./LawyerAccount.css";
 
@@ -11,6 +10,7 @@ const LawyerAccount = ({
   setShowTable,
   styleCar,
   setButtonArea,
+  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     lawyer: true,
@@ -20,12 +20,20 @@ const LawyerAccount = ({
 
   const counter = filteredDataRaport.length;
 
-  let sum = 0;
+  // let sum = 0;
+  // filteredDataRaport.forEach((item) => {
+  //   sum += item.KWOTA_DO_ROZLICZENIA_FK;
+  // });
+
+  let sumFK = 0;
+  let sumAS = 0;
+
   filteredDataRaport.forEach((item) => {
-    sum += item.KWOTA_DO_ROZLICZENIA_FK;
+    sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
+    sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
   });
 
-  const percent = "do ustalenia";
+  // const percent = "do ustalenia";
 
   const handleClick = () => {
     setTableData(filteredDataRaport);
@@ -43,6 +51,7 @@ const LawyerAccount = ({
         showTable={showTable}
         setShowTable={setShowTable}
         setButtonArea={setButtonArea}
+        // filter={filter}
       />
     );
   });
@@ -82,15 +91,27 @@ const LawyerAccount = ({
           {counter}
         </label>
         <label className="lawyer_account--doc-sum" onDoubleClick={handleClick}>
-          {sum.toLocaleString("pl-PL", {
+          {sumFK.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
           })}
         </label>
-        <label className="lawyer_account--percent" onDoubleClick={handleClick}>
-          {percent}
+        <label className="lawyer_account--doc-sum" onDoubleClick={handleClick}>
+          {sumAS.toLocaleString("pl-PL", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })}
         </label>
+        {/* {filter.payment !== "Wszystko" && (
+          <label
+            className="lawyer_account--percent"
+            onDoubleClick={handleClick}
+          >
+            {percent}
+          </label>
+        )} */}
       </section>
       {arrow.lawyer && generateItems}
     </>

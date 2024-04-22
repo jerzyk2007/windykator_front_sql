@@ -11,6 +11,7 @@ const LawyerCars = ({
   showTable,
   setShowTable,
   styleCar,
+  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     car: false,
@@ -23,15 +24,23 @@ const LawyerCars = ({
     return acc;
   }, 0);
 
-  let sum = 0;
+  // let sum = 0;
+  // filteredData.forEach((item) => {
+  //   if (item.CZY_SAMOCHOD_WYDANY_AS === carsIssued) {
+  //     sum += item.KWOTA_DO_ROZLICZENIA_FK;
+  //   }
+  //   return sum;
+  // });
+  let sumFK = 0;
+  let sumAS = 0;
   filteredData.forEach((item) => {
     if (item.CZY_SAMOCHOD_WYDANY_AS === carsIssued) {
-      sum += item.KWOTA_DO_ROZLICZENIA_FK;
+      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
+      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
     }
-    return sum;
+    return { sumFK, sumAS };
   });
-
-  const percent = "do ustalenia";
+  // const percent = "do ustalenia";
 
   const filteredObjects = filteredData.filter(
     (obj) => obj.CZY_SAMOCHOD_WYDANY_AS === carsIssued
@@ -62,6 +71,7 @@ const LawyerCars = ({
           setTableData={setTableData}
           showTable={showTable}
           setShowTable={setShowTable}
+          // filter={filter}
         />
       );
     });
@@ -96,15 +106,24 @@ const LawyerCars = ({
           {counter}
         </label>
         <label className="lawyer_cars--doc-sum" onDoubleClick={handleClick}>
-          {sum.toLocaleString("pl-PL", {
+          {sumFK.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
           })}
         </label>
-        <label className="lawyer_cars--percent" onDoubleClick={handleClick}>
-          {percent}
+        <label className="lawyer_cars--doc-sum" onDoubleClick={handleClick}>
+          {sumAS.toLocaleString("pl-PL", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })}
         </label>
+        {/* {filter.payment !== "Wszystko" && (
+          <label className="lawyer_cars--percent" onDoubleClick={handleClick}>
+            {percent}
+          </label>
+        )} */}
       </section>
       {generateItems}
     </>

@@ -36,9 +36,11 @@ const FKRaportSettings = () => {
 
   const getFilteredData = async () => {
     setPleaseWait(true);
-    const response = await axiosPrivateIntercept.post("/fk/get-data", {
+    const response = await axiosPrivateIntercept.post("/fk/get-raport-data", {
       filter,
     });
+
+    // console.log(response.data);
 
     setFilteredDataRaport(response.data);
     setSettingsSelect(false);

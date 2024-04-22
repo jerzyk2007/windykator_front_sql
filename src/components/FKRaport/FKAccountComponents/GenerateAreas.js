@@ -12,6 +12,7 @@ const GenerateAreas = ({
   setShowTable,
   styleCar,
   setButtonArea,
+  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     [area]: false,
@@ -24,15 +25,17 @@ const GenerateAreas = ({
     return acc;
   }, 0);
 
-  let sum = 0;
+  let sumFK = 0;
+  let sumAS = 0;
   filteredData.forEach((item) => {
     if (item.OBSZAR === area) {
-      sum += item.KWOTA_DO_ROZLICZENIA_FK;
+      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
+      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
     }
-    return sum;
+    return { sumFK, sumAS };
   });
 
-  const percent = "do ustalenia";
+  // const percent = "do ustalenia";
 
   const filteredObjects = filteredData.filter((obj) => obj.OBSZAR === area);
 
@@ -56,6 +59,7 @@ const GenerateAreas = ({
             setTableData={setTableData}
             showTable={showTable}
             setShowTable={setShowTable}
+            // filter={filter}
           />
         );
       });
@@ -79,6 +83,7 @@ const GenerateAreas = ({
             setTableData={setTableData}
             showTable={showTable}
             setShowTable={setShowTable}
+            // filter={filter}
           />
         );
       });
@@ -110,7 +115,7 @@ const GenerateAreas = ({
         ];
       }
     });
-  }, []);
+  }, [filteredData]);
 
   return (
     <>
@@ -143,15 +148,27 @@ const GenerateAreas = ({
           {counter}
         </label>
         <label className="generate_areas--doc-sum" onDoubleClick={handleClick}>
-          {sum.toLocaleString("pl-PL", {
+          {sumFK.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
           })}
         </label>
-        <label className="generate_areas--percent" onDoubleClick={handleClick}>
-          {percent}
+        <label className="generate_areas--doc-sum" onDoubleClick={handleClick}>
+          {sumAS.toLocaleString("pl-PL", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })}
         </label>
+        {/* {filter.payment !== "Wszystko" && (
+          <label
+            className="generate_areas--percent"
+            onDoubleClick={handleClick}
+          >
+            {percent}
+          </label>
+        )} */}
       </section>
       {generateItems}
     </>

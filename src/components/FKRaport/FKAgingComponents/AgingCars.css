@@ -15,6 +15,7 @@
   padding: 3px;
   background-color: #ffffff;
   border-right: 1px solid black;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,7 +32,7 @@
 
 .aging_cars .aging_cars--select {
   min-width: 500px;
-  padding-left: 60px;
+  padding-left: 40px;
   flex-grow: 1;
   display: flex;
   align-items: center;
