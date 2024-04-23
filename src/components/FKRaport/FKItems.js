@@ -13,7 +13,7 @@ const FKItems = () => {
   const [dataItems, setDataItems] = useState([]);
   const [toggleState, setToggleState] = useState(1);
 
-  const aging = ["<1", "1-30", "31-60", "180-360", ">360"];
+  // const aging = ["<1", "1-30", "31-60", "180-360", ">360"];
 
   const toggleTab = (index) => {
     setToggleState(index);
@@ -71,21 +71,21 @@ const FKItems = () => {
                     <section className="section-content-data">
                       <FKItemComponent
                         data={dataItems.departments}
-                        type="departments"
+                        info="departments"
                         title="Działy"
                       />
                     </section>
                     <section className="section-content-data">
                       <FKItemComponent
-                        data={dataItems.localization}
-                        type="localization"
+                        data={dataItems.localizations}
+                        info="localizations"
                         title="Lokalizacje"
                       />
                     </section>
                     <section className="section-content-data">
                       <FKItemComponent
                         data={dataItems.areas}
-                        type="areas"
+                        info="areas"
                         title="Obszary"
                       />
                     </section>
@@ -100,21 +100,21 @@ const FKItems = () => {
                     <section className="section-content-data">
                       <FKItemComponent
                         data={dataItems.owners}
-                        type="owners"
+                        info="owners"
                         title="Ownerzy"
                       />
                     </section>
                     <section className="section-content-data">
                       <FKItemComponent
                         data={dataItems.guardians}
-                        type="guardians"
+                        info="guardians"
                         title="Opiekun"
                       />
                     </section>
                     <section className="section-content-data">
                       <FKItemAging
                         data={dataItems.aging}
-                        type="aging"
+                        info="aging"
                         title="Wiekowanie"
                       />
                     </section>

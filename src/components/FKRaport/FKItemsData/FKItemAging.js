@@ -3,7 +3,7 @@ import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 
 import "./FKItemAging.css";
 
-const FKItemAging = ({ data, type, title }) => {
+const FKItemAging = ({ data, info, title }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [dataItem, setDataItem] = useState([]);
@@ -266,8 +266,8 @@ const FKItemAging = ({ data, type, title }) => {
   };
 
   const saveData = async () => {
-    await axiosPrivateIntercept.patch(`/fk/save-items-data/${type}`, {
-      [type]: dataItem,
+    await axiosPrivateIntercept.patch(`/fk/save-items-data/${info}`, {
+      [info]: dataItem,
     });
   };
 

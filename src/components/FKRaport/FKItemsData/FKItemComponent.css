@@ -43,8 +43,14 @@
   right: 20%;
 }
 
+.fk_item_component--item--fa-save {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
 .fk_item_component--title--fa-save:active,
-.fk_item_component--title--fa-plus:active {
+.fk_item_component--title--fa-plus:active,
+.fk_item_component--item--fa-save:active {
   color: red;
 }
 

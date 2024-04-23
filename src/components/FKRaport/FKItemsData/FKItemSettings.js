@@ -28,7 +28,7 @@ const FKItemSettings = ({
   };
 
   // tworzy dla listy rozwijanej wszytskie nazwy lokalizacji
-  const localizationItems = settingsItem.localization?.map((loc, index) => {
+  const localizationItems = settingsItem.localizations?.map((loc, index) => {
     return (
       <MenuItem value={loc} key={index}>
         {loc}
