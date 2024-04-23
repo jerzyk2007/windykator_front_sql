@@ -1,16 +1,12 @@
 
-zrobić logi błędów na serwerze dla każdej funkcji 
 
-Raport - sprawdzić w Raport czy funkcje wykonują się w prawidłowej kolejności, po zaktualizowaniu stanów useState
-usunąc na serwerze dostęp przez localhost
 
 zrobić zabezpieczenia dla dodawanie danych w tabelce - uwagi i cały wiersz
 ma wyskoczyć błąd w przypadku błednego zapisu
 
-dodać korekty
-Do paginacji dodac opcję Wszytsko
-
-znaleźć - jak się dodaja nowe kolumny, jesli coś dodałem nowego
+przy zmianie nazwy kolumny mają również zmienic się nazwy u każdego uzytkownika
 
 
-raport o błedach i VAT - jesli faktura się spłaci to ma nie liczyć
+
+
+s
