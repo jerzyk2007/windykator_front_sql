@@ -44,7 +44,7 @@ const FKTableSettings = () => {
             />
           </span>
         </section>
-        <section className="columns-item">
+        {/* <section className="columns-item">
           <span className="columns-item-header">Wybierz filtr:</span>
           <span className="columns-item-choice">
             <select
@@ -55,13 +55,11 @@ const FKTableSettings = () => {
               }
             >
               <option value="none">Brak</option>
-              <option value="startsWith">Dokładne wyszukanie</option>
-              <option value="text">Zbliżone wyszukanie</option>
-              <option value="multi-select">Zaznacz wiele</option>
-              <option value="select">Zaznacz jeden</option>
-              <option value="range-slider">Suwak do kwot</option>
+              <option value="startsWith">Wyszukaj dokładnie</option>
               <option value="date-range">Data od - do</option>
-              <option value="date">Data</option>
+              <option value="range">Liczba od - do</option>
+              <option value="select">Zaznacz jeden</option>
+              <option value="multi-select">Zaznacz wiele</option>
             </select>
           </span>
         </section>
@@ -79,7 +77,7 @@ const FKTableSettings = () => {
               <option value="money">waluta</option>
             </select>
           </span>
-        </section>
+        </section> */}
       </section>
     );
   });
@@ -142,10 +140,6 @@ const FKTableSettings = () => {
   useEffect(() => {
     handleGetNewColums();
   }, []);
-
-  //   useEffect(() => {
-  //     createColumns();
-  //   }, [columnsName]);
 
   return (
     <>

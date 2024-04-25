@@ -16,7 +16,7 @@ import * as xlsx from "xlsx";
 
 import { Box, Button } from "@mui/material";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { prepareColumns } from "./utilsForTable/PrepareColumns";
+import { prepareColumns } from "./utilsForTable/prepareColumns";
 import { handleExportRows } from "./utilsForTable/excelFilteredTable";
 
 import "./Table.css";

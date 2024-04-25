@@ -40,8 +40,29 @@ const FKAddData = () => {
       xlsx.writeFile(wb, "Błędy.xlsx"); // Zapisanie pliku Excel
     }
     if (type === "generate") {
+      const cleanData = excelData.map((doc) => {
+        const {
+          _id,
+          __v,
+          OPIEKUN_OBSZARU_CENTRALI,
+          OPIS_ROZRACHUNKU,
+          OWNER,
+          ...cleanDoc
+        } = doc;
+        if (Array.isArray(OPIEKUN_OBSZARU_CENTRALI)) {
+          cleanDoc.OPIEKUN_OBSZARU_CENTRALI =
+            OPIEKUN_OBSZARU_CENTRALI.join(", ");
+        }
+        if (Array.isArray(OPIS_ROZRACHUNKU)) {
+          cleanDoc.OPIS_ROZRACHUNKU = OPIS_ROZRACHUNKU.join(", ");
+        }
+        if (Array.isArray(OWNER)) {
+          cleanDoc.OWNER = OWNER.join(", ");
+        }
+        return cleanDoc;
+      });
       const wb = xlsx.utils.book_new();
-      const ws = xlsx.utils.json_to_sheet(excelData);
+      const ws = xlsx.utils.json_to_sheet(cleanData);
       xlsx.utils.book_append_sheet(wb, ws, "Raport");
       xlsx.writeFile(wb, "Raport.xlsx");
     }
@@ -70,7 +91,6 @@ const FKAddData = () => {
           },
         }
       );
-      console.log(response.data);
 
       if (type === "accountancy") {
         setErrFKAccountancy("Dokumenty zaktualizowane.");
@@ -135,7 +155,7 @@ const FKAddData = () => {
         setRaportErrors("Znaleziono błędy podczas przygotowania raportu");
       }
 
-      console.log(result.data);
+      // console.log(result.data);
       setPleaseWait(false);
     } catch (err) {
       console.error(err);
