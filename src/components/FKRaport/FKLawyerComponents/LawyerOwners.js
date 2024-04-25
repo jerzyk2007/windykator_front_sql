@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-// import { IoIosArrowDown } from "react-icons/io";
-// import LawyerNames from "./LawyerNames";
 import "./LawyerOwners.css";
 
 const LawyerOwners = ({
@@ -10,13 +8,10 @@ const LawyerOwners = ({
   setShowTable,
   showTable,
   styleCar,
-  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     [own]: false,
   });
-
-  // const [lawNameItems, setLawNameItems] = useState([]);
 
   const counter = filteredData.reduce((acc, doc) => {
     if (doc.OWNER === own) {
@@ -25,20 +20,23 @@ const LawyerOwners = ({
     return acc;
   }, 0);
 
-  // let sum = 0;
-  // filteredData.forEach((item) => {
-  //   if (item.OWNER === own) {
-  //     sum += item.KWOTA_DO_ROZLICZENIA_FK;
-  //   }
-  //   return sum;
-  // });
-
   let sumFK = 0;
   let sumAS = 0;
+
   filteredData.forEach((item) => {
     if (item.OWNER === own) {
-      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
-      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
+      if (
+        typeof item.KWOTA_DO_ROZLICZENIA_FK === "number" ||
+        !isNaN(item.KWOTA_DO_ROZLICZENIA_FK)
+      ) {
+        sumFK += Number(item.KWOTA_DO_ROZLICZENIA_FK);
+      }
+      if (
+        typeof item.DO_ROZLICZENIA_AS === "number" ||
+        !isNaN(item.DO_ROZLICZENIA_AS)
+      ) {
+        sumAS += Number(item.DO_ROZLICZENIA_AS);
+      }
     }
     return { sumFK, sumAS };
   });
@@ -50,31 +48,6 @@ const LawyerOwners = ({
     setTableData(filteredObjects);
     setShowTable(true);
   };
-
-  // const generateItems = lawNameItems.map((item, index) => {
-  //   return (
-  //     <LawyerNames
-  //       key={index}
-  //       styleCar={styleCar}
-  //       name={item}
-  //       filteredData={filteredObjects}
-  //       setTableData={setTableData}
-  //       showTable={showTable}
-  //       setShowTable={setShowTable}
-  //     />
-  //   );
-  // });
-
-  // useEffect(() => {
-  //   const lawNameArray = [
-  //     ...new Set(
-  //       filteredObjects
-  //         .filter((item) => item.OBSZAR)
-  //         .map((item) => item.JAKA_KANCELARIA)
-  //     ),
-  //   ].sort();
-  //   setLawNameItems(lawNameArray);
-  // }, [own]);
 
   return (
     <>
@@ -94,10 +67,6 @@ const LawyerOwners = ({
             })
           }
         >
-          {/* <IoIosArrowDown
-            className="lawyer_owners--arrow"
-            style={!arrow[own] ? null : { rotate: "180deg" }}
-          /> */}
           {own}
         </label>
         <label
@@ -120,13 +89,7 @@ const LawyerOwners = ({
             useGrouping: true,
           })}
         </label>
-        {/* {filter.payment !== "Wszystko" && (
-          <label className="lawyer_owners--percent" onDoubleClick={handleClick}>
-            {percent}
-          </label>
-        )} */}
       </section>
-      {/* {arrow[own] && generateItems} */}
     </>
   );
 };

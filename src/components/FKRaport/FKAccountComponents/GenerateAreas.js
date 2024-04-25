@@ -12,7 +12,6 @@ const GenerateAreas = ({
   setShowTable,
   styleCar,
   setButtonArea,
-  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     [area]: false,
@@ -27,10 +26,21 @@ const GenerateAreas = ({
 
   let sumFK = 0;
   let sumAS = 0;
+
   filteredData.forEach((item) => {
     if (item.OBSZAR === area) {
-      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
-      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
+      if (
+        typeof item.KWOTA_DO_ROZLICZENIA_FK === "number" ||
+        !isNaN(item.KWOTA_DO_ROZLICZENIA_FK)
+      ) {
+        sumFK += Number(item.KWOTA_DO_ROZLICZENIA_FK);
+      }
+      if (
+        typeof item.DO_ROZLICZENIA_AS === "number" ||
+        !isNaN(item.DO_ROZLICZENIA_AS)
+      ) {
+        sumAS += Number(item.DO_ROZLICZENIA_AS);
+      }
     }
     return { sumFK, sumAS };
   });
@@ -59,7 +69,6 @@ const GenerateAreas = ({
             setTableData={setTableData}
             showTable={showTable}
             setShowTable={setShowTable}
-            // filter={filter}
           />
         );
       });

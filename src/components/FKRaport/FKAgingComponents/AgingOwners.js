@@ -8,7 +8,6 @@ const AgingOwners = ({
   showTable,
   setShowTable,
   styleCar,
-  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     [own]: false,
@@ -22,20 +21,23 @@ const AgingOwners = ({
     return acc;
   }, 0);
 
-  // let sum = 0;
-  // filteredData.forEach((item) => {
-  //   if (item.OWNER === own) {
-  //     sum += item.KWOTA_DO_ROZLICZENIA_FK;
-  //   }
-  //   return sum;
-  // });
-
   let sumFK = 0;
   let sumAS = 0;
+
   filteredData.forEach((item) => {
     if (item.OWNER === own) {
-      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
-      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
+      if (
+        typeof item.KWOTA_DO_ROZLICZENIA_FK === "number" ||
+        !isNaN(item.KWOTA_DO_ROZLICZENIA_FK)
+      ) {
+        sumFK += Number(item.KWOTA_DO_ROZLICZENIA_FK);
+      }
+      if (
+        typeof item.DO_ROZLICZENIA_AS === "number" ||
+        !isNaN(item.DO_ROZLICZENIA_AS)
+      ) {
+        sumAS += Number(item.DO_ROZLICZENIA_AS);
+      }
     }
     return { sumFK, sumAS };
   });
@@ -67,10 +69,6 @@ const AgingOwners = ({
             })
           }
         >
-          {/* <IoIosArrowDown
-                        className='aging_owners--arrow'
-                        style={!arrow[own] ? null : { rotate: "180deg" }}
-                    /> */}
           {own}
         </label>
         <label
@@ -93,11 +91,6 @@ const AgingOwners = ({
             useGrouping: true,
           })}
         </label>
-        {/* {filter.payment !== "Wszystko" && (
-          <label className="aging_owners--percent" onDoubleClick={handleClick}>
-            {percent}
-          </label>
-        )} */}
       </section>
     </>
   );

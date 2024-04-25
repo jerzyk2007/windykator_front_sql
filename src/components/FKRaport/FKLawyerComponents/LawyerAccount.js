@@ -10,7 +10,6 @@ const LawyerAccount = ({
   setShowTable,
   styleCar,
   setButtonArea,
-  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     lawyer: true,
@@ -20,17 +19,23 @@ const LawyerAccount = ({
 
   const counter = filteredDataRaport.length;
 
-  // let sum = 0;
-  // filteredDataRaport.forEach((item) => {
-  //   sum += item.KWOTA_DO_ROZLICZENIA_FK;
-  // });
-
   let sumFK = 0;
   let sumAS = 0;
 
   filteredDataRaport.forEach((item) => {
-    sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
-    sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
+    if (
+      typeof item.KWOTA_DO_ROZLICZENIA_FK === "number" ||
+      !isNaN(item.KWOTA_DO_ROZLICZENIA_FK)
+    ) {
+      sumFK += Number(item.KWOTA_DO_ROZLICZENIA_FK);
+    }
+    if (
+      typeof item.DO_ROZLICZENIA_AS === "number" ||
+      !isNaN(item.DO_ROZLICZENIA_AS)
+    ) {
+      sumAS += Number(item.DO_ROZLICZENIA_AS);
+    }
+    return { sumFK, sumAS };
   });
 
   // const percent = "do ustalenia";
@@ -51,7 +56,6 @@ const LawyerAccount = ({
         showTable={showTable}
         setShowTable={setShowTable}
         setButtonArea={setButtonArea}
-        // filter={filter}
       />
     );
   });
@@ -65,7 +69,10 @@ const LawyerAccount = ({
 
   return (
     <>
-      <section className="lawyer_account">
+      <section
+        className="lawyer_account"
+        style={counter === 0 || showTable ? { display: "none" } : null}
+      >
         <label
           className={
             styleCar === "car"
@@ -104,14 +111,6 @@ const LawyerAccount = ({
             useGrouping: true,
           })}
         </label>
-        {/* {filter.payment !== "Wszystko" && (
-          <label
-            className="lawyer_account--percent"
-            onDoubleClick={handleClick}
-          >
-            {percent}
-          </label>
-        )} */}
       </section>
       {arrow.lawyer && generateItems}
     </>

@@ -15,20 +15,14 @@ const FKRaportSettings = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { pleaseWait, setPleaseWait } = useData();
 
-  // const [data, setData] = useState([]);
   const [filteredDataRaport, setFilteredDataRaport] = useState([]);
-  // const [filter, setFilter] = useState({
-  //   raport: "accountRaport",
-  //   business: "201203",
-  //   payment: "Przeterminowane",
-  //   actions: "Tak",
-  // });
   const [filter, setFilter] = useState({
     raport: "accountRaport",
     business: "201203",
-    payment: "Wszystko",
-    actions: "All",
+    payment: "Przeterminowane",
+    actions: "Tak",
   });
+
   const [showRaport, setShowRaport] = useState(false);
   const [showSettingsSelect, setSettingsSelect] = useState(false);
   const [showTable, setShowTable] = useState(false);
@@ -45,8 +39,6 @@ const FKRaportSettings = () => {
     const response = await axiosPrivateIntercept.post("/fk/get-raport-data", {
       filter,
     });
-
-    // console.log(response.data);
 
     setFilteredDataRaport(response.data);
     setSettingsSelect(false);

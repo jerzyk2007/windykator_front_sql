@@ -7,7 +7,7 @@ const GenerateAging = ({
   setTableData,
   setShowTable,
   styleCar,
-  // filter,
+  showTable,
 }) => {
   const [arrow, setArrow] = useState({
     [age]: false,
@@ -20,20 +20,23 @@ const GenerateAging = ({
     return acc;
   }, 0);
 
-  // let sum = 0;
-  // filteredData.forEach((item) => {
-  //   if (item.PRZEDZIAL_WIEKOWANIE === age) {
-  //     sum += item.KWOTA_DO_ROZLICZENIA_FK;
-  //   }
-  //   return sum;
-  // });
-
   let sumFK = 0;
   let sumAS = 0;
+
   filteredData.forEach((item) => {
     if (item.PRZEDZIAL_WIEKOWANIE === age) {
-      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
-      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
+      if (
+        typeof item.KWOTA_DO_ROZLICZENIA_FK === "number" ||
+        !isNaN(item.KWOTA_DO_ROZLICZENIA_FK)
+      ) {
+        sumFK += Number(item.KWOTA_DO_ROZLICZENIA_FK);
+      }
+      if (
+        typeof item.DO_ROZLICZENIA_AS === "number" ||
+        !isNaN(item.DO_ROZLICZENIA_AS)
+      ) {
+        sumAS += Number(item.DO_ROZLICZENIA_AS);
+      }
     }
     return { sumFK, sumAS };
   });
@@ -51,9 +54,11 @@ const GenerateAging = ({
 
   return (
     <>
-      <section className="generate_aging">
+      <section
+        className="generate_aging"
+        style={counter === 0 || showTable ? { display: "none" } : null}
+      >
         <label
-          // className='generate_aging--select'
           className={
             styleCar === "car"
               ? "generate_aging--select generate_aging--select--car"
@@ -65,10 +70,6 @@ const GenerateAging = ({
             })
           }
         >
-          {/* <IoIosArrowDown
-                        className='generate_aging--arrow'
-                        style={!arrow[age] ? null : { rotate: "180deg" }}
-                    /> */}
           {age}
         </label>
         <label

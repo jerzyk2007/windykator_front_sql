@@ -10,7 +10,6 @@ const AgingComponent = ({
   setShowTable,
   showTable,
   styleCar,
-  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     [age]: false,
@@ -25,20 +24,23 @@ const AgingComponent = ({
     return acc;
   }, 0);
 
-  // let sum = 0;
-  // filteredData.forEach((item) => {
-  //   if (item.PRZEDZIAL_WIEKOWANIE === age) {
-  //     sum += item.KWOTA_DO_ROZLICZENIA_FK;
-  //   }
-  //   return sum;
-  // });
-
   let sumFK = 0;
   let sumAS = 0;
+
   filteredData.forEach((item) => {
     if (item.PRZEDZIAL_WIEKOWANIE === age) {
-      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
-      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
+      if (
+        typeof item.KWOTA_DO_ROZLICZENIA_FK === "number" ||
+        !isNaN(item.KWOTA_DO_ROZLICZENIA_FK)
+      ) {
+        sumFK += Number(item.KWOTA_DO_ROZLICZENIA_FK);
+      }
+      if (
+        typeof item.DO_ROZLICZENIA_AS === "number" ||
+        !isNaN(item.DO_ROZLICZENIA_AS)
+      ) {
+        sumAS += Number(item.DO_ROZLICZENIA_AS);
+      }
     }
     return { sumFK, sumAS };
   });
@@ -64,7 +66,6 @@ const AgingComponent = ({
         setTableData={setTableData}
         showTable={showTable}
         setShowTable={setShowTable}
-        // filter={filter}
       />
     );
   });
@@ -83,7 +84,10 @@ const AgingComponent = ({
 
   return (
     <>
-      <section className="aging_component">
+      <section
+        className="aging_component"
+        style={counter === 0 || showTable ? { display: "none" } : null}
+      >
         <label
           className={
             styleCar === "car"
@@ -122,14 +126,6 @@ const AgingComponent = ({
             useGrouping: true,
           })}
         </label>
-        {/* {filter.payment !== "Wszystko" && (
-          <label
-            className="aging_component--percent"
-            onDoubleClick={handleClick}
-          >
-            {percent}
-          </label>
-        )} */}
       </section>
       {arrow[age] && generateItems}
     </>

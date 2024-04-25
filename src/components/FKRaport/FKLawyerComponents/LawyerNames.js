@@ -10,7 +10,6 @@ const LawyerNames = ({
   showTable,
   setShowTable,
   styleCar,
-  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     [name]: false,
@@ -24,23 +23,27 @@ const LawyerNames = ({
     return acc;
   }, 0);
 
-  // let sum = 0;
-  // filteredData.forEach((item) => {
-  //   if (item.JAKA_KANCELARIA === name) {
-  //     sum += item.KWOTA_DO_ROZLICZENIA_FK;
-  //   }
-  //   return sum;
-  // });
-
   let sumFK = 0;
   let sumAS = 0;
+
   filteredData.forEach((item) => {
     if (item.JAKA_KANCELARIA === name) {
-      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
-      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
+      if (
+        typeof item.KWOTA_DO_ROZLICZENIA_FK === "number" ||
+        !isNaN(item.KWOTA_DO_ROZLICZENIA_FK)
+      ) {
+        sumFK += Number(item.KWOTA_DO_ROZLICZENIA_FK);
+      }
+      if (
+        typeof item.DO_ROZLICZENIA_AS === "number" ||
+        !isNaN(item.DO_ROZLICZENIA_AS)
+      ) {
+        sumAS += Number(item.DO_ROZLICZENIA_AS);
+      }
     }
     return { sumFK, sumAS };
   });
+
   // const percent = "do ustalenia";
 
   const filteredObjects = filteredData.filter(
@@ -73,7 +76,6 @@ const LawyerNames = ({
           setTableData={setTableData}
           showTable={showTable}
           setShowTable={setShowTable}
-          // filter={filter}
         />
       );
     });
@@ -123,11 +125,6 @@ const LawyerNames = ({
             useGrouping: true,
           })}
         </label>
-        {/* {filter.payment !== "Wszystko" && (
-          <label className="lawyer_names--percent" onDoubleClick={handleClick}>
-            {percent}
-          </label>
-        )} */}
       </section>
       {generateItems}
     </>

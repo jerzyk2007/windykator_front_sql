@@ -10,7 +10,6 @@ const AgingDepartments = ({
   setShowTable,
   showTable,
   styleCar,
-  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     [dep]: false,
@@ -22,20 +21,23 @@ const AgingDepartments = ({
     return acc;
   }, 0);
 
-  // let sum = 0;
-  // filteredData.forEach((item) => {
-  //   if (item.DZIAL === dep) {
-  //     sum += item.KWOTA_DO_ROZLICZENIA_FK;
-  //   }
-  //   return sum;
-  // });
-
   let sumFK = 0;
   let sumAS = 0;
+
   filteredData.forEach((item) => {
     if (item.DZIAL === dep) {
-      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
-      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
+      if (
+        typeof item.KWOTA_DO_ROZLICZENIA_FK === "number" ||
+        !isNaN(item.KWOTA_DO_ROZLICZENIA_FK)
+      ) {
+        sumFK += Number(item.KWOTA_DO_ROZLICZENIA_FK);
+      }
+      if (
+        typeof item.DO_ROZLICZENIA_AS === "number" ||
+        !isNaN(item.DO_ROZLICZENIA_AS)
+      ) {
+        sumAS += Number(item.DO_ROZLICZENIA_AS);
+      }
     }
     return { sumFK, sumAS };
   });
@@ -44,6 +46,23 @@ const AgingDepartments = ({
 
   const filteredObjects = filteredData.filter((obj) => obj.DZIAL === dep);
 
+  const filteredOwner = filteredObjects.map((item) => {
+    if (item.OWNER) {
+      let combinedText;
+      if (Array.isArray(item.OWNER)) {
+        combinedText =
+          item.OWNER.length > 1 ? item.OWNER.join(" - ") : item.OWNER[0];
+      } else {
+        combinedText = item.OWNER; // Jeśli item.OWNER jest pojedynczym stringiem
+      }
+      return {
+        ...item,
+        OWNER: combinedText,
+      };
+    }
+    return item;
+  });
+
   const handleClick = () => {
     setTableData(filteredObjects);
     setShowTable(true);
@@ -51,24 +70,17 @@ const AgingDepartments = ({
 
   let generateItems = [];
   if (arrow[dep]) {
-    const owners = [
-      ...new Set(
-        filteredObjects
-          .filter((own) => own.DZIAL === dep)
-          .map((own) => own.OWNER)
-      ),
-    ];
-    generateItems = owners.map((own, index) => {
+    const owner = [...new Set(filteredOwner.map((own) => own.OWNER))].sort();
+    generateItems = owner.map((own, index) => {
       return (
         <AgingOwners
           key={index}
           styleCar={styleCar}
-          filteredData={filteredObjects}
+          filteredData={filteredOwner}
           own={own}
           setTableData={setTableData}
           showTable={showTable}
           setShowTable={setShowTable}
-          // filter={filter}
         />
       );
     });

@@ -10,7 +10,6 @@ const GenerateOwners = ({
   showTable,
   setShowTable,
   styleCar,
-  // filter,
 }) => {
   const [arrow, setArrow] = useState({
     [own]: false,
@@ -24,20 +23,23 @@ const GenerateOwners = ({
     return acc;
   }, 0);
 
-  // let sum = 0;
-  // filteredData.forEach((item) => {
-  //   if (item.OWNER === own) {
-  //     sum += item.KWOTA_DO_ROZLICZENIA_FK;
-  //   }
-  //   return sum;
-  // });
-
   let sumFK = 0;
   let sumAS = 0;
+
   filteredData.forEach((item) => {
     if (item.OWNER === own) {
-      sumFK += item.KWOTA_DO_ROZLICZENIA_FK ? item.KWOTA_DO_ROZLICZENIA_FK : 0;
-      sumAS += item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : 0;
+      if (
+        typeof item.KWOTA_DO_ROZLICZENIA_FK === "number" ||
+        !isNaN(item.KWOTA_DO_ROZLICZENIA_FK)
+      ) {
+        sumFK += Number(item.KWOTA_DO_ROZLICZENIA_FK);
+      }
+      if (
+        typeof item.DO_ROZLICZENIA_AS === "number" ||
+        !isNaN(item.DO_ROZLICZENIA_AS)
+      ) {
+        sumAS += Number(item.DO_ROZLICZENIA_AS);
+      }
     }
     return { sumFK, sumAS };
   });
@@ -60,18 +62,6 @@ const GenerateOwners = ({
           .map((age) => age.PRZEDZIAL_WIEKOWANIE)
       ),
     ];
-
-    // const ageArray = [
-    //   "< 1",
-    //   " 1 - 30",
-    //   " 31 - 90",
-    //   " 91 - 180",
-    //   " 181 - 360",
-    //   "> 360",
-    // ];
-
-    // // Utwórz nową tablicę, zachowując kolejność z ageArray
-    // const sortedAging = ageArray.filter((item) => aging.includes(item));
 
     generateItems = aging.map((age, index) => {
       return (
