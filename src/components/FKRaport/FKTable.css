@@ -14,3 +14,11 @@
   left: 50px;
   z-index: 5;
 } */
+
+.fk-table-save-settings {
+  font-size: 2rem;
+  cursor: pointer;
+}
+.fk-table-save-settings:active {
+  color: red;
+}

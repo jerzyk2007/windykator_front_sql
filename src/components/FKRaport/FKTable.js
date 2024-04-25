@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import {
-  MaterialReactTable, //import alternative sub-component if we do not want toolbars
+  MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
 import { MRT_Localization_PL } from "material-react-table/locales/pl";
@@ -24,14 +24,15 @@ const FKTable = ({ tableData, setShowTable }) => {
   const theme = useTheme();
   const { height } = useWindowSize();
   const [data, setData] = useState([]);
-  const [tableSize, setTableSize] = useState(500);
+  const [tableSize, setTableSize] = useState("");
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const [columnItems, setColumnItems] = useState(preparedFKColumns);
 
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10, //customize the default page size
-  });
+  const [columnVisibility, setColumnVisibility] = useState({});
+  const [columnSizing, setColumnSizing] = useState({});
+  const [columnOrder, setColumnOrder] = useState([]);
+  const [columnPinning, setColumnPinning] = useState({});
+  const [pagination, setPagination] = useState({});
 
   const plLocale =
     plPL.components.MuiLocalizationProvider.defaultProps.localeText;
@@ -40,8 +41,13 @@ const FKTable = ({ tableData, setShowTable }) => {
     () =>
       columnItems.map((column) => ({
         ...column,
+        size: columnSizing?.[column.accessorKey]
+          ? columnSizing[column.accessorKey]
+          : column.size,
+        minSize: 50,
+        maxSize: 400,
       })),
-    [columnItems]
+    [columnItems, columnSizing]
   );
 
   const table = useMaterialReactTable({
@@ -51,6 +57,7 @@ const FKTable = ({ tableData, setShowTable }) => {
     // globalFilterModeOptions: ["fuzzy", "contains", "startsWith"],
     globalFilterFn: "contains",
     // globalFilterFn: "fuzzy",
+    enableFullScreenToggle: false,
     positionGlobalFilter: "left",
     enableGlobalFilterModes: true,
     enableColumnFilters: true,
@@ -60,6 +67,7 @@ const FKTable = ({ tableData, setShowTable }) => {
     // wyłacza 3 kropki w
     enableColumnActions: false,
     enablePagination: true,
+    enableDensityToggle: false,
 
     //wyświetla się górne menu tabeli, wyszukiwanie, order itp
     enableTopToolbar: true,
@@ -91,10 +99,23 @@ const FKTable = ({ tableData, setShowTable }) => {
     // opcja wyszukuje zbiory do select i multi-select
     enableFacetedValues: true,
 
+    onColumnSizingChange: setColumnSizing,
+    onColumnVisibilityChange: setColumnVisibility,
+    onColumnOrderChange: setColumnOrder,
+    onColumnPinningChange: setColumnPinning,
+    onPaginationChange: setPagination,
+
     initialState: {
       showColumnFilters: true,
       showGlobalFilter: true,
       density: "comfortable",
+    },
+    state: {
+      columnVisibility,
+      // density,
+      columnOrder,
+      columnPinning,
+      pagination,
     },
 
     muiTableHeadCellProps: {
@@ -156,6 +177,11 @@ const FKTable = ({ tableData, setShowTable }) => {
         >
           Wyjście
         </Button>
+        <i
+          className="fas fa-save fk-table-save-settings"
+          onClick={handleSaveSettings}
+        ></i>
+
         {/* <Button
           disabled={table.getRowModel().rows.length === 0}
           //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
@@ -177,10 +203,26 @@ const FKTable = ({ tableData, setShowTable }) => {
     ),
   });
 
+  const handleSaveSettings = async () => {
+    const tableSettings = {
+      size: { ...columnSizing },
+      visible: { ...columnVisibility },
+      order: columnOrder,
+      pinning: columnPinning,
+      pagination,
+    };
+    try {
+      await axiosPrivateIntercept.patch(`/fk/save-table-settings`, {
+        tableSettings,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const getColumnSettings = async () => {
     try {
       const settingsColumn = await axiosPrivateIntercept.get("/fk/get-columns");
-
       const updateColumns = columnItems.map((item) => {
         const matching = settingsColumn.data.find(
           (match) => match.accessorKey === item.accessorKey
@@ -195,8 +237,24 @@ const FKTable = ({ tableData, setShowTable }) => {
         return item;
       });
       setColumnItems(updateColumns);
+
+      const getTableSettings = await axiosPrivateIntercept.get(
+        "/fk/get-table-settings"
+      );
+      setColumnVisibility(getTableSettings?.data?.visible || {});
+      setColumnSizing(getTableSettings?.data?.size || {});
+      setColumnOrder(
+        getTableSettings?.data?.order?.map((order) => order) || []
+      );
+      setColumnPinning(
+        getTableSettings?.data?.pinning || { left: [], right: [] }
+      );
+      setPagination(
+        getTableSettings?.data?.pagination || { pageIndex: 0, pageSize: 10 }
+      );
+      // setPagination({ pageIndex: 0, pageSize: 10 });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 

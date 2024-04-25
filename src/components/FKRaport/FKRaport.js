@@ -41,7 +41,10 @@ const FKRaport = ({
 
   return (
     <>
-      <section className="fk_raport">
+      <section
+        className="fk_raport"
+        style={showTable ? { display: "none" } : null}
+      >
         <section className="fk_raport-panel">{buttonItems}</section>
 
         <section className="fk_raport-title">

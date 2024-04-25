@@ -67,7 +67,10 @@ const FKRaportSettings = () => {
       ) : (
         <section className="fk_settings">
           {!showSettingsSelect && (
-            <section className="fk_settings-container-panel">
+            <section
+              className="fk_settings-container-panel"
+              style={showTable ? { display: "none" } : null}
+            >
               <section className="fk_settings-container-info">
                 <label className="fk_settings-container-info--text">
                   Raport:<span>{raportLabels[filter.raport]}</span>
