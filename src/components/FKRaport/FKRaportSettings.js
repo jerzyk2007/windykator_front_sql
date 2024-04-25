@@ -17,11 +17,17 @@ const FKRaportSettings = () => {
 
   // const [data, setData] = useState([]);
   const [filteredDataRaport, setFilteredDataRaport] = useState([]);
+  // const [filter, setFilter] = useState({
+  //   raport: "accountRaport",
+  //   business: "201203",
+  //   payment: "Przeterminowane",
+  //   actions: "Tak",
+  // });
   const [filter, setFilter] = useState({
     raport: "accountRaport",
     business: "201203",
-    payment: "Przeterminowane",
-    actions: "Tak",
+    payment: "Wszystko",
+    actions: "All",
   });
   const [showRaport, setShowRaport] = useState(false);
   const [showSettingsSelect, setSettingsSelect] = useState(false);

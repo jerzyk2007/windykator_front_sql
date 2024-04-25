@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FKTable from "./FKTable";
 import GenerateAccount from "./FKAccountComponents/GenerateAccount";
 import Button from "@mui/material/Button";
@@ -34,6 +34,10 @@ const FKRaport = ({
       </section>
     );
   });
+
+  // useEffect(() => {
+  // console.log(tableData.length);
+  // }, [tableData]);
 
   return (
     <>
