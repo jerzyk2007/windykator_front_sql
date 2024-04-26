@@ -9,4 +9,3 @@ przy zmianie nazwy kolumny mają również zmienic się nazwy u każdego uzytkow
 
 
 
-s

@@ -84,10 +84,9 @@ const TableSettings = () => {
 
   const handleSaveColumnsSetinngs = async () => {
     try {
-      const result = await axiosPrivateIntercept.patch(
-        "/settings/change-columns",
-        { columns }
-      );
+      await axiosPrivateIntercept.patch("/settings/change-columns", {
+        columns,
+      });
     } catch (err) {
       console.log(err);
     }

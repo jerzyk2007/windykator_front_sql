@@ -89,7 +89,6 @@ export const handleExportRows = (
     const column = columns.find((col) => col.accessorKey === key);
     return column ? column.header : key;
   });
-
   //   // Stwórz nowy arkusz Excel
   const wb = xlsx.utils.book_new();
   const ws = xlsx.utils.aoa_to_sheet([newSortedColumns]);

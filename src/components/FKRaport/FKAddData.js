@@ -4,6 +4,8 @@ import PleaseWait from "../PleaseWait";
 import useData from "../hooks/useData";
 import Button from "@mui/material/Button";
 import * as xlsx from "xlsx";
+import XLSX from "xlsx-js-style";
+import { getAllDataRaport } from "./utilsForFKTable/prepareFKExcelFile";
 
 import "./FKAddData.css";
 
@@ -125,38 +127,51 @@ const FKAddData = () => {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/fk/generate-raport");
 
-      handleExportExcel(result.data, "generate");
+      const settingsColumn = await axiosPrivateIntercept.get(
+        "/fk/get-columns-order"
+      );
+
+      const orderColumns = settingsColumn.data;
+
+      // handleExportExcel(result.data, "generate");
+      getAllDataRaport(
+        result.data,
+        XLSX,
+        // axiosPrivateIntercept,
+        orderColumns,
+        "Całość"
+      );
       setPleaseWait(false);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const checkRaportErrors = async () => {
-    try {
-      setPleaseWait(true);
+  // const checkRaportErrors = async () => {
+  //   try {
+  //     setPleaseWait(true);
 
-      const result = await axiosPrivateIntercept.get("/fk/check-error-raport");
-      if (result.data.check === "OK") {
-        setRaportErrors("Brak błędów :)");
-      } else {
-        const excelData = {
-          dzial: result.data.check.departments,
-          wiekowanie: result.data.check.aging,
-          obszar: result.data.check.areas,
-          lokalizacja: result.data.check.localizations,
-          owner: result.data.check.owners,
-        };
-        handleExportExcel(excelData, "errors");
-        setRaportErrors("Znaleziono błędy podczas przygotowania raportu");
-      }
+  //     const result = await axiosPrivateIntercept.get("/fk/check-error-raport");
+  //     if (result.data.check === "OK") {
+  //       setRaportErrors("Brak błędów :)");
+  //     } else {
+  //       const excelData = {
+  //         dzial: result.data.check.departments,
+  //         wiekowanie: result.data.check.aging,
+  //         obszar: result.data.check.areas,
+  //         lokalizacja: result.data.check.localizations,
+  //         owner: result.data.check.owners,
+  //       };
+  //       handleExportExcel(excelData, "errors");
+  //       setRaportErrors("Znaleziono błędy podczas przygotowania raportu");
+  //     }
 
-      // console.log(result.data);
-      setPleaseWait(false);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  //     // console.log(result.data);
+  //     setPleaseWait(false);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   const deleteDataRaport = async () => {
     try {
@@ -355,7 +370,7 @@ const FKAddData = () => {
               )}
             </section>
 
-            <section className="fk_add_data__container-item">
+            {/* <section className="fk_add_data__container-item">
               {!raportErrors ? (
                 <span className="fk_add_data__container-item--title">
                   Sprawdź dane przed wygenerowaniem raportu
@@ -387,7 +402,7 @@ const FKAddData = () => {
                     </Button>
                   )}
               </section>
-            </section>
+            </section> */}
 
             <section className="fk_add_data__container-item">
               <span className="fk_add_data__container-item--title">

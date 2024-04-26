@@ -7,7 +7,7 @@ import LawyerAccount from "./FKLawyerComponents/LawyerAccount";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 // import * as xlsx from "xlsx";
 import XLSX from "xlsx-js-style";
-import { getExcelRaport } from "./utilsForFKTable/prepareExcelFile";
+import { getExcelRaport } from "./utilsForFKTable/prepareFKExcelFile";
 import "./FKRaport.css";
 
 const FKRaport = ({
