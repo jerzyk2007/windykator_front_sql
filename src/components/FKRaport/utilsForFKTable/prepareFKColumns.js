@@ -167,7 +167,9 @@ export const preparedFKColumns = [
       const cellValue = cell.getValue();
       if (Array.isArray(cellValue) && cellValue.length > 0) {
         return (
-          <div style={{ whiteSpace: "pre-wrap" }}>
+          <div
+            style={{ whiteSpace: "pre-wrap", textAlign: "left", width: "100%" }}
+          >
             {cellValue.map((item, index) => (
               <p key={index} style={{ textAlign: "left" }}>
                 {item.length > 200 && index !== cellValue.length - 1
