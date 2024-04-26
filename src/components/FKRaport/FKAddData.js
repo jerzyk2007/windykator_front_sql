@@ -82,15 +82,11 @@ const FKAddData = () => {
       const formData = new FormData();
       formData.append("excelFile", file);
 
-      const response = await axiosPrivateIntercept.post(
-        `/fk/send-documents/${type}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axiosPrivateIntercept.post(`/fk/send-documents/${type}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (type === "accountancy") {
         setErrFKAccountancy("Dokumenty zaktualizowane.");

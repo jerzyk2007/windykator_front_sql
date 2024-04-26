@@ -4,6 +4,10 @@ import GenerateAccount from "./FKAccountComponents/GenerateAccount";
 import Button from "@mui/material/Button";
 import AgingAccount from "./FKAgingComponents/AgingAccount";
 import LawyerAccount from "./FKLawyerComponents/LawyerAccount";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+// import * as xlsx from "xlsx";
+import XLSX from "xlsx-js-style";
+import { getExcelRaport } from "./utilsForFKTable/prepareExcelFile";
 import "./FKRaport.css";
 
 const FKRaport = ({
@@ -14,30 +18,47 @@ const FKRaport = ({
   setShowTable,
   filter,
 }) => {
+  const axiosPrivateIntercept = useAxiosPrivateIntercept();
+
   const [buttonArea, setButtonArea] = useState([]);
 
-  const handleButtonClick = (data) => {
+  const handleShowTable = (data) => {
     setTableData(data);
     setShowTable(true);
   };
 
   const buttonItems = buttonArea.map((item, index) => {
     return (
-      <section className="fk_raport-panel--item" key={index}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={() => handleButtonClick(item.data)}
-        >
-          {item.name}
-        </Button>
+      <section
+        className={
+          item.name === "Raport"
+            ? "fk_raport-panel--item_all"
+            : "fk_raport-panel--item"
+        }
+        key={index}
+      >
+        {item.name === "Raport" ? (
+          <Button
+            variant="outlined"
+            color="success"
+            onClick={() =>
+              getExcelRaport(buttonArea, XLSX, axiosPrivateIntercept)
+            }
+          >
+            {item.name}
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => handleShowTable(item.data)}
+          >
+            {item.name}
+          </Button>
+        )}
       </section>
     );
   });
-
-  // useEffect(() => {
-  // console.log(tableData.length);
-  // }, [tableData]);
 
   return (
     <>
@@ -58,9 +79,6 @@ const FKRaport = ({
           <label className="fk_raport-title--doc-sum--header">
             Kwota do rozliczenia AS
           </label>
-          {/* {filter.payment !== "Wszystko" && (
-            <label className="fk_raport-title--percent--header">Procent</label>
-          )} */}
         </section>
 
         {filter.raport === "accountRaport" && (

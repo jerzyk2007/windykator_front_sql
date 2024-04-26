@@ -1,61 +1,63 @@
 .fk_raport {
-    font-family: Calibri, sans-serif;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
+  font-family: Calibri, sans-serif;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .fk_raport-panel {
-    padding: 10px;
-    display: flex;
+  padding: 10px;
+  display: flex;
 }
 
-.fk_raport-panel--item {
-    flex-grow: 1;
-    font-size: .8rem;
-    display: flex;
-    justify-content: space-around;
+.fk_raport-panel--item,
+.fk_raport-panel--item_all {
+  flex-grow: 1;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-around;
 }
 
-.fk_raport-panel--item Button {
-    margin: 0 5px;
-    font-size: 1rem;
-    background-color: rgba(178, 255, 255, .5);
+.fk_raport-panel--item Button,
+.fk_raport-panel--item_all Button {
+  margin: 0 5px;
+  font-size: 1rem;
+  background-color: rgba(178, 255, 255, 0.5);
+}
+.fk_raport-panel--item_all Button {
+  background-color: rgba(53, 199, 48, 0.5);
+  color: black;
 }
 
 .fk_raport-title {
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    user-select: none;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  user-select: none;
 }
 
 .fk_raport-title label {
-    min-width: 100px;
-    font-size: 1.2rem;
-    height: 100%;
-    flex-basis: 15%;
-    text-align: center;
-    padding: 3px;
-    background-color: #e6e6e6;
-    border-right: 1px solid black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  min-width: 100px;
+  font-size: 1.2rem;
+  height: 100%;
+  flex-basis: 15%;
+  text-align: center;
+  padding: 3px;
+  background-color: #e6e6e6;
+  border-right: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-
-
 
 .fk_raport-title .fk_raport-title--percent--header {
-    border-right: none;
+  border-right: none;
 }
 
-
 .fk_raport-title .fk_raport-title--business--header {
-    min-width: 500px;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  min-width: 500px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

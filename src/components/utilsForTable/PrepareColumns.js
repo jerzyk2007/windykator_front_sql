@@ -65,6 +65,7 @@ export const prepareColumns = (columnsData, data) => {
       updatedSx.backgroundColor = "rgba(248, 255, 152, .2)";
       changeMuiTableBodyCellProps.sx = updatedSx;
       modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
+      modifiedItem.enableClickToCopy = false;
     }
 
     if (item.accessorKey === "UWAGI_Z_FAKTURY") {
@@ -87,7 +88,7 @@ export const prepareColumns = (columnsData, data) => {
 
     if (item.accessorKey === "KONTRAHENT") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
-        const cellValue = cell.getValue();
+        // const cellValue = cell.getValue();
         const checkClient = cell.row.original.ZAZNACZ_KONTRAHENTA;
 
         return {

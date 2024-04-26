@@ -65,6 +65,32 @@ const LawyerAccount = ({
       ...new Set(filteredDataRaport.map((item) => item.OBSZAR)),
     ].sort();
     setAreasArray(areasArray);
+    setButtonArea((prev) => {
+      // Sprawdź, czy area już istnieje w tablicy
+      const existingAreaIndex = prev.findIndex(
+        (item) => item.name === "Raport"
+      );
+
+      if (existingAreaIndex !== -1) {
+        // Jeśli area już istnieje, zaktualizuj tylko jego dane
+        const updatedArea = {
+          ...prev[existingAreaIndex],
+          data: filteredDataRaport,
+        };
+        const updatedAreas = [...prev];
+        updatedAreas[existingAreaIndex] = updatedArea;
+        return updatedAreas;
+      } else {
+        // Jeśli area nie istnieje, dodaj nowy obiekt do tablicy
+        return [
+          ...prev,
+          {
+            name: "Raport",
+            data: filteredDataRaport,
+          },
+        ];
+      }
+    });
   }, [filteredDataRaport]);
 
   return (
