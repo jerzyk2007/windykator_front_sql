@@ -3,7 +3,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
 import useData from "../hooks/useData";
 import Button from "@mui/material/Button";
-import * as xlsx from "xlsx";
+// import * as xlsx from "xlsx";
 import XLSX from "xlsx-js-style";
 import { getAllDataRaport } from "./utilsForFKTable/prepareFKExcelFile";
 
@@ -19,56 +19,56 @@ const FKAddData = () => {
   const [rubiconData, setRubiconData] = useState("");
   const [deleteRaport, setDeleteRaport] = useState("");
   const [dateCounter, setDateCounter] = useState({});
-  const [raportErrors, setRaportErrors] = useState("");
+  // const [raportErrors, setRaportErrors] = useState("");
 
-  const handleExportExcel = (excelData, type) => {
-    const wb = xlsx.utils.book_new();
-    if (type === "errors") {
-      // Obsługa kluczy z tablicami stringów
-      const stringArrayKeys = [
-        "dzial",
-        "wiekowanie",
-        "obszar",
-        "lokalizacja",
-        "owner",
-      ];
-      stringArrayKeys.forEach((key) => {
-        if (excelData[key]) {
-          const data = excelData[key].map((string) => [string]); // Tworzenie tablicy dwuwymiarowej, gdzie każdy string jest w osobnej tablicy
-          const ws = xlsx.utils.aoa_to_sheet(data); // Konwersja tablicy na arkusz
-          xlsx.utils.book_append_sheet(wb, ws, key); // Dodanie arkusza z danymi dla danego klucza
-        }
-      });
-      xlsx.writeFile(wb, "Błędy.xlsx"); // Zapisanie pliku Excel
-    }
-    if (type === "generate") {
-      const cleanData = excelData.map((doc) => {
-        const {
-          _id,
-          __v,
-          OPIEKUN_OBSZARU_CENTRALI,
-          OPIS_ROZRACHUNKU,
-          OWNER,
-          ...cleanDoc
-        } = doc;
-        if (Array.isArray(OPIEKUN_OBSZARU_CENTRALI)) {
-          cleanDoc.OPIEKUN_OBSZARU_CENTRALI =
-            OPIEKUN_OBSZARU_CENTRALI.join(", ");
-        }
-        if (Array.isArray(OPIS_ROZRACHUNKU)) {
-          cleanDoc.OPIS_ROZRACHUNKU = OPIS_ROZRACHUNKU.join(", ");
-        }
-        if (Array.isArray(OWNER)) {
-          cleanDoc.OWNER = OWNER.join(", ");
-        }
-        return cleanDoc;
-      });
-      const wb = xlsx.utils.book_new();
-      const ws = xlsx.utils.json_to_sheet(cleanData);
-      xlsx.utils.book_append_sheet(wb, ws, "Raport");
-      xlsx.writeFile(wb, "Raport.xlsx");
-    }
-  };
+  // const handleExportExcel = (excelData, type) => {
+  //   const wb = xlsx.utils.book_new();
+  //   if (type === "errors") {
+  //     // Obsługa kluczy z tablicami stringów
+  //     const stringArrayKeys = [
+  //       "dzial",
+  //       "wiekowanie",
+  //       "obszar",
+  //       "lokalizacja",
+  //       "owner",
+  //     ];
+  //     stringArrayKeys.forEach((key) => {
+  //       if (excelData[key]) {
+  //         const data = excelData[key].map((string) => [string]); // Tworzenie tablicy dwuwymiarowej, gdzie każdy string jest w osobnej tablicy
+  //         const ws = xlsx.utils.aoa_to_sheet(data); // Konwersja tablicy na arkusz
+  //         xlsx.utils.book_append_sheet(wb, ws, key); // Dodanie arkusza z danymi dla danego klucza
+  //       }
+  //     });
+  //     xlsx.writeFile(wb, "Błędy.xlsx"); // Zapisanie pliku Excel
+  //   }
+  //   if (type === "generate") {
+  //     const cleanData = excelData.map((doc) => {
+  //       const {
+  //         _id,
+  //         __v,
+  //         OPIEKUN_OBSZARU_CENTRALI,
+  //         OPIS_ROZRACHUNKU,
+  //         OWNER,
+  //         ...cleanDoc
+  //       } = doc;
+  //       if (Array.isArray(OPIEKUN_OBSZARU_CENTRALI)) {
+  //         cleanDoc.OPIEKUN_OBSZARU_CENTRALI =
+  //           OPIEKUN_OBSZARU_CENTRALI.join(", ");
+  //       }
+  //       if (Array.isArray(OPIS_ROZRACHUNKU)) {
+  //         cleanDoc.OPIS_ROZRACHUNKU = OPIS_ROZRACHUNKU.join(", ");
+  //       }
+  //       if (Array.isArray(OWNER)) {
+  //         cleanDoc.OWNER = OWNER.join(", ");
+  //       }
+  //       return cleanDoc;
+  //     });
+  //     const wb = xlsx.utils.book_new();
+  //     const ws = xlsx.utils.json_to_sheet(cleanData);
+  //     xlsx.utils.book_append_sheet(wb, ws, "Raport");
+  //     xlsx.writeFile(wb, "Raport.xlsx");
+  //   }
+  // };
 
   const handleSendFile = async (e, type) => {
     setPleaseWait(true);
