@@ -408,6 +408,9 @@ const FKAddData = () => {
               <span className="fk_add_data__container-item--title">
                 Generuj raport FK
               </span>
+              <span>{dateCounter?.genrateRaport?.date}</span>
+              <span></span>
+
               <section className="fk_add_data__container-file">
                 {dateCounter?.accountancy &&
                   dateCounter?.carReleased &&
