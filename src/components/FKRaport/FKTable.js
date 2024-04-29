@@ -17,6 +17,8 @@ import {
   muiTableBodyCellProps,
   preparedData,
 } from "./utilsForFKTable/prepareFKColumns";
+import XLSX from "xlsx-js-style";
+import { getAllDataRaport } from "./utilsForFKTable/prepareFKExcelFile";
 
 import "./FKTable.css";
 
@@ -166,7 +168,7 @@ const FKTable = ({ tableData, setShowTable }) => {
           padding: "8px",
           flexWrap: "wrap",
           justifyContent: "flex-start",
-          alignItems: "left",
+          alignItems: "center",
         }}
       >
         <Button
@@ -181,24 +183,22 @@ const FKTable = ({ tableData, setShowTable }) => {
           className="fas fa-save fk-table-save-settings"
           onClick={handleSaveSettings}
         ></i>
-
-        {/* <Button
+        <button
+          className="fk-table__container--excel"
           disabled={table.getRowModel().rows.length === 0}
-          //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
-          //   onClick={() => handleExportRows(table.getRowModel().rows)}
-          // onClick={() =>
-          //   handleExportRows(
-          //     table.getPrePaginationRowModel().rows,
-          //     columnOrder,
-          //     columnVisibility,
-          //     columnPinning,
-          //     columns
-          //   )
-          // }
-          startIcon={<FileDownloadIcon />}
         >
-          Pobierz wyfiltrowane dane
-        </Button> */}
+          <i
+            className="fa-regular fa-file-excel fk-table-export-excel"
+            onClick={() =>
+              handleExportRows(
+                table.getPrePaginationRowModel().rows,
+                columnOrder,
+                columnVisibility,
+                columns
+              )
+            }
+          ></i>
+        </button>
       </Box>
     ),
   });
@@ -256,6 +256,53 @@ const FKTable = ({ tableData, setShowTable }) => {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleExportRows = (rows, columnOrder, columnVisibility, columns) => {
+    const rowData = rows.map((row) => row.original);
+
+    const arrayOrder = columnOrder.filter(
+      (item) => columnVisibility[item] !== false
+    );
+
+    const newColumns = columns
+      .map((item) => {
+        const matching = arrayOrder.find((match) => match === item.accessorKey);
+        if (matching) {
+          return {
+            accessorKey: item.accessorKey,
+            header: item.header,
+          };
+        }
+      })
+      .filter(Boolean);
+
+    const newOrder = arrayOrder.map((key) => {
+      const matchedColumn = newColumns.find(
+        (column) => column.accessorKey === key
+      );
+      return matchedColumn ? matchedColumn.header : key;
+    });
+    // Aktualizacja danych
+    const updateData = rowData.map((item) => {
+      // Filtracja kluczy obiektu na podstawie arrayOrder
+      const filteredKeys = Object.keys(item).filter((key) =>
+        arrayOrder.includes(key)
+      );
+      // Tworzenie nowego obiektu z wybranymi kluczami
+      const updatedItem = filteredKeys.reduce((obj, key) => {
+        obj[key] = item[key];
+        return obj;
+      }, {});
+      return updatedItem;
+    });
+
+    const orderColumns = {
+      columns: newColumns,
+      order: newOrder,
+    };
+
+    getAllDataRaport(updateData, XLSX, orderColumns, "filtr");
   };
 
   useEffect(() => {

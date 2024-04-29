@@ -169,25 +169,27 @@ export const getExcelRaport = async (
   }
 };
 
-export const getAllDataRaport = async (
-  allData,
-  XLSX,
-  //   axiosPrivateIntercept,
-  orderColumns,
-  info
-) => {
+export const getAllDataRaport = async (allData, XLSX, orderColumns, info) => {
   try {
     const cleanData = allData.map((item) => {
-      return {
-        ...item,
-        OPIEKUN_OBSZARU_CENTRALI: Array.isArray(item.OPIEKUN_OBSZARU_CENTRALI)
+      if (item.OPIEKUN_OBSZARU_CENTRALI) {
+        item.OPIEKUN_OBSZARU_CENTRALI = Array.isArray(
+          item.OPIEKUN_OBSZARU_CENTRALI
+        )
           ? item.OPIEKUN_OBSZARU_CENTRALI.join(", ")
-          : item.OPIEKUN_OBSZARU_CENTRALI,
-        OPIS_ROZRACHUNKU: Array.isArray(item.OPIS_ROZRACHUNKU)
+          : item.OPIEKUN_OBSZARU_CENTRALI;
+      }
+      if (item.OPIS_ROZRACHUNKU) {
+        item.OPIS_ROZRACHUNKU = Array.isArray(item.OPIS_ROZRACHUNKU)
           ? item.OPIS_ROZRACHUNKU.join(", ")
-          : item.OPIS_ROZRACHUNKU,
-        OWNER: Array.isArray(item.OWNER) ? item.OWNER.join(", ") : item.OWNER,
-      };
+          : item.OPIS_ROZRACHUNKU;
+      }
+      if (item.OWNER) {
+        item.OWNER = Array.isArray(item.OWNER)
+          ? item.OWNER.join(", ")
+          : item.OWNER;
+      }
+      return item;
     });
 
     const changeNameColumns = cleanData.map((item) => {
