@@ -59,7 +59,7 @@ const TableSettings = () => {
               <option value="range-slider">Suwak do kwot</option>
               <option value="range">Od - do</option>
               <option value="date-range">Data od - do</option>
-              <option value="date">Data</option>
+              {/* <option value="date">Data</option> */}
             </select>
           </span>
         </section>

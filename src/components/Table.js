@@ -20,6 +20,7 @@ import * as xlsx from "xlsx";
 import { Box, Button } from "@mui/material";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { prepareColumns } from "./utilsForTable/prepareColumns";
+import { prepareDataTable } from "./utilsForTable/prepareDataTable";
 import { handleExportRows } from "./utilsForTable/excelFilteredTable";
 
 import "./Table.css";
@@ -66,7 +67,7 @@ const Table = ({ info }) => {
         { tableSettings }
       );
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -99,12 +100,226 @@ const Table = ({ info }) => {
         size: columnSizing?.[column.accessorKey]
           ? columnSizing[column.accessorKey]
           : column.size,
-        // enableHiding: true,
-        // enablePinning: true,
         enableColumnFilterModes: false,
         minSize: 50,
         maxSize: 400,
       })),
+    [columns, columnSizing]
+  );
+
+  useEffect(() => {
+    console.log(columns);
+  }, [columns, columnSizing]);
+
+  const columnsItem2 = useMemo(
+    () => [
+      {
+        accessorKey: "NUMER_FV",
+        header: "NUMER_FV",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "50_VAT",
+        header: "50_VAT",
+        // filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "100_VAT",
+        header: "100_VAT",
+        // filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "ASYSTENTKA",
+        header: "ASYSTENTKA",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "BLAD_DORADCY",
+        header: "BLAD_DORADCY",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "BLAD_W_DOKUMENTACJI",
+        header: "BLAD_W_DOKUMENTACJI",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "BRUTTO",
+        header: "BRUTTO",
+        // filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "DATA_FV",
+        header: "DATA_FV",
+        filterVariant: "date-range",
+        accessorFn: (originalRow) => new Date(originalRow.DATA_FV),
+        // accessorFn: (originalRow) => console.log(originalRow.DATA_FV),
+        // Cell: ({ cell }) => {
+        //   // Parsowanie wartości komórki jako data
+        //   const date = new Date(cell.getValue());
+        //   // console.log(cell.getValue());
+        //   // Sprawdzenie, czy data jest prawidłowa
+        //   if (!isNaN(date)) {
+        //     // Jeśli data jest prawidłowa, zwracamy ją jako lokalizowaną datę w formacie pl-PL
+        //     return date.toLocaleDateString("pl-PL", {
+        //       useGrouping: true,
+        //     });
+        //   } else {
+        //     // Jeśli data jest nieprawidłowa, zwracamy pusty string lub inny komunikat błędu
+        //     return "brak danych";
+        //   }
+        // },
+        Cell: ({ cell }) => cell.getValue().toLocaleDateString(),
+      },
+      // {
+      //   accessorKey: "DATA_FV",
+      //   header: "DATA_FV",
+      //   filterVariant: "date-range",
+      //   Cell: ({ cell }) => {
+      //     // Parsowanie wartości komórki jako data
+      //     const date = new Date(cell.getValue());
+      //     // Sprawdzenie, czy data jest prawidłowa
+      //     if (!isNaN(date)) {
+      //       // Jeśli data jest prawidłowa, zwracamy ją jako lokalizowaną datę w formacie pl-PL
+      //       return date.toLocaleDateString("pl-PL", {
+      //         useGrouping: true,
+      //       });
+      //     } else {
+      //       // Jeśli data jest nieprawidłowa, zwracamy pusty string lub inny komunikat błędu
+      //       return "brak danych";
+      //     }
+      //   },
+      // },
+      {
+        accessorKey: "DATA_KOMENTARZA_BECARED",
+        header: "DATA_KOMENTARZA_BECARED",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "DORADCA",
+        header: "DORADCA",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "DO_ROZLICZENIA",
+        header: "DO_ROZLICZENIA",
+        // filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "DZIAL",
+        header: "DZIAL",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "DZIALANIA",
+        header: "DZIALANIA",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "ILE_DNI_PO_TERMINIE",
+        header: "ILE_DNI_PO_TERMINIE",
+        // filterVariant: "multi-select",
+        // Cell: ({ cell }) =>
+        //   cell.getValue() ? cell.getValue()?.toString() : "null",
+      },
+      {
+        accessorKey: "JAKA_KANCELARIA",
+        header: "JAKA_KANCELARIA",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "KOMENTARZ_KANCELARIA_BECARED",
+        header: "KOMENTARZ_KANCELARIA_BECARED",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "KONTRAHENT",
+        header: "KONTRAHENT",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "KWOTA_WINDYKOWANA_BECARED",
+        header: "KWOTA_WINDYKOWANA_BECARED",
+        // filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "NETTO",
+        header: "NETTO",
+        // filterVariant: "multi-select",
+        // Cell: ({ cell }) =>
+        //   cell.getValue() ? cell.getValue()?.toString() : "null",
+      },
+      {
+        accessorKey: "NR_REJESTRACYJNY",
+        header: "NR_REJESTRACYJNY",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "NR_SZKODY",
+        header: "NR_SZKODY",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "NUMER_SPRAWY_BECARED",
+        header: "NUMER_SPRAWY_BECARED",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "POBRANO_VAT",
+        header: "POBRANO_VAT",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "STATUS_SPRAWY_KANCELARIA",
+        header: "STATUS_SPRAWY_KANCELARIA",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "STATUS_SPRAWY_WINDYKACJA",
+        header: "STATUS_SPRAWY_WINDYKACJA",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "TERMIN",
+        header: "TERMIN",
+        // filterVariant: "date-range",
+        // Cell: ({ cell }) => {
+        //   // Parsowanie wartości komórki jako data
+        //   const date = new Date(cell.getValue());
+        //   // console.log(cell.getValue());
+        //   // Sprawdzenie, czy data jest prawidłowa
+        //   if (!isNaN(date)) {
+        //     // Jeśli data jest prawidłowa, zwracamy ją jako lokalizowaną datę w formacie pl-PL
+        //     return date.toLocaleDateString("pl-PL", {
+        //       useGrouping: true,
+        //     });
+        //   } else {
+        //     // Jeśli data jest nieprawidłowa, zwracamy pusty string lub inny komunikat błędu
+        //     return "brak danych";
+        //   }
+        // },
+      },
+      {
+        accessorKey: "UWAGI_ASYSTENT",
+        header: "UWAGI_ASYSTENT",
+        // filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "UWAGI_Z_FAKTURY",
+        header: "UWAGI_Z_FAKTURY",
+        // filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "ZAZNACZ_KONTRAHENTA",
+        header: "ZAZNACZ_KONTRAHENTA",
+        filterVariant: "multi-select",
+      },
+      {
+        accessorKey: "CZY_PRZETERMINOWANE",
+        header: "CZY_PRZETERMINOWANE",
+        filterVariant: "multi-select",
+      },
+    ],
     [columns, columnSizing]
   );
 
@@ -249,9 +464,10 @@ const Table = ({ info }) => {
           axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`),
           axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`),
         ]);
-        const modifiedColumns = prepareColumns(getColumns.data, result.data);
+        // const modifiedColumns = prepareColumns(getColumns.data, result.data);
         if (isMounted) {
-          setDocuments(result.data);
+          const updateDocuments = prepareDataTable(result.data);
+          setDocuments(updateDocuments);
           setColumnVisibility(settingsUser?.data?.visible || {});
           setColumnSizing(settingsUser?.data?.size || {});
           // setDensity(settingsUser?.data?.density || 'comfortable');
@@ -264,6 +480,11 @@ const Table = ({ info }) => {
           setPagination(
             settingsUser?.data?.pagination || { pageIndex: 0, pageSize: 10 }
           );
+          const modifiedColumns = prepareColumns(
+            getColumns.data,
+            updateDocuments
+          );
+          console.log(modifiedColumns);
           setColumns(modifiedColumns);
           setPleaseWait(false);
         }
@@ -279,10 +500,6 @@ const Table = ({ info }) => {
       isMounted = false;
     };
   }, [info, auth._id, setPleaseWait, axiosPrivateIntercept]);
-
-  useEffect(() => {
-    console.log(columns);
-  }, [columns]);
 
   return (
     <section className="actual_table">
