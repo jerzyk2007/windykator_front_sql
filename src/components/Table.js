@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { MaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { MRT_Localization_PL } from "material-react-table/locales/pl";
 import { ThemeProvider, useTheme } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -105,6 +108,132 @@ const Table = ({ info }) => {
     [columns, columnSizing]
   );
 
+  const table = useMaterialReactTable({
+    columns: columnsItem,
+    data: documents,
+    enableClickToCopy: true,
+    enableColumnFilterModes: true,
+    enableStickyHeader: true,
+    enableStickyFooter: true,
+    enableSorting: true,
+    enableColumnResizing: true,
+    enableColumnOrdering: true,
+    enableColumnPinning: true,
+    onColumnSizingChange: setColumnSizing,
+    onColumnVisibilityChange: setColumnVisibility,
+    onColumnOrderChange: setColumnOrder,
+    onColumnPinningChange: setColumnPinning,
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
+    enableDensityToggle: false,
+    enableSelectAll: false,
+    initialState: {
+      showColumnFilters: false,
+      showGlobalFilter: true,
+      density: "compact",
+    },
+    state: {
+      columnVisibility,
+      columnOrder,
+      columnPinning,
+      pagination,
+      sorting,
+    },
+    localization: MRT_Localization_PL,
+    enableGlobalFilterModes: true,
+    globalFilterModeOptions: ["fuzzy", "contains", "startsWith"],
+    globalFilterFn: "contains",
+    positionGlobalFilter: "left",
+    // opcja wyszukuje zbiory do select i multi-select
+    enableFacetedValues: true,
+    // wyłącza filtr (3 kropki) w kolumnie
+    enableColumnActions: false,
+    // nie odświeża tabeli po zmianie danych
+    autoResetPageIndex: false,
+    muiTableContainerProps: { sx: { maxHeight: tableSize } },
+    // wyświetla filtry nad komórką -
+    columnFilterDisplayMode: "popover",
+    //filtr nad headerem - popover
+    muiFilterTextFieldProps: {
+      // sx: { m: '0.5rem 0', width: '100%' },
+      sx: { m: "0", width: "300px" },
+      variant: "outlined",
+    },
+    muiPaginationProps: {
+      rowsPerPageOptions: [10, 20, 30, 50, 100],
+      // rowsPerPageOptions: [10, 20, 30, 50, 100, { value: 10000, label: 'Całość' }],
+      shape: "rounded",
+      variant: "outlined",
+    },
+    muiTableHeadCellProps: () => ({
+      align: "left",
+      sx: {
+        fontWeight: "700",
+        fontFamily: "Calibri, sans-serif",
+        fontSize: "15px",
+        color: "black",
+        backgroundColor: "#a7d3f7",
+        borderRight: "1px solid #c9c7c7",
+        minHeight: "3rem",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        "& .Mui-TableHeadCell-Content": {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          textWrap: "balance",
+        },
+        "& .Mui-TableHeadCell-Content-Actions": {
+          display: "none",
+        },
+      },
+    }),
+    // odczytanie danych po kliknięciu w wiersz
+    muiTableBodyCellProps: ({ column, row, cell }) => ({
+      onDoubleClick: () => {
+        if (column.id === "UWAGI_ASYSTENT") {
+          setQuickNote(row.original);
+        } else {
+          setDataRowTable(row.original);
+        }
+      },
+      sx: {
+        // position: "relative"
+      },
+    }),
+
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: "flex",
+          gap: "16px",
+          padding: "8px",
+          flexWrap: "wrap",
+        }}
+      >
+        <Button
+          disabled={table.getRowModel().rows.length === 0}
+          //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
+          //   onClick={() => handleExportRows(table.getRowModel().rows)}
+          onClick={() =>
+            handleExportRows(
+              table.getPrePaginationRowModel().rows,
+              columnOrder,
+              columnVisibility,
+              columnPinning,
+              columns
+            )
+          }
+          startIcon={<FileDownloadIcon />}
+        >
+          Pobierz wyfiltrowane dane
+        </Button>
+      </Box>
+    ),
+  });
+
   useEffect(() => {
     setTableSize(height - 180);
   }, [height]);
@@ -151,6 +280,10 @@ const Table = ({ info }) => {
     };
   }, [info, auth._id, setPleaseWait, axiosPrivateIntercept]);
 
+  useEffect(() => {
+    console.log(columns);
+  }, [columns]);
+
   return (
     <section className="actual_table">
       {pleaseWait ? (
@@ -181,139 +314,7 @@ const Table = ({ info }) => {
               adapterLocale="pl"
               localeText={plLocale}
             >
-              <MaterialReactTable
-                className="actual_table__table"
-                columns={columnsItem}
-                data={documents}
-                enableClickToCopy
-                enableColumnFilterModes
-                enableStickyHeader
-                enableStickyFooter
-                enableSorting
-                enableColumnResizing
-                onColumnSizingChange={setColumnSizing}
-                onColumnVisibilityChange={setColumnVisibility}
-                // onDensityChange={setDensity}
-                onColumnOrderChange={setColumnOrder}
-                enableColumnOrdering
-                enableColumnPinning
-                onColumnPinningChange={setColumnPinning}
-                onPaginationChange={setPagination}
-                onSortingChange={setSorting}
-                enableDensityToggle={false}
-                enableSelectAll={false}
-                initialState={{
-                  showColumnFilters: false,
-                  showGlobalFilter: true,
-                  density: "compact",
-                }}
-                localization={MRT_Localization_PL}
-                state={{
-                  columnVisibility,
-                  // density,
-                  columnOrder,
-                  columnPinning,
-                  pagination,
-                  sorting,
-                }}
-                // filterFns={'equals'}
-                enableGlobalFilterModes
-                globalFilterModeOptions={["fuzzy", "contains", "startsWith"]}
-                // globalFilterFn={info === "actual" ? "contains" : "fuzzy"}
-                globalFilterFn="contains"
-                positionGlobalFilter="left"
-                // opcja wyszukuje zbiory do select i multi-select
-                enableFacetedValues
-                // rowCount={data.length}
-
-                // wyłącza filtr (3 kropki) w kolumnie
-                enableColumnActions={false}
-                // nie odświeża tabeli po zmianie danych
-                autoResetPageIndex={false}
-                // enableColumnVirtualization
-
-                muiTableContainerProps={{ sx: { maxHeight: tableSize } }}
-                // wyświetla filtry nad komórką -
-                columnFilterDisplayMode={"popover"}
-                //filtr nad headerem - popover
-                muiFilterTextFieldProps={{
-                  // sx: { m: '0.5rem 0', width: '100%' },
-                  sx: { m: "0", width: "300px" },
-                  variant: "outlined",
-                }}
-                muiPaginationProps={{
-                  rowsPerPageOptions: [10, 20, 30, 50, 100],
-                  // rowsPerPageOptions: [10, 20, 30, 50, 100, { value: 10000, label: 'Całość' }],
-                  shape: "rounded",
-                  variant: "outlined",
-                }}
-                muiTableHeadCellProps={() => ({
-                  align: "left",
-                  sx: {
-                    fontWeight: "700",
-                    fontFamily: "Calibri, sans-serif",
-                    fontSize: "15px",
-                    color: "black",
-                    backgroundColor: "#a7d3f7",
-                    borderRight: "1px solid #c9c7c7",
-                    minHeight: "3rem",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    "& .Mui-TableHeadCell-Content": {
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      textWrap: "balance",
-                    },
-                    "& .Mui-TableHeadCell-Content-Actions": {
-                      display: "none",
-                    },
-                  },
-                })}
-                // odczytanie danych po kliknięciu w wiersz
-                muiTableBodyCellProps={({ column, row, cell }) => ({
-                  onDoubleClick: () => {
-                    if (column.id === "UWAGI_ASYSTENT") {
-                      setQuickNote(row.original);
-                    } else {
-                      setDataRowTable(row.original);
-                    }
-                  },
-                  sx: {
-                    // position: "relative"
-                  },
-                })}
-                renderTopToolbarCustomActions={({ table }) => (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      gap: "16px",
-                      padding: "8px",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <Button
-                      disabled={table.getRowModel().rows.length === 0}
-                      //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
-                      //   onClick={() => handleExportRows(table.getRowModel().rows)}
-                      onClick={() =>
-                        handleExportRows(
-                          table.getPrePaginationRowModel().rows,
-                          columnOrder,
-                          columnVisibility,
-                          columnPinning,
-                          columns
-                        )
-                      }
-                      startIcon={<FileDownloadIcon />}
-                    >
-                      Pobierz wyfiltrowane dane
-                    </Button>
-                  </Box>
-                )}
-              />
+              <MaterialReactTable table={table} />
             </LocalizationProvider>
           </ThemeProvider>
           <section className="table-icons-panel">
