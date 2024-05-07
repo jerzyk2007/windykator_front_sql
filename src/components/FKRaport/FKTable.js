@@ -302,7 +302,6 @@ const FKTable = ({ tableData, setShowTable }) => {
       columns: newColumns,
       order: newOrder,
     };
-    console.log(orderColumns);
 
     getAllDataRaport(updateData, XLSX, orderColumns, "filtr");
   };

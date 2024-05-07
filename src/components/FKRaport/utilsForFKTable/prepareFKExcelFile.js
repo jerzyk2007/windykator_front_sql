@@ -108,6 +108,17 @@ export const getExcelRaport = async (
           ws[cell].s = {
             ...ws[cell].s,
             fill: { fgColor: { rgb: "FFFF00" } },
+            alignment: {
+              wrapText: true,
+              vertical: "center",
+              horizontal: "center",
+            },
+            border: {
+              top: { style: "thin" },
+              left: { style: "thin" },
+              right: { style: "thin" },
+              bottom: { style: "thin" },
+            },
           }; // Ustawienie koloru żółtego
         }
 
@@ -150,12 +161,13 @@ export const getExcelRaport = async (
             }
           }
           // Ustawienie wysokości wiersza dla danego wiersza
-          const rowObject = XLSX.utils.encode_row(row);
-          ws["!rows"] = ws["!rows"] || [];
-          ws["!rows"][rowObject] = {
-            hpt: rowHeight * 0.75, // Konwersja pikseli na punkty (1 piksel ≈ 0.75 punkta)
-            hpx: rowHeight,
-          };
+          // const rowObject = XLSX.utils.encode_row(row);
+          // ws["!rows"] = ws["!rows"] || [];
+          // ws["!rows"][rowObject] = {
+          //   // hpt: rowHeight * 0.75, // Konwersja pikseli na punkty (1 piksel ≈ 0.75 punkta)
+          //   // hpt: rowHeight, // Konwersja pikseli na punkty (1 piksel ≈ 0.75 punkta)
+          //   // hpx: rowHeight * 2,
+          // };
         }
       });
 
@@ -284,6 +296,17 @@ export const getAllDataRaport = async (allData, XLSX, orderColumns, info) => {
         ws[cell].s = {
           ...ws[cell].s,
           fill: { fgColor: { rgb: "FFFF00" } },
+          alignment: {
+            wrapText: true,
+            vertical: "center",
+            horizontal: "center",
+          },
+          border: {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
+            bottom: { style: "thin" },
+          },
         }; // Ustawienie koloru żółtego
       }
 
@@ -326,12 +349,12 @@ export const getAllDataRaport = async (allData, XLSX, orderColumns, info) => {
           }
         }
         // Ustawienie wysokości wiersza dla danego wiersza
-        const rowObject = XLSX.utils.encode_row(row);
-        ws["!rows"] = ws["!rows"] || [];
-        ws["!rows"][rowObject] = {
-          hpt: rowHeight * 0.75, // Konwersja pikseli na punkty (1 piksel ≈ 0.75 punkta)
-          hpx: rowHeight,
-        };
+        // const rowObject = XLSX.utils.encode_row(row);
+        // ws["!rows"] = ws["!rows"] || [];
+        // ws["!rows"][rowObject] = {
+        //   hpt: rowHeight, // Konwersja pikseli na punkty (1 piksel ≈ 0.75 punkta)
+        //   hpx: rowHeight * 2,
+        // };
       }
 
       // Dodanie arkusza kalkulacyjnego do arkusza roboczego

@@ -178,11 +178,11 @@ const AddDataFromFile = () => {
                 name="uploadfile"
                 id="test"
                 style={{ display: "none" }}
-                onChange={(e) => handleSendFileBL(e, "test")}
+                // onChange={(e) => handleSendFileBL(e, "test")}
               />
-              <label htmlFor="test" className="add_data_file-click-me">
+              {/* <label htmlFor="test" className="add_data_file-click-me">
                 Napraw
-              </label>
+              </label> */}
             </section>
           ) : (
             <section className="add_data_from_file__container-documents">

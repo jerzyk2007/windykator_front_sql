@@ -4,7 +4,7 @@
 zrobić zabezpieczenia dla dodawanie danych w tabelce - uwagi i cały wiersz
 ma wyskoczyć błąd w przypadku błednego zapisu
 
-przy zmianie nazwy kolumny mają również zmienic się nazwy u każdego uzytkownika
+
 
 
 

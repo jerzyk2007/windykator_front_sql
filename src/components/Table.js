@@ -66,7 +66,7 @@ const Table = ({
       });
     }
     let newColumns = [];
-    if (type === "all") {
+    if (type === "Całość") {
       newColumns = columns
         .map((item) => {
           const matching = arrayOrder.find(
