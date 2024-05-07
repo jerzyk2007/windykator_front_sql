@@ -1,33 +1,38 @@
-.actual_table {
-    flex-grow: 1;
-    width: 100vw;
-    overflow-x: auto;
+.table {
+  flex-grow: 1;
+  width: 100vw;
+  overflow-x: auto;
 }
 
-.actual_table td {
-    cursor: pointer;
-}
-
-.table-icons-panel {
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    z-index: 6;
-    font-size: 2rem;
-    display: flex;
+.table td {
+  cursor: pointer;
 }
 
 .table-save-settings,
-.table-export-excel {
-    margin: 0 20px;
-    cursor: pointer;
+.table-export-excel,
+.table_fa-filter {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.table-save-settings {
+  color: #1e201e;
+  font-size: 1.6rem;
 }
 
 .table-export-excel {
-    color: #018f25;
+  color: #018f25;
+  font-size: 1.6rem;
 }
 
 .table-save-settings:active,
-.table-export-excel:active {
-    color: red;
+.table-export-excel:active,
+.table_fa-filter:active {
+  color: red;
+}
+
+.table-save-settings:hover,
+.table-export-excel:hover,
+.table_fa-filter:hover {
+  color: rgb(189, 29, 204);
 }

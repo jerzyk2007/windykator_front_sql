@@ -4,7 +4,6 @@ import Header from "./components/Header";
 import Contacts from "./components/Contacts";
 import Home from "./components/Home";
 import AddDataFromFile from "./components/AddDataFromFile";
-import Table from "./components/Table";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import PersistLogin from "./components/PersistLogin";
@@ -19,6 +18,7 @@ import FKTableSettings from "./components/FKRaport/FKTableSettings";
 import FKAddData from "./components/FKRaport/FKAddData";
 import FKDataSettings from "./components/FKRaport/FKDataSettings";
 import FKItems from "./components/FKRaport/FKItems";
+import PrepareTable from "./components/PrepareTable";
 import "./App.css";
 
 const ROLES = {
@@ -54,7 +54,10 @@ function App() {
                 />
               }
             >
-              <Route path="/actual-table" element={<Table info={"actual"} />} />
+              <Route
+                path="/actual-table"
+                element={<PrepareTable info={"actual"} />}
+              />
             </Route>
 
             <Route
@@ -66,7 +69,7 @@ function App() {
             >
               <Route
                 path="/archive-table"
-                element={<Table info={"archive"} />}
+                element={<PrepareTable info={"archive"} />}
               />
             </Route>
 
@@ -77,7 +80,10 @@ function App() {
                 />
               }
             >
-              <Route path="/all-data-table" element={<Table info={"all"} />} />
+              <Route
+                path="/all-data-table"
+                element={<PrepareTable info={"all"} />}
+              />
             </Route>
 
             <Route

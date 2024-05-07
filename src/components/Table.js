@@ -9,88 +9,105 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "dayjs/locale/pl";
 import { plPL } from "@mui/x-date-pickers/locales";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
 import useWindowSize from "./hooks/useWindow";
 import QuickTableNote from "./QuickTableNote";
 import EditRowTable from "./EditRowTable";
-import PleaseWait from "./PleaseWait";
-import * as xlsx from "xlsx";
 
 import { Box, Button } from "@mui/material";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { prepareColumns } from "./utilsForTable/prepareColumns";
-import { prepareDataTable } from "./utilsForTable/prepareDataTable";
-import { handleExportRows } from "./utilsForTable/excelFilteredTable";
+import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
 
 import "./Table.css";
 
-const Table = ({ info }) => {
+const Table = ({
+  documents,
+  setDocuments,
+  columns,
+  settings,
+  handleSaveSettings,
+  getSingleRow,
+  quickNote,
+  setQuickNote,
+  dataRowTable,
+  setDataRowTable,
+}) => {
   const theme = useTheme();
 
-  const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const { pleaseWait, setPleaseWait, auth } = useData();
+  const { auth } = useData();
   const { height } = useWindowSize();
 
-  const [documents, setDocuments] = useState([]);
-  const [columnVisibility, setColumnVisibility] = useState({});
-  const [columnSizing, setColumnSizing] = useState({});
-  // const [density, setDensity] = useState("");
-  const [columnOrder, setColumnOrder] = useState([]);
-  const [columnPinning, setColumnPinning] = useState({});
-  const [columns, setColumns] = useState([]);
+  const [columnVisibility, setColumnVisibility] = useState(settings.visible);
+  const [columnSizing, setColumnSizing] = useState(settings.size);
+  const [columnOrder, setColumnOrder] = useState(settings.order);
+  const [columnPinning, setColumnPinning] = useState(settings.pinning);
+  const [pagination, setPagination] = useState(settings.pagination);
   const [tableSize, setTableSize] = useState(500);
-  const [pagination, setPagination] = useState({});
 
   const [sorting, setSorting] = useState([
     { id: "ILE_DNI_PO_TERMINIE", desc: false },
   ]);
 
-  const [quickNote, setQuickNote] = useState("");
-  const [dataRowTable, setDataRowTable] = useState("");
-
   const plLocale =
     plPL.components.MuiLocalizationProvider.defaultProps.localeText;
 
-  const handleSaveSettings = async () => {
-    const tableSettings = {
-      size: { ...columnSizing },
-      visible: { ...columnVisibility },
-      // density,
-      order: columnOrder,
-      pinning: columnPinning,
-      pagination,
-    };
-    try {
-      await axiosPrivateIntercept.patch(
-        `/user/save-table-settings/${auth._id}`,
-        { tableSettings }
+  const handleExportExel = (data, type) => {
+    let rowData = [];
+    let arrayOrder = [];
+
+    if (type === "Całość" && data.length > 0) {
+      arrayOrder = [...columnOrder];
+      rowData = [...data];
+    } else if (type === "Filtr") {
+      arrayOrder = columnOrder.filter(
+        (item) => columnVisibility[item] !== false
       );
-    } catch (err) {
-      console.error(err);
+      rowData = data.map((item) => {
+        return item.original;
+      });
     }
-  };
+    let newColumns = [];
+    if (type === "all") {
+      newColumns = columns
+        .map((item) => {
+          const matching = arrayOrder.find(
+            (match) => match === item.accessorKey
+          );
+          if (matching) {
+            return {
+              accessorKey: item.accessorKey,
+              header: item.header,
+            };
+          }
+        })
+        .filter(Boolean);
+    }
 
-  const handleExportExcel = async () => {
-    const result = await axiosPrivateIntercept.get(
-      `/documents/get-all/${auth._id}/${info}`
-    );
-
-    const cleanData = result.data.map((doc) => {
-      const { _id, __v, UWAGI_ASYSTENT, UWAGI_Z_FAKTURY, ...cleanDoc } = doc;
-      if (Array.isArray(UWAGI_ASYSTENT)) {
-        cleanDoc.UWAGI_ASYSTENT = UWAGI_ASYSTENT.join(", ");
-      }
-      if (Array.isArray(UWAGI_Z_FAKTURY)) {
-        cleanDoc.UWAGI_Z_FAKTURY = UWAGI_Z_FAKTURY.join(", ");
-      }
-      return cleanDoc;
+    const newOrder = arrayOrder.map((key) => {
+      const matchedColumn = newColumns.find(
+        (column) => column.accessorKey === key
+      );
+      return matchedColumn ? matchedColumn.header : key;
     });
 
-    const wb = xlsx.utils.book_new();
-    const ws = xlsx.utils.json_to_sheet(cleanData);
-    xlsx.utils.book_append_sheet(wb, ws, "Faktury");
-    xlsx.writeFile(wb, "Faktury.xlsx");
+    const updateData = rowData.map((item) => {
+      // Filtracja kluczy obiektu na podstawie arrayOrder
+      const filteredKeys = Object.keys(item).filter((key) =>
+        arrayOrder.includes(key)
+      );
+      // Tworzenie nowego obiektu z wybranymi kluczami
+      const updatedItem = filteredKeys.reduce((obj, key) => {
+        obj[key] = item[key];
+        return obj;
+      }, {});
+      return updatedItem;
+    });
+
+    const orderColumns = {
+      columns: newColumns,
+      order: newOrder,
+    };
+
+    getAllDataRaport(updateData, orderColumns, type);
   };
 
   const columnsItem = useMemo(
@@ -100,227 +117,11 @@ const Table = ({ info }) => {
         size: columnSizing?.[column.accessorKey]
           ? columnSizing[column.accessorKey]
           : column.size,
-        enableColumnFilterModes: false,
+        enableColumnFilterModes: true,
         minSize: 50,
         maxSize: 400,
       })),
-    [columns, columnSizing]
-  );
-
-  useEffect(() => {
-    console.log(columns);
-  }, [columns, columnSizing]);
-
-  const columnsItem2 = useMemo(
-    () => [
-      {
-        accessorKey: "NUMER_FV",
-        header: "NUMER_FV",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "50_VAT",
-        header: "50_VAT",
-        // filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "100_VAT",
-        header: "100_VAT",
-        // filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "ASYSTENTKA",
-        header: "ASYSTENTKA",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "BLAD_DORADCY",
-        header: "BLAD_DORADCY",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "BLAD_W_DOKUMENTACJI",
-        header: "BLAD_W_DOKUMENTACJI",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "BRUTTO",
-        header: "BRUTTO",
-        // filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "DATA_FV",
-        header: "DATA_FV",
-        filterVariant: "date-range",
-        accessorFn: (originalRow) => new Date(originalRow.DATA_FV),
-        // accessorFn: (originalRow) => console.log(originalRow.DATA_FV),
-        // Cell: ({ cell }) => {
-        //   // Parsowanie wartości komórki jako data
-        //   const date = new Date(cell.getValue());
-        //   // console.log(cell.getValue());
-        //   // Sprawdzenie, czy data jest prawidłowa
-        //   if (!isNaN(date)) {
-        //     // Jeśli data jest prawidłowa, zwracamy ją jako lokalizowaną datę w formacie pl-PL
-        //     return date.toLocaleDateString("pl-PL", {
-        //       useGrouping: true,
-        //     });
-        //   } else {
-        //     // Jeśli data jest nieprawidłowa, zwracamy pusty string lub inny komunikat błędu
-        //     return "brak danych";
-        //   }
-        // },
-        Cell: ({ cell }) => cell.getValue().toLocaleDateString(),
-      },
-      // {
-      //   accessorKey: "DATA_FV",
-      //   header: "DATA_FV",
-      //   filterVariant: "date-range",
-      //   Cell: ({ cell }) => {
-      //     // Parsowanie wartości komórki jako data
-      //     const date = new Date(cell.getValue());
-      //     // Sprawdzenie, czy data jest prawidłowa
-      //     if (!isNaN(date)) {
-      //       // Jeśli data jest prawidłowa, zwracamy ją jako lokalizowaną datę w formacie pl-PL
-      //       return date.toLocaleDateString("pl-PL", {
-      //         useGrouping: true,
-      //       });
-      //     } else {
-      //       // Jeśli data jest nieprawidłowa, zwracamy pusty string lub inny komunikat błędu
-      //       return "brak danych";
-      //     }
-      //   },
-      // },
-      {
-        accessorKey: "DATA_KOMENTARZA_BECARED",
-        header: "DATA_KOMENTARZA_BECARED",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "DORADCA",
-        header: "DORADCA",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "DO_ROZLICZENIA",
-        header: "DO_ROZLICZENIA",
-        // filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "DZIAL",
-        header: "DZIAL",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "DZIALANIA",
-        header: "DZIALANIA",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "ILE_DNI_PO_TERMINIE",
-        header: "ILE_DNI_PO_TERMINIE",
-        // filterVariant: "multi-select",
-        // Cell: ({ cell }) =>
-        //   cell.getValue() ? cell.getValue()?.toString() : "null",
-      },
-      {
-        accessorKey: "JAKA_KANCELARIA",
-        header: "JAKA_KANCELARIA",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "KOMENTARZ_KANCELARIA_BECARED",
-        header: "KOMENTARZ_KANCELARIA_BECARED",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "KONTRAHENT",
-        header: "KONTRAHENT",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "KWOTA_WINDYKOWANA_BECARED",
-        header: "KWOTA_WINDYKOWANA_BECARED",
-        // filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "NETTO",
-        header: "NETTO",
-        // filterVariant: "multi-select",
-        // Cell: ({ cell }) =>
-        //   cell.getValue() ? cell.getValue()?.toString() : "null",
-      },
-      {
-        accessorKey: "NR_REJESTRACYJNY",
-        header: "NR_REJESTRACYJNY",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "NR_SZKODY",
-        header: "NR_SZKODY",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "NUMER_SPRAWY_BECARED",
-        header: "NUMER_SPRAWY_BECARED",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "POBRANO_VAT",
-        header: "POBRANO_VAT",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "STATUS_SPRAWY_KANCELARIA",
-        header: "STATUS_SPRAWY_KANCELARIA",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "STATUS_SPRAWY_WINDYKACJA",
-        header: "STATUS_SPRAWY_WINDYKACJA",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "TERMIN",
-        header: "TERMIN",
-        // filterVariant: "date-range",
-        // Cell: ({ cell }) => {
-        //   // Parsowanie wartości komórki jako data
-        //   const date = new Date(cell.getValue());
-        //   // console.log(cell.getValue());
-        //   // Sprawdzenie, czy data jest prawidłowa
-        //   if (!isNaN(date)) {
-        //     // Jeśli data jest prawidłowa, zwracamy ją jako lokalizowaną datę w formacie pl-PL
-        //     return date.toLocaleDateString("pl-PL", {
-        //       useGrouping: true,
-        //     });
-        //   } else {
-        //     // Jeśli data jest nieprawidłowa, zwracamy pusty string lub inny komunikat błędu
-        //     return "brak danych";
-        //   }
-        // },
-      },
-      {
-        accessorKey: "UWAGI_ASYSTENT",
-        header: "UWAGI_ASYSTENT",
-        // filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "UWAGI_Z_FAKTURY",
-        header: "UWAGI_Z_FAKTURY",
-        // filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "ZAZNACZ_KONTRAHENTA",
-        header: "ZAZNACZ_KONTRAHENTA",
-        filterVariant: "multi-select",
-      },
-      {
-        accessorKey: "CZY_PRZETERMINOWANE",
-        header: "CZY_PRZETERMINOWANE",
-        filterVariant: "multi-select",
-      },
-    ],
-    [columns, columnSizing]
+    [columnSizing, columns]
   );
 
   const table = useMaterialReactTable({
@@ -371,7 +172,7 @@ const Table = ({ info }) => {
     //filtr nad headerem - popover
     muiFilterTextFieldProps: {
       // sx: { m: '0.5rem 0', width: '100%' },
-      sx: { m: "0", width: "300px" },
+      sx: { m: "0", width: "250px" },
       variant: "outlined",
     },
     muiPaginationProps: {
@@ -409,41 +210,56 @@ const Table = ({ info }) => {
     muiTableBodyCellProps: ({ column, row, cell }) => ({
       onDoubleClick: () => {
         if (column.id === "UWAGI_ASYSTENT") {
-          setQuickNote(row.original);
+          getSingleRow(row.original._id, "quick");
         } else {
-          setDataRowTable(row.original);
+          getSingleRow(row.original._id, "full");
         }
-      },
-      sx: {
-        // position: "relative"
       },
     }),
 
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
+          width: "100%",
           display: "flex",
+          justifyContent: "space-evenly",
+          alignItems: "center",
           gap: "16px",
-          padding: "8px",
+          padding: "0px",
           flexWrap: "wrap",
         }}
       >
         <Button
           disabled={table.getRowModel().rows.length === 0}
-          //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
-          //   onClick={() => handleExportRows(table.getRowModel().rows)}
+          // onClick={handleExportExcel}
+          onClick={() => handleExportExel(documents, "Całość")}
+        >
+          <i className="fa-regular fa-file-excel table-export-excel"></i>
+        </Button>
+        <Button
           onClick={() =>
-            handleExportRows(
-              table.getPrePaginationRowModel().rows,
-              columnOrder,
+            handleSaveSettings(
+              columnSizing,
               columnVisibility,
+              columnOrder,
               columnPinning,
-              columns
+              pagination
             )
           }
-          startIcon={<FileDownloadIcon />}
         >
-          Pobierz wyfiltrowane dane
+          <i className="fas fa-save table-save-settings"></i>
+        </Button>
+        <Button
+          disabled={table.getRowModel().rows.length === 0}
+          style={
+            table.getRowModel().rows.length === 0 ? { display: "none" } : null
+          }
+          //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
+          onClick={() =>
+            handleExportExel(table.getPrePaginationRowModel().rows, "Filtr")
+          }
+        >
+          <i className="fa-solid fa-filter table_fa-filter"></i>
         </Button>
       </Box>
     ),
@@ -453,99 +269,35 @@ const Table = ({ info }) => {
     setTableSize(height - 180);
   }, [height]);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const prepareTable = async () => {
-      try {
-        setPleaseWait(true);
-        const [result, settingsUser, getColumns] = await Promise.all([
-          axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`),
-          axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`),
-          axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`),
-        ]);
-        // const modifiedColumns = prepareColumns(getColumns.data, result.data);
-        if (isMounted) {
-          const updateDocuments = prepareDataTable(result.data);
-          setDocuments(updateDocuments);
-          setColumnVisibility(settingsUser?.data?.visible || {});
-          setColumnSizing(settingsUser?.data?.size || {});
-          // setDensity(settingsUser?.data?.density || 'comfortable');
-          setColumnOrder(
-            settingsUser?.data?.order?.map((order) => order) || []
-          );
-          setColumnPinning(
-            settingsUser?.data?.pinning || { left: [], right: [] }
-          );
-          setPagination(
-            settingsUser?.data?.pagination || { pageIndex: 0, pageSize: 10 }
-          );
-          const modifiedColumns = prepareColumns(
-            getColumns.data,
-            updateDocuments
-          );
-          console.log(modifiedColumns);
-          setColumns(modifiedColumns);
-          setPleaseWait(false);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    setQuickNote("");
-    setDataRowTable("");
-    prepareTable();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [info, auth._id, setPleaseWait, axiosPrivateIntercept]);
-
   return (
-    <section className="actual_table">
-      {pleaseWait ? (
-        <PleaseWait />
-      ) : (
-        <>
-          <ThemeProvider theme={theme}>
-            {quickNote && (
-              <QuickTableNote
-                quickNote={quickNote}
-                setQuickNote={setQuickNote}
-                documents={documents}
-                setDocuments={setDocuments}
-              />
-            )}
+    <section className="table">
+      <ThemeProvider theme={theme}>
+        {quickNote && (
+          <QuickTableNote
+            quickNote={quickNote}
+            setQuickNote={setQuickNote}
+            documents={documents}
+            setDocuments={setDocuments}
+          />
+        )}
 
-            {auth?.roles?.includes(200 || 300 || 500) && dataRowTable && (
-              <EditRowTable
-                dataRowTable={dataRowTable}
-                setDataRowTable={setDataRowTable}
-                documents={documents}
-                setDocuments={setDocuments}
-              />
-            )}
+        {auth?.roles?.includes(200 || 300 || 500) && dataRowTable && (
+          <EditRowTable
+            dataRowTable={dataRowTable}
+            setDataRowTable={setDataRowTable}
+            documents={documents}
+            setDocuments={setDocuments}
+          />
+        )}
 
-            <LocalizationProvider
-              dateAdapter={AdapterDayjs}
-              adapterLocale="pl"
-              localeText={plLocale}
-            >
-              <MaterialReactTable table={table} />
-            </LocalizationProvider>
-          </ThemeProvider>
-          <section className="table-icons-panel">
-            <i
-              className="fas fa-save table-save-settings"
-              onClick={handleSaveSettings}
-            ></i>
-            <i
-              className="fa-regular fa-file-excel table-export-excel"
-              onClick={handleExportExcel}
-            ></i>
-          </section>
-        </>
-      )}
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          adapterLocale="pl"
+          localeText={plLocale}
+        >
+          <MaterialReactTable table={table} />
+        </LocalizationProvider>
+      </ThemeProvider>
     </section>
   );
 };

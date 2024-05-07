@@ -283,6 +283,7 @@ const FKTable = ({ tableData, setShowTable }) => {
       );
       return matchedColumn ? matchedColumn.header : key;
     });
+
     // Aktualizacja danych
     const updateData = rowData.map((item) => {
       // Filtracja kluczy obiektu na podstawie arrayOrder
@@ -301,6 +302,7 @@ const FKTable = ({ tableData, setShowTable }) => {
       columns: newColumns,
       order: newOrder,
     };
+    console.log(orderColumns);
 
     getAllDataRaport(updateData, XLSX, orderColumns, "filtr");
   };
