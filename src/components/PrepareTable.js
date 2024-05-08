@@ -14,8 +14,8 @@ const PrepareTable = ({ info }) => {
   const [columns, setColumns] = useState([]);
   const [documents, setDocuments] = useState([]);
   const [tableSettings, setTableSettings] = useState([]);
-  const [quickNote, setQuickNote] = useState("");
-  const [dataRowTable, setDataRowTable] = useState("");
+  // const [quickNote, setQuickNote] = useState("");
+  // const [dataRowTable, setDataRowTable] = useState("");
 
   const handleSaveSettings = async (
     columnSizing,
@@ -41,23 +41,23 @@ const PrepareTable = ({ info }) => {
     }
   };
 
-  const getSingleRow = async (id, type) => {
-    try {
-      setPleaseWait(true);
-      const result = await axiosPrivateIntercept.get(
-        `/documents/get-single-row/${id}`
-      );
-      if (type === "quick") {
-        setQuickNote(result.data);
-      }
-      if (type === "full") {
-        setDataRowTable(result.data);
-      }
-      setPleaseWait(false);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const getSingleRow = async (id, type) => {
+  //   try {
+  //     setPleaseWait(true);
+  //     const result = await axiosPrivateIntercept.get(
+  //       `/documents/get-single-row/${id}`
+  //     );
+  //     if (type === "quick") {
+  //       setQuickNote(result.data);
+  //     }
+  //     if (type === "full") {
+  //       setDataRowTable(result.data);
+  //     }
+  //     setPleaseWait(false);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   useEffect(() => {
     let isMounted = true;
@@ -94,7 +94,6 @@ const PrepareTable = ({ info }) => {
       {pleaseWait ? (
         <PleaseWait />
       ) : (
-        documents.length > 0 &&
         columns.length > 0 && (
           <Table
             documents={documents}
@@ -102,11 +101,12 @@ const PrepareTable = ({ info }) => {
             columns={columns}
             settings={tableSettings}
             handleSaveSettings={handleSaveSettings}
-            getSingleRow={getSingleRow}
-            quickNote={quickNote}
-            setQuickNote={setQuickNote}
-            dataRowTable={dataRowTable}
-            setDataRowTable={setDataRowTable}
+            // getSingleRow={getSingleRow}
+            // quickNote={quickNote}
+            // setQuickNote={setQuickNote}
+            // dataRowTable={dataRowTable}
+            // setDataRowTable={setDataRowTable}
+            info={info}
           />
         )
       )}

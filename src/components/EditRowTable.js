@@ -70,6 +70,15 @@ const EditRowTable = ({
     }
   };
 
+  // useEffect(() => {
+  //   const date = new Date();
+  //   const lastDate = new Date(dataRowTable.TERMIN);
+  //   const timeDifference = date - lastDate;
+  //   const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  //   dataRowTable.ILE_DNI_PO_TERMINIE = daysDifference;
+  //   setRowData(dataRowTable);
+  // }, [dataRowTable]);
+
   return (
     <section className="edit_row_table">
       <section className="edit_row_table__container">

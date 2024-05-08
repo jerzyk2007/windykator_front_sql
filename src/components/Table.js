@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -13,9 +14,9 @@ import useData from "./hooks/useData";
 import useWindowSize from "./hooks/useWindow";
 import QuickTableNote from "./QuickTableNote";
 import EditRowTable from "./EditRowTable";
-
 import { Box, Button } from "@mui/material";
 import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
+import PleaseWait from "./PleaseWait";
 
 import "./Table.css";
 
@@ -25,15 +26,17 @@ const Table = ({
   columns,
   settings,
   handleSaveSettings,
-  getSingleRow,
-  quickNote,
-  setQuickNote,
-  dataRowTable,
-  setDataRowTable,
+  // getSingleRow,
+  // quickNote,
+  // setQuickNote,
+  // dataRowTable,
+  // setDataRowTable,
+  info,
 }) => {
+  const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const theme = useTheme();
 
-  const { auth } = useData();
+  const { pleaseWait, setPleaseWait, auth } = useData();
   const { height } = useWindowSize();
 
   const [columnVisibility, setColumnVisibility] = useState(settings.visible);
@@ -42,6 +45,9 @@ const Table = ({
   const [columnPinning, setColumnPinning] = useState(settings.pinning);
   const [pagination, setPagination] = useState(settings.pagination);
   const [tableSize, setTableSize] = useState(500);
+  // const [documents, setDocuments] = useState([]);
+  const [quickNote, setQuickNote] = useState("");
+  const [dataRowTable, setDataRowTable] = useState("");
 
   const [sorting, setSorting] = useState([
     { id: "ILE_DNI_PO_TERMINIE", desc: false },
@@ -109,6 +115,33 @@ const Table = ({
 
     getAllDataRaport(updateData, orderColumns, type);
   };
+
+  const getSingleRow = (id, type) => {
+    const getRow = documents.filter((row) => row._id === id);
+    if (type === "quick") {
+      setQuickNote(getRow[0]);
+    }
+    if (type === "full") {
+      setDataRowTable(getRow[0]);
+    }
+  };
+  // const getSingleRow = async (id, type) => {
+  //   try {
+  //     // setPleaseWait(true);
+  //     const result = await axiosPrivateIntercept.get(
+  //       `/documents/get-single-row/${id}`
+  //     );
+  //     if (type === "quick") {
+  //       setQuickNote(result.data);
+  //     }
+  //     if (type === "full") {
+  //       setDataRowTable(result.data);
+  //     }
+  //     // setPleaseWait(false);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   const columnsItem = useMemo(
     () =>
@@ -268,6 +301,19 @@ const Table = ({
   useEffect(() => {
     setTableSize(height - 180);
   }, [height]);
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     // setPleaseWait(true);
+  //     const result = await axiosPrivateIntercept.get(
+  //       `/documents/get-all/${auth._id}/${info}`
+  //     );
+  //     console.log(result.data);
+  //     setDocuments(result.data);
+  //     // setPleaseWait(false);
+  //   };
+  //   getData();
+  // }, [info]);
 
   return (
     <section className="table">
