@@ -157,7 +157,18 @@ function App() {
               <Route path="/table-settings" element={<TableSettings />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route
+              element={
+                <RequireAuth
+                  allowedRoles={[
+                    ROLES.User,
+                    ROLES.Editor,
+                    ROLES.FK,
+                    ROLES.Admin,
+                  ]}
+                />
+              }
+            >
               <Route path="/change-password" element={<ChangePassword />} />
             </Route>
           </Route>

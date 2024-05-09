@@ -571,7 +571,7 @@ export const columnsDep = [
   },
   {
     accessorKey: "CEL_CALOSC",
-    header: "Stan wszytskich należności w %",
+    header: "Stan wszystkich należności w %",
     Cell: ({ cell }) => {
       const value = cell.getValue();
       const formattedSalary =
@@ -596,7 +596,7 @@ export const columnsDep = [
 
   {
     accessorKey: "PRZETERMINOWANE_FV",
-    header: "Kwota wszytskich przeterminowanych fv",
+    header: "Kwota wszystkich przeterminowanych fv",
     Cell: ({ cell }) => {
       const value = cell.getValue();
       const formattedSalary =
@@ -621,7 +621,7 @@ export const columnsDep = [
 
   {
     accessorKey: "ILOSC_PRZETERMINOWANYCH_FV",
-    header: "Ilość wszytskich faktur przeterminowanych",
+    header: "Ilość wszystkich faktur przeterminowanych",
     muiTableBodyCellProps: {
       ...muiTableBodyCellProps,
       sx: {
@@ -632,7 +632,7 @@ export const columnsDep = [
   },
   {
     accessorKey: "NIEPRZETERMINOWANE_FV",
-    header: "Kwota wszytskich nieprzeterminowanych fv",
+    header: "Kwota wszystkich nieprzeterminowanych fv",
     Cell: ({ cell }) => {
       const value = cell.getValue();
       const formattedSalary =
@@ -715,7 +715,7 @@ export const columnsDep = [
   },
   {
     accessorKey: "NIEPRZETERMINOWANE_FV_BEZ_KANCELARII",
-    header: "Kwota wszytskich nieprzeterminowanych fv bez kancelarii",
+    header: "Kwota wszystkich nieprzeterminowanych fv bez kancelarii",
     Cell: ({ cell }) => {
       const value = cell.getValue();
       const formattedSalary =

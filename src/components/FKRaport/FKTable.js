@@ -17,8 +17,9 @@ import {
   muiTableBodyCellProps,
   preparedData,
 } from "./utilsForFKTable/prepareFKColumns";
-import XLSX from "xlsx-js-style";
-import { getAllDataRaport } from "./utilsForFKTable/prepareFKExcelFile";
+import { getAllDataRaport } from "../utilsForTable/excelFilteredTable";
+// import XLSX from "xlsx-js-style";
+// import { getAllDataRaport } from "./utilsForFKTable/prepareFKExcelFile";
 
 import "./FKTable.css";
 
@@ -259,7 +260,25 @@ const FKTable = ({ tableData, setShowTable }) => {
   };
 
   const handleExportRows = (rows, columnOrder, columnVisibility, columns) => {
-    const rowData = rows.map((row) => row.original);
+    const rowDataTable = rows.map((row) => row.original);
+
+    const rowData = rowDataTable.map((item) => {
+      if (item.DATA_WYSTAWIENIA_FV) {
+        item.DATA_WYSTAWIENIA_FV = new Date(
+          item.DATA_WYSTAWIENIA_FV
+        ).toLocaleDateString("pl-PL", {
+          useGrouping: true,
+        });
+      }
+      if (item.TERMIN_PLATNOSCI_FV) {
+        item.TERMIN_PLATNOSCI_FV = new Date(
+          item.TERMIN_PLATNOSCI_FV
+        ).toLocaleDateString("pl-PL", {
+          useGrouping: true,
+        });
+      }
+      return item;
+    });
 
     const arrayOrder = columnOrder.filter(
       (item) => columnVisibility[item] !== false
@@ -303,7 +322,8 @@ const FKTable = ({ tableData, setShowTable }) => {
       order: newOrder,
     };
 
-    getAllDataRaport(updateData, XLSX, orderColumns, "filtr");
+    getAllDataRaport(updateData, orderColumns, "Filtr");
+    // getAllDataRaport(updateData, XLSX, orderColumns, "Filtr");
   };
 
   useEffect(() => {

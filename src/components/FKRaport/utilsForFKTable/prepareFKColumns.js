@@ -37,6 +37,7 @@ export const preparedFKColumns = [
     Cell: ({ cell }) => {
       // Parsowanie wartości komórki jako data
       const date = new Date(cell.getValue());
+
       // Sprawdzenie, czy data jest prawidłowa
       if (!isNaN(date)) {
         // Jeśli data jest prawidłowa, zwracamy ją jako lokalizowaną datę w formacie pl-PL

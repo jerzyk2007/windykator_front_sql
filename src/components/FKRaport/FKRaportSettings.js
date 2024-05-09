@@ -20,7 +20,7 @@ const FKRaportSettings = () => {
     raport: "accountRaport",
     business: "201203",
     payment: "Przeterminowane",
-    actions: "Tak",
+    actions: "All",
   });
 
   const [showRaport, setShowRaport] = useState(false);
