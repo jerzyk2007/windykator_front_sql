@@ -94,7 +94,9 @@ const PrepareTable = ({ info }) => {
       {pleaseWait ? (
         <PleaseWait />
       ) : (
-        columns.length > 0 && (
+        columns.length > 0 &&
+        documents.length > 0 &&
+        tableSettings.pagination && (
           <Table
             documents={documents}
             setDocuments={setDocuments}
@@ -106,7 +108,7 @@ const PrepareTable = ({ info }) => {
             // setQuickNote={setQuickNote}
             // dataRowTable={dataRowTable}
             // setDataRowTable={setDataRowTable}
-            info={info}
+            // info={info}
           />
         )
       )}

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+// import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -16,7 +16,7 @@ import QuickTableNote from "./QuickTableNote";
 import EditRowTable from "./EditRowTable";
 import { Box, Button } from "@mui/material";
 import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
-import PleaseWait from "./PleaseWait";
+// import PleaseWait from "./PleaseWait";
 
 import "./Table.css";
 
@@ -31,12 +31,12 @@ const Table = ({
   // setQuickNote,
   // dataRowTable,
   // setDataRowTable,
-  info,
+  // info,
 }) => {
-  const axiosPrivateIntercept = useAxiosPrivateIntercept();
+  // const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const theme = useTheme();
 
-  const { pleaseWait, setPleaseWait, auth } = useData();
+  const { auth } = useData();
   const { height } = useWindowSize();
 
   const [columnVisibility, setColumnVisibility] = useState(settings.visible);
@@ -45,12 +45,13 @@ const Table = ({
   const [columnPinning, setColumnPinning] = useState(settings.pinning);
   const [pagination, setPagination] = useState(settings.pagination);
   const [tableSize, setTableSize] = useState(500);
-  // const [documents, setDocuments] = useState([]);
+  const [data, setData] = useState([]);
   const [quickNote, setQuickNote] = useState("");
   const [dataRowTable, setDataRowTable] = useState("");
 
   const [sorting, setSorting] = useState([
     { id: "ILE_DNI_PO_TERMINIE", desc: false },
+    // { id: "DO_ROZLICZENIA", desc: true },
   ]);
 
   const plLocale =
@@ -159,7 +160,7 @@ const Table = ({
 
   const table = useMaterialReactTable({
     columns: columnsItem,
-    data: documents,
+    data,
     enableClickToCopy: true,
     enableColumnFilterModes: true,
     enableStickyHeader: true,
@@ -176,6 +177,7 @@ const Table = ({
     onSortingChange: setSorting,
     enableDensityToggle: false,
     enableSelectAll: false,
+    // isMultiSortEvent: () => true,
     initialState: {
       showColumnFilters: false,
       showGlobalFilter: true,
@@ -302,18 +304,22 @@ const Table = ({
     setTableSize(height - 180);
   }, [height]);
 
+  useEffect(() => {
+    setData(documents);
+  }, [documents]);
+
   // useEffect(() => {
   //   const getData = async () => {
   //     // setPleaseWait(true);
   //     const result = await axiosPrivateIntercept.get(
   //       `/documents/get-all/${auth._id}/${info}`
   //     );
-  //     console.log(result.data);
+  //     // console.log(result.data);
   //     setDocuments(result.data);
   //     // setPleaseWait(false);
   //   };
   //   getData();
-  // }, [info]);
+  // }, []);
 
   return (
     <section className="table">
