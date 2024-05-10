@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useData from "./hooks/useData";
+import PleaseWait from "./PleaseWait";
+
 import "./TableSettings.css";
 
 const TableSettings = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
+  const { pleaseWait, setPleaseWait, auth } = useData();
 
   const [columns, setColumns] = useState([]);
-  const [columnsName, setColumnsName] = useState([]);
+  // const [columnsName, setColumnsName] = useState([]);
 
   const handleHeaderChange = (index, field, newValue) => {
     setColumns((prevColumns) => {
@@ -95,20 +99,28 @@ const TableSettings = () => {
   // pobiera wszytskie nazwy kolumn z pierwszego dokumnetu w DB
   const handleGetColums = async () => {
     try {
+      setPleaseWait(true);
+      // const documentsColumn = await axiosPrivateIntercept.get(
+      //   "/documents/get-columns"
+      // );
       const documentsColumn = await axiosPrivateIntercept.get(
-        "/documents/get-columns"
+        `/documents/get-all/${auth._id}/actual`
       );
-      const filteredArray = documentsColumn.data.filter(
-        (item) => item !== "__v"
+      const firstDocument = documentsColumn.data[0];
+
+      const keysArray = Object.keys(firstDocument);
+      const newArray = keysArray.filter(
+        (item) => item !== "_id" && item !== "__v"
       );
-      setColumnsName(filteredArray);
+
+      createColumns(newArray);
     } catch (err) {
       console.log(err);
     }
   };
 
   //tworzy kolumny na podstawie już zapisanych danych w DB i sprawdza czy są jakies nowe kolumny dzięki handleGetColums
-  const createColumns = async () => {
+  const createColumns = async (columnsName) => {
     try {
       const settingsColumn = await axiosPrivateIntercept.get(
         "/settings/get-columns"
@@ -136,6 +148,7 @@ const TableSettings = () => {
       });
 
       setColumns(newColumns);
+      setPleaseWait(false);
     } catch (error) {
       console.error("Błąd podczas pobierania kolumn: ", error);
     }
@@ -145,34 +158,40 @@ const TableSettings = () => {
     handleGetColums();
   }, []);
 
-  useEffect(() => {
-    createColumns();
-  }, [columnsName]);
+  // useEffect(() => {
+  //   createColumns();
+  // }, [columnsName]);
 
   return (
     <section className="table_settings">
-      <section className="table_settings-table">
-        <section className="table_settings-table--title">
-          <h3 className="table_settings-table--name">
-            Ustawienia kolumn tabeli
-          </h3>
-          <i
-            className="fas fa-save table_settings-table--save"
-            onClick={handleSaveColumnsSetinngs}
-          ></i>
-        </section>
-        <section className="table_settings-table__container">
-          {columnItems}
-        </section>
-      </section>
-      <section className="table_settings-raport">
-        <section className="table_settings-table--title">
-          <h3 className="table_settings-table--name">
-            Ustawienia kolumn raportu
-          </h3>
-          <i className="fas fa-save table_settings-table--save"></i>
-        </section>
-      </section>
+      {pleaseWait ? (
+        <PleaseWait />
+      ) : (
+        <>
+          <section className="table_settings-table">
+            <section className="table_settings-table--title">
+              <h3 className="table_settings-table--name">
+                Ustawienia kolumn tabeli
+              </h3>
+              <i
+                className="fas fa-save table_settings-table--save"
+                onClick={handleSaveColumnsSetinngs}
+              ></i>
+            </section>
+            <section className="table_settings-table__container">
+              {columnItems}
+            </section>
+          </section>
+          <section className="table_settings-raport">
+            <section className="table_settings-table--title">
+              <h3 className="table_settings-table--name">
+                Ustawienia kolumn raportu
+              </h3>
+              <i className="fas fa-save table_settings-table--save"></i>
+            </section>
+          </section>
+        </>
+      )}
     </section>
   );
 };

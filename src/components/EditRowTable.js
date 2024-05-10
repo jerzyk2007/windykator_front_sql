@@ -4,6 +4,8 @@ import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import EditDocAction from "./EditDocAction";
 import EditDocBeCared from "./EditDocBeCared";
+import { format } from "date-fns";
+// import plLocale from "date-fns/locale/pl";
 import "./EditRowTable.css";
 
 const EditRowTable = ({
@@ -70,15 +72,6 @@ const EditRowTable = ({
     }
   };
 
-  // useEffect(() => {
-  //   const date = new Date();
-  //   const lastDate = new Date(dataRowTable.TERMIN);
-  //   const timeDifference = date - lastDate;
-  //   const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-  //   dataRowTable.ILE_DNI_PO_TERMINIE = daysDifference;
-  //   setRowData(dataRowTable);
-  // }, [dataRowTable]);
-
   return (
     <section className="edit_row_table">
       <section className="edit_row_table__container">
@@ -98,7 +91,7 @@ const EditRowTable = ({
                 Data wystawienia:
               </span>
               <span className="edit_row_table-section-data--content">
-                {rowData.DATA_FV}
+                {format(rowData.DATA_FV, "yyyy-MM-dd")}
               </span>
             </section>
             <section className="edit_row_table-section-data--document">
@@ -106,7 +99,7 @@ const EditRowTable = ({
                 Termin płatności:
               </span>
               <span className="edit_row_table-section-data--content">
-                {rowData.TERMIN}
+                {format(rowData.TERMIN, "yyyy-MM-dd")}
               </span>
             </section>
             <section className="edit_row_table-section-data--document">
@@ -311,6 +304,7 @@ const EditRowTable = ({
               />
               <section className="edit_row_table-section-data__panel">
                 <Button
+                  disabled={!note ? true : false}
                   variant="contained"
                   color="error"
                   onClick={() => setNote("")}

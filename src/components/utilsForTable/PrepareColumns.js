@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export const muiTableBodyCellProps = {
   align: "center",
   sx: {
@@ -28,9 +30,10 @@ export const prepareColumns = (columnsData, data) => {
         // Sprawdzenie, czy data jest prawidłowa
         if (!isNaN(date)) {
           // Jeśli data jest prawidłowa, zwracamy ją jako lokalizowaną datę w formacie pl-PL
-          return date.toLocaleDateString("pl-PL", {
-            useGrouping: true,
-          });
+          // return date.toLocaleDateString("pl-PL", {
+          //   useGrouping: true,
+          // });
+          return format(date, "yyyy-MM-dd");
         } else {
           // Jeśli data jest nieprawidłowa, zwracamy pusty string lub inny komunikat błędu
           return "brak danych";
@@ -206,13 +209,13 @@ export const prepareColumns = (columnsData, data) => {
       modifiedItem.Cell = ({ cell }) => {
         const value = cell.getValue();
         const formattedSalary =
-          value !== undefined && value !== null
+          value !== undefined && value !== null && value !== 0
             ? value.toLocaleString("pl-PL", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
                 useGrouping: true,
               })
-            : "0,00"; // Zastąp puste pola zerem
+            : ""; // Zastąp puste pola zerem
 
         return `${formattedSalary}`;
       };

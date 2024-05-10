@@ -308,19 +308,6 @@ const Table = ({
     setData(documents);
   }, [documents]);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     // setPleaseWait(true);
-  //     const result = await axiosPrivateIntercept.get(
-  //       `/documents/get-all/${auth._id}/${info}`
-  //     );
-  //     // console.log(result.data);
-  //     setDocuments(result.data);
-  //     // setPleaseWait(false);
-  //   };
-  //   getData();
-  // }, []);
-
   return (
     <section className="table">
       <ThemeProvider theme={theme}>

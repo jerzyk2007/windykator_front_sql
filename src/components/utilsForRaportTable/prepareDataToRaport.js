@@ -373,7 +373,7 @@ export const grossTotalDepartments = (departments, raportData, raportDate) => {
         item.DZIAL === dep &&
         documentDate >= minDate &&
         documentDate <= maxDate &&
-        (item.BLAD_DORADCY === "TAK" || item.BLAD_W_DOKUMENTACJI === "TAK") &&
+        item.BLAD_DORADCY === "TAK" &&
         item.DO_ROZLICZENIA !== 0
       ) {
         adviserMistakeCounter.set(dep, adviserMistakeCounter.get(dep) + 1);
@@ -1200,7 +1200,7 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
         dep.merge === `${dep.adviser}-${item.DZIAL}` &&
         documentDate >= minDate &&
         documentDate <= maxDate &&
-        (item.BLAD_DORADCY === "TAK" || item.BLAD_W_DOKUMENTACJI === "TAK") &&
+        item.BLAD_DORADCY === "TAK" &&
         item.DO_ROZLICZENIA !== 0
       ) {
         adviserMistakeCounter.set(

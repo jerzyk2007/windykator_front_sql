@@ -69,6 +69,7 @@ const PrepareTable = ({ info }) => {
           axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`),
           axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`),
           axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`),
+          // axiosPrivateIntercept.get("/settings/get-columns"),
         ]);
         if (isMounted) {
           setDocuments(result.data);
