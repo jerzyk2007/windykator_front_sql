@@ -108,13 +108,23 @@ const Table = ({
       }, {});
       return updatedItem;
     });
+    const dateToString = updateData.map((item) => {
+      if (item.ILE_DNI_PO_TERMINIE) {
+        return {
+          ...item,
+          ILE_DNI_PO_TERMINIE: String(item.ILE_DNI_PO_TERMINIE),
+        };
+      }
+      return item;
+    });
 
     const orderColumns = {
       columns: newColumns,
       order: newOrder,
     };
 
-    getAllDataRaport(updateData, orderColumns, type);
+    getAllDataRaport(dateToString, orderColumns, type);
+    // getAllDataRaport(updateData, orderColumns, type);
   };
 
   const getSingleRow = (id, type) => {

@@ -18,8 +18,6 @@ import {
   preparedData,
 } from "./utilsForFKTable/prepareFKColumns";
 import { getAllDataRaport } from "../utilsForTable/excelFilteredTable";
-// import XLSX from "xlsx-js-style";
-// import { getAllDataRaport } from "./utilsForFKTable/prepareFKExcelFile";
 
 import "./FKTable.css";
 
@@ -322,8 +320,17 @@ const FKTable = ({ tableData, setShowTable }) => {
       order: newOrder,
     };
 
-    getAllDataRaport(updateData, orderColumns, "Filtr");
-    // getAllDataRaport(updateData, XLSX, orderColumns, "Filtr");
+    const dataToString = updateData.map((item) => {
+      if (item.ILE_DNI_NA_PLATNOSC_FV) {
+        item.ILE_DNI_NA_PLATNOSC_FV = String(item.ILE_DNI_NA_PLATNOSC_FV);
+      }
+      if (item.KWOTA_WPS === 0) {
+        item.KWOTA_WPS = "";
+      }
+      item.RODZAJ_KONTA = String(item.RODZAJ_KONTA);
+      return item;
+    });
+    getAllDataRaport(dataToString, orderColumns, "Filtr");
   };
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import AgingAccount from "./FKAgingComponents/AgingAccount";
 import LawyerAccount from "./FKLawyerComponents/LawyerAccount";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 // import * as xlsx from "xlsx";
-import XLSX from "xlsx-js-style";
+// import XLSX from "xlsx-js-style";
 import { getExcelRaport } from "./utilsForFKTable/prepareFKExcelFile";
 import "./FKRaport.css";
 
@@ -27,6 +27,37 @@ const FKRaport = ({
     setShowTable(true);
   };
 
+  const handleExportExcel = async () => {
+    try {
+      const settingsColumn = await axiosPrivateIntercept.get(
+        "/fk/get-columns-order"
+      );
+
+      const update = buttonArea.map((item) => {
+        const updatedData = item.data.map((element) => {
+          if (element.ILE_DNI_NA_PLATNOSC_FV) {
+            element.ILE_DNI_NA_PLATNOSC_FV = String(
+              element.ILE_DNI_NA_PLATNOSC_FV
+            );
+          }
+
+          if (element.KWOTA_WPS) {
+            element.KWOTA_WPS =
+              element.KWOTA_WPS != 0 ? Number(element.KWOTA_WPS) : "";
+          }
+          if (element.RODZAJ_KONTA) {
+            element.RODZAJ_KONTA = String(element.RODZAJ_KONTA);
+          }
+          return element;
+        });
+        return { ...item, data: updatedData };
+      });
+
+      getExcelRaport(update, settingsColumn.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   const buttonItems = buttonArea.map((item, index) => {
     return (
       <section
@@ -41,9 +72,7 @@ const FKRaport = ({
           <Button
             variant="outlined"
             color="success"
-            onClick={() =>
-              getExcelRaport(buttonArea, XLSX, axiosPrivateIntercept)
-            }
+            onClick={handleExportExcel}
           >
             {item.name}
           </Button>

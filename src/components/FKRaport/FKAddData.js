@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
-// import useData from "../hooks/useData";
 import Button from "@mui/material/Button";
-// import * as xlsx from "xlsx";
-import XLSX from "xlsx-js-style";
-import { getAllDataRaport } from "./utilsForFKTable/prepareFKExcelFile";
+import { getAllDataRaport } from "../utilsForTable/excelFilteredTable";
 
 import "./FKAddData.css";
 
@@ -20,56 +17,6 @@ const FKAddData = () => {
   const [rubiconData, setRubiconData] = useState("");
   const [deleteRaport, setDeleteRaport] = useState("");
   const [dateCounter, setDateCounter] = useState({});
-  // const [raportErrors, setRaportErrors] = useState("");
-
-  // const handleExportExcel = (excelData, type) => {
-  //   const wb = xlsx.utils.book_new();
-  //   if (type === "errors") {
-  //     // Obsługa kluczy z tablicami stringów
-  //     const stringArrayKeys = [
-  //       "dzial",
-  //       "wiekowanie",
-  //       "obszar",
-  //       "lokalizacja",
-  //       "owner",
-  //     ];
-  //     stringArrayKeys.forEach((key) => {
-  //       if (excelData[key]) {
-  //         const data = excelData[key].map((string) => [string]); // Tworzenie tablicy dwuwymiarowej, gdzie każdy string jest w osobnej tablicy
-  //         const ws = xlsx.utils.aoa_to_sheet(data); // Konwersja tablicy na arkusz
-  //         xlsx.utils.book_append_sheet(wb, ws, key); // Dodanie arkusza z danymi dla danego klucza
-  //       }
-  //     });
-  //     xlsx.writeFile(wb, "Błędy.xlsx"); // Zapisanie pliku Excel
-  //   }
-  //   if (type === "generate") {
-  //     const cleanData = excelData.map((doc) => {
-  //       const {
-  //         _id,
-  //         __v,
-  //         OPIEKUN_OBSZARU_CENTRALI,
-  //         OPIS_ROZRACHUNKU,
-  //         OWNER,
-  //         ...cleanDoc
-  //       } = doc;
-  //       if (Array.isArray(OPIEKUN_OBSZARU_CENTRALI)) {
-  //         cleanDoc.OPIEKUN_OBSZARU_CENTRALI =
-  //           OPIEKUN_OBSZARU_CENTRALI.join(", ");
-  //       }
-  //       if (Array.isArray(OPIS_ROZRACHUNKU)) {
-  //         cleanDoc.OPIS_ROZRACHUNKU = OPIS_ROZRACHUNKU.join(", ");
-  //       }
-  //       if (Array.isArray(OWNER)) {
-  //         cleanDoc.OWNER = OWNER.join(", ");
-  //       }
-  //       return cleanDoc;
-  //     });
-  //     const wb = xlsx.utils.book_new();
-  //     const ws = xlsx.utils.json_to_sheet(cleanData);
-  //     xlsx.utils.book_append_sheet(wb, ws, "Raport");
-  //     xlsx.writeFile(wb, "Raport.xlsx");
-  //   }
-  // };
 
   const handleSendFile = async (e, type) => {
     setPleaseWait(true);
@@ -134,45 +81,24 @@ const FKAddData = () => {
 
       const orderColumns = settingsColumn.data;
 
-      // handleExportExcel(result.data, "generate");
-      getAllDataRaport(
-        result.data,
-        XLSX,
-        // axiosPrivateIntercept,
-        orderColumns,
-        "Całość"
-      );
+      const dataToString = result.data.map((item) => {
+        if (item.ILE_DNI_NA_PLATNOSC_FV) {
+          item.ILE_DNI_NA_PLATNOSC_FV = String(item.ILE_DNI_NA_PLATNOSC_FV);
+        }
+        if (item.RODZAJ_KONTA) {
+          item.RODZAJ_KONTA = String(item.RODZAJ_KONTA);
+        }
+        if (item.NR_KLIENTA) {
+          item.NR_KLIENTA = String(item.NR_KLIENTA);
+        }
+        return item;
+      });
+      getAllDataRaport(dataToString, orderColumns, "Generowanie Raportu");
       setPleaseWait(false);
     } catch (err) {
       console.error(err);
     }
   };
-
-  // const checkRaportErrors = async () => {
-  //   try {
-  //     setPleaseWait(true);
-
-  //     const result = await axiosPrivateIntercept.get("/fk/check-error-raport");
-  //     if (result.data.check === "OK") {
-  //       setRaportErrors("Brak błędów :)");
-  //     } else {
-  //       const excelData = {
-  //         dzial: result.data.check.departments,
-  //         wiekowanie: result.data.check.aging,
-  //         obszar: result.data.check.areas,
-  //         lokalizacja: result.data.check.localizations,
-  //         owner: result.data.check.owners,
-  //       };
-  //       handleExportExcel(excelData, "errors");
-  //       setRaportErrors("Znaleziono błędy podczas przygotowania raportu");
-  //     }
-
-  //     // console.log(result.data);
-  //     setPleaseWait(false);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
 
   const deleteDataRaport = async () => {
     try {

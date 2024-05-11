@@ -149,6 +149,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
               vertical: "center",
               horizontal: "center",
             },
+            numFmt: "# ##0.00 zł",
           };
         }
       }

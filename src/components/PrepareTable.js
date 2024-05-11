@@ -15,7 +15,6 @@ const PrepareTable = ({ info }) => {
   const [documents, setDocuments] = useState([]);
   const [tableSettings, setTableSettings] = useState([]);
   const [pleaseWait, setPleaseWait] = useState(false);
-  // const [dataRowTable, setDataRowTable] = useState("");
 
   const handleSaveSettings = async (
     columnSizing,
@@ -41,41 +40,32 @@ const PrepareTable = ({ info }) => {
     }
   };
 
-  // const getSingleRow = async (id, type) => {
-  //   try {
-  //     setPleaseWait(true);
-  //     const result = await axiosPrivateIntercept.get(
-  //       `/documents/get-single-row/${id}`
-  //     );
-  //     if (type === "quick") {
-  //       setQuickNote(result.data);
-  //     }
-  //     if (type === "full") {
-  //       setDataRowTable(result.data);
-  //     }
-  //     setPleaseWait(false);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
   useEffect(() => {
     let isMounted = true;
 
     const getData = async () => {
       try {
         setPleaseWait(true);
-        const [result, settingsUser, getColumns] = await Promise.all([
-          axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`),
-          axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`),
-          axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`),
-          // axiosPrivateIntercept.get("/settings/get-columns"),
-        ]);
+        const dataTable = await axiosPrivateIntercept.get(
+          `/documents/get-data-table/${auth._id}/${info}`
+        );
+        // console.log(dataTable.data);
+        // const [result, settingsUser, getColumns] = await Promise.all([
+        //   axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`),
+        //   axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`),
+        //   axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`),
+        // ]);
         if (isMounted) {
-          setDocuments(result.data);
-          setTableSettings(settingsUser.data);
+          setDocuments(dataTable.data.dataTable);
+          setTableSettings(dataTable.data.tableSettings);
           // kolumny są modyfikowane wg filtrów
-          const update = prepareColumns(getColumns.data, result.data);
+          const update = prepareColumns(
+            dataTable.data.columns,
+            dataTable.data.dataTable
+          );
+          // setDocuments(result.data);
+          // setTableSettings(settingsUser.data);
+          // const update = prepareColumns(getColumns.data, result.data);
           setColumns(update);
           setPleaseWait(false);
         }
