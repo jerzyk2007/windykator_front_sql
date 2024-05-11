@@ -43,16 +43,18 @@ const FKRaport = ({
 
           if (element.KWOTA_WPS) {
             element.KWOTA_WPS =
-              element.KWOTA_WPS != 0 ? Number(element.KWOTA_WPS) : "";
+              element.KWOTA_WPS !== "0" ? Number(element.KWOTA_WPS) : "";
           }
           if (element.RODZAJ_KONTA) {
             element.RODZAJ_KONTA = String(element.RODZAJ_KONTA);
+          }
+          if (element.NR_KLIENTA) {
+            element.NR_KLIENTA = String(element.NR_KLIENTA);
           }
           return element;
         });
         return { ...item, data: updatedData };
       });
-
       getExcelRaport(update, settingsColumn.data);
     } catch (err) {
       console.error(err);

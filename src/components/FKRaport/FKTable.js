@@ -327,7 +327,12 @@ const FKTable = ({ tableData, setShowTable }) => {
       if (item.KWOTA_WPS === 0) {
         item.KWOTA_WPS = "";
       }
-      item.RODZAJ_KONTA = String(item.RODZAJ_KONTA);
+      if (item.RODZAJ_KONTA) {
+        item.RODZAJ_KONTA = String(item.RODZAJ_KONTA);
+      }
+      if (item.NR_KLIENTA) {
+        item.NR_KLIENTA = String(item.NR_KLIENTA);
+      }
       return item;
     });
     getAllDataRaport(dataToString, orderColumns, "Filtr");

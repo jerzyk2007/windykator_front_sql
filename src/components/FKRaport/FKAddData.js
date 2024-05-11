@@ -91,6 +91,9 @@ const FKAddData = () => {
         if (item.NR_KLIENTA) {
           item.NR_KLIENTA = String(item.NR_KLIENTA);
         }
+        if (item.KWOTA_WPS) {
+          item.KWOTA_WPS = item.KWOTA_WPS !== "0" ? Number(item.KWOTA_WPS) : "";
+        }
         return item;
       });
       getAllDataRaport(dataToString, orderColumns, "Generowanie Raportu");
