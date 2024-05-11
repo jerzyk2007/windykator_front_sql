@@ -7,10 +7,10 @@ import "./TableSettings.css";
 
 const TableSettings = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const { pleaseWait, setPleaseWait, auth } = useData();
+  const { auth } = useData();
 
+  const [pleaseWait, setPleaseWait] = useState(false);
   const [columns, setColumns] = useState([]);
-  // const [columnsName, setColumnsName] = useState([]);
 
   const handleHeaderChange = (index, field, newValue) => {
     setColumns((prevColumns) => {

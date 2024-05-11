@@ -8,13 +8,14 @@ import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
 import FKRaport from "./FKRaport";
 import PleaseWait from "../PleaseWait";
-import useData from "../hooks/useData";
+// import useData from "../hooks/useData";
 import "./FKRaportSettings.css";
 
 const FKRaportSettings = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const { pleaseWait, setPleaseWait } = useData();
+  // const { pleaseWait, setPleaseWait } = useData();
 
+  const [pleaseWait, setPleaseWait] = useState(false);
   const [filteredDataRaport, setFilteredDataRaport] = useState([]);
   const [filter, setFilter] = useState({
     raport: "accountRaport",

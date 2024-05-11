@@ -11,18 +11,19 @@ import UserDelete from "./UserDelete";
 import PleaseWait from "./PleaseWait";
 import { FiX } from "react-icons/fi";
 import isEqual from "lodash/isEqual";
-import useData from "./hooks/useData";
+// import useData from "./hooks/useData";
 
 import "./EditUserSettings.css";
 
 const EditUserSettings = ({ user, setEdit }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const { pleaseWait, setPleaseWait } = useData();
+  // const { pleaseWait, setPleaseWait } = useData();
 
   const [permissions, setPermissions] = useState({});
   const [roles, setRoles] = useState({});
   const [departments, setDepartments] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [pleaseWait, setPleaseWait] = useState(false);
 
   useEffect(() => {
     const getSettings = async () => {

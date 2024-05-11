@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
-import useData from "../hooks/useData";
+// import useData from "../hooks/useData";
 import FKItemSettings from "./FKItemsData/FKItemSettings";
 import "./FKDataSettings.css";
 
 const FKDataSettings = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const { pleaseWait, setPleaseWait } = useData();
+  // const { pleaseWait, setPleaseWait } = useData();
 
+  const [pleaseWait, setPleaseWait] = useState(false);
   const [data, setData] = useState([]);
   const [raportDep, setRaportDep] = useState([]);
   const [mergeDep, setMergeDep] = useState([]);

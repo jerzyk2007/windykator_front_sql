@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
-import useData from "../hooks/useData";
+// import useData from "../hooks/useData";
 import FKItemComponent from "./FKItemsData/FKItemComponent";
 import FKItemAging from "./FKItemsData/FKItemAging";
 import "./FKItems.css";
 
 const FKItems = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const { pleaseWait, setPleaseWait } = useData();
+  // const { pleaseWait, setPleaseWait } = useData();
 
+  const [pleaseWait, setPleaseWait] = useState(false);
   const [dataItems, setDataItems] = useState([]);
   const [toggleState, setToggleState] = useState(1);
 

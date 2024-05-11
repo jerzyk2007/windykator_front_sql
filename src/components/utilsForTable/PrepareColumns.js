@@ -215,12 +215,26 @@ export const prepareColumns = (columnsData, data) => {
                 maximumFractionDigits: 2,
                 useGrouping: true,
               })
+            : "0,00"; // Zastąp puste pola zerem
+
+        return `${formattedSalary}`;
+      };
+    }
+    if (item.accessorKey === "KWOTA_WINDYKOWANA_BECARED") {
+      modifiedItem.Cell = ({ cell }) => {
+        const value = cell.getValue();
+        const formattedSalary =
+          value !== undefined && value !== null && value !== 0
+            ? value.toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+              })
             : ""; // Zastąp puste pola zerem
 
         return `${formattedSalary}`;
       };
     }
-
     delete modifiedItem.type;
     return modifiedItem;
   });

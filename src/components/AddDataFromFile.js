@@ -1,18 +1,18 @@
 import { useState } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import useData from "./hooks/useData";
+// import useData from "./hooks/useData";
 import PleaseWait from "./PleaseWait";
 import "./AddDataFromFile.css";
 
 const AddDataFromFile = () => {
-  const { pleaseWait, setPleaseWait } = useData();
+  // const { pleaseWait, setPleaseWait } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [errBecared, setErrBecared] = useState("");
   const [errSettlements, setSettlements] = useState("");
   const [errAS, setErrAS] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  // const [errDataFK, setErrDataFK] = useState("");
+  const [pleaseWait, setPleaseWait] = useState(false);
 
   const handleSendFileBL = async (e, type) => {
     setPleaseWait(true);

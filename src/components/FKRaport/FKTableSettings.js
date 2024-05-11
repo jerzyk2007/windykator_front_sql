@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
-import useData from "../hooks/useData";
+// import useData from "../hooks/useData";
 import "./FKTableSettings.css";
 
 const FKTableSettings = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const { pleaseWait, setPleaseWait } = useData();
+  // const { pleaseWait, setPleaseWait } = useData();
 
+  const [pleaseWait, setPleaseWait] = useState(false);
   const [columns, setColumns] = useState([]);
   //   const [columnsName, setColumnsName] = useState([]);
 

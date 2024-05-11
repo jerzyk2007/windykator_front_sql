@@ -19,9 +19,10 @@ import "./RaportDepartments.css";
 
 const RaportDepartments = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const { pleaseWait, setPleaseWait, auth } = useData();
+  const { auth } = useData();
   const { height } = useWindowSize();
 
+  const [pleaseWait, setPleaseWait] = useState(false);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [columnSizing, setColumnSizing] = useState({});
   const [density, setDensity] = useState("");

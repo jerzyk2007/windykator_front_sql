@@ -10,11 +10,11 @@ import "./PrepareTable.css";
 
 const PrepareTable = ({ info }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const { pleaseWait, setPleaseWait, auth } = useData();
+  const { auth } = useData();
   const [columns, setColumns] = useState([]);
   const [documents, setDocuments] = useState([]);
   const [tableSettings, setTableSettings] = useState([]);
-  // const [quickNote, setQuickNote] = useState("");
+  const [pleaseWait, setPleaseWait] = useState(false);
   // const [dataRowTable, setDataRowTable] = useState("");
 
   const handleSaveSettings = async (

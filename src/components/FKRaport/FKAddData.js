@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
-import useData from "../hooks/useData";
+// import useData from "../hooks/useData";
 import Button from "@mui/material/Button";
 // import * as xlsx from "xlsx";
 import XLSX from "xlsx-js-style";
@@ -11,8 +11,9 @@ import "./FKAddData.css";
 
 const FKAddData = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const { pleaseWait, setPleaseWait } = useData();
+  // const { pleaseWait, setPleaseWait } = useData();
 
+  const [pleaseWait, setPleaseWait] = useState(false);
   const [errFKAccountancy, setErrFKAccountancy] = useState("");
   const [carReleased, setCarReleased] = useState("");
   const [settlementNames, setSettlementNames] = useState("");
