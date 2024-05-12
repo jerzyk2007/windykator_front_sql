@@ -3,6 +3,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
 import Button from "@mui/material/Button";
 import { getAllDataRaport } from "../utilsForTable/excelFilteredTable";
+import { format } from "date-fns";
 
 import "./FKAddData.css";
 
@@ -124,7 +125,18 @@ const FKAddData = () => {
       try {
         setPleaseWait(true);
         const result = await axiosPrivateIntercept.get("/fk/get-date-counter");
-        setDateCounter(result.data.updateDate);
+        const response = await axiosPrivateIntercept.get(`/update/get-time`);
+        const DMS_date = response.data;
+
+        const update = {
+          ...result.data.updateDate,
+          dms: {
+            date: format(DMS_date, "dd-MM-yyyy "),
+            hour: format(DMS_date, "HH:mm"),
+          },
+        };
+
+        setDateCounter(update);
         setPleaseWait(false);
       } catch (err) {
         console.error(err);
@@ -333,6 +345,15 @@ const FKAddData = () => {
                   )}
               </section>
             </section> */}
+            <section className="fk_add_data__container-item">
+              <span className="fk_add_data__container-item--title">
+                Rozrachunki z Autostacji
+              </span>
+              <span>{dateCounter?.dms?.date}</span>
+              <span>godzina: {dateCounter?.dms?.hour}</span>
+
+              <section className="fk_add_data__container-file"></section>
+            </section>
 
             <section className="fk_add_data__container-item">
               <span className="fk_add_data__container-item--title">

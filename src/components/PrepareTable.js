@@ -49,23 +49,69 @@ const PrepareTable = ({ info }) => {
         const dataTable = await axiosPrivateIntercept.get(
           `/documents/get-data-table/${auth._id}/${info}`
         );
-        // console.log(dataTable.data);
-        // const [result, settingsUser, getColumns] = await Promise.all([
-        //   axiosPrivateIntercept.get(`/documents/get-all/${auth._id}/${info}`),
-        //   axiosPrivateIntercept.get(`/user/get-table-settings/${auth._id}`),
-        //   axiosPrivateIntercept.get(`/user/get-columns/${auth._id}`),
-        // ]);
+        //funkcja do naprawiania danych i ich testowania
+        // const test = dataTable.data.dataTable.map((item) => {
+        //   if (item.KWOTA_WINDYKOWANA_BECARED) {
+        //     console.log(item.KWOTA_WINDYKOWANA_BECARED);
+        //     return item;
+        //   } else {
+        //     return {
+        //       ...item,
+        //       // KWOTA_WINDYKOWANA_BECARED: 0,
+        //     };
+        //   }
+        //   console.log(item.KWOTA_WINDYKOWANA_BECARED);
+        // });
+
         if (isMounted) {
+          // setDocuments(test);
           setDocuments(dataTable.data.dataTable);
           setTableSettings(dataTable.data.tableSettings);
           // kolumny są modyfikowane wg filtrów
+
+          // do testowania kolumn w przypadku błędów
+          // const updateColumns = dataTable.data.columns.filter(
+          //   (item) =>
+          //     item.accessorKey === "BLAD_DORADCY" ||
+          //     item.accessorKey === "BRUTTO" ||
+          //     item.accessorKey === "DATA_FV" ||
+          //     item.accessorKey === "DATA_KOMENTARZA_BECARED" ||
+          //     item.accessorKey === "DO_ROZLICZENIA" ||
+          //     item.accessorKey === "DORADCA" ||
+          //     item.accessorKey === "DZIAL" ||
+          //     item.accessorKey === "DZIALANIA" ||
+          //     item.accessorKey === "JAKA_KANCELARIA" ||
+          //     item.accessorKey === "KOMENTARZ_KANCELARIA_BECARED" ||
+          //     item.accessorKey === "KONTRAHENT" ||
+          //     item.accessorKey === "KWOTA_WINDYKOWANA_BECARED" ||
+          //     item.accessorKey === "NETTO" ||
+          //     item.accessorKey === "NR_REJESTRACYJNY" ||
+          //     item.accessorKey === "NR_SZKODY" ||
+          //     item.accessorKey === "NUMER_FV" ||
+          //     item.accessorKey === "NUMER_SPRAWY_BECARED" ||
+          //     item.accessorKey === "POBRANO_VAT" ||
+          //     item.accessorKey === "STATUS_SPRAWY_KANCELARIA" ||
+          //     item.accessorKey === "STATUS_SPRAWY_WINDYKACJA" ||
+          //     item.accessorKey === "TERMIN" ||
+          //     item.accessorKey === "UWAGI_ASYSTENT" ||
+          //     item.accessorKey === "UWAGI_Z_FAKTURY" ||
+          //     item.accessorKey === "ZAZNACZ_KONTRAHENTA" ||
+          //     item.accessorKey === "ILE_DNI_PO_TERMINIE" ||
+          //     item.accessorKey === "CZY_PRZETERMINOWANE" ||
+          //     item.accessorKey === "100_VAT" ||
+          //     item.accessorKey === "50_VAT"
+          // );
+          // console.log(dataTable.data.columns);
+
+          // const update = prepareColumns(
+          //   updateColumns,
+          //   dataTable.data.dataTable
+          // );
           const update = prepareColumns(
             dataTable.data.columns,
             dataTable.data.dataTable
           );
-          // setDocuments(result.data);
-          // setTableSettings(settingsUser.data);
-          // const update = prepareColumns(getColumns.data, result.data);
+
           setColumns(update);
           setPleaseWait(false);
         }

@@ -215,12 +215,17 @@ export const prepareColumns = (columnsData, data) => {
                 maximumFractionDigits: 2,
                 useGrouping: true,
               })
-            : "0,00"; // Zastąp puste pola zerem
+            : "0,00";
 
         return `${formattedSalary}`;
       };
     }
     if (item.accessorKey === "KWOTA_WINDYKOWANA_BECARED") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return originalRow[item.accessorKey]
+          ? originalRow[item.accessorKey]
+          : " ";
+      };
       modifiedItem.Cell = ({ cell }) => {
         const value = cell.getValue();
         const formattedSalary =
@@ -230,7 +235,7 @@ export const prepareColumns = (columnsData, data) => {
                 maximumFractionDigits: 2,
                 useGrouping: true,
               })
-            : ""; // Zastąp puste pola zerem
+            : "0,00"; // Zastąp puste pola zerem
 
         return `${formattedSalary}`;
       };

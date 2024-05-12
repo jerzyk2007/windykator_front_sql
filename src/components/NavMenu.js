@@ -14,7 +14,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
 
   const [menuActive, setMenuActive] = useState(false);
   const handleLinkClick = () => {
-    // setMenuActive(false);
     if (mobileMenu) {
       handleCloseMobileMenu();
     }
@@ -158,7 +157,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     Raport
                   </Link>
                 </li>
-                {auth?.roles?.includes(220) && (
+                {auth?.roles?.includes(250) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/fk-add-data"
@@ -180,14 +179,14 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )} */}
-                {auth?.roles?.includes(220) && (
+                {auth?.roles?.includes(250) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link className="nav_menu-link">
                       <i className="fas fa-caret-right"></i>Ustawienia
                     </Link>
                     <div className="nav_menu-dropdown__menu--side">
                       <ul className="nav_menu__menu--side">
-                        {auth?.roles?.includes(220) && (
+                        {auth?.roles?.includes(250) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-table-settings"
@@ -198,7 +197,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(220) && (
+                        {auth?.roles?.includes(250) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-change-items"
@@ -209,7 +208,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(220) && (
+                        {auth?.roles?.includes(250) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-data-settings"

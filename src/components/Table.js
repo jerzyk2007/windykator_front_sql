@@ -110,11 +110,13 @@ const Table = ({
     });
     const dateToString = updateData.map((item) => {
       if (item.ILE_DNI_PO_TERMINIE) {
-        return {
-          ...item,
-          ILE_DNI_PO_TERMINIE: String(item.ILE_DNI_PO_TERMINIE),
-        };
+        item.ILE_DNI_PO_TERMINIE = String(item.ILE_DNI_PO_TERMINIE);
       }
+
+      if (typeof item.KWOTA_WINDYKOWANA_BECARED === "object") {
+        item.KWOTA_WINDYKOWANA_BECARED = "NULL";
+      }
+
       return item;
     });
 
@@ -136,23 +138,6 @@ const Table = ({
       setDataRowTable(getRow[0]);
     }
   };
-  // const getSingleRow = async (id, type) => {
-  //   try {
-  //     // setPleaseWait(true);
-  //     const result = await axiosPrivateIntercept.get(
-  //       `/documents/get-single-row/${id}`
-  //     );
-  //     if (type === "quick") {
-  //       setQuickNote(result.data);
-  //     }
-  //     if (type === "full") {
-  //       setDataRowTable(result.data);
-  //     }
-  //     // setPleaseWait(false);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
 
   const columnsItem = useMemo(
     () =>
