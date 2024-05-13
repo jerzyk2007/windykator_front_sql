@@ -132,8 +132,8 @@ const PrepareTable = ({ info }) => {
         <PleaseWait />
       ) : (
         columns.length > 0 &&
-        documents.length > 0 &&
-        tableSettings.pagination && (
+        documents.length > 0 && (
+          // tableSettings.pagination &&
           <Table
             documents={documents}
             setDocuments={setDocuments}

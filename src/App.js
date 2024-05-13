@@ -46,39 +46,21 @@ function App() {
               <Route path="/register" element={<Register />} />
             </Route>
 
-            <Route
-              element={
-                <RequireAuth
-                  allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]}
-                />
-              }
-            >
+            <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
               <Route
                 path="/actual-table"
                 element={<PrepareTable info={"actual"} />}
               />
             </Route>
 
-            <Route
-              element={
-                <RequireAuth
-                  allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]}
-                />
-              }
-            >
+            <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
               <Route
                 path="/archive-table"
                 element={<PrepareTable info={"archive"} />}
               />
             </Route>
 
-            <Route
-              element={
-                <RequireAuth
-                  allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]}
-                />
-              }
-            >
+            <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
               <Route
                 path="/all-data-table"
                 element={<PrepareTable info={"all"} />}
