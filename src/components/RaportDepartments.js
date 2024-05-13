@@ -366,6 +366,7 @@ const RaportDepartments = () => {
         const resultData = await axiosPrivateIntercept.get(
           `/raport/get-data/${auth._id}`
         );
+
         setRaportData(resultData.data.data);
         setPermission(resultData.data.permission);
         checkMinMaxDateGlobal(resultData.data.data);

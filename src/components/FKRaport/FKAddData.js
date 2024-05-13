@@ -12,7 +12,7 @@ const FKAddData = () => {
   // const { pleaseWait, setPleaseWait } = useData();
 
   const [pleaseWait, setPleaseWait] = useState(false);
-  const [errFKAccountancy, setErrFKAccountancy] = useState("");
+  const [fKAccountancy, setfKAccountancy] = useState("");
   const [carReleased, setCarReleased] = useState("");
   const [settlementNames, setSettlementNames] = useState("");
   const [rubiconData, setRubiconData] = useState("");
@@ -25,7 +25,7 @@ const FKAddData = () => {
     const file = e.target.files[0];
     if (!file) return console.log("Brak pliku");
     if (!file.name.endsWith(".xlsx")) {
-      setErrFKAccountancy("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
+      setfKAccountancy("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
       return;
     }
     try {
@@ -33,14 +33,26 @@ const FKAddData = () => {
       const formData = new FormData();
       formData.append("excelFile", file);
 
-      await axiosPrivateIntercept.post(`/fk/send-documents/${type}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const result = await axiosPrivateIntercept.post(
+        `/fk/send-documents/${type}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setPleaseWait(false);
+
+      // console.log(result.data);
+      if (result.data.error) {
+        return setfKAccountancy(
+          `Nie dopasowano danych dla: ${result.data.data}`
+        );
+      }
 
       if (type === "accountancy") {
-        setErrFKAccountancy("Dokumenty zaktualizowane.");
+        setfKAccountancy("Dokumenty zaktualizowane.");
       }
       if (type === "car") {
         setCarReleased("Dokumenty zaktualizowane.");
@@ -51,11 +63,9 @@ const FKAddData = () => {
       if (type === "settlement") {
         setSettlementNames("Dokumenty zaktualizowane.");
       }
-
-      setPleaseWait(false);
     } catch (error) {
       if (type === "accountancy") {
-        setErrFKAccountancy("Błąd aktualizacji dokumentów.");
+        setfKAccountancy("Błąd aktualizacji dokumentów.");
       }
       if (type === "car") {
         setCarReleased("Błąd aktualizacji dokumentów.");
@@ -111,6 +121,10 @@ const FKAddData = () => {
       if (result.data.result === "delete") {
         setDateCounter({});
         setDeleteRaport("Dane usunięte.");
+        setfKAccountancy("");
+        setCarReleased("");
+        setSettlementNames("");
+        setRubiconData("");
         setPleaseWait(false);
       } else {
         setDeleteRaport("Wystąpił błąd podczas usuwania danych");
@@ -163,7 +177,7 @@ const FKAddData = () => {
             </section>
 
             <section className="fk_add_data__container-item">
-              {!errFKAccountancy ? (
+              {!fKAccountancy ? (
                 <>
                   <span>Wiekowanie - plik księgowość</span>
                   <span>{dateCounter?.accountancy?.date}</span>
@@ -189,7 +203,7 @@ const FKAddData = () => {
                   )}
                 </>
               ) : (
-                <p className="fk_add_data-error">{errFKAccountancy}</p>
+                <p className="fk_add_data-error">{fKAccountancy}</p>
               )}
             </section>
 

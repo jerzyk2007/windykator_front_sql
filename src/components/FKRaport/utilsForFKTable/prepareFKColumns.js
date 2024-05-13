@@ -26,6 +26,11 @@ export const preparedFKColumns = [
     filterVariant: "multi-select",
   },
   {
+    accessorKey: "DATA_ROZLICZENIA_AS",
+    header: "DATA_ROZLICZENIA_AS",
+    // filterVariant: "multi-select",
+  },
+  {
     accessorKey: "DATA_WYDANIA_AUTA",
     header: "DATA_WYDANIA_AUTA",
     filterVariant: "multi-select",
