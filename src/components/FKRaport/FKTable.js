@@ -320,22 +320,34 @@ const FKTable = ({ tableData, setShowTable }) => {
       order: newOrder,
     };
 
-    const dataToString = updateData.map((item) => {
-      if (item.ILE_DNI_NA_PLATNOSC_FV) {
-        item.ILE_DNI_NA_PLATNOSC_FV = String(item.ILE_DNI_NA_PLATNOSC_FV);
-      }
-      if (item.KWOTA_WPS === 0) {
-        item.KWOTA_WPS = "";
-      }
-      if (item.RODZAJ_KONTA) {
-        item.RODZAJ_KONTA = String(item.RODZAJ_KONTA);
-      }
-      if (item.NR_KLIENTA) {
-        item.NR_KLIENTA = String(item.NR_KLIENTA);
-      }
-      return item;
-    });
-    getAllDataRaport(dataToString, orderColumns, "Filtr");
+    // const dataToString = updateData.map((item) => {
+    //   if (item.ILE_DNI_NA_PLATNOSC_FV) {
+    //     item.ILE_DNI_NA_PLATNOSC_FV = String(item.ILE_DNI_NA_PLATNOSC_FV);
+    //   }
+    //   if (item.KWOTA_WPS === 0) {
+    //     item.KWOTA_WPS = "";
+    //   }
+    //   if (item.RODZAJ_KONTA) {
+    //     item.RODZAJ_KONTA = String(item.RODZAJ_KONTA);
+    //   }
+    //   if (item.NR_KLIENTA) {
+    //     item.NR_KLIENTA = String(item.NR_KLIENTA);
+    //   }
+    //   return item;
+    // });
+
+    // const updateData_JAKA = dataToString.map((item) => {
+    //   if (!item.JAKA_KANCELARIA) {
+    //     return {
+    //       ...item,
+    //       JAKA_KANCELARIA: "NIE DOTYCZY",
+    //     };
+    //   }
+    //   return item;
+    // });
+
+    getAllDataRaport(updateData, orderColumns, "Filtr");
+    // getAllDataRaport(updateData_JAKA, orderColumns, "Filtr");
   };
 
   useEffect(() => {

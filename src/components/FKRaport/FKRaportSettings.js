@@ -38,7 +38,6 @@ const FKRaportSettings = () => {
     const response = await axiosPrivateIntercept.post("/fk/get-raport-data", {
       filter,
     });
-
     setFilteredDataRaport(response.data);
     setSettingsSelect(false);
     setShowRaport(true);

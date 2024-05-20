@@ -50,7 +50,8 @@ export const EditDocBeCared = ({ rowData, setBeCared }) => {
           Kwota windykowana BeCared:
         </span>
         <span className="edit_doc_becared-section-data-becared--content">
-          {rowData.KWOTA_WINDYKOWANA_BECARED !== 0
+          {rowData.KWOTA_WINDYKOWANA_BECARED !== 0 &&
+          rowData.KWOTA_WINDYKOWANA_BECARED
             ? rowData.KWOTA_WINDYKOWANA_BECARED.toLocaleString("pl-PL", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,

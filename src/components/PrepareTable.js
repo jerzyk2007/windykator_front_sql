@@ -67,6 +67,7 @@ const PrepareTable = ({ info }) => {
           // setDocuments(test);
           setDocuments(dataTable.data.dataTable);
           setTableSettings(dataTable.data.tableSettings);
+
           // kolumny są modyfikowane wg filtrów
 
           // do testowania kolumn w przypadku błędów
@@ -101,7 +102,11 @@ const PrepareTable = ({ info }) => {
           //     item.accessorKey === "100_VAT" ||
           //     item.accessorKey === "50_VAT"
           // );
-          // console.log(dataTable.data.columns);
+          // const testDocuments = dataTable.data.dataTable.map((item) => {
+          //   if (item.NUMER_SPRAWY_BECARED === null) {
+          //     console.log(item);
+          //   }
+          // });
 
           // const update = prepareColumns(
           //   updateColumns,

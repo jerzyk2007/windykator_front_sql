@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-// import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -33,7 +33,7 @@ const Table = ({
   // setDataRowTable,
   // info,
 }) => {
-  // const axiosPrivateIntercept = useAxiosPrivateIntercept();
+  const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const theme = useTheme();
 
   const { auth } = useData();
@@ -52,7 +52,6 @@ const Table = ({
   const [data, setData] = useState([]);
   const [quickNote, setQuickNote] = useState("");
   const [dataRowTable, setDataRowTable] = useState("");
-
   const [sorting, setSorting] = useState([
     { id: "ILE_DNI_PO_TERMINIE", desc: false },
     // { id: "DO_ROZLICZENIA", desc: true },
@@ -133,15 +132,44 @@ const Table = ({
     // getAllDataRaport(updateData, orderColumns, type);
   };
 
-  const getSingleRow = (id, type) => {
+  const getSingleRow = async (id, type, dep) => {
     const getRow = documents.filter((row) => row._id === id);
-    if (type === "quick") {
-      setQuickNote(getRow[0]);
-    }
-    if (type === "full") {
-      setDataRowTable(getRow[0]);
+    if (getRow.length > 0) {
+      try {
+        const response = await axiosPrivateIntercept.get(
+          `/documents/get-single-document/${id}`
+        );
+        const getRowDB = response.data; // Zakładam, że dane są w 'data'
+
+        for (const key in getRowDB) {
+          if (getRowDB.hasOwnProperty(key) && getRow[0].hasOwnProperty(key)) {
+            getRow[0][key] = getRowDB[key];
+          }
+        }
+        if (type === "quick") {
+          setQuickNote(getRow[0]);
+        }
+        if (type === "full") {
+          setDataRowTable(getRow[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching data from the server:", error);
+      }
+    } else {
+      console.error("No row found with the specified ID");
     }
   };
+
+  // const getSingleRow1 = async (id, type, dep) => {
+  //   const getRow = documents.filter((row) => row._id === id);
+  //   console.log(getRow);
+  //   if (type === "quick") {
+  //     setQuickNote(getRow[0]);
+  //   }
+  //   if (type === "full") {
+  //     setDataRowTable(getRow[0]);
+  //   }
+  // };
 
   const columnsItem = useMemo(
     () =>
@@ -244,9 +272,9 @@ const Table = ({
     muiTableBodyCellProps: ({ column, row, cell }) => ({
       onDoubleClick: () => {
         if (column.id === "UWAGI_ASYSTENT") {
-          getSingleRow(row.original._id, "quick");
+          getSingleRow(row.original._id, "quick", row.original.DZIAL);
         } else {
-          getSingleRow(row.original._id, "full");
+          getSingleRow(row.original._id, "full", row.original.DZIAL);
         }
       },
     }),

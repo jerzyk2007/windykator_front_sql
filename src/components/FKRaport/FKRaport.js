@@ -35,26 +35,57 @@ const FKRaport = ({
 
       const update = buttonArea.map((item) => {
         const updatedData = item.data.map((element) => {
-          if (element.ILE_DNI_NA_PLATNOSC_FV) {
-            element.ILE_DNI_NA_PLATNOSC_FV = String(
-              element.ILE_DNI_NA_PLATNOSC_FV
-            );
+          if (element.KWOTA_WPS == 0) {
+            element.KWOTA_WPS = "NULL";
+          }
+          if (element.KWOTA_WPS != 0 && element.KWOTA_WPS !== "NULL") {
+            element.KWOTA_WPS = Number(element.KWOTA_WPS);
+            // item.KWOTA_WPS = "NULL";
           }
 
-          if (element.KWOTA_WPS) {
-            element.KWOTA_WPS =
-              element.KWOTA_WPS !== "0" ? Number(element.KWOTA_WPS) : "";
+          if (element.DO_ROZLICZENIA_AS == 0) {
+            element.DO_ROZLICZENIA_AS = "NULL";
           }
-          if (element.RODZAJ_KONTA) {
-            element.RODZAJ_KONTA = String(element.RODZAJ_KONTA);
+
+          if (
+            element.DO_ROZLICZENIA_AS != 0 &&
+            element.DO_ROZLICZENIA_AS !== "NULL"
+          ) {
+            element.DO_ROZLICZENIA_AS = Number(element.DO_ROZLICZENIA_AS);
+            // item.KWOTA_WPS = "NULL";
           }
-          if (element.NR_KLIENTA) {
-            element.NR_KLIENTA = String(element.NR_KLIENTA);
+
+          if (element.ROZNICA == 0) {
+            element.ROZNICA = "NULL";
           }
+          if (element.ROZNICA != 0 && element.ROZNICA !== "NULL") {
+            element.ROZNICA = Number(element.ROZNICA);
+            // item.KWOTA_WPS = "NULL";
+          }
+          // if (element.ILE_DNI_NA_PLATNOSC_FV) {
+          //   element.ILE_DNI_NA_PLATNOSC_FV = String(
+          //     element.ILE_DNI_NA_PLATNOSC_FV
+          //   );
+          // }
+
+          // if (element.KWOTA_WPS) {
+          //   element.KWOTA_WPS =
+          //     element.KWOTA_WPS !== "0" ? Number(element.KWOTA_WPS) : "";
+          // }
+          // if (element.RODZAJ_KONTA) {
+          //   element.RODZAJ_KONTA = String(element.RODZAJ_KONTA);
+          // }
+          // if (element.NR_KLIENTA) {
+          //   element.NR_KLIENTA = String(element.NR_KLIENTA);
+          // }
+          // if (!element.JAKA_KANCELARIA) {
+          //   element.JAKA_KANCELARIA = "NIE DOTYCZY";
+          // }
           return element;
         });
         return { ...item, data: updatedData };
       });
+      // console.log(update[0]);
       getExcelRaport(update, settingsColumn.data);
     } catch (err) {
       console.error(err);

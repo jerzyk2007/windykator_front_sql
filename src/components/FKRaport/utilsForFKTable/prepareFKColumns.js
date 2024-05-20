@@ -95,6 +95,8 @@ export const preparedFKColumns = [
     accessorKey: "JAKA_KANCELARIA",
     header: "JAKA_KANCELARIA",
     filterVariant: "multi-select",
+    accessorFn: (originalRow) =>
+      originalRow.JAKA_KANCELARIA ? originalRow.JAKA_KANCELARIA : "NIE DOTYCZY",
   },
   {
     accessorKey: "KONTRAHENT",
@@ -259,33 +261,53 @@ export const preparedFKColumns = [
 
 export const preparedData = (tableData) => {
   const update = tableData.map((item) => {
-    if (!item.DO_ROZLICZENIA_AS) {
+    // if (!item.DO_ROZLICZENIA_AS) {
+    //   item.DO_ROZLICZENIA_AS = "NULL";
+    // }
+
+    // if (item.JAKA_KANCELARIA === "" || item.JAKA_KANCELARIA === " ") {
+    //   item.JAKA_KANCELARIA = "NIE DOTYCZY";
+    // }
+    if (item.KWOTA_WPS == 0) {
+      item.KWOTA_WPS = "NULL";
+    }
+    if (item.KWOTA_WPS != 0 && item.KWOTA_WPS !== "NULL") {
+      item.KWOTA_WPS = Number(item.KWOTA_WPS);
+      // item.KWOTA_WPS = "NULL";
+    }
+
+    if (item.DO_ROZLICZENIA_AS == 0) {
       item.DO_ROZLICZENIA_AS = "NULL";
     }
 
-    if (item.JAKA_KANCELARIA === " ") {
-      item.JAKA_KANCELARIA = "NIE DOTYCZY";
+    if (item.DO_ROZLICZENIA_AS != 0 && item.DO_ROZLICZENIA_AS !== "NULL") {
+      item.DO_ROZLICZENIA_AS = Number(item.DO_ROZLICZENIA_AS);
+      // item.KWOTA_WPS = "NULL";
     }
 
-    if (item.KWOTA_WPS) {
-      item.KWOTA_WPS = Number(item.KWOTA_WPS);
+    if (item.ROZNICA == 0) {
+      item.ROZNICA = "NULL";
+    }
+    if (item.ROZNICA != 0 && item.ROZNICA !== "NULL") {
+      item.ROZNICA = Number(item.ROZNICA);
+      // item.KWOTA_WPS = "NULL";
     }
 
-    if (!item.KWOTA_WPS) {
-      item.KWOTA_WPS = 0;
-    }
+    // if (!item.KWOTA_WPS) {
+    //   item.KWOTA_WPS = 0;
+    // }
 
-    if (item.RODZAJ_KONTA) {
-      item.RODZAJ_KONTA = String(item.RODZAJ_KONTA);
-    }
+    // if (item.RODZAJ_KONTA) {
+    //   item.RODZAJ_KONTA = String(item.RODZAJ_KONTA);
+    // }
 
-    if (!item.ROZNICA) {
-      item.ROZNICA = 0;
-    }
+    // if (!item.ROZNICA) {
+    //   item.ROZNICA = 0;
+    // }
 
-    if (item.DATA_WYSTAWIENIA_FV === "1900-01-01") {
-      item.DATA_WYSTAWIENIA_FV = "brak danych";
-    }
+    // if (item.DATA_WYSTAWIENIA_FV === "1900-01-01") {
+    //   item.DATA_WYSTAWIENIA_FV = "brak danych";
+    // }
     if (item.DATA_WYSTAWIENIA_FV) {
       item.DATA_WYSTAWIENIA_FV = new Date(item.DATA_WYSTAWIENIA_FV);
     }
