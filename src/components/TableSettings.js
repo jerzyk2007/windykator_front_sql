@@ -61,7 +61,7 @@ const TableSettings = () => {
               <option value="multi-select">Zaznacz wiele</option>
               <option value="select">Zaznacz jeden</option>
               <option value="range-slider">Suwak do kwot</option>
-              <option value="range">Od - do</option>
+              {/* <option value="range">Od - do</option> */}
               <option value="date-range">Data od - do</option>
               {/* <option value="date">Data</option> */}
             </select>
