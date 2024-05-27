@@ -277,6 +277,7 @@ const RaportDepartments = () => {
     }
     let newColumns = [];
     if (type === "Dział") {
+      console.log(columnsDep);
       newColumns = columnsDep
         .map((item) => {
           const matching = arrayOrder.find(

@@ -679,7 +679,7 @@ export const columnsDep = [
     },
   },
   {
-    accessorKey: "PRZETERMINOWANE_KANCELARIA",
+    accessorKey: "PRZETERMINOWANE_BEZ_KANCELARII",
     header: "Kwota przeterminowanych fv bez kancelarii",
     Cell: ({ cell }) => {
       const value = cell.getValue();
