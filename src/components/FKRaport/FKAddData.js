@@ -20,13 +20,27 @@ const FKAddData = () => {
   const [dateCounter, setDateCounter] = useState({});
 
   const handleSendFile = async (e, type) => {
-    setPleaseWait(true);
     setDeleteRaport("");
     const file = e.target.files[0];
     if (!file) return console.log("Brak pliku");
     if (!file.name.endsWith(".xlsx")) {
-      setfKAccountancy("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
-      return;
+      if (type === "accountancy") {
+        return setfKAccountancy(
+          "Akceptowany jest tylko plik z rozszerzeniem .xlsx"
+        );
+      } else if (type === "car") {
+        return setCarReleased(
+          "Akceptowany jest tylko plik z rozszerzeniem .xlsx"
+        );
+      } else if (type === "rubicon") {
+        return setRubiconData(
+          "Akceptowany jest tylko plik z rozszerzeniem .xlsx"
+        );
+      } else if (type === "settlement") {
+        return setSettlementNames(
+          "Akceptowany jest tylko plik z rozszerzeniem .xlsx"
+        );
+      }
     }
     try {
       setPleaseWait(true);
@@ -44,7 +58,6 @@ const FKAddData = () => {
       );
       setPleaseWait(false);
 
-      // console.log(result.data);
       if (result.data.error) {
         return setfKAccountancy(
           `Nie dopasowano danych dla: ${result.data.data}`

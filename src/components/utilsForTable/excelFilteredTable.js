@@ -114,7 +114,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
         const cell = XLSX.utils.encode_cell({ r: 0, c: col });
         ws[cell].s = {
           ...ws[cell].s,
-          fill: { fgColor: { rgb: "FFFF00" } },
+          fill: { fgColor: { rgb: "B8B8B8" } },
           alignment: {
             wrapText: true,
             vertical: "center",
