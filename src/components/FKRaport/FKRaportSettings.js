@@ -18,7 +18,7 @@ const FKRaportSettings = () => {
   const [filter, setFilter] = useState({
     raport: "accountRaport",
     business: "201203",
-    payment: "Przeterminowane",
+    payment: "Przeterminowane > 8",
     actions: "All",
   });
 
@@ -194,6 +194,11 @@ const FKRaportSettings = () => {
                       value="Wszystko"
                       control={<Radio />}
                       label="Wszystko"
+                    />
+                    <FormControlLabel
+                      value="Przeterminowane > 8"
+                      control={<Radio />}
+                      label="Przeterminowane > 8"
                     />
                     <FormControlLabel
                       value="Przeterminowane"

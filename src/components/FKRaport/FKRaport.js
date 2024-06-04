@@ -122,6 +122,10 @@ const FKRaport = ({
     );
   });
 
+  useEffect(() => {
+    console.log(buttonArea);
+  }, [buttonArea]);
+
   return (
     <>
       <section
