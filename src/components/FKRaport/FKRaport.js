@@ -33,7 +33,7 @@ const FKRaport = ({
         "/fk/get-columns-order"
       );
 
-      const update = buttonArea.map((item) => {
+      let update = buttonArea.map((item) => {
         const updatedData = item.data.map((element) => {
           if (element.KWOTA_WPS == 0) {
             element.KWOTA_WPS = "NULL";
@@ -60,32 +60,41 @@ const FKRaport = ({
           }
           if (element.ROZNICA != 0 && element.ROZNICA !== "NULL") {
             element.ROZNICA = Number(element.ROZNICA);
-            // item.KWOTA_WPS = "NULL";
           }
-          // if (element.ILE_DNI_NA_PLATNOSC_FV) {
-          //   element.ILE_DNI_NA_PLATNOSC_FV = String(
-          //     element.ILE_DNI_NA_PLATNOSC_FV
-          //   );
-          // }
 
-          // if (element.KWOTA_WPS) {
-          //   element.KWOTA_WPS =
-          //     element.KWOTA_WPS !== "0" ? Number(element.KWOTA_WPS) : "";
-          // }
-          // if (element.RODZAJ_KONTA) {
-          //   element.RODZAJ_KONTA = String(element.RODZAJ_KONTA);
-          // }
-          // if (element.NR_KLIENTA) {
-          //   element.NR_KLIENTA = String(element.NR_KLIENTA);
-          // }
-          // if (!element.JAKA_KANCELARIA) {
-          //   element.JAKA_KANCELARIA = "NIE DOTYCZY";
-          // }
           return element;
         });
         return { ...item, data: updatedData };
       });
-      // console.log(update[0]);
+
+      if (filter.payment === "Przeterminowane > 8") {
+        update = update.map((element) => {
+          if (element.name !== "Raport" && element.data) {
+            const updatedData = element.data.filter((item) => {
+              return item.PRZEDZIAL_WIEKOWANIE !== "1-7";
+            });
+            return { ...element, data: updatedData }; // Zwracamy zaktualizowany element
+          }
+
+          return element; // Zwracamy element bez zmian, jeśli name === "Raport" lub data jest niezdefiniowana
+        });
+        update = update.map((element) => {
+          if (
+            element.name !== "Raport" &&
+            element.name !== "SAMOCHODY NOWE" &&
+            element.name !== "SAMOCHODY UŻYWANE"
+          ) {
+            const updatedData = element.data.map((item) => {
+              const { CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA, ...rest } =
+                item;
+              return rest; // Zwróć obiekt bez tych dwóch kluczy
+            });
+            return { ...element, data: updatedData };
+          }
+          return element;
+        });
+      }
+
       getExcelRaport(update, settingsColumn.data);
     } catch (err) {
       console.error(err);
@@ -122,9 +131,9 @@ const FKRaport = ({
     );
   });
 
-  useEffect(() => {
-    console.log(buttonArea);
-  }, [buttonArea]);
+  // useEffect(() => {
+  //   console.log(buttonArea);
+  // }, [buttonArea]);
 
   return (
     <>

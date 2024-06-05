@@ -18,6 +18,7 @@ const GenerateAccount = ({
   const [businessAccount, setBusinessAccount] = useState({
     accountArea: [],
   });
+
   const counter = filteredDataRaport.length;
 
   let sumFK = 0;
