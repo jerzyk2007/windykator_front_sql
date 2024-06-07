@@ -78,22 +78,23 @@ const FKRaport = ({
 
           return element; // Zwracamy element bez zmian, jeśli name === "Raport" lub data jest niezdefiniowana
         });
-        update = update.map((element) => {
-          if (
-            element.name !== "Raport" &&
-            element.name !== "SAMOCHODY NOWE" &&
-            element.name !== "SAMOCHODY UŻYWANE"
-          ) {
-            const updatedData = element.data.map((item) => {
-              const { CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA, ...rest } =
-                item;
-              return rest; // Zwróć obiekt bez tych dwóch kluczy
-            });
-            return { ...element, data: updatedData };
-          }
-          return element;
-        });
       }
+
+      //usuwam kolumny CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA z innych arkuszy niż Raport, SAMOCHODY NOWE, SAMOCHODY UŻYWANE
+      update = update.map((element) => {
+        if (
+          element.name !== "Raport" &&
+          element.name !== "SAMOCHODY NOWE" &&
+          element.name !== "SAMOCHODY UŻYWANE"
+        ) {
+          const updatedData = element.data.map((item) => {
+            const { CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA, ...rest } = item;
+            return rest; // Zwróć obiekt bez tych dwóch kluczy
+          });
+          return { ...element, data: updatedData };
+        }
+        return element;
+      });
 
       getExcelRaport(update, settingsColumn.data);
     } catch (err) {
