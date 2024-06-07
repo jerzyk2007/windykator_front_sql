@@ -308,12 +308,45 @@ const RaportAdvisers = () => {
       return updatedItem;
     });
 
+    const update = updateData.map((item) => {
+      const CEL_BEZ_PZU_LINK4 = Number(item.CEL_BEZ_PZU_LINK4).toLocaleString(
+        "pl-PL",
+        { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+      );
+      // const CEL_BEZ_KANCELARII = Number(item.CEL_BEZ_KANCELARII).toLocaleString(
+      //   "pl-PL",
+      //   { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+      // );
+      // const CEL_CALOSC = Number(item.CEL_CALOSC).toLocaleString("pl-PL", {
+      //   minimumFractionDigits: 2,
+      //   maximumFractionDigits: 2,
+      // });
+
+      const ILE_BLEDOW_DORADCY_I_DOKUMENTACJI = Number(
+        item.ILE_BLEDOW_DORADCY_I_DOKUMENTACJI
+      ).toFixed(0);
+
+      const ILE_NIEPOBRANYCH_VAT = Number(item.ILE_NIEPOBRANYCH_VAT).toFixed(0);
+
+      const ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4 = Number(
+        item.ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4
+      ).toFixed(0);
+
+      return {
+        ...item,
+        CEL_BEZ_PZU_LINK4: String(`${CEL_BEZ_PZU_LINK4} %`),
+        ILE_BLEDOW_DORADCY_I_DOKUMENTACJI,
+        ILE_NIEPOBRANYCH_VAT,
+        ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4,
+      };
+    });
+
     const orderColumns = {
       columns: newColumns,
       order: newOrder,
     };
 
-    getAllDataRaport(updateData, orderColumns, type);
+    getAllDataRaport(update, orderColumns, type);
   };
 
   useEffect(() => {
