@@ -4,6 +4,14 @@ import PleaseWait from "../PleaseWait";
 import Button from "@mui/material/Button";
 import { getAllDataRaport } from "../utilsForTable/excelFilteredTable";
 import { format } from "date-fns";
+import * as XLSX from "xlsx";
+import {
+  preparedAccountancyData,
+  preparedCarData,
+  getPreparedData,
+  preparedRubiconData,
+  preparedSettlementData,
+} from "./preparedDataFKFile";
 
 import "./FKAddData.css";
 
@@ -12,82 +20,242 @@ const FKAddData = () => {
   // const { pleaseWait, setPleaseWait } = useData();
 
   const [pleaseWait, setPleaseWait] = useState(false);
-  const [fKAccountancy, setfKAccountancy] = useState("");
+  const [fKAccountancy, setFKAccountancy] = useState("");
   const [carReleased, setCarReleased] = useState("");
   const [settlementNames, setSettlementNames] = useState("");
   const [rubiconData, setRubiconData] = useState("");
   const [deleteRaport, setDeleteRaport] = useState("");
   const [dateCounter, setDateCounter] = useState({});
+  const [message, setMessage] = useState({
+    prepare: "Przygotowywanie danych.",
+    progress: "Trwa dopasowywanie danych.",
+    error: "Nastąpił bład.",
+    finish: "Dokumenty zaktualizowane",
+    errorExcelFile: "Nieprawidłowy plik. Proszę przesłać plik Excel.",
+    errorXLSX: "Akceptowany jest tylko plik z rozszerzeniem .xlsx",
+    errorData: "Nieprawidłowe dane w pliku.",
+    saveToDB: "Zapis do bazy danych - proszę czekać ...",
+  });
 
-  const handleSendFile = async (e, type) => {
-    setDeleteRaport("");
-    const file = e.target.files[0];
-    if (!file) return console.log("Brak pliku");
-    if (!file.name.endsWith(".xlsx")) {
-      if (type === "accountancy") {
-        return setfKAccountancy(
-          "Akceptowany jest tylko plik z rozszerzeniem .xlsx"
-        );
-      } else if (type === "car") {
-        return setCarReleased(
-          "Akceptowany jest tylko plik z rozszerzeniem .xlsx"
-        );
-      } else if (type === "rubicon") {
-        return setRubiconData(
-          "Akceptowany jest tylko plik z rozszerzeniem .xlsx"
-        );
-      } else if (type === "settlement") {
-        return setSettlementNames(
-          "Akceptowany jest tylko plik z rozszerzeniem .xlsx"
-        );
+  // weryfikacja czy plik excel jest prawidłowy (czy nie jest podmienione rozszerzenie)
+  const isExcelFile = (data) => {
+    const excelSignature = [0x50, 0x4b, 0x03, 0x04];
+    for (let i = 0; i < excelSignature.length; i++) {
+      if (data[i] !== excelSignature[i]) {
+        return false;
       }
     }
-    try {
-      setPleaseWait(true);
-      const formData = new FormData();
-      formData.append("excelFile", file);
+    return true;
+  };
 
-      const result = await axiosPrivateIntercept.post(
-        `/fk/send-documents/${type}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+  // funkcja zamienia dane z pliku excel na json
+  const decodeExcelFile = (
+    file,
+    type,
+    setFKAccountancy,
+    setCarReleased,
+    setRubiconData,
+    setSettlementNames
+  ) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const arrayBuffer = event.target.result;
+
+        const uint8Array = new Uint8Array(arrayBuffer);
+
+        // Sprawdzenie, czy plik jest prawidłowym plikiem Excel
+        if (!isExcelFile(uint8Array)) {
+          if (type === "accountancy") {
+            return setFKAccountancy(message.errorExcelFile);
+          } else if (type === "car") {
+            return setCarReleased(message.errorExcelFile);
+          } else if (type === "rubicon") {
+            return setRubiconData(message.errorExcelFile);
+          } else if (type === "settlement") {
+            return setSettlementNames(message.errorExcelFile);
+          }
+          return;
         }
+        const workbook = XLSX.read(new Uint8Array(arrayBuffer), {
+          type: "array",
+        });
+
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        resolve(jsonData);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+
+      reader.readAsArrayBuffer(file);
+    });
+  };
+
+  const saveDataToDB = async (info, dataDB, counterData) => {
+    try {
+      await axiosPrivateIntercept.post("/fk/save-data", {
+        type: info,
+        data: dataDB,
+        counter: counterData,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleSendFile = async (e, type) => {
+    setPleaseWait(true);
+    setDeleteRaport("");
+    const file = e.target.files[0];
+    // if (!file) return console.log("Brak pliku");
+    if (!file || !file.name.endsWith(".xlsx")) {
+      if (type === "accountancy") {
+        return setFKAccountancy(message.errorXLSX);
+      } else if (type === "car") {
+        return setCarReleased(message.errorXLSX);
+      } else if (type === "rubicon") {
+        return setRubiconData(message.errorXLSX);
+      } else if (type === "settlement") {
+        return setSettlementNames(message.errorXLSX);
+      }
+    }
+
+    try {
+      const decodedFile = await decodeExcelFile(
+        file,
+        type,
+        setFKAccountancy,
+        setCarReleased,
+        setRubiconData,
+        setSettlementNames
       );
       setPleaseWait(false);
-
-      if (result.data.error) {
-        return setfKAccountancy(
-          `Nie dopasowano danych dla: ${result.data.data}`
-        );
-      }
-
       if (type === "accountancy") {
-        setfKAccountancy("Dokumenty zaktualizowane.");
+        if (
+          !decodedFile[0]["Nr. dokumentu"] ||
+          !decodedFile[0]["Kontrahent"] ||
+          !decodedFile[0]["Płatność"] ||
+          !decodedFile[0]["Data płatn."] ||
+          !decodedFile[0]["Nr kontrahenta"] ||
+          !decodedFile[0]["Synt."]
+        ) {
+          return setFKAccountancy(message.errorData);
+        }
+
+        const result = await preparedAccountancyData(
+          axiosPrivateIntercept,
+          decodedFile
+        );
+        if (result?.errorDepartments.length) {
+          return setFKAccountancy(
+            `Brak przypisanych działów: ${result.errorDepartments}`
+          );
+        }
+        setFKAccountancy(message.saveToDB);
+
+        await saveDataToDB(
+          "accountancy",
+          result.generateDocuments,
+          result.generateDocuments.length
+        );
+        setFKAccountancy(message.finish);
       }
+
       if (type === "car") {
-        setCarReleased("Dokumenty zaktualizowane.");
+        if (!decodedFile[0]["NR FAKTURY"] || !decodedFile[0]["WYDANO"]) {
+          return setCarReleased(message.errorData);
+        }
+
+        setCarReleased(message.prepare);
+
+        const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
+
+        const result = preparedCarData(
+          decodedFile,
+          resultPreparedData,
+          setCarReleased
+        );
+        setCarReleased(message.saveToDB);
+
+        await saveDataToDB(
+          "carReleased",
+          result.preparedDataReleasedCars,
+          result.counter
+        );
+        setCarReleased(message.finish);
       }
       if (type === "rubicon") {
-        setRubiconData("Dokumenty zaktualizowane.");
+        if (
+          !decodedFile[0]["Faktura nr"] ||
+          !decodedFile[0]["Status aktualny"] ||
+          !decodedFile[0]["Firma zewnętrzna"] ||
+          !decodedFile[0]["Data faktury"]
+        ) {
+          return setRubiconData(message.errorData);
+        }
+        // setRubiconData(message.prepare);
+        setRubiconData("Przetwarzanie danych z pliku Rubicon.");
+
+        const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
+
+        const result = await preparedRubiconData(
+          decodedFile,
+          resultPreparedData,
+          setRubiconData,
+          axiosPrivateIntercept
+        );
+        setRubiconData(message.saveToDB);
+
+        await saveDataToDB(
+          "caseStatus",
+          result.preparedCaseStatusBL,
+          result.counter
+        );
+
+        setRubiconData(message.finish);
       }
       if (type === "settlement") {
-        setSettlementNames("Dokumenty zaktualizowane.");
+        if (
+          !decodedFile[0]["NUMER"] ||
+          !decodedFile[0]["OPIS"] ||
+          !decodedFile[0]["DataRozlAutostacja"] ||
+          !decodedFile[0]["DATA_WYSTAWIENIA"]
+        ) {
+          return setSettlementNames(message.errorData);
+        }
+        setSettlementNames(message.prepare);
+
+        const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
+
+        const result = preparedSettlementData(
+          decodedFile,
+          resultPreparedData,
+          setSettlementNames
+        );
+        setSettlementNames(message.saveToDB);
+        await saveDataToDB(
+          "settlementNames",
+          result.preparedSettlementDate,
+          result.counter
+        );
+        setSettlementNames(message.finish);
       }
     } catch (error) {
       if (type === "accountancy") {
-        setfKAccountancy("Błąd aktualizacji dokumentów.");
+        setFKAccountancy(message.error);
       }
       if (type === "car") {
-        setCarReleased("Błąd aktualizacji dokumentów.");
+        setCarReleased(message.error);
       }
       if (type === "rubicon") {
-        setRubiconData("Błąd aktualizacji dokumentów.");
+        setRubiconData(message.error);
       }
       if (type === "settlement") {
-        setSettlementNames("Błąd aktualizacji dokumentów.");
+        setSettlementNames(message.error);
       }
       console.error("Błąd przesyłania pliku:", error);
       setPleaseWait(false);
@@ -105,7 +273,17 @@ const FKAddData = () => {
 
       const orderColumns = settingsColumn.data;
 
-      getAllDataRaport(result.data, orderColumns, "Generowanie Raportu");
+      // console.log(result.data[0]);
+      const dataToString = result.data.map((item) => {
+        return {
+          ...item,
+          ILE_DNI_NA_PLATNOSC_FV: item.ILE_DNI_NA_PLATNOSC_FV.toString(),
+          RODZAJ_KONTA: item.RODZAJ_KONTA.toString(),
+          NR_KLIENTA: item.NR_KLIENTA.toString(),
+        };
+      });
+
+      getAllDataRaport(dataToString, orderColumns, "Generowanie Raportu");
       setPleaseWait(false);
     } catch (err) {
       console.error(err);
@@ -119,7 +297,7 @@ const FKAddData = () => {
       if (result.data.result === "delete") {
         setDateCounter({});
         setDeleteRaport("Dane usunięte.");
-        setfKAccountancy("");
+        setFKAccountancy("");
         setCarReleased("");
         setSettlementNames("");
         setRubiconData("");
