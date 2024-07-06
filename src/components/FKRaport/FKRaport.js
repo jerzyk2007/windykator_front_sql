@@ -35,10 +35,14 @@ const FKRaport = ({
 
       let update = buttonArea.map((item) => {
         const updatedData = item.data.map((element) => {
-          if (element.KWOTA_WPS == 0) {
-            element.KWOTA_WPS = "NULL";
-          }
-          if (element.KWOTA_WPS != 0 && element.KWOTA_WPS !== "NULL") {
+          // if (element.KWOTA_WPS == 0) {
+          //   element.KWOTA_WPS = "NULL";
+          // }
+          if (
+            element.KWOTA_WPS != 0 &&
+            element.KWOTA_WPS !== "NULL" &&
+            element.KWOTA_WPS !== " "
+          ) {
             element.KWOTA_WPS = Number(element.KWOTA_WPS);
             // item.KWOTA_WPS = "NULL";
           }

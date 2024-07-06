@@ -25,6 +25,7 @@ export const getPreparedData = async (axiosPrivateIntercept) => {
   }
 };
 
+// funkcja dla pliku wiekowanie, dekoduje nazwy działów i przypisuje wstępne defaultowe dane
 export const preparedAccountancyData = async (axiosPrivateIntercept, rows) => {
   try {
     const result = await axiosPrivateIntercept.get("/fk/prepared-items");
@@ -116,19 +117,19 @@ export const preparedAccountancyData = async (axiosPrivateIntercept, rows) => {
       }
 
       return {
-        CZY_SAMOCHOD_WYDANY_AS: "NULL",
+        CZY_SAMOCHOD_WYDANY_AS: " ",
         CZY_W_KANCELARI: "NIE",
         DATA_ROZLICZENIA_AS: "-",
-        DATA_WYDANIA_AUTA: "NULL",
+        DATA_WYDANIA_AUTA: " ",
         DATA_WYSTAWIENIA_FV: "2000-01-01",
         DO_ROZLICZENIA_AS: 0,
         DZIAL: DZIAL_NR,
-        ETAP_SPRAWY: "BRAK",
+        ETAP_SPRAWY: " ",
         ILE_DNI_NA_PLATNOSC_FV: 0,
-        JAKA_KANCELARIA: "NIE DOTYCZY",
+        JAKA_KANCELARIA: " ",
         KONTRAHENT: row["Kontrahent"],
         KWOTA_DO_ROZLICZENIA_FK: Number(row["Płatność"]),
-        KWOTA_WPS: "NULL",
+        KWOTA_WPS: " ",
         LOKALIZACJA,
         NR_DOKUMENTU: row["Nr. dokumentu"],
         NR_KLIENTA,
@@ -150,6 +151,7 @@ export const preparedAccountancyData = async (axiosPrivateIntercept, rows) => {
   }
 };
 
+// funkcja pobierająca dane z pliku "wydane auta"
 export const preparedCarData = (rows, preparedData, setCarReleased) => {
   setCarReleased("Filtrowanie danych.");
 
@@ -187,7 +189,7 @@ export const preparedCarData = (rows, preparedData, setCarReleased) => {
         DATA_WYDANIA_AUTA: checkDate
           ? excelDateToISODate(matchingItems["WYDANO"]).toString()
           : "NULL",
-        CZY_SAMOCHOD_WYDANY_AS: matchingItems["WYDANO"] ? "TAK" : "NIE",
+        CZY_SAMOCHOD_WYDANY_AS: matchingItems["WYDANO"] ? "TAK" : " ",
       };
     } else {
       return item;
@@ -196,6 +198,7 @@ export const preparedCarData = (rows, preparedData, setCarReleased) => {
   return { preparedDataReleasedCars, counter };
 };
 
+// funkcja pobierająca dane z pliku Rubicon oraz z danych raportu BL
 export const preparedRubiconData = async (
   rows,
   preparedData,
@@ -231,11 +234,13 @@ export const preparedRubiconData = async (
 
       return {
         ...item,
-        ETAP_SPRAWY: status ? status : item.ETAP_SPRAWY,
+        ETAP_SPRAWY: status !== "BRAK" ? status : item.ETAP_SPRAWY,
         KWOTA_WPS:
-          item.DO_ROZLICZENIA_AS && status !== "BRAK" && item.DO_ROZLICZENIA_AS
-            ? Number(item.DO_ROZLICZENIA_AS)
-            : "NULL",
+          item.DO_ROZLICZENIA_AS && status !== "BRAK"
+            ? item.DO_ROZLICZENIA_AS
+              ? Number(item.DO_ROZLICZENIA_AS)
+              : " "
+            : " ",
         JAKA_KANCELARIA:
           status !== "BRAK"
             ? matchingSettlemnt["Firma zewnętrzna"]
@@ -282,18 +287,21 @@ export const preparedRubiconData = async (
         ...item,
         ETAP_SPRAWY: matchingSettlemnt.STATUS_SPRAWY_KANCELARIA
           ? matchingSettlemnt.STATUS_SPRAWY_KANCELARIA
-          : "BRAK",
+          : " ",
         JAKA_KANCELARIA:
           matchingSettlemnt.JAKA_KANCELARIA !== "BRAK"
             ? matchingSettlemnt.JAKA_KANCELARIA
-            : "NIE DOTYCZY",
+            : " ",
+        // : "NIE DOTYCZY",
         CZY_W_KANCELARI:
-          matchingSettlemnt.JAKA_KANCELARIA !== "BRAK" ? "TAK" : "NIE",
+          matchingSettlemnt.JAKA_KANCELARIA !== "BRAK" ? "TAK" : " ",
         KWOTA_WPS:
           matchingSettlemnt.KWOTA_WINDYKOWANA_BECARED &&
           matchingSettlemnt.JAKA_KANCELARIA !== "BRAK"
-            ? Number(matchingSettlemnt.KWOTA_WINDYKOWANA_BECARED)
-            : "NULL",
+            ? matchingSettlemnt.KWOTA_WINDYKOWANA_BECARED
+              ? Number(matchingSettlemnt.KWOTA_WINDYKOWANA_BECARED)
+              : " "
+            : " ",
         DATA_WYSTAWIENIA_FV: matchingSettlemnt.DATA_FV
           ? matchingSettlemnt.DATA_FV
           : item.DATA_FV,
@@ -305,6 +313,7 @@ export const preparedRubiconData = async (
   return { preparedCaseStatusBL, counter };
 };
 
+// funkcja pobirająca dane z pliku rozlas - opis i daty rozrachunków
 export const preparedSettlementData = (
   rows,
   preparedData,
@@ -321,13 +330,7 @@ export const preparedSettlementData = (
   const preparedSettlementName = preparedData.map((item) => {
     let dateAndName = [];
     let dateSettlement = "";
-    // let documentsDate = "";
     const rows = filteredRows.filter((preparedItem) => {
-      // Użycie metody filter()
-      //   const checkDokumentsDate = isExcelDate(preparedItem.DATA_WYSTAWIENIA);
-      //   if (checkDokumentsDate) {
-      //     documentsDate = excelDateToISODate(preparedItem.DATA_WYSTAWIENIA);
-      //   }
       if (
         preparedItem.NUMER === item.NR_DOKUMENTU &&
         preparedItem.OPIS !== "NULL"
@@ -365,20 +368,12 @@ export const preparedSettlementData = (
         ...item,
         OPIS_ROZRACHUNKU: dateAndName,
         DATA_ROZLICZENIA_AS: dateSettlement ? dateSettlement : "-",
-        // DATA_WYSTAWIENIA_FV: documentsDate
-        //   ? documentsDate
-        //   : item.DATA_WYSTAWIENIA_FV,
-        // OPIS_ROZRACHUNKU: item.ROZNICA !== 0 ? dateAndName : "NULL",
-        // DATA_ROZLICZENIA_AS: item.ROZNICA !== 0 ? dateSettlement : "-",
       };
     } else {
       // Jeśli tablica jest pusta, przypisujemy pustą tablicę do OPIS_ROZRACHUNKU
       return {
         ...item,
         OPIS_ROZRACHUNKU: ["NULL"],
-        // DATA_WYSTAWIENIA_FV: documentsDate
-        //   ? documentsDate
-        //   : item.DATA_WYSTAWIENIA_FV,
       };
     }
   });
@@ -403,82 +398,168 @@ export const preparedSettlementData = (
 
   return { preparedSettlementDate, counter };
 };
-// export const preparedSettlementData = (
-//   rows,
-//   preparedData,
-//   setSettlementNames
-// ) => {
-//   setSettlementNames("Filtrowanie danych.");
 
-//   // usuwanie zbędnych danych, których nie ma w pliku wiekowanie
-//   const filteredRows = rows.filter((row) => {
-//     return preparedData.some((data) => data.NR_DOKUMENTU === row.NUMER);
-//   });
+export const prepareDataRaport = (data) => {
+  const preparedDataSettlements = data.dataFK.map((item) => {
+    const matchingSettlement = data.settlements.find(
+      (preparedItem) => preparedItem.NUMER_FV === item.NR_DOKUMENTU
+    );
+    if (matchingSettlement && item.OBSZAR !== "BLACHARNIA") {
+      return {
+        ...item,
+        DO_ROZLICZENIA_AS:
+          item.TYP_DOKUMENTU === "Korekta zaliczki" ||
+          item.TYP_DOKUMENTU === "Korekta"
+            ? matchingSettlement.ZOBOWIAZANIA
+              ? -matchingSettlement.ZOBOWIAZANIA
+              : matchingSettlement.DO_ROZLICZENIA
+            : matchingSettlement.DO_ROZLICZENIA,
+        ROZNICA:
+          item.TYP_DOKUMENTU === "Korekta zaliczki" ||
+          item.TYP_DOKUMENTU === "Korekta"
+            ? matchingSettlement.ZOBOWIAZANIA
+              ? -matchingSettlement.ZOBOWIAZANIA - item.KWOTA_DO_ROZLICZENIA_FK
+              : item.KWOTA_DO_ROZLICZENIA_FK - matchingSettlement.DO_ROZLICZENIA
+            : item.KWOTA_DO_ROZLICZENIA_FK - matchingSettlement.DO_ROZLICZENIA,
+        KWOTA_WPS: matchingSettlement.DO_ROZLICZENIA
+          ? matchingSettlement.DO_ROZLICZENIA
+          : " ",
+      };
+    } else if (matchingSettlement && item.OBSZAR === "BLACHARNIA") {
+      return {
+        ...item,
+        DO_ROZLICZENIA_AS:
+          item.TYP_DOKUMENTU === "Korekta zaliczki" ||
+          item.TYP_DOKUMENTU === "Korekta"
+            ? matchingSettlement.ZOBOWIAZANIA
+              ? -matchingSettlement.ZOBOWIAZANIA
+              : matchingSettlement.DO_ROZLICZENIA
+            : matchingSettlement.DO_ROZLICZENIA,
+        ROZNICA:
+          item.TYP_DOKUMENTU === "Korekta zaliczki" ||
+          item.TYP_DOKUMENTU === "Korekta"
+            ? matchingSettlement.ZOBOWIAZANIA
+              ? -matchingSettlement.ZOBOWIAZANIA - item.KWOTA_DO_ROZLICZENIA_FK
+              : item.KWOTA_DO_ROZLICZENIA_FK - matchingSettlement.DO_ROZLICZENIA
+            : item.KWOTA_DO_ROZLICZENIA_FK - matchingSettlement.DO_ROZLICZENIA,
+      };
+    } else {
+      return {
+        ...item,
+        DO_ROZLICZENIA_AS: 0,
+        ROZNICA: item.KWOTA_DO_ROZLICZENIA_FK,
+      };
+    }
+  });
+  // dodaję wiekowanie wg wcześniej przygotowanych opcji
+  const preparedDataAging = preparedDataSettlements.map((item) => {
+    const todayDate = new Date();
+    const documentDate = new Date(item.DATA_WYSTAWIENIA_FV);
+    const documentDatePayment = new Date(item.TERMIN_PLATNOSCI_FV);
+    // Różnica w milisekundach
+    const differenceInMilliseconds =
+      todayDate.getTime() - documentDatePayment.getTime();
 
-//   let counter = 0;
-//   const preparedSettlementName = preparedData.map((item) => {
-//     let dateAndName = [];
-//     let dateSettlement = "";
-//     // let documentsDate = "";
-//     const rows = filteredRows.filter((preparedItem) => {
-//       // Użycie metody filter()
-//       //   const checkDokumentsDate = isExcelDate(preparedItem.DATA_WYSTAWIENIA);
-//       //   if (checkDokumentsDate) {
-//       //     documentsDate = excelDateToISODate(preparedItem.DATA_WYSTAWIENIA);
-//       //   }
-//       if (
-//         preparedItem.NUMER === item.NR_DOKUMENTU &&
-//         preparedItem.OPIS !== "NULL"
-//       ) {
-//         const checkDate = isExcelDate(preparedItem.DataRozlAutostacja);
-//         const date =
-//           preparedItem.DataRozlAutostacja === "NULL"
-//             ? "BRAK"
-//             : checkDate
-//             ? excelDateToISODate(preparedItem.DataRozlAutostacja)
-//             : "BRAK";
+    // Konwersja różnicy na dni
+    const differenceInDays = Math.floor(
+      differenceInMilliseconds / (1000 * 60 * 60 * 24)
+    );
 
-//         if (date !== "BRAK" && /\d{4}-\d{2}-\d{2}/.test(date)) {
-//           // Jeśli dateSettlement jest puste lub data jest większa niż dateSettlement
-//           if (
-//             dateSettlement === "" ||
-//             new Date(date) > new Date(dateSettlement)
-//           ) {
-//             dateSettlement = date; // Aktualizacja dateSettlement
-//           }
-//         }
+    const differenceInMillisecondsDocument =
+      documentDatePayment.getTime() - documentDate.getTime();
 
-//         const name = preparedItem.OPIS === "NULL" ? "BRAK" : preparedItem.OPIS;
+    const differenceInDaysDocument = Math.floor(
+      differenceInMillisecondsDocument / (1000 * 60 * 60 * 24)
+    );
 
-//         dateAndName.push(`${date} - ${name}`); // Dodajemy do tablicy dateAndName
-//         return false; // Usunięcie obiektu preparedItem z tablicy rows
-//       }
-//       return true; // Zachowaj obiekt preparedItem w tablicy rows
-//     });
+    let title = "";
+    let foundMatchingAging = false;
+    const preparedAging = data.aging;
 
-//     if (dateAndName.length > 0) {
-//       counter++;
-//       // Jeśli tablica nie jest pusta, przypisujemy ją do OPIS_ROZRACHUNKU
-//       return {
-//         ...item,
-//         OPIS_ROZRACHUNKU: dateAndName,
-//         DATA_ROZLICZENIA_AS: dateSettlement ? dateSettlement : "-",
-//         // DATA_WYSTAWIENIA_FV: documentsDate
-//         //   ? documentsDate
-//         //   : item.DATA_WYSTAWIENIA_FV,
-//         // OPIS_ROZRACHUNKU: item.ROZNICA !== 0 ? dateAndName : "NULL",
-//         // DATA_ROZLICZENIA_AS: item.ROZNICA !== 0 ? dateSettlement : "-",
-//       };
-//     } else {
-//       // Jeśli tablica jest pusta, przypisujemy pustą tablicę do OPIS_ROZRACHUNKU
-//       return {
-//         ...item,
-//         OPIS_ROZRACHUNKU: ["NULL"],
-//         // DATA_WYSTAWIENIA_FV: documentsDate
-//         //   ? documentsDate
-//         //   : item.DATA_WYSTAWIENIA_FV,
-//       };
-//     }
-//   });
-//   return { preparedSettlementName, counter };
-// };
+    for (const age of preparedAging) {
+      if (age.type === "first" && Number(age.firstValue) >= differenceInDays) {
+        title = age.title;
+        foundMatchingAging = true;
+        break;
+      } else if (
+        age.type === "last" &&
+        Number(age.secondValue) <= differenceInDays
+      ) {
+        title = age.title;
+        foundMatchingAging = true;
+        break;
+      } else if (
+        age.type === "some" &&
+        Number(age.firstValue) <= differenceInDays &&
+        Number(age.secondValue) >= differenceInDays
+      ) {
+        title = age.title;
+        foundMatchingAging = true;
+        break;
+      }
+    }
+
+    if (!foundMatchingAging) {
+    }
+    return {
+      ...item,
+      PRZEDZIAL_WIEKOWANIE: title,
+      PRZETER_NIEPRZETER:
+        differenceInDays > 0 ? "Przeterminowane" : "Nieprzeterminowane",
+      ILE_DNI_NA_PLATNOSC_FV: Number(differenceInDaysDocument),
+    };
+  });
+
+  // do danych z pliku księgowego przypisuję wcześniej przygotowane dane działów
+  const preparedDataDep = preparedDataAging.map((item) => {
+    const matchingDepItem = data.items.find(
+      (preparedItem) => preparedItem.department === item.DZIAL
+    );
+
+    if (matchingDepItem) {
+      const { _id, ...rest } = item;
+      return {
+        ...rest,
+        OWNER: matchingDepItem.owner,
+        LOKALIZACJA: matchingDepItem.localization,
+        OBSZAR: matchingDepItem.area,
+        OPIEKUN_OBSZARU_CENTRALI: matchingDepItem.guardian,
+      };
+    } else {
+      return item;
+    }
+  });
+
+  const prepareDataToRaport = preparedDataDep.map((item) => {
+    let KANCELARIA;
+
+    if (item.JAKA_KANCELARIA === "M Legal Solutions") {
+      KANCELARIA = "M_LEGAL";
+    } else if (item.JAKA_KANCELARIA === "Inwest Inkaso") {
+      KANCELARIA = "INWEST INKASO";
+    } else {
+      KANCELARIA = item.JAKA_KANCELARIA;
+    }
+    return {
+      ...item,
+      // CZY_SAMOCHOD_WYDANY_AS:
+      //   item.CZY_SAMOCHOD_WYDANY_AS !== " "
+      //     ? item.CZY_SAMOCHOD_WYDANY_AS
+      //     : " ",
+
+      //zmiana na prośbę Kasi Plewki, ma się zawsze pojawiać data rozliczenia
+      DATA_ROZLICZENIA_AS:
+        item.DATA_ROZLICZENIA_AS !== "-" ? item.DATA_ROZLICZENIA_AS : "NULL",
+      DATA_WYDANIA_AUTA:
+        item.DATA_WYDANIA_AUTA !== "-" ? item.DATA_WYDANIA_AUTA : "NULL",
+      DO_ROZLICZENIA_AS:
+        item.DO_ROZLICZENIA_AS !== 0 ? item.DO_ROZLICZENIA_AS : "NULL",
+      JAKA_KANCELARIA: item.JAKA_KANCELARIA !== " " ? KANCELARIA : " ",
+      KWOTA_WPS: item.CZY_W_KANCELARI === "NIE" ? " " : item.KWOTA_WPS,
+      OPIS_ROZRACHUNKU:
+        item.OPIS_ROZRACHUNKU.length > 0 ? item.OPIS_ROZRACHUNKU : ["NULL"],
+      ROZNICA: item.ROZNICA !== 0 ? item.ROZNICA : "NULL",
+    };
+  });
+  return prepareDataToRaport;
+};

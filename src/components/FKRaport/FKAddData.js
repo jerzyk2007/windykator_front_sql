@@ -11,6 +11,7 @@ import {
   getPreparedData,
   preparedRubiconData,
   preparedSettlementData,
+  prepareDataRaport,
 } from "./preparedDataFKFile";
 
 import "./FKAddData.css";
@@ -66,6 +67,8 @@ const FKAddData = () => {
 
         // Sprawdzenie, czy plik jest prawidłowym plikiem Excel
         if (!isExcelFile(uint8Array)) {
+          setPleaseWait(false);
+
           if (type === "accountancy") {
             return setFKAccountancy(message.errorExcelFile);
           } else if (type === "car") {
@@ -113,6 +116,8 @@ const FKAddData = () => {
     const file = e.target.files[0];
     // if (!file) return console.log("Brak pliku");
     if (!file || !file.name.endsWith(".xlsx")) {
+      setPleaseWait(false);
+
       if (type === "accountancy") {
         return setFKAccountancy(message.errorXLSX);
       } else if (type === "car") {
@@ -131,9 +136,11 @@ const FKAddData = () => {
         setFKAccountancy,
         setCarReleased,
         setRubiconData,
-        setSettlementNames
+        setSettlementNames,
+        setPleaseWait
       );
       setPleaseWait(false);
+
       if (type === "accountancy") {
         if (
           !decodedFile[0]["Nr. dokumentu"] ||
@@ -262,10 +269,22 @@ const FKAddData = () => {
     }
   };
 
+  // funkcja generująca raport z już pobranych danych z pliku excel, każde generowanie nadaje nowe wiekowanie, kwote faktur do rozliczenia oraz od nowa przypisuje Obszary, Ownerów, Lokalizacje itd
   const generateRaport = async () => {
     try {
       setPleaseWait(true);
-      const result = await axiosPrivateIntercept.get("/fk/generate-raport");
+      // const result = await axiosPrivateIntercept.get("/fk/generate-raport");
+      const result = await axiosPrivateIntercept.get(
+        "/fk/generate-raport-front"
+      );
+
+      const dataRaport = prepareDataRaport(result.data);
+
+      const saveDataFK = await axiosPrivateIntercept.post(
+        "/fk/save-raport-FK",
+        { dataRaport }
+      );
+      setPleaseWait(false);
 
       const settingsColumn = await axiosPrivateIntercept.get(
         "/fk/get-columns-order"
@@ -274,7 +293,7 @@ const FKAddData = () => {
       const orderColumns = settingsColumn.data;
 
       // console.log(result.data[0]);
-      const dataToString = result.data.map((item) => {
+      const dataToString = dataRaport.map((item) => {
         return {
           ...item,
           ILE_DNI_NA_PLATNOSC_FV: item.ILE_DNI_NA_PLATNOSC_FV.toString(),
@@ -282,9 +301,17 @@ const FKAddData = () => {
           NR_KLIENTA: item.NR_KLIENTA.toString(),
         };
       });
+      // const dataToString = result.data.map((item) => {
+      //   return {
+      //     ...item,
+      //     ILE_DNI_NA_PLATNOSC_FV: item.ILE_DNI_NA_PLATNOSC_FV.toString(),
+      //     RODZAJ_KONTA: item.RODZAJ_KONTA.toString(),
+      //     NR_KLIENTA: item.NR_KLIENTA.toString(),
+      //   };
+      // });
 
       getAllDataRaport(dataToString, orderColumns, "Generowanie Raportu");
-      setPleaseWait(false);
+      // setPleaseWait(false);
     } catch (err) {
       console.error(err);
     }
@@ -311,6 +338,7 @@ const FKAddData = () => {
   };
 
   useEffect(() => {
+    // pobieram daty i licznik ustawień dla aktualizowanych plików excel
     const getDateAndCounter = async () => {
       try {
         setPleaseWait(true);
