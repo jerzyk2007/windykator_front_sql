@@ -16,6 +16,11 @@ export const muiTableBodyCellProps = {
 
 export const preparedFKColumns = [
   {
+    accessorKey: "BRAK_DATY_WYSTAWIENIA_FV",
+    header: "BRAK DATY WYSTAWIENIA FV",
+    filterVariant: "select",
+  },
+  {
     accessorKey: "CZY_SAMOCHOD_WYDANY_AS",
     header: "CZY_SAMOCHOD_WYDANY_AS",
     filterVariant: "multi-select",

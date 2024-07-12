@@ -1,3 +1,5 @@
+import { subDays, format, parseISO } from "date-fns";
+
 // Funkcja do konwersji daty z formatu Excel na "yyyy-mm-dd"
 const excelDateToISODate = (excelDate) => {
   // const date = new Date((excelDate - (25567 + 1)) * 86400 * 1000); // Konwersja z formatu Excel do milisekund
@@ -117,6 +119,7 @@ export const preparedAccountancyData = async (axiosPrivateIntercept, rows) => {
       }
 
       return {
+        BRAK_DATY_WYSTAWIENIA_FV: " ",
         CZY_SAMOCHOD_WYDANY_AS: " ",
         CZY_W_KANCELARI: "NIE",
         DATA_ROZLICZENIA_AS: "-",
@@ -274,27 +277,32 @@ export const preparedRubiconData = async (
       (preparedItem) => preparedItem.NUMER_FV === item.NR_DOKUMENTU
     );
 
+    // console.log(matchingSettlemnt);
+
     if (
       matchingSettlemnt &&
-      item.OBSZAR === "BLACHARNIA" &&
-      (matchingSettlemnt.JAKA_KANCELARIA === "ROK-KONOPA" ||
-        matchingSettlemnt.JAKA_KANCELARIA === "CNP" ||
-        matchingSettlemnt.JAKA_KANCELARIA === "KRAUZE")
+      item.OBSZAR === "BLACHARNIA"
+      // &&
+      // (matchingSettlemnt.JAKA_KANCELARIA === "ROK-KONOPA" ||
+      //   matchingSettlemnt.JAKA_KANCELARIA === "CNP" ||
+      //   matchingSettlemnt.JAKA_KANCELARIA === "KRAUZE")
     ) {
       counter++;
 
       return {
         ...item,
-        ETAP_SPRAWY: matchingSettlemnt.STATUS_SPRAWY_KANCELARIA
-          ? matchingSettlemnt.STATUS_SPRAWY_KANCELARIA
-          : " ",
+        ETAP_SPRAWY:
+          matchingSettlemnt.STATUS_SPRAWY_KANCELARIA &&
+          matchingSettlemnt.JAKA_KANCELARIA !== "BRAK"
+            ? matchingSettlemnt.STATUS_SPRAWY_KANCELARIA
+            : " ",
         JAKA_KANCELARIA:
           matchingSettlemnt.JAKA_KANCELARIA !== "BRAK"
             ? matchingSettlemnt.JAKA_KANCELARIA
             : " ",
         // : "NIE DOTYCZY",
         CZY_W_KANCELARI:
-          matchingSettlemnt.JAKA_KANCELARIA !== "BRAK" ? "TAK" : " ",
+          matchingSettlemnt.JAKA_KANCELARIA !== "BRAK" ? "TAK" : "NIE",
         KWOTA_WPS:
           matchingSettlemnt.KWOTA_WINDYKOWANA_BECARED &&
           matchingSettlemnt.JAKA_KANCELARIA !== "BRAK"
@@ -310,6 +318,7 @@ export const preparedRubiconData = async (
       return item;
     }
   });
+
   return { preparedCaseStatusBL, counter };
 };
 
@@ -327,20 +336,31 @@ export const preparedSettlementData = (
   });
 
   let counter = 0;
+
+  // // console.log(filteredRows);
+  // const testRows = filteredRows.map((item) => {
+  //   console.log(item.DataOperacji);
+  // });
+
   const preparedSettlementName = preparedData.map((item) => {
     let dateAndName = [];
     let dateSettlement = "";
+    let dateFinishSettlement = "";
+
     const rows = filteredRows.filter((preparedItem) => {
       if (
         preparedItem.NUMER === item.NR_DOKUMENTU &&
         preparedItem.OPIS !== "NULL"
       ) {
-        const checkDate = isExcelDate(preparedItem.DataRozlAutostacja);
+        dateFinishSettlement = isExcelDate(preparedItem.DataRozlAutostacja)
+          ? excelDateToISODate(preparedItem.DataRozlAutostacja)
+          : "NULL";
+        const checkDate = isExcelDate(preparedItem.DataOperacji);
         const date =
-          preparedItem.DataRozlAutostacja === "NULL"
+          preparedItem.DataOperacji === "NULL"
             ? "BRAK"
             : checkDate
-            ? excelDateToISODate(preparedItem.DataRozlAutostacja)
+            ? excelDateToISODate(preparedItem.DataOperacji)
             : "BRAK";
 
         if (date !== "BRAK" && /\d{4}-\d{2}-\d{2}/.test(date)) {
@@ -367,7 +387,7 @@ export const preparedSettlementData = (
       return {
         ...item,
         OPIS_ROZRACHUNKU: dateAndName,
-        DATA_ROZLICZENIA_AS: dateSettlement ? dateSettlement : "-",
+        DATA_ROZLICZENIA_AS: dateFinishSettlement,
       };
     } else {
       // Jeśli tablica jest pusta, przypisujemy pustą tablicę do OPIS_ROZRACHUNKU
@@ -397,6 +417,125 @@ export const preparedSettlementData = (
   });
 
   return { preparedSettlementDate, counter };
+};
+// export const preparedSettlementData = (
+//   rows,
+//   preparedData,
+//   setSettlementNames
+// ) => {
+//   setSettlementNames("Filtrowanie danych.");
+
+//   // usuwanie zbędnych danych, których nie ma w pliku wiekowanie
+//   const filteredRows = rows.filter((row) => {
+//     return preparedData.some((data) => data.NR_DOKUMENTU === row.NUMER);
+//   });
+
+//   let counter = 0;
+
+//   const preparedSettlementName = preparedData.map((item) => {
+//     let dateAndName = [];
+//     let dateSettlement = "";
+//     let dateFinishSettlement = '';
+//     // console.log(item.DataOperacji);
+
+//     const rows = filteredRows.filter((preparedItem) => {
+//       if (
+//         preparedItem.NUMER === item.NR_DOKUMENTU &&
+//         preparedItem.OPIS !== "NULL"
+//       ) {
+//         const checkDate = isExcelDate(preparedItem.DataRozlAutostacja);
+//         const date =
+//           preparedItem.DataRozlAutostacja === "NULL"
+//             ? "BRAK"
+//             : checkDate
+//             ? excelDateToISODate(preparedItem.DataRozlAutostacja)
+//             : "BRAK";
+
+//         if (date !== "BRAK" && /\d{4}-\d{2}-\d{2}/.test(date)) {
+//           // Jeśli dateSettlement jest puste lub data jest większa niż dateSettlement
+//           if (
+//             dateSettlement === "" ||
+//             new Date(date) > new Date(dateSettlement)
+//           ) {
+//             dateSettlement = date; // Aktualizacja dateSettlement
+//           }
+//         }
+
+//         const name = preparedItem.OPIS === "NULL" ? "BRAK" : preparedItem.OPIS;
+
+//         dateAndName.push(`${date} - ${name}`); // Dodajemy do tablicy dateAndName
+//         return false; // Usunięcie obiektu preparedItem z tablicy rows
+//       }
+//       return true; // Zachowaj obiekt preparedItem w tablicy rows
+//     });
+
+//     if (dateAndName.length > 0) {
+//       counter++;
+//       // Jeśli tablica nie jest pusta, przypisujemy ją do OPIS_ROZRACHUNKU
+//       return {
+//         ...item,
+//         OPIS_ROZRACHUNKU: dateAndName,
+//         DATA_ROZLICZENIA_AS: dateSettlement ? dateSettlement : "-",
+//       };
+//     } else {
+//       // Jeśli tablica jest pusta, przypisujemy pustą tablicę do OPIS_ROZRACHUNKU
+//       return {
+//         ...item,
+//         OPIS_ROZRACHUNKU: ["NULL"],
+//       };
+//     }
+//   });
+
+//   const preparedSettlementDate = preparedSettlementName.map((item) => {
+//     const matchingSettlemnt = filteredRows.find(
+//       (preparedItem) => preparedItem.NUMER === item.NR_DOKUMENTU
+//     );
+//     if (matchingSettlemnt) {
+//       const checkDate = isExcelDate(matchingSettlemnt.DATA_WYSTAWIENIA);
+//       return {
+//         ...item,
+//         DATA_WYSTAWIENIA_FV:
+//           checkDate && matchingSettlemnt.DATA_WYSTAWIENIA
+//             ? excelDateToISODate(matchingSettlemnt.DATA_WYSTAWIENIA)
+//             : item.DATA_WYSTAWIENIA,
+//       };
+//     } else {
+//       return item;
+//     }
+//   });
+
+//   return { preparedSettlementDate, counter };
+// };
+
+export const prepareMissedDate = (rows, preparedData, setMissedDate) => {
+  setMissedDate("Filtrowanie danych.");
+
+  // usuwanie zbędnych danych, których nie ma w pliku wiekowanie
+  const filteredRows = rows.filter((row) => {
+    return preparedData.some((data) => data.NR_DOKUMENTU === row["NUMER"]);
+  });
+
+  let counter = 0;
+
+  const preparedDate = preparedData.map((item, index) => {
+    const matchingItems = filteredRows.find(
+      (preparedItem) => preparedItem["NUMER"] === item.NR_DOKUMENTU
+    );
+
+    if (matchingItems) {
+      const checkDate = isExcelDate(matchingItems["DATA_WYSTAWIENIA"]);
+      counter++;
+      return {
+        ...item,
+        DATA_WYSTAWIENIA_FV: checkDate
+          ? excelDateToISODate(matchingItems["DATA_WYSTAWIENIA"]).toString()
+          : item.DATA_WYSTAWIENIA_FV,
+      };
+    } else {
+      return item;
+    }
+  });
+  return { preparedDate, counter };
 };
 
 export const prepareDataRaport = (data) => {
@@ -442,6 +581,12 @@ export const prepareDataRaport = (data) => {
               ? -matchingSettlement.ZOBOWIAZANIA - item.KWOTA_DO_ROZLICZENIA_FK
               : item.KWOTA_DO_ROZLICZENIA_FK - matchingSettlement.DO_ROZLICZENIA
             : item.KWOTA_DO_ROZLICZENIA_FK - matchingSettlement.DO_ROZLICZENIA,
+      };
+    } else if (item.OBSZAR === "KSIĘGOWOŚĆ") {
+      return {
+        ...item,
+        DO_ROZLICZENIA_AS: item.KWOTA_DO_ROZLICZENIA_FK,
+        ROZNICA: "NULL",
       };
     } else {
       return {
@@ -561,5 +706,41 @@ export const prepareDataRaport = (data) => {
       ROZNICA: item.ROZNICA !== 0 ? item.ROZNICA : "NULL",
     };
   });
-  return prepareDataToRaport;
+
+  const prepareMissedDate = prepareDataToRaport.map((item) => {
+    if (item.DATA_WYSTAWIENIA_FV === "2000-01-01") {
+      const dateObject = parseISO(item.TERMIN_PLATNOSCI_FV);
+
+      // Odejmij 14 dni
+      const newDate = subDays(dateObject, 14);
+
+      // Sformatuj datę z powrotem do stringa
+      const formattedDate = format(newDate, "yyyy-MM-dd");
+
+      return {
+        ...item,
+        BRAK_DATY_WYSTAWIENIA_FV: "TAK",
+        DATA_WYSTAWIENIA_FV: formattedDate,
+      };
+    } else {
+      return item;
+    }
+  });
+
+  const convertToNumberIfPossible = (value) => {
+    if (typeof value === "string" && !isNaN(value) && value.trim() !== "") {
+      return parseFloat(value);
+    }
+    return value;
+  };
+
+  const kwotaWPSToNumber = prepareMissedDate.map((item) => {
+    return {
+      ...item,
+      KWOTA_WPS: convertToNumberIfPossible(item.KWOTA_WPS),
+    };
+  });
+
+  // return prepareMissedDate;
+  return kwotaWPSToNumber;
 };

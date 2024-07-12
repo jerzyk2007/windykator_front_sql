@@ -100,6 +100,46 @@ const FKRaport = ({
         return element;
       });
 
+      // usuwam kolumnę BRAK DATY WYSTAWIENIA FV ze wszytskich arkuszy oprócz RAPORT
+      update = update.map((element) => {
+        if (element.name !== "Raport") {
+          const updatedData = element.data.map((item) => {
+            const { BRAK_DATY_WYSTAWIENIA_FV, ...rest } = item;
+            return rest;
+          });
+          return { ...element, data: updatedData };
+        }
+        return element;
+      });
+
+      // zmieniam zapis daty string na zapis date
+      update = update.map((element) => {
+        const updatedData = element.data.map((item) => {
+          const convertToDateIfPossible = (value) => {
+            const date = new Date(value);
+            if (!isNaN(date.getTime())) {
+              return date;
+            }
+            return value;
+          };
+
+          return {
+            ...item,
+            DATA_WYSTAWIENIA_FV: convertToDateIfPossible(
+              item.DATA_WYSTAWIENIA_FV
+            ),
+            DATA_ROZLICZENIA_AS: convertToDateIfPossible(
+              item.DATA_ROZLICZENIA_AS
+            ),
+            TERMIN_PLATNOSCI_FV: convertToDateIfPossible(
+              item.TERMIN_PLATNOSCI_FV
+            ),
+            DATA_WYDANIA_AUTA: convertToDateIfPossible(item.DATA_WYDANIA_AUTA),
+          };
+        });
+        return { ...element, data: updatedData };
+      });
+
       getExcelRaport(update, settingsColumn.data);
     } catch (err) {
       console.error(err);

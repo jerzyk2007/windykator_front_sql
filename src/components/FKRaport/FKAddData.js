@@ -12,6 +12,7 @@ import {
   preparedRubiconData,
   preparedSettlementData,
   prepareDataRaport,
+  prepareMissedDate,
 } from "./preparedDataFKFile";
 
 import "./FKAddData.css";
@@ -25,8 +26,11 @@ const FKAddData = () => {
   const [carReleased, setCarReleased] = useState("");
   const [settlementNames, setSettlementNames] = useState("");
   const [rubiconData, setRubiconData] = useState("");
+  const [missedDate, setMissedDate] = useState("");
+  const [disableMissedDate, setDisableMissedDate] = useState(false);
   const [deleteRaport, setDeleteRaport] = useState("");
   const [dateCounter, setDateCounter] = useState({});
+  const [generateRaportMsg, setGenerateRaportMsg] = useState("");
   const [message, setMessage] = useState({
     prepare: "Przygotowywanie danych.",
     progress: "Trwa dopasowywanie danych.",
@@ -77,6 +81,8 @@ const FKAddData = () => {
             return setRubiconData(message.errorExcelFile);
           } else if (type === "settlement") {
             return setSettlementNames(message.errorExcelFile);
+          } else if (type === "missedDate") {
+            return setMissedDate(message.errorExcelFile);
           }
           return;
         }
@@ -126,6 +132,8 @@ const FKAddData = () => {
         return setRubiconData(message.errorXLSX);
       } else if (type === "settlement") {
         return setSettlementNames(message.errorXLSX);
+      } else if (type === "missedDate") {
+        return setMissedDate(message.errorXLSX);
       }
     }
 
@@ -137,7 +145,8 @@ const FKAddData = () => {
         setCarReleased,
         setRubiconData,
         setSettlementNames,
-        setPleaseWait
+        setPleaseWait,
+        setMissedDate
       );
       setPleaseWait(false);
 
@@ -230,7 +239,8 @@ const FKAddData = () => {
           !decodedFile[0]["NUMER"] ||
           !decodedFile[0]["OPIS"] ||
           !decodedFile[0]["DataRozlAutostacja"] ||
-          !decodedFile[0]["DATA_WYSTAWIENIA"]
+          !decodedFile[0]["DATA_WYSTAWIENIA"] ||
+          !decodedFile[0]["DataOperacji"]
         ) {
           return setSettlementNames(message.errorData);
         }
@@ -250,6 +260,25 @@ const FKAddData = () => {
           result.counter
         );
         setSettlementNames(message.finish);
+      }
+
+      if (type === "missedDate") {
+        if (!decodedFile[0]["NUMER"] || !decodedFile[0]["DATA_WYSTAWIENIA"]) {
+          return setMissedDate(message.errorData);
+        }
+
+        setMissedDate(message.prepare);
+
+        const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
+
+        const result = prepareMissedDate(
+          decodedFile,
+          resultPreparedData,
+          setMissedDate
+        );
+        setMissedDate(message.saveToDB);
+        await saveDataToDB("missedDate", result.preparedDate, result.counter);
+        setMissedDate(message.finish);
       }
     } catch (error) {
       if (type === "accountancy") {
@@ -272,6 +301,7 @@ const FKAddData = () => {
   // funkcja generująca raport z już pobranych danych z pliku excel, każde generowanie nadaje nowe wiekowanie, kwote faktur do rozliczenia oraz od nowa przypisuje Obszary, Ownerów, Lokalizacje itd
   const generateRaport = async () => {
     try {
+      setDisableMissedDate(true);
       setPleaseWait(true);
       // const result = await axiosPrivateIntercept.get("/fk/generate-raport");
       const result = await axiosPrivateIntercept.get(
@@ -280,28 +310,18 @@ const FKAddData = () => {
 
       const dataRaport = prepareDataRaport(result.data);
 
-      const saveDataFK = await axiosPrivateIntercept.post(
-        "/fk/save-raport-FK",
-        { dataRaport }
-      );
+      await axiosPrivateIntercept.post("/fk/save-raport-FK", { dataRaport });
+
       setPleaseWait(false);
+      setGenerateRaportMsg("Raport został wygenerowany.");
 
-      const settingsColumn = await axiosPrivateIntercept.get(
-        "/fk/get-columns-order"
-      );
+      // const settingsColumn = await axiosPrivateIntercept.get(
+      //   "/fk/get-columns-order"
+      // );
 
-      const orderColumns = settingsColumn.data;
+      // const orderColumns = settingsColumn.data;
 
-      // console.log(result.data[0]);
-      const dataToString = dataRaport.map((item) => {
-        return {
-          ...item,
-          ILE_DNI_NA_PLATNOSC_FV: item.ILE_DNI_NA_PLATNOSC_FV.toString(),
-          RODZAJ_KONTA: item.RODZAJ_KONTA.toString(),
-          NR_KLIENTA: item.NR_KLIENTA.toString(),
-        };
-      });
-      // const dataToString = result.data.map((item) => {
+      // const dataToString = dataRaport.map((item) => {
       //   return {
       //     ...item,
       //     ILE_DNI_NA_PLATNOSC_FV: item.ILE_DNI_NA_PLATNOSC_FV.toString(),
@@ -310,8 +330,7 @@ const FKAddData = () => {
       //   };
       // });
 
-      getAllDataRaport(dataToString, orderColumns, "Generowanie Raportu");
-      // setPleaseWait(false);
+      // getAllDataRaport(dataToString, orderColumns, "Generowanie Raportu");
     } catch (err) {
       console.error(err);
     }
@@ -353,7 +372,6 @@ const FKAddData = () => {
             hour: format(DMS_date, "HH:mm"),
           },
         };
-
         setDateCounter(update);
         setPleaseWait(false);
       } catch (err) {
@@ -403,7 +421,7 @@ const FKAddData = () => {
                       </label>
                     </section>
                   ) : (
-                    <span></span>
+                    <section className="fk_add_data__container-file"></section>
                   )}
                 </>
               ) : (
@@ -431,7 +449,7 @@ const FKAddData = () => {
                       </label>
                     </section>
                   ) : (
-                    <span></span>
+                    <section className="fk_add_data__container-file"></section>
                   )}
                 </>
               ) : (
@@ -448,6 +466,7 @@ const FKAddData = () => {
 
                   {dateCounter?.accountancy &&
                   dateCounter?.carReleased &&
+                  // dateCounter?.caseStatus ? (
                   !dateCounter?.caseStatus ? (
                     <section className="fk_add_data__container-file">
                       <input
@@ -462,7 +481,7 @@ const FKAddData = () => {
                       </label>
                     </section>
                   ) : (
-                    <span></span>
+                    <section className="fk_add_data__container-file"></section>
                   )}
                 </>
               ) : (
@@ -498,11 +517,49 @@ const FKAddData = () => {
                       </label>
                     </section>
                   ) : (
-                    <span></span>
+                    <section className="fk_add_data__container-file"></section>
                   )}
                 </>
               ) : (
                 <p className="fk_add_data-error">{settlementNames}</p>
+              )}
+            </section>
+
+            <section className="fk_add_data__container-item">
+              {!missedDate ? (
+                <>
+                  <span>Dodatkowy plik - Data wystawienia dokumentu</span>
+                  <span>{dateCounter?.missedDate?.date}</span>
+                  <span>{dateCounter?.missedDate?.counter}</span>
+
+                  {dateCounter?.accountancy &&
+                  dateCounter?.carReleased &&
+                  dateCounter?.caseStatus &&
+                  dateCounter?.settlementNames &&
+                  !dateCounter?.missedDate &&
+                  !dateCounter?.genrateRaport &&
+                  !disableMissedDate ? (
+                    <section className="fk_add_data__container-file">
+                      <input
+                        type="file"
+                        name="uploadfile"
+                        id="missedDate"
+                        style={{ display: "none" }}
+                        onChange={(e) => handleSendFile(e, "missedDate")}
+                      />
+                      <label
+                        htmlFor="missedDate"
+                        className="fk_add_data-click-me"
+                      >
+                        DODAJ
+                      </label>
+                    </section>
+                  ) : (
+                    <section className="fk_add_data__container-file"></section>
+                  )}
+                </>
+              ) : (
+                <p className="fk_add_data-error">{missedDate}</p>
               )}
             </section>
 
@@ -575,27 +632,33 @@ const FKAddData = () => {
             </section>
 
             <section className="fk_add_data__container-item">
-              <span className="fk_add_data__container-item--title">
-                Generuj raport FK
-              </span>
-              <span>{dateCounter?.genrateRaport?.date}</span>
-              <span></span>
+              {!generateRaportMsg ? (
+                <>
+                  <span className="fk_add_data__container-item--title">
+                    Generuj raport FK
+                  </span>
+                  <span>{dateCounter?.genrateRaport?.date}</span>
+                  <span></span>
 
-              <section className="fk_add_data__container-file">
-                {dateCounter?.accountancy &&
-                  dateCounter?.carReleased &&
-                  dateCounter?.caseStatus &&
-                  dateCounter?.settlementNames && (
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      disableElevation
-                      onClick={generateRaport}
-                    >
-                      Generuj Raport FK
-                    </Button>
-                  )}
-              </section>
+                  <section className="fk_add_data__container-file">
+                    {dateCounter?.accountancy &&
+                      dateCounter?.carReleased &&
+                      dateCounter?.caseStatus &&
+                      dateCounter?.settlementNames && (
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          disableElevation
+                          onClick={generateRaport}
+                        >
+                          Generuj Raport FK
+                        </Button>
+                      )}
+                  </section>
+                </>
+              ) : (
+                <p className="fk_add_data-error">{generateRaportMsg}</p>
+              )}
             </section>
           </section>
         </section>
