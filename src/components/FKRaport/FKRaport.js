@@ -139,6 +139,18 @@ const FKRaport = ({
         });
         return { ...element, data: updatedData };
       });
+      // Dodawanie danych w pierwszych 10 wierszach
+      // const customData = [
+      //   { cell: "A1", value: "Nazwa Raportu" },
+      //   { cell: "B1", value: "Raport Finansowy" },
+      //   { cell: "A3", value: "Data" },
+      //   { cell: "B3", value: "2024-07-11" },
+      //   { cell: "A8", value: "Autor" },
+      //   { cell: "B8", value: "Jan Kowalski" },
+      //   { cell: "D4", value: "Suma przeterminowanych" },
+      //   { cell: "E4", value: 100 },
+      //   // Dodaj więcej danych według własnego pomysłu
+      // ];
 
       getExcelRaport(update, settingsColumn.data);
     } catch (err) {

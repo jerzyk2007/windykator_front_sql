@@ -152,15 +152,25 @@ const FKAddData = () => {
 
       if (type === "accountancy") {
         if (
-          !decodedFile[0]["Nr. dokumentu"] ||
-          !decodedFile[0]["Kontrahent"] ||
-          !decodedFile[0]["Płatność"] ||
-          !decodedFile[0]["Data płatn."] ||
-          !decodedFile[0]["Nr kontrahenta"] ||
-          !decodedFile[0]["Synt."]
+          !("Nr. dokumentu" in decodedFile[0]) ||
+          !("Kontrahent" in decodedFile[0]) ||
+          !("Płatność" in decodedFile[0]) ||
+          !("Data płatn." in decodedFile[0]) ||
+          !("Nr kontrahenta" in decodedFile[0]) ||
+          !("Synt." in decodedFile[0])
         ) {
           return setFKAccountancy(message.errorData);
         }
+        // if (
+        //   !decodedFile[0]["Nr. dokumentu"] ||
+        //   !decodedFile[0]["Kontrahent"] ||
+        //   !decodedFile[0]["Płatność"] ||
+        //   !decodedFile[0]["Data płatn."] ||
+        //   !decodedFile[0]["Nr kontrahenta"] ||
+        //   !decodedFile[0]["Synt."]
+        // ) {
+        //   return setFKAccountancy(message.errorData);
+        // }
 
         const result = await preparedAccountancyData(
           axiosPrivateIntercept,
@@ -182,9 +192,15 @@ const FKAddData = () => {
       }
 
       if (type === "car") {
-        if (!decodedFile[0]["NR FAKTURY"] || !decodedFile[0]["WYDANO"]) {
+        if (
+          !("NR FAKTURY" in decodedFile[0]) ||
+          !("WYDANO" in decodedFile[0])
+        ) {
           return setCarReleased(message.errorData);
         }
+        // if (!decodedFile[0]["NR FAKTURY"] || !decodedFile[0]["WYDANO"]) {
+        //   return setCarReleased(message.errorData);
+        // }
 
         setCarReleased(message.prepare);
 
@@ -206,13 +222,21 @@ const FKAddData = () => {
       }
       if (type === "rubicon") {
         if (
-          !decodedFile[0]["Faktura nr"] ||
-          !decodedFile[0]["Status aktualny"] ||
-          !decodedFile[0]["Firma zewnętrzna"] ||
-          !decodedFile[0]["Data faktury"]
+          !("Faktura nr" in decodedFile[0]) ||
+          !("Status aktualny" in decodedFile[0]) ||
+          !("Firma zewnętrzna" in decodedFile[0]) ||
+          !("Data faktury" in decodedFile[0])
         ) {
           return setRubiconData(message.errorData);
         }
+        // if (
+        //   !decodedFile[0]["Faktura nr"] ||
+        //   !decodedFile[0]["Status aktualny"] ||
+        //   !decodedFile[0]["Firma zewnętrzna"] ||
+        //   !decodedFile[0]["Data faktury"]
+        // ) {
+        //   return setRubiconData(message.errorData);
+        // }
         // setRubiconData(message.prepare);
         setRubiconData("Przetwarzanie danych z pliku Rubicon.");
 
@@ -235,15 +259,25 @@ const FKAddData = () => {
         setRubiconData(message.finish);
       }
       if (type === "settlement") {
+        // if (
+        //   !decodedFile[0]["NUMER"] ||
+        //   !decodedFile[0]["OPIS"] ||
+        //   !decodedFile[0]["DataRozlAutostacja"] ||
+        //   !decodedFile[0]["DATA_WYSTAWIENIA"] ||
+        //   !decodedFile[0]["DataOperacji"]
+        // ) {
+        //   return setSettlementNames(message.errorData);
+        // }
         if (
-          !decodedFile[0]["NUMER"] ||
-          !decodedFile[0]["OPIS"] ||
-          !decodedFile[0]["DataRozlAutostacja"] ||
-          !decodedFile[0]["DATA_WYSTAWIENIA"] ||
-          !decodedFile[0]["DataOperacji"]
+          !("NUMER" in decodedFile[0]) ||
+          !("OPIS" in decodedFile[0]) ||
+          !("DataRozlAutostacja" in decodedFile[0]) ||
+          !("DATA_WYSTAWIENIA" in decodedFile[0]) ||
+          !("DataOperacji" in decodedFile[0])
         ) {
           return setSettlementNames(message.errorData);
         }
+
         setSettlementNames(message.prepare);
 
         const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
@@ -263,7 +297,14 @@ const FKAddData = () => {
       }
 
       if (type === "missedDate") {
-        if (!decodedFile[0]["NUMER"] || !decodedFile[0]["DATA_WYSTAWIENIA"]) {
+        // if (!decodedFile[0]["NUMER"] || !decodedFile[0]["DATA_WYSTAWIENIA"]) {
+        //   return setMissedDate(message.errorData);
+        // }
+
+        if (
+          !("NUMER" in decodedFile[0]) ||
+          !("DATA_WYSTAWIENIA" in decodedFile[0])
+        ) {
           return setMissedDate(message.errorData);
         }
 
@@ -315,6 +356,7 @@ const FKAddData = () => {
       setPleaseWait(false);
       setGenerateRaportMsg("Raport został wygenerowany.");
 
+      // funkcja generująca plik excel ze wszytskimi danymi
       // const settingsColumn = await axiosPrivateIntercept.get(
       //   "/fk/get-columns-order"
       // );
