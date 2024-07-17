@@ -3,6 +3,7 @@ import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
 import PleaseWait from "./PleaseWait";
 import PercentageTarget from "./PercentageTarget";
+import TableSettings from "./TableSettings";
 
 import "./SystemSettings.css";
 
@@ -145,7 +146,9 @@ const SystemSettings = () => {
                     }
                   >
                     <section className="system_settings_section-content">
-                      <section className="system_settings_section-content-data"></section>
+                      <section className="system_settings_section-content-data">
+                        <TableSettings dataColumns={columns} />
+                      </section>
 
                       <section className="system_settings_section-content-data">
                         <PercentageTarget departments={departments} />

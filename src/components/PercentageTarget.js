@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 
@@ -31,7 +31,7 @@ const PercentageTarget = ({ departments }) => {
   if (!percentDep || !percentDep.departments) return null;
 
   // Wydobycie wartości dla klucza "Całość"
-  const allValue = percentDep.departments["Całość"];
+  // const allValue = percentDep.departments["Całość"];
 
   // Tworzenie nowego obiektu bez klucza "Całość"
   const { Całość: _, ...otherDepartments } = percentDep.departments;
@@ -106,7 +106,7 @@ const PercentageTarget = ({ departments }) => {
         onClick={handleSavePercentageTarget}
         size="small"
       >
-        Zmień
+        Zapisz
       </Button>
     </section>
   );

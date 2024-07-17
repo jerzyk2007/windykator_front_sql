@@ -1,7 +1,7 @@
 .percentage-department {
-  /* flex-grow: 1; */
-  width: 100%;
-  padding: 5px 10px;
+  /* width: 100%;
+  padding: 5px 10px;*/
+  height: 50%;
   margin: 5px 20px;
   border: 1px solid rgba(0, 0, 0, 0.5);
   overflow: hidden;
@@ -62,6 +62,7 @@
   width: 30%;
   height: 1.5rem;
   text-align: center;
+  font-size: 1rem;
 }
 .percentage-department__title__container-number {
   width: 4rem;
@@ -76,4 +77,5 @@
   margin-left: 10px;
   padding-left: 10px;
   text-align: center;
+  font-size: 1.2rem;
 }

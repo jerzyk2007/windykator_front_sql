@@ -1,60 +1,12 @@
 .table_settings {
-  position: relative;
+  /* position: relative; */
   flex-grow: 1;
   display: flex;
-  padding: 5px;
+  /* padding: 5px; */
   overflow: hidden;
 }
-.table_settings_items {
-  flex-grow: 1;
-  overflow: hidden;
-  display: flex;
-  justify-content: space-evenly;
-}
 
-.table_settings-wrapper {
-  flex-grow: 1;
-  /* background-color: rgb(205, 255, 238); */
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.table_settings__container {
-  flex-grow: 1;
-  position: relative;
-  margin: 10px;
-  display: flex;
-  flex-direction: column;
-}
-
-.table_settings--bloc-tabs {
-  display: flex;
-  min-width: 300px;
-}
-
-.table_settings--bloc-tabs button {
-  border: none;
-  padding: 10px 0;
-  margin: 0px 80px;
-}
-
-.table_settings_section-content {
-  max-height: 85vh;
-  flex-grow: 1;
-  flex-shrink: 1;
-  display: flex;
-  justify-content: space-around;
-}
-
-.table_settings_section-content-data {
-  flex-basis: 50%;
-  max-width: 50%;
-  display: flex;
-  justify-content: center;
-}
-
-.table_settings-table,
-.table_settings-raport {
+.table_settings-table {
   flex-grow: 1;
   flex-shrink: 0;
   flex-basis: 50%;
@@ -144,33 +96,4 @@
   height: 100%;
   font-size: 1rem;
   color: blue;
-}
-
-@media screen and (max-width: 960px) {
-  .table_settings {
-    overflow-y: auto;
-  }
-
-  .table_settings {
-    flex-direction: column;
-  }
-
-  .table_settings-table,
-  .table_settings-raport {
-    font-size: 0.7rem;
-  }
-
-  .table_settings-table__container {
-    margin: 5px 0;
-    padding: 5px 0;
-  }
-
-  .columns-item-header,
-  .columns-item-choice {
-    min-width: 50px;
-  }
-
-  .item-choice {
-    font-size: 0.7rem;
-  }
 }
