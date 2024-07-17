@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
 import PleaseWait from "./PleaseWait";
+import PercentageTarget from "./PercentageTarget";
 
 import "./TableSettings.css";
 
@@ -11,6 +12,11 @@ const TableSettings = () => {
 
   const [pleaseWait, setPleaseWait] = useState(false);
   const [columns, setColumns] = useState([]);
+  const [toggleState, setToggleState] = useState(1);
+
+  const toggleTab = (index) => {
+    setToggleState(index);
+  };
 
   const handleHeaderChange = (index, field, newValue) => {
     setColumns((prevColumns) => {
@@ -168,26 +174,83 @@ const TableSettings = () => {
         <PleaseWait />
       ) : (
         <>
-          <section className="table_settings-table">
-            <section className="table_settings-table--title">
-              <h3 className="table_settings-table--name">
-                Ustawienia kolumn tabeli
-              </h3>
-              <i
-                className="fas fa-save table_settings-table--save"
-                onClick={handleSaveColumnsSetinngs}
-              ></i>
-            </section>
-            <section className="table_settings-table__container">
-              {columnItems}
-            </section>
-          </section>
-          <section className="table_settings-raport">
-            <section className="table_settings-table--title">
-              <h3 className="table_settings-table--name">
-                Ustawienia kolumn raportu
-              </h3>
-              <i className="fas fa-save table_settings-table--save"></i>
+          <section className="table_settings_items">
+            <section className="table_settings-wrapper">
+              <section className="table_settings__container">
+                <section className="table_settings--bloc-tabs">
+                  <button
+                    className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+                    onClick={() => toggleTab(1)}
+                  ></button>
+                  <button
+                    className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+                    onClick={() => toggleTab(2)}
+                  ></button>
+                  <button
+                    className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+                    onClick={() => toggleTab(3)}
+                  ></button>
+                </section>
+
+                <section className="content-tabs">
+                  <section
+                    className={
+                      toggleState === 1 ? "content  active-content" : "content"
+                    }
+                  >
+                    <section className="table_settings_section-content">
+                      <section className="table_settings_section-content-data">
+                        <section className="table_settings-table">
+                          <section className="table_settings-table--title">
+                            <h3 className="table_settings-table--name">
+                              Ustawienia kolumn tabeli
+                            </h3>
+                            <i
+                              className="fas fa-save table_settings-table--save"
+                              onClick={handleSaveColumnsSetinngs}
+                            ></i>
+                          </section>
+                          <section className="table_settings-table__container">
+                            {columnItems}
+                          </section>
+                        </section>
+                      </section>
+                      <section className="table_settings_section-content-data">
+                        <section className="table_settings-raport">
+                          <section className="table_settings-table--title">
+                            <h3 className="table_settings-table--name">
+                              Ustawienia kolumn raportu yy
+                            </h3>
+                            <i className="fas fa-save table_settings-table--save"></i>
+                          </section>
+                        </section>
+                      </section>
+                    </section>
+                  </section>
+                  <section
+                    className={
+                      toggleState === 2 ? "content  active-content" : "content"
+                    }
+                  >
+                    <section className="table_settings_section-content">
+                      <section className="table_settings_section-content-data">
+                        <PercentageTarget />
+                      </section>
+                      <section className="table_settings_section-content-data"></section>
+                    </section>
+                  </section>
+                  <section
+                    className={
+                      toggleState === 3 ? "content  active-content" : "content"
+                    }
+                  >
+                    <section className="table_settings_section-content">
+                      <section className="table_settings_section-content-data"></section>
+                      <section className="table_settings_section-content-data"></section>
+                    </section>
+                  </section>
+                </section>
+              </section>
             </section>
           </section>
         </>

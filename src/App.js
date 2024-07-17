@@ -9,7 +9,7 @@ import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import ChangePassword from "./components/ChangePassword";
 import UserSettings from "./components/UserSettings";
-import TableSettings from "./components/TableSettings";
+import SystemSettings from "./components/SystemSettings";
 import RaportDepartments from "./components/RaportDepartments";
 import RaportAdvisers from "./components/RaportAdvisers";
 import FKRaportSettings from "./components/FKRaport/FKRaportSettings";
@@ -135,7 +135,7 @@ function App() {
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-              <Route path="/table-settings" element={<TableSettings />} />
+              <Route path="/system-settings" element={<SystemSettings />} />
             </Route>
 
             <Route

@@ -11,7 +11,7 @@ import { Box } from "@mui/material";
 import PleaseWait from "./PleaseWait";
 import {
   grossTotalDepartments,
-  columnsDep,
+  columnsDepartments,
 } from "./utilsForRaportTable/prepareDataToRaport";
 import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
 
@@ -42,6 +42,8 @@ const RaportDepartments = () => {
     maxRaportDate: "",
   });
   const [errRaportDate, errSetRaportDate] = useState(false);
+  const [percentTarget, setPercentTarget] = useState({});
+  const [columnsDep, setColumnsDep] = useState(columnsDepartments);
 
   const checkMinMaxDateGlobal = (documents) => {
     let maxDate = documents[0].DATA_FV;
@@ -276,6 +278,7 @@ const RaportDepartments = () => {
       );
     }
     let newColumns = [];
+
     if (type === "Dział") {
       newColumns = columnsDep
         .map((item) => {
@@ -388,8 +391,8 @@ const RaportDepartments = () => {
     const update = grossTotalDepartments(
       departments,
       raportData,
-      raportDate
-      // departmentsObjective
+      raportDate,
+      percentTarget
     );
     setRaport(update);
   }, [departments]);
@@ -415,6 +418,22 @@ const RaportDepartments = () => {
         const resultData = await axiosPrivateIntercept.get(
           `/raport/get-data/${auth._id}`
         );
+
+        const resultDepartments = await axiosPrivateIntercept.get(
+          "/settings/get-departments"
+        );
+
+        setPercentTarget(resultDepartments.data.target);
+
+        const preprareColumnsDep = columnsDepartments.map((item) => {
+          if (item.header === "Cele na bez R-K i CNP") {
+            return {
+              ...item,
+              header: `Cele na ${resultDepartments.data.target.time.Q} kwartał bez R-K i CNP`,
+            };
+          } else return item;
+        });
+        setColumnsDep(preprareColumnsDep);
 
         setRaportData(resultData.data.data);
         setPermission(resultData.data.permission);

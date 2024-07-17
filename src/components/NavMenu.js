@@ -289,11 +289,11 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 </li>
                 <li className="nav_menu-item-dropmenu">
                   <Link
-                    to="/table-settings"
+                    to="/system-settings"
                     className="nav_menu-link"
                     onClick={handleLinkClick}
                   >
-                    Ustawienia tabel
+                    Ustawienia
                   </Link>
                 </li>
               </ul>

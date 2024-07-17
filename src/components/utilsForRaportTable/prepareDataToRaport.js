@@ -1,19 +1,19 @@
-const departmentsObjective = {
-  time: {
-    Q: 2,
-  },
-  departments: {
-    Całość: "-",
-    D08: 28,
-    D38: 28,
-    "D48/D58": 28,
-    "D68/D78": 28,
-    D88: 28,
-    D98: 28,
-    "D118/D148": 21,
-    "D308/D318": 28,
-  },
-};
+// const departmentsObjective = {
+//   time: {
+//     Q: 5,
+//   },
+//   departments: {
+//     Całość: "-",
+//     D08: 28,
+//     D38: 28,
+//     "D48/D58": 28,
+//     "D68/D78": 28,
+//     D88: 28,
+//     D98: 28,
+//     "D118/D148": 21,
+//     "D308/D318": 28,
+//   },
+// };
 
 const muiTableBodyCellProps = {
   align: "center",
@@ -140,7 +140,14 @@ const addedAllToRaportsDep = (generatingRaport) => {
 };
 
 // funkcja przygotowuje dane do raportu
-export const grossTotalDepartments = (departments, raportData, raportDate) => {
+export const grossTotalDepartments = (
+  departments,
+  raportData,
+  raportDate,
+  percentTarget
+) => {
+  const departmentsObjective = { ...percentTarget };
+
   // suma Brutto
   let sumOfGross = new Map();
 
@@ -468,7 +475,7 @@ export const grossTotalDepartments = (departments, raportData, raportDate) => {
   return preparedData;
 };
 
-export const columnsDep = [
+export const columnsDepartments = [
   {
     accessorKey: "DZIALY",
     header: "Dział",
@@ -477,7 +484,7 @@ export const columnsDep = [
   },
   {
     accessorKey: "CEL",
-    header: `Cele na ${departmentsObjective.time.Q}-Q bez R-K i CNP`,
+    header: "Cele na bez R-K i CNP",
     // enableColumnFilter: false,
     Cell: ({ cell }) => {
       const value = cell.getValue();

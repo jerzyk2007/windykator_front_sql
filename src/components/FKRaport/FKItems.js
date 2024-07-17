@@ -135,7 +135,6 @@ const FKItems = () => {
               </section>
             </section>
           </section>
-          */
         </section>
       )}
     </>
