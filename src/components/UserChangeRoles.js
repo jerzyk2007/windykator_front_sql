@@ -36,10 +36,22 @@ const UserChangeRoles = ({ user, roles }) => {
                 - przeglądanie
               </span>
             )}
+            {role === "Nora" && (
+              <span className="user-change-roles--information">
+                {" "}
+                - raporty dla Nory
+              </span>
+            )}
             {role === "Editor" && (
               <span className="user-change-roles--information">
                 {" "}
                 - edytowanie tabel i raportów
+              </span>
+            )}
+            {role === "EditorPlus" && (
+              <span className="user-change-roles--information">
+                {" "}
+                - Editor + dodawanie danych
               </span>
             )}
 
@@ -102,6 +114,9 @@ const UserChangeRoles = ({ user, roles }) => {
           }
         })
         .filter(Boolean);
+
+      // dodaje role Start - podstwawowa rola startowa
+      arrayRoles.push("Start");
 
       await axiosPrivateIntercept.patch(`/user/change-roles/${user._id}`, {
         roles: arrayRoles,

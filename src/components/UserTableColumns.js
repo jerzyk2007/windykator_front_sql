@@ -92,7 +92,7 @@ const UserTableColumns = ({ user, columns }) => {
     <section className="user-table-columns">
       <section className="user-table-columns__title">
         <h3 className="user-table-columns__title--name">
-          {!errMsg ? "Dostęp do danych w tabeli" : errMsg}
+          {!errMsg ? "Dostęp do danych w tabeli BL" : errMsg}
         </h3>
         <section className="user-table-columns__select">
           <Button

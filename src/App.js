@@ -23,7 +23,9 @@ import "./App.css";
 const ROLES = {
   Start: 1,
   User: 100,
+  Nora: 120,
   Editor: 200,
+  EditorPlus: 210,
   FK: 220,
   Admin: 300,
 };
@@ -131,7 +133,11 @@ function App() {
               <Route path="/contacts" element={<Contacts />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+            <Route
+              element={
+                <RequireAuth allowedRoles={[ROLES.EditorPlus, ROLES.Admin]} />
+              }
+            >
               <Route path="/add-data" element={<AddDataFromFile />} />
             </Route>
 
@@ -143,19 +149,7 @@ function App() {
               <Route path="/system-settings" element={<SystemSettings />} />
             </Route>
 
-            <Route
-              element={
-                <RequireAuth
-                  allowedRoles={[
-                    ROLES.Start,
-                    ROLES.User,
-                    ROLES.Editor,
-                    ROLES.FK,
-                    ROLES.Admin,
-                  ]}
-                />
-              }
-            >
+            <Route element={<RequireAuth allowedRoles={[ROLES.Start]} />}>
               <Route path="/change-password" element={<ChangePassword />} />
             </Route>
           </Route>

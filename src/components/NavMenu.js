@@ -83,7 +83,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {auth?.roles?.includes(100) && (
+        {(auth?.roles?.includes(100) || auth?.roles?.includes(120)) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Raporty</Link>
             <div
@@ -105,15 +105,28 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                <li className="nav_menu-item-dropmenu">
-                  <Link
-                    to="/raport-advisers"
-                    className="nav_menu-link"
-                    onClick={handleLinkClick}
-                  >
-                    Raport - Doradca
-                  </Link>
-                </li>
+                {auth?.roles?.includes(100) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link
+                      to="/raport-advisers"
+                      className="nav_menu-link"
+                      onClick={handleLinkClick}
+                    >
+                      Raport - Doradca
+                    </Link>
+                  </li>
+                )}
+                {(auth?.roles?.includes(120) || auth?.roles?.includes(300)) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link
+                      to="/"
+                      className="nav_menu-link"
+                      onClick={handleLinkClick}
+                    >
+                      Raport - Nora
+                    </Link>
+                  </li>
+                )}
                 {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Pracownika
                             </Link></li> */}
                 {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link">
@@ -258,7 +271,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {auth?.roles?.includes(300) && (
+        {(auth?.roles?.includes(300) || auth?.roles?.includes(210)) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">System</Link>
             <div
@@ -269,33 +282,39 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
               }
             >
               <ul className="nav_menu__menu-dropmenu">
-                <li className="nav_menu-item-dropmenu">
-                  <Link
-                    to="/add-data"
-                    className="nav_menu-link"
-                    onClick={handleLinkClick}
-                  >
-                    Dodaj dane
-                  </Link>
-                </li>
-                <li className="nav_menu-item-dropmenu">
-                  <Link
-                    to="/user-settings"
-                    className="nav_menu-link"
-                    onClick={handleLinkClick}
-                  >
-                    Uprawnienia użytkownika
-                  </Link>
-                </li>
-                <li className="nav_menu-item-dropmenu">
-                  <Link
-                    to="/system-settings"
-                    className="nav_menu-link"
-                    onClick={handleLinkClick}
-                  >
-                    Ustawienia
-                  </Link>
-                </li>
+                {(auth?.roles?.includes(300) || auth?.roles?.includes(210)) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link
+                      to="/add-data"
+                      className="nav_menu-link"
+                      onClick={handleLinkClick}
+                    >
+                      Dodaj dane
+                    </Link>
+                  </li>
+                )}
+                {auth?.roles?.includes(300) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link
+                      to="/user-settings"
+                      className="nav_menu-link"
+                      onClick={handleLinkClick}
+                    >
+                      Uprawnienia użytkownika
+                    </Link>
+                  </li>
+                )}
+                {auth?.roles?.includes(300) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link
+                      to="/system-settings"
+                      className="nav_menu-link"
+                      onClick={handleLinkClick}
+                    >
+                      Ustawienia
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </li>
