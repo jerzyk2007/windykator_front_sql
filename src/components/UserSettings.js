@@ -26,7 +26,7 @@ const UserSetting = () => {
       setUsers(result.data);
       setPleaseWait(false);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
   const handleEdit = (data) => {

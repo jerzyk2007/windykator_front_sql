@@ -120,7 +120,6 @@ const FKItemComponent = ({ data, info, title }) => {
     setNewDataItem(update);
     setEditIndex(null);
     try {
-      console.log(updateDB);
       await axiosPrivateIntercept.patch(`/fk/save-item/${info}`, {
         [info]: updateDB,
       });

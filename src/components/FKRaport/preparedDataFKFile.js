@@ -277,8 +277,6 @@ export const preparedRubiconData = async (
       (preparedItem) => preparedItem.NUMER_FV === item.NR_DOKUMENTU
     );
 
-    // console.log(matchingSettlemnt);
-
     if (
       matchingSettlemnt &&
       item.OBSZAR === "BLACHARNIA"
@@ -336,11 +334,6 @@ export const preparedSettlementData = (
   });
 
   let counter = 0;
-
-  // // console.log(filteredRows);
-  // const testRows = filteredRows.map((item) => {
-  //   console.log(item.DataOperacji);
-  // });
 
   const preparedSettlementName = preparedData.map((item) => {
     let dateAndName = [];

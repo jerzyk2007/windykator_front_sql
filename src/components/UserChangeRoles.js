@@ -9,8 +9,6 @@ const UserChangeRoles = ({ user, roles }) => {
   const [userRoles, setUserRoles] = useState(roles);
   const [errMsg, setErrMsg] = useState("");
 
-  // console.log(roles);
-
   const rolesItem = Object.entries(userRoles).map(
     ([role, isChecked], index) => (
       <section key={index} className="user-change-roles__container">

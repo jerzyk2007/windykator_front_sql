@@ -17,9 +17,9 @@ const AddDataFromFile = () => {
   const handleSendFileBL = async (e, type) => {
     setPleaseWait(true);
     const file = e.target.files[0];
-    if (!file) return console.log("Brak pliku");
+    if (!file) return console.error("Brak pliku");
     if (!file.name.endsWith(".xlsx")) {
-      console.log("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
+      console.error("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
       return;
     }
     try {

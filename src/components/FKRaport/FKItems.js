@@ -27,7 +27,6 @@ const FKItems = () => {
       const result = await axiosPrivateIntercept.get("/fk/get-items-data");
 
       setDataItems(result.data.data);
-      // console.log(result.data.data);
 
       setPleaseWait(false);
     } catch (error) {

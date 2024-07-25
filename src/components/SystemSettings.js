@@ -110,11 +110,6 @@ const SystemSettings = () => {
     handleGetData();
   }, []);
 
-  //   useEffect(() => {
-  //     console.log(columns);
-  //     console.log(departments);
-  //   }, [columns, departments]);
-
   return (
     <section className="system_settings">
       {pleaseWait ? (

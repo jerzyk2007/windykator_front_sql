@@ -89,7 +89,7 @@ const FKTableSettings = () => {
         columns,
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -103,7 +103,7 @@ const FKTableSettings = () => {
       await createColumns(documentsColumn.data);
       setPleaseWait(false);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 

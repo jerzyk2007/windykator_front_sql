@@ -53,7 +53,7 @@ const QuickTableNote = ({
       setDocuments(newDocuments);
       setQuickNote("");
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 

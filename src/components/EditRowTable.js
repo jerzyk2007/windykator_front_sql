@@ -68,7 +68,7 @@ const EditRowTable = ({
       setDocuments(newDocuments);
       setDataRowTable("");
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 

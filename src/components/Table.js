@@ -160,17 +160,6 @@ const Table = ({
     }
   };
 
-  // const getSingleRow1 = async (id, type, dep) => {
-  //   const getRow = documents.filter((row) => row._id === id);
-  //   console.log(getRow);
-  //   if (type === "quick") {
-  //     setQuickNote(getRow[0]);
-  //   }
-  //   if (type === "full") {
-  //     setDataRowTable(getRow[0]);
-  //   }
-  // };
-
   const columnsItem = useMemo(
     () =>
       columns.map((column) => ({

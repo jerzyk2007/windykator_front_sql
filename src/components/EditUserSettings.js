@@ -32,8 +32,6 @@ const EditUserSettings = ({ user, setEdit }) => {
       const filteredRoles = result.data
         .map((item) => item.roles)
         .filter(Boolean)[0];
-      // console.log(user.roles);
-      // console.log(filteredRoles);
 
       const roles = filteredRoles.reduce((acc, role, index) => {
         // acc[role] = user?.roles[index] ? true : false;

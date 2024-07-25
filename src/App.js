@@ -21,6 +21,7 @@ import PrepareTable from "./components/PrepareTable";
 import "./App.css";
 
 const ROLES = {
+  Start: 1,
   User: 100,
   Editor: 200,
   FK: 220,
@@ -37,7 +38,11 @@ function App() {
           {/* protected routes */}
           <Route element={<PersistLogin />}>
             <Route
-              element={<RequireAuth allowedRoles={[ROLES.User, ROLES.FK]} />}
+              element={
+                <RequireAuth
+                  allowedRoles={[ROLES.User, ROLES.FK, ROLES.Start]}
+                />
+              }
             >
               <Route path="/" element={<Home />} />
             </Route>
@@ -142,6 +147,7 @@ function App() {
               element={
                 <RequireAuth
                   allowedRoles={[
+                    ROLES.Start,
                     ROLES.User,
                     ROLES.Editor,
                     ROLES.FK,
