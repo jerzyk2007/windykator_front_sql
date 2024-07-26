@@ -345,7 +345,9 @@ export const preparedSettlementData = (
         preparedItem.NUMER === item.NR_DOKUMENTU &&
         preparedItem.OPIS !== "NULL"
       ) {
-        dateFinishSettlement = isExcelDate(preparedItem.DataRozlAutostacja)
+        let currentDateFinishSettlement = isExcelDate(
+          preparedItem.DataRozlAutostacja
+        )
           ? excelDateToISODate(preparedItem.DataRozlAutostacja)
           : "NULL";
         const checkDate = isExcelDate(preparedItem.DataOperacji);
@@ -357,7 +359,6 @@ export const preparedSettlementData = (
             : "BRAK";
 
         if (date !== "BRAK" && /\d{4}-\d{2}-\d{2}/.test(date)) {
-          // Jeśli dateSettlement jest puste lub data jest większa niż dateSettlement
           if (
             dateSettlement === "" ||
             new Date(date) > new Date(dateSettlement)
@@ -366,13 +367,36 @@ export const preparedSettlementData = (
           }
         }
 
+        // Sprawdzenie i przypisanie najnowszej daty do dateFinishSettlement
+        if (
+          currentDateFinishSettlement !== "NULL" &&
+          (dateFinishSettlement === "" ||
+            new Date(currentDateFinishSettlement) >
+              new Date(dateFinishSettlement))
+        ) {
+          dateFinishSettlement = currentDateFinishSettlement;
+        }
+
         const name = preparedItem.OPIS === "NULL" ? "BRAK" : preparedItem.OPIS;
 
-        dateAndName.push(`${date} - ${name}`); // Dodajemy do tablicy dateAndName
+        dateAndName.push({ date, name }); // Dodajemy obiekt do tablicy dateAndName
         return false; // Usunięcie obiektu preparedItem z tablicy rows
       }
       return true; // Zachowaj obiekt preparedItem w tablicy rows
     });
+
+    // Sortowanie tablicy dateAndName
+    dateAndName.sort((a, b) => {
+      // Najpierw sortujemy obiekty bez daty lub z datą "BRAK" / "NULL" na początek
+      if (a.date === "BRAK" || a.date === "NULL") return -1;
+      if (b.date === "BRAK" || b.date === "NULL") return 1;
+
+      // Sortowanie dat od najstarszej do najmłodszej
+      return new Date(a.date) - new Date(b.date);
+    });
+
+    // Przekształcanie obiektów z powrotem do stringów
+    dateAndName = dateAndName.map((entry) => `${entry.date} - ${entry.name}`);
 
     if (dateAndName.length > 0) {
       counter++;
@@ -389,6 +413,127 @@ export const preparedSettlementData = (
         OPIS_ROZRACHUNKU: ["NULL"],
       };
     }
+
+    // let dateAndName = [];
+    // let dateSettlement = "";
+    // let dateFinishSettlement = "";
+
+    // const rows = filteredRows.filter((preparedItem) => {
+    //   if (
+    //     preparedItem.NUMER === item.NR_DOKUMENTU &&
+    //     preparedItem.OPIS !== "NULL"
+    //   ) {
+    //     let currentDateFinishSettlement = isExcelDate(
+    //       preparedItem.DataRozlAutostacja
+    //     )
+    //       ? excelDateToISODate(preparedItem.DataRozlAutostacja)
+    //       : "NULL";
+    //     const checkDate = isExcelDate(preparedItem.DataOperacji);
+    //     const date =
+    //       preparedItem.DataOperacji === "NULL"
+    //         ? "BRAK"
+    //         : checkDate
+    //         ? excelDateToISODate(preparedItem.DataOperacji)
+    //         : "BRAK";
+
+    //     if (date !== "BRAK" && /\d{4}-\d{2}-\d{2}/.test(date)) {
+    //       // Jeśli dateSettlement jest puste lub data jest większa niż dateSettlement
+    //       if (
+    //         dateSettlement === "" ||
+    //         new Date(date) > new Date(dateSettlement)
+    //       ) {
+    //         dateSettlement = date; // Aktualizacja dateSettlement
+    //       }
+    //     }
+
+    //     // Sprawdzenie i przypisanie najnowszej daty do dateFinishSettlement
+    //     if (
+    //       currentDateFinishSettlement !== "NULL" &&
+    //       (dateFinishSettlement === "" ||
+    //         new Date(currentDateFinishSettlement) >
+    //           new Date(dateFinishSettlement))
+    //     ) {
+    //       dateFinishSettlement = currentDateFinishSettlement;
+    //     }
+
+    //     const name = preparedItem.OPIS === "NULL" ? "BRAK" : preparedItem.OPIS;
+
+    //     dateAndName.push(`${date} - ${name}`); // Dodajemy do tablicy dateAndName
+    //     return false; // Usunięcie obiektu preparedItem z tablicy rows
+    //   }
+    //   return true; // Zachowaj obiekt preparedItem w tablicy rows
+    // });
+
+    // if (dateAndName.length > 0) {
+    //   counter++;
+    //   // Jeśli tablica nie jest pusta, przypisujemy ją do OPIS_ROZRACHUNKU
+    //   console.log(dateAndName);
+    //   return {
+    //     ...item,
+    //     OPIS_ROZRACHUNKU: dateAndName,
+    //     DATA_ROZLICZENIA_AS: dateFinishSettlement,
+    //   };
+    // } else {
+    //   // Jeśli tablica jest pusta, przypisujemy pustą tablicę do OPIS_ROZRACHUNKU
+    //   return {
+    //     ...item,
+    //     OPIS_ROZRACHUNKU: ["NULL"],
+    //   };
+    // }
+
+    // let dateAndName = [];
+    // let dateSettlement = "";
+    // let dateFinishSettlement = "";
+
+    // const rows = filteredRows.filter((preparedItem) => {
+    //   if (
+    //     preparedItem.NUMER === item.NR_DOKUMENTU &&
+    //     preparedItem.OPIS !== "NULL"
+    //   ) {
+    //     dateFinishSettlement = isExcelDate(preparedItem.DataRozlAutostacja)
+    //       ? excelDateToISODate(preparedItem.DataRozlAutostacja)
+    //       : "NULL";
+    //     const checkDate = isExcelDate(preparedItem.DataOperacji);
+    //     const date =
+    //       preparedItem.DataOperacji === "NULL"
+    //         ? "BRAK"
+    //         : checkDate
+    //         ? excelDateToISODate(preparedItem.DataOperacji)
+    //         : "BRAK";
+
+    //     if (date !== "BRAK" && /\d{4}-\d{2}-\d{2}/.test(date)) {
+    //       // Jeśli dateSettlement jest puste lub data jest większa niż dateSettlement
+    //       if (
+    //         dateSettlement === "" ||
+    //         new Date(date) > new Date(dateSettlement)
+    //       ) {
+    //         dateSettlement = date; // Aktualizacja dateSettlement
+    //       }
+    //     }
+
+    //     const name = preparedItem.OPIS === "NULL" ? "BRAK" : preparedItem.OPIS;
+
+    //     dateAndName.push(`${date} - ${name}`); // Dodajemy do tablicy dateAndName
+    //     return false; // Usunięcie obiektu preparedItem z tablicy rows
+    //   }
+    //   return true; // Zachowaj obiekt preparedItem w tablicy rows
+    // });
+
+    // if (dateAndName.length > 0) {
+    //   counter++;
+    //   // Jeśli tablica nie jest pusta, przypisujemy ją do OPIS_ROZRACHUNKU
+    //   return {
+    //     ...item,
+    //     OPIS_ROZRACHUNKU: dateAndName,
+    //     DATA_ROZLICZENIA_AS: dateFinishSettlement,
+    //   };
+    // } else {
+    //   // Jeśli tablica jest pusta, przypisujemy pustą tablicę do OPIS_ROZRACHUNKU
+    //   return {
+    //     ...item,
+    //     OPIS_ROZRACHUNKU: ["NULL"],
+    //   };
+    // }
   });
 
   const preparedSettlementDate = preparedSettlementName.map((item) => {
@@ -411,6 +556,91 @@ export const preparedSettlementData = (
 
   return { preparedSettlementDate, counter };
 };
+
+//   // usuwanie zbędnych danych, których nie ma w pliku wiekowanie
+//wersja działająca do 26-07-2024
+//   const filteredRows = rows.filter((row) => {
+//     return preparedData.some((data) => data.NR_DOKUMENTU === row.NUMER);
+//   });
+
+//   let counter = 0;
+
+//   const preparedSettlementName = preparedData.map((item) => {
+//     let dateAndName = [];
+//     let dateSettlement = "";
+//     let dateFinishSettlement = "";
+
+//     const rows = filteredRows.filter((preparedItem) => {
+//       if (
+//         preparedItem.NUMER === item.NR_DOKUMENTU &&
+//         preparedItem.OPIS !== "NULL"
+//       ) {
+//         dateFinishSettlement = isExcelDate(preparedItem.DataRozlAutostacja)
+//           ? excelDateToISODate(preparedItem.DataRozlAutostacja)
+//           : "NULL";
+//         const checkDate = isExcelDate(preparedItem.DataOperacji);
+//         const date =
+//           preparedItem.DataOperacji === "NULL"
+//             ? "BRAK"
+//             : checkDate
+//             ? excelDateToISODate(preparedItem.DataOperacji)
+//             : "BRAK";
+
+//         if (date !== "BRAK" && /\d{4}-\d{2}-\d{2}/.test(date)) {
+//           // Jeśli dateSettlement jest puste lub data jest większa niż dateSettlement
+//           if (
+//             dateSettlement === "" ||
+//             new Date(date) > new Date(dateSettlement)
+//           ) {
+//             dateSettlement = date; // Aktualizacja dateSettlement
+//           }
+//         }
+
+//         const name = preparedItem.OPIS === "NULL" ? "BRAK" : preparedItem.OPIS;
+
+//         dateAndName.push(`${date} - ${name}`); // Dodajemy do tablicy dateAndName
+//         return false; // Usunięcie obiektu preparedItem z tablicy rows
+//       }
+//       return true; // Zachowaj obiekt preparedItem w tablicy rows
+//     });
+
+//     if (dateAndName.length > 0) {
+//       counter++;
+//       // Jeśli tablica nie jest pusta, przypisujemy ją do OPIS_ROZRACHUNKU
+//       return {
+//         ...item,
+//         OPIS_ROZRACHUNKU: dateAndName,
+//         DATA_ROZLICZENIA_AS: dateFinishSettlement,
+//       };
+//     } else {
+//       // Jeśli tablica jest pusta, przypisujemy pustą tablicę do OPIS_ROZRACHUNKU
+//       return {
+//         ...item,
+//         OPIS_ROZRACHUNKU: ["NULL"],
+//       };
+//     }
+//   });
+
+//   const preparedSettlementDate = preparedSettlementName.map((item) => {
+//     const matchingSettlemnt = filteredRows.find(
+//       (preparedItem) => preparedItem.NUMER === item.NR_DOKUMENTU
+//     );
+//     if (matchingSettlemnt) {
+//       const checkDate = isExcelDate(matchingSettlemnt.DATA_WYSTAWIENIA);
+//       return {
+//         ...item,
+//         DATA_WYSTAWIENIA_FV:
+//           checkDate && matchingSettlemnt.DATA_WYSTAWIENIA
+//             ? excelDateToISODate(matchingSettlemnt.DATA_WYSTAWIENIA)
+//             : item.DATA_WYSTAWIENIA,
+//       };
+//     } else {
+//       return item;
+//     }
+//   });
+
+//   return { preparedSettlementDate, counter };
+// };
 // export const preparedSettlementData = (
 //   rows,
 //   preparedData,
