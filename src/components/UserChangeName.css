@@ -1,4 +1,5 @@
 .user_change_name {
+  flex-grow: 1;
   width: 100%;
   margin: 2px 0;
   padding: 5px 10px;

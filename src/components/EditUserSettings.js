@@ -84,21 +84,21 @@ const EditUserSettings = ({ user, setEdit }) => {
       ) : (
         <>
           <section className="edit_user_settings__container">
-            {columns.length && (
-              <UserTableColumns user={user} columns={columns} />
-            )}
-            {permissions && Object.keys(permissions).length > 0 && (
-              <UserChangePermissions user={user} permissions={permissions} />
-            )}
-          </section>
-
-          <section className="edit_user_settings__container">
             {roles && Object.keys(roles).length > 0 && (
               <UserChangeRoles user={user} roles={roles} />
             )}
 
             {departments && Object.keys(departments).length > 0 && (
               <UserChangeDepartments user={user} departments={departments} />
+            )}
+          </section>
+
+          <section className="edit_user_settings__container">
+            {columns.length && (
+              <UserTableColumns user={user} columns={columns} />
+            )}
+            {permissions && Object.keys(permissions).length > 0 && (
+              <UserChangePermissions user={user} permissions={permissions} />
             )}
           </section>
 
