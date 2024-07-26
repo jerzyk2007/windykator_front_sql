@@ -122,7 +122,7 @@ export const preparedAccountancyData = async (axiosPrivateIntercept, rows) => {
         BRAK_DATY_WYSTAWIENIA_FV: " ",
         CZY_SAMOCHOD_WYDANY_AS: " ",
         CZY_W_KANCELARI: "NIE",
-        DATA_ROZLICZENIA_AS: "-",
+        DATA_ROZLICZENIA_AS: "NULL",
         DATA_WYDANIA_AUTA: " ",
         DATA_WYSTAWIENIA_FV: "2000-01-01",
         DO_ROZLICZENIA_AS: 0,
@@ -385,14 +385,25 @@ export const preparedSettlementData = (
       return true; // Zachowaj obiekt preparedItem w tablicy rows
     });
 
-    // Sortowanie tablicy dateAndName
+    // // Sortowanie tablicy dateAndName od najstarszej do najnowszej
+    // dateAndName.sort((a, b) => {
+    //   // Najpierw sortujemy obiekty bez daty lub z datą "BRAK" / "NULL" na początek
+    //   if (a.date === "BRAK" || a.date === "NULL") return -1;
+    //   if (b.date === "BRAK" || b.date === "NULL") return 1;
+
+    //   // Sortowanie dat od najstarszej do najmłodszej
+    //   return new Date(a.date) - new Date(b.date);
+    // });
+
+    // // Sortowanie tablicy dateAndName od  najnowszej do najstarszej
+
     dateAndName.sort((a, b) => {
       // Najpierw sortujemy obiekty bez daty lub z datą "BRAK" / "NULL" na początek
       if (a.date === "BRAK" || a.date === "NULL") return -1;
       if (b.date === "BRAK" || b.date === "NULL") return 1;
 
-      // Sortowanie dat od najstarszej do najmłodszej
-      return new Date(a.date) - new Date(b.date);
+      // Sortowanie dat od najnowszej do najstarszej
+      return new Date(b.date) - new Date(a.date);
     });
 
     // Przekształcanie obiektów z powrotem do stringów
@@ -916,8 +927,9 @@ export const prepareDataRaport = (data) => {
       //     : " ",
 
       //zmiana na prośbę Kasi Plewki, ma się zawsze pojawiać data rozliczenia
-      DATA_ROZLICZENIA_AS:
-        item.DATA_ROZLICZENIA_AS !== "-" ? item.DATA_ROZLICZENIA_AS : "NULL",
+      DATA_ROZLICZENIA_AS: item.DATA_ROZLICZENIA_AS
+        ? item.DATA_ROZLICZENIA_AS
+        : "NULL",
       DATA_WYDANIA_AUTA:
         item.DATA_WYDANIA_AUTA !== "-" ? item.DATA_WYDANIA_AUTA : "NULL",
       DO_ROZLICZENIA_AS:
