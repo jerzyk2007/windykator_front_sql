@@ -21,15 +21,16 @@ import PrepareTable from "./components/PrepareTable";
 import { ROLES } from "./config/roles_list";
 import "./App.css";
 
-// const ROLES = {
+// export const ROLES = {
 //   Start: 1,
 //   User: 100,
-//   Nora: 120,
-//   Editor: 200,
-//   EditorPlus: 210,
-//   AdminBL: 310,
-//   FK: 220,
-//   Admin: 300,
+//   Editor: 110,
+//   EditorPlus: 120,
+//   AdminBL: 150,
+//   FK: 200,
+//   FKAdmin: 250,
+//   Nora: 300,
+//   Admin: 1000,
 // };
 
 function App() {
