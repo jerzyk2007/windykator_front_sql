@@ -33,7 +33,7 @@ const UserChangeRoles = ({ user, roles }) => {
             {role === "User" && (
               <span className="user-change-roles--information">
                 {" "}
-                - przeglądanie
+                - BL przeglądanie
               </span>
             )}
             {role === "Nora" && (
@@ -45,20 +45,20 @@ const UserChangeRoles = ({ user, roles }) => {
             {role === "Editor" && (
               <span className="user-change-roles--information">
                 {" "}
-                - edytowanie tabel i raportów
+                - BL edytowanie tabel i raportów
               </span>
             )}
             {role === "EditorPlus" && (
               <span className="user-change-roles--information">
                 {" "}
-                - Editor + dodawanie danych
+                - BL Editor + dodawanie danych
               </span>
             )}
 
             {role === "Admin" && (
               <span className="user-change-roles--information">
                 {" "}
-                - admin BL
+                - Super Admin
               </span>
             )}
           </span>

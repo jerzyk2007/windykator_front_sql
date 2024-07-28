@@ -1,18 +1,25 @@
 .edit_user_settings {
   position: relative;
   flex-grow: 1;
+  display: flex;
+  /* padding: 5px; */
+  overflow: hidden;
+}
+/* .edit_user_settings {
+  position: relative;
+  flex-grow: 1;
   width: 100%;
   height: 90vh;
   padding: 2px;
   display: flex;
-}
+} */
 
-.edit_user_settings__container {
+/* .edit_user_settings__container {
   flex-basis: 40%;
   padding: 5px;
   display: flex;
   flex-direction: column;
-}
+} */
 
 .edit_user_settings-button {
   position: absolute;
@@ -26,13 +33,58 @@
   margin: 5px;
 }
 
-@media screen and (max-width: 960px) {
-  .edit_user_settings {
-    flex-direction: column;
-    justify-content: start;
-  }
+.edit_user_settings_items {
+  flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-evenly;
+}
 
-  .edit_user_settings__container {
-    padding: 5px;
-  }
+.edit_user_settings-wrapper {
+  flex-grow: 1;
+  /* background-color: rgb(205, 255, 238); */
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.edit_user_settings__container {
+  flex-grow: 1;
+  position: relative;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit_user_settings--bloc-tabs {
+  display: flex;
+  min-width: 300px;
+}
+
+.edit_user_settings--bloc-tabs button {
+  border: none;
+  padding: 10px 0;
+  margin: 0px 80px;
+  font-size: 1rem;
+}
+
+.edit_user_settings_section-content {
+  max-height: 82vh;
+  flex-grow: 1;
+  /* flex-shrink: 1; */
+  display: flex;
+  /* justify-content: space-around; */
+}
+
+.edit_user_settings_section-content-data {
+  flex-basis: 50%;
+  margin: 0 2px;
+  /* max-width: 34%; */
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+}
+
+.edit_user_settings_content-tabs {
+  flex-grow: 1;
+  display: flex;
 }

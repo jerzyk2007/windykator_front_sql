@@ -24,6 +24,11 @@ const EditUserSettings = ({ user, setEdit }) => {
   const [departments, setDepartments] = useState([]);
   const [columns, setColumns] = useState([]);
   const [pleaseWait, setPleaseWait] = useState(false);
+  const [toggleState, setToggleState] = useState(1);
+
+  const toggleTab = (index) => {
+    setToggleState(index);
+  };
 
   useEffect(() => {
     const getSettings = async () => {
@@ -83,30 +88,96 @@ const EditUserSettings = ({ user, setEdit }) => {
         <PleaseWait />
       ) : (
         <>
-          <section className="edit_user_settings__container">
-            {roles && Object.keys(roles).length > 0 && (
-              <UserChangeRoles user={user} roles={roles} />
-            )}
+          <section className="edit_user_settings_items">
+            <section className="edit_user_settings-wrapper">
+              <section className="edit_user_settings__container">
+                <section className="edit_user_settings--bloc-tabs">
+                  <button
+                    className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+                    onClick={() => toggleTab(1)}
+                  >
+                    Globalne
+                  </button>
+                  <button
+                    className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+                    onClick={() => toggleTab(2)}
+                  >
+                    Blacharnia
+                  </button>
+                  <button
+                    className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+                    onClick={() => toggleTab(3)}
+                  ></button>
+                </section>
 
-            {departments && Object.keys(departments).length > 0 && (
-              <UserChangeDepartments user={user} departments={departments} />
-            )}
-          </section>
+                <section className="edit_user_settings_content-tabs">
+                  <section
+                    className={
+                      toggleState === 1 ? "content  active-content" : "content"
+                    }
+                  >
+                    <section className="edit_user_settings_section-content">
+                      <section
+                        className="edit_user_settings_section-content-data"
+                        // style={{ backgroundColor: "red" }}
+                      >
+                        {/* <TableSettings dataColumns={columns} /> */}
+                        {roles && Object.keys(roles).length > 0 && (
+                          <UserChangeRoles user={user} roles={roles} />
+                        )}
+                      </section>
 
-          <section className="edit_user_settings__container">
-            {columns.length && (
-              <UserTableColumns user={user} columns={columns} />
-            )}
-            {permissions && Object.keys(permissions).length > 0 && (
-              <UserChangePermissions user={user} permissions={permissions} />
-            )}
-          </section>
-
-          <section className="edit_user_settings__container">
-            <UserChangeName user={user} />
-            <UserChangePass user={user} />
-            <UserChangeLogin user={user} />
-            <UserDelete user={user} setEdit={setEdit} />
+                      <section className="edit_user_settings_section-content-data">
+                        <UserChangeName user={user} />
+                        <UserChangePass user={user} />
+                      </section>
+                      <section className="edit_user_settings_section-content-data">
+                        <UserChangeLogin user={user} />
+                        <UserDelete user={user} setEdit={setEdit} />
+                      </section>
+                    </section>
+                  </section>
+                  <section
+                    className={
+                      toggleState === 2 ? "content  active-content" : "content"
+                    }
+                  >
+                    <section className="edit_user_settings_section-content">
+                      <section className="edit_user_settings_section-content-data">
+                        {columns.length && (
+                          <UserTableColumns user={user} columns={columns} />
+                        )}
+                      </section>
+                      <section className="edit_user_settings_section-content-data">
+                        {permissions && Object.keys(permissions).length > 0 && (
+                          <UserChangePermissions
+                            user={user}
+                            permissions={permissions}
+                          />
+                        )}
+                        {departments && Object.keys(departments).length > 0 && (
+                          <UserChangeDepartments
+                            user={user}
+                            departments={departments}
+                          />
+                        )}
+                      </section>
+                      <section className="edit_user_settings_section-content-data"></section>
+                    </section>
+                  </section>
+                  <section
+                    className={
+                      toggleState === 3 ? "content  active-content" : "content"
+                    }
+                  >
+                    <section className="edit_user_settings_section-content">
+                      <section className="edit_user_settings_section-content-data"></section>
+                      <section className="edit_user_settings_section-content-data"></section>
+                    </section>
+                  </section>
+                </section>
+              </section>
+            </section>
           </section>
 
           <FiX

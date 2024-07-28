@@ -18,17 +18,19 @@ import FKAddData from "./components/FKRaport/FKAddData";
 import FKDataSettings from "./components/FKRaport/FKDataSettings";
 import FKItems from "./components/FKRaport/FKItems";
 import PrepareTable from "./components/PrepareTable";
+import { ROLES } from "./config/roles_list";
 import "./App.css";
 
-const ROLES = {
-  Start: 1,
-  User: 100,
-  Nora: 120,
-  Editor: 200,
-  EditorPlus: 210,
-  FK: 220,
-  Admin: 300,
-};
+// const ROLES = {
+//   Start: 1,
+//   User: 100,
+//   Nora: 120,
+//   Editor: 200,
+//   EditorPlus: 210,
+//   AdminBL: 310,
+//   FK: 220,
+//   Admin: 300,
+// };
 
 function App() {
   return (
@@ -49,7 +51,11 @@ function App() {
               <Route path="/" element={<Home />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+            <Route
+              element={
+                <RequireAuth allowedRoles={[ROLES.Admin, ROLES.AdminBL]} />
+              }
+            >
               <Route path="/register" element={<Register />} />
             </Route>
 
@@ -77,7 +83,12 @@ function App() {
             <Route
               element={
                 <RequireAuth
-                  allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]}
+                  allowedRoles={[
+                    ROLES.User,
+                    ROLES.Editor,
+                    ROLES.AdminBL,
+                    ROLES.Admin,
+                  ]}
                 />
               }
             >
@@ -90,7 +101,12 @@ function App() {
             <Route
               element={
                 <RequireAuth
-                  allowedRoles={[ROLES.User, ROLES.Editor, ROLES.Admin]}
+                  allowedRoles={[
+                    ROLES.User,
+                    ROLES.Editor,
+                    ROLES.AdminBL,
+                    ROLES.Admin,
+                  ]}
                 />
               }
             >
@@ -135,17 +151,27 @@ function App() {
 
             <Route
               element={
-                <RequireAuth allowedRoles={[ROLES.EditorPlus, ROLES.Admin]} />
+                <RequireAuth
+                  allowedRoles={[ROLES.EditorPlus, ROLES.AdminBL, ROLES.Admin]}
+                />
               }
             >
               <Route path="/add-data" element={<AddDataFromFile />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+            <Route
+              element={
+                <RequireAuth allowedRoles={[ROLES.AdminBL, ROLES.Admin]} />
+              }
+            >
               <Route path="/user-settings" element={<UserSettings />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+            <Route
+              element={
+                <RequireAuth allowedRoles={[ROLES.AdminBL, ROLES.Admin]} />
+              }
+            >
               <Route path="/system-settings" element={<SystemSettings />} />
             </Route>
 

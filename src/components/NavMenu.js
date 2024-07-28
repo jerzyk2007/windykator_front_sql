@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import useData from "./hooks/useData";
 import useLogout from "./hooks/useLogout";
 import useWindowSize from "./hooks/useWindow";
+import { ROLES } from "../config/roles_list";
+
 import "./NavMenu.css";
 
 const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
@@ -37,7 +39,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           width && width >= 960 ? () => setMenuActive(false) : undefined
         }
       >
-        {auth?.roles?.includes(100) && (
+        {auth?.roles?.includes(ROLES.User) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Tabelka</Link>
             <div
@@ -83,7 +85,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {(auth?.roles?.includes(100) || auth?.roles?.includes(120)) && (
+        {(auth?.roles?.includes(ROLES.User) ||
+          auth?.roles?.includes(ROLES.Nora)) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Raporty</Link>
             <div
@@ -105,7 +108,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {auth?.roles?.includes(100) && (
+                {auth?.roles?.includes(ROLES.User) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/raport-advisers"
@@ -116,7 +119,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {(auth?.roles?.includes(120) || auth?.roles?.includes(300)) && (
+                {(auth?.roles?.includes(ROLES.Nora) ||
+                  auth?.roles?.includes(ROLES.Admin)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/"
@@ -150,7 +154,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {auth?.roles?.includes(220) && (
+        {auth?.roles?.includes(ROLES.FK) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Raport FK</Link>
             <div
@@ -170,7 +174,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     Raport
                   </Link>
                 </li>
-                {auth?.roles?.includes(250) && (
+                {auth?.roles?.includes(ROLES.FKAdmin) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/fk-add-data"
@@ -192,14 +196,14 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )} */}
-                {auth?.roles?.includes(250) && (
+                {auth?.roles?.includes(ROLES.FKAdmin) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link className="nav_menu-link">
                       <i className="fas fa-caret-right"></i>Ustawienia
                     </Link>
                     <div className="nav_menu-dropdown__menu--side">
                       <ul className="nav_menu__menu--side">
-                        {auth?.roles?.includes(250) && (
+                        {auth?.roles?.includes(ROLES.FKAdmin) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-table-settings"
@@ -210,7 +214,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(250) && (
+                        {auth?.roles?.includes(ROLES.FKAdmin) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-change-items"
@@ -221,7 +225,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(250) && (
+                        {auth?.roles?.includes(ROLES.FKAdmin) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-data-settings"
@@ -241,7 +245,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {auth?.roles?.includes(500) && (
+        {auth?.roles?.includes(ROLES.Root) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Kontakty</Link>
             <div
@@ -271,7 +275,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {(auth?.roles?.includes(300) || auth?.roles?.includes(210)) && (
+        {(auth?.roles?.includes(ROLES.Admin) ||
+          auth?.roles?.includes(ROLES.AdminBL) ||
+          auth?.roles?.includes(ROLES.EditorPlus)) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">System</Link>
             <div
@@ -282,7 +288,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
               }
             >
               <ul className="nav_menu__menu-dropmenu">
-                {(auth?.roles?.includes(300) || auth?.roles?.includes(210)) && (
+                {(auth?.roles?.includes(ROLES.Admin) ||
+                  auth?.roles?.includes(ROLES.AdminBL) ||
+                  auth?.roles?.includes(ROLES.EditorPlus)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/add-data"
@@ -293,7 +301,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {auth?.roles?.includes(300) && (
+                {(auth?.roles?.includes(ROLES.Admin) ||
+                  auth?.roles?.includes(ROLES.AdminBL)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/user-settings"
@@ -304,7 +313,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {auth?.roles?.includes(300) && (
+                {(auth?.roles?.includes(ROLES.Admin) ||
+                  auth?.roles?.includes(ROLES.AdminBL)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/system-settings"
@@ -324,7 +334,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           {menuActive && (
             <div className="nav_menu-dropdown__menu">
               <ul className="nav_menu__menu-dropmenu">
-                {auth?.roles?.includes(100) && (
+                {auth?.roles?.includes(ROLES.User) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/"
@@ -335,7 +345,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {auth?.roles?.includes(300) && (
+                {auth?.roles?.includes(ROLES.Admin) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/register"
