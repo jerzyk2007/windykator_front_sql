@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import useData from "./hooks/useData";
 import useLogout from "./hooks/useLogout";
 import useWindowSize from "./hooks/useWindow";
-import { ROLES } from "../config/roles_list";
 
 import "./NavMenu.css";
 
@@ -39,7 +38,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           width && width >= 960 ? () => setMenuActive(false) : undefined
         }
       >
-        {auth?.roles?.includes(ROLES.User) && (
+        {auth?.roles?.includes(100) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Tabelka</Link>
             <div
@@ -85,8 +84,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {(auth?.roles?.includes(ROLES.User) ||
-          auth?.roles?.includes(ROLES.Nora)) && (
+        {(auth?.roles?.includes(100) || auth?.roles?.includes(300)) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Raporty</Link>
             <div
@@ -108,7 +106,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {auth?.roles?.includes(ROLES.User) && (
+                {auth?.roles?.includes(100) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/raport-advisers"
@@ -119,8 +117,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {(auth?.roles?.includes(ROLES.Nora) ||
-                  auth?.roles?.includes(ROLES.Admin)) && (
+                {(auth?.roles?.includes(300) ||
+                  auth?.roles?.includes(1000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/"
@@ -154,7 +152,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {auth?.roles?.includes(ROLES.FK) && (
+        {auth?.roles?.includes(200) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Raport FK</Link>
             <div
@@ -174,7 +172,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     Raport
                   </Link>
                 </li>
-                {auth?.roles?.includes(ROLES.FKAdmin) && (
+                {auth?.roles?.includes(250) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/fk-add-data"
@@ -196,14 +194,14 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )} */}
-                {auth?.roles?.includes(ROLES.FKAdmin) && (
+                {auth?.roles?.includes(250) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link className="nav_menu-link">
                       <i className="fas fa-caret-right"></i>Ustawienia
                     </Link>
-                    <div className="nav_menu-dropdown__menu--side">
+                    <div className="nav_menu-dropdown__menu--side_right">
                       <ul className="nav_menu__menu--side">
-                        {auth?.roles?.includes(ROLES.FKAdmin) && (
+                        {auth?.roles?.includes(250) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-table-settings"
@@ -214,7 +212,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(ROLES.FKAdmin) && (
+                        {auth?.roles?.includes(250) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-change-items"
@@ -225,7 +223,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(ROLES.FKAdmin) && (
+                        {auth?.roles?.includes(250) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-data-settings"
@@ -245,7 +243,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {auth?.roles?.includes(ROLES.Root) && (
+        {auth?.roles?.includes(5000) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Kontakty</Link>
             <div
@@ -275,9 +273,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {(auth?.roles?.includes(ROLES.Admin) ||
-          auth?.roles?.includes(ROLES.AdminBL) ||
-          auth?.roles?.includes(ROLES.EditorPlus)) && (
+        {(auth?.roles?.includes(1000) ||
+          auth?.roles?.includes(150) ||
+          auth?.roles?.includes(120)) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">System</Link>
             <div
@@ -288,9 +286,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
               }
             >
               <ul className="nav_menu__menu-dropmenu">
-                {(auth?.roles?.includes(ROLES.Admin) ||
-                  auth?.roles?.includes(ROLES.AdminBL) ||
-                  auth?.roles?.includes(ROLES.EditorPlus)) && (
+                {/* {(auth?.roles?.includes(1000) ||
+                  auth?.roles?.includes(150) ||
+                  auth?.roles?.includes(120)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/add-data"
@@ -300,9 +298,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       Dodaj dane
                     </Link>
                   </li>
-                )}
-                {(auth?.roles?.includes(ROLES.Admin) ||
-                  auth?.roles?.includes(ROLES.AdminBL)) && (
+                )} */}
+                {(auth?.roles?.includes(1000) ||
+                  auth?.roles?.includes(150)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/user-settings"
@@ -313,8 +311,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {(auth?.roles?.includes(ROLES.Admin) ||
-                  auth?.roles?.includes(ROLES.AdminBL)) && (
+                {/* {(auth?.roles?.includes(1000) ||
+                  auth?.roles?.includes(150) ||
+                  auth?.roles?.includes(120)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/system-settings"
@@ -323,6 +322,45 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     >
                       Ustawienia
                     </Link>
+                  </li>
+                )} */}
+
+                {(auth?.roles?.includes(1000) ||
+                  auth?.roles?.includes(150) ||
+                  auth?.roles?.includes(120)) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link className="nav_menu-link">
+                      <i className="fas fa-caret-left"></i>Ustawienia BL
+                    </Link>
+                    <div className="nav_menu-dropdown__menu--side_left">
+                      <ul className="nav_menu__menu--side">
+                        {(auth?.roles?.includes(1000) ||
+                          auth?.roles?.includes(150) ||
+                          auth?.roles?.includes(120)) && (
+                          <li className="nav_menu-item-dropmenu">
+                            <Link
+                              to="/add-data"
+                              className="nav_menu-link"
+                              onClick={handleLinkClick}
+                            >
+                              Dodaj dane
+                            </Link>
+                          </li>
+                        )}
+                        {(auth?.roles?.includes(1000) ||
+                          auth?.roles?.includes(150)) && (
+                          <li className="nav_menu-item-dropmenu">
+                            <Link
+                              to="/system-settings"
+                              className="nav_menu-link"
+                              onClick={handleLinkClick}
+                            >
+                              Tabela, Cele
+                            </Link>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
                   </li>
                 )}
               </ul>
@@ -334,7 +372,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           {menuActive && (
             <div className="nav_menu-dropdown__menu">
               <ul className="nav_menu__menu-dropmenu">
-                {auth?.roles?.includes(ROLES.User) && (
+                {auth?.roles?.includes(100) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/"
@@ -345,7 +383,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {auth?.roles?.includes(ROLES.Admin) && (
+                {auth?.roles?.includes(1000) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/register"
@@ -382,3 +420,385 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
 };
 
 export default NavMenu;
+// import { useState } from "react";
+// import { useNavigate } from "react-router";
+// import { Link } from "react-router-dom";
+// import useData from "./hooks/useData";
+// import useLogout from "./hooks/useLogout";
+// import useWindowSize from "./hooks/useWindow";
+
+// import "./NavMenu.css";
+
+// const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
+//   const logout = useLogout();
+//   const navigate = useNavigate();
+//   const { auth } = useData();
+//   const { width } = useWindowSize();
+
+//   const [menuActive, setMenuActive] = useState(false);
+//   const handleLinkClick = () => {
+//     if (mobileMenu) {
+//       handleCloseMobileMenu();
+//     }
+//   };
+
+//   const handleLogout = async () => {
+//     handleLinkClick();
+//     await logout();
+//     navigate("/login");
+//   };
+//   return (
+//     <nav className="nav_menu">
+//       <ul
+//         className={!mobileMenu ? "nav_menu__menu" : "nav_menu__menu active"}
+//         onClick={
+//           width && width >= 960
+//             ? () => setMenuActive(!menuActive)
+//             : () => setMenuActive(true)
+//         }
+//         onMouseLeave={
+//           width && width >= 960 ? () => setMenuActive(false) : undefined
+//         }
+//       >
+//         {auth?.roles?.includes(100) && (
+//           <li className="nav_menu__menu-item">
+//             <Link className="nav_menu-link">Tabelka</Link>
+//             <div
+//               className={
+//                 menuActive
+//                   ? "nav_menu-dropdown__menu"
+//                   : "nav_menu-dropdown__menu-disabled"
+//               }
+//             >
+//               <ul className="nav_menu__menu-dropmenu">
+//                 <li className="nav_menu-item-dropmenu">
+//                   <Link
+//                     to="/actual-table"
+//                     className="nav_menu-link"
+//                     onClick={handleLinkClick}
+//                   >
+//                     Aktualne
+//                   </Link>
+//                 </li>
+//                 <li className="nav_menu-item-dropmenu">
+//                   <Link
+//                     to="/archive-table"
+//                     className="nav_menu-link"
+//                     onClick={handleLinkClick}
+//                   >
+//                     Archiwum
+//                   </Link>
+//                 </li>
+//                 {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Kancelaria
+//                             </Link>
+//                             </li> */}
+//                 <li className="nav_menu-item-dropmenu">
+//                   <Link
+//                     to="/all-data-table"
+//                     className="nav_menu-link"
+//                     onClick={handleLinkClick}
+//                   >
+//                     Kpl dane
+//                   </Link>
+//                 </li>
+//               </ul>
+//             </div>
+//           </li>
+//         )}
+
+//         {(auth?.roles?.includes(100) || auth?.roles?.includes(300)) && (
+//           <li className="nav_menu__menu-item">
+//             <Link className="nav_menu-link">Raporty</Link>
+//             <div
+//               className={
+//                 menuActive
+//                   ? "nav_menu-dropdown__menu"
+//                   : "nav_menu-dropdown__menu-disabled"
+//               }
+//             >
+//               <ul className="nav_menu__menu-dropmenu">
+//                 {auth?.permissions?.Standard && (
+//                   <li className="nav_menu-item-dropmenu">
+//                     <Link
+//                       to="/raport-departments"
+//                       className="nav_menu-link"
+//                       onClick={handleLinkClick}
+//                     >
+//                       Raport - Dział
+//                     </Link>
+//                   </li>
+//                 )}
+//                 {auth?.roles?.includes(100) && (
+//                   <li className="nav_menu-item-dropmenu">
+//                     <Link
+//                       to="/raport-advisers"
+//                       className="nav_menu-link"
+//                       onClick={handleLinkClick}
+//                     >
+//                       Raport - Doradca
+//                     </Link>
+//                   </li>
+//                 )}
+//                 {(auth?.roles?.includes(300) ||
+//                   auth?.roles?.includes(1000)) && (
+//                   <li className="nav_menu-item-dropmenu">
+//                     <Link
+//                       to="/"
+//                       className="nav_menu-link"
+//                       onClick={handleLinkClick}
+//                     >
+//                       Raport - Nora
+//                     </Link>
+//                   </li>
+//                 )}
+//                 {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Pracownika
+//                             </Link></li> */}
+//                 {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link">
+//                                 <i className='fas fa-caret-right' ></i>Test
+//                             </Link>
+//                                 <div className="nav_menu-dropdown__menu--side">
+//                                     <ul className='nav_menu__menu--side'>
+//                                         <li className='nav_menu-item-dropmenu--side'><Link className="nav_menu-link" onClick={handleLinkClick}>Test-1
+//                                         </Link></li>
+//                                         <li className='nav_menu-item-dropmenu--side'><Link className="nav_menu-link" onClick={handleLinkClick}>Test-2
+//                                         </Link></li>
+//                                         <li className='nav_menu-item-dropmenu--side'><Link className="nav_menu-link" onClick={handleLinkClick}>Test-3
+//                                         </Link></li>
+//                                         <li className='nav_menu-item-dropmenu--side'><Link className="nav_menu-link" onClick={handleLinkClick}>Test-4
+//                                         </Link></li>
+//                                     </ul>
+//                                 </div>
+//                             </li> */}
+//               </ul>
+//             </div>
+//           </li>
+//         )}
+
+//         {auth?.roles?.includes(200) && (
+//           <li className="nav_menu__menu-item">
+//             <Link className="nav_menu-link">Raport FK</Link>
+//             <div
+//               className={
+//                 menuActive
+//                   ? "nav_menu-dropdown__menu"
+//                   : "nav_menu-dropdown__menu-disabled"
+//               }
+//             >
+//               <ul className="nav_menu__menu-dropmenu">
+//                 <li className="nav_menu-item-dropmenu">
+//                   <Link
+//                     to="/fk-raport"
+//                     className="nav_menu-link"
+//                     onClick={handleLinkClick}
+//                   >
+//                     Raport
+//                   </Link>
+//                 </li>
+//                 {auth?.roles?.includes(250) && (
+//                   <li className="nav_menu-item-dropmenu">
+//                     <Link
+//                       to="/fk-add-data"
+//                       className="nav_menu-link"
+//                       onClick={handleLinkClick}
+//                     >
+//                       Dodaj dane
+//                     </Link>
+//                   </li>
+//                 )}
+//                 {/* {auth?.roles?.includes(220) && auth?.roles?.includes(300) && (
+//                   <li className="nav_menu-item-dropmenu">
+//                     <Link
+//                       to="/fk-table-settings"
+//                       className="nav_menu-link"
+//                       onClick={handleLinkClick}
+//                     >
+//                       Ustawienia
+//                     </Link>
+//                   </li>
+//                 )} */}
+//                 {auth?.roles?.includes(250) && (
+//                   <li className="nav_menu-item-dropmenu">
+//                     <Link className="nav_menu-link">
+//                       <i className="fas fa-caret-right"></i>Ustawienia
+//                     </Link>
+//                     <div className="nav_menu-dropdown__menu--side">
+//                       <ul className="nav_menu__menu--side">
+//                         {auth?.roles?.includes(250) && (
+//                           <li className="nav_menu-item-dropmenu">
+//                             <Link
+//                               to="/fk-table-settings"
+//                               className="nav_menu-link"
+//                               onClick={handleLinkClick}
+//                             >
+//                               Tabela
+//                             </Link>
+//                           </li>
+//                         )}
+//                         {auth?.roles?.includes(250) && (
+//                           <li className="nav_menu-item-dropmenu">
+//                             <Link
+//                               to="/fk-change-items"
+//                               className="nav_menu-link"
+//                               onClick={handleLinkClick}
+//                             >
+//                               Zmień stałe
+//                             </Link>
+//                           </li>
+//                         )}
+//                         {auth?.roles?.includes(250) && (
+//                           <li className="nav_menu-item-dropmenu">
+//                             <Link
+//                               to="/fk-data-settings"
+//                               className="nav_menu-link"
+//                               onClick={handleLinkClick}
+//                             >
+//                               Dopasuj dane
+//                             </Link>
+//                           </li>
+//                         )}
+//                       </ul>
+//                     </div>
+//                   </li>
+//                 )}
+//               </ul>
+//             </div>
+//           </li>
+//         )}
+
+//         {auth?.roles?.includes(5000) && (
+//           <li className="nav_menu__menu-item">
+//             <Link className="nav_menu-link">Kontakty</Link>
+//             <div
+//               className={
+//                 menuActive
+//                   ? "nav_menu-dropdown__menu"
+//                   : "nav_menu-dropdown__menu-disabled"
+//               }
+//             >
+//               <ul className="nav_menu__menu-dropmenu">
+//                 <li className="nav_menu-item-dropmenu">
+//                   <Link
+//                     to="/contacts"
+//                     className="nav_menu-link"
+//                     onClick={handleLinkClick}
+//                   >
+//                     Wyszukaj
+//                   </Link>
+//                 </li>
+//                 <li className="nav_menu-item-dropmenu">
+//                   <Link className="nav_menu-link" onClick={handleLinkClick}>
+//                     Dodaj
+//                   </Link>
+//                 </li>
+//               </ul>
+//             </div>
+//           </li>
+//         )}
+
+//         {(auth?.roles?.includes(1000) ||
+//           auth?.roles?.includes(150) ||
+//           auth?.roles?.includes(120)) && (
+//           <li className="nav_menu__menu-item">
+//             <Link className="nav_menu-link">System</Link>
+//             <div
+//               className={
+//                 menuActive
+//                   ? "nav_menu-dropdown__menu"
+//                   : "nav_menu-dropdown__menu-disabled"
+//               }
+//             >
+//               <ul className="nav_menu__menu-dropmenu">
+//                 {(auth?.roles?.includes(1000) ||
+//                   auth?.roles?.includes(150) ||
+//                   auth?.roles?.includes(120)) && (
+//                   <li className="nav_menu-item-dropmenu">
+//                     <Link
+//                       to="/add-data"
+//                       className="nav_menu-link"
+//                       onClick={handleLinkClick}
+//                     >
+//                       Dodaj dane
+//                     </Link>
+//                   </li>
+//                 )}
+//                 {(auth?.roles?.includes(1000) ||
+//                   auth?.roles?.includes(150)) && (
+//                   <li className="nav_menu-item-dropmenu">
+//                     <Link
+//                       to="/user-settings"
+//                       className="nav_menu-link"
+//                       onClick={handleLinkClick}
+//                     >
+//                       Uprawnienia użytkownika
+//                     </Link>
+//                   </li>
+//                 )}
+//                 {(auth?.roles?.includes(1000) ||
+//                   auth?.roles?.includes(150)) && (
+//                   <li className="nav_menu-item-dropmenu">
+//                     <Link
+//                       to="/system-settings"
+//                       className="nav_menu-link"
+//                       onClick={handleLinkClick}
+//                     >
+//                       Ustawienia
+//                     </Link>
+//                   </li>
+//                 )}
+//               </ul>
+//             </div>
+//           </li>
+//         )}
+//         <li className="nav_menu__menu-item">
+//           <Link className="nav_menu-link">Użytkownik</Link>
+//           {menuActive && (
+//             <div className="nav_menu-dropdown__menu">
+//               <ul className="nav_menu__menu-dropmenu">
+//                 {auth?.roles?.includes(100) && (
+//                   <li className="nav_menu-item-dropmenu">
+//                     <Link
+//                       to="/"
+//                       className="nav_menu-link"
+//                       onClick={handleLinkClick}
+//                     >
+//                       Informacje
+//                     </Link>
+//                   </li>
+//                 )}
+//                 {auth?.roles?.includes(1000) && (
+//                   <li className="nav_menu-item-dropmenu">
+//                     <Link
+//                       to="/register"
+//                       className="nav_menu-link"
+//                       onClick={handleLinkClick}
+//                     >
+//                       Dodaj użytkownika
+//                     </Link>
+//                   </li>
+//                 )}
+//                 {/* {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zmień uprawnienia
+//                             </Link></li>} */}
+//                 <li className="nav_menu-item-dropmenu">
+//                   <Link
+//                     to="/change-password"
+//                     className="nav_menu-link"
+//                     onClick={handleLinkClick}
+//                   >
+//                     Zmień hasło
+//                   </Link>
+//                 </li>
+//                 <li className="nav_menu-item-dropmenu">
+//                   <Link className="nav_menu-link" onClick={handleLogout}>
+//                     Wyloguj
+//                   </Link>
+//                 </li>
+//               </ul>
+//             </div>
+//           )}
+//         </li>
+//       </ul>
+//     </nav>
+//   );
+// };
+
+// export default NavMenu;

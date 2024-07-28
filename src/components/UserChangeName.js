@@ -12,13 +12,10 @@ const UserChangeName = ({ user }) => {
 
   const handleChangeNameSurname = async () => {
     try {
-      const result = await axiosPrivateIntercept.patch(
-        `/user/change-name/${user._id}`,
-        {
-          name: username,
-          surname: usersurname,
-        }
-      );
+      await axiosPrivateIntercept.patch(`/user/change-name/${user._id}`, {
+        name: username,
+        surname: usersurname,
+      });
       setErrMsg("Sukces.");
     } catch (err) {
       setErrMsg(`Zmiana się nie powiodła.`);

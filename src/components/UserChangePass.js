@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./UserChangePass.css";
@@ -15,7 +15,7 @@ const UserChangePass = ({ user }) => {
 
   const handleChangePass = async () => {
     try {
-      const result = await axiosPrivateIntercept.patch(
+      await axiosPrivateIntercept.patch(
         `/user/another-user-change-pass/${user._id}`,
         {
           password: userPass,

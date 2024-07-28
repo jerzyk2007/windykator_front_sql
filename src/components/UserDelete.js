@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./UserDelete.css";
@@ -11,12 +11,9 @@ const UserDelete = ({ user, setEdit }) => {
 
   const handleConfirmDeleteUser = async () => {
     try {
-      const result = await axiosPrivateIntercept.delete(
-        `/user/delete-user/${user._id}`,
-        {
-          userlogin: user.userlogin,
-        }
-      );
+      await axiosPrivateIntercept.delete(`/user/delete-user/${user._id}`, {
+        userlogin: user.userlogin,
+      });
       setEdit(false);
     } catch (err) {
       setErrMsg("Użytkownik nie został usunięty.");

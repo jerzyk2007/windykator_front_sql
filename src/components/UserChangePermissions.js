@@ -50,7 +50,7 @@ const UserChangePermissions = ({ user, permissions }) => {
 
   const handleChangePermission = async () => {
     try {
-      const result = await axiosPrivateIntercept.patch(
+      await axiosPrivateIntercept.patch(
         `/user/change-permissions/${user._id}`,
         {
           permissions: userPermissions,

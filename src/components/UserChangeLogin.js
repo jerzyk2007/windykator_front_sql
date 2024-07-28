@@ -14,12 +14,9 @@ const UserChangeLogin = ({ user }) => {
 
   const handleChangeLogin = async () => {
     try {
-      const result = await axiosPrivateIntercept.patch(
-        `/user/change-login/${user._id}`,
-        {
-          newUserlogin: userLogin,
-        }
-      );
+      await axiosPrivateIntercept.patch(`/user/change-login/${user._id}`, {
+        newUserlogin: userLogin,
+      });
       setErrMsg(`Sukces.`);
     } catch (err) {
       if (err.response.status === 409) {

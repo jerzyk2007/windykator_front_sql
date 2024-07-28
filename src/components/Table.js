@@ -16,7 +16,6 @@ import QuickTableNote from "./QuickTableNote";
 import EditRowTable from "./EditRowTable";
 import { Box, Button } from "@mui/material";
 import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
-import { ROLES } from "../config/roles_list";
 
 import "./Table.css";
 
@@ -336,18 +335,15 @@ const Table = ({
           />
         )}
 
-        {auth?.roles?.includes(
-          ROLES.Editor || ROLES.EditorPlus || ROLES.AdminBL
-        ) &&
-          dataRowTable && (
-            <EditRowTable
-              dataRowTable={dataRowTable}
-              setDataRowTable={setDataRowTable}
-              documents={documents}
-              setDocuments={setDocuments}
-              s
-            />
-          )}
+        {auth?.roles?.includes(110 || 120 || 150) && dataRowTable && (
+          <EditRowTable
+            dataRowTable={dataRowTable}
+            setDataRowTable={setDataRowTable}
+            documents={documents}
+            setDocuments={setDocuments}
+            s
+          />
+        )}
 
         <LocalizationProvider
           dateAdapter={AdapterDayjs}

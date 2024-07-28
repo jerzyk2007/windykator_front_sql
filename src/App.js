@@ -18,20 +18,7 @@ import FKAddData from "./components/FKRaport/FKAddData";
 import FKDataSettings from "./components/FKRaport/FKDataSettings";
 import FKItems from "./components/FKRaport/FKItems";
 import PrepareTable from "./components/PrepareTable";
-import { ROLES } from "./config/roles_list";
 import "./App.css";
-
-// export const ROLES = {
-//   Start: 1,
-//   User: 100,
-//   Editor: 110,
-//   EditorPlus: 120,
-//   AdminBL: 150,
-//   FK: 200,
-//   FKAdmin: 250,
-//   Nora: 300,
-//   Admin: 1000,
-// };
 
 function App() {
   return (
@@ -42,39 +29,29 @@ function App() {
           <Route path="/login" element={<Login />} />
           {/* protected routes */}
           <Route element={<PersistLogin />}>
-            <Route
-              element={
-                <RequireAuth
-                  allowedRoles={[ROLES.User, ROLES.FK, ROLES.Start]}
-                />
-              }
-            >
+            <Route element={<RequireAuth allowedRoles={[100, 200, 1]} />}>
               <Route path="/" element={<Home />} />
             </Route>
 
-            <Route
-              element={
-                <RequireAuth allowedRoles={[ROLES.Admin, ROLES.AdminBL]} />
-              }
-            >
+            <Route element={<RequireAuth allowedRoles={[1000, 150]} />}>
               <Route path="/register" element={<Register />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route element={<RequireAuth allowedRoles={[100]} />}>
               <Route
                 path="/actual-table"
                 element={<PrepareTable info={"actual"} />}
               />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route element={<RequireAuth allowedRoles={[100]} />}>
               <Route
                 path="/archive-table"
                 element={<PrepareTable info={"archive"} />}
               />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route element={<RequireAuth allowedRoles={[100]} />}>
               <Route
                 path="/all-data-table"
                 element={<PrepareTable info={"all"} />}
@@ -82,16 +59,7 @@ function App() {
             </Route>
 
             <Route
-              element={
-                <RequireAuth
-                  allowedRoles={[
-                    ROLES.User,
-                    ROLES.Editor,
-                    ROLES.AdminBL,
-                    ROLES.Admin,
-                  ]}
-                />
-              }
+              element={<RequireAuth allowedRoles={[100, 110, 150, 1000]} />}
             >
               <Route
                 path="/raport-departments"
@@ -100,83 +68,48 @@ function App() {
             </Route>
 
             <Route
-              element={
-                <RequireAuth
-                  allowedRoles={[
-                    ROLES.User,
-                    ROLES.Editor,
-                    ROLES.AdminBL,
-                    ROLES.Admin,
-                  ]}
-                />
-              }
+              element={<RequireAuth allowedRoles={[100, 110, 150, 1000]} />}
             >
               <Route path="/raport-advisers" element={<RaportAdvisers />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.FK]} />}>
+            <Route element={<RequireAuth allowedRoles={[200]} />}>
               <Route path="/fk-raport" element={<FKRaportSettings />} />
             </Route>
 
-            <Route
-              element={<RequireAuth allowedRoles={[ROLES.FK, ROLES.Admin]} />}
-            >
+            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/fk-add-data" element={<FKAddData />} />
             </Route>
 
-            <Route
-              element={<RequireAuth allowedRoles={[ROLES.FK, ROLES.Admin]} />}
-            >
+            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/fk-table-settings" element={<FKTableSettings />} />
             </Route>
 
-            <Route
-              element={<RequireAuth allowedRoles={[ROLES.FK, ROLES.Admin]} />}
-            >
+            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/fk-data-settings" element={<FKDataSettings />} />
             </Route>
 
-            <Route
-              element={<RequireAuth allowedRoles={[ROLES.FK, ROLES.Admin]} />}
-            >
+            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/fk-change-items" element={<FKItems />} />
             </Route>
 
-            <Route
-              element={
-                <RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />
-              }
-            >
+            <Route element={<RequireAuth allowedRoles={[110, 1000]} />}>
               <Route path="/contacts" element={<Contacts />} />
             </Route>
 
-            <Route
-              element={
-                <RequireAuth
-                  allowedRoles={[ROLES.EditorPlus, ROLES.AdminBL, ROLES.Admin]}
-                />
-              }
-            >
+            <Route element={<RequireAuth allowedRoles={[120, 150, 1000]} />}>
               <Route path="/add-data" element={<AddDataFromFile />} />
             </Route>
 
-            <Route
-              element={
-                <RequireAuth allowedRoles={[ROLES.AdminBL, ROLES.Admin]} />
-              }
-            >
+            <Route element={<RequireAuth allowedRoles={[150, 1000]} />}>
               <Route path="/user-settings" element={<UserSettings />} />
             </Route>
 
-            <Route
-              element={
-                <RequireAuth allowedRoles={[ROLES.AdminBL, ROLES.Admin]} />
-              }
-            >
+            <Route element={<RequireAuth allowedRoles={[150, 1000]} />}>
               <Route path="/system-settings" element={<SystemSettings />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[ROLES.Start]} />}>
+            <Route element={<RequireAuth allowedRoles={[1]} />}>
               <Route path="/change-password" element={<ChangePassword />} />
             </Route>
           </Route>
