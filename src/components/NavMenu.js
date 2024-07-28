@@ -84,7 +84,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {(auth?.roles?.includes(100) || auth?.roles?.includes(300)) && (
+        {(auth?.roles?.includes(100) ||
+          auth?.roles?.includes(200) ||
+          auth?.roles?.includes(300)) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Raporty</Link>
             <div
@@ -95,7 +97,106 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
               }
             >
               <ul className="nav_menu__menu-dropmenu">
-                {auth?.permissions?.Standard && (
+                {auth?.roles?.includes(100) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link className="nav_menu-link">
+                      <i className="fas fa-caret-left"></i>Raporty - BL
+                    </Link>
+                    <div className="nav_menu-dropdown__menu--side_left">
+                      <ul className="nav_menu__menu--side">
+                        {auth?.permissions?.Standard && (
+                          <li className="nav_menu-item-dropmenu">
+                            <Link
+                              to="/raport-departments"
+                              className="nav_menu-link"
+                              onClick={handleLinkClick}
+                            >
+                              Raport - Dział
+                            </Link>
+                          </li>
+                        )}
+                        {auth?.roles?.includes(100) && (
+                          <li className="nav_menu-item-dropmenu">
+                            <Link
+                              to="/raport-advisers"
+                              className="nav_menu-link"
+                              onClick={handleLinkClick}
+                            >
+                              Raport - Doradca
+                            </Link>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </li>
+                )}
+
+                {auth?.roles?.includes(200) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link className="nav_menu-link">
+                      <i className="fas fa-caret-left"></i>Raporty - FK
+                    </Link>
+                    <div className="nav_menu-dropdown__menu--side_left">
+                      <ul className="nav_menu__menu--side">
+                        <li className="nav_menu-item-dropmenu">
+                          <Link
+                            to="/fk-raport"
+                            className="nav_menu-link"
+                            onClick={handleLinkClick}
+                          >
+                            Raport
+                          </Link>
+                        </li>
+                        {auth?.roles?.includes(250) && (
+                          <li className="nav_menu-item-dropmenu">
+                            <Link
+                              to="/fk-add-data"
+                              className="nav_menu-link"
+                              onClick={handleLinkClick}
+                            >
+                              Dodaj dane
+                            </Link>
+                          </li>
+                        )}
+                        {auth?.roles?.includes(250) && (
+                          <li className="nav_menu-item-dropmenu">
+                            <Link
+                              to="/fk-table-settings"
+                              className="nav_menu-link"
+                              onClick={handleLinkClick}
+                            >
+                              Tabela
+                            </Link>
+                          </li>
+                        )}
+                        {auth?.roles?.includes(250) && (
+                          <li className="nav_menu-item-dropmenu">
+                            <Link
+                              to="/fk-change-items"
+                              className="nav_menu-link"
+                              onClick={handleLinkClick}
+                            >
+                              Zmień stałe
+                            </Link>
+                          </li>
+                        )}
+                        {auth?.roles?.includes(250) && (
+                          <li className="nav_menu-item-dropmenu">
+                            <Link
+                              to="/fk-data-settings"
+                              className="nav_menu-link"
+                              onClick={handleLinkClick}
+                            >
+                              Dopasuj dane
+                            </Link>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </li>
+                )}
+
+                {/* {auth?.permissions?.Standard && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/raport-departments"
@@ -116,7 +217,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       Raport - Doradca
                     </Link>
                   </li>
-                )}
+                )} */}
                 {(auth?.roles?.includes(300) ||
                   auth?.roles?.includes(1000)) && (
                   <li className="nav_menu-item-dropmenu">
@@ -152,7 +253,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
           </li>
         )}
 
-        {auth?.roles?.includes(200) && (
+        {/* {auth?.roles?.includes(200) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Raport FK</Link>
             <div
@@ -183,17 +284,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {/* {auth?.roles?.includes(220) && auth?.roles?.includes(300) && (
-                  <li className="nav_menu-item-dropmenu">
-                    <Link
-                      to="/fk-table-settings"
-                      className="nav_menu-link"
-                      onClick={handleLinkClick}
-                    >
-                      Ustawienia
-                    </Link>
-                  </li>
-                )} */}
+
                 {auth?.roles?.includes(250) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link className="nav_menu-link">
@@ -241,7 +332,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
               </ul>
             </div>
           </li>
-        )}
+        )} */}
 
         {auth?.roles?.includes(5000) && (
           <li className="nav_menu__menu-item">

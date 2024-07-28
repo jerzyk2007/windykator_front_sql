@@ -92,11 +92,11 @@ const UserChangeRoles = ({ user, roles }) => {
                 }
 
                 //odznacz inne role jesli jest zaznaczany FK
-                if (role === "FK" && !isChecked) {
-                  updatedRoles["User"] = false;
-                  updatedRoles["Editor"] = false;
-                  updatedRoles["Admin"] = false;
-                }
+                // if (role === "FK" && !isChecked) {
+                //   updatedRoles["User"] = false;
+                //   updatedRoles["Editor"] = false;
+                //   updatedRoles["Admin"] = false;
+                // }
 
                 return updatedRoles;
               });
