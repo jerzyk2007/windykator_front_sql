@@ -261,10 +261,12 @@ const RaportAdvisers = () => {
     const rowData = data.map((item) => {
       return item.original;
     });
+
     let arrayOrder = [];
 
     if (type === "Doradca" && rowData.length > 0) {
       arrayOrder = [...columnOrder];
+
       // rowData = [...data];
     } else if (type === "Filtr") {
       arrayOrder = columnOrder.filter(
@@ -345,7 +347,6 @@ const RaportAdvisers = () => {
       columns: newColumns,
       order: newOrder,
     };
-
     getAllDataRaport(update, orderColumns, type);
   };
 
@@ -452,7 +453,7 @@ const RaportAdvisers = () => {
 
         setPleaseWait(false);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
     getData();

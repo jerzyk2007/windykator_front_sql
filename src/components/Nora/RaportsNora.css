@@ -1,0 +1,73 @@
+.raports_nora {
+  flex-grow: 1;
+  display: flex;
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+
+.raports_nora__container {
+  flex-grow: 1;
+  flex-basis: 50%;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid black;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.raports_nora__container--title {
+  padding: 10px;
+  font-weight: bold;
+}
+
+.raports_nora__container--title p {
+  font-size: 1.5rem;
+}
+
+.raports_nora__container--data {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.raports_nora__container-documents,
+.raports_nora__container-contacts,
+.raports_nora__container-settlements,
+.raports_nora__container-corrections {
+  flex-basis: 20%;
+  margin: 10px;
+  width: 70%;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.raports_nora__container-documents:active,
+.raports_nora__container-contacts:active,
+.raports_nora__container-settlements:active,
+.raports_nora__container-corrections:active {
+  background-color: rgb(22, 171, 81);
+  color: #fff;
+}
+
+.add_data_file-click-me {
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add_data_file-click-me:hover {
+  background-color: rgba(22, 171, 81, 0.3);
+  /* color: #fff; */
+}

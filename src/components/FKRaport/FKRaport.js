@@ -152,7 +152,34 @@ const FKRaport = ({
       //   // Dodaj więcej danych według własnego pomysłu
       // ];
 
-      getExcelRaport(update, settingsColumn.data);
+      // w tablicach odzdielam nowym wierszem dane lub dodatkowo pustym wierszem
+      const cleanData = buttonArea.map((doc) => {
+        const update = doc.data.map((item) => {
+          const {
+            OPIEKUN_OBSZARU_CENTRALI,
+            OPIS_ROZRACHUNKU,
+            OWNER,
+            ...cleanDoc
+          } = item;
+
+          return {
+            ...cleanDoc,
+            OPIEKUN_OBSZARU_CENTRALI: Array.isArray(OPIEKUN_OBSZARU_CENTRALI)
+              ? OPIEKUN_OBSZARU_CENTRALI.join("\n")
+              : OPIEKUN_OBSZARU_CENTRALI,
+            OPIS_ROZRACHUNKU: Array.isArray(OPIS_ROZRACHUNKU)
+              ? OPIS_ROZRACHUNKU.join("\n\n")
+              : OPIS_ROZRACHUNKU,
+            OWNER: Array.isArray(OWNER) ? OWNER.join("\n") : OWNER,
+          };
+        });
+        return {
+          name: doc.name,
+          data: update,
+        };
+      });
+
+      getExcelRaport(cleanData, settingsColumn.data);
     } catch (err) {
       console.error(err);
     }

@@ -2,28 +2,7 @@ import XLSX from "xlsx-js-style";
 
 // wersja bez dodatkowych wierszy nad tabelą
 
-export const getExcelRaport = async (buttonArea, settingsColumn) => {
-  const cleanData = buttonArea.map((doc) => {
-    const update = doc.data.map((item) => {
-      const { OPIEKUN_OBSZARU_CENTRALI, OPIS_ROZRACHUNKU, OWNER, ...cleanDoc } =
-        item;
-
-      return {
-        ...cleanDoc,
-        OPIEKUN_OBSZARU_CENTRALI: Array.isArray(OPIEKUN_OBSZARU_CENTRALI)
-          ? OPIEKUN_OBSZARU_CENTRALI.join(", ")
-          : OPIEKUN_OBSZARU_CENTRALI,
-        OPIS_ROZRACHUNKU: Array.isArray(OPIS_ROZRACHUNKU)
-          ? OPIS_ROZRACHUNKU.join(", ")
-          : OPIS_ROZRACHUNKU,
-        OWNER: Array.isArray(OWNER) ? OWNER.join(", ") : OWNER,
-      };
-    });
-    return {
-      name: doc.name,
-      data: update,
-    };
-  });
+export const getExcelRaport = async (cleanData, settingsColumn) => {
   try {
     // const settingsColumn = await axiosPrivateIntercept.get(
     //   "/fk/get-columns-order"
@@ -63,7 +42,6 @@ export const getExcelRaport = async (buttonArea, settingsColumn) => {
           });
           return reorderedItem;
         });
-
         // Tworzenie arkusza kalkulacyjnego z przearanżowanymi danymi
         const ws = XLSX.utils.json_to_sheet(reorderedData);
 
@@ -123,33 +101,57 @@ export const getExcelRaport = async (buttonArea, settingsColumn) => {
         }
 
         // Dodanie obramowania dla wszystkich komórek z danymi
+        // for (let row = range.s.r + 1; row <= range.e.r; row++) {
+        //   for (let col = range.s.c; col <= range.e.c; col++) {
+        //     const cell = XLSX.utils.encode_cell({ r: row, c: col });
+        //     ws[cell].s = {
+        //       ...ws[cell].s,
+        //       border: {
+        //         top: { style: "thin" },
+        //         left: { style: "thin" },
+        //         bottom: { style: "thin" },
+        //         right: { style: "thin" },
+        //       },
+        //       alignment: {
+        //         wrapText: true,
+        //         vertical: "center",
+        //         horizontal: "center",
+        //       },
+        //       numFmt: "# ##0.00 zł",
+        //     };
+        //     // ws[cell].s = {
+        //     //   ...ws[cell].s,
+        //     //   alignment: {
+        //     //     wrapText: true,
+        //     //     vertical: "center",
+        //     //     horizontal: "center",
+        //     //   },
+        //     //   numFmt: "# ##0.00 zł",
+        //     // };
+        //   }
+        // }
+
+        // Dodanie obramowania dla wszystkich komórek z danymi
         for (let row = range.s.r + 1; row <= range.e.r; row++) {
           for (let col = range.s.c; col <= range.e.c; col++) {
             const cell = XLSX.utils.encode_cell({ r: row, c: col });
-            ws[cell].s = {
-              ...ws[cell].s,
-              border: {
-                top: { style: "thin" },
-                left: { style: "thin" },
-                bottom: { style: "thin" },
-                right: { style: "thin" },
-              },
-              alignment: {
-                wrapText: true,
-                vertical: "center",
-                horizontal: "center",
-              },
-              numFmt: "# ##0.00 zł",
-            };
-            // ws[cell].s = {
-            //   ...ws[cell].s,
-            //   alignment: {
-            //     wrapText: true,
-            //     vertical: "center",
-            //     horizontal: "center",
-            //   },
-            //   numFmt: "# ##0.00 zł",
-            // };
+            if (ws[cell]) {
+              ws[cell].s = {
+                ...ws[cell].s,
+                border: {
+                  top: { style: "thin" },
+                  left: { style: "thin" },
+                  bottom: { style: "thin" },
+                  right: { style: "thin" },
+                },
+                alignment: {
+                  wrapText: true,
+                  vertical: "center",
+                  horizontal: "center",
+                },
+                numFmt: "# ##0.00 zł",
+              };
+            }
           }
         }
         //test

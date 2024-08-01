@@ -18,6 +18,7 @@ import FKAddData from "./components/FKRaport/FKAddData";
 import FKDataSettings from "./components/FKRaport/FKDataSettings";
 import FKItems from "./components/FKRaport/FKItems";
 import PrepareTable from "./components/PrepareTable";
+import RaportsNora from "./components/Nora/RaportsNora";
 import "./App.css";
 
 function App() {
@@ -91,6 +92,10 @@ function App() {
 
             <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/fk-change-items" element={<FKItems />} />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={[300, 1000]} />}>
+              <Route path="/raport-nora" element={<RaportsNora />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[110, 1000]} />}>
