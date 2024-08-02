@@ -320,7 +320,7 @@ const RaportsNora = () => {
             } else if (newKey.type === "percentage") {
               newValue =
                 currentYearValue === 0 || maxCurrentYearValue === 0
-                  ? ""
+                  ? 0
                   : Number(
                       (
                         ((maxCurrentYearValue - currentYearValue) /
