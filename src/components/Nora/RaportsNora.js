@@ -285,8 +285,6 @@ const RaportsNora = () => {
       };
       const cleanData = filterKeys(sortedArray, allowedKeys);
 
-      setErrCodeRaport(message.successRaport);
-
       // Największa wartość w allowedKeysYear
       const maxKey = Math.max(...allowedKeysYear);
 
@@ -349,8 +347,9 @@ const RaportsNora = () => {
           });
         });
       });
-      // console.log(cleanData);
-      getExcelRaport(cleanData, allowedKeys);
+      setErrCodeRaport(message.successRaport);
+
+      getExcelRaport(cleanData, allowedKeys, newKeys);
 
       setPleaseWait(false);
     } catch (err) {
