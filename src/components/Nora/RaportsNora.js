@@ -71,6 +71,7 @@ const RaportsNora = () => {
     try {
       const decodedFile = await decodeExcelFile(file, type, setErrCodeRaport);
       if (
+        !("Oddział" in decodedFile[0]) ||
         !("kontrahent" in decodedFile[0]) ||
         !("nip" in decodedFile[0]) ||
         !("kod pocztowy" in decodedFile[0]) ||
@@ -201,6 +202,7 @@ const RaportsNora = () => {
       }));
 
       const allowedKeys = [
+        "Oddział",
         "kontrahent",
         "nip",
         "kod pocztowy",

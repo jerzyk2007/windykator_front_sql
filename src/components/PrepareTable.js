@@ -4,7 +4,7 @@ import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
 import PleaseWait from "./PleaseWait";
 import Table from "./Table";
-import { prepareColumns } from "./utilsForTable/prepareColumns";
+import { prepareColumns } from "./utilsForTable/PrepareColumns";
 
 import "./PrepareTable.css";
 

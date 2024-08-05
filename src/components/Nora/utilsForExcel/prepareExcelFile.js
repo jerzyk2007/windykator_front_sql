@@ -36,6 +36,7 @@ const numberToLetter = (number) => {
 
 export const getExcelRaport = async (cleanData, settingsColumn, newKeys) => {
   const deleteColumns = [
+    "Oddział",
     "kontrahent",
     "nip",
     "kod pocztowy",
