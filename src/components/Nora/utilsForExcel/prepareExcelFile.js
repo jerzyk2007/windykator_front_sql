@@ -34,19 +34,10 @@ const numberToLetter = (number) => {
   return result;
 };
 
-export const getExcelRaport = async (cleanData, settingsColumn, newKeys) => {
-  const deleteColumns = [
-    "Oddział",
-    "kontrahent",
-    "nip",
-    "kod pocztowy",
-    "miasto",
-    "k_adres",
-    "Opiekun D.CZ ASO",
-  ];
+export const getExcelRaport = async (cleanData, settingsColumn, newKeys, orderColumn) => {
 
   const filteredSettingsColumn = settingsColumn.filter(
-    (col) => !deleteColumns.includes(col)
+    (col) => !orderColumn.includes(col)
   );
 
   try {

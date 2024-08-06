@@ -201,7 +201,8 @@ const RaportsNora = () => {
         data,
       }));
 
-      const allowedKeys = [
+      //kolejnośc kolumn oraz te co mają byc zachowane z orygilnalnego pliku
+      const orderColumn=[
         "Oddział",
         "kontrahent",
         "nip",
@@ -209,6 +210,10 @@ const RaportsNora = () => {
         "miasto",
         "k_adres",
         "Opiekun D.CZ ASO",
+      ];
+
+      const allowedKeys = [
+     ...orderColumn
       ];
       const allowedKeysYear = [];
 
@@ -351,7 +356,7 @@ const RaportsNora = () => {
       });
       setErrCodeRaport(message.successRaport);
 
-      getExcelRaport(cleanData, allowedKeys, newKeys);
+      getExcelRaport(cleanData, allowedKeys, newKeys, orderColumn);
 
       setPleaseWait(false);
     } catch (err) {
