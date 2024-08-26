@@ -70,19 +70,41 @@ const RaportsNora = () => {
     }
     try {
       const decodedFile = await decodeExcelFile(file, type, setErrCodeRaport);
-      if (
-        !("Oddział" in decodedFile[0]) ||
-        !("kontrahent" in decodedFile[0]) ||
-        !("nip" in decodedFile[0]) ||
-        !("kod pocztowy" in decodedFile[0]) ||
-        !("miasto" in decodedFile[0]) ||
-        !("k_adres" in decodedFile[0]) ||
-        !("Opiekun D.CZ ASO" in decodedFile[0])
-      ) {
-        setPleaseWait(false);
 
-        return setErrCodeRaport(message.errorData);
-      }
+      // Pobieramy nagłówki kolumn z pierwszego wiersza
+const headers = Object.keys(decodedFile[0]);
+
+// Lista wymaganych nagłówków
+const requiredHeaders = [
+  "Oddział",
+  "kontrahent",
+  "nip",
+  "kod pocztowy",
+  "miasto",
+  "k_adres",
+  // "Opiekun D.CZ ASO"
+];
+
+// Sprawdzamy, czy wszystkie wymagane nagłówki są obecne
+const missingHeaders = requiredHeaders.filter(header => !headers.includes(header));
+
+if (missingHeaders.length > 0) {
+  setPleaseWait(false);
+  return setErrCodeRaport(`Brakuje następujących nagłówków: ${missingHeaders.join(', ')}`);
+}
+      // if (
+      //   !("Oddział" in decodedFile[0]) ||
+      //   !("kontrahent" in decodedFile[0]) ||
+      //   !("nip" in decodedFile[0]) ||
+      //   !("kod pocztowy" in decodedFile[0]) ||
+      //   !("miasto" in decodedFile[0]) ||
+      //   !("k_adres" in decodedFile[0]) ||
+      //   !("Opiekun D.CZ ASO" in decodedFile[0])
+      // ) {
+      //   setPleaseWait(false);
+
+      //   return setErrCodeRaport(message.errorData);
+      // }
       const postCode = {
         0: "0x-xxx",
         1: "1x-xxx",
