@@ -141,7 +141,7 @@ export const preparedAccountancyData = async (axiosPrivateIntercept, rows) => {
         OPIS_ROZRACHUNKU: [],
         OWNER,
         PRZEDZIAL_WIEKOWANIE: "-",
-        PRZETER_NIEPRZETER: "NIE",
+        PRZETER_NIEPRZETER: "Nieprzeterminowane",
         RODZAJ_KONTA: Number(row["Synt."]),
         ROZNICA: 0,
         TERMIN_PLATNOSCI_FV: excelDateToISODate(row["Data płatn."]),
@@ -856,7 +856,7 @@ export const prepareDataRaport = (data) => {
     const preparedAging = data.aging;
 
     for (const age of preparedAging) {
-      if (age.type === "first" && Number(age.firstValue) >= differenceInDays) {
+        if (age.type === "first" && Number(age.firstValue) >= differenceInDays) {
         title = age.title;
         foundMatchingAging = true;
         break;

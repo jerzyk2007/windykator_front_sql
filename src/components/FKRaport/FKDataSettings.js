@@ -20,6 +20,7 @@ const FKDataSettings = () => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/fk/get-fksettings-data");
+
       setData(result.data);
 
       const uniqueDep = await axiosPrivateIntercept.get("/fk/get-uniques-dep");

@@ -28,12 +28,13 @@ const FKRaport = ({
   };
 
   const handleExportExcel = async () => {
+
     try {
       const settingsColumn = await axiosPrivateIntercept.get(
         "/fk/get-columns-order"
       );
-
-      let update = buttonArea.map((item) => {
+      let update=[]
+    update = buttonArea.map((item) => {
         const updatedData = item.data.map((element) => {
           // if (element.KWOTA_WPS == 0) {
           //   element.KWOTA_WPS = "NULL";
@@ -70,8 +71,8 @@ const FKRaport = ({
         });
         return { ...item, data: updatedData };
       });
-
       if (filter.payment === "Przeterminowane > 8") {
+
         update = update.map((element) => {
           if (element.name !== "Raport" && element.data) {
             const updatedData = element.data.filter((item) => {
@@ -153,15 +154,14 @@ const FKRaport = ({
       // ];
 
       // w tablicach odzdielam nowym wierszem dane lub dodatkowo pustym wierszem
-      const cleanData = buttonArea.map((doc) => {
-        const update = doc.data.map((item) => {
+      const cleanData = update.map((doc) => {
+        const updateDoc = doc.data.map((item) => {
           const {
             OPIEKUN_OBSZARU_CENTRALI,
             OPIS_ROZRACHUNKU,
             OWNER,
             ...cleanDoc
           } = item;
-
           return {
             ...cleanDoc,
             OPIEKUN_OBSZARU_CENTRALI: Array.isArray(OPIEKUN_OBSZARU_CENTRALI)
@@ -175,10 +175,35 @@ const FKRaport = ({
         });
         return {
           name: doc.name,
-          data: update,
+          data: updateDoc,
         };
       });
+      // // w tablicach odzdielam nowym wierszem dane lub dodatkowo pustym wierszem
+      // const cleanData = buttonArea.map((doc) => {
+      //   const update = doc.data.map((item) => {
+      //     const {
+      //       OPIEKUN_OBSZARU_CENTRALI,
+      //       OPIS_ROZRACHUNKU,
+      //       OWNER,
+      //       ...cleanDoc
+      //     } = item;
 
+      //     return {
+      //       ...cleanDoc,
+      //       OPIEKUN_OBSZARU_CENTRALI: Array.isArray(OPIEKUN_OBSZARU_CENTRALI)
+      //         ? OPIEKUN_OBSZARU_CENTRALI.join("\n")
+      //         : OPIEKUN_OBSZARU_CENTRALI,
+      //       OPIS_ROZRACHUNKU: Array.isArray(OPIS_ROZRACHUNKU)
+      //         ? OPIS_ROZRACHUNKU.join("\n\n")
+      //         : OPIS_ROZRACHUNKU,
+      //       OWNER: Array.isArray(OWNER) ? OWNER.join("\n") : OWNER,
+      //     };
+      //   });
+      //   return {
+      //     name: doc.name,
+      //     data: update,
+      //   };
+      // });
       getExcelRaport(cleanData, settingsColumn.data);
     } catch (err) {
       console.error(err);
