@@ -47,6 +47,7 @@ const EditUserSettings = ({ user, setEdit }) => {
       const filteredDepartments = result.data
         .map((item) => item.departments)
         .filter(Boolean)[0];
+
       const filteredPermissions = result.data
         .map((item) => item.permissions)
         .filter(Boolean)[0];
@@ -54,19 +55,19 @@ const EditUserSettings = ({ user, setEdit }) => {
       const columnsDB = result.data
         .map((item) => item.columns)
         .filter(Boolean)[0];
-      // const userColumns = [...user.columns];
       const userColumns = user?.columns ? [...user.columns] : [];
 
-      const departments = filteredDepartments.reduce((acc, dep, index) => {
-        // acc[dep] = user?.departments[dep] ? true : false;
-        acc[dep] = user?.roles.includes(dep);
+      const departments = filteredDepartments.reduce((acc, dep) => {
+        // Ustawiamy user.departments jako pusty obiekt, jeśli nie istnieje
+        const userDepartments = user?.departments || {};
+        acc[dep] = userDepartments[dep] ? true : false;
         return acc;
       }, {});
 
       const permissions = filteredPermissions.reduce((acc, perm, index) => {
-        // acc[perm] = user?.permissions[perm] ? true : false;
-        acc[perm] = user?.roles.includes(perm);
-
+        // Ustawiamy user.permissions jako pusty obiekt, jeśli nie istnieje
+        const userPermissions = user?.permissions || {};
+        acc[perm] = userPermissions[perm] ? true : false;
         return acc;
       }, {});
 
@@ -76,7 +77,6 @@ const EditUserSettings = ({ user, setEdit }) => {
         );
         return { ...col, checked: !!userColMatch };
       });
-
       setPermissions(permissions);
       setDepartments(departments);
       setRoles(roles);

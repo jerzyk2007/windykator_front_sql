@@ -49,6 +49,7 @@ const PrepareTable = ({ info }) => {
         const dataTable = await axiosPrivateIntercept.get(
           `/documents/get-data-table/${auth._id}/${info}`
         );
+
         //funkcja do naprawiania danych i ich testowania
         // const test = dataTable.data.dataTable.map((item) => {
         //   if (item.KWOTA_WINDYKOWANA_BECARED) {
@@ -116,7 +117,6 @@ const PrepareTable = ({ info }) => {
             dataTable.data.columns,
             dataTable.data.dataTable
           );
-
           setColumns(update);
           setPleaseWait(false);
         }

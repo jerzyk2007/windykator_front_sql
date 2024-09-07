@@ -23,6 +23,7 @@ const UserSetting = () => {
       const result = await axiosPrivateIntercept.get("/user/get-userdata/", {
         params: { search },
       });
+
       setUsers(result.data);
       setPleaseWait(false);
     } catch (err) {
