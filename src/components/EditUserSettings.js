@@ -29,7 +29,6 @@ const EditUserSettings = ({ user, setEdit }) => {
   const toggleTab = (index) => {
     setToggleState(index);
   };
-  console.log("user settings");
 
   useEffect(() => {
     const getSettings = async () => {
@@ -55,7 +54,8 @@ const EditUserSettings = ({ user, setEdit }) => {
       const columnsDB = result.data
         .map((item) => item.columns)
         .filter(Boolean)[0];
-      const userColumns = [...user.columns];
+      // const userColumns = [...user.columns];
+      const userColumns = user?.columns ? [...user.columns] : [];
 
       const departments = filteredDepartments.reduce((acc, dep, index) => {
         // acc[dep] = user?.departments[dep] ? true : false;
