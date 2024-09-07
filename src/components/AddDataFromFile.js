@@ -62,6 +62,16 @@ const AddDataFromFile = () => {
     }
   };
 
+  const handleSQL = async () => {
+    try {
+      const copyUsers = await axiosPrivateIntercept.get(`/sql/copyUsers`);
+
+      console.log(copyUsers.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // funkcja dla przesłania gotowych danych, już przygotowanych i obrobionych da raportu FK
   // const handleSendFileFK = async (e, type) => {
   //   setPleaseWait(true);
@@ -169,25 +179,44 @@ const AddDataFromFile = () => {
                    
                     </section> */}
 
-          {/* chwilowa funckja do naprawiania, nadpisywania danych */}
+          {/* chwilowa funckja przeniesienia danych z mongo do mysql */}
           {!errMsg ? (
             <section className="add_data_from_file__container-documents">
-              <input
-                type="file"
-                name="uploadfile"
-                id="test"
-                style={{ display: "none" }}
-                // onChange={(e) => handleSendFileBL(e, "test")}
-              />
-              {/* <label htmlFor="test" className="add_data_file-click-me">
-                Napraw
-              </label> */}
+              <label
+                htmlFor="test"
+                className="add_data_file-click-me"
+                onClick={handleSQL}
+              >
+                SQL
+              </label>
             </section>
           ) : (
             <section className="add_data_from_file__container-documents">
               <span className="add_data_file-click-me">{errMsg}</span>
             </section>
           )}
+
+          {/* chwilowa funckja do naprawiania, nadpisywania danych */}
+          {/* {!errMsg ? (
+            <section className="add_data_from_file__container-documents">
+              <input
+                type="file"
+                name="uploadfile"
+                id="test"
+                style={{ display: "none" }}
+                onChange={(e) => handleSendFileBL(e, "test")}
+              />
+              <label htmlFor="test" className="add_data_file-click-me">
+                Napraw
+              </label>
+         
+            </section>
+          ) : (
+            <section className="add_data_from_file__container-documents">
+              <span className="add_data_file-click-me">{errMsg}</span>
+            </section>
+          )}
+           */}
         </section>
       </section>
 

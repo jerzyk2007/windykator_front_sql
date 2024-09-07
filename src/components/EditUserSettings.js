@@ -29,6 +29,7 @@ const EditUserSettings = ({ user, setEdit }) => {
   const toggleTab = (index) => {
     setToggleState(index);
   };
+  console.log("user settings");
 
   useEffect(() => {
     const getSettings = async () => {
@@ -57,12 +58,15 @@ const EditUserSettings = ({ user, setEdit }) => {
       const userColumns = [...user.columns];
 
       const departments = filteredDepartments.reduce((acc, dep, index) => {
-        acc[dep] = user?.departments[dep] ? true : false;
+        // acc[dep] = user?.departments[dep] ? true : false;
+        acc[dep] = user?.roles.includes(dep);
         return acc;
       }, {});
 
       const permissions = filteredPermissions.reduce((acc, perm, index) => {
-        acc[perm] = user?.permissions[perm] ? true : false;
+        // acc[perm] = user?.permissions[perm] ? true : false;
+        acc[perm] = user?.roles.includes(perm);
+
         return acc;
       }, {});
 

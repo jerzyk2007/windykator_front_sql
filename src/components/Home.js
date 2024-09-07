@@ -16,6 +16,8 @@ const Home = () => {
 
     useEffect(() => {
         const getUpdateTime = async () => {
+    
+
             const response = await axiosPrivateIntercept.get(`/update/get-time`);
 
             const dateObj = new Date(response.data);
