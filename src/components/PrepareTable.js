@@ -68,7 +68,6 @@ const PrepareTable = ({ info }) => {
           // setDocuments(test);
           setDocuments(dataTable.data.dataTable);
           setTableSettings(dataTable.data.tableSettings);
-
           // kolumny są modyfikowane wg filtrów
 
           // do testowania kolumn w przypadku błędów

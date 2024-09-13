@@ -25,7 +25,6 @@ const EditUserSettings = ({ user, setEdit }) => {
   const [columns, setColumns] = useState([]);
   const [pleaseWait, setPleaseWait] = useState(false);
   const [toggleState, setToggleState] = useState(1);
-
   const toggleTab = (index) => {
     setToggleState(index);
   };

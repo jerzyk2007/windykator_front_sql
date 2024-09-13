@@ -64,9 +64,12 @@ const AddDataFromFile = () => {
 
   const handleSQL = async () => {
     try {
-      const copyUsers = await axiosPrivateIntercept.get(`/sql/copyUsers`);
+      console.log("test");
+      // const copyUsers = await axiosPrivateIntercept.get(`/sql/copyUsers`);
+      // const copySettings = await axiosPrivateIntercept.get(`/sql/copySettings`);
 
-      console.log(copyUsers.data.data);
+      // console.log(copyUsers.data.data);
+      // console.log(copySettings.data.data);
     } catch (err) {
       console.error(err);
     }

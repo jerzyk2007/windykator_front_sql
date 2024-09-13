@@ -67,7 +67,37 @@ const PercentageTarget = ({ departments }) => {
     <section className="percentage-department">
       <section className="percentage-department__title__container">
         <h3 className="percentage-department--name">
-          {!errMsg ? (
+          <p
+            className="percentage-department__title__container-name"
+            style={{ color: "red" }}
+          >
+            {errMsg}
+          </p>
+          <label className="percentage-department__title__container-name">
+            Cel na kwartał
+          </label>
+          <select
+            className="percentage-department__title__container-actions--select"
+            value={percentDep.time.Q}
+            onChange={(e) =>
+              setPercentDep((prev) => {
+                return {
+                  ...prev,
+
+                  time: {
+                    Q: Number(e.target.value),
+                  },
+                };
+              })
+            }
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+
+          {/* {!errMsg ? (
             <>
               <label className="percentage-department__title__container-name">
                 Cel na kwartał
@@ -95,7 +125,7 @@ const PercentageTarget = ({ departments }) => {
             </>
           ) : (
             errMsg
-          )}
+          )} */}
         </h3>
       </section>
       <section className="percentage-department__container">
