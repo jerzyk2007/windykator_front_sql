@@ -316,7 +316,7 @@ const Table = ({
   });
 
   useEffect(() => {
-    setTableSize(height - 180);
+    setTableSize(height - 164);
   }, [height]);
 
   useEffect(() => {

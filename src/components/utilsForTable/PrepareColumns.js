@@ -76,23 +76,23 @@ export const prepareColumns = (columnsData, data) => {
       modifiedItem.enableClickToCopy = false;
     }
 
-    if (item.accessorKey === "UWAGI_Z_FAKTURY") {
-      modifiedItem.Cell = ({ cell }) => {
-        const cellValue = cell.getValue();
-        if (Array.isArray(cellValue) && cellValue.length > 0) {
-          return (
-            <div style={{ whiteSpace: "pre-wrap" }}>
-              {cellValue.map((item, index) => (
-                <p key={index}>{item}</p>
-              ))}
-            </div>
-          );
-        }
-      };
-      const changeMuiTableBodyCellProps = { ...muiTableBodyCellProps };
-      changeMuiTableBodyCellProps.align = "left";
-      modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
-    }
+    // if (item.accessorKey === "UWAGI_Z_FAKTURY") {
+    //   modifiedItem.Cell = ({ cell }) => {
+    //     const cellValue = cell.getValue();
+    //     if (Array.isArray(cellValue) && cellValue.length > 0) {
+    //       return (
+    //         <div style={{ whiteSpace: "pre-wrap" }}>
+    //           {cellValue.map((item, index) => (
+    //             <p key={index}>{item}</p>
+    //           ))}
+    //         </div>
+    //       );
+    //     }
+    //   };
+    //   const changeMuiTableBodyCellProps = { ...muiTableBodyCellProps };
+    //   changeMuiTableBodyCellProps.align = "left";
+    //   modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
+    // }
 
     if (item.accessorKey === "KONTRAHENT") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
@@ -207,7 +207,10 @@ export const prepareColumns = (columnsData, data) => {
 
     if (item.type === "money") {
       modifiedItem.Cell = ({ cell }) => {
+        // const value = Number(cell.getValue());
         const value = cell.getValue();
+        // console.log(typeof value);
+
         const formattedSalary =
           value !== undefined && value !== null && value !== 0
             ? value.toLocaleString("pl-PL", {
@@ -216,8 +219,10 @@ export const prepareColumns = (columnsData, data) => {
                 useGrouping: true,
               })
             : "0,00";
+        // console.log(formattedSalary);
 
-        return `${formattedSalary}`;
+        // return `${formattedSalary}`;
+        return formattedSalary;
       };
     }
     if (item.accessorKey === "KWOTA_WINDYKOWANA_BECARED") {

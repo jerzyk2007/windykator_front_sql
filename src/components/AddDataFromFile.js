@@ -67,9 +67,12 @@ const AddDataFromFile = () => {
       console.log("test");
       // const copyUsers = await axiosPrivateIntercept.get(`/sql/copyUsers`);
       // const copySettings = await axiosPrivateIntercept.get(`/sql/copySettings`);
-
+      // const copyDocuments = await axiosPrivateIntercept.get(
+      //   `/sql/copyDocuments`
+      // );
       // console.log(copyUsers.data.data);
       // console.log(copySettings.data.data);
+      // console.log(copyDocuments.data);
     } catch (err) {
       console.error(err);
     }
