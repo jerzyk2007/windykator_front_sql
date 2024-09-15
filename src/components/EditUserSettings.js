@@ -33,10 +33,10 @@ const EditUserSettings = ({ user, setEdit }) => {
     const getSettings = async () => {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/settings/get-settings");
+
       const filteredRoles = result.data
         .map((item) => item.roles)
         .filter(Boolean)[0];
-
       const roles = filteredRoles.reduce((acc, role, index) => {
         // acc[role] = user?.roles[index] ? true : false;
         acc[role] = user?.roles.includes(role);
@@ -54,6 +54,7 @@ const EditUserSettings = ({ user, setEdit }) => {
       const columnsDB = result.data
         .map((item) => item.columns)
         .filter(Boolean)[0];
+
       const userColumns = user?.columns ? [...user.columns] : [];
 
       const departments = filteredDepartments.reduce((acc, dep) => {
@@ -124,7 +125,6 @@ const EditUserSettings = ({ user, setEdit }) => {
                         className="edit_user_settings_section-content-data"
                         // style={{ backgroundColor: "red" }}
                       >
-                        {/* <TableSettings dataColumns={columns} /> */}
                         {roles && Object.keys(roles).length > 0 && (
                           <UserChangeRoles user={user} roles={roles} />
                         )}
@@ -147,7 +147,7 @@ const EditUserSettings = ({ user, setEdit }) => {
                   >
                     <section className="edit_user_settings_section-content">
                       <section className="edit_user_settings_section-content-data">
-                        {columns.length && (
+                        {columns.length > 0 && (
                           <UserTableColumns user={user} columns={columns} />
                         )}
                       </section>

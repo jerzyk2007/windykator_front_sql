@@ -133,18 +133,19 @@ const Table = ({
 
   const getSingleRow = async (id, type, dep) => {
     const getRow = documents.filter((row) => row._id === id);
+
     if (getRow.length > 0) {
       try {
         const response = await axiosPrivateIntercept.get(
           `/documents/get-single-document/${id}`
         );
         const getRowDB = response.data; // Zakładam, że dane są w 'data'
-
         for (const key in getRowDB) {
           if (getRowDB.hasOwnProperty(key) && getRow[0].hasOwnProperty(key)) {
             getRow[0][key] = getRowDB[key];
           }
         }
+
         if (type === "quick") {
           setQuickNote(getRow[0]);
         }
@@ -341,7 +342,6 @@ const Table = ({
             setDataRowTable={setDataRowTable}
             documents={documents}
             setDocuments={setDocuments}
-            s
           />
         )}
 
