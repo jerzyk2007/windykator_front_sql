@@ -132,7 +132,7 @@ const Table = ({
   };
 
   const getSingleRow = async (id, type, dep) => {
-    const getRow = documents.filter((row) => row._id === id);
+    const getRow = documents.filter((row) => row.id_document === id);
 
     if (getRow.length > 0) {
       try {
@@ -261,9 +261,9 @@ const Table = ({
     muiTableBodyCellProps: ({ column, row, cell }) => ({
       onDoubleClick: () => {
         if (column.id === "UWAGI_ASYSTENT") {
-          getSingleRow(row.original._id, "quick", row.original.DZIAL);
+          getSingleRow(row.original.id_document, "quick", row.original.DZIAL);
         } else {
-          getSingleRow(row.original._id, "full", row.original.DZIAL);
+          getSingleRow(row.original.id_document, "full", row.original.DZIAL);
         }
       },
     }),

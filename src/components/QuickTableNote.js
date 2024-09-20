@@ -18,7 +18,7 @@ const QuickTableNote = ({
   const [note, setNote] = useState("");
 
   const handleAddNote = async () => {
-    const { _id, UWAGI_ASYSTENT } = quickNote;
+    const { id_document, UWAGI_ASYSTENT } = quickNote;
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -35,7 +35,7 @@ const QuickTableNote = ({
 
     const newRow = { ...quickNote, UWAGI_ASYSTENT: newNote };
     const newDocuments = documents.map((item) => {
-      if (item._id === _id) {
+      if (item.id_document === id_document) {
         return newRow;
       } else {
         return item;
@@ -46,7 +46,7 @@ const QuickTableNote = ({
       await axiosPrivateIntercept.patch(
         `/documents/change-single-document/${auth.id_user}`,
         {
-          _id: quickNote._id,
+          id_document: quickNote.id_document,
           documentItem: newRow,
         }
       );

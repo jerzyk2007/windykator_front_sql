@@ -47,20 +47,21 @@ const EditRowTable = ({
   };
 
   const handleSaveData = async () => {
-    const { _id } = rowData;
+    const { id_document } = rowData;
 
     const newDocuments = documents.map((item) => {
-      if (item._id === _id) {
+      if (item.id_document === id_document) {
         return rowData;
       } else {
         return item;
       }
     });
+
     try {
       await axiosPrivateIntercept.patch(
         `/documents/change-single-document/${auth.id_user}`,
         {
-          _id,
+          id_document,
           documentItem: rowData,
         }
       );
