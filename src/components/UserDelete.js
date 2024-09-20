@@ -11,7 +11,7 @@ const UserDelete = ({ user, setEdit }) => {
 
   const handleConfirmDeleteUser = async () => {
     try {
-      await axiosPrivateIntercept.delete(`/user/delete-user/${user._id}`, {
+      await axiosPrivateIntercept.delete(`/user/delete-user/${user.id_user}`, {
         userlogin: user.userlogin,
       });
       setEdit(false);

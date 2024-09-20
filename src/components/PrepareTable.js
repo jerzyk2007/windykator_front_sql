@@ -32,7 +32,7 @@ const PrepareTable = ({ info }) => {
     };
     try {
       await axiosPrivateIntercept.patch(
-        `/user/save-table-settings/${auth._id}`,
+        `/user/save-table-settings/${auth.id_user}`,
         { tableSettings }
       );
     } catch (err) {
@@ -47,7 +47,7 @@ const PrepareTable = ({ info }) => {
       try {
         setPleaseWait(true);
         const dataTable = await axiosPrivateIntercept.get(
-          `/documents/get-data-table/${auth._id}/${info}`
+          `/documents/get-data-table/${auth.id_user}/${info}`
         );
 
         //funkcja do naprawiania danych i ich testowania
@@ -128,7 +128,7 @@ const PrepareTable = ({ info }) => {
     return () => {
       isMounted = false;
     };
-  }, [info, auth._id, setPleaseWait, axiosPrivateIntercept]);
+  }, [info, auth.id_user, setPleaseWait, axiosPrivateIntercept]);
 
   return (
     <section className="prepare_table">

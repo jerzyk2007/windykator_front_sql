@@ -52,7 +52,7 @@ const UserChangeDepartments = ({ user, departments }) => {
       }, {});
     try {
       const result = await axiosPrivateIntercept.patch(
-        `/user/change-departments/${user._id}`,
+        `/user/change-departments/${user.id_user}`,
         {
           departments: filteredObject,
         }

@@ -58,19 +58,12 @@ const EditRowTable = ({
     });
     try {
       await axiosPrivateIntercept.patch(
-        `/documents/change-single-document/${auth._id}`,
+        `/documents/change-single-document/${auth.id_user}`,
         {
           _id,
           documentItem: rowData,
         }
       );
-      // const result = await axiosPrivateIntercept.patch(
-      //   `/documents/change-single-document/${auth._id}`,
-      //   {
-      //     _id,
-      //     documentItem: rowData,
-      //   }
-      // );
 
       setDocuments(newDocuments);
       setDataRowTable("");

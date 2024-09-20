@@ -12,7 +12,7 @@ const UserChangeName = ({ user }) => {
 
   const handleChangeNameSurname = async () => {
     try {
-      await axiosPrivateIntercept.patch(`/user/change-name/${user._id}`, {
+      await axiosPrivateIntercept.patch(`/user/change-name/${user.id_user}`, {
         name: username,
         surname: usersurname,
       });

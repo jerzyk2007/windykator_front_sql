@@ -73,9 +73,12 @@ const UserTableColumns = ({ user, columns }) => {
       .filter(Boolean);
 
     try {
-      await axiosPrivateIntercept.patch(`/user/change-columns/${user._id}`, {
-        columns: modifiedColumns,
-      });
+      await axiosPrivateIntercept.patch(
+        `/user/change-columns/${user.id_user}`,
+        {
+          columns: modifiedColumns,
+        }
+      );
       setErrMsg("Sukces.");
     } catch (err) {
       setErrMsg("Dane nie zostały zmienione.");

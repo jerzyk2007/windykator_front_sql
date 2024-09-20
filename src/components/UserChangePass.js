@@ -16,7 +16,7 @@ const UserChangePass = ({ user }) => {
   const handleChangePass = async () => {
     try {
       await axiosPrivateIntercept.patch(
-        `/user/another-user-change-pass/${user._id}`,
+        `/user/another-user-change-pass/${user.id_user}`,
         {
           password: userPass,
         }

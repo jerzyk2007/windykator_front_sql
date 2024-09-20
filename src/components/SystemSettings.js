@@ -49,16 +49,10 @@ const SystemSettings = () => {
       setPleaseWait(true);
 
       const documentsColumn = await axiosPrivateIntercept.get(
-        `/documents/get-all/${auth._id}/actual`
-      );
-      const firstDocument = documentsColumn.data[0];
-
-      const keysArray = Object.keys(firstDocument);
-      const newArray = keysArray.filter(
-        (item) => item !== "_id" && item !== "__v"
+        `/documents/get-columns-name`
       );
 
-      createColumns(newArray);
+      createColumns(documentsColumn.data);
 
       const resultDepartments = await axiosPrivateIntercept.get(
         "/settings/get-departments"

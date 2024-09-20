@@ -120,7 +120,7 @@ const UserChangeRoles = ({ user, roles }) => {
       // dodaje role Start - podstwawowa rola startowa
       arrayRoles.push("Start");
 
-      await axiosPrivateIntercept.patch(`/user/change-roles/${user._id}`, {
+      await axiosPrivateIntercept.patch(`/user/change-roles/${user.id_user}`, {
         roles: arrayRoles,
       });
       setErrMsg("Sukces.");

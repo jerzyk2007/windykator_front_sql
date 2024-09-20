@@ -249,7 +249,7 @@ const RaportAdvisers = () => {
     };
     try {
       await axiosPrivateIntercept.patch(
-        `/user/save-raport-advisers-settings/${auth._id}`,
+        `/user/save-raport-advisers-settings/${auth.id_user}`,
         { raportAdvisers }
       );
     } catch (err) {
@@ -429,7 +429,7 @@ const RaportAdvisers = () => {
       try {
         setPleaseWait(true);
         const resultData = await axiosPrivateIntercept.get(
-          `/raport/get-data/${auth._id}`
+          `/raport/get-data/${auth.id_user}`
         );
         setRaportData(resultData.data.data);
         setPermission(resultData.data.permission);
@@ -437,7 +437,7 @@ const RaportAdvisers = () => {
 
         const [settingsRaportUserAdvisers] = await Promise.all([
           axiosPrivateIntercept.get(
-            `/user/get-raport-advisers-settings/${auth._id}`
+            `/user/get-raport-advisers-settings/${auth.id_user}`
           ),
         ]);
 
@@ -457,7 +457,7 @@ const RaportAdvisers = () => {
       }
     };
     getData();
-  }, [auth._id, axiosPrivateIntercept, setPleaseWait]);
+  }, [auth.id_user, axiosPrivateIntercept, setPleaseWait]);
 
   useEffect(() => {
     setTableSize(height - 120);

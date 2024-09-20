@@ -255,7 +255,7 @@ const RaportDepartments = () => {
     };
     try {
       await axiosPrivateIntercept.patch(
-        `/user/save-raport-departments-settings/${auth._id}`,
+        `/user/save-raport-departments-settings/${auth.id_user}`,
         { raportDepartments }
       );
     } catch (err) {
@@ -416,7 +416,7 @@ const RaportDepartments = () => {
       try {
         setPleaseWait(true);
         const resultData = await axiosPrivateIntercept.get(
-          `/raport/get-data/${auth._id}`
+          `/raport/get-data/${auth.id_user}`
         );
 
         const resultDepartments = await axiosPrivateIntercept.get(
@@ -441,7 +441,7 @@ const RaportDepartments = () => {
 
         const [settingsRaportUserDepartments] = await Promise.all([
           axiosPrivateIntercept.get(
-            `/user/get-raport-departments-settings/${auth._id}`
+            `/user/get-raport-departments-settings/${auth.id_user}`
           ),
         ]);
 
@@ -467,7 +467,7 @@ const RaportDepartments = () => {
       }
     };
     getData();
-  }, [auth._id, axiosPrivateIntercept, setPleaseWait]);
+  }, [auth.id_user, axiosPrivateIntercept, setPleaseWait]);
 
   return (
     <section className="raport_departments">
