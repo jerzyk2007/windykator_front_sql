@@ -290,7 +290,19 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-
+                {(auth?.roles?.includes(1000) ||
+                  auth?.roles?.includes(150) ||
+                  auth?.roles?.includes(120)) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link
+                      to="/add-data"
+                      className="nav_menu-link"
+                      onClick={handleLinkClick}
+                    >
+                      Dodaj dane
+                    </Link>
+                  </li>
+                )}
                 {(auth?.roles?.includes(1000) ||
                   auth?.roles?.includes(150) ||
                   auth?.roles?.includes(120)) && (
@@ -300,19 +312,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                     <div className="nav_menu-dropdown__menu--side_left">
                       <ul className="nav_menu__menu--side">
-                        {(auth?.roles?.includes(1000) ||
-                          auth?.roles?.includes(150) ||
-                          auth?.roles?.includes(120)) && (
-                          <li className="nav_menu-item-dropmenu">
-                            <Link
-                              to="/add-data"
-                              className="nav_menu-link"
-                              onClick={handleLinkClick}
-                            >
-                              Dodaj dane
-                            </Link>
-                          </li>
-                        )}
                         {(auth?.roles?.includes(1000) ||
                           auth?.roles?.includes(150)) && (
                           <li className="nav_menu-item-dropmenu">
