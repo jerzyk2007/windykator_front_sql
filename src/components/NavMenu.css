@@ -151,7 +151,8 @@
   padding: 10px;
 }
 .nav_menu-item-dropmenu:hover .nav_menu-dropdown__menu--side_left {
-  left: -95%;
+  /* left: -95%; */
+  left: -105%;
 }
 
 .nav_menu-link {
