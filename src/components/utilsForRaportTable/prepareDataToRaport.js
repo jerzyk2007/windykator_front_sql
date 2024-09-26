@@ -480,12 +480,14 @@ export const columnsDepartments = [
     accessorKey: "DZIALY",
     header: "Dział",
     filterVariant: "multi-select",
+    enableColumnFilter: true,
+
     // size: columnSizing?.Department ? columnSizing.Department : 150
   },
   {
     accessorKey: "CEL",
     header: "Cele na bez R-K i CNP",
-    // enableColumnFilter: false,
+    enableColumnFilter: false,
     Cell: ({ cell }) => {
       const value = cell.getValue();
       const formattedValue =
@@ -516,6 +518,7 @@ export const columnsDepartments = [
         backgroundColor: "#ffe884",
       },
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "PRZETERMINOWANE_BEZ_PZU_LINK4",
@@ -540,6 +543,7 @@ export const columnsDepartments = [
         backgroundColor: "#ffe884",
       },
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4",
@@ -551,6 +555,7 @@ export const columnsDepartments = [
         backgroundColor: "#ffe884",
       },
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "NIEPRZETERMINOWANE_FV_BEZ_PZU_LINK4",
@@ -575,6 +580,7 @@ export const columnsDepartments = [
         backgroundColor: "#ffe884",
       },
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "CEL_CALOSC",
@@ -599,6 +605,7 @@ export const columnsDepartments = [
         backgroundColor: "#caff84",
       },
     },
+    enableColumnFilter: false,
   },
 
   {
@@ -624,6 +631,7 @@ export const columnsDepartments = [
         backgroundColor: "#caff84",
       },
     },
+    enableColumnFilter: false,
   },
 
   {
@@ -636,6 +644,7 @@ export const columnsDepartments = [
         backgroundColor: "#caff84",
       },
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "NIEPRZETERMINOWANE_FV",
@@ -660,6 +669,7 @@ export const columnsDepartments = [
         backgroundColor: "#caff84",
       },
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "CEL_BEZ_KANCELARII",
@@ -684,6 +694,7 @@ export const columnsDepartments = [
         backgroundColor: "#9fdcff",
       },
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "PRZETERMINOWANE_BEZ_KANCELARII",
@@ -708,6 +719,7 @@ export const columnsDepartments = [
         backgroundColor: "#9fdcff",
       },
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII",
@@ -719,6 +731,7 @@ export const columnsDepartments = [
         backgroundColor: "#9fdcff",
       },
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "NIEPRZETERMINOWANE_FV_BEZ_KANCELARII",
@@ -743,6 +756,7 @@ export const columnsDepartments = [
         backgroundColor: "#9fdcff",
       },
     },
+    enableColumnFilter: false,
   },
 
   {
@@ -768,6 +782,7 @@ export const columnsDepartments = [
         backgroundColor: "rgba(255, 0, 255, .2)",
       },
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "ILE_NIEPOBRANYCH_VAT",
@@ -779,6 +794,7 @@ export const columnsDepartments = [
         backgroundColor: "rgba(255, 0, 255, .2)",
       },
     },
+    enableColumnFilter: false,
   },
   {
     accessorKey: "KWOTA_BLEDOW_DORADCY_I_DOKUMENTACJI",
@@ -803,6 +819,7 @@ export const columnsDepartments = [
         backgroundColor: "rgba(255, 0, 255, .2)",
       },
     },
+    enableColumnFilter: false,
   },
 
   {
@@ -815,6 +832,7 @@ export const columnsDepartments = [
         backgroundColor: "rgba(255, 0, 255, .2)",
       },
     },
+    enableColumnFilter: false,
   },
 ];
 

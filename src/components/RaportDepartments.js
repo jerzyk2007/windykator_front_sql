@@ -80,7 +80,7 @@ const RaportDepartments = () => {
     enableStickyHeader: true,
     enableGlobalFilter: false,
     enableGlobalFilterModes: false,
-    enableColumnFilters: false,
+    enableColumnFilters: true,
     enableColumnPinning: true,
     enableColumnResizing: true,
     enableColumnOrdering: true,
@@ -97,9 +97,9 @@ const RaportDepartments = () => {
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
     // opcja wyszukuje zbiory do select i multi-select
-    // enableFacetedValues: true,
+    enableFacetedValues: true,
     // wyświetla filtry nad komórką -
-    // columnFilterDisplayMode: "popover",
+    columnFilterDisplayMode: "popover",
     initialState: {
       density: "compact",
     },

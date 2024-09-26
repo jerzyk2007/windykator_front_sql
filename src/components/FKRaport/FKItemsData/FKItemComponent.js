@@ -6,7 +6,7 @@ import "./FKItemComponent.css";
 const FKItemComponent = ({ data, info, title }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
-  const [dataItem, setDataItem] = useState([]);
+  // const [dataItem, setDataItem] = useState([]);
   const [newDataItem, setNewDataItem] = useState([]);
   const [duplicate, setDuplicate] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
@@ -15,11 +15,6 @@ const FKItemComponent = ({ data, info, title }) => {
   const [addItem, setAddItem] = useState({ oldName: "", newName: "" });
 
   //sortowanie z uwzględnieniem polskich znaków
-  // const sorted = (items) => {
-  //   const collator = new Intl.Collator("pl", { sensitivity: "base" });
-  //   const dataSort = items.sort(collator.compare);
-  //   return dataSort;
-  // };
   const sorted = (items) => {
     const collator = new Intl.Collator("pl", { sensitivity: "base" });
 
@@ -119,13 +114,6 @@ const FKItemComponent = ({ data, info, title }) => {
     });
     setNewDataItem(update);
     setEditIndex(null);
-    try {
-      await axiosPrivateIntercept.patch(`/fk/save-item/${info}`, {
-        [info]: updateDB,
-      });
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   // funkcja wywoływana w inpucie dodawania nowego wpisu
@@ -151,7 +139,6 @@ const FKItemComponent = ({ data, info, title }) => {
     if (addItem) {
       const update = [...newDataItem, addItem];
       const sortedData = sorted(update);
-
       setNewDataItem(sortedData);
     }
 
@@ -165,7 +152,8 @@ const FKItemComponent = ({ data, info, title }) => {
   // zapis do bazy danych
   const saveData = async () => {
     const newNamesArray = newDataItem.map((item) => item.newName);
-
+    console.log(newNamesArray);
+    console.log(info);
     await axiosPrivateIntercept.patch(`/fk/save-items-data/${info}`, {
       [info]: newNamesArray,
     });
@@ -216,7 +204,7 @@ const FKItemComponent = ({ data, info, title }) => {
               style={duplicate ? { display: "none" } : null}
             ></i> */}
             <i
-              className="fas fa-save fk_item_component--item--fa-save"
+              className="fas fa-check fk_item_component--item--fa-save"
               style={duplicate ? { display: "none" } : null}
               onClick={() => handleUpdateItem(index)}
             ></i>
@@ -245,10 +233,6 @@ const FKItemComponent = ({ data, info, title }) => {
       setEditIndex(null);
     }
   }, [addActive]);
-
-  useEffect(() => {
-    // console.log(addItem);
-  }, [addItem]);
 
   return (
     <section className="fk_item_component">

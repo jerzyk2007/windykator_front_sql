@@ -83,6 +83,14 @@ const AddDataFromFile = () => {
       //   `/sql/repair-departments`
       // );
 
+      // const repairDepartments = await axiosPrivateIntercept.get(
+      //   `/sql/copy-items-departments`
+      // );
+
+      const repairDepartments = await axiosPrivateIntercept.get(
+        `/sql/copy-prepared-items`
+      );
+
       // console.log(copyUsers.data.data);
       // console.log(copySettings.data.data);
       // console.log(copyDocuments.data);

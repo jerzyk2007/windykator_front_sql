@@ -232,7 +232,10 @@ const FKItemSettings = ({
   }, [itemsValue]);
 
   return (
-    <section className="fk_data_settings__container-item">
+    <section
+      className="fk_data_settings__container-item"
+      style={!activeSave ? { backgroundColor: "yellow" } : null}
+    >
       <section className="fk_data_settings-counter__container">
         <span
           className="fk_data_settings-counter"

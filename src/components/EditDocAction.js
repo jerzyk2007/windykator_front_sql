@@ -13,7 +13,7 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
         <span
           className="edit_doc_action-section-data--content"
           style={
-            rowData.UWAGI_Z_FAKTURY.length > 170
+            rowData?.UWAGI_Z_FAKTURY?.length > 170
               ? { overflowY: "scroll" }
               : null
           }

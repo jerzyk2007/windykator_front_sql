@@ -100,7 +100,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 {auth?.roles?.includes(100) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link className="nav_menu-link">
-                      <i className="fas fa-caret-left"></i>Raporty - BL
+                      <i className="fas fa-caret-left"></i>Raporty
                     </Link>
                     <div className="nav_menu-dropdown__menu--side_left">
                       <ul className="nav_menu__menu--side">
@@ -169,7 +169,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(250) && (
+                        {/* {auth?.roles?.includes(250) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-change-items"
@@ -179,8 +179,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                               Zmień stałe
                             </Link>
                           </li>
-                        )}
-                        {auth?.roles?.includes(250) && (
+                        )} */}
+                        {/* {auth?.roles?.includes(250) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-data-settings"
@@ -190,7 +190,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                               Dopasuj dane
                             </Link>
                           </li>
-                        )}
+                        )} */}
                       </ul>
                     </div>
                   </li>
@@ -308,7 +308,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                   auth?.roles?.includes(120)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link className="nav_menu-link">
-                      <i className="fas fa-caret-left"></i>Ustawienia BL
+                      <i className="fas fa-caret-left"></i>Ustawienia
                     </Link>
                     <div className="nav_menu-dropdown__menu--side_left">
                       <ul className="nav_menu__menu--side">
@@ -321,6 +321,28 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                               onClick={handleLinkClick}
                             >
                               Tabela, Cele
+                            </Link>
+                          </li>
+                        )}
+                        {auth?.roles?.includes(250) && (
+                          <li className="nav_menu-item-dropmenu">
+                            <Link
+                              to="/fk-change-items"
+                              className="nav_menu-link"
+                              onClick={handleLinkClick}
+                            >
+                              Zmień stałe
+                            </Link>
+                          </li>
+                        )}
+                        {auth?.roles?.includes(250) && (
+                          <li className="nav_menu-item-dropmenu">
+                            <Link
+                              to="/fk-data-settings"
+                              className="nav_menu-link"
+                              onClick={handleLinkClick}
+                            >
+                              Dopasuj dane
                             </Link>
                           </li>
                         )}
