@@ -28,7 +28,12 @@ const RaportAdvisers = () => {
   const [density, setDensity] = useState("");
   const [columnOrder, setColumnOrder] = useState([]);
   const [columnPinning, setColumnPinning] = useState({});
-  const [tableSize, setTableSize] = useState(400);
+  const [pagination, setPagination] = useState({});
+  const [tableSize, setTableSize] = useState(500);
+  const [sorting, setSorting] = useState([
+    { id: "DORADCA", desc: false },
+    // { id: "DO_ROZLICZENIA", desc: true },
+  ]);
   const [raportData, setRaportData] = useState([]);
   const [permission, setPermission] = useState("");
   const [departments, setDepartments] = useState([]);
@@ -78,14 +83,16 @@ const RaportAdvisers = () => {
     enableColumnOrdering: true,
     enableDensityToggle: false,
     enableColumnActions: false,
-    enablePagination: false,
+    enablePagination: true,
+    enableSorting: true,
     localization: MRT_Localization_PL,
     onColumnVisibilityChange: setColumnVisibility,
     onDensityChange: setDensity,
     onColumnSizingChange: setColumnSizing,
     onColumnOrderChange: setColumnOrder,
     onColumnPinningChange: setColumnPinning,
-
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
     // automatycznie pobiera dane dla select i multi- select
     enableFacetedValues: true,
     initialState: {
@@ -97,6 +104,8 @@ const RaportAdvisers = () => {
       columnOrder,
       columnPinning,
       columnSizing,
+      pagination,
+      sorting,
     },
 
     defaultColumn: {
@@ -246,6 +255,7 @@ const RaportAdvisers = () => {
       density,
       order: columnOrder,
       pinning: columnPinning,
+      pagination,
     };
     try {
       await axiosPrivateIntercept.patch(
@@ -440,7 +450,6 @@ const RaportAdvisers = () => {
             `/user/get-raport-advisers-settings/${auth.id_user}`
           ),
         ]);
-
         setColumnVisibility(settingsRaportUserAdvisers?.data?.visible || {});
         setColumnSizing(settingsRaportUserAdvisers?.data?.size || {});
         setDensity(settingsRaportUserAdvisers?.data?.density || "comfortable");
@@ -450,7 +459,12 @@ const RaportAdvisers = () => {
         setColumnPinning(
           settingsRaportUserAdvisers?.data?.pinning || { left: [], right: [] }
         );
-
+        setPagination(
+          settingsRaportUserAdvisers?.data?.pagination || {
+            pageIndex: 0,
+            pageSize: 20,
+          }
+        );
         setPleaseWait(false);
       } catch (err) {
         console.error(err);
@@ -460,7 +474,7 @@ const RaportAdvisers = () => {
   }, [auth.id_user, axiosPrivateIntercept, setPleaseWait]);
 
   useEffect(() => {
-    setTableSize(height - 120);
+    setTableSize(height - 164);
   }, [height]);
 
   useEffect(() => {

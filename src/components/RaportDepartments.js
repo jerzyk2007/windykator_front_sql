@@ -28,7 +28,12 @@ const RaportDepartments = () => {
   const [density, setDensity] = useState("");
   const [columnOrder, setColumnOrder] = useState([]);
   const [columnPinning, setColumnPinning] = useState({});
-  const [tableSize, setTableSize] = useState(400);
+  const [pagination, setPagination] = useState({});
+  const [tableSize, setTableSize] = useState(500);
+  const [sorting, setSorting] = useState([
+    { id: "DZIALY", desc: false },
+    // { id: "DO_ROZLICZENIA", desc: true },
+  ]);
   const [raportData, setRaportData] = useState([]);
   const [permission, setPermission] = useState("");
   const [departments, setDepartments] = useState([]);
@@ -81,13 +86,16 @@ const RaportDepartments = () => {
     enableColumnOrdering: true,
     enableDensityToggle: false,
     enableColumnActions: false,
-    enablePagination: false,
+    enablePagination: true,
+    enableSorting: true,
     localization: MRT_Localization_PL,
     onColumnVisibilityChange: setColumnVisibility,
     onDensityChange: setDensity,
     onColumnSizingChange: setColumnSizing,
     onColumnOrderChange: setColumnOrder,
     onColumnPinningChange: setColumnPinning,
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
     // opcja wyszukuje zbiory do select i multi-select
     // enableFacetedValues: true,
     // wyświetla filtry nad komórką -
@@ -101,6 +109,8 @@ const RaportDepartments = () => {
       columnOrder,
       columnPinning,
       columnSizing,
+      pagination,
+      sorting,
     },
 
     defaultColumn: {
@@ -252,6 +262,7 @@ const RaportDepartments = () => {
       density,
       order: columnOrder,
       pinning: columnPinning,
+      pagination,
     };
     try {
       await axiosPrivateIntercept.patch(
@@ -398,7 +409,7 @@ const RaportDepartments = () => {
   }, [departments]);
 
   useEffect(() => {
-    setTableSize(height - 115);
+    setTableSize(height - 164);
   }, [height]);
 
   useEffect(() => {
@@ -434,7 +445,6 @@ const RaportDepartments = () => {
           } else return item;
         });
         setColumnsDep(preprareColumnsDep);
-
         setRaportData(resultData.data.data);
         setPermission(resultData.data.permission);
         checkMinMaxDateGlobal(resultData.data.data);
@@ -460,7 +470,12 @@ const RaportDepartments = () => {
             right: [],
           }
         );
-
+        setPagination(
+          settingsRaportUserDepartments?.data?.pagination || {
+            pageIndex: 0,
+            pageSize: 20,
+          }
+        );
         setPleaseWait(false);
       } catch (err) {
         console.error(err);

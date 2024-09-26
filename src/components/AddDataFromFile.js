@@ -10,6 +10,7 @@ const AddDataFromFile = () => {
 
   const [errBecared, setErrBecared] = useState("");
   const [errSettlements, setSettlements] = useState("");
+  const [errSettlementsDescription, setSettlementsDescription] = useState("");
   const [errAS, setErrAS] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [pleaseWait, setPleaseWait] = useState(false);
@@ -42,6 +43,8 @@ const AddDataFromFile = () => {
         setSettlements("Dokumenty zaktualizowane.");
       } else if (type === "AS") {
         setErrAS("Dokumenty zaktualizowane.");
+      } else if (type === "settlements_description") {
+        setSettlementsDescription("Dokumenty zaktualizowane.");
       } else if (type === "test") {
         setErrMsg("Dokumenty zaktualizowane.");
       }
@@ -50,10 +53,12 @@ const AddDataFromFile = () => {
     } catch (error) {
       if (type === "becared") {
         setErrBecared("Błąd aktualizacji dokumentów.");
-      } else if (type === "AS") {
-        setErrAS("Błąd aktualizacji dokumentów.");
       } else if (type === "settlements") {
         setSettlements("Błąd aktualizacji dokumentów.");
+      } else if (type === "AS") {
+        setErrAS("Błąd aktualizacji dokumentów.");
+      } else if (type === "settlements_description") {
+        setSettlementsDescription("Błąd aktualizacji dokumentów.");
       } else if (type === "test") {
         setErrMsg("Błąd aktualizacji dokumentów.");
       }
@@ -70,9 +75,13 @@ const AddDataFromFile = () => {
       // const copyDocuments = await axiosPrivateIntercept.get(
       //   `/sql/copyDocuments`
       // );
-      const copyDocuments_Actions = await axiosPrivateIntercept.get(
-        `/sql/copyDocuments_Actions`
-      );
+      // const copyDocuments_Actions = await axiosPrivateIntercept.get(
+      //   `/sql/copyDocuments_Actions`
+      // );
+
+      // const repairDepartments = await axiosPrivateIntercept.get(
+      //   `/sql/repair-departments`
+      // );
 
       // console.log(copyUsers.data.data);
       // console.log(copySettings.data.data);
@@ -183,6 +192,29 @@ const AddDataFromFile = () => {
           ) : (
             <section className="add_data_from_file__container-documents">
               <span className="add_data_file-click-me">{errBecared}</span>
+            </section>
+          )}
+          {!errSettlementsDescription ? (
+            <section className="add_data_from_file__container-documents">
+              <input
+                type="file"
+                name="uploadfile"
+                id="settlements_description"
+                style={{ display: "none" }}
+                onChange={(e) => handleSendFileBL(e, "settlements_description")}
+              />
+              <label
+                htmlFor="settlements_description"
+                className="add_data_file-click-me"
+              >
+                Prześlij plik z opisami rozrachunków
+              </label>
+            </section>
+          ) : (
+            <section className="add_data_from_file__container-documents">
+              <span className="add_data_file-click-me">
+                {errSettlementsDescription}
+              </span>
             </section>
           )}
 

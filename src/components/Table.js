@@ -40,9 +40,7 @@ const Table = ({
 
   const [columnVisibility, setColumnVisibility] = useState(settings.visible);
   const [columnSizing, setColumnSizing] = useState(settings.size);
-
   const [columnOrder, setColumnOrder] = useState(settings.order);
-
   const [columnPinning, setColumnPinning] = useState(settings.pinning);
   const [pagination, setPagination] = useState(
     settings.pagination ? settings.pagination : { pageIndex: 0, pageSize: 10 }

@@ -76,6 +76,19 @@ export const prepareColumns = (columnsData, data) => {
       modifiedItem.enableClickToCopy = false;
     }
 
+    if (
+      item.accessorKey === "UWAGI_Z_FAKTURY" ||
+      item.accessorKey === "STATUS_SPRAWY_KANCELARIA" ||
+      item.accessorKey === "OPIS_ROZRACHUNKU"
+    ) {
+      modifiedItem.Cell = ({ cell }) => {
+        const cellValue = cell.getValue();
+        if (typeof cellValue === "string" && cellValue.length > 150) {
+          return cellValue.slice(0, 150) + " ...";
+        }
+        return cellValue;
+      };
+    }
     // if (item.accessorKey === "UWAGI_Z_FAKTURY") {
     //   modifiedItem.Cell = ({ cell }) => {
     //     const cellValue = cell.getValue();

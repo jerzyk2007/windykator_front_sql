@@ -5,12 +5,19 @@ import "./EditDocAction.css";
 const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
   return (
     <section className="edit_doc_action-section-data">
-      <section className="edit_row_table-section-data--document">
-        <span className="edit_row_table-section-data--title">
+      <section className="edit_doc_action-section-data--document">
+        <span className="edit_doc_action-section-data--title">
           Uwagi z faktury:
         </span>
 
-        <span className="edit_row_table-section-data--content">
+        <span
+          className="edit_doc_action-section-data--content"
+          style={
+            rowData.UWAGI_Z_FAKTURY.length > 170
+              ? { overflowY: "scroll" }
+              : null
+          }
+        >
           {rowData.UWAGI_Z_FAKTURY}
         </span>
       </section>

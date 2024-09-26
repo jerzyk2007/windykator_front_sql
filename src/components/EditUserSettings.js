@@ -99,15 +99,11 @@ const EditUserSettings = ({ user, setEdit }) => {
                   <button
                     className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
                     onClick={() => toggleTab(1)}
-                  >
-                    Globalne
-                  </button>
+                  ></button>
                   <button
                     className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
                     onClick={() => toggleTab(2)}
-                  >
-                    Blacharnia
-                  </button>
+                  ></button>
                   <button
                     className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
                     onClick={() => toggleTab(3)}
@@ -128,15 +124,27 @@ const EditUserSettings = ({ user, setEdit }) => {
                         {roles && Object.keys(roles).length > 0 && (
                           <UserChangeRoles user={user} roles={roles} />
                         )}
+                        {permissions && Object.keys(permissions).length > 0 && (
+                          <UserChangePermissions
+                            user={user}
+                            permissions={permissions}
+                          />
+                        )}
                       </section>
 
                       <section className="edit_user_settings_section-content-data">
                         <UserChangeName user={user} />
                         <UserChangePass user={user} />
-                      </section>
-                      <section className="edit_user_settings_section-content-data">
                         <UserChangeLogin user={user} />
                         <UserDelete user={user} setEdit={setEdit} />
+                      </section>
+                      <section className="edit_user_settings_section-content-data">
+                        {/* <UserChangeName user={user} />
+                        <UserChangePass user={user} />
+                        <UserChangeLogin user={user} />
+                        <UserDelete user={user} setEdit={setEdit} /> */}
+                        {/* <UserChangeLogin user={user} /> */}
+                        {/* <UserDelete user={user} setEdit={setEdit} /> */}
                       </section>
                     </section>
                   </section>
@@ -152,12 +160,12 @@ const EditUserSettings = ({ user, setEdit }) => {
                         )}
                       </section>
                       <section className="edit_user_settings_section-content-data">
-                        {permissions && Object.keys(permissions).length > 0 && (
+                        {/* {permissions && Object.keys(permissions).length > 0 && (
                           <UserChangePermissions
                             user={user}
                             permissions={permissions}
                           />
-                        )}
+                        )} */}
                         {departments && Object.keys(departments).length > 0 && (
                           <UserChangeDepartments
                             user={user}
