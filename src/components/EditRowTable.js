@@ -46,6 +46,11 @@ const EditRowTable = ({
     setNote("");
   };
 
+  // console.log(dataRowTable);
+  // console.log(setDataRowTable);
+  // console.log(documents);
+  console.log(setDocuments);
+
   const handleSaveData = async () => {
     const { id_document } = rowData;
 
