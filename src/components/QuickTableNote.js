@@ -4,12 +4,7 @@ import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./QuickTableNote.css";
 
-const QuickTableNote = ({
-  quickNote,
-  setQuickNote,
-  documents,
-  setDocuments,
-}) => {
+const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
   const noteRef = useRef();
 
   const { auth } = useData();
@@ -34,13 +29,6 @@ const QuickTableNote = ({
     }
 
     const newRow = { ...quickNote, UWAGI_ASYSTENT: newNote };
-    const newDocuments = documents.map((item) => {
-      if (item.id_document === id_document) {
-        return newRow;
-      } else {
-        return item;
-      }
-    });
 
     try {
       await axiosPrivateIntercept.patch(
@@ -50,7 +38,7 @@ const QuickTableNote = ({
           documentItem: newRow,
         }
       );
-      setDocuments(newDocuments);
+      updateDocuments(newRow);
       setQuickNote("");
     } catch (err) {
       console.error(err);
@@ -66,7 +54,7 @@ const QuickTableNote = ({
       <section className="quick_table_note__container">
         <section className="quick_table_note__container-title">
           <span className="quick_table_note__container-title--document">
-            Faktura:{" "}
+            Faktura:
           </span>
           <span className="quick_table_note__container-title--document">
             {quickNote.NUMER_FV}

@@ -8,12 +8,7 @@ import { format } from "date-fns";
 // import plLocale from "date-fns/locale/pl";
 import "./EditRowTable.css";
 
-const EditRowTable = ({
-  dataRowTable,
-  setDataRowTable,
-  documents,
-  setDocuments,
-}) => {
+const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
@@ -46,21 +41,8 @@ const EditRowTable = ({
     setNote("");
   };
 
-  // console.log(dataRowTable);
-  // console.log(setDataRowTable);
-  // console.log(documents);
-  console.log(setDocuments);
-
   const handleSaveData = async () => {
     const { id_document } = rowData;
-
-    const newDocuments = documents.map((item) => {
-      if (item.id_document === id_document) {
-        return rowData;
-      } else {
-        return item;
-      }
-    });
 
     try {
       await axiosPrivateIntercept.patch(
@@ -71,7 +53,8 @@ const EditRowTable = ({
         }
       );
 
-      setDocuments(newDocuments);
+      updateDocuments(rowData);
+      // setDocuments(newDocuments);
       setDataRowTable("");
     } catch (err) {
       console.error(err);

@@ -158,6 +158,17 @@ const Table = ({
     }
   };
 
+  const updateDocuments = (editRowData) => {
+    const newDocuments = documents.map((item) => {
+      if (item.id_document === editRowData.id_document) {
+        return editRowData;
+      } else {
+        return item;
+      }
+    });
+    setDocuments(newDocuments);
+  };
+
   const columnsItem = useMemo(
     () =>
       columns.map((column) => ({
@@ -329,8 +340,7 @@ const Table = ({
           <QuickTableNote
             quickNote={quickNote}
             setQuickNote={setQuickNote}
-            documents={documents}
-            setDocuments={setDocuments}
+            updateDocuments={updateDocuments}
           />
         )}
 
@@ -338,8 +348,7 @@ const Table = ({
           <EditRowTable
             dataRowTable={dataRowTable}
             setDataRowTable={setDataRowTable}
-            documents={documents}
-            setDocuments={setDocuments}
+            updateDocuments={updateDocuments}
           />
         )}
 
