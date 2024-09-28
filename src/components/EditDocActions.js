@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import "./EditDocActions.css";
 
-const EditDocActions = ({ rowData, setRowData }) => {
+const EditDocActions = ({ rowData, setRowData, setBeCared }) => {
   return (
     <section className="edit_doc_actions">
       <section className="edit_doc_actions__container">
@@ -122,6 +122,11 @@ const EditDocActions = ({ rowData, setRowData }) => {
             })
           }
         />
+      </section>
+      <section className="edit_doc_actions--button">
+        <Button variant="outlined" onClick={() => setBeCared(true)}>
+          BeCared
+        </Button>
       </section>
     </section>
   );

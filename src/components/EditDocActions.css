@@ -1,6 +1,7 @@
 .edit_doc_actions {
   display: flex;
   flex-direction: column;
+  margin-bottom: 5px;
 }
 
 .edit_doc_actions__container {
@@ -27,4 +28,14 @@
   text-align: center;
   padding: 2px;
   margin: 2px;
+}
+
+.edit_doc_actions--button {
+  margin-top: 10px;
+}
+
+.edit_doc_actions--button Button {
+  width: 100%;
+  background-color: rgba(58, 247, 58, 0.2);
+  color: black;
 }
