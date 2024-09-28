@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import EditDocBasicData from "./EditDocBasicData";
 import EditDocChat from "./EditDocChat";
 import EditDocSettlements from "./EditDocSettlements";
+import EditDocActions from "./EditDocActions";
 import EditDocAction from "./EditDocAction";
 import EditDocBeCared from "./EditDocBeCared";
 import { format } from "date-fns";
@@ -85,7 +86,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
                   <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} />
                 </section>
                 <section className="edit-row-table_section-content-data">
-                  {!beCared && (
+                  {/* {!beCared && (
                     <EditDocAction
                       rowData={rowData}
                       setRowData={setRowData}
@@ -98,7 +99,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
                       setRowData={setRowData}
                       setBeCared={setBeCared}
                     />
-                  )}
+                  )} */}
+                  <EditDocActions rowData={rowData} setRowData={setRowData} />
                 </section>
               </section>
             </section>

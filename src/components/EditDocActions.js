@@ -1,17 +1,16 @@
 import { Button } from "@mui/material";
+import "./EditDocActions.css";
 
-import "./EditDocAction.css";
-
-const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
+const EditDocActions = ({ rowData, setRowData }) => {
   return (
-    <section className="edit_doc_action-section-data">
-      <section className="edit_doc_action-section-data-law">
-        <span className="edit_doc_action-section-data-law--title">
+    <section className="edit_doc_actions">
+      <section className="edit_doc_actions__container">
+        <span className="edit_doc_actions__container--title">
           Wybierz kancelarię:
         </span>
 
         <select
-          className="edit_doc_action-section-data-law--select"
+          className="edit_doc_actions__container--select"
           value={rowData.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : ""}
           onChange={(e) =>
             setRowData((prev) => {
@@ -32,13 +31,13 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
           <option value="CNP">CNP</option>
         </select>
       </section>
-      <section className="edit_doc_action-section-data-actions">
-        <span className="edit_doc_action-section-data-actions--title">
+
+      <section className="edit_doc_actions__container">
+        <span className="edit_doc_actions__container--title">
           Rodzaj działania:
         </span>
-
         <select
-          className="edit_doc_action-section-data-actions--select"
+          className="edit_doc_actions__container--select"
           value={rowData.DZIALANIA ? rowData.DZIALANIA : ""}
           onChange={(e) =>
             setRowData((prev) => {
@@ -60,14 +59,13 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
         </select>
       </section>
 
-      {/* poprawić klasy, value i onChange */}
-      <section className="edit_doc_action-section-data-actions">
-        <span className="edit_doc_action-section-data-actions--title">
+      <section className="edit_doc_actions__container">
+        <span className="edit_doc_actions__container--title">
           Błąd doradcy:
         </span>
 
         <select
-          className="edit_doc_action-section-data-actions--select"
+          className="edit_doc_actions__container--select"
           value={rowData.BLAD_DORADCY ? rowData.BLAD_DORADCY : ""}
           onChange={(e) =>
             setRowData((prev) => {
@@ -83,33 +81,12 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
         </select>
       </section>
 
-      {/* poprawić klasy, value i onChange */}
-      {/* <section className='edit_doc_action-section-data-actions'>
-                <span className='edit_doc_action-section-data-actions--title'>Błędy w dokumentacji:</span>
-
-                <select
-                    className='edit_doc_action-section-data-actions--select'
-                    value={rowData.BLAD_W_DOKUMENTACJI ? rowData.BLAD_W_DOKUMENTACJI : ''}
-                    onChange={(e) => setRowData(prev => {
-                        return {
-                            ...prev,
-                            BLAD_W_DOKUMENTACJI: e.target.value
-                        };
-                    })}
-                >
-                    <option value="NIE">Nie</option>
-                    <option value="TAK">Tak</option>
-                </select>
-            </section> */}
-
-      {/* poprawić klasy, value i onChange */}
-      <section className="edit_doc_action-section-data-actions">
-        <span className="edit_doc_action-section-data-actions--title">
+      <section className="edit_doc_actions__container">
+        <span className="edit_doc_actions__container--title">
           Pobrany VAT ?
         </span>
-
         <select
-          className="edit_doc_action-section-data-actions--select"
+          className="edit_doc_actions__container--select"
           value={rowData.POBRANO_VAT ? rowData.POBRANO_VAT : ""}
           onChange={(e) =>
             setRowData((prev) => {
@@ -126,12 +103,13 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
           <option value="100">Nie pobrano 100%</option>
         </select>
       </section>
-      <section className="edit_doc_action-section-data-actions">
-        <span className="edit_doc_action-section-data-actions--title">
+
+      <section className="edit_doc_actions__container">
+        <span className="edit_doc_actions__container--title">
           Wyróżnij kontrahenta
         </span>
         <input
-          className="edit_doc_action-section-data-actions--check"
+          className="edit_doc_actions__container--select"
           type="checkbox"
           checked={rowData.ZAZNACZ_KONTRAHENTA === "Tak"}
           onChange={(e) =>
@@ -145,13 +123,8 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
           }
         />
       </section>
-      <section className="edit_doc_action-section-data-becared--button">
-        <Button variant="outlined" onClick={() => setBeCared(true)}>
-          BeCared
-        </Button>
-      </section>
     </section>
   );
 };
 
-export default EditDocAction;
+export default EditDocActions;

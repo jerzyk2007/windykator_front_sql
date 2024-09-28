@@ -1,0 +1,30 @@
+.edit_doc_actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit_doc_actions__container {
+  flex-grow: 1;
+  display: flex;
+  font-family: Calibri, sans-serif;
+  font-size: 1.2rem;
+}
+
+.edit_doc_actions__container--title {
+  flex-basis: 50%;
+  text-align: left;
+  padding: 2px;
+  margin: 2px;
+  background-color: rgba(135, 207, 255, 0.4);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.edit_doc_actions__container--select {
+  width: 100%;
+  flex-basis: 50%;
+  font-family: Calibri, sans-serif;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2px;
+  margin: 2px;
+}
