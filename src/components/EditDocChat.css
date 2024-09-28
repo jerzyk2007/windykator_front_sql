@@ -14,8 +14,8 @@
 
 .edit-doc-chat--content,
 .edit-doc-chat--edit {
-  height: 180px;
-  max-height: 180px;
+  height: 250px;
+  max-height: 250px;
   resize: none;
   font-size: 1.1rem;
   padding: 5px;
