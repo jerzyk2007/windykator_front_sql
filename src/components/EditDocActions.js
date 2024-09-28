@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import "./EditDocActions.css";
 
-const EditDocActions = ({ rowData, setRowData, setBeCared }) => {
+const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
   return (
     <section className="edit_doc_actions">
       <section className="edit_doc_actions__container">
@@ -12,14 +12,18 @@ const EditDocActions = ({ rowData, setRowData, setBeCared }) => {
         <select
           className="edit_doc_actions__container--select"
           value={rowData.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : ""}
-          onChange={(e) =>
+          onChange={(e) => {
+            handleAddNote(
+              "Wybierz kancelarię:",
+              e.target.options[e.target.selectedIndex].text
+            );
             setRowData((prev) => {
               return {
                 ...prev,
                 JAKA_KANCELARIA: e.target.value,
               };
-            })
-          }
+            });
+          }}
         >
           <option value="BRAK">BRAK</option>
           <option value="M_LEGAL">M_LEGAL</option>
@@ -39,14 +43,18 @@ const EditDocActions = ({ rowData, setRowData, setBeCared }) => {
         <select
           className="edit_doc_actions__container--select"
           value={rowData.DZIALANIA ? rowData.DZIALANIA : ""}
-          onChange={(e) =>
+          onChange={(e) => {
+            handleAddNote(
+              "Rodzaj działania:",
+              e.target.options[e.target.selectedIndex].text
+            );
             setRowData((prev) => {
               return {
                 ...prev,
                 DZIALANIA: e.target.value,
               };
-            })
-          }
+            });
+          }}
         >
           <option value="BRAK">BRAK</option>
           <option value="W KOSZTY DZIAŁU">W KOSZTY DZIAŁU</option>
@@ -67,14 +75,18 @@ const EditDocActions = ({ rowData, setRowData, setBeCared }) => {
         <select
           className="edit_doc_actions__container--select"
           value={rowData.BLAD_DORADCY ? rowData.BLAD_DORADCY : ""}
-          onChange={(e) =>
+          onChange={(e) => {
+            handleAddNote(
+              "Błąd doradcy:",
+              e.target.options[e.target.selectedIndex].text
+            );
             setRowData((prev) => {
               return {
                 ...prev,
                 BLAD_DORADCY: e.target.value,
               };
-            })
-          }
+            });
+          }}
         >
           <option value="NIE">Nie</option>
           <option value="TAK">Tak</option>
@@ -88,14 +100,18 @@ const EditDocActions = ({ rowData, setRowData, setBeCared }) => {
         <select
           className="edit_doc_actions__container--select"
           value={rowData.POBRANO_VAT ? rowData.POBRANO_VAT : ""}
-          onChange={(e) =>
+          onChange={(e) => {
+            handleAddNote(
+              "Pobrany VAT:",
+              e.target.options[e.target.selectedIndex].text
+            );
             setRowData((prev) => {
               return {
                 ...prev,
                 POBRANO_VAT: e.target.value,
               };
-            })
-          }
+            });
+          }}
         >
           <option value="Nie dotyczy">Nie dotyczy</option>
           <option value="TAK">Tak</option>
@@ -106,10 +122,37 @@ const EditDocActions = ({ rowData, setRowData, setBeCared }) => {
 
       <section className="edit_doc_actions__container">
         <span className="edit_doc_actions__container--title">
+          Data wydania auta:
+        </span>
+        <input
+          className="edit_doc_actions__container--select"
+          style={
+            !rowData.DATA_WYDANIA_AUTA ? { backgroundColor: "yellow" } : null
+          }
+          type="date"
+          value={rowData.DATA_WYDANIA_AUTA}
+          onChange={(e) => {
+            handleAddNote(
+              "Data wydania auta:",
+              e.target.value.length > 3 ? e.target.value : "Brak"
+            );
+            setRowData((prev) => {
+              return {
+                ...prev,
+                DATA_WYDANIA_AUTA: e.target.value,
+              };
+            });
+          }}
+        />
+      </section>
+
+      <section className="edit_doc_actions__container">
+        <span className="edit_doc_actions__container--title">
           Wyróżnij kontrahenta
         </span>
         <input
           className="edit_doc_actions__container--select"
+          style={{ transform: "scale(0.7)" }}
           type="checkbox"
           checked={rowData.ZAZNACZ_KONTRAHENTA === "Tak"}
           onChange={(e) =>

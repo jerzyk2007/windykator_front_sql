@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import useData from "./hooks/useData";
 import { Button } from "@mui/material";
 import "./EditDocChat.css";
@@ -6,6 +6,19 @@ import "./EditDocChat.css";
 const EditDocChat = ({ rowData, setRowData }) => {
   const { auth } = useData();
   const [note, setNote] = useState("");
+  const textareaRef = useRef(null);
+
+  // Funkcja przewijająca do dołu
+  const scrollToBottom = () => {
+    if (textareaRef.current) {
+      textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+    }
+  };
+
+  // Przewijanie na dół po załadowaniu komponentu lub zmianie `rowData.UWAGI_ASYSTENT`
+  useEffect(() => {
+    scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.UWAGI_ASYSTENT`
+  }, [rowData.UWAGI_ASYSTENT]); // Wywołaj useEffect przy zmianie `rowData.UWAGI_ASYSTENT`
 
   const handleAddNote = () => {
     const oldNote = rowData.UWAGI_ASYSTENT;
@@ -38,6 +51,7 @@ const EditDocChat = ({ rowData, setRowData }) => {
       </span>
 
       <textarea
+        ref={textareaRef}
         className="edit-doc-chat--content"
         readOnly
         value={rowData.UWAGI_ASYSTENT ? rowData.UWAGI_ASYSTENT.join("\n") : ""}

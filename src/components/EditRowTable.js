@@ -18,6 +18,30 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
   const [beCared, setBeCared] = useState(false);
   const [toggleState, setToggleState] = useState(1);
 
+  const handleAddNote = (info, text) => {
+    const oldNote = rowData.UWAGI_ASYSTENT;
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+
+    let newNote = [];
+    let addNote = `${formattedDate} - ${auth.usersurname} - ${info} ${text}`;
+    if (oldNote) {
+      newNote = [...oldNote, addNote];
+    } else {
+      newNote = [addNote];
+    }
+
+    setRowData((prev) => {
+      return {
+        ...prev,
+        UWAGI_ASYSTENT: newNote,
+      };
+    });
+  };
+
   const toggleTab = (index) => {
     setToggleState(index);
   };
@@ -64,6 +88,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
                       rowData={rowData}
                       setRowData={setRowData}
                       setBeCared={setBeCared}
+                      handleAddNote={handleAddNote}
                     />
                   )}
                   {beCared && (
@@ -73,7 +98,9 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
                       setBeCared={setBeCared}
                     />
                   )}
-                  <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} />
+                  {!beCared && rowData.OPIS_ROZRACHUNKU && (
+                    <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} />
+                  )}
                 </section>
               </section>
             </section>
