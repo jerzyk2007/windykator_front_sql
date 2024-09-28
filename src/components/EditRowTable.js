@@ -16,6 +16,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
 
   const [rowData, setRowData] = useState(dataRowTable);
   const [beCared, setBeCared] = useState(false);
+  const [note, setNote] = useState("");
   const [toggleState, setToggleState] = useState(1);
 
   const handleAddNote = (info, text) => {
@@ -40,6 +41,9 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
         UWAGI_ASYSTENT: newNote,
       };
     });
+    if (!text) {
+      setNote("");
+    }
   };
 
   const toggleTab = (index) => {
@@ -80,7 +84,13 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
                   <EditDocBasicData rowData={rowData} setRowData={setRowData} />
                 </section>
                 <section className="edit-row-table_section-content-data">
-                  <EditDocChat rowData={rowData} setRowData={setRowData} />
+                  <EditDocChat
+                    rowData={rowData}
+                    setRowData={setRowData}
+                    note={note}
+                    setNote={setNote}
+                    handleAddNote={handleAddNote}
+                  />
                 </section>
                 <section className="edit-row-table_section-content-data">
                   {!beCared && (

@@ -1,11 +1,8 @@
-import { useState, useRef, useEffect } from "react";
-import useData from "./hooks/useData";
+import { useRef, useEffect } from "react";
 import { Button } from "@mui/material";
 import "./EditDocChat.css";
 
-const EditDocChat = ({ rowData, setRowData }) => {
-  const { auth } = useData();
-  const [note, setNote] = useState("");
+const EditDocChat = ({ rowData, note, setNote, handleAddNote }) => {
   const textareaRef = useRef(null);
 
   // Funkcja przewijająca do dołu
@@ -20,30 +17,6 @@ const EditDocChat = ({ rowData, setRowData }) => {
     scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.UWAGI_ASYSTENT`
   }, [rowData.UWAGI_ASYSTENT]); // Wywołaj useEffect przy zmianie `rowData.UWAGI_ASYSTENT`
 
-  const handleAddNote = () => {
-    const oldNote = rowData.UWAGI_ASYSTENT;
-    const date = new Date();
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const formattedDate = `${day}-${month}-${year}`;
-
-    let newNote = [];
-    let addNote = `${formattedDate} - ${auth.usersurname} - ${note}`;
-    if (oldNote) {
-      newNote = [...oldNote, addNote];
-    } else {
-      newNote = [addNote];
-    }
-
-    setRowData((prev) => {
-      return {
-        ...prev,
-        UWAGI_ASYSTENT: newNote,
-      };
-    });
-    setNote("");
-  };
   return (
     <section className="edit-doc-chat">
       <span className="edit-doc-chat--title">
@@ -73,7 +46,7 @@ const EditDocChat = ({ rowData, setRowData }) => {
         </Button>
         <Button
           variant="contained"
-          onClick={handleAddNote}
+          onClick={() => handleAddNote(note, "")}
           disabled={!note ? true : false}
         >
           Dodaj

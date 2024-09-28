@@ -130,7 +130,7 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
             !rowData.DATA_WYDANIA_AUTA ? { backgroundColor: "yellow" } : null
           }
           type="date"
-          value={rowData.DATA_WYDANIA_AUTA}
+          value={rowData.DATA_WYDANIA_AUTA ? rowData.DATA_WYDANIA_AUTA : ""}
           onChange={(e) => {
             handleAddNote(
               "Data wydania auta:",
@@ -148,7 +148,7 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
 
       <section className="edit_doc_actions__container">
         <span className="edit_doc_actions__container--title">
-          Wyróżnij kontrahenta
+          Wyróżnij kontrahenta:
         </span>
         <input
           className="edit_doc_actions__container--select"
