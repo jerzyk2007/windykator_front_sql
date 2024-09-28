@@ -54,7 +54,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
       );
 
       updateDocuments(rowData);
-      // setDocuments(newDocuments);
       setDataRowTable("");
     } catch (err) {
       console.error(err);
