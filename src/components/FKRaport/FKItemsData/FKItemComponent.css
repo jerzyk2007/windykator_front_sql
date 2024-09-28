@@ -65,7 +65,7 @@
 }
 .fk_item_component-items__container {
   flex-grow: 1;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   margin: 10px 0;
   padding: 5px 0;
   display: flex;

@@ -5,7 +5,7 @@ import "./EditDocAction.css";
 const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
   return (
     <section className="edit_doc_action-section-data">
-      <section className="edit_doc_action-section-data--document">
+      {/* <section className="edit_doc_action-section-data--document">
         <span className="edit_doc_action-section-data--title">
           Uwagi z faktury:
         </span>
@@ -20,7 +20,7 @@ const EditDocAction = ({ rowData, setRowData, setBeCared }) => {
         >
           {rowData.UWAGI_Z_FAKTURY}
         </span>
-      </section>
+      </section> */}
 
       <section className="edit_doc_action-section-data-law">
         <span className="edit_doc_action-section-data-law--title">

@@ -1,0 +1,24 @@
+.edit-doc-settlements {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.edit-doc-settlements--title {
+  font-size: 1.1rem;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 3px;
+  text-align: center;
+  background-color: rgba(58, 178, 247, 0.2);
+}
+
+.edit-doc-settlements--content {
+  height: 120px;
+  max-height: 180px;
+  resize: none;
+  font-size: 1.1rem;
+  padding: 5px;
+  font-family: Calibri, sans-serif;
+  margin: 2px 0;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
