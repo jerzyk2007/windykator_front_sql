@@ -137,18 +137,22 @@ const Table = ({
         const response = await axiosPrivateIntercept.get(
           `/documents/get-single-document/${id}`
         );
-        const getRowDB = response.data; // Zakładam, że dane są w 'data'
-        for (const key in getRowDB) {
-          if (getRowDB.hasOwnProperty(key) && getRow[0].hasOwnProperty(key)) {
-            getRow[0][key] = getRowDB[key];
-          }
-        }
+        // const getRowDB = response.data; // Zakładam, że dane są w 'data'
+        // for (const key in getRowDB) {
+        //   if (getRowDB.hasOwnProperty(key) && getRow[0].hasOwnProperty(key)) {
+        //     getRow[0][key] = getRowDB[key];
+        //   }
+        // }
+        // console.log(getRow[0]);
 
         if (type === "quick") {
-          setQuickNote(getRow[0]);
+          setDataRowTable(response.data);
+
+          // setQuickNote(getRow[0]);
         }
         if (type === "full") {
-          setDataRowTable(getRow[0]);
+          setDataRowTable(response.data);
+          // setDataRowTable(getRow[0]);
         }
       } catch (error) {
         console.error("Error fetching data from the server:", error);

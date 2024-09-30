@@ -450,6 +450,7 @@ const RaportAdvisers = () => {
             `/user/get-raport-advisers-settings/${auth.id_user}`
           ),
         ]);
+
         setColumnVisibility(settingsRaportUserAdvisers?.data?.visible || {});
         setColumnSizing(settingsRaportUserAdvisers?.data?.size || {});
         setDensity(settingsRaportUserAdvisers?.data?.density || "comfortable");

@@ -471,8 +471,13 @@ export const grossTotalDepartments = (
     };
     generatingRaport.push(departmentObj);
   });
-  const preparedData = addedAllToRaportsDep(generatingRaport);
-  return preparedData;
+
+  if (generatingRaport.length === 1) {
+    return generatingRaport;
+  } else {
+    const preparedData = addedAllToRaportsDep(generatingRaport);
+    return preparedData;
+  }
 };
 
 export const columnsDepartments = [

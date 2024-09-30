@@ -429,7 +429,6 @@ const RaportDepartments = () => {
         const resultData = await axiosPrivateIntercept.get(
           `/raport/get-data/${auth.id_user}`
         );
-
         const resultDepartments = await axiosPrivateIntercept.get(
           "/settings/get-departments"
         );
@@ -444,6 +443,7 @@ const RaportDepartments = () => {
             };
           } else return item;
         });
+
         setColumnsDep(preprareColumnsDep);
         setRaportData(resultData.data.data);
         setPermission(resultData.data.permission);

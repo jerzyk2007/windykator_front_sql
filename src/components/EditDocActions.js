@@ -4,37 +4,41 @@ import "./EditDocActions.css";
 const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
   return (
     <section className="edit_doc_actions">
-      <section className="edit_doc_actions__container">
-        <span className="edit_doc_actions__container--title">
-          Wybierz kancelarię:
-        </span>
+      {rowData.area === "BLACHARNIA" && (
+        <section className="edit_doc_actions__container">
+          <span className="edit_doc_actions__container--title">
+            Wybierz kancelarię:
+          </span>
 
-        <select
-          className="edit_doc_actions__container--select"
-          value={rowData.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : ""}
-          onChange={(e) => {
-            handleAddNote(
-              "Wybierz kancelarię:",
-              e.target.options[e.target.selectedIndex].text
-            );
-            setRowData((prev) => {
-              return {
-                ...prev,
-                JAKA_KANCELARIA: e.target.value,
-              };
-            });
-          }}
-        >
-          <option value="BRAK">BRAK</option>
-          <option value="M_LEGAL">M_LEGAL</option>
-          <option value="INWEST INKASO">INWEST INKASO</option>
-          <option value="KANCELARIA KROTOSKI">KANCELARIA KROTOSKI</option>
-          <option value="KRAUZE">KRAUZE</option>
-          <option value="POSTEPOWANIE SANACYJNE">POSTĘPOWANIE SANACYJNE</option>
-          <option value="ROK-KONOPA">ROK-KONOPA</option>
-          <option value="CNP">CNP</option>
-        </select>
-      </section>
+          <select
+            className="edit_doc_actions__container--select"
+            value={rowData.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : ""}
+            onChange={(e) => {
+              handleAddNote(
+                "Wybierz kancelarię:",
+                e.target.options[e.target.selectedIndex].text
+              );
+              setRowData((prev) => {
+                return {
+                  ...prev,
+                  JAKA_KANCELARIA: e.target.value,
+                };
+              });
+            }}
+          >
+            <option value="BRAK">BRAK</option>
+            <option value="M_LEGAL">M_LEGAL</option>
+            <option value="INWEST INKASO">INWEST INKASO</option>
+            <option value="KANCELARIA KROTOSKI">KANCELARIA KROTOSKI</option>
+            <option value="KRAUZE">KRAUZE</option>
+            <option value="POSTEPOWANIE SANACYJNE">
+              POSTĘPOWANIE SANACYJNE
+            </option>
+            <option value="ROK-KONOPA">ROK-KONOPA</option>
+            <option value="CNP">CNP</option>
+          </select>
+        </section>
+      )}
 
       <section className="edit_doc_actions__container">
         <span className="edit_doc_actions__container--title">
@@ -93,58 +97,63 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
         </select>
       </section>
 
-      <section className="edit_doc_actions__container">
-        <span className="edit_doc_actions__container--title">
-          Pobrany VAT ?
-        </span>
-        <select
-          className="edit_doc_actions__container--select"
-          value={rowData.POBRANO_VAT ? rowData.POBRANO_VAT : ""}
-          onChange={(e) => {
-            handleAddNote(
-              "Pobrany VAT:",
-              e.target.options[e.target.selectedIndex].text
-            );
-            setRowData((prev) => {
-              return {
-                ...prev,
-                POBRANO_VAT: e.target.value,
-              };
-            });
-          }}
-        >
-          <option value="Nie dotyczy">Nie dotyczy</option>
-          <option value="TAK">Tak</option>
-          <option value="50">Nie pobrano 50%</option>
-          <option value="100">Nie pobrano 100%</option>
-        </select>
-      </section>
+      {rowData.area === "BLACHARNIA" && (
+        <section className="edit_doc_actions__container">
+          <span className="edit_doc_actions__container--title">
+            Pobrany VAT ?
+          </span>
+          <select
+            className="edit_doc_actions__container--select"
+            value={rowData.POBRANO_VAT ? rowData.POBRANO_VAT : ""}
+            onChange={(e) => {
+              handleAddNote(
+                "Pobrany VAT:",
+                e.target.options[e.target.selectedIndex].text
+              );
+              setRowData((prev) => {
+                return {
+                  ...prev,
+                  POBRANO_VAT: e.target.value,
+                };
+              });
+            }}
+          >
+            <option value="Nie dotyczy">Nie dotyczy</option>
+            <option value="TAK">Tak</option>
+            <option value="50">Nie pobrano 50%</option>
+            <option value="100">Nie pobrano 100%</option>
+          </select>
+        </section>
+      )}
 
-      <section className="edit_doc_actions__container">
-        <span className="edit_doc_actions__container--title">
-          Data wydania auta:
-        </span>
-        <input
-          className="edit_doc_actions__container--select"
-          style={
-            !rowData.DATA_WYDANIA_AUTA ? { backgroundColor: "yellow" } : null
-          }
-          type="date"
-          value={rowData.DATA_WYDANIA_AUTA ? rowData.DATA_WYDANIA_AUTA : ""}
-          onChange={(e) => {
-            handleAddNote(
-              "Data wydania auta:",
-              e.target.value.length > 3 ? e.target.value : "Brak"
-            );
-            setRowData((prev) => {
-              return {
-                ...prev,
-                DATA_WYDANIA_AUTA: e.target.value,
-              };
-            });
-          }}
-        />
-      </section>
+      {(rowData.area === "SAMOCHODY NOWE" ||
+        rowData.area === "SAMOCHODY UŻYWANE") && (
+        <section className="edit_doc_actions__container">
+          <span className="edit_doc_actions__container--title">
+            Data wydania auta:
+          </span>
+          <input
+            className="edit_doc_actions__container--select"
+            style={
+              !rowData.DATA_WYDANIA_AUTA ? { backgroundColor: "yellow" } : null
+            }
+            type="date"
+            value={rowData.DATA_WYDANIA_AUTA ? rowData.DATA_WYDANIA_AUTA : ""}
+            onChange={(e) => {
+              handleAddNote(
+                "Data wydania auta:",
+                e.target.value.length > 3 ? e.target.value : "Brak"
+              );
+              setRowData((prev) => {
+                return {
+                  ...prev,
+                  DATA_WYDANIA_AUTA: e.target.value,
+                };
+              });
+            }}
+          />
+        </section>
+      )}
 
       <section className="edit_doc_actions__container">
         <span className="edit_doc_actions__container--title">
@@ -166,11 +175,13 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
           }
         />
       </section>
-      <section className="edit_doc_actions--button">
-        <Button variant="outlined" onClick={() => setBeCared(true)}>
-          BeCared
-        </Button>
-      </section>
+      {rowData.area === "BLACHARNIA" && (
+        <section className="edit_doc_actions--button">
+          <Button variant="outlined" onClick={() => setBeCared(true)}>
+            BeCared
+          </Button>
+        </section>
+      )}
     </section>
   );
 };
