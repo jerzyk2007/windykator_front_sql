@@ -5,6 +5,7 @@ import { saveAs } from "file-saver";
 const cellToIndex = (cell) => {
   const col = cell.replace(/[0-9]/g, "");
   const row = parseInt(cell.replace(/[A-Z]/g, ""), 10);
+
   return {
     col:
       col
@@ -34,11 +35,16 @@ const numberToLetter = (number) => {
   return result;
 };
 
-export const getExcelRaport = async (cleanData, settingsColumn, newKeys, orderColumn) => {
-
+export const getExcelRaport = async (
+  cleanData,
+  settingsColumn,
+  newKeys,
+  orderColumn
+) => {
   const filteredSettingsColumn = settingsColumn.filter(
     (col) => !orderColumn.includes(col)
   );
+  console.log(settingsColumn);
 
   try {
     const workbook = new ExcelJS.Workbook();
@@ -64,6 +70,7 @@ export const getExcelRaport = async (cleanData, settingsColumn, newKeys, orderCo
         const index = settingsColumn.indexOf(item);
         const letter = numberToLetter(index + 1);
         const findItem = newKeys.filter((prev) => prev.newName === item);
+
         let value = 0;
         if (findItem.length) {
           const first = totalAmount(obj.data, String(findItem[0].maxKey));

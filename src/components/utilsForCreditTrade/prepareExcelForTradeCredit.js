@@ -1,0 +1,402 @@
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+
+// Funkcja do mapowania oznaczenia komórki na wiersz i kolumnę
+const cellToIndex = (cell) => {
+  const col = cell.replace(/[0-9]/g, "");
+  const row = parseInt(cell.replace(/[A-Z]/g, ""), 10);
+  return {
+    col:
+      col
+        .split("")
+        .reduce(
+          (acc, char) => acc * 26 + char.charCodeAt(0) - "A".charCodeAt(0) + 1,
+          0
+        ) - 1,
+    row: row - 1,
+  };
+};
+
+const numberToLetter = (number) => {
+  if (number < 1) {
+    throw new Error("Number must be greater than or equal to 1.");
+  }
+
+  let result = "";
+  while (number > 0) {
+    // Zamień liczbę na literę (z uwagi na indeksowanie od 1, musisz odjąć 1)
+    number--;
+    const charCode = (number % 26) + "A".charCodeAt(0);
+    result = String.fromCharCode(charCode) + result;
+    number = Math.floor(number / 26);
+  }
+
+  return result;
+};
+
+export const getExcelRaport = async (cleanData, settingsColumn) => {
+  try {
+    const workbook = new ExcelJS.Workbook();
+
+    for (const obj of cleanData) {
+      const worksheet = workbook.addWorksheet(obj.name);
+
+      /// od którego wiersza ma się zaczynać tabela
+      const headerRow = worksheet.getRow(1);
+      settingsColumn.forEach((col, index) => {
+        headerRow.getCell(index + 1).value = col;
+        headerRow.getCell(index + 1).font = { bold: true };
+        headerRow.getCell(index + 1).alignment = {
+          horizontal: "center",
+          vertical: "center",
+          wrapText: true,
+        };
+        headerRow.getCell(index + 1).fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "B8B8B8" },
+        };
+        headerRow.getCell(index + 1).border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+      });
+
+      // Zmiana koloru nagłówków w kolumnach G, H, I, J i K
+      const columnsToChange = ["G", "H", "I", "J", "K"]; // Lista kolumn do zmiany
+
+      columnsToChange.forEach((columnName) => {
+        const headerCell = worksheet.getCell(`${columnName}1`); // Odwołanie do nagłówka (pierwsza komórka w danej kolumnie)
+        headerCell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "efc179" }, // Kolor tła
+        };
+        headerCell.font = {
+          bold: true,
+          color: { argb: "000000" }, // Kolor tekstu
+        };
+      });
+      // Dodaj dane
+      obj.data.forEach((item, rowIndex) => {
+        const row = worksheet.getRow(2 + rowIndex); // Tabela zaczyna się od wiersza 2
+        settingsColumn.forEach((col, colIndex) => {
+          row.getCell(colIndex + 1).value =
+            item[col] !== undefined ? item[col] : "";
+          row.getCell(colIndex + 1).alignment = {
+            wrapText: true,
+            horizontal: "center",
+            vertical: "center",
+          };
+          row.getCell(colIndex + 1).border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" },
+          };
+          if (typeof item[col] === "number") {
+            row.getCell(colIndex + 1).numFmt = "#,##0"; // Formatowanie liczb
+          }
+        });
+        row.commit(); // Po dodaniu danych do wiersza musisz je zapisać
+      });
+
+      // Lista wartości dla listy rozwijanej
+      const formOfPayment = [
+        "GOTÓWKA",
+        "PRZELEW",
+        "KARTA PŁATNICZA",
+        "POBRANIE",
+        "VOUCHER",
+        "KOMPENSATA",
+        "BLIK",
+        "ALLEGRO",
+        "PAYU",
+        "PAYPAL",
+      ];
+      const daysPayment = [
+        "BRAK",
+        "0 - 7",
+        "8 - 14",
+        "15 - 30",
+        "31 - 90",
+        "91 - 180",
+        "181 - 360",
+      ];
+
+      const businessPayment = ["TAK", "NIE"];
+
+      const columnFormOfPayment = "G";
+      const columnDaysPayment = "H";
+      const columnBusinessPayment = "I";
+      const columnDaysBusinessPayment = "J";
+      const columnTotalPurchases = "K";
+
+      settingsColumn.forEach((_, index) => {
+        let maxLength = 0;
+
+        // Iterujemy przez wszystkie wiersze, aby znaleźć najdłuższą wartość w kolumnie
+        worksheet.eachRow((row) => {
+          // zmiana zabzepieczenia arkusza
+          row.eachCell((cell) => {
+            cell.protection = { locked: true }; // Oznacz wszystkie komórki jako niezablokowane
+            // cell.protection = { locked: true, sort: true }; // Oznacz wszystkie komórki jako niezablokowane
+          });
+
+          // Ustawienie nagłówków jako niezablokowane
+          // const headerRow = worksheet.getRow(1); // Przyjmujemy, że nagłówki są w pierwszym wierszu
+          // headerRow.eachCell((cell) => {
+          //   cell.protection = { locked: false }; // Oznacz nagłówki jako niezablokowane
+          // });
+
+          // koniec zmiany
+          const cellValue = row.getCell(index + 1).value;
+          if (cellValue) {
+            const cellLength = cellValue.toString().length;
+            if (cellLength > maxLength) {
+              maxLength = cellLength;
+            }
+          }
+        });
+
+        // Dopasowanie szerokości kolumny: nie węższa niż 10, nie szersza niż 25
+        worksheet.getColumn(index + 1).width = Math.max(
+          Math.min(maxLength + 5, 25),
+          8
+        );
+
+        if (worksheet.getColumn(columnFormOfPayment)) {
+          // Iteracja przez komórki, zaczynając od drugiego wiersza
+          worksheet
+            .getColumn(columnFormOfPayment)
+            .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+              // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
+              if (rowNumber > 1) {
+                cell.dataValidation = {
+                  type: "list",
+                  allowBlank: false,
+                  operator: "equal",
+                  formulae: [`"${formOfPayment.join(",")}"`],
+                  showErrorMessage: true,
+                  errorStyle: "stop",
+                  errorTitle: "Nieprawidłowa wartość",
+                  error: "Wartość musi zostać wybrana z listy",
+                };
+
+                cell.fill = {
+                  type: "pattern",
+                  pattern: "solid",
+                  fgColor: {
+                    argb: "efc179",
+                  },
+                };
+
+                // Blokowanie komórki
+                cell.protection = {
+                  locked: false, // Oznacza komórkę jako zablokowaną
+                };
+              }
+            });
+        }
+
+        if (worksheet.getColumn(columnDaysPayment)) {
+          // Iteracja przez komórki, zaczynając od drugiego wiersza
+          worksheet
+            .getColumn(columnDaysPayment)
+            .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+              // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
+              if (rowNumber > 1) {
+                cell.dataValidation = {
+                  type: "list",
+                  allowBlank: false,
+                  operator: "equal",
+                  formulae: [`"${daysPayment.join(",")}"`],
+                  showErrorMessage: true,
+                  errorStyle: "stop",
+                  errorTitle: "Nieprawidłowa wartość",
+                  error: "Wartość musi zostać wybrana z listy",
+                };
+
+                cell.fill = {
+                  type: "pattern",
+                  pattern: "solid",
+                  fgColor: {
+                    argb: "efc179",
+                  },
+                };
+
+                // Blokowanie komórki
+                cell.protection = {
+                  locked: false, // Oznacza komórkę jako zablokowaną
+                };
+              }
+            });
+        }
+
+        if (worksheet.getColumn(columnBusinessPayment)) {
+          // Iteracja przez komórki, zaczynając od drugiego wiersza
+          worksheet
+            .getColumn(columnBusinessPayment)
+            .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+              // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
+              if (rowNumber > 1) {
+                cell.dataValidation = {
+                  type: "list",
+                  allowBlank: false,
+                  operator: "equal",
+                  formulae: [`"${businessPayment.join(",")}"`],
+                  showErrorMessage: true,
+                  errorStyle: "stop",
+                  errorTitle: "Nieprawidłowa wartość",
+                  error: "Wartość musi zostać wybrana z listy",
+                };
+
+                cell.fill = {
+                  type: "pattern",
+                  pattern: "solid",
+                  fgColor: {
+                    argb: "efc179",
+                  },
+                };
+
+                // Blokowanie komórki
+                cell.protection = {
+                  locked: false, // Oznacza komórkę jako zablokowaną
+                };
+              }
+            });
+        }
+
+        if (worksheet.getColumn(columnDaysBusinessPayment)) {
+          // Iteracja przez komórki, zaczynając od drugiego wiersza
+          worksheet
+            .getColumn(columnDaysBusinessPayment)
+            .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+              // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
+              if (rowNumber > 1) {
+                cell.fill = {
+                  type: "pattern",
+                  pattern: "solid",
+                  fgColor: {
+                    argb: "efc179",
+                  },
+                };
+                // Blokowanie komórki
+                cell.protection = {
+                  locked: false, // Oznacza komórkę jako zablokowaną
+                };
+
+                cell.numFmt = "#,##0";
+
+                cell.dataValidation = {
+                  type: "whole", // Możliwe wartości: 'whole', 'decimal', 'list', 'date', 'time', 'textLength', 'custom'
+                  operator: "between", // Możliwe wartości: 'between', 'notBetween', 'equal', 'notEqual', 'greaterThan', 'lessThan', 'greaterThanOrEqual', 'lessThanOrEqual'
+                  formula1: 0, // Minimalna wartość
+                  formula2: 1000000, // Maksymalna wartość (możesz ustawić na wartość, którą potrzebujesz)
+                  showErrorMessage: true,
+                  errorTitle: "Nieprawidłowa wartość",
+                  error:
+                    "Proszę wprowadzić wartość liczbową (tylko liczby, bez przecinka).",
+                };
+              }
+            });
+        }
+
+        if (worksheet.getColumn(columnTotalPurchases)) {
+          // Iteracja przez komórki, zaczynając od drugiego wiersza
+          worksheet
+            .getColumn(columnTotalPurchases)
+            .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+              // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
+              if (rowNumber > 1) {
+                cell.fill = {
+                  type: "pattern",
+                  pattern: "solid",
+                  fgColor: {
+                    argb: "efc179",
+                  },
+                };
+                // Blokowanie komórki
+                cell.protection = {
+                  locked: false, // Oznacza komórkę jako zablokowaną
+                };
+
+                cell.numFmt = "#,##0.00";
+
+                cell.dataValidation = {
+                  type: "whole", // Możliwe wartości: 'whole', 'decimal', 'list', 'date', 'time', 'textLength', 'custom'
+                  operator: "between", // Możliwe wartości: 'between', 'notBetween', 'equal', 'notEqual', 'greaterThan', 'lessThan', 'greaterThanOrEqual', 'lessThanOrEqual'
+                  formula1: 0, // Minimalna wartość
+                  formula2: 1000000, // Maksymalna wartość (możesz ustawić na wartość, którą potrzebujesz)
+                  showErrorMessage: true,
+                  errorTitle: "Nieprawidłowa wartość",
+                  error:
+                    "Proszę wprowadzić wartość liczbową (tylko liczby, bez przecinka).",
+                };
+              }
+            });
+        }
+
+        if (worksheet.getColumn("L")) {
+          worksheet.getColumn("L").eachCell((cell) => {
+            // Formatowanie liczby
+            cell.numFmt = "#,##0.00"; // Formatowanie z przecinkami i dwoma miejscami po przecinku
+          });
+        }
+      });
+
+      // Dodanie autofilter
+      worksheet.autoFilter = {
+        from: { row: 1, column: 1 },
+        to: { row: 1, column: settingsColumn.length },
+      };
+
+      // Sortowanie według kolumny K od największej do najmniejszej wartości
+      // Zmienna do sortowania przed dodaniem do arkusza
+      obj.data.sort((a, b) => b[settingsColumn[10]] - a[settingsColumn[10]]); // Zakładając, że kolumna K jest 11. kolumną (indeks 10)
+
+      // Dodaj dane bez zmian w stylu
+      // Wstaw dane do arkusza, pominając kolumnę A
+      obj.data.forEach((item, rowIndex) => {
+        const row = worksheet.getRow(2 + rowIndex); // Tabela zaczyna się od wiersza 2
+        settingsColumn.forEach((col, colIndex) => {
+          // Pomiń kolumnę A, czyli indeks 0
+          if (colIndex > 0) {
+            row.getCell(colIndex + 1).value =
+              item[col] !== undefined ? item[col] : "";
+          }
+        });
+        row.commit(); // Po dodaniu danych do wiersza musisz je zapisać
+      });
+
+      // Zamrożenie pierwszej kolumny i pierwszych 2 wierszy
+      worksheet.views = [{ state: "frozen", xSplit: 1, ySplit: 1 }];
+
+      // Ochrona arkusza, aby zablokowane komórki były faktycznie chronione
+      worksheet.protect("windykacja", {
+        selectLockedCells: true, // Umożliwia zaznaczanie zablokowanych komórek
+        selectUnlockedCells: true, // Umożliwia zaznaczanie niezablokowanych komórek
+        formatCells: false, // Zakaz formatowania komórek
+        formatColumns: false, // Zakaz formatowania kolumn
+        formatRows: false, // Zakaz formatowania wierszy
+        insertColumns: false, // Zakaz wstawiania kolumn
+        insertRows: false, // Zakaz wstawiania wierszy
+        deleteColumns: false, // Zakaz usuwania kolumn
+        deleteRows: false, // Zakaz usuwania wierszy
+        autoFilter: true, // Umożliwia korzystanie z autofilter
+        sort: true, // Umożliwia sortowanie
+      });
+    }
+
+    // Zapisz plik
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    saveAs(blob, "Kredyt Kupiecki.xlsx");
+  } catch (err) {
+    console.error(err);
+  }
+};

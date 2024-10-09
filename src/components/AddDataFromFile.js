@@ -87,8 +87,11 @@ const AddDataFromFile = () => {
       //   `/sql/copy-items-departments`
       // );
 
+      // const repairDepartments = await axiosPrivateIntercept.get(
+      //   `/sql/copy-prepared-items`
+      // );
       const repairDepartments = await axiosPrivateIntercept.get(
-        `/sql/copy-prepared-items`
+        `/sql/trade-credit-settlements`
       );
 
       // console.log(copyUsers.data.data);
@@ -153,7 +156,11 @@ const AddDataFromFile = () => {
                 name="uploadfile"
                 id="settlements"
                 style={{ display: "none" }}
-                onChange={(e) => handleSendFileBL(e, "settlements")}
+                // onChange={(e) => handleSendFileBL(e, "settlements")}
+                // onChange={(e) =>
+                //   handleSendFileBL(e, "settlements_credit_trade")
+                // }
+                onChange={(e) => handleSendFileBL(e, "data_credit_trade")}
               />
               <label htmlFor="settlements" className="add_data_file-click-me">
                 Prześlij rozrachunki

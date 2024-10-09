@@ -3,6 +3,7 @@ import XLSX from "xlsx-js-style";
 // wersja bez dodatkowych wierszy nad tabelą
 
 export const getExcelRaport = async (cleanData, settingsColumn) => {
+  console.log(settingsColumn);
   try {
     // const settingsColumn = await axiosPrivateIntercept.get(
     //   "/fk/get-columns-order"

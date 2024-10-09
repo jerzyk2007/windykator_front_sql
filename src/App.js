@@ -19,6 +19,7 @@ import FKDataSettings from "./components/FKRaport/FKDataSettings";
 import FKItems from "./components/FKRaport/FKItems";
 import PrepareTable from "./components/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
+import TradeCredit from "./components/TradeCredit";
 import "./App.css";
 
 function App() {
@@ -96,6 +97,10 @@ function App() {
 
             <Route element={<RequireAuth allowedRoles={[300, 1000]} />}>
               <Route path="/raport-nora" element={<RaportsNora />} />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={[300, 1000]} />}>
+              <Route path="/trade-credit" element={<TradeCredit />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[110, 1000]} />}>

@@ -230,6 +230,18 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
+                {(auth?.roles?.includes(300) ||
+                  auth?.roles?.includes(1000)) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link
+                      to="/trade-credit"
+                      className="nav_menu-link"
+                      onClick={handleLinkClick}
+                    >
+                      Kredyt Kupiecki
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </li>
