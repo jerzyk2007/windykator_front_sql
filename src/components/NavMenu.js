@@ -16,8 +16,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
   const [menuActive, setMenuActive] = useState(false);
   const handleLinkClick = () => {
     if (mobileMenu) {
-      handleCloseMobileMenu();
+      return handleCloseMobileMenu();
     }
+    setMenuActive(false);
   };
 
   const handleLogout = async () => {
@@ -30,12 +31,16 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
       <ul
         className={!mobileMenu ? "nav_menu__menu" : "nav_menu__menu active"}
         onClick={
-          width && width >= 960
-            ? () => setMenuActive(!menuActive)
-            : () => setMenuActive(true)
+          width ? () => setMenuActive(!menuActive) : () => setMenuActive(true)
         }
+        // onClick={
+        //   width && width >= 960
+        //     ? () => setMenuActive(!menuActive)
+        //     : () => setMenuActive(true)
+        // }
         onMouseLeave={
-          width && width >= 960 ? () => setMenuActive(false) : undefined
+          // width && width >= 960 ? () => setMenuActive(false) : undefined
+          width ? () => setMenuActive(false) : undefined
         }
       >
         {auth?.roles?.includes(100) && (

@@ -65,7 +65,8 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
       });
 
       // Zmiana koloru nagłówków w kolumnach G, H, I, J i K
-      const columnsToChange = ["G", "H", "I", "J", "K"]; // Lista kolumn do zmiany
+      // const columnsToChange = ["G", "H", "I", "J", "K"]; // Lista kolumn do zmiany
+      const columnsToChange = ["G", "K", "L", "N", "O"]; // Lista kolumn do zmiany
 
       columnsToChange.forEach((columnName) => {
         const headerCell = worksheet.getCell(`${columnName}1`); // Odwołanie do nagłówka (pierwsza komórka w danej kolumnie)
@@ -104,18 +105,19 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
       });
 
       // Lista wartości dla listy rozwijanej
-      const formOfPayment = [
-        "GOTÓWKA",
-        "PRZELEW",
-        "KARTA PŁATNICZA",
-        "POBRANIE",
-        "VOUCHER",
-        "KOMPENSATA",
-        "BLIK",
-        "ALLEGRO",
-        "PAYU",
-        "PAYPAL",
-      ];
+      // const formOfPayment = [
+      //   "GOTÓWKA",
+      //   "PRZELEW",
+      //   "KARTA PŁATNICZA",
+      //   "POBRANIE",
+      //   "VOUCHER",
+      //   "KOMPENSATA",
+      //   "BLIK",
+      //   "ALLEGRO",
+      //   "PAYU",
+      //   "PAYPAL",
+      // ];
+      const formOfPayment = ["PRZELEW", "BRAK PRZELEWU", "KOMPENSATA"];
       const daysPayment = [
         "BRAK",
         "0 - 7",
@@ -127,12 +129,6 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
       ];
 
       const businessPayment = ["TAK", "NIE"];
-
-      const columnFormOfPayment = "G";
-      const columnDaysPayment = "H";
-      const columnBusinessPayment = "I";
-      const columnDaysBusinessPayment = "J";
-      const columnTotalPurchases = "K";
 
       settingsColumn.forEach((_, index) => {
         let maxLength = 0;
@@ -167,13 +163,52 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
           8
         );
 
-        if (worksheet.getColumn(columnFormOfPayment)) {
-          // Iteracja przez komórki, zaczynając od drugiego wiersza
+        // // Zmienna do sortowania przed dodaniem do arkusza
+        obj.data.sort((a, b) => b[settingsColumn[9]] - a[settingsColumn[9]]); // Zakładając, że kolumna K jest 11. kolumną (indeks 10)
+
+        // // Zmienna do sortowania przed dodaniem do arkusza, sortuje po pierwszej wartości w tablicy i zamianie na Number
+        // obj.data.sort((a, b) => {
+        //   // Sprawdź, czy a[settingsColumn[10]] i b[settingsColumn[10]] są tablicami
+        //   const valueA =
+        //     Array.isArray(a[settingsColumn[10]]) &&
+        //     a[settingsColumn[10]].length > 0
+        //       ? Number(a[settingsColumn[10]][0])
+        //       : 0;
+        //   const valueB =
+        //     Array.isArray(b[settingsColumn[10]]) &&
+        //     b[settingsColumn[10]].length > 0
+        //       ? Number(b[settingsColumn[10]][0])
+        //       : 0;
+
+        //   return valueB - valueA; // Sortowanie malejące
+        // });
+
+        // Dodaj dane bez zmian w stylu
+        // Wstaw dane do arkusza, pominając kolumnę A
+        obj.data.forEach((item, rowIndex) => {
+          const row = worksheet.getRow(2 + rowIndex); // Tabela zaczyna się od wiersza 2
+          settingsColumn.forEach((col, colIndex) => {
+            // Pomiń kolumnę A, czyli indeks 0
+            if (colIndex > 0) {
+              row.getCell(colIndex + 1).value =
+                item[col] !== undefined ? item[col] : "";
+            }
+          });
+          row.commit(); // Po dodaniu danych do wiersza musisz je zapisać
+        });
+
+        if (worksheet.getColumn("G")) {
+          worksheet.getColumn("G").width = 20;
+
           worksheet
-            .getColumn(columnFormOfPayment)
+            .getColumn("G")
             .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
-              // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
               if (rowNumber > 1) {
+                const cellValue = cell.value;
+                const [displayValue, isValid] = cellValue;
+                // Ustawiamy wyświetlaną wartość tylko na pierwszy element tablicy
+                cell.value = displayValue;
+
                 cell.dataValidation = {
                   type: "list",
                   allowBlank: false,
@@ -185,107 +220,160 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
                   error: "Wartość musi zostać wybrana z listy",
                 };
 
+                // Ustawiamy odpowiedni kolor na podstawie drugiego elementu tablicy
                 cell.fill = {
                   type: "pattern",
                   pattern: "solid",
                   fgColor: {
-                    argb: "efc179",
+                    argb: isValid ? "ADD8E6" : "efc179", // Jasnoniebieski, gdy true, pomarańczowy, gdy false
                   },
                 };
 
-                // Blokowanie komórki
                 cell.protection = {
-                  locked: false, // Oznacza komórkę jako zablokowaną
+                  locked: false, // Oznacza komórkę jako niezablokowaną
                 };
               }
             });
         }
 
-        if (worksheet.getColumn(columnDaysPayment)) {
+        // if (worksheet.getColumn("H")) {
+        //   // Iteracja przez komórki, zaczynając od drugiego wiersza
+        //   worksheet
+        //     .getColumn("H")
+        //     .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+        //       // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
+        //       if (rowNumber > 1) {
+        //         const cellValue = cell.value;
+        //         const [displayValue, isValid] = cellValue;
+
+        //         cell.value = displayValue;
+
+        //         cell.dataValidation = {
+        //           type: "list",
+        //           allowBlank: false,
+        //           operator: "equal",
+        //           formulae: [`"${daysPayment.join(",")}"`],
+        //           showErrorMessage: true,
+        //           errorStyle: "stop",
+        //           errorTitle: "Nieprawidłowa wartość",
+        //           error: "Wartość musi zostać wybrana z listy",
+        //         };
+
+        //         cell.fill = {
+        //           type: "pattern",
+        //           pattern: "solid",
+        //           fgColor: {
+        //             argb: isValid ? "ADD8E6" : "efc179",
+        //           },
+        //         };
+
+        //         // Blokowanie komórki
+        //         cell.protection = {
+        //           locked: false, // Oznacza komórkę jako zablokowaną
+        //         };
+        //       }
+        //     });
+        // }
+
+        // if (worksheet.getColumn("I")) {
+        //   // Iteracja przez komórki, zaczynając od drugiego wiersza
+        //   worksheet
+        //     .getColumn("I")
+        //     .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+        //       // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
+        //       if (rowNumber > 1) {
+        //         const cellValue = cell.value;
+        //         const [displayValue, isValid] = cellValue;
+
+        //         cell.value = displayValue;
+
+        //         cell.dataValidation = {
+        //           type: "list",
+        //           allowBlank: false,
+        //           operator: "equal",
+        //           formulae: [`"${businessPayment.join(",")}"`],
+        //           showErrorMessage: true,
+        //           errorStyle: "stop",
+        //           errorTitle: "Nieprawidłowa wartość",
+        //           error: "Wartość musi zostać wybrana z listy",
+        //         };
+
+        //         cell.fill = {
+        //           type: "pattern",
+        //           pattern: "solid",
+        //           fgColor: {
+        //             argb: isValid ? "ADD8E6" : "efc179",
+        //           },
+        //         };
+
+        //         // Blokowanie komórki
+        //         cell.protection = {
+        //           locked: false, // Oznacza komórkę jako zablokowaną
+        //         };
+        //       }
+        //     });
+        // }
+
+        // if (worksheet.getColumn("J")) {
+        //   // Iteracja przez komórki, zaczynając od drugiego wiersza
+        //   worksheet
+        //     .getColumn("J")
+        //     .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+        //       // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
+        //       if (rowNumber > 1) {
+        //         // const cellValue = cell.value;
+        //         // const [displayValue, isValid] = cellValue;
+
+        //         // cell.value = displayValue;
+
+        //         cell.fill = {
+        //           type: "pattern",
+        //           pattern: "solid",
+        //           fgColor: {
+        //             argb: "efc179",
+        //           },
+        //         };
+        //         // Blokowanie komórki
+        //         cell.protection = {
+        //           locked: false, // Oznacza komórkę jako zablokowaną
+        //         };
+
+        //         cell.numFmt = "#,##0";
+
+        //         cell.dataValidation = {
+        //           type: "whole", // Możliwe wartości: 'whole', 'decimal', 'list', 'date', 'time', 'textLength', 'custom'
+        //           operator: "between", // Możliwe wartości: 'between', 'notBetween', 'equal', 'notEqual', 'greaterThan', 'lessThan', 'greaterThanOrEqual', 'lessThanOrEqual'
+        //           formula1: 0, // Minimalna wartość
+        //           formula2: 1000000, // Maksymalna wartość (możesz ustawić na wartość, którą potrzebujesz)
+        //           showErrorMessage: true,
+        //           errorTitle: "Nieprawidłowa wartość",
+        //           error:
+        //             "Proszę wprowadzić wartość liczbową (tylko liczby, bez przecinka).",
+        //         };
+        //       }
+        //     });
+        // }
+
+        if (worksheet.getColumn("K")) {
+          worksheet.getColumn("K").width = 20;
           // Iteracja przez komórki, zaczynając od drugiego wiersza
           worksheet
-            .getColumn(columnDaysPayment)
+            .getColumn("K")
             .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
               // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
               if (rowNumber > 1) {
-                cell.dataValidation = {
-                  type: "list",
-                  allowBlank: false,
-                  operator: "equal",
-                  formulae: [`"${daysPayment.join(",")}"`],
-                  showErrorMessage: true,
-                  errorStyle: "stop",
-                  errorTitle: "Nieprawidłowa wartość",
-                  error: "Wartość musi zostać wybrana z listy",
-                };
+                // console.log(cell.value);
+                const cellValue = cell.value;
+                const [displayValue, isValid] = cellValue;
+
+                cell.value = displayValue;
 
                 cell.fill = {
                   type: "pattern",
                   pattern: "solid",
                   fgColor: {
-                    argb: "efc179",
+                    argb: isValid ? "ADD8E6" : "efc179",
                   },
-                };
-
-                // Blokowanie komórki
-                cell.protection = {
-                  locked: false, // Oznacza komórkę jako zablokowaną
-                };
-              }
-            });
-        }
-
-        if (worksheet.getColumn(columnBusinessPayment)) {
-          // Iteracja przez komórki, zaczynając od drugiego wiersza
-          worksheet
-            .getColumn(columnBusinessPayment)
-            .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
-              // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
-              if (rowNumber > 1) {
-                cell.dataValidation = {
-                  type: "list",
-                  allowBlank: false,
-                  operator: "equal",
-                  formulae: [`"${businessPayment.join(",")}"`],
-                  showErrorMessage: true,
-                  errorStyle: "stop",
-                  errorTitle: "Nieprawidłowa wartość",
-                  error: "Wartość musi zostać wybrana z listy",
-                };
-
-                cell.fill = {
-                  type: "pattern",
-                  pattern: "solid",
-                  fgColor: {
-                    argb: "efc179",
-                  },
-                };
-
-                // Blokowanie komórki
-                cell.protection = {
-                  locked: false, // Oznacza komórkę jako zablokowaną
-                };
-              }
-            });
-        }
-
-        if (worksheet.getColumn(columnDaysBusinessPayment)) {
-          // Iteracja przez komórki, zaczynając od drugiego wiersza
-          worksheet
-            .getColumn(columnDaysBusinessPayment)
-            .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
-              // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
-              if (rowNumber > 1) {
-                cell.fill = {
-                  type: "pattern",
-                  pattern: "solid",
-                  fgColor: {
-                    argb: "efc179",
-                  },
-                };
-                // Blokowanie komórki
-                cell.protection = {
-                  locked: false, // Oznacza komórkę jako zablokowaną
                 };
 
                 cell.numFmt = "#,##0";
@@ -294,20 +382,77 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
                   type: "whole", // Możliwe wartości: 'whole', 'decimal', 'list', 'date', 'time', 'textLength', 'custom'
                   operator: "between", // Możliwe wartości: 'between', 'notBetween', 'equal', 'notEqual', 'greaterThan', 'lessThan', 'greaterThanOrEqual', 'lessThanOrEqual'
                   formula1: 0, // Minimalna wartość
-                  formula2: 1000000, // Maksymalna wartość (możesz ustawić na wartość, którą potrzebujesz)
+                  formula2: 365, // Maksymalna wartość (możesz ustawić na wartość, którą potrzebujesz)
                   showErrorMessage: true,
                   errorTitle: "Nieprawidłowa wartość",
                   error:
                     "Proszę wprowadzić wartość liczbową (tylko liczby, bez przecinka).",
                 };
+
+                // Blokowanie komórki
+                cell.protection = {
+                  locked: false, // Oznacza komórkę jako zablokowaną
+                };
               }
             });
         }
 
-        if (worksheet.getColumn(columnTotalPurchases)) {
+        if (worksheet.getColumn("L")) {
+          worksheet.getColumn("L").width = 30;
+          worksheet
+            .getColumn("L")
+            .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+              if (rowNumber > 1) {
+                cell.fill = {
+                  type: "pattern",
+                  pattern: "solid",
+                  fgColor: {
+                    argb: "efc179",
+                  },
+                };
+                cell.protection = {
+                  locked: false, // Oznacza komórkę jako zablokowaną
+                };
+              }
+            });
+        }
+
+        if (worksheet.getColumn("M")) {
+          worksheet
+            .getColumn("M")
+            .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+              if (rowNumber > 1) {
+                cell.value = {
+                  // formula: `H${rowNumber}/365*K${rowNumber}`,
+
+                  formula: `
+                  IF(ISBLANK(K${rowNumber}), "",
+                  IF(H${rowNumber}/365*K${rowNumber}=0, 0,
+                  IF(H${rowNumber}/365*K${rowNumber}<10, 10,
+                  IF(H${rowNumber}/365*K${rowNumber}<100, 100,
+                  IF(H${rowNumber}/365*K${rowNumber}<500, 500,
+                  IF(H${rowNumber}/365*K${rowNumber}<1000, CEILING(H${rowNumber}/365*K${rowNumber}, 100),
+                  IF(H${rowNumber}/365*K${rowNumber}<10000, CEILING(H${rowNumber}/365*K${rowNumber}, 100),
+                  IF(H${rowNumber}/365*K${rowNumber}<100000, CEILING(H${rowNumber}/365*K${rowNumber}, 1000),
+                  CEILING(H${rowNumber}/365*K${rowNumber}, 10000)))))))))`,
+                };
+                // cell.fill = {
+                //   type: "pattern",
+                //   pattern: "solid",
+                //   fgColor: {
+                //     argb: "ADD8E6",
+                //   },
+                // };
+                cell.numFmt = "#,##0";
+              }
+            });
+        }
+
+        if (worksheet.getColumn("N")) {
+          worksheet.getColumn("N").width = 20;
           // Iteracja przez komórki, zaczynając od drugiego wiersza
           worksheet
-            .getColumn(columnTotalPurchases)
+            .getColumn("N")
             .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
               // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
               if (rowNumber > 1) {
@@ -318,32 +463,46 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
                     argb: "efc179",
                   },
                 };
-                // Blokowanie komórki
-                cell.protection = {
-                  locked: false, // Oznacza komórkę jako zablokowaną
-                };
 
-                cell.numFmt = "#,##0.00";
+                cell.numFmt = "#,##0";
 
                 cell.dataValidation = {
                   type: "whole", // Możliwe wartości: 'whole', 'decimal', 'list', 'date', 'time', 'textLength', 'custom'
                   operator: "between", // Możliwe wartości: 'between', 'notBetween', 'equal', 'notEqual', 'greaterThan', 'lessThan', 'greaterThanOrEqual', 'lessThanOrEqual'
                   formula1: 0, // Minimalna wartość
-                  formula2: 1000000, // Maksymalna wartość (możesz ustawić na wartość, którą potrzebujesz)
+                  formula2: 365, // Maksymalna wartość (możesz ustawić na wartość, którą potrzebujesz)
                   showErrorMessage: true,
                   errorTitle: "Nieprawidłowa wartość",
                   error:
                     "Proszę wprowadzić wartość liczbową (tylko liczby, bez przecinka).",
                 };
+
+                // Blokowanie komórki
+                cell.protection = {
+                  locked: false, // Oznacza komórkę jako zablokowaną
+                };
               }
             });
         }
 
-        if (worksheet.getColumn("L")) {
-          worksheet.getColumn("L").eachCell((cell) => {
-            // Formatowanie liczby
-            cell.numFmt = "#,##0.00"; // Formatowanie z przecinkami i dwoma miejscami po przecinku
-          });
+        if (worksheet.getColumn("O")) {
+          worksheet.getColumn("O").width = 30;
+          worksheet
+            .getColumn("O")
+            .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+              if (rowNumber > 1) {
+                cell.fill = {
+                  type: "pattern",
+                  pattern: "solid",
+                  fgColor: {
+                    argb: "efc179",
+                  },
+                };
+                cell.protection = {
+                  locked: false, // Oznacza komórkę jako zablokowaną
+                };
+              }
+            });
         }
       });
 
@@ -352,24 +511,6 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
         from: { row: 1, column: 1 },
         to: { row: 1, column: settingsColumn.length },
       };
-
-      // Sortowanie według kolumny K od największej do najmniejszej wartości
-      // Zmienna do sortowania przed dodaniem do arkusza
-      obj.data.sort((a, b) => b[settingsColumn[10]] - a[settingsColumn[10]]); // Zakładając, że kolumna K jest 11. kolumną (indeks 10)
-
-      // Dodaj dane bez zmian w stylu
-      // Wstaw dane do arkusza, pominając kolumnę A
-      obj.data.forEach((item, rowIndex) => {
-        const row = worksheet.getRow(2 + rowIndex); // Tabela zaczyna się od wiersza 2
-        settingsColumn.forEach((col, colIndex) => {
-          // Pomiń kolumnę A, czyli indeks 0
-          if (colIndex > 0) {
-            row.getCell(colIndex + 1).value =
-              item[col] !== undefined ? item[col] : "";
-          }
-        });
-        row.commit(); // Po dodaniu danych do wiersza musisz je zapisać
-      });
 
       // Zamrożenie pierwszej kolumny i pierwszych 2 wierszy
       worksheet.views = [{ state: "frozen", xSplit: 1, ySplit: 1 }];

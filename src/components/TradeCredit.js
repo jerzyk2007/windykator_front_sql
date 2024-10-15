@@ -125,8 +125,6 @@ const TradeCredit = () => {
     );
   };
 
-  const platnoscPowyzejIluDni = 3;
-
   const generateRaport = async () => {
     try {
       setPleaseWait(true);
@@ -134,17 +132,42 @@ const TradeCredit = () => {
         `/documents/get-data-credit-trade`
       );
 
+      const tradeCreditData = [...result.data.tradeCreditData];
+      const areaCreditData = [...result.data.areaCreditData];
+
       // tablica z unikalnymi kontrahentami
-      const newResult = uniqueContractor(result.data);
+      const newResult = uniqueContractor(tradeCreditData);
 
       //   Wydobycie unikalnych wartości z klucza "segment"
       const uniqueSegments = [
-        ...new Set(result.data.map((item) => item.segment)),
+        ...new Set(tradeCreditData.map((item) => item.segment)),
       ];
+
+      const adjustLimit = (limit) => {
+        if (limit === 0) return 0;
+        if (limit < 10) return 10;
+        if (limit < 100) return 100;
+        if (limit < 500) return 500;
+
+        // Zaokrąglanie w górę do najbliższej setki dla wartości poniżej 1000
+        if (limit < 1000) return Math.ceil(limit / 100) * 100;
+
+        // Zaokrąglanie w górę do najbliższego tysiąca dla wartości poniżej 10000
+        if (limit <= 10000) return Math.ceil(limit / 100) * 100;
+
+        // Zaokrąglanie w górę do najbliższego tysiąca dla wartości poniżej 100000
+        if (limit <= 100000) return Math.ceil(limit / 1000) * 1000;
+
+        // Zaokrąglanie w górę do najbliższej dziesiątki tysięcy dla wartości powyżej 100000
+        if (limit > 100000) return Math.ceil(limit / 10000) * 10000;
+
+        // Dla wartości od 10000 do 100000 bez zmian
+        return limit;
+      };
 
       // tworzę tablicę z osobnymi danymi dla każdego segmentu
       const raportData = uniqueSegments.sort().map((item) => {
-        const filteredData = result.data.filter(
+        const filteredData = tradeCreditData.filter(
           (doc) => doc.segment.toUpperCase() === item.toUpperCase()
         );
         return {
@@ -153,7 +176,8 @@ const TradeCredit = () => {
         };
       });
 
-      // result.data wszytskie dokumenty
+      // tradeCreditDataa wszytskie dokumenty
+      // areaCreditData - dane uzupełnione przez obszary
       // newResult - unikalni kontrahenci
       // raportData - unikalne obszary z danymi
 
@@ -212,6 +236,37 @@ const TradeCredit = () => {
               // Przypisanie title do zmiennej titleDaysPayment, jeśli znalazł odpowiedni zakres
               const titleDaysPayment = foundPayment ? foundPayment.title : null;
 
+              const formaPlatnWskazBiznes = contractor.kontrahent_nip
+                ? transfer
+                : "BRAK PRZELEWU";
+
+              const termPlatnWskazBiznes =
+                contractor.kontrahent_nip &&
+                transfer === "PRZELEW" &&
+                titleDaysPayment
+                  ? titleDaysPayment
+                  : "BRAK";
+
+              const CzyBiznesZezwala =
+                contractor.kontrahent_nip && transfer === "PRZELEW"
+                  ? "TAK"
+                  : "NIE";
+
+              const iloscDni =
+                contractor.kontrahent_nip && transfer === "PRZELEW"
+                  ? Math.ceil(averageDayPayment / docCounter)
+                  : 0;
+
+              const dopuszczKredyt =
+                contractor.kontrahent_nip && transfer === "PRZELEW"
+                  ? Math.ceil(totalPurchases * 1.1) > 500
+                    ? Math.ceil(totalPurchases * 1.1)
+                    : 500
+                  : 0;
+
+              const creditLimit = (Math.ceil(totalPurchases) / 365) * iloscDni;
+              const maxLimit = adjustLimit(creditLimit);
+
               return {
                 "Numer klienta": String(contractor.kontrahent_id),
                 "Nazwa kontrahenta": contractor.kontrahent_nazwa,
@@ -219,34 +274,17 @@ const TradeCredit = () => {
                   ? contractor.kontrahent_nip
                   : "",
                 Obszar: area,
-                "Forma płatności - Teraz": contractor.kontrahent_nip
+                "Forma płatności -\nTeraz": contractor.kontrahent_nip
                   ? transfer
                   : "BRAK PRZELEWU",
-                "Forma płatności - Wskazuje Biznes": contractor.kontrahent_nip
-                  ? transfer
-                  : "BRAK PRZELEWU",
-                "Termin Płatności - Wskazuje Biznes":
-                  contractor.kontrahent_nip &&
-                  transfer === "PRZELEW" &&
-                  titleDaysPayment
-                    ? titleDaysPayment
-                    : "BRAK",
-                "Czy Biznes zezwala na płatność TAK/NIE":
-                  contractor.kontrahent_nip && transfer === "PRZELEW"
-                    ? "TAK"
-                    : "NIE",
-                "Ilość dni płatności opóźnionej":
-                  contractor.kontrahent_nip && transfer === "PRZELEW"
-                    ? Math.ceil(averageDayPayment / docCounter)
-                    : 0,
-                "Dopuszczalny kredyt - Wskazuje Biznes":
-                  contractor.kontrahent_nip && transfer === "PRZELEW"
-                    ? Math.ceil(totalPurchases * 1.1) > 500
-                      ? Math.ceil(totalPurchases * 1.1)
-                      : 500
-                    : 0,
-                Saldo: Math.ceil(totalPurchases),
-                "Klient nienazwany": filteredSegment.length > 0 ? "TAK" : "NIE",
+                "Forma płatności -\nWskazuje Biznes": [
+                  formaPlatnWskazBiznes,
+                  false,
+                ],
+                "Obrót - 12 m-cy": Math.ceil(totalPurchases),
+
+                "Ilość dni płatności opóźnionej": iloscDni,
+                Limit: maxLimit,
               };
             }
             return null; // Zwróć null, jeśli nie ma filtrów
@@ -262,32 +300,54 @@ const TradeCredit = () => {
         "Nazwa kontrahenta",
         "Nip kontrahenta",
         "Obszar",
-        "Forma płatności - Teraz",
-        "Forma płatności - Wskazuje Biznes",
-        "Termin Płatności - Wskazuje Biznes",
-        "Czy Biznes zezwala na płatność TAK/NIE",
+        "Forma płatności -\nTeraz",
+        "Forma płatności -\nWskazuje Biznes",
+        "Obrót - 12 m-cy",
+
+        // "Czy Biznes zezwala na płatność TAK/NIE",
         "Ilość dni płatności opóźnionej",
-        "Dopuszczalny kredyt - Wskazuje Biznes",
-        "Saldo",
-        "Klient nienazwany",
-        // "Obecnie zgoda na płatności opóźnione",
-        // "Ile wystawiona faktur",
-        // "Ile wystawiono faktur - Przelew",
-        // "Średnia dni na płatność",
-        // "Ilość dni płatności opóźnionej",
-        // `Ile faktur zapłacono powyżej dni - ${platnoscPowyzejIluDni}`,
-        // `Sugerowana zgoda na na przelew (Nie, jeśli 3 fv powyżej ${platnoscPowyzejIluDni} dni)`,
-        // "Suma zakupów",
-        // "Przyznany kredyt - 10% sumy zakupów",
+        "Limit",
+        "Termin Płatności -\nWskazuje Biznes",
+        "Komentarz Biznes -\nTermin",
+        "Limit -\nnowy",
+        "Podaj nowy limit",
+        "Komentarz \nnowy limit",
       ];
 
       const generateNumber = raport.map((item) => {
         const preparedData = [...item.data];
         let counter = 1;
         const data = preparedData.map((doc) => {
+          const filteredDoc = areaCreditData.filter(
+            (docFiltr) =>
+              docFiltr.area === doc.Obszar &&
+              docFiltr.kontr_id === doc["Numer klienta"]
+          );
+
+          // if (filteredDoc.length) {
+          //   console.log(filteredDoc);
+          // }
+
+          const firstFilteredDoc = filteredDoc[0] || {};
+          const formaPltnosciBiznes =
+            firstFilteredDoc.forma_plat === "PRZELEW"
+              ? "PRZELEW"
+              : firstFilteredDoc.forma_plat === "KOMPENSATA"
+              ? "KOMPENSATA"
+              : "BRAK PRZELEWU";
           return {
-            Lp: counter++,
             ...doc,
+            Lp: counter++,
+            "Forma płatności -\nWskazuje Biznes": firstFilteredDoc.forma_plat
+              ? [formaPltnosciBiznes, true]
+              : doc["Forma płatności -\nWskazuje Biznes"],
+            "Termin Płatności -\nWskazuje Biznes": firstFilteredDoc.ile_dni
+              ? [firstFilteredDoc.ile_dni, true]
+              : [null, false],
+            "Komentarz Biznes -\nTermin": "",
+            "Limit -\nnowy": "",
+            "Podaj nowy limit": "",
+            "Komentarz \nnowy limit": "",
           };
         });
         // console.log(data);

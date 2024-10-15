@@ -156,11 +156,12 @@ const AddDataFromFile = () => {
                 name="uploadfile"
                 id="settlements"
                 style={{ display: "none" }}
-                // onChange={(e) => handleSendFileBL(e, "settlements")}
+                onChange={(e) => handleSendFileBL(e, "settlements")}
                 // onChange={(e) =>
                 //   handleSendFileBL(e, "settlements_credit_trade")
                 // }
-                onChange={(e) => handleSendFileBL(e, "data_credit_trade")}
+                // onChange={(e) => handleSendFileBL(e, "data_credit_trade")}
+                // onChange={(e) => handleSendFileBL(e, "add_data_credit_trade")}
               />
               <label htmlFor="settlements" className="add_data_file-click-me">
                 Prześlij rozrachunki
