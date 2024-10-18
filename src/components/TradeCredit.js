@@ -9,60 +9,6 @@ const TradeCredit = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const [pleaseWait, setPleaseWait] = useState(false);
 
-  //   const uniqueContractor = (contractor) => {
-  //     const mapByNip = new Map();
-  //     const usedNames = new Set();
-  //     const nullNipKontrahenci = [];
-
-  //     contractor.forEach((item) => {
-  //       const { kontrahent_nip, kontrahent_nazwa } = item;
-
-  //       if (kontrahent_nip) {
-  //         // Sprawdzamy, czy kontrahent_nazwa już nie występuje
-  //         if (!usedNames.has(kontrahent_nazwa)) {
-  //           // Dodajemy unikalne wpisy na podstawie kontrahent_nip, jeśli kontrahent_nazwa się nie powtarza
-  //           if (!mapByNip.has(kontrahent_nip)) {
-  //             mapByNip.set(kontrahent_nip, item);
-  //             usedNames.add(kontrahent_nazwa); // Oznaczamy nazwę jako wykorzystaną
-  //           }
-  //         }
-  //       } else {
-  //         // Zbieramy obiekty z null w kontrahent_nip
-  //         nullNipKontrahenci.push(item);
-  //       }
-  //     });
-
-  //     // Filtrujemy obiekty z kontrahent_nip === null, by były unikalne na podstawie kontrahent_nazwa i kontrahent_adres
-  //     const uniqueNullNipKontrahenci = [];
-  //     const setByNameAndAddress = new Set();
-
-  //     nullNipKontrahenci.forEach((item) => {
-  //       const { kontrahent_nazwa, kontrahent_adres } = item;
-  //       const key = `${kontrahent_nazwa}-${kontrahent_adres}`;
-
-  //       if (!setByNameAndAddress.has(key) && !usedNames.has(kontrahent_nazwa)) {
-  //         setByNameAndAddress.add(key);
-  //         uniqueNullNipKontrahenci.push(item);
-  //         usedNames.add(kontrahent_nazwa); // Oznaczamy nazwę jako wykorzystaną
-  //       }
-  //     });
-
-  //     // Łączymy wyniki z obu filtracji
-  //     const uniqueKontrahenci = [
-  //       ...Array.from(mapByNip.values()),
-  //       ...uniqueNullNipKontrahenci,
-  //     ];
-
-  //     // Zwracamy tylko wybrane klucze
-  //     return uniqueKontrahenci.map(
-  //       ({ kontrahent_nazwa, kontrahent_nip, kontrahent_id }) => ({
-  //         kontrahent_nazwa,
-  //         kontrahent_nip,
-  //         kontrahent_id,
-  //       })
-  //     );
-  //   };
-
   const uniqueContractor = (contractor) => {
     const mapByNip = new Map();
     const usedNames = new Set();
@@ -138,7 +84,7 @@ const TradeCredit = () => {
       // tablica z unikalnymi kontrahentami
       const newResult = uniqueContractor(tradeCreditData);
 
-      //   Wydobycie unikalnych wartości z klucza "segment"
+      // Wydobycie unikalnych wartości z klucza "segment"
       const uniqueSegments = [
         ...new Set(tradeCreditData.map((item) => item.segment)),
       ];
@@ -165,7 +111,7 @@ const TradeCredit = () => {
         return limit;
       };
 
-      // tworzę tablicę z osobnymi danymi dla każdego segmentu
+      // // tworzę tablicę z osobnymi danymi dla każdego segmentu
       const raportData = uniqueSegments.sort().map((item) => {
         const filteredData = tradeCreditData.filter(
           (doc) => doc.segment.toUpperCase() === item.toUpperCase()
@@ -176,10 +122,10 @@ const TradeCredit = () => {
         };
       });
 
-      // tradeCreditDataa wszytskie dokumenty
-      // areaCreditData - dane uzupełnione przez obszary
-      // newResult - unikalni kontrahenci
-      // raportData - unikalne obszary z danymi
+      // // tradeCreditDataa wszytskie dokumenty
+      // // areaCreditData - dane uzupełnione przez obszary
+      // // newResult - unikalni kontrahenci
+      // // raportData - unikalne obszary z danymi
 
       const daysPayment = [
         { first: 0, last: 7, title: "0 - 7" },
@@ -199,7 +145,8 @@ const TradeCredit = () => {
             let filteredSegment = [];
             if (contractor.kontrahent_nip) {
               filteredSegment = raportItemData.filter(
-                (segment) => segment.kontrahent_id === contractor.kontrahent_id
+                (segment) =>
+                  segment.kontrahent_nip === contractor.kontrahent_nip
               );
             } else {
               filteredSegment = raportItemData.filter(
@@ -207,7 +154,6 @@ const TradeCredit = () => {
                   segment.kontrahent_nazwa === contractor.kontrahent_nazwa
               );
             }
-
             if (filteredSegment.length > 0) {
               let docCounter = 0;
               let area = "";
@@ -294,6 +240,14 @@ const TradeCredit = () => {
         return { name: raportItemName, data: prepareData };
       });
 
+      // const test = raportData.map((item) => {
+      //   for (const doc of item.data) {
+      //     if (doc.segment === "F&I" && doc.kontrahent_nip === "5252800978") {
+      //       console.log(doc);
+      //     }
+      //   }
+      // });
+
       const columns = [
         "Lp",
         "Numer klienta",
@@ -313,42 +267,51 @@ const TradeCredit = () => {
         "Podaj nowy limit",
         "Komentarz \nnowy limit",
       ];
-
       const generateNumber = raport.map((item) => {
         const preparedData = [...item.data];
         let counter = 1;
+        console.log(item);
+
         const data = preparedData.map((doc) => {
-          const filteredDoc = areaCreditData.filter(
-            (docFiltr) =>
-              docFiltr.area === doc.Obszar &&
-              docFiltr.kontr_id === doc["Numer klienta"]
+          // console.log(doc);
+          const filteredDoc = areaCreditData.filter((docFiltr) =>
+            item.name === doc.Obszar && doc["Nip kontrahenta"]
+              ? // docFiltr.area === doc.Obszar && doc["Nip kontrahenta"]
+                docFiltr.kontr_nip === doc["Nip kontrahenta"]
+              : docFiltr.kontr_nazwa === doc["Nazwa kontrahenta"]
           );
 
-          // if (filteredDoc.length) {
+          // if (filteredDoc.length && filteredDoc.area === "F&I") {
           //   console.log(filteredDoc);
           // }
-
-          const firstFilteredDoc = filteredDoc[0] || {};
-          const formaPltnosciBiznes =
-            firstFilteredDoc.forma_plat === "PRZELEW"
-              ? "PRZELEW"
-              : firstFilteredDoc.forma_plat === "KOMPENSATA"
-              ? "KOMPENSATA"
-              : "BRAK PRZELEWU";
-          return {
-            ...doc,
-            Lp: counter++,
-            "Forma płatności -\nWskazuje Biznes": firstFilteredDoc.forma_plat
-              ? [formaPltnosciBiznes, true]
-              : doc["Forma płatności -\nWskazuje Biznes"],
-            "Termin Płatności -\nWskazuje Biznes": firstFilteredDoc.ile_dni
-              ? [firstFilteredDoc.ile_dni, true]
-              : [null, false],
-            "Komentarz Biznes -\nTermin": "",
-            "Limit -\nnowy": "",
-            "Podaj nowy limit": "",
-            "Komentarz \nnowy limit": "",
-          };
+          // const test = areaCreditData.map((item) => {
+          //   console.log(item);
+          // });
+          if (filteredDoc.length) {
+            const firstFilteredDoc = filteredDoc[0] || {};
+            const formaPltnosciBiznes =
+              firstFilteredDoc.forma_plat === "PRZELEW"
+                ? "PRZELEW"
+                : firstFilteredDoc.forma_plat === "KOMPENSATA"
+                ? "KOMPENSATA"
+                : "BRAK PRZELEWU";
+            return {
+              ...doc,
+              Lp: counter++,
+              "Forma płatności -\nWskazuje Biznes": firstFilteredDoc.forma_plat
+                ? [formaPltnosciBiznes, true]
+                : doc["Forma płatności -\nWskazuje Biznes"],
+              "Termin Płatności -\nWskazuje Biznes": firstFilteredDoc.ile_dni
+                ? [firstFilteredDoc.ile_dni, true]
+                : [null, false],
+              "Komentarz Biznes -\nTermin": "",
+              "Limit -\nnowy": "",
+              "Podaj nowy limit": "",
+              "Komentarz \nnowy limit": "",
+            };
+          } else {
+            return doc;
+          }
         });
         // console.log(data);
         return {
@@ -357,9 +320,40 @@ const TradeCredit = () => {
         };
       });
 
+      const columnsContractor = [
+        "Lp",
+        "Numer klienta",
+        "Nazwa kontrahenta",
+        "Nip kontrahenta",
+        "Obszar",
+        "Forma płatności -\nWskazuje Biznes",
+        "Termin Płatności -\nWskazuje Biznes",
+        "Komentarz Biznes -\nTermin",
+        "Podaj nowy limit",
+        "Komentarz \nnowy limit",
+      ];
+
+      const newContractor = () => {
+        const name = "NOWY KONTRAHENT";
+        const data = Array.from({ length: 100 }, (_, index) => ({
+          Lp: index + 1,
+          "Numer klienta": "",
+          "Nazwa kontrahenta": "",
+          "Nip kontrahenta": "",
+          Obszar: "",
+          "Forma płatności -\nWskazuje Biznes": "",
+          "Termin Płatności -\nWskazuje Biznes": "",
+          "Komentarz Biznes -\nTermin": "",
+          "Podaj nowy limit": "",
+          "Komentarz \nnowy limit": "",
+        }));
+        return { name, data };
+      };
+
+      generateNumber.push(newContractor());
       console.log(generateNumber);
 
-      getExcelRaport(generateNumber, columns);
+      getExcelRaport(generateNumber, columns, columnsContractor);
 
       console.log("finish");
 
