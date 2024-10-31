@@ -24,15 +24,24 @@ const TableSettings = ({ dataColumns }) => {
   const columnItems = columns.map((col, index) => {
     return (
       <section className="table_settings-table__columns" key={index}>
-        <section className="columns-item">
-          <span className="columns-item-header">Nazwa w DB:</span>
-          <span className="columns-item-choice">{col.accessorKey}</span>
+        <section className="table_settings-table__columns-item">
+          <span className="table_settings-table__columns-item-header">
+            Nazwa w DB:
+          </span>
+          <span
+            className="table_settings-table__columns-item-choice"
+            style={{ color: "black" }}
+          >
+            {col.accessorKey}
+          </span>
         </section>
-        <section className="columns-item">
-          <span className="columns-item-header">Podaj swoją nazwę:</span>
-          <span className="columns-item-choice">
+        <section className="table_settings-table__columns-item">
+          <span className="table_settings-table__columns-item-header">
+            Podaj swoją nazwę:
+          </span>
+          <span className="table_settings-table__columns-item-choice">
             <input
-              className="item-choice"
+              className="table_settings-table__columns-item-choice--select"
               type="text"
               value={col.header}
               onChange={(e) =>
@@ -41,11 +50,13 @@ const TableSettings = ({ dataColumns }) => {
             />
           </span>
         </section>
-        <section className="columns-item">
-          <span className="columns-item-header">Wybierz filtr:</span>
-          <span className="columns-item-choice">
+        <section className="table_settings-table__columns-item">
+          <span className="table_settings-table__columns-item-header">
+            Wybierz filtr:
+          </span>
+          <span className="table_settings-table__columns-item-choice">
             <select
-              className="item-choice"
+              className="table_settings-table__columns-item-choice--select"
               value={col.filterVariant}
               onChange={(e) =>
                 handleHeaderChange(index, "filterVariant", e.target.value)
@@ -63,11 +74,13 @@ const TableSettings = ({ dataColumns }) => {
             </select>
           </span>
         </section>
-        <section className="columns-item">
-          <span className="columns-item-header">Wybierz typ danych:</span>
-          <span className="columns-item-choice">
+        <section className="table_settings-table__columns-item">
+          <span className="table_settings-table__columns-item-header">
+            Wybierz typ danych:
+          </span>
+          <span className="table_settings-table__columns-item-choice">
             <select
-              className="item-choice"
+              className="table_settings-table__columns-item-choice--select"
               value={col.type}
               onChange={(e) =>
                 handleHeaderChange(index, "type", e.target.value)

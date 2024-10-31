@@ -161,7 +161,9 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
         </span>
         <input
           className="edit_doc_actions__container--select"
-          style={{ transform: "scale(0.7)" }}
+          style={{
+            transform: "scale(0.7)",
+          }}
           type="checkbox"
           checked={rowData.ZAZNACZ_KONTRAHENTA === "Tak"}
           onChange={(e) =>

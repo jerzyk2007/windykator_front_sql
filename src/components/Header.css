@@ -1,5 +1,6 @@
 .header {
-  background-color: #a7d3f7;
+  /* background-color: #a7d3f7; */
+  background-color: #bfe2ff;
   display: flex;
   position: relative;
   z-index: 6;

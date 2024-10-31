@@ -1,25 +1,14 @@
 .edit_user_settings {
   position: relative;
   flex-grow: 1;
+  min-width: 1200px;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.05rem;
+  font-optical-sizing: auto;
+  font-style: 700;
   display: flex;
-  /* padding: 5px; */
   overflow: hidden;
 }
-/* .edit_user_settings {
-  position: relative;
-  flex-grow: 1;
-  width: 100%;
-  height: 90vh;
-  padding: 2px;
-  display: flex;
-} */
-
-/* .edit_user_settings__container {
-  flex-basis: 40%;
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-} */
 
 .edit_user_settings-button {
   position: absolute;

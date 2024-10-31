@@ -248,8 +248,8 @@ const Table = ({
     muiTableHeadCellProps: () => ({
       align: "left",
       sx: {
-        fontWeight: "700",
-        fontFamily: "Calibri, sans-serif",
+        fontWeight: "600",
+        fontFamily: "'Source Sans 3', Calibri, sans-serif",
         fontSize: "15px",
         color: "black",
         backgroundColor: "#a7d3f7",
@@ -330,7 +330,7 @@ const Table = ({
   });
 
   useEffect(() => {
-    setTableSize(height - 164);
+    setTableSize(height - 154);
   }, [height]);
 
   useEffect(() => {

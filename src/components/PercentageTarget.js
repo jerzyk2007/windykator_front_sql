@@ -96,48 +96,20 @@ const PercentageTarget = ({ departments }) => {
             <option value="3">3</option>
             <option value="4">4</option>
           </select>
-
-          {/* {!errMsg ? (
-            <>
-              <label className="percentage-department__title__container-name">
-                Cel na kwartał
-              </label>
-              <select
-                className="percentage-department__title__container-actions--select"
-                value={percentDep.time.Q}
-                onChange={(e) =>
-                  setPercentDep((prev) => {
-                    return {
-                      ...prev,
-
-                      time: {
-                        Q: Number(e.target.value),
-                      },
-                    };
-                  })
-                }
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-              </select>
-            </>
-          ) : (
-            errMsg
-          )} */}
         </h3>
       </section>
       <section className="percentage-department__container">
         {departmentsItem}
       </section>
-      <Button
-        variant="contained"
-        onClick={handleSavePercentageTarget}
-        size="small"
-      >
-        Zapisz
-      </Button>
+      <section className="percentage-department__container-check">
+        <Button
+          variant="contained"
+          onClick={handleSavePercentageTarget}
+          size="small"
+        >
+          Zapisz
+        </Button>
+      </section>
     </section>
   );
 };

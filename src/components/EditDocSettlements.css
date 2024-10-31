@@ -1,11 +1,16 @@
 .edit-doc-settlements {
   margin-bottom: 10px;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.05rem;
+  font-optical-sizing: auto;
+  font-style: 700;
   display: flex;
   flex-direction: column;
 }
 .edit-doc-settlements--title {
   font-size: 1.1rem;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
   padding: 3px;
   text-align: center;
   background-color: rgba(58, 178, 247, 0.2);
@@ -15,9 +20,11 @@
   height: 120px;
   max-height: 180px;
   resize: none;
-  font-size: 1.1rem;
   padding: 5px;
-  font-family: Calibri, sans-serif;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.05rem;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
   margin: 2px 0;
   overflow-wrap: break-word;
   white-space: pre-wrap;

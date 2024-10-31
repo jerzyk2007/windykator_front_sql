@@ -3,10 +3,11 @@ import { format } from "date-fns";
 export const muiTableBodyCellProps = {
   align: "center",
   sx: {
-    fontSize: "16px",
+    // fontFamily: "'Source Sans 3', Calibri, sans-serif",
+    fontFamily: " Calibri, sans-serif",
+    fontSize: "15px",
     borderRight: "1px solid #000",
     borderBottom: "1px solid #000",
-    fontFamily: "Calibri",
     padding: "5px",
     fontWeight: "500",
     minHeight: "2rem",

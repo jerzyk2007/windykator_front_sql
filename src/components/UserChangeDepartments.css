@@ -3,7 +3,8 @@
   width: 100%;
   padding: 5px 10px;
   margin: 2px 0;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 92, 145, 0.6);
+  border-radius: 5px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -47,10 +48,13 @@
   flex-basis: 40%;
   min-width: 120px;
   padding: 5px 5px;
+  margin: 2px 0;
   flex-wrap: wrap;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border: 1px solid rgba(0, 92, 145, 0.6);
+  border-radius: 5px;
 }
 
 .user_change_departments__container--text {

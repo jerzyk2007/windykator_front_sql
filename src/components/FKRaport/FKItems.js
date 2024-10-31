@@ -48,41 +48,55 @@ const FKItems = () => {
             <section className="fk_items__container">
               <section className="fk_items--bloc-tabs">
                 <button
-                  className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+                  className={
+                    toggleState === 1
+                      ? "fk_items--bloc-area fk_items--bloc-active-tabs"
+                      : "fk_items--bloc-area"
+                  }
                   onClick={() => toggleTab(1)}
                 ></button>
                 <button
-                  className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+                  className={
+                    toggleState === 2
+                      ? "fk_items--bloc-area fk_items--bloc-active-tabs"
+                      : "fk_items--bloc-area"
+                  }
                   onClick={() => toggleTab(2)}
                 ></button>
                 <button
-                  className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+                  className={
+                    toggleState === 3
+                      ? "fk_items--bloc-area fk_items--bloc-active-tabs"
+                      : "fk_items--bloc-area"
+                  }
                   onClick={() => toggleTab(3)}
                 ></button>
               </section>
 
-              <section className="content-tabs">
+              <section className="fk_items__content-tabs">
                 <section
                   className={
-                    toggleState === 1 ? "content  active-content" : "content"
+                    toggleState === 1
+                      ? "fk_items__content  fk_items__active-content"
+                      : "fk_items__content"
                   }
                 >
-                  <section className="section-content">
-                    <section className="section-content-data">
+                  <section className="fk_items__section-content">
+                    <section className="fk_items__section-content-data">
                       <FKItemComponent
                         data={dataItems.departments}
                         info="departments"
                         title="Działy"
                       />
                     </section>
-                    <section className="section-content-data">
+                    <section className="fk_items__section-content-data">
                       <FKItemComponent
                         data={dataItems.localizations}
                         info="localizations"
                         title="Lokalizacje"
                       />
                     </section>
-                    <section className="section-content-data">
+                    <section className="fk_items__section-content-data">
                       <FKItemComponent
                         data={dataItems.areas}
                         info="areas"
@@ -96,22 +110,22 @@ const FKItems = () => {
                     toggleState === 2 ? "content  active-content" : "content"
                   }
                 >
-                  <section className="section-content">
-                    <section className="section-content-data">
+                  <section className="fk_items__section-content">
+                    <section className="fk_items__section-content-data">
                       <FKItemComponent
                         data={dataItems.owners}
                         info="owners"
                         title="Ownerzy"
                       />
                     </section>
-                    <section className="section-content-data">
+                    <section className="fk_items__section-content-data">
                       <FKItemComponent
                         data={dataItems.guardians}
                         info="guardians"
                         title="Opiekun"
                       />
                     </section>
-                    <section className="section-content-data">
+                    <section className="fk_items__section-content-data">
                       <FKItemAging
                         data={dataItems.aging}
                         info="aging"
@@ -125,10 +139,10 @@ const FKItems = () => {
                     toggleState === 3 ? "content  active-content" : "content"
                   }
                 >
-                  <section className="section-content">
-                    <section className="section-data"></section>
-                    <section className="section-data"></section>
-                    <section className="section-data"></section>
+                  <section className="fk_items__section-content">
+                    <section className="fk_items__section-content-data"></section>
+                    <section className="fk_items__section-content-data"></section>
+                    <section className="fk_items__section-content-data"></section>
                   </section>
                 </section>
               </section>

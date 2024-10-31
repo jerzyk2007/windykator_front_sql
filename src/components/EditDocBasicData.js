@@ -200,10 +200,10 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
       <section className="edit_doc_basic-data--document">
         <span className="edit_doc_basic-data--title">Kontrahent:</span>
         <span
-          className="edit_doc_basic-data--content"
+          className="edit_doc_basic-data--content-scroll"
           style={
-            rowData?.KONTRAHENT?.length > 35 && rowData.area === "BLACHARNIA"
-              ? { overflowY: "scroll", maxHeight: "70px" }
+            rowData?.KONTRAHENT?.length > 140 && rowData.area === "BLACHARNIA"
+              ? { overflowY: "auto", maxHeight: "80px" }
               : null
           }
         >
@@ -230,11 +230,11 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
       <section className="edit_doc_basic-data--document">
         <span className="edit_doc_basic-data--title">Uwagi z faktury:</span>
         <span
-          className="edit_doc_basic-data--content"
+          className="edit_doc_basic-data--content-scroll"
           style={
-            rowData?.UWAGI_Z_FAKTURY?.length > 35 &&
+            rowData?.UWAGI_Z_FAKTURY?.length > 70 &&
             rowData.area === "BLACHARNIA"
-              ? { overflowY: "scroll", maxHeight: "70px" }
+              ? { overflowY: "auto", maxHeight: "70px" }
               : null
           }
         >
