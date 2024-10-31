@@ -9,11 +9,9 @@ const TradeCredit = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const [pleaseWait, setPleaseWait] = useState(false);
 
-  // wyszukuję unikalnych kontrahentów
-  const generateUniqueContractors = (contractor) => {
+  const uniqueContractor = (contractor) => {
     const mapByNip = new Map();
     const usedNames = new Set();
-
     const nullNipKontrahenci = [];
 
     contractor.forEach((item) => {
@@ -73,41 +71,6 @@ const TradeCredit = () => {
     );
   };
 
-  const adjustLimit = (limit) => {
-    if (limit === 0) return 0;
-    if (limit < 10) return 10;
-    if (limit < 100) return 100;
-    if (limit < 500) return 500;
-
-    // Zaokrąglanie w górę do najbliższej setki dla wartości poniżej 1000
-    if (limit < 1000) return Math.ceil(limit / 100) * 100;
-
-    // Zaokrąglanie w górę do najbliższego tysiąca dla wartości poniżej 10000
-    if (limit <= 10000) return Math.ceil(limit / 100) * 100;
-
-    // Zaokrąglanie w górę do najbliższego tysiąca dla wartości poniżej 100000
-    if (limit <= 100000) return Math.ceil(limit / 1000) * 1000;
-
-    // Zaokrąglanie w górę do najbliższej dziesiątki tysięcy dla wartości powyżej 100000
-    if (limit > 100000) return Math.ceil(limit / 10000) * 10000;
-
-    // Dla wartości od 10000 do 100000 bez zmian
-    return limit;
-  };
-
-  // // tworzę tablicę z osobnymi danymi dla każdego segmentu
-  const generateUniqueSegmentsData = (uniqueSegments, tradeCreditData) => {
-    return uniqueSegments.sort().map((item) => {
-      const filteredData = tradeCreditData.filter(
-        (doc) => doc.segment.toUpperCase() === item.toUpperCase()
-      );
-      return {
-        item, // Nazwa segmentu
-        data: filteredData, // Filtrowana tablica powiązanych danych
-      };
-    });
-  };
-
   const generateRaport = async () => {
     try {
       setPleaseWait(true);
@@ -118,26 +81,68 @@ const TradeCredit = () => {
       const tradeCreditData = [...result.data.tradeCreditData];
       const areaCreditData = [...result.data.areaCreditData];
 
-      // Wydobycie unikalnych wartości z klucza "segment" - Blcharnia, Części itp
+      // tablica z unikalnymi kontrahentami
+      const newResult = uniqueContractor(tradeCreditData);
+
+      // Wydobycie unikalnych wartości z klucza "segment"
       const uniqueSegments = [
         ...new Set(tradeCreditData.map((item) => item.segment)),
       ];
 
-      // tablica z unikalnymi kontrahentami
-      const uniqueContractors = generateUniqueContractors(tradeCreditData);
+      const adjustLimit = (limit) => {
+        if (limit === 0) return 0;
+        if (limit < 10) return 10;
+        if (limit < 100) return 100;
+        if (limit < 500) return 500;
 
-      // faktury sa podzielone na poszczególne obszary
-      const uniqueSegmentsData = generateUniqueSegmentsData(
-        uniqueSegments,
-        tradeCreditData
-      );
+        // Zaokrąglanie w górę do najbliższej setki dla wartości poniżej 1000
+        if (limit < 1000) return Math.ceil(limit / 100) * 100;
 
-      // przeliczam wartości z danych dokumentów dla konkretnego kontrahenta
-      const raport = uniqueSegmentsData.map((item) => {
+        // Zaokrąglanie w górę do najbliższego tysiąca dla wartości poniżej 10000
+        if (limit <= 10000) return Math.ceil(limit / 100) * 100;
+
+        // Zaokrąglanie w górę do najbliższego tysiąca dla wartości poniżej 100000
+        if (limit <= 100000) return Math.ceil(limit / 1000) * 1000;
+
+        // Zaokrąglanie w górę do najbliższej dziesiątki tysięcy dla wartości powyżej 100000
+        if (limit > 100000) return Math.ceil(limit / 10000) * 10000;
+
+        // Dla wartości od 10000 do 100000 bez zmian
+        return limit;
+      };
+
+      // // tworzę tablicę z osobnymi danymi dla każdego segmentu
+      const raportData = uniqueSegments.sort().map((item) => {
+        const filteredData = tradeCreditData.filter(
+          (doc) => doc.segment.toUpperCase() === item.toUpperCase()
+        );
+        return {
+          item, // Nazwa segmentu
+          data: filteredData, // Filtrowana tablica powiązanych danych
+        };
+      });
+
+      console.log(raportData);
+
+      // // tradeCreditDataa wszytskie dokumenty
+      // // areaCreditData - dane uzupełnione przez obszary
+      // // newResult - unikalni kontrahenci
+      // // raportData - unikalne obszary z danymi
+
+      const daysPayment = [
+        { first: 0, last: 7, title: "0 - 7" },
+        { first: 8, last: 14, title: "8 - 14" },
+        { first: 15, last: 30, title: "15 - 30" },
+        { first: 31, last: 90, title: "31 - 90" },
+        { first: 91, last: 180, title: "91 - 180" },
+        { first: 181, last: 360, title: "181 - 360" },
+      ];
+
+      const raport = raportData.map((item) => {
         const raportItemName = item.item;
         const raportItemData = [...item.data];
 
-        const prepareData = uniqueContractors
+        const prepareData = newResult
           .map((contractor) => {
             let filteredSegment = [];
             if (contractor.kontrahent_nip) {
@@ -163,15 +168,28 @@ const TradeCredit = () => {
                 area = doc.segment;
                 averageDayPayment += doc.days_difference; // Suma dni
                 totalPurchases += doc.brutto;
-                if (doc.zgoda_na_platnosci_opoznione === "TAK") {
+                if (doc.sposob_zaplaty === "PRZELEW") {
                   transfer = "PRZELEW";
                 }
               }
 
+              // Oblicz średnią
+              const foundPayment = daysPayment.find((payment) => {
+                const roundedValue = Math.ceil(averageDayPayment / docCounter); // Zaokrąglenie w górę
+                return (
+                  roundedValue >= payment.first && roundedValue <= payment.last
+                );
+              });
+
               const formaPlatnWskazBiznes = contractor.kontrahent_nip
                 ? transfer
                 : "BRAK PRZELEWU";
-              const iloscDni = Math.ceil(averageDayPayment / docCounter);
+
+              const iloscDni =
+                contractor.kontrahent_nip && transfer === "PRZELEW"
+                  ? Math.ceil(averageDayPayment / docCounter)
+                  : 0;
+
               const creditLimit = (Math.ceil(totalPurchases) / 365) * iloscDni;
               const maxLimit = adjustLimit(creditLimit);
 
@@ -191,19 +209,14 @@ const TradeCredit = () => {
                 ],
                 "Obrót - 12 m-cy": Math.ceil(totalPurchases),
 
-                "Ilość dni płatności opóźnionej":
-                  contractor.kontrahent_nip && transfer === "PRZELEW"
-                    ? iloscDni
-                    : 0,
-                Limit:
-                  contractor.kontrahent_nip && transfer === "PRZELEW"
-                    ? maxLimit
-                    : 0,
+                "Ilość dni płatności opóźnionej": iloscDni,
+                Limit: maxLimit,
               };
             }
-            return null;
+            return null; // Zwróć null, jeśli nie ma filtrów
           })
           .filter(Boolean);
+
         return { name: raportItemName, data: prepareData };
       });
 
@@ -224,23 +237,19 @@ const TradeCredit = () => {
         "Podaj nowy limit",
         "Komentarz \nnowy limit",
       ];
-
-      const addDataFromArea = raport.map((item) => {
+      const generateNumber = raport.map((item) => {
         const preparedData = [...item.data];
+        let counter = 1;
+        console.log(item);
 
         const data = preparedData.map((doc) => {
-          const filteredDoc = areaCreditData.filter((docFiltr) => {
-            const sameArea = docFiltr.area === doc.Obszar;
-            const sameNip =
-              docFiltr.kontr_nip &&
-              docFiltr.kontr_nip === doc["Nip kontrahenta"];
-            const sameName =
-              !docFiltr.kontr_nip &&
-              docFiltr.kontr_nazwa === doc["Nazwa kontrahenta"];
-
-            // Sprawdzenie obu warunków
-            return sameArea && (sameNip || sameName);
-          });
+          // console.log(doc);
+          const filteredDoc = areaCreditData.filter((docFiltr) =>
+            item.name === doc.Obszar && doc["Nip kontrahenta"]
+              ? // docFiltr.area === doc.Obszar && doc["Nip kontrahenta"]
+                docFiltr.kontr_nip === doc["Nip kontrahenta"]
+              : docFiltr.kontr_nazwa === doc["Nazwa kontrahenta"]
+          );
 
           if (filteredDoc.length) {
             const firstFilteredDoc = filteredDoc[0] || {};
@@ -252,6 +261,7 @@ const TradeCredit = () => {
                 : "BRAK PRZELEWU";
             return {
               ...doc,
+              Lp: counter++,
               "Forma płatności -\nWskazuje Biznes": firstFilteredDoc.forma_plat
                 ? [formaPltnosciBiznes, true]
                 : doc["Forma płatności -\nWskazuje Biznes"],
@@ -274,24 +284,6 @@ const TradeCredit = () => {
         };
       });
 
-      const generateNumber = addDataFromArea.map((item) => {
-        const preparedData = [...item.data];
-        let counter = 1;
-        const data = preparedData.map((doc) => {
-          return {
-            Lp: counter++,
-            ...doc,
-          };
-        });
-        return {
-          name: item.name,
-          data,
-        };
-      });
-
-      // const test = areaCreditData.map((item) => {
-      //   console.log(item);
-      // });
       const columnsContractor = [
         "Lp",
         "Numer klienta",
@@ -323,8 +315,8 @@ const TradeCredit = () => {
       };
 
       generateNumber.push(newContractor());
+      console.log(generateNumber);
 
-      // getExcelRaport(raport, columns, columnsContractor);
       getExcelRaport(generateNumber, columns, columnsContractor);
 
       console.log("finish");

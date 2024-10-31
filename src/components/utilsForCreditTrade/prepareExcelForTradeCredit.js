@@ -169,7 +169,43 @@ export const getExcelRaport = async (
           );
 
           // // Zmienna do sortowania przed dodaniem do arkusza
-          obj.data.sort((a, b) => b[settingsColumn[9]] - a[settingsColumn[9]]); // Zakładając, że kolumna K jest 11. kolumną (indeks 10)
+          // obj.data.sort((a, b) => b[settingsColumn[9]] - a[settingsColumn[9]]); // Zakładając, że kolumna K jest 11. kolumną (indeks 10)
+
+          obj.data.sort((a, b) => {
+            // Najpierw sortowanie na podstawie wartości w kolumnie 5 ("PRZELEW" najpierw)
+            if (
+              a[settingsColumn[5]] === "PRZELEW" &&
+              b[settingsColumn[5]] !== "PRZELEW"
+            ) {
+              return -1;
+            }
+            if (
+              a[settingsColumn[5]] !== "PRZELEW" &&
+              b[settingsColumn[5]] === "PRZELEW"
+            ) {
+              return 1;
+            }
+
+            // Jeśli oba wiersze mają "PRZELEW" lub oba "BRAK PRZELEWU", sortuj na podstawie kolumny 9 (malejąco)
+            return b[settingsColumn[9]] - a[settingsColumn[9]];
+          });
+
+          // obj.data.sort((a, b) => {
+          //   // Pobieranie pierwszych wartości z tablicy w kolumnie 5
+          //   const aValue = a[settingsColumn[5]][0]; // Pierwszy element w tablicy a[settingsColumn[5]]
+          //   const bValue = b[settingsColumn[5]][0]; // Pierwszy element w tablicy b[settingsColumn[5]]
+
+          //   // Najpierw sortowanie na podstawie wartości w kolumnie 5 ("PRZELEW" najpierw)
+          //   if (aValue === "PRZELEW" && bValue !== "PRZELEW") {
+          //     return -1;
+          //   }
+          //   if (aValue !== "PRZELEW" && bValue === "PRZELEW") {
+          //     return 1;
+          //   }
+
+          //   // Jeśli oba wiersze mają "PRZELEW" lub oba "BRAK PRZELEWU", sortuj na podstawie kolumny 9 (malejąco)
+          //   return b[settingsColumn[9]] - a[settingsColumn[9]];
+          // });
 
           // // Zmienna do sortowania przed dodaniem do arkusza, sortuje po pierwszej wartości w tablicy i zamianie na Number
           // obj.data.sort((a, b) => {
