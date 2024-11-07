@@ -112,7 +112,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
                   {/* {!beCared && rowData.OPIS_ROZRACHUNKU && (
                     <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} />
                   )} */}
-                  {!beCared && (
+                  {!beCared && rowData.OPIS_ROZRACHUNKU && (
                     <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} />
                   )}
                 </section>

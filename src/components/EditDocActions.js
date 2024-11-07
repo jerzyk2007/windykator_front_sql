@@ -157,6 +157,34 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
           </section>
         )}
 
+
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">
+          Ostateczna data rozliczenia:
+        </span>
+        <input
+          className="edit_doc--select"
+          style={
+            !rowData.OSTATECZNA_DATA_ROZLICZENIA ? { backgroundColor: "yellow" } : null
+          }
+          type="date"
+          value={rowData.OSTATECZNA_DATA_ROZLICZENIA ? rowData.OSTATECZNA_DATA_ROZLICZENIA : ""}
+          onChange={(e) => {
+            handleAddNote(
+              "Ostateczna data rozliczenia:",
+              e.target.value.length > 3 ? e.target.value : "Brak"
+            );
+            setRowData((prev) => {
+              return {
+                ...prev,
+                OSTATECZNA_DATA_ROZLICZENIA: e.target.value,
+              };
+            });
+          }}
+        />
+      </section>
+
+
       <section className="edit_doc__container">
         <span className="edit_doc--title">
           Wyróżnij kontrahenta:
