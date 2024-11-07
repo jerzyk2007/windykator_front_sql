@@ -337,9 +337,6 @@ const Table = ({
     setData(documents);
   }, [documents]);
 
-  useEffect(() => {
-    console.log(quickNote);
-  }, [quickNote]);
 
   return (
     <section className="table">
