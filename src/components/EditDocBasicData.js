@@ -3,20 +3,19 @@ import "./EditDocBasicData.css";
 const EditDocBasicData = ({ rowData, setRowData }) => {
   return (
     <section className=" edit_doc edit_doc_basic-data">
-      {/* <section className="edit_doc_basic-data__container"> */}
-      <section className="edit_doc--document">
+      <section className="edit_doc__container">
         <span className="edit_doc--title">Faktura:</span>
         <span className="edit_doc--content">{rowData.NUMER_FV}</span>
       </section>
-      <section className="edit_doc--document">
+      <section className="edit_doc__container">
         <span className="edit_doc--title">Data wystawienia:</span>
         <span className="edit_doc--content">{rowData.DATA_FV}</span>
       </section>
-      <section className="edit_doc--document">
+      <section className="edit_doc__container">
         <span className="edit_doc--title">Termin płatności:</span>
         <span className="edit_doc--content">{rowData.TERMIN}</span>
       </section>
-      <section className="edit_doc--document">
+      <section className="edit_doc__container">
         <span className="edit_doc--title">Po terminie:</span>
         <span
           className="edit_doc--content"
@@ -31,7 +30,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
       </section>
 
       {rowData.area === "BLACHARNIA" && (
-        <section className="edit_doc--document">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">
             Wprowadź kwotę brutto:
           </span>
@@ -57,7 +56,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
         </section>
       )}
 
-      <section className="edit_doc--document">
+      <section className="edit_doc__container">
         <span className="edit_doc--title">Brutto:</span>
         <span className="edit_doc--content">
           {rowData.BRUTTO.toLocaleString("pl-PL", {
@@ -67,7 +66,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
           })}
         </span>
       </section>
-      <section className="edit_doc--document">
+      <section className="edit_doc__container">
         <span className="edit_doc--title">Netto:</span>
         <span className="edit_doc--content">
           {rowData.NETTO.toLocaleString("pl-PL", {
@@ -78,7 +77,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
         </span>
       </section>
       {rowData.area === "BLACHARNIA" && (
-        <section className="edit_doc--document">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">Netto + 50% VAT:</span>
           <span className="edit_doc--content">
             {(
@@ -94,7 +93,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
       )}
 
       {rowData.area === "BLACHARNIA" && (
-        <section className="edit_doc--document">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">100% VAT:</span>
           <span
             className="edit_doc--content"
@@ -117,7 +116,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
       )}
 
       {rowData.area === "BLACHARNIA" && (
-        <section className="edit_doc--document">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">50% VAT:</span>
           <span
             className="edit_doc--content"
@@ -139,7 +138,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
         </section>
       )}
 
-      <section className="edit_doc--document">
+      <section className="edit_doc__container">
         <span className="edit_doc--title">Do rozliczenia:</span>
         <span
           className="edit_doc--content"
@@ -154,7 +153,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
       </section>
 
       {rowData.area === "SERWIS" && (
-        <section className="edit_doc--document">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">Typ płatności:</span>
           <span
             className="edit_doc--content"
@@ -170,7 +169,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
       )}
 
       {rowData.area === "BLACHARNIA" && (
-        <section className="edit_doc--document">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">Nr szkody:</span>
           <span className="edit_doc--content">
             {rowData.NR_SZKODY}
@@ -178,7 +177,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
         </section>
       )}
       {rowData.area !== "BLACHARNIA" && (
-        <section className="edit_doc--document">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">Nr szkody:</span>
           <span className="edit_doc--content">
             {rowData.NR_SZKODY}
@@ -186,7 +185,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
         </section>
       )}
       {rowData.area !== "BLACHARNIA" && (
-        <section className="edit_doc--document">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">Nr autoryzacji:</span>
           <span className="edit_doc--content">
             {rowData.NR_AUTORYZACJI}
@@ -195,7 +194,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
       )}
 
       {rowData.area !== "CZĘŚCI" && rowData.area !== "SAMOCHODY NOWE" && (
-        <section className="edit_doc--document">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">Nr rejestracyjny:</span>
           <span className="edit_doc--content">
             {rowData.NR_REJESTRACYJNY}
@@ -203,20 +202,20 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
         </section>
       )}
       {rowData.area !== "CZĘŚCI" && rowData.area !== "BLACHARNIA" && (
-        <section className="edit_doc--document">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">Nr VIN:</span>
           <span className="edit_doc--content">{rowData.VIN}</span>
         </section>
       )}
 
-      <section className="edit_doc--document">
+      <section className="edit_doc__container">
         <span className="edit_doc--title">Doradca:</span>
         <span className="edit_doc--content">{rowData.DORADCA}</span>
       </section>
-      <section className="edit_doc--document">
+      <section className="edit_doc__container">
         <span className="edit_doc--title">Kontrahent:</span>
         <span
-          className="edit_doc--content-scroll"
+          className={rowData?.KONTRAHENT?.length > 140 ? "edit_doc--content-scroll" : "edit_doc--content"}
           style={
             rowData?.KONTRAHENT?.length > 140 && rowData.area === "BLACHARNIA"
               ? { overflowY: "auto", maxHeight: "80px" }
@@ -228,25 +227,16 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
       </section>
 
       {rowData.area !== "BLACHARNIA" && (
-        <section className="edit_doc--document">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">NIP:</span>
           <span className="edit_doc--content">{rowData.NIP}</span>
         </section>
       )}
 
-      {/* {rowData.area !== "BLACHARNIA" && (
-        <section className="edit_doc--document">
-          <span className="edit_doc--title">Nr klienta:</span>
-          <span className="edit_doc--content">
-            {rowData.NR_KLIENTA}
-          </span>
-        </section>
-      )} */}
-
-      <section className="edit_doc--document">
+      <section className="edit_doc__container">
         <span className="edit_doc--title">Uwagi z faktury:</span>
         <span
-          className="edit_doc--content-scroll"
+          className={rowData?.UWAGI_Z_FAKTURY?.length > 70 ? "edit_doc--content-scroll" : "edit_doc--content"}
           style={
             rowData?.UWAGI_Z_FAKTURY?.length > 70 &&
               rowData.area === "BLACHARNIA"

@@ -91,6 +91,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
                     setNote={setNote}
                     handleAddNote={handleAddNote}
                   />
+
                 </section>
                 <section className="edit-row-table_section-content-data">
                   {!beCared && (
@@ -108,7 +109,10 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
                       setBeCared={setBeCared}
                     />
                   )}
-                  {!beCared && rowData.OPIS_ROZRACHUNKU && (
+                  {/* {!beCared && rowData.OPIS_ROZRACHUNKU && (
+                    <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} />
+                  )} */}
+                  {!beCared && (
                     <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} />
                   )}
                 </section>

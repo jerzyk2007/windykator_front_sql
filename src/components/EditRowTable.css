@@ -118,7 +118,8 @@
   min-width: 450px;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  /* justify-content: start; */
+  justify-content: space-between;
   padding: 2px;
   max-height: calc(100vh - 100px);
   overflow: auto;
@@ -135,7 +136,7 @@
   overflow: auto;
 }
 
-.edit_doc--document {
+.edit_doc__container {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -150,9 +151,7 @@
   border-radius: 5px;
   padding: 2px;
   margin: 1px 2px;
-  /* background-color: rgba(191, 196, 199, 0.2); */
   background-color: rgba(220, 241, 253, 0.2);
-  /* background-color: rgba(241, 243, 245, .2); */
   display: flex;
   align-items: center;
   cursor: help;
@@ -169,7 +168,6 @@
   padding: 2px;
   margin: 1px 2px;
   text-wrap: wrap;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -180,4 +178,25 @@
   padding: 5px;
   overflow-y: auto;
   max-height: 90px;
+}
+
+.edit_doc--select {
+  width: 100%;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2px;
+  margin: 2px;
+}
+
+.edit_doc--button {
+  margin-top: 10px;
+}
+
+.edit_doc--button Button {
+  width: 100%;
+  background-color: rgba(58, 247, 58, 0.2);
+  color: black;
 }

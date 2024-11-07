@@ -2,6 +2,7 @@ import "./EditDocSettlements.css";
 
 const EditDocSettlements = ({ settlement }) => {
   return (
+    // <section className="edit-doc-settlements">
     <section className="edit-doc-settlements">
       <span className="edit-doc-settlements--title">Opisy rozrachunków</span>
       <textarea

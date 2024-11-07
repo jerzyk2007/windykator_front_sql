@@ -3,15 +3,17 @@ import "./EditDocActions.css";
 
 const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
   return (
-    <section className="edit_doc_actions">
+    // <section className="edit_doc edit_doc_actions">
+    <section className="edit_doc">
       {rowData.area === "BLACHARNIA" && (
-        <section className="edit_doc_actions__container">
-          <span className="edit_doc_actions__container--title">
+        // <section className="edit_doc_actions__container">
+        <section className="edit_doc__container">
+          <span className="edit_doc--title">
             Wybierz kancelarię:
           </span>
 
           <select
-            className="edit_doc_actions__container--select"
+            className="edit_doc--select"
             value={rowData.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : ""}
             onChange={(e) => {
               handleAddNote(
@@ -40,12 +42,12 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
         </section>
       )}
 
-      <section className="edit_doc_actions__container">
-        <span className="edit_doc_actions__container--title">
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">
           Rodzaj działania:
         </span>
         <select
-          className="edit_doc_actions__container--select"
+          className="edit_doc--select"
           value={rowData.DZIALANIA ? rowData.DZIALANIA : ""}
           onChange={(e) => {
             handleAddNote(
@@ -71,13 +73,13 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
         </select>
       </section>
 
-      <section className="edit_doc_actions__container">
-        <span className="edit_doc_actions__container--title">
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">
           Błąd doradcy:
         </span>
 
         <select
-          className="edit_doc_actions__container--select"
+          className="edit_doc--select"
           value={rowData.BLAD_DORADCY ? rowData.BLAD_DORADCY : ""}
           onChange={(e) => {
             handleAddNote(
@@ -98,12 +100,12 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
       </section>
 
       {rowData.area === "BLACHARNIA" && (
-        <section className="edit_doc_actions__container">
-          <span className="edit_doc_actions__container--title">
+        <section className="edit_doc__container">
+          <span className="edit_doc--title">
             Pobrany VAT ?
           </span>
           <select
-            className="edit_doc_actions__container--select"
+            className="edit_doc--select"
             value={rowData.POBRANO_VAT ? rowData.POBRANO_VAT : ""}
             onChange={(e) => {
               handleAddNote(
@@ -128,12 +130,12 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
 
       {(rowData.area === "SAMOCHODY NOWE" ||
         rowData.area === "SAMOCHODY UŻYWANE") && (
-          <section className="edit_doc_actions__container">
-            <span className="edit_doc_actions__container--title">
+          <section className="edit_doc__container">
+            <span className="edit_doc--title">
               Data wydania auta:
             </span>
             <input
-              className="edit_doc_actions__container--select"
+              className="edit_doc--select"
               style={
                 !rowData.DATA_WYDANIA_AUTA ? { backgroundColor: "yellow" } : null
               }
@@ -155,12 +157,12 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
           </section>
         )}
 
-      <section className="edit_doc_actions__container">
-        <span className="edit_doc_actions__container--title">
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">
           Wyróżnij kontrahenta:
         </span>
         <input
-          className="edit_doc_actions__container--select"
+          className="edit_doc--select"
           style={{
             transform: "scale(0.7)",
           }}
@@ -178,7 +180,7 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
         />
       </section>
       {rowData.area === "BLACHARNIA" && (
-        <section className="edit_doc_actions--button">
+        <section className="edit_doc--button">
           <Button variant="outlined" onClick={() => setBeCared(true)}>
             BeCared
           </Button>
