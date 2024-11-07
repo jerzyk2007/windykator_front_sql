@@ -143,10 +143,10 @@ const Table = ({
         //     getRow[0][key] = getRowDB[key];
         //   }
         // }
-        // console.log(getRow[0]);
 
         if (type === "quick") {
-          setDataRowTable(response.data);
+          // setDataRowTable(response.data);
+          setQuickNote(response.data);
 
           // setQuickNote(getRow[0]);
         }
@@ -336,6 +336,10 @@ const Table = ({
   useEffect(() => {
     setData(documents);
   }, [documents]);
+
+  useEffect(() => {
+    console.log(quickNote);
+  }, [quickNote]);
 
   return (
     <section className="table">

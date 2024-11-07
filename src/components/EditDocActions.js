@@ -128,32 +128,32 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
 
       {(rowData.area === "SAMOCHODY NOWE" ||
         rowData.area === "SAMOCHODY UŻYWANE") && (
-        <section className="edit_doc_actions__container">
-          <span className="edit_doc_actions__container--title">
-            Data wydania auta:
-          </span>
-          <input
-            className="edit_doc_actions__container--select"
-            style={
-              !rowData.DATA_WYDANIA_AUTA ? { backgroundColor: "yellow" } : null
-            }
-            type="date"
-            value={rowData.DATA_WYDANIA_AUTA ? rowData.DATA_WYDANIA_AUTA : ""}
-            onChange={(e) => {
-              handleAddNote(
-                "Data wydania auta:",
-                e.target.value.length > 3 ? e.target.value : "Brak"
-              );
-              setRowData((prev) => {
-                return {
-                  ...prev,
-                  DATA_WYDANIA_AUTA: e.target.value,
-                };
-              });
-            }}
-          />
-        </section>
-      )}
+          <section className="edit_doc_actions__container">
+            <span className="edit_doc_actions__container--title">
+              Data wydania auta:
+            </span>
+            <input
+              className="edit_doc_actions__container--select"
+              style={
+                !rowData.DATA_WYDANIA_AUTA ? { backgroundColor: "yellow" } : null
+              }
+              type="date"
+              value={rowData.DATA_WYDANIA_AUTA ? rowData.DATA_WYDANIA_AUTA : ""}
+              onChange={(e) => {
+                handleAddNote(
+                  "Data wydania auta:",
+                  e.target.value.length > 3 ? e.target.value : "Brak"
+                );
+                setRowData((prev) => {
+                  return {
+                    ...prev,
+                    DATA_WYDANIA_AUTA: e.target.value,
+                  };
+                });
+              }}
+            />
+          </section>
+        )}
 
       <section className="edit_doc_actions__container">
         <span className="edit_doc_actions__container--title">

@@ -10,7 +10,8 @@ export const muiTableBodyCellProps = {
     borderBottom: "1px solid #000",
     padding: "5px",
     fontWeight: "500",
-    minHeight: "2rem",
+    // minHeight: "2rem",
+    minHeight: "65px",
     // maxHeight: "8rem",
     textWrap: "balance",
     whiteSpace: "pre-wrap",
@@ -168,7 +169,7 @@ export const prepareColumns = (columnsData, data) => {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
               cell.column.id === "50_VAT" &&
-              Math.abs(cellValue - dorozliczValue) <= 1
+                Math.abs(cellValue - dorozliczValue) <= 1
                 ? "rgb(250, 136, 136)"
                 : "white",
           },
@@ -186,7 +187,7 @@ export const prepareColumns = (columnsData, data) => {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
               cell.column.id === "100_VAT" &&
-              Math.abs(cellValue - dorozliczValue) <= 1
+                Math.abs(cellValue - dorozliczValue) <= 1
                 ? "rgb(250, 136, 136)"
                 : "white",
           },
@@ -228,10 +229,10 @@ export const prepareColumns = (columnsData, data) => {
         const formattedSalary =
           value !== undefined && value !== null && value !== 0
             ? value.toLocaleString("pl-PL", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-                useGrouping: true,
-              })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
             : "0,00";
         // console.log(formattedSalary);
 
@@ -250,10 +251,10 @@ export const prepareColumns = (columnsData, data) => {
         const formattedSalary =
           value !== undefined && value !== null && value !== 0
             ? value.toLocaleString("pl-PL", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-                useGrouping: true,
-              })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
             : "0,00"; // Zastąp puste pola zerem
 
         return `${formattedSalary}`;

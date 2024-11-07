@@ -475,7 +475,7 @@ const RaportAdvisers = () => {
   }, [auth.id_user, axiosPrivateIntercept, setPleaseWait]);
 
   useEffect(() => {
-    setTableSize(height - 164);
+    setTableSize(height - 151);
   }, [height]);
 
   useEffect(() => {

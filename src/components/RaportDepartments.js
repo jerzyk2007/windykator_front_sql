@@ -409,7 +409,7 @@ const RaportDepartments = () => {
   }, [departments]);
 
   useEffect(() => {
-    setTableSize(height - 164);
+    setTableSize(height - 151);
   }, [height]);
 
   useEffect(() => {
@@ -462,7 +462,7 @@ const RaportDepartments = () => {
         );
         setColumnOrder(
           settingsRaportUserDepartments?.data?.order?.map((order) => order) ||
-            []
+          []
         );
         setColumnPinning(
           settingsRaportUserDepartments?.data?.pinning || {

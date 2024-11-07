@@ -145,11 +145,11 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
           className="edit_doc_basic-data--content"
           style={{ backgroundColor: "rgba(248, 255, 152, .6)" }}
         >
-          {rowData.DO_ROZLICZENIA.toLocaleString("pl-PL", {
+          {rowData.DO_ROZLICZENIA ? rowData.DO_ROZLICZENIA.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
-          })}
+          }) : "0,00"}
         </span>
       </section>
 
@@ -174,6 +174,22 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
           <span className="edit_doc_basic-data--title">Nr szkody:</span>
           <span className="edit_doc_basic-data--content">
             {rowData.NR_SZKODY}
+          </span>
+        </section>
+      )}
+      {rowData.area !== "BLACHARNIA" && (
+        <section className="edit_doc_basic-data--document">
+          <span className="edit_doc_basic-data--title">Nr szkody:</span>
+          <span className="edit_doc_basic-data--content">
+            {rowData.NR_SZKODY}
+          </span>
+        </section>
+      )}
+      {rowData.area !== "BLACHARNIA" && (
+        <section className="edit_doc_basic-data--document">
+          <span className="edit_doc_basic-data--title">Nr autoryzacji:</span>
+          <span className="edit_doc_basic-data--content">
+            {rowData.NR_AUTORYZACJI}
           </span>
         </section>
       )}
@@ -218,14 +234,14 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
         </section>
       )}
 
-      {rowData.area !== "BLACHARNIA" && (
+      {/* {rowData.area !== "BLACHARNIA" && (
         <section className="edit_doc_basic-data--document">
           <span className="edit_doc_basic-data--title">Nr klienta:</span>
           <span className="edit_doc_basic-data--content">
             {rowData.NR_KLIENTA}
           </span>
         </section>
-      )}
+      )} */}
 
       <section className="edit_doc_basic-data--document">
         <span className="edit_doc_basic-data--title">Uwagi z faktury:</span>
@@ -233,7 +249,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
           className="edit_doc_basic-data--content-scroll"
           style={
             rowData?.UWAGI_Z_FAKTURY?.length > 70 &&
-            rowData.area === "BLACHARNIA"
+              rowData.area === "BLACHARNIA"
               ? { overflowY: "auto", maxHeight: "70px" }
               : null
           }

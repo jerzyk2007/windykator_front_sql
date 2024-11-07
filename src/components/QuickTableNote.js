@@ -6,6 +6,7 @@ import "./QuickTableNote.css";
 
 const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
   const noteRef = useRef();
+  const textareaRef = useRef(null);
 
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
@@ -45,9 +46,23 @@ const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
     }
   };
 
+  // Funkcja przewijająca do dołu
+  const scrollToBottom = () => {
+    if (textareaRef.current) {
+      textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.UWAGI_ASYSTENT`
+  }, [quickNote.UWAGI_ASYSTENT]); // Wywołaj useEffect przy zmianie `rowData.UWAGI_ASYSTENT`
+
+
   useEffect(() => {
     noteRef.current.focus();
   }, []);
+
+
 
   return (
     <section className="quick_table_note">
@@ -62,6 +77,7 @@ const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
         </section>
 
         <textarea
+          ref={textareaRef}
           className="quick_table_note__container-edit"
           name=""
           id=""
