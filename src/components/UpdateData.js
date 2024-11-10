@@ -22,7 +22,6 @@ const UpdateData = ({ data }) => {
                 <span className='update-data--info'>Data:</span>
                 <span className='update-data--info'>Godzina:</span>
                 <span className='update-data--info'>Status:</span>
-
             </section>
             {updateItems}
 
