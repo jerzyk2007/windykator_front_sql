@@ -239,11 +239,11 @@ const FKItemSettings = ({
       <section className="fk_data_settings-counter__container">
         <span
           className="fk_data_settings-counter"
-          style={
-            style === "exist"
-              ? { backgroundColor: "#aeffe4" }
-              : { backgroundColor: "red", color: "white", padding: "5px" }
-          }
+        // style={
+        //   style === "exist"
+        //     ? { backgroundColor: "#aeffe4" }
+        //     : { backgroundColor: "red", color: "white", padding: "5px" }
+        // }
         >
           {id + 1}
         </span>
@@ -256,7 +256,7 @@ const FKItemSettings = ({
           ></i>
         )}
       </section>
-      <span className="fk_data_settings-department">
+      <span className="fk_data_settings-dep">
         {itemsValue?.department}
       </span>
       <section className="fk_data_settings-localization">

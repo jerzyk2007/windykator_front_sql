@@ -66,6 +66,7 @@
   padding: 5px 0;
   user-select: none;
 }
+
 .fk_item_component-items__container {
   flex-grow: 1;
   margin: 10px 0;
@@ -74,6 +75,7 @@
   flex-direction: column;
   overflow: auto;
 }
+
 .fk_item_component-items__columns {
   min-width: 250px;
   text-align: center;
@@ -83,6 +85,7 @@
   border-radius: 5px;
   display: flex;
 }
+
 .fk_item_component-items__columns--counter {
   margin: 0 5px;
   flex-basis: 10%;
@@ -126,7 +129,7 @@
 }
 
 .fk_item_component-title__container-add {
-  width: 90%;
+  width: 100%;
   border: 1px solid black;
   margin-top: 20px;
   padding: 10px 0;

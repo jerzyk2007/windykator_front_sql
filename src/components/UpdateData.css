@@ -9,6 +9,7 @@
 
 .update-data__container {
     flex-grow: 1;
+    min-width: 600px;
     margin: 2px 0;
     border: 1px solid rgba(191, 196, 199, 0.6);
     background-color: rgba(202, 219, 230, 0.1);
@@ -31,6 +32,7 @@
 
 .update-data--info:first-child,
 .update-data--info:last-child {
+    min-width: 150px;
     flex-basis: 35%;
 
 }
