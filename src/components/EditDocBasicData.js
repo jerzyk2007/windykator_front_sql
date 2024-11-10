@@ -29,7 +29,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
         </span>
       </section>
 
-      {rowData.area === "BLACHARNIA" && (
+      {/* {rowData.area === "BLACHARNIA" && (
         <section className="edit_doc__container">
           <span className="edit_doc--title">
             Wprowadź kwotę brutto:
@@ -54,7 +54,7 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
             }
           />
         </section>
-      )}
+      )} */}
 
       <section className="edit_doc__container">
         <span className="edit_doc--title">Brutto:</span>

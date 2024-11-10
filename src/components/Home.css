@@ -1,38 +1,11 @@
 .home {
     /* flex-grow: 1; */
     display: flex;
-    justify-content: center;
-    padding: 10px;
 }
 
-.home-update {
-    width: 50%;
-    padding: 10px;
-    font-size: 1.2rem;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    border-radius: 5px;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.home-update-time {
+.home__update {
     flex-grow: 1;
-    width: 100%;
     display: flex;
     justify-content: center;
-}
-
-.home-update-time--date,
-.home-update-time--time {
-    margin: 10px;
-}
-
-@media screen and (max-width: 960px) {
-    .home-update {
-        width: 95%;
-        font-size: 1rem;
-    }
+    /* margin: 0 auto; */
 }

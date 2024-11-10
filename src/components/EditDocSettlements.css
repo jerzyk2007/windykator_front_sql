@@ -1,4 +1,5 @@
 .edit-doc-settlements {
+  /* flex-grow: 1; */
   margin-bottom: 10px;
   font-family: "Source Sans 3", Calibri, sans-serif;
   font-size: 1.05rem;
@@ -7,6 +8,7 @@
   display: flex;
   flex-direction: column;
 }
+
 .edit-doc-settlements--title {
   font-size: 1.1rem;
   border: 1px solid rgba(44, 123, 168, 0.6);
@@ -17,8 +19,8 @@
 }
 
 .edit-doc-settlements--content {
-  height: 120px;
-  max-height: 180px;
+  height: 180px;
+  /* max-height: 180px; */
   resize: none;
   padding: 5px;
   font-family: "Source Sans 3", Calibri, sans-serif;

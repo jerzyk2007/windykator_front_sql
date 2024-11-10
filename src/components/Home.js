@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
+import UpdateData from "./UpdateData";
 
 import "./Home.css";
 
@@ -8,30 +9,21 @@ const Home = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
 
-  const [updateTime, setUpdateTime] = useState({
-    date: "",
-  });
+  const [updateData, setUpdateData] = useState([]);
 
   useEffect(() => {
     const getUpdateTime = async () => {
       const response = await axiosPrivateIntercept.get(`/update/get-time`);
-
-      setUpdateTime({
-        date: response.data,
-      });
+      setUpdateData(response.data);
     };
     getUpdateTime();
   }, []);
 
   return (
     <section className="home">
-      {auth?.roles?.includes(100) && updateTime.date && (
-        <section className="home-update">
-          <span>Data i czas aktualizacji rozrachunków:</span>
-          <section className="home-update-time">
-            <span className="home-update-time--date">{updateTime.date}</span>
-            {/* <span className="home-update-time--time">{updateTime.time}</span> */}
-          </section>
+      {auth?.roles?.includes(100) && (
+        <section className="home__update">
+          {updateData.length && <UpdateData data={updateData} />}
         </section>
       )}
     </section>
