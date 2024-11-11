@@ -18,9 +18,13 @@ const EditDocSettlements = ({ settlement, date }) => {
     // <section className="edit-doc-settlements">
     <section className="edit-doc-settlements">
       <span className="edit-doc-settlements--title">Opisy rozrachunków</span>
-      {date && <section className="edit_doc__container">
+      {/* {date && <section className="edit_doc__container">
         <span className="edit_doc--title">Data rozliczenia autostacja:</span>
         <span className="edit_doc--content">{date}</span>
+      </section>} */}
+      {<section className="edit_doc__container">
+        <span className="edit_doc--title">Data rozliczenia autostacja:</span>
+        <span className="edit_doc--content">{date || "brak danych"}</span>
       </section>}
       <textarea
         ref={textareaRef}

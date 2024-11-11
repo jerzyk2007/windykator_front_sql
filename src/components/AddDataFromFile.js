@@ -70,6 +70,7 @@ const AddDataFromFile = () => {
   const handleSQL = async () => {
     try {
       console.log("test");
+
       // const copyUsers = await axiosPrivateIntercept.get(`/sql/copyUsers`);
       // const copySettings = await axiosPrivateIntercept.get(`/sql/copySettings`);
       // const copyDocuments = await axiosPrivateIntercept.get(
@@ -87,12 +88,20 @@ const AddDataFromFile = () => {
       //   `/sql/copy-items-departments`
       // );
 
+      // kopiowanie dopasowanych danych dział, lokalizacja, owner itp
       // const repairDepartments = await axiosPrivateIntercept.get(
       //   `/sql/copy-prepared-items`
       // );
-      const repairDepartments = await axiosPrivateIntercept.get(
-        `/sql/trade-credit-settlements`
-      );
+
+      // kopiowanie danych kredytu kupieckiego
+      // const repairDepartments = await axiosPrivateIntercept.get(
+      //   `/sql/trade-credit-settlements`
+      // );
+
+      // poprawienie kwoty brutto i netto dla faktur BL
+      // const repairDepartments = await axiosPrivateIntercept.get(
+      //   `/sql/change-fullBrutto-fullNetto`
+      // );
 
       // console.log(copyUsers.data.data);
       // console.log(copySettings.data.data);
@@ -157,11 +166,11 @@ const AddDataFromFile = () => {
                 id="settlements"
                 style={{ display: "none" }}
                 onChange={(e) => handleSendFileBL(e, "settlements")}
-                // onChange={(e) =>
-                //   handleSendFileBL(e, "settlements_credit_trade")
-                // }
-                // onChange={(e) => handleSendFileBL(e, "data_credit_trade")}
-                // onChange={(e) => handleSendFileBL(e, "add_data_credit_trade")}
+              // onChange={(e) =>
+              //   handleSendFileBL(e, "settlements_credit_trade")
+              // }
+              // onChange={(e) => handleSendFileBL(e, "data_credit_trade")}
+              // onChange={(e) => handleSendFileBL(e, "add_data_credit_trade")}
               />
               <label htmlFor="settlements" className="add_data_file-click-me">
                 Prześlij rozrachunki
