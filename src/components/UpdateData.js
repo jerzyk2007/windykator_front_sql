@@ -2,14 +2,13 @@ import React from 'react';
 import './UpdateData.css';
 
 const UpdateData = ({ data }) => {
-
     const updateItems = data.map((item, index) => {
         return (
             <section key={index} className='update-data__container'>
                 <span className='update-data--info'>{item.data_name}</span>
                 <span className='update-data--info'>{item.date}</span>
                 <span className='update-data--info'>{item.hour}</span>
-                <span className='update-data--info'>{item.success}</span>
+                <span className='update-data--info'>{item.update_success}</span>
 
             </section>
         );

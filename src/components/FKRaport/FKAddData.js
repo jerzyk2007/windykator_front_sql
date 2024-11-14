@@ -6,6 +6,8 @@ import { getAllDataRaport } from "../utilsForTable/excelFilteredTable";
 import { format } from "date-fns";
 import * as XLSX from "xlsx";
 import {
+  excelDateToISODate,
+  isExcelDate,
   preparedAccountancyData,
   preparedCarData,
   getPreparedData,
@@ -161,166 +163,187 @@ const FKAddData = () => {
         ) {
           return setFKAccountancy(message.errorData);
         }
-        // if (
-        //   !decodedFile[0]["Nr. dokumentu"] ||
-        //   !decodedFile[0]["Kontrahent"] ||
-        //   !decodedFile[0]["Płatność"] ||
-        //   !decodedFile[0]["Data płatn."] ||
-        //   !decodedFile[0]["Nr kontrahenta"] ||
-        //   !decodedFile[0]["Synt."]
-        // ) {
-        //   return setFKAccountancy(message.errorData);
-        // }
+        setPleaseWait(true);
 
-        const result = await preparedAccountancyData(
-          axiosPrivateIntercept,
-          decodedFile
+        // console.log(type);
+        // console.log(decodedFile);
+
+        // const response = await axiosPrivateIntercept.post(
+        //   "/fk/send-accountancy-fk",
+        //   { data: 'test' },
+        // );
+
+        // const repairDepartments = await axiosPrivateIntercept.get(
+        //   `/sql/change-fullBrutto-fullNetto`
+        // );
+
+        // const result = await preparedAccountancyData(
+        //   axiosPrivateIntercept,
+        //   decodedFile
+        // );
+        const changeDate = decodedFile.map(item => {
+          return {
+            KONTRAHENT: item['Kontrahent'],
+            NR_KONTRAHENTA: item['Nr kontrahenta'],
+            NUMER: item['Nr. dokumentu'],
+            DO_ROZLICZENIA_FK: item['Płatność'],
+            DATA_PLATNOSCI: isExcelDate(item['Data płatn.']) ? excelDateToISODate(item['Data płatn.']) : null,
+            KONTO: item['Synt.']
+          };
+        });
+
+        const result = await axiosPrivateIntercept.post(
+          "/fk/send-accountancy-fk",
+          { documents_data: changeDate },
         );
-        if (result?.errorDepartments.length) {
+
+        if (result?.data?.errorDepartments?.length) {
           return setFKAccountancy(
-            `Brak przypisanych działów: ${result.errorDepartments}`
+            `Brak przypisanych działów: ${result.data.errorDepartments}`
           );
         }
-        setFKAccountancy(message.saveToDB);
+        // setFKAccountancy(message.saveToDB);
 
-        await saveDataToDB(
-          "accountancy",
-          result.generateDocuments,
-          result.generateDocuments.length
-        );
+        // await saveDataToDB(
+        //   "accountancy",
+        //   result.generateDocuments,
+        //   result.generateDocuments.length
+        // );
         setFKAccountancy(message.finish);
+        setPleaseWait(false);
+
       }
 
-      if (type === "car") {
-        if (
-          !("NR FAKTURY" in decodedFile[0]) ||
-          !("WYDANO" in decodedFile[0])
-        ) {
-          return setCarReleased(message.errorData);
-        }
-        // if (!decodedFile[0]["NR FAKTURY"] || !decodedFile[0]["WYDANO"]) {
-        //   return setCarReleased(message.errorData);
-        // }
+      // if (type === "car") {
+      //   if (
+      //     !("NR FAKTURY" in decodedFile[0]) ||
+      //     !("WYDANO" in decodedFile[0])
+      //   ) {
+      //     return setCarReleased(message.errorData);
+      //   }
+      //   // if (!decodedFile[0]["NR FAKTURY"] || !decodedFile[0]["WYDANO"]) {
+      //   //   return setCarReleased(message.errorData);
+      //   // }
 
-        setCarReleased(message.prepare);
+      //   setCarReleased(message.prepare);
 
-        const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
+      //   const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
 
-        const result = preparedCarData(
-          decodedFile,
-          resultPreparedData,
-          setCarReleased
-        );
-        setCarReleased(message.saveToDB);
+      //   const result = preparedCarData(
+      //     decodedFile,
+      //     resultPreparedData,
+      //     setCarReleased
+      //   );
+      //   setCarReleased(message.saveToDB);
 
-        await saveDataToDB(
-          "carReleased",
-          result.preparedDataReleasedCars,
-          result.counter
-        );
-        setCarReleased(message.finish);
-      }
-      if (type === "rubicon") {
-        if (
-          !("Faktura nr" in decodedFile[0]) ||
-          !("Status aktualny" in decodedFile[0]) ||
-          !("Firma zewnętrzna" in decodedFile[0]) ||
-          !("Data faktury" in decodedFile[0])
-        ) {
-          return setRubiconData(message.errorData);
-        }
-        // if (
-        //   !decodedFile[0]["Faktura nr"] ||
-        //   !decodedFile[0]["Status aktualny"] ||
-        //   !decodedFile[0]["Firma zewnętrzna"] ||
-        //   !decodedFile[0]["Data faktury"]
-        // ) {
-        //   return setRubiconData(message.errorData);
-        // }
-        // setRubiconData(message.prepare);
-        setRubiconData("Przetwarzanie danych z pliku Rubicon.");
+      //   await saveDataToDB(
+      //     "carReleased",
+      //     result.preparedDataReleasedCars,
+      //     result.counter
+      //   );
+      //   setCarReleased(message.finish);
+      // }
+      // if (type === "rubicon") {
+      //   if (
+      //     !("Faktura nr" in decodedFile[0]) ||
+      //     !("Status aktualny" in decodedFile[0]) ||
+      //     !("Firma zewnętrzna" in decodedFile[0]) ||
+      //     !("Data faktury" in decodedFile[0])
+      //   ) {
+      //     return setRubiconData(message.errorData);
+      //   }
+      //   // if (
+      //   //   !decodedFile[0]["Faktura nr"] ||
+      //   //   !decodedFile[0]["Status aktualny"] ||
+      //   //   !decodedFile[0]["Firma zewnętrzna"] ||
+      //   //   !decodedFile[0]["Data faktury"]
+      //   // ) {
+      //   //   return setRubiconData(message.errorData);
+      //   // }
+      //   // setRubiconData(message.prepare);
+      //   setRubiconData("Przetwarzanie danych z pliku Rubicon.");
 
-        const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
+      //   const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
 
-        const result = await preparedRubiconData(
-          decodedFile,
-          resultPreparedData,
-          setRubiconData,
-          axiosPrivateIntercept
-        );
-        setRubiconData(message.saveToDB);
+      //   const result = await preparedRubiconData(
+      //     decodedFile,
+      //     resultPreparedData,
+      //     setRubiconData,
+      //     axiosPrivateIntercept
+      //   );
+      //   setRubiconData(message.saveToDB);
 
-        await saveDataToDB(
-          "caseStatus",
-          result.preparedCaseStatusBL,
-          result.counter
-        );
+      //   await saveDataToDB(
+      //     "caseStatus",
+      //     result.preparedCaseStatusBL,
+      //     result.counter
+      //   );
 
-        setRubiconData(message.finish);
-      }
-      if (type === "settlement") {
-        // if (
-        //   !decodedFile[0]["NUMER"] ||
-        //   !decodedFile[0]["OPIS"] ||
-        //   !decodedFile[0]["DataRozlAutostacja"] ||
-        //   !decodedFile[0]["DATA_WYSTAWIENIA"] ||
-        //   !decodedFile[0]["DataOperacji"]
-        // ) {
-        //   return setSettlementNames(message.errorData);
-        // }
-        if (
-          !("NUMER" in decodedFile[0]) ||
-          !("OPIS" in decodedFile[0]) ||
-          !("DataRozlAutostacja" in decodedFile[0]) ||
-          !("DATA_WYSTAWIENIA" in decodedFile[0]) ||
-          !("DataOperacji" in decodedFile[0])
-        ) {
-          return setSettlementNames(message.errorData);
-        }
+      //   setRubiconData(message.finish);
+      // }
+      // if (type === "settlement") {
+      //   // if (
+      //   //   !decodedFile[0]["NUMER"] ||
+      //   //   !decodedFile[0]["OPIS"] ||
+      //   //   !decodedFile[0]["DataRozlAutostacja"] ||
+      //   //   !decodedFile[0]["DATA_WYSTAWIENIA"] ||
+      //   //   !decodedFile[0]["DataOperacji"]
+      //   // ) {
+      //   //   return setSettlementNames(message.errorData);
+      //   // }
+      //   if (
+      //     !("NUMER" in decodedFile[0]) ||
+      //     !("OPIS" in decodedFile[0]) ||
+      //     !("DataRozlAutostacja" in decodedFile[0]) ||
+      //     !("DATA_WYSTAWIENIA" in decodedFile[0]) ||
+      //     !("DataOperacji" in decodedFile[0])
+      //   ) {
+      //     return setSettlementNames(message.errorData);
+      //   }
 
-        setSettlementNames(message.prepare);
+      //   setSettlementNames(message.prepare);
 
-        const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
+      //   const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
 
-        const result = preparedSettlementData(
-          decodedFile,
-          resultPreparedData,
-          setSettlementNames
-        );
-        setSettlementNames(message.saveToDB);
-        await saveDataToDB(
-          "settlementNames",
-          result.preparedSettlementDate,
-          result.counter
-        );
-        setSettlementNames(message.finish);
-      }
+      //   const result = preparedSettlementData(
+      //     decodedFile,
+      //     resultPreparedData,
+      //     setSettlementNames
+      //   );
+      //   setSettlementNames(message.saveToDB);
+      //   await saveDataToDB(
+      //     "settlementNames",
+      //     result.preparedSettlementDate,
+      //     result.counter
+      //   );
+      //   setSettlementNames(message.finish);
+      // }
 
-      if (type === "missedDate") {
-        // if (!decodedFile[0]["NUMER"] || !decodedFile[0]["DATA_WYSTAWIENIA"]) {
-        //   return setMissedDate(message.errorData);
-        // }
+      // if (type === "missedDate") {
+      //   // if (!decodedFile[0]["NUMER"] || !decodedFile[0]["DATA_WYSTAWIENIA"]) {
+      //   //   return setMissedDate(message.errorData);
+      //   // }
 
-        if (
-          !("NUMER" in decodedFile[0]) ||
-          !("DATA_WYSTAWIENIA" in decodedFile[0])
-        ) {
-          return setMissedDate(message.errorData);
-        }
+      //   if (
+      //     !("NUMER" in decodedFile[0]) ||
+      //     !("DATA_WYSTAWIENIA" in decodedFile[0])
+      //   ) {
+      //     return setMissedDate(message.errorData);
+      //   }
 
-        setMissedDate(message.prepare);
+      //   setMissedDate(message.prepare);
 
-        const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
+      //   const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
 
-        const result = prepareMissedDate(
-          decodedFile,
-          resultPreparedData,
-          setMissedDate
-        );
-        setMissedDate(message.saveToDB);
-        await saveDataToDB("missedDate", result.preparedDate, result.counter);
-        setMissedDate(message.finish);
-      }
+      //   const result = prepareMissedDate(
+      //     decodedFile,
+      //     resultPreparedData,
+      //     setMissedDate
+      //   );
+      //   setMissedDate(message.saveToDB);
+      //   await saveDataToDB("missedDate", result.preparedDate, result.counter);
+      //   setMissedDate(message.finish);
+      // }
     } catch (error) {
       if (type === "accountancy") {
         setFKAccountancy(message.error);
@@ -405,15 +428,20 @@ const FKAddData = () => {
         setPleaseWait(true);
         const result = await axiosPrivateIntercept.get("/fk/get-date-counter");
         const response = await axiosPrivateIntercept.get(`/update/get-time`);
-        const DMS_date = response.data;
+        // const DMS_date = response.data;
+
+        const DMS_date = response.data.find(item => item.data_name === "Rozrachunki");
+
+
 
         const update = {
-          ...result.data.updateDate,
+          updateData: JSON.stringify(result.data.updateDate),
           dms: {
-            date: format(DMS_date, "dd-MM-yyyy "),
-            hour: format(DMS_date, "HH:mm"),
+            date: DMS_date.update_success ? DMS_date.date : "Błąd aktualizacji",
+            hour: DMS_date.update_success ? `godzina: ${DMS_date.hour}` : "Błąd aktualizacji",
           },
         };
+        console.log(update);
         setDateCounter(update);
         setPleaseWait(false);
       } catch (err) {
@@ -507,9 +535,9 @@ const FKAddData = () => {
                   <span>{dateCounter?.caseStatus?.counter}</span>
 
                   {dateCounter?.accountancy &&
-                  dateCounter?.carReleased &&
-                  // dateCounter?.caseStatus ? (
-                  !dateCounter?.caseStatus ? (
+                    dateCounter?.carReleased &&
+                    // dateCounter?.caseStatus ? (
+                    !dateCounter?.caseStatus ? (
                     <section className="fk_add_data__container-file">
                       <input
                         type="file"
@@ -539,10 +567,10 @@ const FKAddData = () => {
                   <span>{dateCounter?.settlementNames?.counter}</span>
 
                   {dateCounter?.accountancy &&
-                  dateCounter?.carReleased &&
-                  dateCounter?.caseStatus &&
-                  // dateCounter?.settlementNames ? (
-                  !dateCounter?.settlementNames ? (
+                    dateCounter?.carReleased &&
+                    dateCounter?.caseStatus &&
+                    // dateCounter?.settlementNames ? (
+                    !dateCounter?.settlementNames ? (
                     <section className="fk_add_data__container-file">
                       <input
                         type="file"
@@ -575,12 +603,12 @@ const FKAddData = () => {
                   <span>{dateCounter?.missedDate?.counter}</span>
 
                   {dateCounter?.accountancy &&
-                  dateCounter?.carReleased &&
-                  dateCounter?.caseStatus &&
-                  dateCounter?.settlementNames &&
-                  !dateCounter?.missedDate &&
-                  !dateCounter?.genrateRaport &&
-                  !disableMissedDate ? (
+                    dateCounter?.carReleased &&
+                    dateCounter?.caseStatus &&
+                    dateCounter?.settlementNames &&
+                    !dateCounter?.missedDate &&
+                    !dateCounter?.genrateRaport &&
+                    !disableMissedDate ? (
                     <section className="fk_add_data__container-file">
                       <input
                         type="file"
@@ -668,7 +696,7 @@ const FKAddData = () => {
                 Rozrachunki z Autostacji
               </span>
               <span>{dateCounter?.dms?.date}</span>
-              <span>godzina: {dateCounter?.dms?.hour}</span>
+              <span>{dateCounter?.dms?.hour}</span>
 
               <section className="fk_add_data__container-file"></section>
             </section>

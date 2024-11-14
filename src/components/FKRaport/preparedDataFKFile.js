@@ -1,14 +1,14 @@
 import { subDays, format, parseISO } from "date-fns";
 
 // Funkcja do konwersji daty z formatu Excel na "yyyy-mm-dd"
-const excelDateToISODate = (excelDate) => {
+export const excelDateToISODate = (excelDate) => {
   // const date = new Date((excelDate - (25567 + 1)) * 86400 * 1000); // Konwersja z formatu Excel do milisekund
   const date = new Date((excelDate - (25567 + 2)) * 86400 * 1000); // Konwersja z formatu Excel do milisekund
   return date.toISOString().split("T")[0]; // Pobranie daty w formacie "yyyy-mm-dd"
 };
 
 // funkcja wykonuje sprawdzenie czy data jest sformatowana w excelu czy zwykły string
-const isExcelDate = (value) => {
+export const isExcelDate = (value) => {
   // Sprawdź, czy wartość jest liczbą i jest większa od zera (Excelowa data to liczba większa od zera)
   if (typeof value === "number" && value > 0) {
     // Sprawdź, czy wartość mieści się w zakresie typowych wartości dat w Excelu
@@ -225,13 +225,13 @@ export const preparedRubiconData = async (
       counter++;
       const status =
         matchingSettlemnt["Status aktualny"] !== "Brak działań" &&
-        matchingSettlemnt["Status aktualny"] !== "Rozliczona" &&
-        matchingSettlemnt["Status aktualny"] !== "sms/mail +3" &&
-        matchingSettlemnt["Status aktualny"] !== "sms/mail -2" &&
-        matchingSettlemnt["Status aktualny"] !== "Zablokowana" &&
-        matchingSettlemnt["Status aktualny"] !== "Zablokowana BL" &&
-        matchingSettlemnt["Status aktualny"] !== "Zablokowana KF" &&
-        matchingSettlemnt["Status aktualny"] !== "Zablokowana KF BL"
+          matchingSettlemnt["Status aktualny"] !== "Rozliczona" &&
+          matchingSettlemnt["Status aktualny"] !== "sms/mail +3" &&
+          matchingSettlemnt["Status aktualny"] !== "sms/mail -2" &&
+          matchingSettlemnt["Status aktualny"] !== "Zablokowana" &&
+          matchingSettlemnt["Status aktualny"] !== "Zablokowana BL" &&
+          matchingSettlemnt["Status aktualny"] !== "Zablokowana KF" &&
+          matchingSettlemnt["Status aktualny"] !== "Zablokowana KF BL"
           ? matchingSettlemnt["Status aktualny"]
           : "BRAK";
 
@@ -291,7 +291,7 @@ export const preparedRubiconData = async (
         ...item,
         ETAP_SPRAWY:
           matchingSettlemnt.STATUS_SPRAWY_KANCELARIA &&
-          matchingSettlemnt.JAKA_KANCELARIA !== "BRAK"
+            matchingSettlemnt.JAKA_KANCELARIA !== "BRAK"
             ? matchingSettlemnt.STATUS_SPRAWY_KANCELARIA
             : " ",
         JAKA_KANCELARIA:
@@ -303,7 +303,7 @@ export const preparedRubiconData = async (
           matchingSettlemnt.JAKA_KANCELARIA !== "BRAK" ? "TAK" : "NIE",
         KWOTA_WPS:
           matchingSettlemnt.KWOTA_WINDYKOWANA_BECARED &&
-          matchingSettlemnt.JAKA_KANCELARIA !== "BRAK"
+            matchingSettlemnt.JAKA_KANCELARIA !== "BRAK"
             ? matchingSettlemnt.KWOTA_WINDYKOWANA_BECARED
               ? Number(matchingSettlemnt.KWOTA_WINDYKOWANA_BECARED)
               : " "
@@ -355,8 +355,8 @@ export const preparedSettlementData = (
           preparedItem.DataOperacji === "NULL"
             ? "BRAK"
             : checkDate
-            ? excelDateToISODate(preparedItem.DataOperacji)
-            : "BRAK";
+              ? excelDateToISODate(preparedItem.DataOperacji)
+              : "BRAK";
 
         if (date !== "BRAK" && /\d{4}-\d{2}-\d{2}/.test(date)) {
           if (
@@ -372,7 +372,7 @@ export const preparedSettlementData = (
           currentDateFinishSettlement !== "NULL" &&
           (dateFinishSettlement === "" ||
             new Date(currentDateFinishSettlement) >
-              new Date(dateFinishSettlement))
+            new Date(dateFinishSettlement))
         ) {
           dateFinishSettlement = currentDateFinishSettlement;
         }
@@ -782,14 +782,14 @@ export const prepareDataRaport = (data) => {
         ...item,
         DO_ROZLICZENIA_AS:
           item.TYP_DOKUMENTU === "Korekta zaliczki" ||
-          item.TYP_DOKUMENTU === "Korekta"
+            item.TYP_DOKUMENTU === "Korekta"
             ? matchingSettlement.ZOBOWIAZANIA
               ? -matchingSettlement.ZOBOWIAZANIA
               : matchingSettlement.DO_ROZLICZENIA
             : matchingSettlement.DO_ROZLICZENIA,
         ROZNICA:
           item.TYP_DOKUMENTU === "Korekta zaliczki" ||
-          item.TYP_DOKUMENTU === "Korekta"
+            item.TYP_DOKUMENTU === "Korekta"
             ? matchingSettlement.ZOBOWIAZANIA
               ? -matchingSettlement.ZOBOWIAZANIA - item.KWOTA_DO_ROZLICZENIA_FK
               : item.KWOTA_DO_ROZLICZENIA_FK - matchingSettlement.DO_ROZLICZENIA
@@ -803,14 +803,14 @@ export const prepareDataRaport = (data) => {
         ...item,
         DO_ROZLICZENIA_AS:
           item.TYP_DOKUMENTU === "Korekta zaliczki" ||
-          item.TYP_DOKUMENTU === "Korekta"
+            item.TYP_DOKUMENTU === "Korekta"
             ? matchingSettlement.ZOBOWIAZANIA
               ? -matchingSettlement.ZOBOWIAZANIA
               : matchingSettlement.DO_ROZLICZENIA
             : matchingSettlement.DO_ROZLICZENIA,
         ROZNICA:
           item.TYP_DOKUMENTU === "Korekta zaliczki" ||
-          item.TYP_DOKUMENTU === "Korekta"
+            item.TYP_DOKUMENTU === "Korekta"
             ? matchingSettlement.ZOBOWIAZANIA
               ? -matchingSettlement.ZOBOWIAZANIA - item.KWOTA_DO_ROZLICZENIA_FK
               : item.KWOTA_DO_ROZLICZENIA_FK - matchingSettlement.DO_ROZLICZENIA
@@ -856,7 +856,7 @@ export const prepareDataRaport = (data) => {
     const preparedAging = data.aging;
 
     for (const age of preparedAging) {
-        if (age.type === "first" && Number(age.firstValue) >= differenceInDays) {
+      if (age.type === "first" && Number(age.firstValue) >= differenceInDays) {
         title = age.title;
         foundMatchingAging = true;
         break;

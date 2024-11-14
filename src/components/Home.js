@@ -14,6 +14,7 @@ const Home = () => {
   useEffect(() => {
     const getUpdateTime = async () => {
       const response = await axiosPrivateIntercept.get(`/update/get-time`);
+      console.log(response.data);
       setUpdateData(response.data);
     };
     getUpdateTime();
@@ -21,9 +22,9 @@ const Home = () => {
 
   return (
     <section className="home">
-      {auth?.roles?.includes(100) && (
+      {auth?.roles?.includes(100) && updateData.length > 0 && (
         <section className="home__update">
-          {updateData.length && <UpdateData data={updateData} />}
+          {<UpdateData data={updateData} />}
         </section>
       )}
     </section>
