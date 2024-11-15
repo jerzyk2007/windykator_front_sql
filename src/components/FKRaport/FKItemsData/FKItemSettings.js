@@ -234,7 +234,7 @@ const FKItemSettings = ({
   return (
     <section
       className="fk_data_settings__container-item"
-      style={!activeSave ? { backgroundColor: "yellow" } : null}
+    // style={!activeSave ? { backgroundColor: "yellow" } : null}
     >
       <section className="fk_data_settings-counter__container">
         <span
@@ -256,9 +256,14 @@ const FKItemSettings = ({
           ></i>
         )}
       </section>
-      <span className="fk_data_settings-dep">
-        {itemsValue?.department}
-      </span>
+      <section className="fk_data_settings-department">
+        <span className="fk_data_settings-dep"
+          style={!activeSave ? { backgroundColor: "yellow", border: "1px solid rgba(44, 123, 168, 0.6)" } : null}
+
+        >
+          {itemsValue?.department}
+        </span>
+      </section>
       <section className="fk_data_settings-localization">
         <Box>
           <FormControl fullWidth>

@@ -152,8 +152,6 @@ const FKItemComponent = ({ data, info, title }) => {
   // zapis do bazy danych
   const saveData = async () => {
     const newNamesArray = newDataItem.map((item) => item.newName);
-    console.log(newNamesArray);
-    console.log(info);
     await axiosPrivateIntercept.patch(`/fk/save-items-data/${info}`, {
       [info]: newNamesArray,
     });

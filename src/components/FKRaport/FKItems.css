@@ -32,7 +32,8 @@
   box-sizing: content-box;
   position: relative;
   outline: none;
-  border: 1px solid rgba(0, 92, 145, 0.6);
+  border: none;
+  /* border: 1px solid rgba(0, 92, 145, 0.6); */
   border-radius: 10px;
 }
 
@@ -42,7 +43,8 @@
 
 .fk_items--bloc-active-tabs {
   /* border-bottom: 1px solid transparent; */
-  background-color: rgba(44, 108, 168, 0.6);
+  /* background-color: rgba(44, 108, 168, 0.6); */
+  background-color: #007bff;
 }
 
 .fk_items--bloc-active-tabs::before {
