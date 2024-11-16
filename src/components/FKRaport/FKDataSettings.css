@@ -1,6 +1,5 @@
 .fk_data_settings {
   flex-grow: 1;
-  padding: 5px;
   user-select: none;
   display: flex;
   flex-direction: column;
@@ -25,7 +24,6 @@
 .fk_data_settings__container {
   flex-grow: 1;
   width: 100%;
-  margin: 5px;
   display: flex;
   flex-direction: column;
 }
@@ -33,7 +31,7 @@
 .fk_data_settings__container-item {
   flex-grow: 1;
   padding: 10px;
-  margin: 4px 0;
+  margin: 1px 0;
   text-align: center;
   font-weight: bold;
   border: 1px solid rgba(191, 196, 199, 0.6);
@@ -48,8 +46,8 @@
   padding: 5px;
   border: 1px solid rgba(191, 196, 199, 0.6);
   border-radius: 5px;
-  /* background-color: rgba(255, 0, 0, 0.15); */
   background-color: rgba(72, 255, 0, 0.15);
+  background-color: rgb(140, 253, 96);
   font-size: 1.2rem;
   display: flex;
 }
