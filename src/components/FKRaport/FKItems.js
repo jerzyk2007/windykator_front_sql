@@ -4,6 +4,7 @@ import PleaseWait from "../PleaseWait";
 // import useData from "../hooks/useData";
 import FKItemComponent from "./FKItemsData/FKItemComponent";
 import FKItemAging from "./FKItemsData/FKItemAging";
+import PercentageTarget from "../PercentageTarget";
 import "./FKItems.css";
 
 const FKItems = () => {
@@ -12,12 +13,35 @@ const FKItems = () => {
 
   const [pleaseWait, setPleaseWait] = useState(false);
   const [dataItems, setDataItems] = useState([]);
+  const [departments, setDepartments] = useState([]);
+
   const [toggleState, setToggleState] = useState(1);
 
   // const aging = ["<1", "1-30", "31-60", "180-360", ">360"];
 
   const toggleTab = (index) => {
     setToggleState(index);
+  };
+
+  const prepareTarget = (data) => {
+    const { time, departments: originalDepartments } = data.target;
+    const { departments: departmentKeys } = data;
+    const newDepartments = {
+      Całość: originalDepartments["Całość"] || "-",
+    };
+
+    // Przypisanie wartości z oryginalnego obiektu lub 0 dla nowych kluczy
+    departmentKeys.forEach((dep) => {
+      newDepartments[dep] = originalDepartments[dep] || 0;
+    });
+
+    // Stworzenie nowego obiektu target
+    const newTarget = {
+      time: { ...time },
+      departments: newDepartments,
+    };
+
+    return newTarget;
   };
 
   const getData = async () => {
@@ -27,6 +51,12 @@ const FKItems = () => {
       const result = await axiosPrivateIntercept.get("/fk/get-items-data");
 
       setDataItems(result.data.data);
+
+      const resultDepartments = await axiosPrivateIntercept.get(
+        "/settings/get-departments"
+      );
+      const targetData = prepareTarget(resultDepartments.data);
+      setDepartments(targetData);
 
       setPleaseWait(false);
     } catch (error) {
@@ -151,7 +181,11 @@ const FKItems = () => {
                   }
                 >
                   <section className="fk_items__section-content">
-                    <section className="fk_items__section-content-data"></section>
+                    <section className="fk_items__section-content-data">
+                      <PercentageTarget departments={departments} />
+                      {/* <PercentageTarget /> */}
+
+                    </section>
                     <section className="fk_items__section-content-data"></section>
                     <section className="fk_items__section-content-data"></section>
                   </section>

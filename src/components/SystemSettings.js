@@ -13,34 +13,10 @@ const SystemSettings = () => {
 
   const [pleaseWait, setPleaseWait] = useState(false);
   const [columns, setColumns] = useState([]);
-  const [departments, setDepartments] = useState([]);
   const [toggleState, setToggleState] = useState(1);
 
   const toggleTab = (index) => {
     setToggleState(index);
-  };
-
-  const prepareTarget = (data) => {
-    const { time, departments: originalDepartments } = data.target;
-    const { departments: departmentKeys } = data;
-
-    // Nowy obiekt departments
-    const newDepartments = {
-      Całość: originalDepartments["Całość"] || "-",
-    };
-
-    // Przypisanie wartości z oryginalnego obiektu lub 0 dla nowych kluczy
-    departmentKeys.forEach((dep) => {
-      newDepartments[dep] = originalDepartments[dep] || 0;
-    });
-
-    // Stworzenie nowego obiektu target
-    const newTarget = {
-      time: { ...time },
-      departments: newDepartments,
-    };
-
-    return newTarget;
   };
 
   // pobiera wszytskie nazwy kolumn z pierwszego dokumnetu w DB
@@ -52,13 +28,7 @@ const SystemSettings = () => {
         `/documents/get-columns-name`
       );
 
-      createColumns(documentsColumn.data);
-
-      const resultDepartments = await axiosPrivateIntercept.get(
-        "/settings/get-departments"
-      );
-      const targetData = prepareTarget(resultDepartments.data);
-      setDepartments(targetData);
+      await createColumns(documentsColumn.data);
 
       setPleaseWait(false);
     } catch (err) {
@@ -93,7 +63,7 @@ const SystemSettings = () => {
           };
         }
       });
-
+      console.log(newColumns);
       setColumns(newColumns);
     } catch (error) {
       console.error("Błąd podczas pobierania kolumn: ", error);
@@ -141,7 +111,7 @@ const SystemSettings = () => {
                       </section>
 
                       <section className="system_settings_section-content-data">
-                        <PercentageTarget departments={departments} />
+                        {/* <PercentageTarget departments={departments} /> */}
                       </section>
                     </section>
                   </section>
