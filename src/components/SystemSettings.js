@@ -113,7 +113,8 @@ const SystemSettings = () => {
           <section className="system_settings_items">
             <section className="system_settings-wrapper">
               <section className="system_settings__container">
-                <section className="system_settings--bloc-tabs">
+                {/* <section className="system_settings--bloc-tabs"> */}
+                <section className="bloc-tabs">
                   <button
                     className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
                     onClick={() => toggleTab(1)}

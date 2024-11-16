@@ -95,7 +95,8 @@ const EditUserSettings = ({ user, setEdit }) => {
           <section className="edit_user_settings_items">
             <section className="edit_user_settings-wrapper">
               <section className="edit_user_settings__container">
-                <section className="edit_user_settings--bloc-tabs">
+                {/* <section className="edit_user_settings--bloc-tabs"> */}
+                <section className="bloc-tabs">
                   <button
                     className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
                     onClick={() => toggleTab(1)}
@@ -119,7 +120,7 @@ const EditUserSettings = ({ user, setEdit }) => {
                     <section className="edit_user_settings_section-content">
                       <section
                         className="edit_user_settings_section-content-data"
-                        // style={{ backgroundColor: "red" }}
+                      // style={{ backgroundColor: "red" }}
                       >
                         {roles && Object.keys(roles).length > 0 && (
                           <UserChangeRoles user={user} roles={roles} />

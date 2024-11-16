@@ -5,6 +5,7 @@
   padding: 5px;
   overflow: hidden;
 }
+
 .system_settings_items {
   flex-grow: 1;
   overflow: hidden;
@@ -27,16 +28,16 @@
   flex-direction: column;
 }
 
-.system_settings--bloc-tabs {
+/* .system_settings--bloc-tabs {
   display: flex;
   min-width: 300px;
-}
+} */
 
-.system_settings--bloc-tabs button {
+/* .system_settings--bloc-tabs button {
   border: none;
   padding: 10px 0;
   margin: 0px 80px;
-}
+} */
 
 .system_settings_section-content {
   max-height: 85vh;

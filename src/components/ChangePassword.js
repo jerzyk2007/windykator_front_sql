@@ -91,7 +91,7 @@ const ChangePassword = () => {
         </p>
       )}
       {!errMsg && <h1 className="change_password-title">Zmiana hasła</h1>}
-      <h3 className="change_user_name-info">
+      <h3 className="change_user_pass-info">
         Jeśli zmiana hasła zakończy się sukcesem to zostaniesz automatycznie
         wylogowany
       </h3>

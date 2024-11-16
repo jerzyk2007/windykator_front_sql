@@ -145,20 +145,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
             </section>
           </section>
           <section className="edit-row-table__panel">
-            {/* <section className="edit-row-table--bloc-tabs">
-              <button
-                className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(1)}
-              ></button>
-              <button
-                className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(2)}
-              ></button>
-              <button
-                className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
-                onClick={() => toggleTab(3)}
-              ></button>
-            </section> */}
             <section className="edit_row_table-buttons">
               <Button
                 className="mui-button"

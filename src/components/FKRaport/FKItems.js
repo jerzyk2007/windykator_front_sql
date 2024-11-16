@@ -46,39 +46,50 @@ const FKItems = () => {
         <section className="fk_items">
           <section className="fk_items-wrapper">
             <section className="fk_items__container">
-              <section className="fk_items--bloc-tabs">
+              {/* <section className="fk_items--bloc-tabs"> */}
+              <section className="bloc-tabs">
                 <button
-                  className={
-                    toggleState === 1
-                      ? "fk_items--bloc-area fk_items--bloc-active-tabs"
-                      : "fk_items--bloc-area"
-                  }
+                  // className={
+                  //   toggleState === 1
+                  //     ? "fk_items--bloc-area fk_items--bloc-active-tabs"
+                  //     : "fk_items--bloc-area"
+                  // }
+                  className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
                   onClick={() => toggleTab(1)}
                 ></button>
                 <button
-                  className={
-                    toggleState === 2
-                      ? "fk_items--bloc-area fk_items--bloc-active-tabs"
-                      : "fk_items--bloc-area"
-                  }
+                  // className={
+                  //   toggleState === 2
+                  //     ? "fk_items--bloc-area fk_items--bloc-active-tabs"
+                  //     : "fk_items--bloc-area"
+                  // }
+                  className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
                   onClick={() => toggleTab(2)}
                 ></button>
                 <button
-                  className={
-                    toggleState === 3
-                      ? "fk_items--bloc-area fk_items--bloc-active-tabs"
-                      : "fk_items--bloc-area"
-                  }
+                  // className={
+                  //   toggleState === 3
+                  //     ? "fk_items--bloc-area fk_items--bloc-active-tabs"
+                  //     : "fk_items--bloc-area"
+                  // }
+                  className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+
                   onClick={() => toggleTab(3)}
                 ></button>
               </section>
 
-              <section className="fk_items__content-tabs">
+              {/* <section className="fk_items__content-tabs"> */}
+              <section className="content-tabs">
                 <section
+                  // className={
+                  //   toggleState === 1
+                  //     ? "fk_items__content  fk_items__active-content"
+                  //     : "fk_items__content"
+                  // }
                   className={
                     toggleState === 1
-                      ? "fk_items__content  fk_items__active-content"
-                      : "fk_items__content"
+                      ? "content  active-content"
+                      : "content"
                   }
                 >
                   <section className="fk_items__section-content">

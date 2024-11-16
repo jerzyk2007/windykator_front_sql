@@ -6,6 +6,9 @@
     right: 0;
     background-color: #fff;
     z-index: 999;
+    font-family: "Source Sans 3", Calibri, sans-serif;
+    font-size: 1.15rem;
+    font-optical-sizing: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -17,11 +20,10 @@
     min-width: 300px;
     margin: auto;
     padding: 1.2rem;
-    background-color: #a7d3f7;
-    font-family: Calibri, sans-serif;
-    font-size: 1.2rem;
     color: #000000;
-    border: 1px solid rgba(0, 0, 0, .5);
+    border: 1px solid rgba(44, 123, 168, 0.6);
+    border-radius: 5px;
+    background-color: rgba(202, 219, 230, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -30,6 +32,7 @@
 
 .login-title {
     font-size: 1.7rem;
+    font-weight: 500;
 }
 
 .login__container {
@@ -38,62 +41,57 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-
 }
 
 .login__container-title {
-    font-size: 1rem;
+    font-size: .9rem;
     margin-top: 20px;
 
 }
 
 .login__container-text {
-    margin: 10px 0;
+    margin-bottom: 10px;
     padding: 10px;
-    border: 1px solid rgba(0, 0, 0, .5);
+    border: 1px solid rgba(44, 123, 168, 0.6);
+    border-radius: 5px;
     font-size: 1.2rem;
-    background-color: #fff;
+    outline: none;
 }
+
 
 .login-error-message {
     color: red;
     text-align: center;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 1.3rem;
     letter-spacing: 1px;
     background-color: #fffd7d;
     border-radius: 5px;
     border: none;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    width: 100%;
     padding: 10px 20px;
 }
 
 .login Button {
-    width: 50%;
     margin: 10px auto;
 }
 
-/* .login__container-button {
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: none;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin: 20px auto;
-    box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
-    background-color: rgb(127, 240, 134);
-
+.login__container-text {
+    background-color: #fff !important;
+    /* Wymuś biały kolor tła */
+    color: #a01313 !important;
+    /* Wymuś czarny kolor tekstu */
 }
 
-.login__container-button:active {
-    background-color: rgb(22, 171, 81);
-    color: #fff;
+/* .login__container-text:-webkit-autofill {
+    font-size: 1.2rem;
+    background-color: #fff !important;
+    color: #000 !important;
+    transition: background-color 5000s ease-in-out 0s;
 } */
 
-@media screen and (max-width: 960px) {
-    .login {
-        width: 90%;
-        min-width: 300px;
-    }
+.login__container-text:-webkit-autofill {
+    appearance: none;
+    -webkit-text-fill-color: #000 !important;
+    background-color: #fff !important;
+    transition: background-color 5000s ease-in-out 0s;
 }
