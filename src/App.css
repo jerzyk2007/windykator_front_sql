@@ -41,7 +41,7 @@
 
 .content {
   margin: 0 auto;
-  padding: 5px;
+  /* padding: 5px; */
   width: 100%;
   display: none;
 }
@@ -55,8 +55,10 @@
 }
 
 .bloc-tabs {
+  padding: 5px;
   display: flex;
   justify-content: space-around;
+  align-items: center;
 }
 
 .bloc-tabs button {

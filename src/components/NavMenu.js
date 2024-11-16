@@ -337,7 +337,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                                     className="nav_menu-link"
                                     onClick={handleLinkClick}
                                   >
-                                    Tabela, Cele
+                                    Tabela - kolumny
                                   </Link>
                                 </li>
                               )}

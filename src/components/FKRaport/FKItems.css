@@ -14,7 +14,7 @@
 .fk_items__container {
   flex-grow: 1;
   position: relative;
-  margin: 10px;
+  /* margin: 10px; */
   display: flex;
   flex-direction: column;
 }
@@ -81,7 +81,7 @@
 } */
 
 .fk_items__section-content {
-  max-height: 85vh;
+  max-height: 88vh;
   flex-grow: 1;
   display: flex;
   justify-content: space-around;

@@ -1,9 +1,10 @@
 .table_settings {
+  max-height: 88vh;
   flex-grow: 1;
   font-family: "Source Sans 3", Calibri, sans-serif;
   font-size: 1.1rem;
   display: flex;
-  overflow: hidden;
+
 }
 
 .table_settings-table {
@@ -104,6 +105,7 @@
   font-size: 1.2rem;
   color: blue;
 }
+
 .table_settings-table__columns-item-choice--select {
   width: 100%;
   border: none;

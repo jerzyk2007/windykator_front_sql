@@ -3,12 +3,13 @@ import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
 import PleaseWait from "./PleaseWait";
 import TableSettings from "./TableSettings";
+import TableColumns from "./TableColumns";
 
 import "./SystemSettings.css";
 
 const SystemSettings = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const { auth } = useData();
+  // const { auth } = useData();
 
   const [pleaseWait, setPleaseWait] = useState(false);
   const [columns, setColumns] = useState([]);
@@ -62,7 +63,6 @@ const SystemSettings = () => {
           };
         }
       });
-      console.log(newColumns);
       setColumns(newColumns);
     } catch (error) {
       console.error("Błąd podczas pobierania kolumn: ", error);
@@ -105,13 +105,15 @@ const SystemSettings = () => {
                     }
                   >
                     <section className="system_settings_section-content">
+                      {/* <section className="system_settings_section-content-data"> */}
+                      {/* <TableSettings dataColumns={columns} /> */}
+                      {/* <TableColumns /> */}
+                      {/* </section> */}
                       <section className="system_settings_section-content-data">
-                        <TableSettings dataColumns={columns} />
+
+                        <TableColumns />
                       </section>
 
-                      <section className="system_settings_section-content-data">
-                        {/* <PercentageTarget departments={departments} /> */}
-                      </section>
                     </section>
                   </section>
                   <section
