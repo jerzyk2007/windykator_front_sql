@@ -81,7 +81,7 @@
 } */
 
 .fk_items__section-content {
-  max-height: 88vh;
+  /* max-height: 88vh; */
   flex-grow: 1;
   display: flex;
   justify-content: space-around;

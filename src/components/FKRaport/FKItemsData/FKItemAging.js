@@ -283,67 +283,67 @@ const FKItemAging = ({ data, info, title }) => {
   }, [data]);
 
   return (
-    // <section className="fk_item_aging">
     <section className="fk_item_component">
-      {/* <section className="fk_item_aging-title__container"> */}
       <section className="fk_item_component-title__container">
-        {/* <span className="fk_item_aging--title">{title}</span> */}
-        <span className="fk_item_component--title">{title}</span>
-        {/* <span className="fk_item_aging--counter"> */}
-        <span className="fk_item_component--counter">
+        <section className="fk_item_component--counter">
+          <span className="fk_item_component--counter-info">
+            {dataItem ? dataItem.length : ""}
+          </span>
+        </section>
+        <section className="fk_item_component--title">
+          <span >{title}</span>
+        </section>
+
+        {/* <span className="fk_item_component--counter">
           {dataItem ? dataItem.length : ""}
         </span>
-        {!addActive && (
-          <>
-            <i
-              // className="fa-solid fa-plus fk_item_aging--title--fa-plus"
-              className="fa-solid fa-plus fk_item_component--title--fa-plus"
-              onClick={() => setAddActive(true)}
-            ></i>
-            <i
-              // className="fas fa-save fk_item_aging--title--fa-save"
-              className="fas fa-save fk_item_component--title--fa-save"
-              onClick={saveData}
-            ></i>
-          </>
-        )}
+        <span className="fk_item_component--title">{title}</span> */}
+
+        <section className="fk_item_component--choice">
+
+          {!addActive && (
+            <>
+              <i
+                className="fa-solid fa-plus fk_item_component--title--fa-plus"
+                onClick={() => setAddActive(true)}
+              ></i>
+              <i
+                className="fas fa-save fk_item_component--title--fa-save"
+                onClick={saveData}
+              ></i>
+            </>
+          )}
+        </section>
       </section>
       {addActive && (
-        // <section className="fk_item_aging-title__container-add">
         <section className="fk_item_component-title__container-add">
           <section className="fk_item_aging-title__container-number">
             <input
               className="fk_item_aging-title__container-add--edit"
-              // className="fk_item_component-title__container-add--edit"
               type="number"
               value={addItem.firstValue}
               onChange={(e) => handleAddItem(e, "first")}
             />
             <input
               className="fk_item_aging-title__container-add--edit"
-              // className="fk_item_component-title__container-add--edit"
               type="number"
               value={addItem.secondValue}
               onChange={(e) => handleAddItem(e, "second")}
             />
           </section>
 
-          {/* <section className="fk_item_aging-title__container-add--panel"> */}
           <section className="fk_item_component-title__container-add--panel">
             <i
-              // className="fa-solid fa-xmark fk_item_aging--fa-xmark"
               className="fa-solid fa-xmark fk_item_component--fa-xmark"
               onClick={cancelAddItem}
             ></i>
             <i
-              // className="fa-solid fa-check fk_item_aging--fa-check"
               className="fa-solid fa-check fk_item_component--fa-check"
               onClick={handleAcceptNewItem}
             ></i>
           </section>
         </section>
       )}
-      {/* <section className="fk_item_aging-items__container">{arrayItems}</section> */}
       <section className="fk_item_component-items__container">{arrayItems}</section>
     </section>
   );

@@ -2,7 +2,7 @@
   position: relative;
   flex-grow: 1;
   display: flex;
-  padding: 5px;
+  /* padding: 5px; */
   overflow: hidden;
 }
 
@@ -23,7 +23,7 @@
 .system_settings__container {
   flex-grow: 1;
   position: relative;
-  margin: 10px;
+  /* margin: 10px; */
   display: flex;
   flex-direction: column;
 }
@@ -49,9 +49,8 @@
 }
 
 .system_settings_section-content-data {
-  flex-grow: 1;
+  /* flex-grow: 1; */
   /* flex-basis: 50%; */
   /* max-width: 50%; */
   display: flex;
-  /* justify-content: center; */
 }

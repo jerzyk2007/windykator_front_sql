@@ -236,22 +236,30 @@ const FKItemComponent = ({ data, info, title }) => {
   return (
     <section className="fk_item_component">
       <section className="fk_item_component-title__container">
-        <span className="fk_item_component--title">{title}</span>
-        <span className="fk_item_component--counter">
-          {newDataItem ? newDataItem.length : ""}
-        </span>
-        {!addActive && (
-          <>
-            <i
-              className="fa-solid fa-plus fk_item_component--title--fa-plus"
-              onClick={() => setAddActive(true)}
-            ></i>
-            <i
-              className="fas fa-save fk_item_component--title--fa-save"
-              onClick={saveData}
-            ></i>
-          </>
-        )}
+        <section className="fk_item_component--counter">
+          <span className="fk_item_component--counter-info">
+            {newDataItem ? newDataItem.length : ""}
+          </span>
+        </section>
+        <section className="fk_item_component--title">
+          <span >{title}</span>
+        </section>
+
+        <section className="fk_item_component--choice">
+          {!addActive && (
+            <>
+              <i
+                className="fa-solid fa-plus fk_item_component--title--fa-plus"
+                onClick={() => setAddActive(true)}
+              ></i>
+              <i
+                className="fas fa-save fk_item_component--title--fa-save"
+                onClick={saveData}
+              ></i>
+            </>
+          )}
+
+        </section>
       </section>
       {addActive && (
         <section className="fk_item_component-title__container-add">
