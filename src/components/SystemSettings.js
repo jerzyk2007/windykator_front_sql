@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
 import PleaseWait from "./PleaseWait";
-import PercentageTarget from "./PercentageTarget";
 import TableSettings from "./TableSettings";
 
 import "./SystemSettings.css";
