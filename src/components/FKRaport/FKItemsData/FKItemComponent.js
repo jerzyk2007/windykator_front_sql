@@ -174,8 +174,9 @@ const FKItemComponent = ({ data, info, title }) => {
                   className="fa-regular fa-pen-to-square fk_item_component--fa-pen-to-square"
                   onClick={() => handleActiveItem(index)}
                 ></i>
+
                 <i
-                  className="fa-regular fa-trash-can fk_item_component--fa-trash-can"
+                  className="fa-regular fa-trash-can fk_item_component--fa-trash-can "
                   onDoubleClick={() => handleDelete(index)}
                 ></i>
               </>
