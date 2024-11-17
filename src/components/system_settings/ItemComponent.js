@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 
-import "./FKItemComponent.css";
+import "./ItemComponent.css";
 
 const FKItemComponent = ({ data, info, title }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
@@ -159,24 +159,24 @@ const FKItemComponent = ({ data, info, title }) => {
 
   const arrayItems = newDataItem.map((item, index) => {
     return (
-      <section key={index} className="fk_item_component-items__columns">
-        <span className="fk_item_component-items__columns--counter">
+      <section key={index} className="item_component-items__columns">
+        <span className="item_component-items__columns--counter">
           {index + 1}.
         </span>
         {editIndex !== index && (
           <>
-            <span className="fk_item_component-items__columns--item">
+            <span className="item_component-items__columns--item">
               {item.oldName}
             </span>
             {!addActive && (
               <>
                 <i
-                  className="fa-regular fa-pen-to-square fk_item_component--fa-pen-to-square"
+                  className="fa-regular fa-pen-to-square item_component--fa-pen-to-square"
                   onClick={() => handleActiveItem(index)}
                 ></i>
 
                 <i
-                  className="fa-regular fa-trash-can fk_item_component--fa-trash-can "
+                  className="fa-regular fa-trash-can item_component--fa-trash-can "
                   onDoubleClick={() => handleDelete(index)}
                 ></i>
               </>
@@ -188,22 +188,22 @@ const FKItemComponent = ({ data, info, title }) => {
           <>
             <input
               style={duplicate ? { color: "red", fontWeight: "bold" } : null}
-              className="fk_item_component--edit"
+              className="item_component--edit"
               type="text"
               value={item.newName}
               onChange={(e) => handleEdit(e, index)}
             />
             <i
-              className="fa-solid fa-xmark fk_item_component--fa-xmark"
+              className="fa-solid fa-xmark item_component--fa-xmark"
               onClick={() => handleEditCancel(index)}
             ></i>
             {/* <i
-              className="fa-solid fa-check fk_item_component--fa-check"
+              className="fa-solid fa-check item_component--fa-check"
               onClick={() => handleUpdateItem(index)}
               style={duplicate ? { display: "none" } : null}
             ></i> */}
             <i
-              className="fas fa-check fk_item_component--item--fa-save"
+              className="fas fa-check item_component--item--fa-save"
               style={duplicate ? { display: "none" } : null}
               onClick={() => handleUpdateItem(index)}
             ></i>
@@ -234,26 +234,26 @@ const FKItemComponent = ({ data, info, title }) => {
   }, [addActive]);
 
   return (
-    <section className="fk_item_component">
-      <section className="fk_item_component-title__container">
-        <section className="fk_item_component--counter">
-          <span className="fk_item_component--counter-info">
+    <section className="item_component">
+      <section className="item_component-title__container">
+        <section className="item_component--counter">
+          <span className="item_component--counter-info">
             {newDataItem ? newDataItem.length : ""}
           </span>
         </section>
-        <section className="fk_item_component--title">
+        <section className="item_component--title">
           <span >{title}</span>
         </section>
 
-        <section className="fk_item_component--choice">
+        <section className="item_component--choice">
           {!addActive && (
             <>
               <i
-                className="fa-solid fa-plus fk_item_component--title--fa-plus"
+                className="fa-solid fa-plus item_component--title--fa-plus"
                 onClick={() => setAddActive(true)}
               ></i>
               <i
-                className="fas fa-save fk_item_component--title--fa-save"
+                className="fas fa-save item_component--title--fa-save"
                 onClick={saveData}
               ></i>
             </>
@@ -262,29 +262,29 @@ const FKItemComponent = ({ data, info, title }) => {
         </section>
       </section>
       {addActive && (
-        <section className="fk_item_component-title__container-add">
+        <section className="item_component-title__container-add">
           <input
             style={duplicate ? { color: "red", fontWeight: "bold" } : null}
-            className="fk_item_component-title__container-add--edit"
+            className="item_component-title__container-add--edit"
             type="text"
             value={addItem.newName}
             onChange={(e) => handleAddItem(e)}
           />
-          <section className="fk_item_component-title__container-add--panel">
+          <section className="item_component-title__container-add--panel">
             <i
-              className="fa-solid fa-xmark fk_item_component--fa-xmark"
+              className="fa-solid fa-xmark item_component--fa-xmark"
               onClick={handleAddCancel}
             ></i>
             {!duplicate && (
               <i
-                className="fa-solid fa-check fk_item_component--fa-check"
+                className="fa-solid fa-check item_component--fa-check"
                 onClick={handleAcceptNewItem}
               ></i>
             )}
           </section>
         </section>
       )}
-      <section className="fk_item_component-items__container">
+      <section className="item_component-items__container">
         {arrayItems.sort()}
       </section>
     </section>

@@ -332,7 +332,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                               auth?.roles?.includes(150)) && (
                                 <li className="nav_menu-item-dropmenu">
                                   <Link
-                                    to="/system-settings"
+                                    to="/table-settings"
                                     className="nav_menu-link"
                                     onClick={handleLinkClick}
                                   >
@@ -343,7 +343,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             {auth?.roles?.includes(250) && (
                               <li className="nav_menu-item-dropmenu">
                                 <Link
-                                  to="/fk-change-items"
+                                  to="/change-items"
                                   className="nav_menu-link"
                                   onClick={handleLinkClick}
                                 >
@@ -354,7 +354,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             {auth?.roles?.includes(250) && (
                               <li className="nav_menu-item-dropmenu">
                                 <Link
-                                  to="/fk-data-settings"
+                                  to="/dept-mapper"
                                   className="nav_menu-link"
                                   onClick={handleLinkClick}
                                 >

@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
 // import useData from "../hooks/useData";
-import FKItemComponent from "./FKItemsData/FKItemComponent";
-import FKItemAging from "./FKItemsData/FKItemAging";
+import FKItemComponent from "./FKItemsData/xxxFKItemComponent";
+import FKItemAging from "./FKItemsData/xxxFKItemAging";
 import PercentageTarget from "../PercentageTarget";
-import "./FKItems.css";
+import "./xxxFKItems.css";
 
 const FKItems = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 
-import "./FKItemAging.css";
+import "./xxxFKItemAging.css";
 
 const FKItemAging = ({ data, info, title }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();

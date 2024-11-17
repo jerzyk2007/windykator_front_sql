@@ -1,4 +1,4 @@
-.system_settings {
+.table_settings {
   position: relative;
   flex-grow: 1;
   display: flex;
@@ -6,21 +6,21 @@
   overflow: hidden;
 }
 
-.system_settings_items {
+.table_settings_items {
   flex-grow: 1;
   overflow: hidden;
   display: flex;
   justify-content: space-evenly;
 }
 
-.system_settings-wrapper {
+.table_settings-wrapper {
   flex-grow: 1;
   /* background-color: rgb(205, 255, 238); */
   display: flex;
   justify-content: space-evenly;
 }
 
-.system_settings__container {
+.table_settings__container {
   flex-grow: 1;
   position: relative;
   /* margin: 10px; */
@@ -28,18 +28,18 @@
   flex-direction: column;
 }
 
-/* .system_settings--bloc-tabs {
+/* .table_settings--bloc-tabs {
   display: flex;
   min-width: 300px;
 } */
 
-/* .system_settings--bloc-tabs button {
+/* .table_settings--bloc-tabs button {
   border: none;
   padding: 10px 0;
   margin: 0px 80px;
 } */
 
-.system_settings_section-content {
+.table_settings_section-content {
   /* max-height: 88vh; */
   /* max-height: 100%; */
   /* flex-grow: 1; */
@@ -48,7 +48,7 @@
   justify-content: space-around;
 }
 
-.system_settings_section-content-data {
+.table_settings_section-content-data {
   /* flex-grow: 1; */
   /* flex-basis: 50%; */
   /* max-width: 50%; */

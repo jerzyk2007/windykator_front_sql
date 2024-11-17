@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
 // import useData from "../hooks/useData";
-import FKItemSettings from "./FKItemsData/FKItemSettings";
-import "./FKDataSettings.css";
+// import FKItemSettings from "./FKItemsData/FKItemSettings";
+import DeptMapperSettings from "./DeptMapperSettings";
+// import FKItemSettings from "../FKRaport/FKItemsData/FKItemSettings";
+import "./DeptMapper.css";
 
-const FKDataSettings = () => {
+const DeptMapper = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [pleaseWait, setPleaseWait] = useState(false);
@@ -29,7 +31,7 @@ const FKDataSettings = () => {
 
   const itemsDep = missingDeps.map((dep, index) => {
     return (
-      <span key={index} className="fk_data_settings__container-dep--info">{dep}</span>
+      <span key={index} className="dept_mapper__container-dep--info">{dep}</span>
     );
   });
 
@@ -111,7 +113,7 @@ const FKDataSettings = () => {
     const checkDepStyle = raportDep.find((item) => item === dep);
 
     return (
-      <FKItemSettings
+      <DeptMapperSettings
         key={index}
         id={index}
         dep={dep}
@@ -162,31 +164,31 @@ const FKDataSettings = () => {
       {pleaseWait ? (
         <PleaseWait />
       ) : (
-        <section className="fk_data_settings">
-          <section className="fk_data_settings__title">
+        <section className="dept_mapper">
+          <section className="dept_mapper__title">
             <span>Dopasuj wyświetlanie danych</span>
           </section>
-          <section className="fk_data_settings__container-dep">
-            <span className="fk_data_settings__container-dep--title">Uzupełnij dane dla działów: </span>
-            <section className="fk_data_settings-dep__container">
+          <section className="dept_mapper__container-dep">
+            <span className="dept_mapper__container-dep--title">Uzupełnij dane dla działów: </span>
+            <section className="dept_mapper-dep__container">
               {itemsDep}
             </section>
           </section>
-          <section className="fk_data_settings__container">
-            <section className="fk_data_settings__container-item">
-              <section className="fk_data_settings-counter__container">
-                <span className="fk_data_settings-counter">Lp</span>
+          <section className="dept_mapper__container">
+            <section className="dept_mapper__container-item">
+              <section className="dept_mapper-counter__container">
+                <span className="dept_mapper-counter">Lp</span>
               </section>
-              <span className="fk_data_settings-department">Dział</span>
-              <span className="fk_data_settings-localization">Lokalizacja</span>
-              <span className="fk_data_settings-area">Obszar</span>
-              <span className="fk_data_settings-owner">Owner</span>
-              <span className="fk_data_settings-guardian">Opiekun</span>
+              <span className="dept_mapper-department">Dział</span>
+              <span className="dept_mapper-localization">Lokalizacja</span>
+              <span className="dept_mapper-area">Obszar</span>
+              <span className="dept_mapper-owner">Owner</span>
+              <span className="dept_mapper-guardian">Opiekun</span>
             </section>
           </section>
 
 
-          <section className="fk_data_settings__container-array">
+          <section className="dept_mapper__container-array">
             {itemsArray}
           </section>
         </section>
@@ -195,4 +197,4 @@ const FKDataSettings = () => {
   );
 };
 
-export default FKDataSettings;
+export default DeptMapper;

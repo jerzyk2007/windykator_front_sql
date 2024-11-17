@@ -9,14 +9,15 @@ import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import ChangePassword from "./components/ChangePassword";
 import UserSettings from "./components/UserSettings";
-import SystemSettings from "./components/SystemSettings";
+import TableSettings from "./components/system_settings/TableSettings";
 import RaportDepartments from "./components/RaportDepartments";
 import RaportAdvisers from "./components/RaportAdvisers";
 import FKRaportSettings from "./components/FKRaport/FKRaportSettings";
 import FKTableSettings from "./components/FKRaport/FKTableSettings";
 import FKAddData from "./components/FKRaport/FKAddData";
-import FKDataSettings from "./components/FKRaport/FKDataSettings";
-import FKItems from "./components/FKRaport/FKItems";
+import DeptMapper from './components/system_settings/DeptMapper';
+// import FKItems from "./components/FKRaport/xxxFKItems";
+import Items from './components/system_settings/Items';
 import PrepareTable from "./components/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
 import TradeCredit from "./components/TradeCredit";
@@ -88,11 +89,11 @@ function App() {
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
-              <Route path="/fk-data-settings" element={<FKDataSettings />} />
+              <Route path="/dept-mapper" element={<DeptMapper />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
-              <Route path="/fk-change-items" element={<FKItems />} />
+              <Route path="/change-items" element={<Items />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[300, 1000]} />}>
@@ -116,7 +117,7 @@ function App() {
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[150, 1000]} />}>
-              <Route path="/system-settings" element={<SystemSettings />} />
+              <Route path="/table-settings" element={<TableSettings />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[1]} />}>
