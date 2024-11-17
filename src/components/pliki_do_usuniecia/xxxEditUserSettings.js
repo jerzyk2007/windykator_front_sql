@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import UserTableColumns from "./xxxUserTableColumns";
 import UserChangeRoles from "./xxxUserChangeRoles";
 import UserChangeDepartments from "./xxxUserChangeDepartments";
@@ -8,7 +8,7 @@ import UserChangeName from "./xxxUserChangeName";
 import UserChangePass from "./xxxUserChangePass";
 import UserChangeLogin from "./xxxUserChangeLogin";
 import UserDelete from "./xxxUserDelete";
-import PleaseWait from "./PleaseWait";
+import PleaseWait from "../PleaseWait";
 import { FiX } from "react-icons/fi";
 import isEqual from "lodash/isEqual";
 // import useData from "./hooks/useData";

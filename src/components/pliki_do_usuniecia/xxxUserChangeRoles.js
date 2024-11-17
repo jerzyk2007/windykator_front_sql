@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import useData from "./hooks/useData";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useData from "../hooks/useData";
 import { Button } from "@mui/material";
 import "./UserChangeRoles.css";
 
