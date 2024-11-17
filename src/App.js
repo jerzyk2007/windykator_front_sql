@@ -8,7 +8,6 @@ import Register from "./components/Register";
 import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import ChangePassword from "./components/ChangePassword";
-// import UserSettings from "./components/UserSettings";
 import UserSettings from "./components/user_permissions/UserSettings";
 import TableSettings from "./components/system_settings/TableSettings";
 import RaportDepartments from "./components/RaportDepartments";
