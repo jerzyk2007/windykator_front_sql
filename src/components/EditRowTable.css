@@ -106,6 +106,7 @@
 }  */
 
 .edit-row-table_section-content {
+  height: 100%;
   flex-grow: 1;
   display: flex;
   justify-content: space-around;
@@ -116,13 +117,14 @@
   flex-basis: 33%;
   min-width: 450px;
   min-height: 500px;
+  /* max-height: calc(100vh - 100px); */
+  padding: 2px;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   /* justify-content: start; */
   justify-content: space-between;
-  padding: 2px;
-  max-height: calc(100vh - 100px);
-  overflow: auto;
+
 }
 
 .edit_doc {

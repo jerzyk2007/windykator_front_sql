@@ -441,6 +441,10 @@ const RaportAdvisers = () => {
         const resultData = await axiosPrivateIntercept.get(
           `/raport/get-data/${auth.id_user}`
         );
+        if (resultData.data.data.length === 0) {
+          setPleaseWait(false);
+          return;
+        }
         setRaportData(resultData.data.data);
         setPermission(resultData.data.permission);
         checkMinMaxDateGlobal(resultData.data.data);

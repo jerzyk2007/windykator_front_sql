@@ -321,8 +321,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       </li>
                     )}
                   {(auth?.roles?.includes(1000) ||
-                    auth?.roles?.includes(150) ||
-                    auth?.roles?.includes(120)) && (
+                    auth?.roles?.includes(150)) && (
                       <li className="nav_menu-item-dropmenu">
                         <Link className="nav_menu-link">
                           <i className="fas fa-caret-left"></i>Ustawienia

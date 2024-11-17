@@ -429,6 +429,11 @@ const RaportDepartments = () => {
         const resultData = await axiosPrivateIntercept.get(
           `/raport/get-data/${auth.id_user}`
         );
+
+        if (resultData.data.data.length === 0) {
+          setPleaseWait(false);
+          return;
+        }
         const resultDepartments = await axiosPrivateIntercept.get(
           "/settings/get-departments"
         );
