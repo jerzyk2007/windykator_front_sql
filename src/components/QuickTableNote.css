@@ -44,6 +44,7 @@
   border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;
   resize: none;
+  outline: none;
 }
 
 .quick_table_note__container-button {
