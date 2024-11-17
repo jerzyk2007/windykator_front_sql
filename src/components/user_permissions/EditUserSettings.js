@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import UserTableColumns from "./UserTableColumns";
 import UserChangeRoles from "./UserChangeRoles";
 import UserChangeDepartments from "./UserChangeDepartments";
@@ -8,7 +8,7 @@ import UserChangeName from "./UserChangeName";
 import UserChangePass from "./UserChangePass";
 import UserChangeLogin from "./UserChangeLogin";
 import UserDelete from "./UserDelete";
-import PleaseWait from "./PleaseWait";
+import PleaseWait from "../PleaseWait";
 import { FiX } from "react-icons/fi";
 import isEqual from "lodash/isEqual";
 // import useData from "./hooks/useData";
@@ -140,12 +140,12 @@ const EditUserSettings = ({ user, setEdit }) => {
                         <UserDelete user={user} setEdit={setEdit} />
                       </section>
                       <section className="edit_user_settings_section-content-data">
-                        {/* <UserChangeName user={user} />
-                        <UserChangePass user={user} />
-                        <UserChangeLogin user={user} />
-                        <UserDelete user={user} setEdit={setEdit} /> */}
-                        {/* <UserChangeLogin user={user} /> */}
-                        {/* <UserDelete user={user} setEdit={setEdit} /> */}
+                        {departments && Object.keys(departments).length > 0 && (
+                          <UserChangeDepartments
+                            user={user}
+                            departments={departments}
+                          />
+                        )}
                       </section>
                     </section>
                   </section>
@@ -167,12 +167,12 @@ const EditUserSettings = ({ user, setEdit }) => {
                             permissions={permissions}
                           />
                         )} */}
-                        {departments && Object.keys(departments).length > 0 && (
+                        {/* {departments && Object.keys(departments).length > 0 && (
                           <UserChangeDepartments
                             user={user}
                             departments={departments}
                           />
-                        )}
+                        )} */}
                       </section>
                       <section className="edit_user_settings_section-content-data"></section>
                     </section>

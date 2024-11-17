@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { LiaEditSolid } from "react-icons/lia";
-import PleaseWait from "./PleaseWait";
+import PleaseWait from "../PleaseWait";
 import EditUserSettings from "./EditUserSettings";
 import { Button } from "@mui/material";
 import "./UserSettings.css";
