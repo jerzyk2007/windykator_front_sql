@@ -134,7 +134,8 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
             <span className="edit_doc--title">
               Data wydania auta:
             </span>
-            <input
+            <span className="edit_doc--content">{rowData.DATA_WYDANIA_AUTA ? rowData.DATA_WYDANIA_AUTA : null}</span>
+            {/* <input
               className="edit_doc--select"
               style={
                 !rowData.DATA_WYDANIA_AUTA ? { backgroundColor: "yellow" } : null
@@ -153,7 +154,7 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
                   };
                 });
               }}
-            />
+            /> */}
           </section>
         )}
 
