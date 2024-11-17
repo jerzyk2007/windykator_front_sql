@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import useData from "./hooks/useData";
+// import useData from "./hooks/useData";
 import PleaseWait from "./PleaseWait";
-import TableSettings from "./TableSettings";
 import TableColumns from "./TableColumns";
 
 import "./SystemSettings.css";
@@ -28,7 +27,7 @@ const SystemSettings = () => {
         `/documents/get-columns-name`
       );
 
-      await createColumns(documentsColumn.data);
+      // await createColumns(documentsColumn.data);
 
       setPleaseWait(false);
     } catch (err) {
@@ -37,41 +36,41 @@ const SystemSettings = () => {
   };
 
   //tworzy kolumny na podstawie już zapisanych danych w DB i sprawdza czy są jakies nowe kolumny dzięki handleGetData
-  const createColumns = async (columnsName) => {
-    try {
-      const settingsColumn = await axiosPrivateIntercept.get(
-        "/settings/get-columns"
-      );
-      const newColumns = columnsName.map((colName) => {
-        const matchingColumn = settingsColumn.data.find(
-          (column) => column.accessorKey === colName
-        );
+  // const createColumns = async (columnsName) => {
+  //   try {
+  //     const settingsColumn = await axiosPrivateIntercept.get(
+  //       "/settings/get-columns"
+  //     );
+  //     const newColumns = columnsName.map((colName) => {
+  //       const matchingColumn = settingsColumn.data.find(
+  //         (column) => column.accessorKey === colName
+  //       );
 
-        if (matchingColumn) {
-          return {
-            accessorKey: matchingColumn.accessorKey,
-            header: matchingColumn.header,
-            filterVariant: matchingColumn.filterVariant,
-            type: matchingColumn.type,
-          };
-        } else {
-          return {
-            accessorKey: colName,
-            header: colName,
-            filterVariant: "contains",
-            type: "text",
-          };
-        }
-      });
-      setColumns(newColumns);
-    } catch (error) {
-      console.error("Błąd podczas pobierania kolumn: ", error);
-    }
-  };
+  //       if (matchingColumn) {
+  //         return {
+  //           accessorKey: matchingColumn.accessorKey,
+  //           header: matchingColumn.header,
+  //           filterVariant: matchingColumn.filterVariant,
+  //           type: matchingColumn.type,
+  //         };
+  //       } else {
+  //         return {
+  //           accessorKey: colName,
+  //           header: colName,
+  //           filterVariant: "contains",
+  //           type: "text",
+  //         };
+  //       }
+  //     });
+  //     setColumns(newColumns);
+  //   } catch (error) {
+  //     console.error("Błąd podczas pobierania kolumn: ", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    handleGetData();
-  }, []);
+  // useEffect(() => {
+  //   handleGetData();
+  // }, []);
 
   return (
     <section className="system_settings">

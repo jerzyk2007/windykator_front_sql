@@ -14,7 +14,7 @@ const Home = () => {
   useEffect(() => {
     const getUpdateTime = async () => {
       const response = await axiosPrivateIntercept.get(`/update/get-time`);
-      console.log(response.data);
+      // console.log(response.data);
       setUpdateData(response.data);
     };
     getUpdateTime();

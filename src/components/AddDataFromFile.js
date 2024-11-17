@@ -182,7 +182,7 @@ const AddDataFromFile = () => {
             </section>
           )}
 
-          {!errAS ? (
+          {/* {!errAS ? (
             <section className="add_data_from_file__container-documents">
               <input
                 type="file"
@@ -199,7 +199,7 @@ const AddDataFromFile = () => {
             <section className="add_data_from_file__container-documents">
               <span className="add_data_file-click-me">{errAS}</span>
             </section>
-          )}
+          )} */}
 
           {!errBecared ? (
             <section className="add_data_from_file__container-documents">
@@ -219,7 +219,7 @@ const AddDataFromFile = () => {
               <span className="add_data_file-click-me">{errBecared}</span>
             </section>
           )}
-          {!errSettlementsDescription ? (
+          {/* {!errSettlementsDescription ? (
             <section className="add_data_from_file__container-documents">
               <input
                 type="file"
@@ -241,11 +241,8 @@ const AddDataFromFile = () => {
                 {errSettlementsDescription}
               </span>
             </section>
-          )}
+          )} */}
 
-          {/* <section className='add_data_from_file__container-corrections'>
-                   
-                    </section> */}
 
           {/* chwilowa funckja przeniesienia danych z mongo do mysql */}
           {!errMsg ? (
