@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import useData from "./hooks/useData";
-import PleaseWait from "./PleaseWait";
-import Table from "./Table";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useData from "../hooks/useData";
+import PleaseWait from "../PleaseWait";
+import Table from "../Table";
 import { prepareColumns } from "./utilsForTable/PrepareColumns";
 
 import "./PrepareTable.css";
@@ -144,12 +144,12 @@ const PrepareTable = ({ info }) => {
             columns={columns}
             settings={tableSettings}
             handleSaveSettings={handleSaveSettings}
-            // getSingleRow={getSingleRow}
-            // quickNote={quickNote}
-            // setQuickNote={setQuickNote}
-            // dataRowTable={dataRowTable}
-            // setDataRowTable={setDataRowTable}
-            // info={info}
+          // getSingleRow={getSingleRow}
+          // quickNote={quickNote}
+          // setQuickNote={setQuickNote}
+          // dataRowTable={dataRowTable}
+          // setDataRowTable={setDataRowTable}
+          // info={info}
           />
         )
       )}

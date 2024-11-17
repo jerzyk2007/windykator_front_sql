@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import useData from "./hooks/useData";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useData from "../hooks/useData";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./QuickTableNote.css";
 

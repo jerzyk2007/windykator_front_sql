@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
 import Button from "@mui/material/Button";
-import { getAllDataRaport } from "../utilsForTable/excelFilteredTable";
+import { getAllDataRaport } from "../pliki_do_usuniecia/utilsForTable/excelFilteredTable";
 import { format } from "date-fns";
 import * as XLSX from "xlsx";
 import {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
-import UpdateData from "./UpdateData";
+import UpdateData from "./user/UpdateData";
 
 import "./Home.css";
 

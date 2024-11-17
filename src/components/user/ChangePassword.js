@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import useLogout from "./hooks/useLogout";
-import useData from "./hooks/useData";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useLogout from "../hooks/useLogout";
+import useData from "../hooks/useData";
 import {
   faCheck,
   faTimes,

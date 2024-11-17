@@ -1,25 +1,25 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
-import Contacts from "./components/Contacts";
+import Contacts from "./components/contacts/Contacts";
 import Home from "./components/Home";
-import AddDataFromFile from "./components/AddDataFromFile";
+import AddDataFromFile from "./components/system_settings/AddDataFromFile";
 import Login from "./components/Login";
-import Register from "./components/Register";
+import Register from "./components/user/Register";
 import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
-import ChangePassword from "./components/ChangePassword";
+import ChangePassword from "./components/user/ChangePassword";
 import UserSettings from "./components/user_permissions/UserSettings";
 import TableSettings from "./components/system_settings/TableSettings";
-import RaportDepartments from "./components/RaportDepartments";
-import RaportAdvisers from "./components/RaportAdvisers";
+import RaportDepartments from "./components/raports/RaportDepartments";
+import RaportAdvisers from "./components/raports/RaportAdvisers";
 import FKRaportSettings from "./components/FKRaport/FKRaportSettings";
 import FKTableSettings from "./components/FKRaport/FKTableSettings";
 import FKAddData from "./components/FKRaport/FKAddData";
 import DeptMapper from './components/system_settings/DeptMapper';
 import Items from './components/system_settings/Items';
-import PrepareTable from "./components/PrepareTable";
+import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
-import TradeCredit from "./components/TradeCredit";
+import TradeCredit from "./components/trade_credit/TradeCredit";
 import "./App.css";
 
 function App() {

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 // import useData from './hooks/useData';
-import PleaseWait from "./PleaseWait";
+import PleaseWait from "../PleaseWait";
 import ContactItem from "./ContactItem";
 import { LiaEditSolid } from "react-icons/lia";
 import "./Contacts.css";
@@ -74,8 +74,8 @@ const Contacts = () => {
                   {`${phone.phone.toString().substring(0, 3)}-${phone.phone
                     .toString()
                     .substring(3, 6)}-${phone.phone
-                    .toString()
-                    .substring(6, 9)}`}
+                      .toString()
+                      .substring(6, 9)}`}
                 </p>
               ))}
             </section>

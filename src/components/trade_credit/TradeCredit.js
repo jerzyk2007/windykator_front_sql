@@ -1,6 +1,6 @@
 import { useState } from "react";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import PleaseWait from "./PleaseWait";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import PleaseWait from "../PleaseWait";
 import { Button } from "@mui/material";
 import "./TradeCredit.css";
 import { getExcelRaport } from "./utilsForCreditTrade/prepareExcelForTradeCredit";
@@ -248,8 +248,8 @@ const TradeCredit = () => {
               firstFilteredDoc.forma_plat === "PRZELEW"
                 ? "PRZELEW"
                 : firstFilteredDoc.forma_plat === "KOMPENSATA"
-                ? "KOMPENSATA"
-                : "BRAK PRZELEWU";
+                  ? "KOMPENSATA"
+                  : "BRAK PRZELEWU";
             return {
               ...doc,
               "Forma płatności -\nWskazuje Biznes": firstFilteredDoc.forma_plat

@@ -3,7 +3,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
 import ItemComponent from './ItemComponent';
 import ItemAging from './ItemAging';
-import PercentageTarget from "../PercentageTarget";
+import PercentageTarget from "./PercentageTarget";
 import "./Items.css";
 
 const FKItems = () => {

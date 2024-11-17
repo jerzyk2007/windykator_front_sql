@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import useData from "./hooks/useData";
-import useWindowSize from "./hooks/useWindow";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useData from "../hooks/useData";
+import useWindowSize from "../hooks/useWindow";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
 import { MRT_Localization_PL } from "material-react-table/locales/pl";
 import { Box } from "@mui/material";
-import PleaseWait from "./PleaseWait";
+import PleaseWait from "../PleaseWait";
 import {
   columnsAdv,
   grossTotalAdv,
 } from "./utilsForRaportTable/prepareDataToRaport";
-import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
+// import { getAllDataRaport } from "./pliki_do_usuniecia/utilsForTable/excelFilteredTable";
+import { getAllDataRaport } from "../table/utilsForTable/excelFilteredTable";
 
 import "./RaportAdvisers.css";
 

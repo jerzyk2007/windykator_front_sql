@@ -235,7 +235,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         </Link>
                       </li>
                     )}
-                  {/* {(
+                  {(
                     auth?.roles?.includes(1000)) && (
                       <li className="nav_menu-item-dropmenu">
                         <Link
@@ -246,7 +246,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                           Kredyt Kupiecki
                         </Link>
                       </li>
-                    )} */}
+                    )}
                 </ul>
               </div>
             </li>

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FiX } from "react-icons/fi";

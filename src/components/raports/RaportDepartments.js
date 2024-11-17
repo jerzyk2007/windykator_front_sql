@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
-import useData from "./hooks/useData";
-import useWindowSize from "./hooks/useWindow";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useData from "../hooks/useData";
+import useWindowSize from "../hooks/useWindow";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
 import { MRT_Localization_PL } from "material-react-table/locales/pl";
 import { Box } from "@mui/material";
-import PleaseWait from "./PleaseWait";
+import PleaseWait from "../PleaseWait";
 import {
   grossTotalDepartments,
   columnsDepartments,
 } from "./utilsForRaportTable/prepareDataToRaport";
-import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
+// import { getAllDataRaport } from "./pliki_do_usuniecia/utilsForTable/excelFilteredTable";
+import { getAllDataRaport } from "../table/utilsForTable/excelFilteredTable";
 
 import "./RaportDepartments.css";
 
@@ -275,9 +276,11 @@ const RaportDepartments = () => {
   };
 
   const handleExportExcel = (data, type) => {
+
     const rowData = data.map((item) => {
       return item.original;
     });
+
     let arrayOrder = [];
 
     if (type === "Dział" && rowData.length > 0) {
@@ -312,6 +315,7 @@ const RaportDepartments = () => {
       return matchedColumn ? matchedColumn.header : key;
     });
 
+
     const updateData = rowData.map((item) => {
       // Filtracja kluczy obiektu na podstawie arrayOrder
       const filteredKeys = Object.keys(item).filter((key) =>
@@ -324,6 +328,7 @@ const RaportDepartments = () => {
       }, {});
       return updatedItem;
     });
+
 
     // przerabiam dane aby w excelu wyświetlały sie zgodnie z oczekiwaniem, jeśli liczba jest Number to wyświetlana jest jako waluta, w przypadku String mogę sam ustalić sposób wyświetlania
     const update = updateData.map((item) => {
@@ -377,7 +382,6 @@ const RaportDepartments = () => {
       order: newOrder,
     };
 
-    // getAllDataRaport(updateData, orderColumns, type);
     getAllDataRaport(update, orderColumns, type);
   };
 

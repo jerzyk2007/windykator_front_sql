@@ -1,7 +1,7 @@
 import { useState } from "react";
-import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 // import useData from "./hooks/useData";
-import PleaseWait from "./PleaseWait";
+import PleaseWait from "../PleaseWait";
 import "./AddDataFromFile.css";
 
 const AddDataFromFile = () => {
