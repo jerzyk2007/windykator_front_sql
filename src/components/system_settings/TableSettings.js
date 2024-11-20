@@ -40,11 +40,11 @@ const TableSettings = () => {
                 <section className="table_settings_section-content">
                   {/* <section className="table_settings_section-content-data"> */}
                   {/* <TableSettings dataColumns={columns} /> */}
-                  {/* <TableColumns /> */}
+                  <TableColumns />
                   {/* </section> */}
                   <section className="table_settings_section-content-data">
 
-                    <TableColumns />
+                    {/* <TableColumns /> */}
                   </section>
 
                 </section>

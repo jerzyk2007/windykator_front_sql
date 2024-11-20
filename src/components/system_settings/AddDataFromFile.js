@@ -10,24 +10,26 @@ const AddDataFromFile = () => {
 
   const [errBecared, setErrBecared] = useState("");
   const [errSettlements, setSettlements] = useState("");
-  const [errSettlementsDescription, setSettlementsDescription] = useState("");
+  const [errRubicon, seterrRubicon] = useState("");
   const [errAS, setErrAS] = useState("");
+  const [errFile, setErrFile] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [pleaseWait, setPleaseWait] = useState(false);
 
   const handleSendFileBL = async (e, type) => {
-    setPleaseWait(true);
     const file = e.target.files[0];
     if (!file) return console.error("Brak pliku");
-    if (!file.name.endsWith(".xlsx")) {
-      console.error("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
+    if (!file.name.endsWith(".xlsx") && !file.name.endsWith(".xls")) {
+      setErrFile("Akceptowany jest tylko plik z rozszerzeniem .xlsx lub .xls");
+      setPleaseWait(false);
+
       return;
     }
     try {
+      setPleaseWait(true);
       const formData = new FormData();
       formData.append("excelFile", file);
 
-      // const response = await axiosPrivateIntercept.post(
       await axiosPrivateIntercept.post(
         `/documents/send-documents/${type}`,
         formData,
@@ -44,7 +46,7 @@ const AddDataFromFile = () => {
       } else if (type === "AS") {
         setErrAS("Dokumenty zaktualizowane.");
       } else if (type === "settlements_description") {
-        setSettlementsDescription("Dokumenty zaktualizowane.");
+        seterrRubicon("Dokumenty zaktualizowane.");
       } else if (type === "test") {
         setErrMsg("Dokumenty zaktualizowane.");
       }
@@ -58,7 +60,7 @@ const AddDataFromFile = () => {
       } else if (type === "AS") {
         setErrAS("Błąd aktualizacji dokumentów.");
       } else if (type === "settlements_description") {
-        setSettlementsDescription("Błąd aktualizacji dokumentów.");
+        seterrRubicon("Błąd aktualizacji dokumentów.");
       } else if (type === "test") {
         setErrMsg("Błąd aktualizacji dokumentów.");
       }
@@ -155,7 +157,9 @@ const AddDataFromFile = () => {
     <section className="add_data_from_file">
       <section className="add_data_from_file__container">
         <section className="add_data_from_file__container--title">
-          <p>Dane dla windykacji BL</p>
+          <p
+            style={errFile ? { color: "red" } : null}
+          >{errFile ? errFile : "Prześlij dane z plików Excel"}</p>
         </section>
         <section className="add_data_from_file__container--data">
           {!errSettlements ? (
@@ -219,33 +223,33 @@ const AddDataFromFile = () => {
               <span className="add_data_file-click-me">{errBecared}</span>
             </section>
           )}
-          {/* {!errSettlementsDescription ? (
+          {!errRubicon ? (
             <section className="add_data_from_file__container-documents">
               <input
                 type="file"
                 name="uploadfile"
                 id="settlements_description"
                 style={{ display: "none" }}
-                onChange={(e) => handleSendFileBL(e, "settlements_description")}
+                onChange={(e) => handleSendFileBL(e, "rubicon")}
               />
               <label
                 htmlFor="settlements_description"
                 className="add_data_file-click-me"
               >
-                Prześlij plik z opisami rozrachunków
+                Prześlij plik Rubicon
               </label>
             </section>
           ) : (
             <section className="add_data_from_file__container-documents">
               <span className="add_data_file-click-me">
-                {errSettlementsDescription}
+                {errBecared}
               </span>
             </section>
-          )} */}
+          )}
 
 
           {/* chwilowa funckja przeniesienia danych z mongo do mysql */}
-          {!errMsg ? (
+          {/* {!errMsg ? (
             <section className="add_data_from_file__container-documents">
               <label
                 htmlFor="test"
@@ -259,7 +263,7 @@ const AddDataFromFile = () => {
             <section className="add_data_from_file__container-documents">
               <span className="add_data_file-click-me">{errMsg}</span>
             </section>
-          )}
+          )} */}
 
           {/* chwilowa funckja do naprawiania, nadpisywania danych */}
           {/* {!errMsg ? (

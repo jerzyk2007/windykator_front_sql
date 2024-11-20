@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
-import UserTableColumns from "./UserTableColumns";
+// import UserTableColumns from "./UserTableColumns";
 import UserChangeRoles from "./UserChangeRoles";
 import UserChangeDepartments from "./UserChangeDepartments";
 import UserChangePermissions from "./UserChangePermissions";
@@ -10,7 +10,7 @@ import UserChangeLogin from "./UserChangeLogin";
 import UserDelete from "./UserDelete";
 import PleaseWait from "../PleaseWait";
 import { FiX } from "react-icons/fi";
-import isEqual from "lodash/isEqual";
+// import isEqual from "lodash/isEqual";
 // import useData from "./hooks/useData";
 
 import "./EditUserSettings.css";
@@ -22,7 +22,7 @@ const EditUserSettings = ({ user, setEdit }) => {
   const [permissions, setPermissions] = useState({});
   const [roles, setRoles] = useState({});
   const [departments, setDepartments] = useState([]);
-  const [columns, setColumns] = useState([]);
+  // const [columns, setColumns] = useState([]);
   const [pleaseWait, setPleaseWait] = useState(false);
   const [toggleState, setToggleState] = useState(1);
   const toggleTab = (index) => {
@@ -47,20 +47,25 @@ const EditUserSettings = ({ user, setEdit }) => {
         .map((item) => item.departments)
         .filter(Boolean)[0];
 
+
       const filteredPermissions = result.data
         .map((item) => item.permissions)
         .filter(Boolean)[0];
 
-      const columnsDB = result.data
-        .map((item) => item.columns)
-        .filter(Boolean)[0];
+      // const columnsDB = result.data
+      //   .map((item) => item.columns)
+      //   .filter(Boolean)[0];
 
-      const userColumns = user?.columns ? [...user.columns] : [];
+
+      // const userColumns = user?.columns ? [...user.columns] : [];
 
       const departments = filteredDepartments.reduce((acc, dep) => {
-        // Ustawiamy user.departments jako pusty obiekt, jeśli nie istnieje
-        const userDepartments = user?.departments || {};
-        acc[dep] = userDepartments[dep] ? true : false;
+        // Ustawiamy user.departments jako pustą tablicę, jeśli nie istnieje
+        const userDepartments = user?.departments || [];
+
+        // Sprawdzamy, czy dep istnieje w tablicy userDepartments
+        acc[dep] = userDepartments.includes(dep);
+
         return acc;
       }, {});
 
@@ -71,16 +76,16 @@ const EditUserSettings = ({ user, setEdit }) => {
         return acc;
       }, {});
 
-      const modifiedColumnsDB = columnsDB.map((col) => {
-        const userColMatch = userColumns.find((userCol) =>
-          isEqual(col, userCol)
-        );
-        return { ...col, checked: !!userColMatch };
-      });
+      // const modifiedColumnsDB = columnsDB.map((col) => {
+      //   const userColMatch = userColumns.find((userCol) =>
+      //     isEqual(col, userCol)
+      //   );
+      //   return { ...col, checked: !!userColMatch };
+      // });
       setPermissions(permissions);
       setDepartments(departments);
       setRoles(roles);
-      setColumns(modifiedColumnsDB);
+      // setColumns(modifiedColumnsDB);
       setPleaseWait(false);
     };
     getSettings();
@@ -156,9 +161,9 @@ const EditUserSettings = ({ user, setEdit }) => {
                   >
                     <section className="edit_user_settings_section-content">
                       <section className="edit_user_settings_section-content-data">
-                        {columns.length > 0 && (
+                        {/* {columns.length > 0 && (
                           <UserTableColumns user={user} columns={columns} />
-                        )}
+                        )} */}
                       </section>
                       <section className="edit_user_settings_section-content-data">
                         {/* {permissions && Object.keys(permissions).length > 0 && (

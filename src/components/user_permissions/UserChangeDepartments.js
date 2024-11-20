@@ -9,6 +9,7 @@ const UserChangeDepartments = ({ user, departments }) => {
   const [userDepartments, setUserDepartments] = useState(departments);
   const [errMsg, setErrMsg] = useState("");
 
+
   const departmentsItem = Object.entries(userDepartments).map(
     ([dep, isChecked], index) => (
       <label
@@ -40,21 +41,25 @@ const UserChangeDepartments = ({ user, departments }) => {
     Object.keys(userDepartments).forEach((depKey) => {
       updatedUserDepartments[depKey] = info === "all";
     });
+
     setUserDepartments(updatedUserDepartments);
   };
 
   const handleSaveUserDepartments = async () => {
-    const filteredObject = Object.keys(userDepartments)
-      .filter((key) => userDepartments[key] !== false)
-      .reduce((acc, key) => {
-        acc[key] = userDepartments[key];
-        return acc;
-      }, {});
+    // const filteredObject = Object.keys(userDepartments)
+    //   .filter((key) => userDepartments[key] !== false)
+    //   .reduce((acc, key) => {
+    //     acc[key] = userDepartments[key];
+    //     return acc;
+    //   }, {});
+    const activeDepartments = Object.keys(userDepartments).filter(key => userDepartments[key] === true);
+
     try {
-      const result = await axiosPrivateIntercept.patch(
+
+      await axiosPrivateIntercept.patch(
         `/user/change-departments/${user.id_user}`,
         {
-          departments: filteredObject,
+          departments: activeDepartments,
         }
       );
       setErrMsg(`Sukces.`);

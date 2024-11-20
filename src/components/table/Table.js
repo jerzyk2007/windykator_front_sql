@@ -25,17 +25,10 @@ const Table = ({
   columns,
   settings,
   handleSaveSettings,
-  // getSingleRow,
-  // quickNote,
-  // setQuickNote,
-  // dataRowTable,
-  // setDataRowTable,
-  // info,
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const theme = useTheme();
 
-  // const { auth } = useData();
   const { height } = useWindowSize();
 
   const [columnVisibility, setColumnVisibility] = useState(settings.visible);
@@ -336,6 +329,7 @@ const Table = ({
   useEffect(() => {
     setData(documents);
   }, [documents]);
+
 
 
   return (
