@@ -109,7 +109,7 @@ const TableColumns = () => {
                             onChange={() => changeArea(area, nameDB, "available")}
                         />
                     </section>
-                    <section className="table_column__areas--available">
+                    {/* <section className="table_column__areas--available">
                         <span style={{ color: "#800091" }}>Widoczny:</span>
                         <input
                             className="table_column__areas--check"
@@ -118,7 +118,7 @@ const TableColumns = () => {
                             onChange={() => changeArea(area, nameDB, "hide")}
                         />
 
-                    </section>
+                    </section> */}
 
                 </section>
             );
@@ -248,7 +248,7 @@ const TableColumns = () => {
                                 Odznacz
                             </Button>
                         </section>
-                        <section className="table_column__areas--hide">
+                        {/* <section className="table_column__areas--hide">
                             <Button
                                 variant="contained"
                                 onClick={() => handleChangeChecked(col, "all", "hide")}
@@ -266,7 +266,7 @@ const TableColumns = () => {
                             >
                                 Odznacz
                             </Button>
-                        </section>
+                        </section> */}
                     </section>
                     <section className="table_column__areas">
                         {createArea(col)}
@@ -279,10 +279,12 @@ const TableColumns = () => {
     const handleSaveColumnsSetinngs = async () => {
         try {
             setNewData(false);
-
+            setPleaseWait(true);
             await axiosPrivateIntercept.patch("/settings/change-columns", {
                 columns,
             });
+            setPleaseWait(false);
+
         } catch (err) {
             console.error(err);
         }

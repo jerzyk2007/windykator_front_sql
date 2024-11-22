@@ -31,10 +31,6 @@ export const prepareColumns = (columnsData, data) => {
         const date = new Date(cell.getValue());
         // Sprawdzenie, czy data jest prawidłowa
         if (!isNaN(date)) {
-          // Jeśli data jest prawidłowa, zwracamy ją jako lokalizowaną datę w formacie pl-PL
-          // return date.toLocaleDateString("pl-PL", {
-          //   useGrouping: true,
-          // });
           return format(date, "yyyy-MM-dd");
         } else {
           // Jeśli data jest nieprawidłowa, zwracamy pusty string lub inny komunikat błędu

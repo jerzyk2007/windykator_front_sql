@@ -134,14 +134,15 @@
 }
 
 .table_column__areas--wrapper {
-    flex-basis: 15%;
-    padding: 2px;
+    flex-basis: 35%;
+    width: 100%;
+    padding: 5px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 .table_column__areas--wrapper Button {
-    scale: 80%;
+    scale: 100%;
 }
 
 .table_column__areas {
@@ -163,14 +164,15 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
 }
 
 .table_column__areas--available {
+    width: 100%;
     padding: 0 4px;
     margin: 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
 }
 

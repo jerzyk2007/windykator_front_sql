@@ -55,7 +55,6 @@ const UserChangeDepartments = ({ user, departments }) => {
     const activeDepartments = Object.keys(userDepartments).filter(key => userDepartments[key] === true);
 
     try {
-
       await axiosPrivateIntercept.patch(
         `/user/change-departments/${user.id_user}`,
         {

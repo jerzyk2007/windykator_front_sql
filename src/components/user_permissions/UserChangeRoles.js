@@ -28,14 +28,14 @@ const UserChangeRoles = ({ user, roles }) => {
             )}
             {role === "FKAdmin" && (
               <span className="user-change-roles--information">
-                {" "}
-                - admin FK
+                {" - administrator FK"}
+
               </span>
             )}
             {role === "User" && (
               <span className="user-change-roles--information">
                 {" "}
-                - BL przeglądanie
+                - przeglądanie dokumentów
               </span>
             )}
             {role === "Nora" && (
@@ -47,20 +47,24 @@ const UserChangeRoles = ({ user, roles }) => {
             {role === "Editor" && (
               <span className="user-change-roles--information">
                 {" "}
-                - BL edytowanie tabel i raportów
+                - edytowanie tabel i raportów
               </span>
             )}
             {role === "EditorPlus" && (
               <span className="user-change-roles--information">
                 {" "}
-                - BL Editor + dodawanie danych
+                - Editor + dodawanie danych
+              </span>
+            )}
+            {role === "Admin" && (
+              <span className="user-change-roles--information">
+                {" - Administartor"}
               </span>
             )}
 
-            {role === "Admin" && (
+            {role === "SuperAdmin" && (
               <span className="user-change-roles--information">
-                {" "}
-                - Super Admin
+                {" - Super Administartor"}
               </span>
             )}
           </span>

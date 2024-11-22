@@ -103,7 +103,7 @@ const Register = () => {
         <>
             {success ?
                 (<section className="register">
-                    <h3 className="register-title">{success}</h3>
+                    <h3 style={{ fontSize: "1.3rem" }} className="register-title">{success}</h3>
                     <Button
                         variant='contained'
                         type="submit"

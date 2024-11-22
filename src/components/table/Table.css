@@ -28,7 +28,8 @@
 .table-save-settings:active,
 .table-export-excel:active,
 .table_fa-filter:active {
-  color: red;
+  background-color: red;
+  padding: 2px;
 }
 
 .table-save-settings:hover,

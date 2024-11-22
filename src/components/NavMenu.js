@@ -65,6 +65,15 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 </li>
                 <li className="nav_menu-item-dropmenu">
                   <Link
+                    to="/obligations-table"
+                    className="nav_menu-link"
+                    onClick={handleLinkClick}
+                  >
+                    Zobowiązania
+                  </Link>
+                </li>
+                <li className="nav_menu-item-dropmenu">
+                  <Link
                     to="/archive-table"
                     className="nav_menu-link"
                     onClick={handleLinkClick}
