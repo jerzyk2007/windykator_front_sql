@@ -243,44 +243,45 @@ const FKAddData = () => {
       //   );
       //   setCarReleased(message.finish);
       // }
-      // if (type === "rubicon") {
-      //   if (
-      //     !("Faktura nr" in decodedFile[0]) ||
-      //     !("Status aktualny" in decodedFile[0]) ||
-      //     !("Firma zewnętrzna" in decodedFile[0]) ||
-      //     !("Data faktury" in decodedFile[0])
-      //   ) {
-      //     return setRubiconData(message.errorData);
-      //   }
-      //   // if (
-      //   //   !decodedFile[0]["Faktura nr"] ||
-      //   //   !decodedFile[0]["Status aktualny"] ||
-      //   //   !decodedFile[0]["Firma zewnętrzna"] ||
-      //   //   !decodedFile[0]["Data faktury"]
-      //   // ) {
-      //   //   return setRubiconData(message.errorData);
-      //   // }
-      //   // setRubiconData(message.prepare);
-      //   setRubiconData("Przetwarzanie danych z pliku Rubicon.");
+      if (type === "rubicon") {
+        if (
+          !("Faktura nr" in decodedFile[0]) ||
+          !("Status aktualny" in decodedFile[0]) ||
+          !("Firma zewnętrzna" in decodedFile[0]) ||
+          !("Data faktury" in decodedFile[0])
+        ) {
+          return setRubiconData(message.errorData);
+        }
+        // if (
+        //   !decodedFile[0]["Faktura nr"] ||
+        //   !decodedFile[0]["Status aktualny"] ||
+        //   !decodedFile[0]["Firma zewnętrzna"] ||
+        //   !decodedFile[0]["Data faktury"]
+        // ) {
+        //   return setRubiconData(message.errorData);
+        // }
+        // setRubiconData(message.prepare);
+        setRubiconData("Przetwarzanie danych z pliku Rubicon.");
 
-      //   const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
 
-      //   const result = await preparedRubiconData(
-      //     decodedFile,
-      //     resultPreparedData,
-      //     setRubiconData,
-      //     axiosPrivateIntercept
-      //   );
-      //   setRubiconData(message.saveToDB);
+        const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
 
-      //   await saveDataToDB(
-      //     "caseStatus",
-      //     result.preparedCaseStatusBL,
-      //     result.counter
-      //   );
+        const result = await preparedRubiconData(
+          decodedFile,
+          resultPreparedData,
+          setRubiconData,
+          axiosPrivateIntercept
+        );
+        setRubiconData(message.saveToDB);
 
-      //   setRubiconData(message.finish);
-      // }
+        // await saveDataToDB(
+        //   "caseStatus",
+        //   result.preparedCaseStatusBL,
+        //   result.counter
+        // );
+
+        setRubiconData(message.finish);
+      }
       // if (type === "settlement") {
       //   // if (
       //   //   !decodedFile[0]["NUMER"] ||
@@ -441,7 +442,7 @@ const FKAddData = () => {
             hour: DMS_date.update_success ? `godzina: ${DMS_date.hour}` : "Błąd aktualizacji",
           },
         };
-        console.log(update);
+        // console.log(update);
         setDateCounter(update);
         setPleaseWait(false);
       } catch (err) {

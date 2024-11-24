@@ -145,7 +145,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </li>
                   )}
 
-                  {auth?.roles?.includes(200) && (
+                  {auth?.roles?.includes(1000) && (
                     <li className="nav_menu-item-dropmenu">
                       <Link className="nav_menu-link">
                         <i className="fas fa-caret-left"></i>Raporty - FK
@@ -330,7 +330,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       </li>
                     )}
                   {(auth?.roles?.includes(1000) ||
-                    auth?.roles?.includes(150)) && (
+                    auth?.roles?.includes(250)) && (
                       <li className="nav_menu-item-dropmenu">
                         <Link className="nav_menu-link">
                           <i className="fas fa-caret-left"></i>Ustawienia

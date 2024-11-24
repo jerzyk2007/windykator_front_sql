@@ -10,7 +10,7 @@ const AddDataFromFile = () => {
 
   const [errBecared, setErrBecared] = useState("");
   const [errSettlements, setSettlements] = useState("");
-  const [errRubicon, seterrRubicon] = useState("");
+  const [errRubicon, setErrRubicon] = useState("");
   const [errAS, setErrAS] = useState("");
   const [errFile, setErrFile] = useState("");
   const [errMsg, setErrMsg] = useState("");
@@ -45,8 +45,8 @@ const AddDataFromFile = () => {
         setSettlements("Dokumenty zaktualizowane.");
       } else if (type === "AS") {
         setErrAS("Dokumenty zaktualizowane.");
-      } else if (type === "settlements_description") {
-        seterrRubicon("Dokumenty zaktualizowane.");
+      } else if (type === "rubicon") {
+        setErrRubicon("Dokumenty zaktualizowane.");
       } else if (type === "test") {
         setErrMsg("Dokumenty zaktualizowane.");
       }
@@ -59,9 +59,10 @@ const AddDataFromFile = () => {
         setSettlements("Błąd aktualizacji dokumentów.");
       } else if (type === "AS") {
         setErrAS("Błąd aktualizacji dokumentów.");
-      } else if (type === "settlements_description") {
-        seterrRubicon("Błąd aktualizacji dokumentów.");
-      } else if (type === "test") {
+      } else if (type === "rubicon") {
+        setErrRubicon("Błąd aktualizacji dokumentów.");
+      }
+      else if (type === "test") {
         setErrMsg("Błąd aktualizacji dokumentów.");
       }
       console.error("Błąd przesyłania pliku:", error);
@@ -109,6 +110,7 @@ const AddDataFromFile = () => {
       // console.log(copySettings.data.data);
       // console.log(copyDocuments.data);
       // console.log(copyDocuments_Actions.data);
+      console.log('finish');
     } catch (err) {
       console.error(err);
     }
@@ -205,24 +207,7 @@ const AddDataFromFile = () => {
             </section>
           )} */}
 
-          {!errBecared ? (
-            <section className="add_data_from_file__container-documents">
-              <input
-                type="file"
-                name="uploadfile"
-                id="sharepoint"
-                style={{ display: "none" }}
-                onChange={(e) => handleSendFileBL(e, "becared")}
-              />
-              <label htmlFor="sharepoint" className="add_data_file-click-me">
-                Prześlij plik Becared
-              </label>
-            </section>
-          ) : (
-            <section className="add_data_from_file__container-documents">
-              <span className="add_data_file-click-me">{errBecared}</span>
-            </section>
-          )}
+
           {!errRubicon ? (
             <section className="add_data_from_file__container-documents">
               <input
@@ -242,11 +227,28 @@ const AddDataFromFile = () => {
           ) : (
             <section className="add_data_from_file__container-documents">
               <span className="add_data_file-click-me">
-                {errBecared}
+                {errRubicon}
               </span>
             </section>
           )}
-
+          {!errBecared ? (
+            <section className="add_data_from_file__container-documents">
+              <input
+                type="file"
+                name="uploadfile"
+                id="sharepoint"
+                style={{ display: "none" }}
+                onChange={(e) => handleSendFileBL(e, "becared")}
+              />
+              <label htmlFor="sharepoint" className="add_data_file-click-me">
+                Prześlij plik Becared
+              </label>
+            </section>
+          ) : (
+            <section className="add_data_from_file__container-documents">
+              <span className="add_data_file-click-me">{errBecared}</span>
+            </section>
+          )}
 
           {/* chwilowa funckja przeniesienia danych z mongo do mysql */}
           {/* {!errMsg ? (
