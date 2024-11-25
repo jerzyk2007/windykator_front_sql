@@ -282,10 +282,18 @@ export const grossTotalDepartments = (
         );
       }
 
+      // if (
+      //   item.DZIAL === dep &&
+      //   item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
+      //   item.JAKA_KANCELARIA !== "CNP" &&
+      //   afterDeadlineDate < todayDate &&
+      //   documentDate >= minDate &&
+      //   documentDate <= maxDate
+      // ) 
       if (
         item.DZIAL === dep &&
-        item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
-        item.JAKA_KANCELARIA !== "CNP" &&
+        item.JAKA_KANCELARIA_TU !== "ROK-KONOPA" &&
+        item.JAKA_KANCELARIA_TU !== "CNP" &&
         afterDeadlineDate < todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
@@ -300,10 +308,18 @@ export const grossTotalDepartments = (
         );
       }
 
+      // if (
+      //   item.DZIAL === dep &&
+      //   item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
+      //   item.JAKA_KANCELARIA !== "CNP" &&
+      //   afterDeadlineDate > todayDate &&
+      //   documentDate >= minDate &&
+      //   documentDate <= maxDate
+      // )
       if (
         item.DZIAL === dep &&
-        item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
-        item.JAKA_KANCELARIA !== "CNP" &&
+        item.JAKA_KANCELARIA_TU !== "ROK-KONOPA" &&
+        item.JAKA_KANCELARIA_TU !== "CNP" &&
         afterDeadlineDate > todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
@@ -314,11 +330,20 @@ export const grossTotalDepartments = (
         );
       }
 
+      // if (
+      //   item.DZIAL === dep &&
+      //   item.JAKA_KANCELARIA !== "BRAK" &&
+      //   item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
+      //   item.JAKA_KANCELARIA !== "CNP" &&
+      //   afterDeadlineDate < todayDate &&
+      //   documentDate >= minDate &&
+      //   documentDate <= maxDate
+      // ) 
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA !== "BRAK" &&
-        item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
-        item.JAKA_KANCELARIA !== "CNP" &&
+        item.JAKA_KANCELARIA_TU !== "ROK-KONOPA" &&
+        item.JAKA_KANCELARIA_TU !== "CNP" &&
         afterDeadlineDate < todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
@@ -327,6 +352,13 @@ export const grossTotalDepartments = (
         legalCounter.set(dep, legalCounter.get(dep) + 1);
       }
 
+      // if (
+      //   item.DZIAL === dep &&
+      //   item.JAKA_KANCELARIA === "BRAK" &&
+      //   afterDeadlineDate < todayDate &&
+      //   documentDate >= minDate &&
+      //   documentDate <= maxDate
+      // )
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA === "BRAK" &&
@@ -341,6 +373,13 @@ export const grossTotalDepartments = (
         withoutLegalCounter.set(dep, withoutLegalCounter.get(dep) + 1);
       }
 
+      // if (
+      //   item.DZIAL === dep &&
+      //   item.JAKA_KANCELARIA === "BRAK" &&
+      //   afterDeadlineDate > todayDate &&
+      //   documentDate >= minDate &&
+      //   documentDate <= maxDate
+      // )
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA === "BRAK" &&
@@ -1154,11 +1193,20 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
         );
       }
 
+      // if (
+      //   item.DORADCA === dep.adviser &&
+      //   dep.merge === `${dep.adviser}-${item.DZIAL}` &&
+      //   item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
+      //   item.JAKA_KANCELARIA !== "CNP" &&
+      //   afterDeadlineDate < todayDate &&
+      //   documentDate >= minDate &&
+      //   documentDate <= maxDate
+      // ) 
       if (
         item.DORADCA === dep.adviser &&
         dep.merge === `${dep.adviser}-${item.DZIAL}` &&
-        item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
-        item.JAKA_KANCELARIA !== "CNP" &&
+        item.JAKA_KANCELARIA_TU !== "ROK-KONOPA" &&
+        item.JAKA_KANCELARIA_TU !== "CNP" &&
         afterDeadlineDate < todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
@@ -1173,12 +1221,22 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
         );
       }
 
+      // if (
+      //   item.DORADCA === dep.adviser &&
+      //   dep.merge === `${dep.adviser}-${item.DZIAL}` &&
+      //   item.JAKA_KANCELARIA !== "BRAK" &&
+      //   item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
+      //   item.JAKA_KANCELARIA !== "CNP" &&
+      //   afterDeadlineDate < todayDate &&
+      //   documentDate >= minDate &&
+      //   documentDate <= maxDate
+      // )
       if (
         item.DORADCA === dep.adviser &&
         dep.merge === `${dep.adviser}-${item.DZIAL}` &&
         item.JAKA_KANCELARIA !== "BRAK" &&
-        item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
-        item.JAKA_KANCELARIA !== "CNP" &&
+        item.JAKA_KANCELARIA_TU !== "ROK-KONOPA" &&
+        item.JAKA_KANCELARIA_TU !== "CNP" &&
         afterDeadlineDate < todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
@@ -1190,11 +1248,20 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
         legalCounter.set(dep.merge, legalCounter.get(dep.merge) + 1);
       }
 
+      // if (
+      //   item.DORADCA === dep.adviser &&
+      //   dep.merge === `${dep.adviser}-${item.DZIAL}` &&
+      //   item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
+      //   item.JAKA_KANCELARIA !== "CNP" &&
+      //   afterDeadlineDate > todayDate &&
+      //   documentDate >= minDate &&
+      //   documentDate <= maxDate
+      // ) 
       if (
         item.DORADCA === dep.adviser &&
         dep.merge === `${dep.adviser}-${item.DZIAL}` &&
-        item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
-        item.JAKA_KANCELARIA !== "CNP" &&
+        item.JAKA_KANCELARIA_TU !== "ROK-KONOPA" &&
+        item.JAKA_KANCELARIA_TU !== "CNP" &&
         afterDeadlineDate > todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
