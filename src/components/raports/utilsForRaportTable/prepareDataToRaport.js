@@ -362,6 +362,7 @@ export const grossTotalDepartments = (
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA === "BRAK" &&
+        item.JAKA_KANCELARIA_TU === "BRAK" &&
         afterDeadlineDate < todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
@@ -383,6 +384,7 @@ export const grossTotalDepartments = (
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA === "BRAK" &&
+        item.JAKA_KANCELARIA_TU === "BRAK" &&
         afterDeadlineDate > todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
