@@ -147,7 +147,6 @@ export const grossTotalDepartments = (
   percentTarget
 ) => {
   const departmentsObjective = { ...percentTarget };
-
   // suma Brutto
   let sumOfGross = new Map();
 
@@ -510,10 +509,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            }) + "%"
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          }) + "%"
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -536,10 +535,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -575,10 +574,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -600,10 +599,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            }) + "%"
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          }) + "%"
           : "0,00"; // Zastąpuje puste pola zerem
 
       return `${formattedSalary}`;
@@ -626,10 +625,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -664,10 +663,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -689,10 +688,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            }) + "%"
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          }) + "%"
           : "0,00"; // Zastąpuje puste pola zerem
 
       return `${formattedSalary}`;
@@ -714,10 +713,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -751,10 +750,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -777,10 +776,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -814,10 +813,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -867,10 +866,10 @@ export const columnsAdv = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            }) + "%"
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          }) + "%"
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -892,10 +891,10 @@ export const columnsAdv = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -929,10 +928,10 @@ export const columnsAdv = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -955,10 +954,10 @@ export const columnsAdv = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -992,10 +991,10 @@ export const columnsAdv = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;

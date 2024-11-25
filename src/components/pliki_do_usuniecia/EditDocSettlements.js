@@ -17,7 +17,7 @@ const EditDocSettlements = ({ settlement, date }) => {
   return (
     // <section className="edit-doc-settlements">
     <section className="edit-doc-settlements">
-      <span className="edit-doc-settlements--title">Opisy rozrachunków</span>
+      <span className="edit-doc-settlements--title">Opisy rozrachunkówxxx</span>
       {/* {date && <section className="edit_doc__container">
         <span className="edit_doc--title">Data rozliczenia autostacja:</span>
         <span className="edit_doc--content">{date}</span>

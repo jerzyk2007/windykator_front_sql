@@ -3,9 +3,9 @@ import "./EditDocActions.css";
 
 const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
   return (
-    // <section className="edit_doc edit_doc_actions">
-    <section className="edit_doc">
-      {rowData.area === "BLACHARNIA" && (
+    <section className="edit_doc edit_doc_actions">
+      {/* <section className="edit_doc"> */}
+      {/* {rowData.area === "BLACHARNIA" && (
         // <section className="edit_doc_actions__container">
         <section className="edit_doc__container">
           <span className="edit_doc--title">
@@ -40,8 +40,19 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
             <option value="CNP">CNP</option>
           </select>
         </section>
-      )}
-
+      )} */}
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">Jaka kancelaria:</span>
+        <span className="edit_doc--content">{rowData?.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : "BRAK"}</span>
+      </section>
+      {rowData?.JAKA_KANCELARIA && <section className="edit_doc__container">
+        <span className="edit_doc--title">Data przek. do kanc.:</span>
+        <span className="edit_doc--content">{rowData?.DATA_PRZENIESIENIA_DO_WP ? rowData.DATA_PRZENIESIENIA_DO_WP : "BRAK"}</span>
+      </section>}
+      {rowData?.JAKA_KANCELARIA && <section className="edit_doc__container">
+        <span className="edit_doc--title">Status kancelaria:</span>
+        <span className="edit_doc--content">{rowData?.STATUS_AKTUALNY ? rowData.STATUS_AKTUALNY : "BRAK"}</span>
+      </section>}
       <section className="edit_doc__container">
         <span className="edit_doc--title">
           Rodzaj działania:
@@ -158,6 +169,40 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
           </section>
         )}
 
+      {rowData.area === "BLACHARNIA" && (
+        // <section className="edit_doc_actions__container">
+        <section className="edit_doc__container">
+          <span className="edit_doc--title">
+            Wybierz kancelarię TU:
+          </span>
+
+          <select
+            className="edit_doc--select"
+            value={rowData.JAKA_KANCELARIA_TU ? rowData.JAKA_KANCELARIA_TU : "BRAK"}
+            onChange={(e) => {
+              handleAddNote(
+                "Wybierz kancelarię:",
+                e.target.options[e.target.selectedIndex].text
+              );
+              setRowData((prev) => {
+                return {
+                  ...prev,
+                  JAKA_KANCELARIA_TU: e.target.value,
+                };
+              });
+            }}
+          >
+            <option value="">BRAK</option>
+            <option value="KANCELARIA KROTOSKI">KANCELARIA KROTOSKI</option>
+            <option value="KRAUZE">KRAUZE</option>
+            <option value="POSTEPOWANIE SANACYJNE">
+              POSTĘPOWANIE SANACYJNE
+            </option>
+            <option value="ROK-KONOPA">ROK-KONOPA</option>
+            <option value="CNP">CNP</option>
+          </select>
+        </section>
+      )}
 
       <section className="edit_doc__container">
         <span className="edit_doc--title">

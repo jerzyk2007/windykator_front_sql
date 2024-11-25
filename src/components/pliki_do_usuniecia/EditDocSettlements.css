@@ -20,14 +20,14 @@
 }
 
 .edit-doc-settlements--content {
-  height: 180px;
-  max-height: 180px;
+  height: 100px;
+  max-height: 100px;
   resize: none;
   padding: 5px;
   font-family: "Source Sans 3", Calibri, sans-serif;
-  font-size: 1.05rem;
-  border: 1px solid rgba(44, 123, 168, 0.6);
-  border-radius: 5px;
+  /* font-size: 1.05rem; */
+  /* border: 1px solid rgba(44, 123, 168, 0.6); */
+  /* border-radius: 5px; */
   margin: 2px 0;
   overflow-wrap: break-word;
   white-space: pre-wrap;

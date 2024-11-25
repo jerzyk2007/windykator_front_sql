@@ -106,6 +106,11 @@ const AddDataFromFile = () => {
       //   `/sql/change-fullBrutto-fullNetto`
       // );
 
+
+      const repairLawName = await axiosPrivateIntercept.get(
+        `/repair/laws-name`
+      );
+
       // console.log(copyUsers.data.data);
       // console.log(copySettings.data.data);
       // console.log(copyDocuments.data);
@@ -251,7 +256,7 @@ const AddDataFromFile = () => {
           )}
 
           {/* chwilowa funckja przeniesienia danych z mongo do mysql */}
-          {/* {!errMsg ? (
+          {!errMsg ? (
             <section className="add_data_from_file__container-documents">
               <label
                 htmlFor="test"
@@ -265,7 +270,7 @@ const AddDataFromFile = () => {
             <section className="add_data_from_file__container-documents">
               <span className="add_data_file-click-me">{errMsg}</span>
             </section>
-          )} */}
+          )}
 
           {/* chwilowa funckja do naprawiania, nadpisywania danych */}
           {/* {!errMsg ? (
