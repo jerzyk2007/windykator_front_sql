@@ -21,6 +21,7 @@ const DeptMapper = () => {
   const checkMissingDepartments = (saveDeps, docDeps) => {
     let checkgDeps = [];
     for (const dep of docDeps) {
+
       const checkDep = saveDeps.find((item) => item === dep);
       if (!checkDep) {
         checkgDeps.push(dep);

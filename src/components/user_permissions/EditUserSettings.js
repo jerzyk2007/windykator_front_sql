@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
-// import UserTableColumns from "./UserTableColumns";
 import UserChangeRoles from "./UserChangeRoles";
 import UserChangeDepartments from "./UserChangeDepartments";
 import UserChangePermissions from "./UserChangePermissions";
@@ -10,19 +9,15 @@ import UserChangeLogin from "./UserChangeLogin";
 import UserDelete from "./UserDelete";
 import PleaseWait from "../PleaseWait";
 import { FiX } from "react-icons/fi";
-// import isEqual from "lodash/isEqual";
-// import useData from "./hooks/useData";
 
 import "./EditUserSettings.css";
 
 const EditUserSettings = ({ user, setEdit }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  // const { pleaseWait, setPleaseWait } = useData();
 
   const [permissions, setPermissions] = useState({});
   const [roles, setRoles] = useState({});
   const [departments, setDepartments] = useState([]);
-  // const [columns, setColumns] = useState([]);
   const [pleaseWait, setPleaseWait] = useState(false);
   const [toggleState, setToggleState] = useState(1);
   const toggleTab = (index) => {
@@ -34,6 +29,25 @@ const EditUserSettings = ({ user, setEdit }) => {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/settings/get-settings");
 
+
+      const checkDep = () => {
+        const filteredDep = result.data.find(obj => obj.departments)?.departments || [];
+        const filteredDepJI = result.data.find(obj => obj.departmentsJI)?.departmentsJI || [];
+        const userDepartments = user?.departments || []; // Sprawdzamy, czy tablica user?.departments istnieje
+        const uniqueDepartments = new Set([...filteredDep, ...filteredDepJI]);
+        const finalArray = [];
+
+        uniqueDepartments.forEach(department => {
+          finalArray.push({
+            dep: department,
+            available: filteredDepJI.includes(department),
+            user: userDepartments.includes(department)
+          });
+        });
+        finalArray.sort((a, b) => a.dep.localeCompare(b.dep));
+        return finalArray;
+      };
+
       const filteredRoles = result.data
         .map((item) => item.roles)
         .filter(Boolean)[0];
@@ -43,32 +57,13 @@ const EditUserSettings = ({ user, setEdit }) => {
         return acc;
       }, {});
 
-      const filteredDepartments = result.data
-        .map((item) => item.departments)
-        .filter(Boolean)[0];
-
 
       const filteredPermissions = result.data
         .map((item) => item.permissions)
         .filter(Boolean)[0];
 
-      // const columnsDB = result.data
-      //   .map((item) => item.columns)
-      //   .filter(Boolean)[0];
 
-
-      // const userColumns = user?.columns ? [...user.columns] : [];
-
-      const departments = filteredDepartments.reduce((acc, dep) => {
-        // Ustawiamy user.departments jako pustą tablicę, jeśli nie istnieje
-        const userDepartments = user?.departments || [];
-
-        // Sprawdzamy, czy dep istnieje w tablicy userDepartments
-        acc[dep] = userDepartments.includes(dep);
-
-        return acc;
-      }, {});
-
+      // console.log(checkDep());
       const permissions = filteredPermissions.reduce((acc, perm, index) => {
         // Ustawiamy user.permissions jako pusty obiekt, jeśli nie istnieje
         const userPermissions = user?.permissions || {};
@@ -76,16 +71,9 @@ const EditUserSettings = ({ user, setEdit }) => {
         return acc;
       }, {});
 
-      // const modifiedColumnsDB = columnsDB.map((col) => {
-      //   const userColMatch = userColumns.find((userCol) =>
-      //     isEqual(col, userCol)
-      //   );
-      //   return { ...col, checked: !!userColMatch };
-      // });
       setPermissions(permissions);
-      setDepartments(departments);
+      setDepartments(checkDep());
       setRoles(roles);
-      // setColumns(modifiedColumnsDB);
       setPleaseWait(false);
     };
     getSettings();
@@ -125,7 +113,6 @@ const EditUserSettings = ({ user, setEdit }) => {
                     <section className="edit_user_settings_section-content">
                       <section
                         className="edit_user_settings_section-content-data"
-                      // style={{ backgroundColor: "red" }}
                       >
                         {roles && Object.keys(roles).length > 0 && (
                           <UserChangeRoles user={user} roles={roles} />
@@ -161,23 +148,8 @@ const EditUserSettings = ({ user, setEdit }) => {
                   >
                     <section className="edit_user_settings_section-content">
                       <section className="edit_user_settings_section-content-data">
-                        {/* {columns.length > 0 && (
-                          <UserTableColumns user={user} columns={columns} />
-                        )} */}
                       </section>
                       <section className="edit_user_settings_section-content-data">
-                        {/* {permissions && Object.keys(permissions).length > 0 && (
-                          <UserChangePermissions
-                            user={user}
-                            permissions={permissions}
-                          />
-                        )} */}
-                        {/* {departments && Object.keys(departments).length > 0 && (
-                          <UserChangeDepartments
-                            user={user}
-                            departments={departments}
-                          />
-                        )} */}
                       </section>
                       <section className="edit_user_settings_section-content-data"></section>
                     </section>

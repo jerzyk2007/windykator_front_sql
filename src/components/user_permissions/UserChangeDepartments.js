@@ -9,50 +9,49 @@ const UserChangeDepartments = ({ user, departments }) => {
   const [userDepartments, setUserDepartments] = useState(departments);
   const [errMsg, setErrMsg] = useState("");
 
-
-  const departmentsItem = Object.entries(userDepartments).map(
-    ([dep, isChecked], index) => (
+  const departmentsItem = userDepartments.map((item, index) => {
+    return (
       <label
         key={index}
         className="user_change_departments__container--info"
         id={`dep${index}`}
       >
-        <span className="user_change_departments__container--text">{dep}</span>
-        <input
+        <span
+          style={!item.available ? { color: "red", fontWeight: "bold" } : null}
+          className="user_change_departments__container--text">{item.dep}</span>
+        {item.available && <input
           className="user_change_departments__container--check"
-          name={`dep${index}`}
           type="checkbox"
           onChange={() =>
             setUserDepartments((prev) => {
-              return {
-                ...prev,
-                [dep]: !isChecked,
-              };
+              return prev.map((obj) =>
+                obj.dep === item.dep ? { ...obj, user: !obj.user } : obj
+              );
             })
           }
-          checked={isChecked}
-        />
+          checked={item.user}
+        />}
       </label>
-    )
-  );
+
+    );
+  });
+
 
   const handleChangeChecked = (info) => {
-    const updatedUserDepartments = {};
-    Object.keys(userDepartments).forEach((depKey) => {
-      updatedUserDepartments[depKey] = info === "all";
+    const updatedUserDepartments = userDepartments.map(item => {
+      return {
+        ...item,
+        user: item.available ? info === "all" ? true : false : false
+      };
     });
-
     setUserDepartments(updatedUserDepartments);
   };
 
   const handleSaveUserDepartments = async () => {
-    // const filteredObject = Object.keys(userDepartments)
-    //   .filter((key) => userDepartments[key] !== false)
-    //   .reduce((acc, key) => {
-    //     acc[key] = userDepartments[key];
-    //     return acc;
-    //   }, {});
-    const activeDepartments = Object.keys(userDepartments).filter(key => userDepartments[key] === true);
+
+    const activeDepartments = userDepartments
+      .filter(item => item.user) // Zatrzymaj tylko obiekty, gdzie user === true
+      .map(item => item.dep);    // Zwróć tylko wartości dep jako stringi
 
     try {
       await axiosPrivateIntercept.patch(
