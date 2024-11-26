@@ -62,6 +62,14 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
         }
       );
 
+      if (rowData.JAKA_KANCELARIA === null) {
+        rowData.JAKA_KANCELARIA = "BRAK";
+      }
+
+      if (rowData.JAKA_KANCELARIA_TU === null) {
+        rowData.JAKA_KANCELARIA_TU = "BRAK";
+      }
+
       updateDocuments(rowData);
       setDataRowTable("");
     } catch (err) {

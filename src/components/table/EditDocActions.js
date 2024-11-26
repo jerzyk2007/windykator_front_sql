@@ -187,7 +187,7 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
               setRowData((prev) => {
                 return {
                   ...prev,
-                  JAKA_KANCELARIA_TU: e.target.value,
+                  JAKA_KANCELARIA_TU: e.target.value ? e.target.value : null,
                 };
               });
             }}
