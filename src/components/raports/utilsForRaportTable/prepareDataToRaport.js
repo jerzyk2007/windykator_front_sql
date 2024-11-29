@@ -569,7 +569,7 @@ export const columnsDepartments = [
   },
   {
     accessorKey: "PRZETERMINOWANE_BEZ_PZU_LINK4",
-    header: "Kwota przeterminowanych",
+    header: "Kwota przeterminowanych fv",
     // header: "Kwota przeterminowanych bez R-K i CNP",
     Cell: ({ cell }) => {
       const value = cell.getValue();
@@ -900,7 +900,8 @@ export const columnsAdv = [
 
   {
     accessorKey: "CEL_BEZ_PZU_LINK4",
-    header: "Stan należności w % bez R-K i CNP",
+    header: "Stan należności w %",
+    // header: "Stan należności w % bez R-K i CNP",
     enableColumnFilter: false,
     Cell: ({ cell }) => {
       const value = cell.getValue();
@@ -925,7 +926,8 @@ export const columnsAdv = [
   },
   {
     accessorKey: "PRZETERMINOWANE_BEZ_PZU_LINK4",
-    header: "Kwota przeterminowanych FV bez R-K i CNP",
+    header: "Kwota przeterminowanych FV",
+    // header: "Kwota przeterminowanych FV bez R-K i CNP",
     enableColumnFilter: false,
     Cell: ({ cell }) => {
       const value = cell.getValue();
@@ -950,7 +952,8 @@ export const columnsAdv = [
   },
   {
     accessorKey: "ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4",
-    header: "Ilość przeterminowanych FV bez R-K i CNP",
+    header: "Ilość przeterminowanych FV",
+    // header: "Ilość przeterminowanych FV bez R-K i CNP",
     enableColumnFilter: false,
     muiTableBodyCellProps: {
       ...muiTableBodyCellProps,
@@ -962,7 +965,8 @@ export const columnsAdv = [
   },
   {
     accessorKey: "NIEPRZETERMINOWANE_FV_BEZ_PZU_LINK4",
-    header: "Kwota nieprzeterminowanych FV bez R-K i CNP",
+    header: "Kwota nieprzeterminowanych FV",
+    // header: "Kwota nieprzeterminowanych FV bez R-K i CNP",
     enableColumnFilter: false,
     Cell: ({ cell }) => {
       const value = cell.getValue();
