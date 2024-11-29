@@ -48,6 +48,7 @@
 .raport_departments-save-settings:active,
 .raport_departments-export-excel:active {
   color: red;
+  padding-top: 5px;
 }
 
 .raport_departments-date-select {

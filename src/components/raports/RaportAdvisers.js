@@ -240,7 +240,7 @@ const RaportAdvisers = () => {
               }
             ></i>
             <i
-              className="fas fa-save raport_advisers-save-settings"
+              className="fas fa-save raport_departments-save-settings"
               onClick={handleSaveSettings}
             ></i>
           </section>

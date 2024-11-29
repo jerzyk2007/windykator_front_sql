@@ -28,12 +28,12 @@
 .table-save-settings:active,
 .table-export-excel:active,
 .table_fa-filter:active {
-  background-color: red;
-  padding: 2px;
+  color: red;
+  padding-top: 5px;
 }
 
-.table-save-settings:hover,
+/* .table-save-settings:hover,
 .table-export-excel:hover,
 .table_fa-filter:hover {
   color: rgb(189, 29, 204);
-}
+} */
