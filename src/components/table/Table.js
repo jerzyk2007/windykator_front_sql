@@ -118,7 +118,17 @@ const Table = ({
       order: newOrder,
     };
 
-    getAllDataRaport(dateToString, orderColumns, type);
+    // jeśli jakiś klucz ma wartośc null to przypisuję mu wartość "", żeby w excelu nie była gubiona kolejność kolumn
+    const updatedArray = dateToString.map(obj => {
+      // Iterujemy po kluczach obiektu
+      return Object.keys(obj).reduce((acc, key) => {
+        // Jeśli wartość jest null, przypisujemy ""
+        acc[key] = obj[key] === null ? "" : obj[key];
+        return acc;
+      }, {});
+    });
+
+    getAllDataRaport(updatedArray, orderColumns, type);
     // getAllDataRaport(updateData, orderColumns, type);
   };
 

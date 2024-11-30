@@ -463,7 +463,6 @@ const RaportDepartments = () => {
             `/user/get-raport-departments-settings/${auth.id_user}`
           ),
         ]);
-
         setColumnVisibility(settingsRaportUserDepartments?.data?.visible || {});
         setColumnSizing(settingsRaportUserDepartments?.data?.size || {});
         setDensity(

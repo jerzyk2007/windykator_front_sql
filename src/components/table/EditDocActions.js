@@ -45,10 +45,10 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
         <span className="edit_doc--title">Jaka kancelaria:</span>
         <span className="edit_doc--content">{rowData?.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : "BRAK"}</span>
       </section>
-      {rowData?.JAKA_KANCELARIA && <section className="edit_doc__container">
+      {/* {rowData?.JAKA_KANCELARIA && <section className="edit_doc__container">
         <span className="edit_doc--title">Data przek. do kanc.:</span>
         <span className="edit_doc--content">{rowData?.DATA_PRZENIESIENIA_DO_WP ? rowData.DATA_PRZENIESIENIA_DO_WP : "BRAK"}</span>
-      </section>}
+      </section>} */}
       {rowData?.JAKA_KANCELARIA && <section className="edit_doc__container">
         <span className="edit_doc--title">Status kancelaria:</span>
         <span className="edit_doc--content">{rowData?.STATUS_AKTUALNY ? rowData.STATUS_AKTUALNY : "BRAK"}</span>
