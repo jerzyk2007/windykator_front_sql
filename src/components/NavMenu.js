@@ -152,7 +152,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       </Link>
                       <div className="nav_menu-dropdown__menu--side_left">
                         <ul className="nav_menu__menu--side">
-                          <li className="nav_menu-item-dropmenu">
+                          {/* <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/fk-raport"
                               className="nav_menu-link"
@@ -160,7 +160,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             >
                               Raport
                             </Link>
-                          </li>
+                          </li> */}
                           {auth?.roles?.includes(250) && (
                             <li className="nav_menu-item-dropmenu">
                               <Link
@@ -168,11 +168,11 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                                 className="nav_menu-link"
                                 onClick={handleLinkClick}
                               >
-                                Dodaj dane
+                                Generuj raport
                               </Link>
                             </li>
                           )}
-                          {auth?.roles?.includes(250) && (
+                          {/* {auth?.roles?.includes(250) && (
                             <li className="nav_menu-item-dropmenu">
                               <Link
                                 to="/fk-table-settings"
@@ -182,7 +182,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                                 Tabela
                               </Link>
                             </li>
-                          )}
+                          )} */}
                           {/* {auth?.roles?.includes(250) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link

@@ -25,18 +25,18 @@ const FKAddData = () => {
 
   const [pleaseWait, setPleaseWait] = useState(false);
   const [fKAccountancy, setFKAccountancy] = useState("");
-  const [carReleased, setCarReleased] = useState("");
-  const [settlementNames, setSettlementNames] = useState("");
-  const [rubiconData, setRubiconData] = useState("");
-  const [missedDate, setMissedDate] = useState("");
-  const [disableMissedDate, setDisableMissedDate] = useState(false);
+  // const [carReleased, setCarReleased] = useState("");
+  // const [settlementNames, setSettlementNames] = useState("");
+  // const [rubiconData, setRubiconData] = useState("");
+  // const [missedDate, setMissedDate] = useState("");
+  // const [disableMissedDate, setDisableMissedDate] = useState(false);
   const [deleteRaport, setDeleteRaport] = useState("");
   const [dateCounter, setDateCounter] = useState({});
   const [generateRaportMsg, setGenerateRaportMsg] = useState("");
   const [message, setMessage] = useState({
     prepare: "Przygotowywanie danych.",
     progress: "Trwa dopasowywanie danych.",
-    error: "Nastąpił bład.",
+    error: "Nastąpił błąd. Sprawdź plik.",
     finish: "Dokumenty zaktualizowane",
     errorExcelFile: "Nieprawidłowy plik. Proszę przesłać plik Excel.",
     errorXLSX: "Akceptowany jest tylko plik z rozszerzeniem .xlsx",
@@ -45,66 +45,66 @@ const FKAddData = () => {
   });
 
   // weryfikacja czy plik excel jest prawidłowy (czy nie jest podmienione rozszerzenie)
-  const isExcelFile = (data) => {
-    const excelSignature = [0x50, 0x4b, 0x03, 0x04];
-    for (let i = 0; i < excelSignature.length; i++) {
-      if (data[i] !== excelSignature[i]) {
-        return false;
-      }
-    }
-    return true;
-  };
+  // const isExcelFile = (data) => {
+  //   const excelSignature = [0x50, 0x4b, 0x03, 0x04];
+  //   for (let i = 0; i < excelSignature.length; i++) {
+  //     if (data[i] !== excelSignature[i]) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // };
 
   // funkcja zamienia dane z pliku excel na json
-  const decodeExcelFile = (
-    file,
-    type,
-    setFKAccountancy,
-    setCarReleased,
-    setRubiconData,
-    setSettlementNames
-  ) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const arrayBuffer = event.target.result;
+  // const decodeExcelFile = (
+  //   file,
+  //   type,
+  //   setFKAccountancy,
+  //   setCarReleased,
+  //   setRubiconData,
+  //   setSettlementNames
+  // ) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onload = (event) => {
+  //       const arrayBuffer = event.target.result;
 
-        const uint8Array = new Uint8Array(arrayBuffer);
+  //       const uint8Array = new Uint8Array(arrayBuffer);
 
-        // Sprawdzenie, czy plik jest prawidłowym plikiem Excel
-        if (!isExcelFile(uint8Array)) {
-          setPleaseWait(false);
+  //       // Sprawdzenie, czy plik jest prawidłowym plikiem Excel
+  //       if (!isExcelFile(uint8Array)) {
+  //         setPleaseWait(false);
 
-          if (type === "accountancy") {
-            return setFKAccountancy(message.errorExcelFile);
-          } else if (type === "car") {
-            return setCarReleased(message.errorExcelFile);
-          } else if (type === "rubicon") {
-            return setRubiconData(message.errorExcelFile);
-          } else if (type === "settlement") {
-            return setSettlementNames(message.errorExcelFile);
-          } else if (type === "missedDate") {
-            return setMissedDate(message.errorExcelFile);
-          }
-          return;
-        }
-        const workbook = XLSX.read(new Uint8Array(arrayBuffer), {
-          type: "array",
-        });
+  //         if (type === "accountancy") {
+  //           return setFKAccountancy(message.errorExcelFile);
+  //         } else if (type === "car") {
+  //           return setCarReleased(message.errorExcelFile);
+  //         } else if (type === "rubicon") {
+  //           return setRubiconData(message.errorExcelFile);
+  //         } else if (type === "settlement") {
+  //           return setSettlementNames(message.errorExcelFile);
+  //         } else if (type === "missedDate") {
+  //           return setMissedDate(message.errorExcelFile);
+  //         }
+  //         return;
+  //       }
+  //       const workbook = XLSX.read(new Uint8Array(arrayBuffer), {
+  //         type: "array",
+  //       });
 
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
-        resolve(jsonData);
-      };
+  //       const sheetName = workbook.SheetNames[0];
+  //       const worksheet = workbook.Sheets[sheetName];
+  //       const jsonData = XLSX.utils.sheet_to_json(worksheet);
+  //       resolve(jsonData);
+  //     };
 
-      reader.onerror = (error) => {
-        reject(error);
-      };
+  //     reader.onerror = (error) => {
+  //       reject(error);
+  //     };
 
-      reader.readAsArrayBuffer(file);
-    });
-  };
+  //     reader.readAsArrayBuffer(file);
+  //   });
+  // };
 
   const saveDataToDB = async (info, dataDB, counterData) => {
     try {
@@ -122,242 +122,33 @@ const FKAddData = () => {
     setPleaseWait(true);
     setDeleteRaport("");
     const file = e.target.files[0];
-    // if (!file) return console.log("Brak pliku");
-    if (!file || !file.name.endsWith(".xlsx")) {
+    if (!file.name.endsWith(".xlsx") && !file.name.endsWith(".xls")) {
+      setFKAccountancy("Akceptowany jest tylko plik z rozszerzeniem .xlsx lub .xls");
       setPleaseWait(false);
-
-      if (type === "accountancy") {
-        return setFKAccountancy(message.errorXLSX);
-      } else if (type === "car") {
-        return setCarReleased(message.errorXLSX);
-      } else if (type === "rubicon") {
-        return setRubiconData(message.errorXLSX);
-      } else if (type === "settlement") {
-        return setSettlementNames(message.errorXLSX);
-      } else if (type === "missedDate") {
-        return setMissedDate(message.errorXLSX);
-      }
+      return;
     }
 
     try {
-      const decodedFile = await decodeExcelFile(
-        file,
-        type,
-        setFKAccountancy,
-        setCarReleased,
-        setRubiconData,
-        setSettlementNames,
-        setPleaseWait,
-        setMissedDate
+      const formData = new FormData();
+      formData.append("excelFile", file);
+
+      const result = await axiosPrivateIntercept.post(
+        `/add-data/send-documents/accountancy`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
+      if (result?.data?.info) {
+        setFKAccountancy(result?.data?.info);
+      }
+
       setPleaseWait(false);
 
-      if (type === "accountancy") {
-        if (
-          !("Nr. dokumentu" in decodedFile[0]) ||
-          !("Kontrahent" in decodedFile[0]) ||
-          !("Płatność" in decodedFile[0]) ||
-          !("Data płatn." in decodedFile[0]) ||
-          !("Nr kontrahenta" in decodedFile[0]) ||
-          !("Synt." in decodedFile[0])
-        ) {
-          return setFKAccountancy(message.errorData);
-        }
-        setPleaseWait(true);
-
-        // console.log(type);
-        // console.log(decodedFile);
-
-        // const response = await axiosPrivateIntercept.post(
-        //   "/fk/send-accountancy-fk",
-        //   { data: 'test' },
-        // );
-
-        // const repairDepartments = await axiosPrivateIntercept.get(
-        //   `/sql/change-fullBrutto-fullNetto`
-        // );
-
-        // const result = await preparedAccountancyData(
-        //   axiosPrivateIntercept,
-        //   decodedFile
-        // );
-        const changeDate = decodedFile.map(item => {
-          return {
-            KONTRAHENT: item['Kontrahent'],
-            NR_KONTRAHENTA: item['Nr kontrahenta'],
-            NUMER: item['Nr. dokumentu'],
-            DO_ROZLICZENIA_FK: item['Płatność'],
-            DATA_PLATNOSCI: isExcelDate(item['Data płatn.']) ? excelDateToISODate(item['Data płatn.']) : null,
-            KONTO: item['Synt.']
-          };
-        });
-
-        const result = await axiosPrivateIntercept.post(
-          "/fk/send-accountancy-fk",
-          { documents_data: changeDate },
-        );
-
-        if (result?.data?.errorDepartments?.length) {
-          return setFKAccountancy(
-            `Brak przypisanych działów: ${result.data.errorDepartments}`
-          );
-        }
-        // setFKAccountancy(message.saveToDB);
-
-        // await saveDataToDB(
-        //   "accountancy",
-        //   result.generateDocuments,
-        //   result.generateDocuments.length
-        // );
-        setFKAccountancy(message.finish);
-        setPleaseWait(false);
-
-      }
-
-      // if (type === "car") {
-      //   if (
-      //     !("NR FAKTURY" in decodedFile[0]) ||
-      //     !("WYDANO" in decodedFile[0])
-      //   ) {
-      //     return setCarReleased(message.errorData);
-      //   }
-      //   // if (!decodedFile[0]["NR FAKTURY"] || !decodedFile[0]["WYDANO"]) {
-      //   //   return setCarReleased(message.errorData);
-      //   // }
-
-      //   setCarReleased(message.prepare);
-
-      //   const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
-
-      //   const result = preparedCarData(
-      //     decodedFile,
-      //     resultPreparedData,
-      //     setCarReleased
-      //   );
-      //   setCarReleased(message.saveToDB);
-
-      //   await saveDataToDB(
-      //     "carReleased",
-      //     result.preparedDataReleasedCars,
-      //     result.counter
-      //   );
-      //   setCarReleased(message.finish);
-      // }
-      if (type === "rubicon") {
-        if (
-          !("Faktura nr" in decodedFile[0]) ||
-          !("Status aktualny" in decodedFile[0]) ||
-          !("Firma zewnętrzna" in decodedFile[0]) ||
-          !("Data faktury" in decodedFile[0])
-        ) {
-          return setRubiconData(message.errorData);
-        }
-        // if (
-        //   !decodedFile[0]["Faktura nr"] ||
-        //   !decodedFile[0]["Status aktualny"] ||
-        //   !decodedFile[0]["Firma zewnętrzna"] ||
-        //   !decodedFile[0]["Data faktury"]
-        // ) {
-        //   return setRubiconData(message.errorData);
-        // }
-        // setRubiconData(message.prepare);
-        setRubiconData("Przetwarzanie danych z pliku Rubicon.");
-
-
-        const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
-
-        const result = await preparedRubiconData(
-          decodedFile,
-          resultPreparedData,
-          setRubiconData,
-          axiosPrivateIntercept
-        );
-        setRubiconData(message.saveToDB);
-
-        // await saveDataToDB(
-        //   "caseStatus",
-        //   result.preparedCaseStatusBL,
-        //   result.counter
-        // );
-
-        setRubiconData(message.finish);
-      }
-      // if (type === "settlement") {
-      //   // if (
-      //   //   !decodedFile[0]["NUMER"] ||
-      //   //   !decodedFile[0]["OPIS"] ||
-      //   //   !decodedFile[0]["DataRozlAutostacja"] ||
-      //   //   !decodedFile[0]["DATA_WYSTAWIENIA"] ||
-      //   //   !decodedFile[0]["DataOperacji"]
-      //   // ) {
-      //   //   return setSettlementNames(message.errorData);
-      //   // }
-      //   if (
-      //     !("NUMER" in decodedFile[0]) ||
-      //     !("OPIS" in decodedFile[0]) ||
-      //     !("DataRozlAutostacja" in decodedFile[0]) ||
-      //     !("DATA_WYSTAWIENIA" in decodedFile[0]) ||
-      //     !("DataOperacji" in decodedFile[0])
-      //   ) {
-      //     return setSettlementNames(message.errorData);
-      //   }
-
-      //   setSettlementNames(message.prepare);
-
-      //   const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
-
-      //   const result = preparedSettlementData(
-      //     decodedFile,
-      //     resultPreparedData,
-      //     setSettlementNames
-      //   );
-      //   setSettlementNames(message.saveToDB);
-      //   await saveDataToDB(
-      //     "settlementNames",
-      //     result.preparedSettlementDate,
-      //     result.counter
-      //   );
-      //   setSettlementNames(message.finish);
-      // }
-
-      // if (type === "missedDate") {
-      //   // if (!decodedFile[0]["NUMER"] || !decodedFile[0]["DATA_WYSTAWIENIA"]) {
-      //   //   return setMissedDate(message.errorData);
-      //   // }
-
-      //   if (
-      //     !("NUMER" in decodedFile[0]) ||
-      //     !("DATA_WYSTAWIENIA" in decodedFile[0])
-      //   ) {
-      //     return setMissedDate(message.errorData);
-      //   }
-
-      //   setMissedDate(message.prepare);
-
-      //   const resultPreparedData = await getPreparedData(axiosPrivateIntercept);
-
-      //   const result = prepareMissedDate(
-      //     decodedFile,
-      //     resultPreparedData,
-      //     setMissedDate
-      //   );
-      //   setMissedDate(message.saveToDB);
-      //   await saveDataToDB("missedDate", result.preparedDate, result.counter);
-      //   setMissedDate(message.finish);
-      // }
     } catch (error) {
-      if (type === "accountancy") {
-        setFKAccountancy(message.error);
-      }
-      if (type === "car") {
-        setCarReleased(message.error);
-      }
-      if (type === "rubicon") {
-        setRubiconData(message.error);
-      }
-      if (type === "settlement") {
-        setSettlementNames(message.error);
-      }
+      setFKAccountancy(message.error);
       console.error("Błąd przesyłania pliku:", error);
       setPleaseWait(false);
     }
@@ -366,16 +157,16 @@ const FKAddData = () => {
   // funkcja generująca raport z już pobranych danych z pliku excel, każde generowanie nadaje nowe wiekowanie, kwote faktur do rozliczenia oraz od nowa przypisuje Obszary, Ownerów, Lokalizacje itd
   const generateRaport = async () => {
     try {
-      setDisableMissedDate(true);
+      // setDisableMissedDate(true);
       setPleaseWait(true);
       // const result = await axiosPrivateIntercept.get("/fk/generate-raport");
       const result = await axiosPrivateIntercept.get(
-        "/fk/generate-raport-front"
+        "/fk/generate-raport"
       );
 
-      const dataRaport = prepareDataRaport(result.data);
+      // const dataRaport = prepareDataRaport(result.data);
 
-      await axiosPrivateIntercept.post("/fk/save-raport-FK", { dataRaport });
+      // await axiosPrivateIntercept.post("/fk/save-raport-FK", { dataRaport });
 
       setPleaseWait(false);
       setGenerateRaportMsg("Raport został wygenerowany.");
@@ -410,9 +201,9 @@ const FKAddData = () => {
         setDateCounter({});
         setDeleteRaport("Dane usunięte.");
         setFKAccountancy("");
-        setCarReleased("");
-        setSettlementNames("");
-        setRubiconData("");
+        // setCarReleased("");
+        // setSettlementNames("");
+        // setRubiconData("");
         setPleaseWait(false);
       } else {
         setDeleteRaport("Wystąpił błąd podczas usuwania danych");
@@ -429,6 +220,7 @@ const FKAddData = () => {
         setPleaseWait(true);
         const result = await axiosPrivateIntercept.get("/fk/get-date-counter");
         const response = await axiosPrivateIntercept.get(`/update/get-time`);
+        // console.log(result.data);
         // const DMS_date = response.data;
 
         const DMS_date = response.data.find(item => item.data_name === "Rozrachunki");
@@ -436,13 +228,12 @@ const FKAddData = () => {
 
 
         const update = {
-          updateData: JSON.stringify(result.data.updateDate),
+          accountancy: result.data.updateData.accountancy,
           dms: {
             date: DMS_date.update_success ? DMS_date.date : "Błąd aktualizacji",
             hour: DMS_date.update_success ? `godzina: ${DMS_date.hour}` : "Błąd aktualizacji",
           },
         };
-        // console.log(update);
         setDateCounter(update);
         setPleaseWait(false);
       } catch (err) {
@@ -501,6 +292,16 @@ const FKAddData = () => {
             </section>
 
             <section className="fk_add_data__container-item">
+              <span className="fk_add_data__container-item--title">
+                Rozrachunki z Autostacji
+              </span>
+              <span>{dateCounter?.dms?.date}</span>
+              <span>{dateCounter?.dms?.hour}</span>
+
+              <section className="fk_add_data__container-file"></section>
+            </section>
+
+            {/* <section className="fk_add_data__container-item">
               {!carReleased ? (
                 <>
                   <span>Auta wydane - plik wydane</span>
@@ -526,9 +327,9 @@ const FKAddData = () => {
               ) : (
                 <p className="fk_add_data-error">{carReleased}</p>
               )}
-            </section>
+            </section> */}
 
-            <section className="fk_add_data__container-item">
+            {/* <section className="fk_add_data__container-item">
               {!rubiconData ? (
                 <>
                   <span>Status sprawy - plik Rubicon</span>
@@ -558,9 +359,9 @@ const FKAddData = () => {
               ) : (
                 <p className="fk_add_data-error">{rubiconData}</p>
               )}
-            </section>
+            </section> */}
 
-            <section className="fk_add_data__container-item">
+            {/* <section className="fk_add_data__container-item">
               {!settlementNames ? (
                 <>
                   <span>Opisy rozrachunków - plik rozlas</span>
@@ -594,9 +395,9 @@ const FKAddData = () => {
               ) : (
                 <p className="fk_add_data-error">{settlementNames}</p>
               )}
-            </section>
+            </section> */}
 
-            <section className="fk_add_data__container-item">
+            {/* <section className="fk_add_data__container-item">
               {!missedDate ? (
                 <>
                   <span>Dodatkowy plik - Data wystawienia dokumentu</span>
@@ -632,7 +433,7 @@ const FKAddData = () => {
               ) : (
                 <p className="fk_add_data-error">{missedDate}</p>
               )}
-            </section>
+            </section> */}
 
             <section className="fk_add_data__container-item">
               <section className="fk_add_data__container-file">
@@ -650,7 +451,7 @@ const FKAddData = () => {
 
               {!deleteRaport ? (
                 <span className="fk_add_data__container-item--title">
-                  Jeśli chcesz dodać nowe pliki, skasuj poprzedni raport
+                  Jeśli chcesz dodać nowe pliki, skasuj poprzednie dane.
                 </span>
               ) : (
                 <span style={{ color: "red", fontWeight: "bold" }}>
@@ -692,15 +493,7 @@ const FKAddData = () => {
                   )}
               </section>
             </section> */}
-            <section className="fk_add_data__container-item">
-              <span className="fk_add_data__container-item--title">
-                Rozrachunki z Autostacji
-              </span>
-              <span>{dateCounter?.dms?.date}</span>
-              <span>{dateCounter?.dms?.hour}</span>
 
-              <section className="fk_add_data__container-file"></section>
-            </section>
 
             <section className="fk_add_data__container-item">
               {!generateRaportMsg ? (
@@ -712,19 +505,16 @@ const FKAddData = () => {
                   <span></span>
 
                   <section className="fk_add_data__container-file">
-                    {dateCounter?.accountancy &&
-                      dateCounter?.carReleased &&
-                      dateCounter?.caseStatus &&
-                      dateCounter?.settlementNames && (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          disableElevation
-                          onClick={generateRaport}
-                        >
-                          Generuj Raport FK
-                        </Button>
-                      )}
+                    {dateCounter?.accountancy && (
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        disableElevation
+                        onClick={generateRaport}
+                      >
+                        Generuj Raport FK
+                      </Button>
+                    )}
                   </section>
                 </>
               ) : (
