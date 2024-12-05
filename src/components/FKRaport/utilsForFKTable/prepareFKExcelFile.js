@@ -1,9 +1,182 @@
 import XLSX from "xlsx-js-style";
 
-// wersja bez dodatkowych wierszy nad tabelą
+// const columnsOrder = [
+//   "TYP_DOKUMENTU",
+//   "NR_DOKUMENTU",
+//   "DZIAL",
+//   "LOKALIZACJA",
+//   "KONTRAHENT",
+//   "KWOTA_DO_ROZLICZENIA_FK",
+//   "DO_ROZLICZENIA_AS",
+//   "ROZNICA",
+//   "DATA_ROZLICZENIA_AS",
+//   "OPIS_ROZRACHUNKU",
+//   "DATA_WYSTAWIENIA_FV",
+//   "BRAK_DATY_WYSTAWIENIA_FV",
+//   "TERMIN_PLATNOSCI_FV",
+//   "PRZEDZIAL_WIEKOWANIE",
+//   "ILE_DNI_NA_PLATNOSC_FV",
+//   "RODZAJ_KONTA",
+//   "PRZETER_NIEPRZETER",
+//   "JAKA_KANCELARIA",
+//   "ETAP_SPRAWY",
+//   "KWOTA_WPS",
+//   "CZY_W_KANCELARI",
+//   "OBSZAR",
+//   "CZY_SAMOCHOD_WYDANY_AS",
+//   "DATA_WYDANIA_AUTA",
+//   "OWNER",
+//   "NR_KLIENTA",
+//   "OPIEKUN_OBSZARU_CENTRALI",
+// ];
+const columnsOrder = [
+  "TYP DOKUMENTU",
+  "NR DOKUMENTU",
+  "DZIAŁ",
+  "LOKALIZACJA",
+  "KONTRAHENT",
+  "POZOSTAŁA KWOTA DO ROZLICZENIA W FK",
+  "POZOSTAŁA KWOTA DO ROZLICZENIA W AS3",
+  "RÓŻNICA MIĘDZY FK A AS3",
+  "DATA ROZLICZENIA AS",
+  "OPIS ROZRACHUNKU",
+  "DATA WYSTAWIENIA FAKTURY",
+  "BRAK DATY WYSTAWIENIA FV",
+  "TERMIN PŁATNOŚCI FV",
+  "PRZEDZIAŁ WIEKOWANIE",
+  "ILE DNI NA PLATNOŚĆ NA FV",
+  "KONTO",
+  "PRZETERMINOWANE / NIEPRZETERMINOWANE",
+  "JAKA KANCELARIA",
+  "ETAP SPRAWY",
+  "KWOTA WPS",
+  "CZY KANCELARIA TAK/ NIE",
+  "OBSZAR",
+  "CZY SAMOCHÓD WYDANY TAK/NIE",
+  "DATA WYDANIA AUTA W AS3",
+  "OWNER",
+  "NR KLIENTA",
+  "OPIEKUN OBSZARU CENTRALI",
+];
 
+const columnsName = [
+  {
+    accessorKey: "TYP_DOKUMENTU",
+    header: "TYP DOKUMENTU"
+  },
+  {
+    accessorKey: "NR_DOKUMENTU",
+    header: "NR DOKUMENTU"
+  },
+  {
+    accessorKey: "DZIAL",
+    header: "DZIAŁ"
+  },
+  {
+    accessorKey: "LOKALIZACJA",
+    header: "LOKALIZACJA"
+  },
+  {
+    accessorKey: "KONTRAHENT",
+    header: "KONTRAHENT"
+  },
+  {
+    accessorKey: "KWOTA_DO_ROZLICZENIA_FK",
+    header: "POZOSTAŁA KWOTA DO ROZLICZENIA W FK"
+  },
+  {
+    accessorKey: "DO_ROZLICZENIA_AS",
+    header: "POZOSTAŁA KWOTA DO ROZLICZENIA W AS3"
+  },
+  {
+    accessorKey: "ROZNICA",
+    header: "RÓŻNICA MIĘDZY FK A AS3"
+  },
+  {
+    accessorKey: "DATA_ROZLICZENIA_AS",
+    header: "DATA ROZLICZENIA AS"
+  },
+  {
+    accessorKey: "OPIS_ROZRACHUNKU",
+    header: "OPIS ROZRACHUNKU"
+  },
+  {
+    accessorKey: "DATA_WYSTAWIENIA_FV",
+    header: "DATA WYSTAWIENIA FAKTURY"
+  },
+  {
+    accessorKey: "BRAK_DATY_WYSTAWIENIA_FV",
+    header: "BRAK DATY WYSTAWIENIA FV"
+  },
+  {
+    accessorKey: "TERMIN_PLATNOSCI_FV",
+    header: "TERMIN PŁATNOŚCI FV"
+  },
+  {
+    accessorKey: "PRZEDZIAL_WIEKOWANIE",
+    header: "PRZEDZIAŁ WIEKOWANIE"
+  },
+  {
+    accessorKey: "ILE_DNI_NA_PLATNOSC_FV",
+    header: "ILE DNI NA PLATNOŚĆ NA FV"
+  },
+  {
+    accessorKey: "RODZAJ_KONTA",
+    header: "KONTO"
+  },
+  {
+    accessorKey: "PRZETER_NIEPRZETER",
+    header: "PRZETERMINOWANE / NIEPRZETERMINOWANE"
+  },
+  {
+    accessorKey: "JAKA_KANCELARIA",
+    header: "JAKA KANCELARIA"
+  },
+  {
+    accessorKey: "ETAP_SPRAWY",
+    header: "ETAP SPRAWY"
+  },
+  {
+    accessorKey: "KWOTA_WPS",
+    header: "KWOTA WPS"
+  },
+  {
+    accessorKey: "CZY_W_KANCELARI",
+    header: "CZY KANCELARIA TAK/ NIE"
+  },
+  {
+    accessorKey: "OBSZAR",
+    header: "OBSZAR"
+  },
+  {
+    accessorKey: "CZY_SAMOCHOD_WYDANY_AS",
+    header: "CZY SAMOCHÓD WYDANY TAK/NIE"
+  },
+  {
+    accessorKey: "DATA_WYDANIA_AUTA",
+    header: "DATA WYDANIA AUTA W AS3"
+  },
+  {
+    accessorKey: "OWNER",
+    header: "OWNER"
+  },
+  {
+    accessorKey: "NR_KLIENTA",
+    header: "NR KLIENTA"
+  },
+  {
+    accessorKey: "OPIEKUN_OBSZARU_CENTRALI",
+    header: "OPIEKUN OBSZARU CENTRALI"
+  },
+];
+
+// wersja bez dodatkowych wierszy nad tabelą
 export const getExcelRaport = async (cleanData, settingsColumn) => {
-  console.log(settingsColumn);
+  // console.log(settingsColumn);
+
+  // const columnsName = settingsColumn.columns;
+  // const columnsOrder = settingsColumn.order;
+  // console.log(cleanData);
   try {
     // const settingsColumn = await axiosPrivateIntercept.get(
     //   "/fk/get-columns-order"
@@ -12,7 +185,8 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
     const changeNameColumns = cleanData.map((doc) => {
       const update = doc.data.map((item) => {
         const newItem = {};
-        for (const column of settingsColumn.columns) {
+        // for (const column of settingsColumn.columns) {
+        for (const column of columnsName) {
           // Sprawdzanie, czy klucz w obiekcie z cleanData.data odpowiada kluczowi accessorKey z obiektu z settingsColumn.data
           if (item[column.accessorKey] !== undefined) {
             // Jeśli klucze są zgodne, podmień nazwę klucza na header z obiektu z settingsColumn.data
@@ -36,7 +210,7 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
         // Przearanżowanie kolumn w odpowiedniej kolejności
         const reorderedData = obj.data.map((item) => {
           const reorderedItem = {};
-          settingsColumn.order.forEach((key) => {
+          columnsOrder.forEach((key) => {
             if (item[key] !== undefined) {
               reorderedItem[key] = item[key];
             }
