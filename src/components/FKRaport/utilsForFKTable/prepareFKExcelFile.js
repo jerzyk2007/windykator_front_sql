@@ -324,7 +324,8 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
                   vertical: "center",
                   horizontal: "center",
                 },
-                numFmt: "# ##0.00 zł",
+                // numFmt: "# ##0.00 zł",
+                numFmt: "#,##0.00 zł"
               };
             }
           }
@@ -356,7 +357,7 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
       });
 
       // Zapisywanie arkusza roboczego do pliku
-      XLSX.writeFile(wb, "Raport.xlsx");
+      XLSX.writeFile(wb, "Raport.xlsx", { compression: true });
     } catch (err) {
       console.error(err);
     }
