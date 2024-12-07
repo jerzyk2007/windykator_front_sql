@@ -39,7 +39,6 @@ const FKDataSettings = () => {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/fk/get-fksettings-data");
       setData(result.data);
-      // console.log(result.data.departments);
       const uniqueDep = await axiosPrivateIntercept.get("/fk/get-uniques-dep");
       setRaportDep(uniqueDep.data);
 
@@ -93,7 +92,6 @@ const FKDataSettings = () => {
       }
       // Aktualizujemy stan itemsDB
       setItemsDB(dataArray);
-      // console.log(dataArray);
 
       await axiosPrivateIntercept.patch("/fk/save-prepared-items", {
         department: itemData.department,

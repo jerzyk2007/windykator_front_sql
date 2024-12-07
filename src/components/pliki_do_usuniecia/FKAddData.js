@@ -122,7 +122,6 @@ const FKAddData = () => {
         setPleaseWait(true);
         setDeleteRaport("");
         const file = e.target.files[0];
-        // if (!file) return console.log("Brak pliku");
         if (!file || !file.name.endsWith(".xlsx")) {
             setPleaseWait(false);
 
@@ -165,22 +164,6 @@ const FKAddData = () => {
                 }
                 setPleaseWait(true);
 
-                // console.log(type);
-                // console.log(decodedFile);
-
-                // const response = await axiosPrivateIntercept.post(
-                //   "/fk/send-accountancy-fk",
-                //   { data: 'test' },
-                // );
-
-                // const repairDepartments = await axiosPrivateIntercept.get(
-                //   `/sql/change-fullBrutto-fullNetto`
-                // );
-
-                // const result = await preparedAccountancyData(
-                //   axiosPrivateIntercept,
-                //   decodedFile
-                // );
                 const changeDate = decodedFile.map(item => {
                     return {
                         KONTRAHENT: item['Kontrahent'],
@@ -412,12 +395,8 @@ const FKAddData = () => {
                 setPleaseWait(true);
                 const result = await axiosPrivateIntercept.get("/fk/get-date-counter");
                 const response = await axiosPrivateIntercept.get(`/update/get-time`);
-                console.log(result.data);
-                // const DMS_date = response.data;
 
                 const DMS_date = response.data.find(item => item.data_name === "Rozrachunki");
-
-
 
                 const update = {
                     updateData: JSON.stringify(result.data.updateDate),
@@ -426,7 +405,6 @@ const FKAddData = () => {
                         hour: DMS_date.update_success ? `godzina: ${DMS_date.hour}` : "Błąd aktualizacji",
                     },
                 };
-                // console.log(update);
                 setDateCounter(update);
                 setPleaseWait(false);
             } catch (err) {

@@ -172,15 +172,8 @@ const columnsName = [
 
 // wersja bez dodatkowych wierszy nad tabelą
 export const getExcelRaport = async (cleanData, settingsColumn) => {
-  // console.log(settingsColumn);
 
-  // const columnsName = settingsColumn.columns;
-  // const columnsOrder = settingsColumn.order;
-  // console.log(cleanData);
   try {
-    // const settingsColumn = await axiosPrivateIntercept.get(
-    //   "/fk/get-columns-order"
-    // );
 
     const changeNameColumns = cleanData.map((doc) => {
       const update = doc.data.map((item) => {

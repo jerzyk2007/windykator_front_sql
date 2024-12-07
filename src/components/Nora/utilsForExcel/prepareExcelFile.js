@@ -44,7 +44,6 @@ export const getExcelRaport = async (
   const filteredSettingsColumn = settingsColumn.filter(
     (col) => !orderColumn.includes(col)
   );
-  console.log(settingsColumn);
 
   try {
     const workbook = new ExcelJS.Workbook();

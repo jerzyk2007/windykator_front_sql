@@ -122,8 +122,6 @@ const TradeCredit = () => {
         };
       });
 
-      console.log(raportData);
-
       // // tradeCreditDataa wszytskie dokumenty
       // // areaCreditData - dane uzupełnione przez obszary
       // // newResult - unikalni kontrahenci
@@ -240,14 +238,11 @@ const TradeCredit = () => {
       const generateNumber = raport.map((item) => {
         const preparedData = [...item.data];
         let counter = 1;
-        console.log(item);
 
         const data = preparedData.map((doc) => {
-          // console.log(doc);
           const filteredDoc = areaCreditData.filter((docFiltr) =>
             item.name === doc.Obszar && doc["Nip kontrahenta"]
-              ? // docFiltr.area === doc.Obszar && doc["Nip kontrahenta"]
-                docFiltr.kontr_nip === doc["Nip kontrahenta"]
+              ? docFiltr.kontr_nip === doc["Nip kontrahenta"]
               : docFiltr.kontr_nazwa === doc["Nazwa kontrahenta"]
           );
 
@@ -257,8 +252,8 @@ const TradeCredit = () => {
               firstFilteredDoc.forma_plat === "PRZELEW"
                 ? "PRZELEW"
                 : firstFilteredDoc.forma_plat === "KOMPENSATA"
-                ? "KOMPENSATA"
-                : "BRAK PRZELEWU";
+                  ? "KOMPENSATA"
+                  : "BRAK PRZELEWU";
             return {
               ...doc,
               Lp: counter++,
@@ -277,7 +272,6 @@ const TradeCredit = () => {
             return doc;
           }
         });
-        // console.log(data);
         return {
           name: item.name,
           data,
@@ -315,11 +309,8 @@ const TradeCredit = () => {
       };
 
       generateNumber.push(newContractor());
-      console.log(generateNumber);
 
       getExcelRaport(generateNumber, columns, columnsContractor);
-
-      console.log("finish");
 
       setPleaseWait(false);
     } catch (err) {

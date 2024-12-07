@@ -63,7 +63,6 @@ const EditUserSettings = ({ user, setEdit }) => {
         .filter(Boolean)[0];
 
 
-      // console.log(checkDep());
       const permissions = filteredPermissions.reduce((acc, perm, index) => {
         // Ustawiamy user.permissions jako pusty obiekt, jeśli nie istnieje
         const userPermissions = user?.permissions || {};

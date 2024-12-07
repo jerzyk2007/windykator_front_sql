@@ -403,7 +403,6 @@ export const getExcelRaport = async (
               .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
                 // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
                 if (rowNumber > 1) {
-                  // console.log(cell.value);
                   const cellValue = cell.value;
                   const [displayValue, isValid] = cellValue;
 

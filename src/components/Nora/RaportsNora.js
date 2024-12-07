@@ -72,26 +72,26 @@ const RaportsNora = () => {
       const decodedFile = await decodeExcelFile(file, type, setErrCodeRaport);
 
       // Pobieramy nagłówki kolumn z pierwszego wiersza
-const headers = Object.keys(decodedFile[0]);
+      const headers = Object.keys(decodedFile[0]);
 
-// Lista wymaganych nagłówków
-const requiredHeaders = [
-  "Oddział",
-  "kontrahent",
-  "nip",
-  "kod pocztowy",
-  "miasto",
-  "k_adres",
-  // "Opiekun D.CZ ASO"
-];
+      // Lista wymaganych nagłówków
+      const requiredHeaders = [
+        "Oddział",
+        "kontrahent",
+        "nip",
+        "kod pocztowy",
+        "miasto",
+        "k_adres",
+        // "Opiekun D.CZ ASO"
+      ];
 
-// Sprawdzamy, czy wszystkie wymagane nagłówki są obecne
-const missingHeaders = requiredHeaders.filter(header => !headers.includes(header));
+      // Sprawdzamy, czy wszystkie wymagane nagłówki są obecne
+      const missingHeaders = requiredHeaders.filter(header => !headers.includes(header));
 
-if (missingHeaders.length > 0) {
-  setPleaseWait(false);
-  return setErrCodeRaport(`Brakuje następujących nagłówków: ${missingHeaders.join(', ')}`);
-}
+      if (missingHeaders.length > 0) {
+        setPleaseWait(false);
+        return setErrCodeRaport(`Brakuje następujących nagłówków: ${missingHeaders.join(', ')}`);
+      }
       // if (
       //   !("Oddział" in decodedFile[0]) ||
       //   !("kontrahent" in decodedFile[0]) ||
@@ -224,7 +224,7 @@ if (missingHeaders.length > 0) {
       }));
 
       //kolejnośc kolumn oraz te co mają byc zachowane z orygilnalnego pliku
-      const orderColumn=[
+      const orderColumn = [
         "Oddział",
         "kontrahent",
         "nip",
@@ -235,7 +235,7 @@ if (missingHeaders.length > 0) {
       ];
 
       const allowedKeys = [
-     ...orderColumn
+        ...orderColumn
       ];
       const allowedKeysYear = [];
 
@@ -351,14 +351,13 @@ if (missingHeaders.length > 0) {
                 currentYearValue === 0 || maxCurrentYearValue === 0
                   ? 0
                   : Number(
-                      (
-                        ((maxCurrentYearValue - currentYearValue) /
-                          currentYearValue) *
-                        100
-                      ).toFixed(2)
-                    );
+                    (
+                      ((maxCurrentYearValue - currentYearValue) /
+                        currentYearValue) *
+                      100
+                    ).toFixed(2)
+                  );
             }
-            // console.log(typeof newKey.newName);
 
             if (!allowedKeys.includes(newKey.newName)) {
               const keyStr = String(newKey.name);

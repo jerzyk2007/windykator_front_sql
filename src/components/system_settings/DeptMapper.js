@@ -41,11 +41,12 @@ const DeptMapper = () => {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/fk/get-fksettings-data");
       setData(result.data);
-      // console.log(result.data.departments);
       const uniqueDep = await axiosPrivateIntercept.get("/fk/get-uniques-dep");
       setRaportDep(uniqueDep.data);
 
-      checkMissingDepartments(result.data.departments, uniqueDep.data);
+
+      checkMissingDepartments(result.data.uniqueDepartments, uniqueDep.data);
+      // checkMissingDepartments(result.data.departments, uniqueDep.data);
 
       const preparedItems = await axiosPrivateIntercept.get(
         "/fk/get-prepared-items"
@@ -95,7 +96,6 @@ const DeptMapper = () => {
       }
       // Aktualizujemy stan itemsDB
       setItemsDB(dataArray);
-      // console.log(dataArray);
 
       await axiosPrivateIntercept.patch("/fk/save-prepared-items", {
         department: itemData.department,

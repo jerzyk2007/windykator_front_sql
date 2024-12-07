@@ -115,52 +115,12 @@ const AddDataFromFile = () => {
       //   `/repair/advisers-name`
       // );
 
-      // console.log(copyUsers.data.data);
-      // console.log(copySettings.data.data);
-      // console.log(copyDocuments.data);
-      // console.log(copyDocuments_Actions.data);
+
       console.log('finish');
     } catch (err) {
       console.error(err);
     }
   };
-
-  // funkcja dla przesłania gotowych danych, już przygotowanych i obrobionych da raportu FK
-  // const handleSendFileFK = async (e, type) => {
-  //   setPleaseWait(true);
-  //   const file = e.target.files[0];
-  //   if (!file) return console.log("Brak pliku");
-  //   if (!file.name.endsWith(".xlsx")) {
-  //     console.log("Akceptowany jest tylko plik z rozszerzeniem .xlsx");
-  //     return;
-  //   }
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("excelFile", file);
-
-  //     const response = await axiosPrivateIntercept.post(
-  //       "/fk/send-data-fk",
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       }
-  //     );
-
-  //     if (type === "dataFK") {
-  //       setErrDataFK("Dokumenty zaktualizowane.");
-  //     }
-
-  //     setPleaseWait(false);
-  //   } catch (error) {
-  //     if (type === "dataFK") {
-  //       setErrDataFK("Błąd aktualizacji dokumentów.");
-  //     }
-  //     console.error("Błąd przesyłania pliku:", error);
-  //     setPleaseWait(false);
-  //   }
-  // };
 
   return pleaseWait ? (
     <PleaseWait />

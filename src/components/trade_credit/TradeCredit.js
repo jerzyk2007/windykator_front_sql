@@ -267,7 +267,6 @@ const TradeCredit = () => {
             return doc;
           }
         });
-        // console.log(data);
         return {
           name: item.name,
           data,
@@ -289,9 +288,6 @@ const TradeCredit = () => {
         };
       });
 
-      // const test = areaCreditData.map((item) => {
-      //   console.log(item);
-      // });
       const columnsContractor = [
         "Lp",
         "Numer klienta",
@@ -324,10 +320,7 @@ const TradeCredit = () => {
 
       generateNumber.push(newContractor());
 
-      // getExcelRaport(raport, columns, columnsContractor);
       getExcelRaport(generateNumber, columns, columnsContractor);
-
-      console.log("finish");
 
       setPleaseWait(false);
     } catch (err) {

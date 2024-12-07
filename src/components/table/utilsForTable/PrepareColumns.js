@@ -227,9 +227,7 @@ export const prepareColumns = (columnsData, data) => {
 
     if (item.type === "money") {
       modifiedItem.Cell = ({ cell }) => {
-        // const value = Number(cell.getValue());
         const value = cell.getValue();
-        // console.log(typeof value);
 
         const formattedSalary =
           value !== undefined && value !== null && value !== 0
@@ -239,9 +237,7 @@ export const prepareColumns = (columnsData, data) => {
               useGrouping: true,
             })
             : "0,00";
-        // console.log(formattedSalary);
 
-        // return `${formattedSalary}`;
         return formattedSalary;
       };
     }
