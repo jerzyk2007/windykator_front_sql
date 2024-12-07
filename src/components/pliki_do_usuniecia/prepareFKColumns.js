@@ -69,10 +69,10 @@ export const preparedFKColumns = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "NULL"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -117,10 +117,10 @@ export const preparedFKColumns = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -137,10 +137,10 @@ export const preparedFKColumns = [
       const formattedSalary =
         value !== undefined && value !== null && value !== 0
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "NULL"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -226,10 +226,10 @@ export const preparedFKColumns = [
       const formattedSalary =
         value !== undefined && value !== null && value !== 0
           ? value.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+          })
           : "NULL"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;

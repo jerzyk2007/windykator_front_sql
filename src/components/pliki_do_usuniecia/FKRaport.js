@@ -7,7 +7,7 @@ import LawyerAccount from "./FKLawyerComponents/LawyerAccount";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 // import * as xlsx from "xlsx";
 // import XLSX from "xlsx-js-style";
-import { getExcelRaport } from "./utilsForFKTable/prepareFKExcelFile";
+import { getExcelRaport } from "../FKRaport/utilsForFKTable/prepareFKExcelFile";
 import "./FKRaport.css";
 
 const FKRaport = ({
@@ -33,8 +33,8 @@ const FKRaport = ({
       const settingsColumn = await axiosPrivateIntercept.get(
         "/fk/get-columns-order"
       );
-      let update=[]
-    update = buttonArea.map((item) => {
+      let update = [];
+      update = buttonArea.map((item) => {
         const updatedData = item.data.map((element) => {
           // if (element.KWOTA_WPS == 0) {
           //   element.KWOTA_WPS = "NULL";

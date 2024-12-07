@@ -16,8 +16,8 @@ import {
   preparedFKColumns,
   muiTableBodyCellProps,
   preparedData,
-} from "./utilsForFKTable/prepareFKColumns";
-import { getAllDataRaport } from "../pliki_do_usuniecia/utilsForTable/excelFilteredTable";
+} from "./prepareFKColumns";
+import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
 
 import "./FKTable.css";
 
