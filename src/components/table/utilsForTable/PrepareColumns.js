@@ -154,6 +154,15 @@ export const prepareColumns = (columnsData, data) => {
       });
     }
 
+    if (item.accessorKey === "OSTATECZNA_DATA_ROZLICZENIA") {
+
+      modifiedItem.accessorFn = (originalRow) => {
+        return originalRow[item.accessorKey]
+          ? originalRow[item.accessorKey]
+          : "BRAK";
+      };
+    }
+
     if (item.accessorKey === "50_VAT") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         const cellValue = cell.getValue();
