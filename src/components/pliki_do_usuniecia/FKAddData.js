@@ -380,23 +380,6 @@ const FKAddData = () => {
             setPleaseWait(false);
             setGenerateRaportMsg("Raport został wygenerowany.");
 
-            // funkcja generująca plik excel ze wszytskimi danymi
-            // const settingsColumn = await axiosPrivateIntercept.get(
-            //   "/fk/get-columns-order"
-            // );
-
-            // const orderColumns = settingsColumn.data;
-
-            // const dataToString = dataRaport.map((item) => {
-            //   return {
-            //     ...item,
-            //     ILE_DNI_NA_PLATNOSC_FV: item.ILE_DNI_NA_PLATNOSC_FV.toString(),
-            //     RODZAJ_KONTA: item.RODZAJ_KONTA.toString(),
-            //     NR_KLIENTA: item.NR_KLIENTA.toString(),
-            //   };
-            // });
-
-            // getAllDataRaport(dataToString, orderColumns, "Generowanie Raportu");
         } catch (err) {
             console.error(err);
         }
