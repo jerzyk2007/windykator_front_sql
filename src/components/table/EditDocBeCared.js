@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 
 // import "./EditDocBeCared.css";
 
-export const EditDocBeCared = ({ rowData, setBeCared }) => {
+export const EditDocBeCared = ({ rowData, setChangePanel }) => {
   return (
     // <section className="edit_doc_becared">
     <section className="edit_doc">
@@ -74,7 +74,7 @@ export const EditDocBeCared = ({ rowData, setBeCared }) => {
       </section>
 
       <section className="edit_doc--button">
-        <Button variant="outlined" onClick={() => setBeCared(false)}>
+        <Button variant="outlined" onClick={() => setChangePanel({ type: "doc-actions" })}>
           Działania
         </Button>
       </section>

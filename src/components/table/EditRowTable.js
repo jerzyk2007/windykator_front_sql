@@ -4,10 +4,10 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import EditDocBasicData from "./EditDocBasicData";
 import EditDocChat from "./EditDocChat";
-import EditDocSettlements from "./EditDocSettlements";
+// import EditDocSettlements from "./EditDocSettlements";
 import EditDocActions from "./EditDocActions";
 import EditDocBeCared from "./EditDocBeCared";
-// import { format } from "date-fns";
+import EditDataManagement from "./EditDataManagement";
 import "./EditRowTable.css";
 
 const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
@@ -15,8 +15,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [rowData, setRowData] = useState(dataRowTable);
-  const [beCared, setBeCared] = useState(false);
+  const [changePanel, setChangePanel] = useState({
+    type: 'doc-actions'
+  });
   const [note, setNote] = useState("");
+  const [managementNote, setManagementNote] = useState("");
   const [toggleState, setToggleState] = useState(1);
 
   const handleAddNote = (info, text) => {
@@ -46,12 +49,65 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
     }
   };
 
-  const toggleTab = (index) => {
-    setToggleState(index);
+  const handleAddManagementNote = (info, text) => {
+    const oldNote = rowData.INFORMACJA_ZARZAD;
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+
+    let newNote = [];
+    let addNote = `${formattedDate} - ${auth.usersurname} - ${info} ${text}`;
+    if (oldNote) {
+      newNote = [...oldNote, addNote];
+    } else {
+      newNote = [addNote];
+    }
+
+    setRowData((prev) => {
+      return {
+        ...prev,
+        INFORMACJA_ZARZAD: newNote,
+      };
+    });
+    if (!text) {
+      setManagementNote("");
+    }
   };
+
+  const handleDateHistoryNote = (info, text) => {
+    const oldNote = rowData.HISTORIA_ZMIANY_DATY_ROZLICZENIA;
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+
+    let newNote = [];
+    let addNote = `${formattedDate} - ${auth.usersurname} - ${info} ${text}`;
+    if (oldNote) {
+      newNote = [...oldNote, addNote];
+    } else {
+      newNote = [addNote];
+    }
+
+    setRowData((prev) => {
+      return {
+        ...prev,
+        HISTORIA_ZMIANY_DATY_ROZLICZENIA: newNote,
+      };
+    });
+  };
+
+  // const toggleTab = (index) => {
+  //   setToggleState(index);
+  // };
 
   const handleSaveData = async () => {
     const { id_document } = rowData;
+
+    console.log(rowData);
 
     try {
       await axiosPrivateIntercept.patch(
@@ -102,30 +158,30 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
 
                 </section>
                 <section className="edit-row-table_section-content-data">
-                  {!beCared && (
+                  {changePanel.type === 'doc-actions' && (
                     <EditDocActions
                       rowData={rowData}
                       setRowData={setRowData}
-                      setBeCared={setBeCared}
+                      setChangePanel={setChangePanel}
                       handleAddNote={handleAddNote}
                     />
                   )}
-                  {beCared && (
+                  {changePanel.type === 'becared' && (
                     <EditDocBeCared
                       rowData={rowData}
                       setRowData={setRowData}
-                      setBeCared={setBeCared}
+                      setChangePanel={setChangePanel}
                     />
                   )}
-                  {/* {!beCared && rowData.OPIS_ROZRACHUNKU && (
-                    <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} />
-                  )} */}
-                  {/* {!beCared && rowData.OPIS_ROZRACHUNKU && (
-                    <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} date={rowData?.DATA_ROZL_AS ? rowData.DATA_ROZL_AS : null} />
-                  )} */}
-                  {!beCared && (
-                    <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} date={rowData?.DATA_ROZL_AS ? rowData.DATA_ROZL_AS : null} />
-                  )}
+                  {changePanel.type === 'management' && <EditDataManagement
+                    rowData={rowData}
+                    setRowData={setRowData}
+                    setChangePanel={setChangePanel}
+                    handleDateHistoryNote={handleDateHistoryNote}
+                    managementNote={managementNote}
+                    setManagementNote={setManagementNote}
+                    handleAddManagementNote={handleAddManagementNote}
+                  />}
                 </section>
               </section>
             </section>

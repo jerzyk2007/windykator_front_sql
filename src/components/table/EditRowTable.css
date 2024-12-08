@@ -7,7 +7,7 @@
   right: 0;
   z-index: 5;
   background-color: #fff;
-  /* overflow: auto; */
+  overflow: auto;
   display: flex;
   justify-content: space-evenly;
 }
@@ -159,6 +159,7 @@
   cursor: help;
 }
 
+
 .edit_doc--content,
 .edit_doc--content-scroll {
   width: 100%;
@@ -195,6 +196,7 @@
 
 .edit_doc--button {
   margin-top: 5px;
+  display: flex;
 }
 
 .edit_doc--button Button {

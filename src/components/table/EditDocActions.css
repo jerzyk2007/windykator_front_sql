@@ -1,10 +1,19 @@
 .edit_doc_actions {
-    max-height: 50vh;
+    flex-grow: 1;
+    /* max-height: 50vh; */
     /* margin-bottom: 0px; */
     /* font-family: "Source Sans 3", Calibri, sans-serif; */
     font-size: 1.1rem;
     /* font-optical-sizing: auto; */
     /* font-style: 700; */
-    /* display: flex; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
 
+}
+
+
+.edit_doc_actions__container {
+    flex-grow: 1;
+    flex-basis: 50%;
 }

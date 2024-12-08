@@ -1,5 +1,7 @@
 .edit-doc-settlements {
-  /* flex-grow: 1; */
+  flex-basis: 40%;
+  /* margin-top: 20px; */
+  flex-grow: 1;
   /* margin-bottom: 10px; */
   /* margin-bottom: 100px; */
   font-family: "Source Sans 3", Calibri, sans-serif;
@@ -20,8 +22,8 @@
 }
 
 .edit-doc-settlements--content {
-  height: 180px;
-  max-height: 180px;
+  flex-grow: 1;
+  /* max-height: 250px; */
   resize: none;
   padding: 5px;
   font-family: "Source Sans 3", Calibri, sans-serif;
