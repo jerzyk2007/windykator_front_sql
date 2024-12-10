@@ -107,8 +107,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
   const handleSaveData = async () => {
     const { id_document } = rowData;
 
-    console.log(rowData);
-
     try {
       await axiosPrivateIntercept.patch(
         `/documents/change-single-document/${auth.id_user}`,

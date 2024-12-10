@@ -85,7 +85,7 @@ function App() {
               <Route path="/fk-raport" element={<FKRaportSettings />} />
             </Route> */}
 
-            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[200, 250, 1000]} />}>
               <Route path="/fk-add-data" element={<FKAddData />} />
             </Route>
 
@@ -93,11 +93,11 @@ function App() {
               <Route path="/fk-table-settings" element={<FKTableSettings />} />
             </Route> */}
 
-            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[200, 250, 1000]} />}>
               <Route path="/dept-mapper" element={<DeptMapper />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[200, 250, 1000]} />}>
               <Route path="/change-items" element={<Items />} />
             </Route>
 
@@ -113,7 +113,7 @@ function App() {
               <Route path="/contacts" element={<Contacts />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[120, 150, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[120, 150, 250, 1000]} />}>
               <Route path="/add-data" element={<AddDataFromFile />} />
             </Route>
 
