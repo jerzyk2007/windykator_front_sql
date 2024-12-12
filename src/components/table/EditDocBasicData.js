@@ -1,6 +1,6 @@
 import "./EditDocBasicData.css";
 
-const EditDocBasicData = ({ rowData, setRowData }) => {
+const EditDocBasicData = ({ rowData }) => {
   return (
     <section className=" edit_doc edit_doc_basic-data">
       <section className="edit_doc__container">
@@ -169,14 +169,6 @@ const EditDocBasicData = ({ rowData, setRowData }) => {
       )}
 
       {rowData.area === "BLACHARNIA" && (
-        <section className="edit_doc__container">
-          <span className="edit_doc--title">Nr szkody:</span>
-          <span className="edit_doc--content">
-            {rowData.NR_SZKODY}
-          </span>
-        </section>
-      )}
-      {rowData.area !== "BLACHARNIA" && (
         <section className="edit_doc__container">
           <span className="edit_doc--title">Nr szkody:</span>
           <span className="edit_doc--content">
