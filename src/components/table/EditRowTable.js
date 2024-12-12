@@ -8,6 +8,7 @@ import EditDocChat from "./EditDocChat";
 import EditDocActions from "./EditDocActions";
 import EditDocBeCared from "./EditDocBeCared";
 import EditDataManagement from "./EditDataManagement";
+import { changeSingleDoc } from './utilsForTable/changeSingleDocument';
 import "./EditRowTable.css";
 
 const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
@@ -116,15 +117,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
         }
       );
 
-      if (rowData.JAKA_KANCELARIA === null) {
-        rowData.JAKA_KANCELARIA = "BRAK";
-      }
-
-      if (rowData.JAKA_KANCELARIA_TU === null) {
-        rowData.JAKA_KANCELARIA_TU = "BRAK";
-      }
-
-      updateDocuments(rowData);
+      updateDocuments(changeSingleDoc(rowData));
       setDataRowTable("");
     } catch (err) {
       console.error(err);

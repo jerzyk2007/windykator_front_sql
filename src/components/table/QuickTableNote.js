@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import useData from "../hooks/useData";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
+import { changeSingleDoc } from './utilsForTable/changeSingleDocument';
 import "./QuickTableNote.css";
 
 const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
@@ -35,11 +36,13 @@ const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
       await axiosPrivateIntercept.patch(
         `/documents/change-single-document/${auth.id_user}`,
         {
-          id_document: quickNote.id_document,
+          id_document: id_document,
           documentItem: newRow,
         }
       );
-      updateDocuments(newRow);
+
+
+      updateDocuments(changeSingleDoc(newRow));
       setQuickNote("");
     } catch (err) {
       console.error(err);
@@ -111,7 +114,10 @@ const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
             Anuluj
           </Button>
 
-          <Button variant="contained" onClick={handleAddNote} size="small">
+          <Button
+            variant="contained"
+            disabled={note ? false : true}
+            onClick={handleAddNote} size="small">
             Zapisz
           </Button>
         </section>

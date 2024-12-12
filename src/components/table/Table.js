@@ -282,6 +282,9 @@ const Table = ({
           getSingleRow(row.original.id_document, "full", row.original.DZIAL);
         }
       },
+      // onDoubleClick: () => {
+      //   getSingleRow(row.original.id_document, "full", row.original.DZIAL);
+      // },
     }),
 
     renderTopToolbarCustomActions: ({ table }) => (
