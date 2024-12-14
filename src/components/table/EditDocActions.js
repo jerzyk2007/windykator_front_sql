@@ -230,7 +230,7 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
           )}
         </section>
       </section>
-      <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} date={rowData?.DATA_ROZL_AS ? rowData.DATA_ROZL_AS : null} />
+      <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} date={rowData?.DATA_ROZL_AS ? rowData.DATA_ROZL_AS : null} fv_zal={rowData.FV_ZALICZKOWA ? rowData.FV_ZALICZKOWA : null} fv_zal_kwota={rowData.KWOTA_FV_ZAL ? rowData.KWOTA_FV_ZAL : null} />
     </section>
   );
 };

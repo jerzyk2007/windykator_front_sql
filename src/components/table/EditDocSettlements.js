@@ -1,8 +1,12 @@
-import { useRef, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import "./EditDocSettlements.css";
 
-const EditDocSettlements = ({ settlement, date }) => {
+const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
+
   const textareaRef = useRef(null);
+
+  const [settlementData, setSettlementData] = useState(settlement || []);
+
   // Funkcja przewijająca do dołu
   const scrollToBottom = () => {
     if (textareaRef.current) {
@@ -13,6 +17,32 @@ const EditDocSettlements = ({ settlement, date }) => {
   useEffect(() => {
     scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.UWAGI_ASYSTENT`
   }, [settlement]);
+
+  useEffect(() => {
+    if (fv_zal) {
+      const newData = `${fv_zal} - ${fv_zal_kwota.toLocaleString("pl-PL", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        useGrouping: true,
+      })}`;
+
+      // console.log(newData);
+      // console.log(settlement);
+      if (settlement) {
+        return setSettlementData([newData, ...settlement]);
+      } else {
+        return setSettlementData(prevData => [...(prevData || []), newData]);
+      }
+
+      // const newSettlement = [newData, ...settlement];
+      // setSettlementData(newSettlement);
+      // setSettlementData(newData);
+
+    }
+
+    // scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.UWAGI_ASYSTENT`
+  }, [fv_zal, fv_zal_kwota]);
+
 
   return (
     // <section className="edit-doc-settlements">
@@ -30,7 +60,7 @@ const EditDocSettlements = ({ settlement, date }) => {
         ref={textareaRef}
         className="edit-doc-settlements--content"
         readOnly
-        value={settlement ? settlement.join("\n") : ""}
+        value={settlementData ? settlementData.join("\n") : ""}
       ></textarea>
     </section>
   );
