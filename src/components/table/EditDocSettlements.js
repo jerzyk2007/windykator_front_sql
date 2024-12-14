@@ -25,22 +25,8 @@ const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
         maximumFractionDigits: 2,
         useGrouping: true,
       })}`;
-
-      // console.log(newData);
-      // console.log(settlement);
-      if (settlement) {
-        return setSettlementData([newData, ...settlement]);
-      } else {
-        return setSettlementData(prevData => [...(prevData || []), newData]);
-      }
-
-      // const newSettlement = [newData, ...settlement];
-      // setSettlementData(newSettlement);
-      // setSettlementData(newData);
-
+      setSettlementData(prevData => [newData, ...(settlement || prevData || [])]);
     }
-
-    // scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.UWAGI_ASYSTENT`
   }, [fv_zal, fv_zal_kwota]);
 
 
@@ -48,10 +34,6 @@ const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
     // <section className="edit-doc-settlements">
     <section className="edit-doc-settlements">
       <span className="edit-doc-settlements--title">Opisy rozrachunków</span>
-      {/* {date && <section className="edit_doc__container">
-        <span className="edit_doc--title">Data rozliczenia autostacja:</span>
-        <span className="edit_doc--content">{date}</span>
-      </section>} */}
       {<section className="edit_doc__container">
         <span className="edit_doc--title">Data rozliczenia autostacja:</span>
         <span className="edit_doc--content">{date || "brak danych"}</span>
