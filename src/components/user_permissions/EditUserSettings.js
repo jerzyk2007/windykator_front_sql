@@ -69,7 +69,6 @@ const EditUserSettings = ({ user, setEdit }) => {
         acc[perm] = userPermissions[perm] ? true : false;
         return acc;
       }, {});
-
       setPermissions(permissions);
       setDepartments(checkDep());
       setRoles(roles);

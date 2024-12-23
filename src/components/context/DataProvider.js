@@ -5,6 +5,7 @@ const DataContext = createContext({});
 export const DataProvider = ({ children }) => {
   // const [contactsData, setContactsData] = useState([]);
   const [auth, setAuth] = useState({});
+
   // const [pleaseWait, setPleaseWait] = useState(false);
   //   const [errorMessage, setErrorMessage] = useState("");
 
