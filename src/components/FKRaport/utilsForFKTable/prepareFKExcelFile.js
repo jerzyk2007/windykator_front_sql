@@ -1,34 +1,8 @@
 import XLSX from "xlsx-js-style";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
-// const columnsOrder = [
-//   "TYP_DOKUMENTU",
-//   "NR_DOKUMENTU",
-//   "DZIAL",
-//   "LOKALIZACJA",
-//   "KONTRAHENT",
-//   "KWOTA_DO_ROZLICZENIA_FK",
-//   "DO_ROZLICZENIA_AS",
-//   "ROZNICA",
-//   "DATA_ROZLICZENIA_AS",
-//   "OPIS_ROZRACHUNKU",
-//   "DATA_WYSTAWIENIA_FV",
-//   "BRAK_DATY_WYSTAWIENIA_FV",
-//   "TERMIN_PLATNOSCI_FV",
-//   "PRZEDZIAL_WIEKOWANIE",
-//   "ILE_DNI_NA_PLATNOSC_FV",
-//   "RODZAJ_KONTA",
-//   "PRZETER_NIEPRZETER",
-//   "JAKA_KANCELARIA",
-//   "ETAP_SPRAWY",
-//   "KWOTA_WPS",
-//   "CZY_W_KANCELARI",
-//   "OBSZAR",
-//   "CZY_SAMOCHOD_WYDANY_AS",
-//   "DATA_WYDANIA_AUTA",
-//   "OWNER",
-//   "NR_KLIENTA",
-//   "OPIEKUN_OBSZARU_CENTRALI",
-// ];
+
 const columnsOrder = [
   "TYP DOKUMENTU",
   "NR DOKUMENTU",
@@ -172,7 +146,6 @@ const columnsName = [
 
 // wersja bez dodatkowych wierszy nad tabelą
 export const getExcelRaport = async (cleanData, settingsColumn) => {
-
   try {
 
     const changeNameColumns = cleanData.map((doc) => {
@@ -358,6 +331,606 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
     console.error(err);
   }
 };
+
+// wersja bez dodatkowych wierszy nad tabelą
+
+// export const getExcelRaportV2 = async (cleanData) => {
+//   try {
+//     const changeNameColumns = cleanData.map((doc) => {
+//       const update = doc.data.map((item) => {
+//         const newItem = {};
+//         for (const column of columnsName) {
+//           if (item[column.accessorKey] !== undefined) {
+//             newItem[column.header] = item[column.accessorKey];
+//           } else {
+//             newItem[column.accessorKey] = item[column.accessorKey];
+//           }
+//         }
+//         return newItem;
+//       });
+//       return {
+//         name: doc.name,
+//         data: update,
+//       };
+//     });
+
+//     const workbook = new ExcelJS.Workbook();
+
+//     changeNameColumns.forEach((sheet) => {
+//       const worksheet = workbook.addWorksheet(sheet.name);
+
+//       if (sheet.data && sheet.data.length > 0) {
+//         // Dodaj 5 pustych wierszy na początku arkusza
+//         for (let i = 0; i < 5; i++) {
+//           worksheet.addRow([]);
+//         }
+
+//         // Użyj tablicy columnsOrder, aby uporządkować nagłówki
+//         const headers = columnsOrder.filter((column) =>
+//           sheet.data[0].hasOwnProperty(column)
+//         );
+
+//         // Dodaj nagłówki w 6. wierszu, z kolumną 'Lp' na początku
+//         worksheet.addRow(['Lp', ...headers]);
+
+//         // Dodaj dane z każdego obiektu jako wiersze, zaczynając od 1 w kolumnie 'Lp'
+//         sheet.data.forEach((row, index) => {
+//           const rowData = [index + 1, ...headers.map((header) => row[header] || '')]; // Dodaj numer porządkowy
+//           worksheet.addRow(rowData);
+//         });
+
+//         // Stylizowanie nagłówków
+//         worksheet.getRow(6).font = { bold: true };
+
+
+
+//         // Stylizowanie kolumn na podstawie ich nazw, pomijając 'Lp'
+//         headers.forEach((header, columnIndex) => {
+//           const column = worksheet.getColumn(columnIndex + 2); // Kolumna 'Lp' ma indeks 1, więc zaczynamy od 2
+//           if (header === 'Lp') {
+//             return; // Ignorujemy kolumnę 'Lp' przy stylizacji
+//           }
+//           // Przykładowe stylizowanie kolumn na podstawie nazw
+//           // if (header === 'TYP DOKUMENTU') {
+//           //   column.font = { bold: true, color: { argb: 'FF0000' } }; // Czerwony tekst, pogrubiony
+//           //   column.alignment = { horizontal: 'center' };
+//           //   column.width = 20;
+//           // }
+//           if (header === 'TYP DOKUMENTU') {
+//             // Czerwony tekst, pogrubiony
+//             column.alignment = { horizontal: 'center' };
+//             column.width = 20;
+//           }
+
+//           else if (header === 'NR DOKUMENTU') {
+//             // Zielony tekst, kursywa
+//             column.alignment = { horizontal: 'left' };
+//             column.width = 25;
+//           } else if (header === 'DATA ROZLICZENIA AS') {
+//             column.numFmt = 'yyyy-mm-dd'; // Formatowanie daty
+//             column.alignment = { horizontal: 'center' };
+//             column.width = 18;
+//           } else if (header === 'KONTRAHENT') {
+
+//             column.alignment = {
+//               horizontal: 'center',
+//               wrapText: true // Dodaj zawijanie tekstu
+//             };
+//             column.width = 30;
+//           }
+
+//           else {
+//             column.alignment = { horizontal: 'left' };
+//             column.width = 15;
+//           }
+//         });
+
+//         // Blokowanie 5 pierwszych wierszy, aby wiersz 6 (nagłówki) został widoczny
+//         worksheet.views = [
+//           {
+//             state: 'frozen',
+//             xSplit: 0,
+//             ySplit: 6, // Zablokowanie do wiersza 6, aby nagłówki zostały widoczne
+//             topLeftCell: 'A7',
+//             activeCell: 'A7',
+//           },
+//         ];
+//       }
+//     });
+
+//     // Zapisz plik Excel
+//     workbook.xlsx.writeBuffer().then((buffer) => {
+//       saveAs(new Blob([buffer]), 'example.xlsx');
+//     });
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
+
+export const getExcelRaportV2 = async (cleanData) => {
+
+  // od którego wiersza mają się zaczynać dane w arkuszu
+  const startRow = 6;
+  try {
+    const changeNameColumns = cleanData.map((doc) => {
+      const update = doc.data.map((item) => {
+        const newItem = {};
+        for (const column of columnsName) {
+          if (item[column.accessorKey] !== undefined) {
+            newItem[column.header] = item[column.accessorKey];
+          } else {
+            newItem[column.accessorKey] = item[column.accessorKey];
+          }
+        }
+        return newItem;
+      });
+      return {
+        name: doc.name,
+        data: update,
+      };
+    });
+
+    const workbook = new ExcelJS.Workbook();
+
+    changeNameColumns.forEach((sheet) => {
+      const worksheet = workbook.addWorksheet(sheet.name);
+
+      if (sheet.data && sheet.data.length > 0) {
+        // Dodaj 5 pustych wierszy na początku arkusza
+        for (let i = 0; i < startRow - 1; i++) {
+          worksheet.addRow([]);
+        }
+
+        // Użyj tablicy columnsOrder, aby uporządkować nagłówki
+        const headers = columnsOrder.filter((column) =>
+          sheet.data[0].hasOwnProperty(column)
+        );
+
+        // Dodaj nagłówki w 6. wierszu, z kolumną 'Lp' na początku
+        worksheet.addRow(['Lp', ...headers]);
+
+        // Dodaj dane z każdego obiektu jako wiersze, zaczynając od 1 w kolumnie 'Lp'
+        sheet.data.forEach((row, index) => {
+          const rowData = [index + 1, ...headers.map((header) => row[header] || '')]; // Dodaj numer porządkowy
+          worksheet.addRow(rowData);
+        });
+
+        // Stylizowanie nagłówków
+        // worksheet.getRow(6).font = { bold: true };
+
+        // Stylizowanie nagłówków
+        const headerRow = worksheet.getRow(startRow);
+        headerRow.font = { bold: true, size: 10 }; // Ustawienie pogrubionej czcionki o rozmiarze 10
+        headerRow.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+        headerRow.eachCell((cell) => {
+          cell.font = { bold: true, size: 10 };
+          // cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'cacaca' }, // Kolor tła (np. żółty)
+          };
+        });
+
+
+        // Stylizacja dla kolumny 'Lp'
+        const lpColumn = worksheet.getColumn(1); // Kolumna 'Lp' to zawsze pierwsza kolumna
+        lpColumn.width = 10; // Szerokość kolumny
+        lpColumn.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyśrodkowanie
+        // worksheet.getCell(6, 1).fill = {
+        //   type: 'pattern',
+        //   pattern: 'solid',
+        // };
+
+        // Stylizowanie kolumn na podstawie ich nazw, pomijając 'Lp'
+        headers.forEach((header, columnIndex) => {
+          const column = worksheet.getColumn(columnIndex + 2); // Kolumna 'Lp' ma indeks 1, więc zaczynamy od 2
+          const headerCell = worksheet.getCell(startRow, columnIndex + 2);
+          headerCell.font = { bold: true }; // Pogrubienie czcionki
+          headerCell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+
+          // Stylizacja dla różnych kolumn
+          if (header === 'TYP DOKUMENTU') {
+            // const headerCell = worksheet.getCell(startRow, column.number); // Nagłówek w odpowiedniej kolumnie
+            headerCell.alignment = { horizontal: 'center', vertical: 'middle' };
+            column.alignment = { horizontal: 'center', vertical: 'middle' };
+            column.width = 20;
+
+            const countCell1 = worksheet.getCell(1, column.number);
+            countCell1.value = "Data zestawienia:";
+            countCell1.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            };
+
+            const countCell2 = worksheet.getCell(2, column.number);
+            countCell2.value = "Wiekowanie na dzień:";
+            countCell2.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            };
+
+            const countCell3 = worksheet.getCell(3, column.number);
+            countCell3.value = "Nazwa zestawienia:";
+            countCell3.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            };
+          }
+
+          else if (header === 'NR DOKUMENTU') {
+            // const headerCell = worksheet.getCell(startRow, column.number); // Nagłówek w odpowiedniej kolumnie
+            headerCell.alignment = { horizontal: 'center', vertical: 'middle' };
+            headerCell.font = { bold: true }; // Pogrubienie czcionki
+
+            column.alignment = { horizontal: 'left', vertical: 'middle' };
+            column.width = 25;
+
+            // Liczenie dokumentów w danej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 7)
+            let documentCount = 0;
+            const startRow = 7; // Zakładamy, że dane zaczynają się od wiersza 7
+            const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
+
+            for (let i = startRow; i <= endRow; i++) {
+              const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
+              if (cellValue !== null && cellValue !== undefined && cellValue !== '') {
+                documentCount++; // Jeśli komórka nie jest pusta, zwiększamy licznik
+              }
+            }
+
+            // Wstawienie liczby dokumentów w wierszu 4 tej kolumny
+            const countCell = worksheet.getCell(5, column.number);
+            countCell.value = documentCount; // Ustawienie wartości liczby dokumentów
+            countCell.numFmt = '0'; // Formatowanie liczby
+            countCell.font = { bold: true }; // Pogrubienie tekstu
+            countCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
+            countCell.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            };
+            countCell.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
+            };
+
+            const countCell1 = worksheet.getCell(1, column.number);
+            countCell1.value = "Jakaś data:";
+            countCell1.alignment = { horizontal: 'center', vertical: 'middle' };
+            countCell1.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            };
+
+            const countCell2 = worksheet.getCell(2, column.number);
+            countCell2.value = "Inna data:";
+            countCell2.alignment = { horizontal: 'center', vertical: 'middle' };
+            countCell2.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            };
+
+            const countCell3 = worksheet.getCell(3, column.number);
+            countCell3.value = "Przypadkowa nazwa:";
+            countCell3.alignment = { horizontal: 'center', vertical: 'middle' };
+            countCell3.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            };
+
+          }
+
+          else if (header === 'DZIAŁ') {
+            column.alignment = { horizontal: 'center', vertical: 'middle' };
+            column.width = 15;
+          }
+          else if (header === 'LOKALIZACJA') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 18;
+          }
+          else if (header === 'KONTRAHENT') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
+            column.width = 30;
+          }
+          else if (header === 'POZOSTAŁA KWOTA DO ROZLICZENIA W FK') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
+            column.width = 20;
+            column.numFmt = '#,##0.00';
+            headerCell.fill = {
+              type: 'pattern', // Wzór wypełnienia
+              pattern: 'solid', // Wypełnienie jednolite
+              fgColor: { argb: '8ac777' },
+            };
+
+            // Obliczanie sumy w tej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 5)
+            let sum = 0;
+            const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
+            const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
+
+            for (let i = startRow; i <= endRow; i++) {
+              const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
+              if (typeof cellValue === 'number') {
+                sum += cellValue; // Dodaj wartość liczbową do sumy
+              }
+            }
+
+            // Wstawienie sumy w wierszu 4 tej kolumny
+            const sumCell = worksheet.getCell(5, column.number); // Wiersz 4, odpowiednia kolumna
+            sumCell.value = sum; // Ustawienie wartości sumy
+            sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
+            sumCell.font = { bold: true }; // Pogrubienie tekstu
+            sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
+            sumCell.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            };
+            sumCell.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
+            };
+          }
+          else if (header === 'POZOSTAŁA KWOTA DO ROZLICZENIA W AS3') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
+            column.width = 20;
+            column.numFmt = '#,##0.00';
+            headerCell.fill = {
+              type: 'pattern', // Wzór wypełnienia
+              pattern: 'solid', // Wypełnienie jednolite
+              fgColor: { argb: '77a3c7' },
+            };
+
+            // Obliczanie sumy w tej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 5)
+            let sum = 0;
+            const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
+            const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
+
+            for (let i = startRow; i <= endRow; i++) {
+              const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
+              if (typeof cellValue === 'number') {
+                sum += cellValue; // Dodaj wartość liczbową do sumy
+              }
+            }
+
+            // Wstawienie sumy w wierszu 4 tej kolumny
+            const sumCell = worksheet.getCell(5, column.number); // Wiersz 4, odpowiednia kolumna
+            sumCell.value = sum; // Ustawienie wartości sumy
+            sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
+            sumCell.font = { bold: true }; // Pogrubienie tekstu
+            sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
+            sumCell.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            };
+            sumCell.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
+            };
+          }
+          else if (header === 'RÓŻNICA MIĘDZY FK A AS3') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
+            column.width = 20;
+            column.numFmt = '#,##0.00';
+            headerCell.fill = {
+              type: 'pattern', // Wzór wypełnienia
+              pattern: 'solid', // Wypełnienie jednolite
+              fgColor: { argb: 'c77777' },
+            };
+
+            // Obliczanie sumy w tej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 5)
+            let sum = 0;
+            const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
+            const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
+
+            for (let i = startRow; i <= endRow; i++) {
+              const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
+              if (typeof cellValue === 'number') {
+                sum += cellValue; // Dodaj wartość liczbową do sumy
+              }
+            }
+
+            // Wstawienie sumy w wierszu 4 tej kolumny
+            const sumCell = worksheet.getCell(5, column.number); // Wiersz 4, odpowiednia kolumna
+            sumCell.value = sum; // Ustawienie wartości sumy
+            sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
+            sumCell.font = { bold: true }; // Pogrubienie tekstu
+            sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
+            sumCell.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            };
+            sumCell.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
+            };
+          }
+          else if (header === 'DATA ROZLICZENIA AS') {
+            column.numFmt = 'yyyy-mm-dd'; // Formatowanie daty
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 18;
+          }
+          else if (header === 'OPIS ROZRACHUNKU') {
+            column.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
+            column.width = 35;
+          }
+
+          else if (header === 'DATA WYSTAWIENIA FAKTURY') {
+            column.numFmt = 'yyyy-mm-dd'; // Formatowanie daty
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 15;
+          }
+          else if (header === 'BRAK DATY WYSTAWIENIA FV') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 15;
+          }
+          else if (header === 'TERMIN PŁATNOŚCI FV') {
+            column.numFmt = 'yyyy-mm-dd'; // Formatowanie daty
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 15;
+          }
+          else if (header === 'PRZEDZIAŁ WIEKOWANIE') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 15;
+          }
+          else if (header === 'ILE DNI NA PLATNOŚĆ NA FV') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.numFmt = '0';
+            column.width = 15;
+          }
+          else if (header === 'KONTO') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.numFmt = '0';
+            column.width = 15;
+          }
+          else if (header === 'PRZETERMINOWANE / NIEPRZETERMINOWANE') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 20;
+          }
+          else if (header === 'JAKA KANCELARIA') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 15;
+          }
+          else if (header === 'ETAP SPRAWY') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 15;
+          }
+          else if (header === 'KWOTA WPS') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.numFmt = '0';
+            column.width = 15;
+          }
+          else if (header === 'CZY KANCELARIA TAK/ NIE') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 15;
+          }
+          else if (header === 'OBSZAR') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 15;
+          }
+          else if (header === 'CZY SAMOCHÓD WYDANY TAK/NIE') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 15;
+          }
+          else if (header === 'DATA WYDANIA AUTA W AS3') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.numFmt = 'yyyy-mm-dd'; // Formatowanie daty
+            column.width = 15;
+          }
+          else if (header === 'OWNER') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 20;
+          }
+          else if (header === 'NR KLIENTA') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            column.width = 15;
+          }
+          else if (header === 'OPIEKUN OBSZARU CENTRALI') {
+            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
+            column.width = 30;
+          }
+          else {
+            column.alignment = { horizontal: 'left', vertical: 'middle' };
+            column.width = 15;
+          }
+        });
+
+
+
+        // worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
+        //   row.eachCell({ includeEmpty: true }, (cell) => {
+        //     // Jeśli to nie jest wiersz nagłówków (np. 6), zastosuj standardową stylizację
+        //     if (rowIndex !== startRow) {
+        //       cell.font = { size: 10 }; // Ustawienie czcionki na rozmiar 10
+        //     }
+
+        //     // Ustawienie cienkiego obramowania dla każdej komórki
+        //     cell.border = {
+        //       top: { style: 'thin' },
+        //       left: { style: 'thin' },
+        //       bottom: { style: 'thin' },
+        //       right: { style: 'thin' },
+        //     };
+        //   });
+        // });
+
+
+        worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
+          // Sprawdzamy, czy jesteśmy w wierszach od 6 w górę
+          if (rowIndex >= startRow) {
+            row.eachCell({ includeEmpty: true }, (cell) => {
+              // Jeśli to nie jest wiersz nagłówka (np. 6), zastosuj standardową stylizację
+              cell.font = { size: 10 }; // Ustawienie czcionki na rozmiar 10
+
+              // Ustawienie cienkiego obramowania dla każdej komórki
+              cell.border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' },
+              };
+            });
+          }
+        });
+        headerRow.eachCell((cell) => {
+          cell.font = { bold: true, size: 10 };
+          cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+
+        });
+
+
+        // Ustawienie autofiltrowania od wiersza 6 (nagłówki) dla całego zakresu
+        worksheet.autoFilter = {
+          from: 'A6', // Pierwsza kolumna (Lp)
+          to: worksheet.getColumn(headers.length + 1).letter + '6', // Ostatnia kolumna na podstawie liczby kolumn
+        };
+
+        // Blokowanie 5 pierwszych wierszy, aby wiersz 6 (nagłówki) został widoczny
+        worksheet.views = [
+          {
+            state: 'frozen',
+            xSplit: 3,
+            ySplit: startRow, // Zablokowanie do wiersza 6, aby nagłówki zostały widoczne
+            topLeftCell: 'D7',
+            activeCell: 'D7',
+          },
+        ];
+      }
+    });
+
+    // Zapisz plik Excel
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      saveAs(new Blob([buffer]), 'plik ćwiczebny.xlsx');
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+
 
 export const getAllDataRaport = async (allData, XLSX, orderColumns, info) => {
   try {
@@ -852,3 +1425,4 @@ export const getAllDataRaport = async (allData, XLSX, orderColumns, info) => {
 //     console.error(err);
 //   }
 // };
+

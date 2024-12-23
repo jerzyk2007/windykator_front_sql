@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
 import Button from "@mui/material/Button";
-import { getExcelRaport } from "./utilsForFKTable/prepareFKExcelFile";
+import { getExcelRaport, getExcelRaportV2 } from "./utilsForFKTable/prepareFKExcelFile";
 import "./FKAddData.css";
 
 const FKAddData = () => {
@@ -13,6 +13,7 @@ const FKAddData = () => {
   const [deleteRaport, setDeleteRaport] = useState("");
   const [dateCounter, setDateCounter] = useState({});
   const [generateRaportMsg, setGenerateRaportMsg] = useState("");
+  const [generateRaportMsgV2, setGenerateRaportMsgV2] = useState("");
   const [message, setMessage] = useState({
     prepare: "Przygotowywanie danych.",
     progress: "Trwa dopasowywanie danych.",
@@ -78,6 +79,24 @@ const FKAddData = () => {
       console.error(err);
     }
   };
+
+  const generateRaportV2 = async () => {
+    try {
+      setPleaseWait(true);
+      await axiosPrivateIntercept.get(
+        "/fk/generate-raport-v2"
+      );
+      setPleaseWait(false);
+      setGenerateRaportMsgV2("Raport został wygenerowany.");
+
+    }
+    catch (err) {
+      setPleaseWait(false);
+      setGenerateRaportMsgV2("Wystąpił błąd.");
+      console.error(err);
+    }
+  };
+
 
   const getRaport = async () => {
     try {
@@ -214,6 +233,126 @@ const FKAddData = () => {
 
     }
   };
+  const getRaportV2 = async () => {
+    try {
+      setPleaseWait(true);
+      const result = await axiosPrivateIntercept.post("/fk/get-raport-data-v2");
+
+
+      const accountArray = [
+        ...new Set(
+          result.data
+            .filter((item) => item.RODZAJ_KONTA)
+            .map((item) => item.OBSZAR)
+        ),
+      ].sort();
+
+      // usuwam wartości null, bo excel ma z tym problem
+      const eraseNull = result.data.map(item => {
+
+        const convertToDateIfPossible = (value) => {
+          // Sprawdź, czy wartość jest stringiem w formacie yyyy-mm-dd
+          const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+          if (typeof value === 'string' && datePattern.test(value)) {
+            const date = new Date(value);
+            if (!isNaN(date.getTime())) {
+              return date;
+            }
+          }
+          // Jeśli nie spełnia warunku lub nie jest datą, zwróć oryginalną wartość
+          return "NULL";
+        };
+
+
+        return {
+          ...item,
+          ILE_DNI_NA_PLATNOSC_FV: item.ILE_DNI_NA_PLATNOSC_FV,
+          RODZAJ_KONTA: item.RODZAJ_KONTA,
+          NR_KLIENTA: item.NR_KLIENTA,
+          DO_ROZLICZENIA_AS: item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : "NULL",
+          ROZNICA: item.ROZNICA !== 0 ? item.ROZNICA : "NULL",
+          DATA_ROZLICZENIA_AS: item.DATA_ROZLICZENIA_AS ? item.DATA_ROZLICZENIA_AS : "NULL",
+          BRAK_DATY_WYSTAWIENIA_FV: item.BRAK_DATY_WYSTAWIENIA_FV ? item.BRAK_DATY_WYSTAWIENIA_FV : " ",
+          JAKA_KANCELARIA: item.JAKA_KANCELARIA ? item.JAKA_KANCELARIA : " ",
+          ETAP_SPRAWY: item.ETAP_SPRAWY ? item.ETAP_SPRAWY : " ",
+          KWOTA_WPS: item.KWOTA_WPS ? item.KWOTA_WPS : " ",
+          CZY_SAMOCHOD_WYDANY_AS: item.CZY_SAMOCHOD_WYDANY_AS ? item.CZY_SAMOCHOD_WYDANY_AS : " ",
+          DATA_WYDANIA_AUTA: item.DATA_WYDANIA_AUTA ? item.DATA_WYDANIA_AUTA : " ",
+          OPIEKUN_OBSZARU_CENTRALI: Array.isArray(item.OPIEKUN_OBSZARU_CENTRALI)
+            ? item.OPIEKUN_OBSZARU_CENTRALI.join("\n")
+            : item.OPIEKUN_OBSZARU_CENTRALI,
+          OPIS_ROZRACHUNKU: Array.isArray(item.OPIS_ROZRACHUNKU)
+            ? item.OPIS_ROZRACHUNKU.join("\n\n")
+            : "NULL",
+          OWNER: Array.isArray(item.OWNER) ? item.OWNER.join("\n") : item.OWNER,
+          DATA_WYSTAWIENIA_FV: convertToDateIfPossible(
+            item.DATA_WYSTAWIENIA_FV
+          ),
+          DATA_ROZLICZENIA_AS: convertToDateIfPossible(
+            item.DATA_ROZLICZENIA_AS
+          ),
+          TERMIN_PLATNOSCI_FV: convertToDateIfPossible(
+            item.TERMIN_PLATNOSCI_FV
+          ),
+          DATA_WYDANIA_AUTA: convertToDateIfPossible(item.DATA_WYDANIA_AUTA),
+        };
+      }
+      );
+      // rozdziela dane na poszczególne obszary BLACHARNIA, CZĘŚCI itd
+      const resultArray = accountArray.reduce((acc, area) => {
+        // Filtrujemy obiekty, które mają odpowiedni OBSZAR
+        const filteredData = eraseNull.filter(item => item.OBSZAR === area);
+
+        // Jeśli są dane, dodajemy obiekt do wynikowej tablicy
+        if (filteredData.length > 0) {
+          // acc.push({ [area]: filteredData });
+          acc.push({ name: area, data: filteredData });
+        }
+
+        return acc;
+      }, []);
+
+
+      // // Dodajemy obiekt RAPORT na początku tablicy
+      const finalResult = [{ name: 'RAPORT', data: eraseNull }, ...resultArray];
+
+
+      //usuwam kolumny CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA z innych arkuszy niż Raport, SAMOCHODY NOWE, SAMOCHODY UŻYWANE
+      const updateCar = finalResult.map((element) => {
+        if (
+          element.name !== "RAPORT" &&
+          element.name !== "SAMOCHODY NOWE" &&
+          element.name !== "SAMOCHODY UŻYWANE"
+        ) {
+          const updatedData = element.data.map((item) => {
+            const { CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA, ...rest } = item;
+            return rest; // Zwróć obiekt bez tych dwóch kluczy
+          });
+          return { ...element, data: updatedData };
+        }
+        return element;
+      });
+
+      // usuwam kolumnę BRAK DATY WYSTAWIENIA FV ze wszytskich arkuszy oprócz RAPORT
+      const updateFvDate = updateCar.map((element) => {
+        if (element.name !== "RAPORT") {
+          const updatedData = element.data.map((item) => {
+            const { BRAK_DATY_WYSTAWIENIA_FV, ...rest } = item;
+            return rest;
+          });
+          return { ...element, data: updatedData };
+        }
+        return element;
+      });
+
+      getExcelRaportV2(updateFvDate);
+      setPleaseWait(false);
+    }
+    catch (error) {
+      console.error(error);
+
+    }
+  };
 
   const deleteDataRaport = async () => {
     try {
@@ -243,6 +382,7 @@ const FKAddData = () => {
         const update = {
           accountancy: result.data.updateData.accountancy,
           raport: result.data.updateData.raport,
+          raport_v2: result.data.updateData.raport_v2,
           dms: {
             date: DMS_date.update_success ? DMS_date.date : "Błąd aktualizacji",
             hour: DMS_date.update_success ? `godzina: ${DMS_date.hour}` : "Błąd aktualizacji",
@@ -392,9 +532,74 @@ const FKAddData = () => {
                 </section>
               </section>}
 
+
+
+            </section>
+
+            <section className="fk_add_data__container-item" >
+              <span style={{ flexGrow: 1, width: "100%" }}>
+                Wersja testowa - generowanie raportu wg nowych ustaleń
+
+              </span>
+            </section>
+
+            <section className="fk_add_data__container-item">
+              {!generateRaportMsgV2 ? (
+                <section className="fk_add_data__container-data">
+                  <section className="fk_add_data__container-data--title">
+                    <span>
+                      {dateCounter?.raport?.date ? `Data raportu: ${dateCounter?.raport_v2?.date}` : dateCounter?.accountancy ? "Generuj raport FK" : ""}
+
+                    </span>
+                    {/* <span>{dateCounter?.genrateRaport?.date}</span> */}
+                    {/* <span></span> */}
+                  </section>
+
+                  <section className="fk_add_data__container-data-file">
+                    {dateCounter?.accountancy && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        disableElevation
+                        onClick={generateRaportV2}
+                      >
+                        Generuj Raport FK v2
+                      </Button>
+                    )}
+                  </section>
+                </section>
+              ) : (
+                <p className="fk_add_data-error">{generateRaportMsgV2}</p>
+              )}
+
+
+              {dateCounter?.raport_v2?.date && <section className="fk_add_data__container-data">
+                <section className="fk_add_data__container-data--title">
+                  <span>
+                    {dateCounter?.genrateRaport?.date ? dateCounter?.genrateRaport?.date : "Pobierz raport FK"}
+
+                  </span>
+                </section>
+
+                <section className="fk_add_data__container-data-file">
+                  {dateCounter?.accountancy && (
+                    <Button
+                      variant="contained"
+                      color="success"
+                      disableElevation
+                      onClick={getRaportV2}
+                    >
+                      Pobierz Raport FK v2
+                    </Button>
+                  )}
+                </section>
+              </section>}
+
+
+
             </section>
           </section>
-        </section>
+        </section >
       )}
     </>
   );
