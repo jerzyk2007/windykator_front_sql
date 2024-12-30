@@ -65,22 +65,23 @@ const Table = ({
         return item.original;
       });
     }
+    // console.log(arrayOrder);
     let newColumns = [];
-    if (type === "Całość") {
-      newColumns = columns
-        .map((item) => {
-          const matching = arrayOrder.find(
-            (match) => match === item.accessorKey
-          );
-          if (matching) {
-            return {
-              accessorKey: item.accessorKey,
-              header: item.header,
-            };
-          }
-        })
-        .filter(Boolean);
-    }
+    // if (type === "Całość") {
+    newColumns = columns
+      .map((item) => {
+        const matching = arrayOrder.find(
+          (match) => match === item.accessorKey
+        );
+        if (matching) {
+          return {
+            accessorKey: item.accessorKey,
+            header: item.header,
+          };
+        }
+      })
+      .filter(Boolean);
+    // }
 
     const newOrder = arrayOrder.map((key) => {
       const matchedColumn = newColumns.find(
@@ -101,35 +102,27 @@ const Table = ({
       }, {});
       return updatedItem;
     });
-    const dateToString = updateData.map((item) => {
-      if (item.ILE_DNI_PO_TERMINIE) {
-        item.ILE_DNI_PO_TERMINIE = String(item.ILE_DNI_PO_TERMINIE);
-      }
 
-      if (typeof item.KWOTA_WINDYKOWANA_BECARED === "object") {
-        item.KWOTA_WINDYKOWANA_BECARED = "NULL";
-      }
 
-      return item;
-    });
+    // const dataToString = updateData.map((item) => {
+    //   // if (item.ILE_DNI_PO_TERMINIE) {
+    //   //   item.ILE_DNI_PO_TERMINIE = Number(item.ILE_DNI_PO_TERMINIE);
+    //   // }
+
+    //   if (typeof item.KWOTA_WINDYKOWANA_BECARED === "object") {
+    //     item.KWOTA_WINDYKOWANA_BECARED = "NULL";
+    //   }
+
+    //   return item;
+    // });
 
     const orderColumns = {
       columns: newColumns,
       order: newOrder,
     };
 
-    // jeśli jakiś klucz ma wartośc null to przypisuję mu wartość "", żeby w excelu nie była gubiona kolejność kolumn
-    const updatedArray = dateToString.map(obj => {
-      // Iterujemy po kluczach obiektu
-      return Object.keys(obj).reduce((acc, key) => {
-        // Jeśli wartość jest null, przypisujemy ""
-        acc[key] = obj[key] === null ? "" : obj[key];
-        return acc;
-      }, {});
-    });
 
-    getAllDataRaport(updatedArray, orderColumns, type);
-    // getAllDataRaport(updateData, orderColumns, type);
+    getAllDataRaport(updateData, orderColumns, type);
   };
 
   const getSingleRow = async (id, type, dep) => {
