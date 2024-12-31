@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
 import Button from "@mui/material/Button";
+import InfoForRaportFK from "./InfoForRaportFK";
 import { getExcelRaport, getExcelRaportV2 } from "./utilsForFKTable/prepareFKExcelFile";
 import "./FKAddData.css";
 
@@ -23,8 +24,13 @@ const FKAddData = () => {
     errorXLSX: "Akceptowany jest tylko plik z rozszerzeniem .xlsx",
     errorData: "Nieprawidłowe dane w pliku.",
     saveToDB: "Zapis do bazy danych - proszę czekać ...",
+    generate: "Raport został wygenerowany.",
+    generateError: "Wystąpił błąd."
   });
 
+
+
+  const [raportInfoActive, setRaportInfoActive] = useState(false);
 
   const handleSendFile = async (e, type) => {
     setPleaseWait(true);
@@ -71,11 +77,11 @@ const FKAddData = () => {
         "/fk/generate-raport"
       );
       setPleaseWait(false);
-      setGenerateRaportMsg("Raport został wygenerowany.");
+      setGenerateRaportMsg(message.generate);
 
     } catch (err) {
       setPleaseWait(false);
-      setGenerateRaportMsg("Wystąpił błąd.");
+      setGenerateRaportMsg(message.generateError);
       console.error(err);
     }
   };
@@ -87,12 +93,12 @@ const FKAddData = () => {
         "/fk/generate-raport-v2"
       );
       setPleaseWait(false);
-      setGenerateRaportMsgV2("Raport został wygenerowany.");
+      setGenerateRaportMsgV2(message.generate);
 
     }
     catch (err) {
       setPleaseWait(false);
-      setGenerateRaportMsgV2("Wystąpił błąd.");
+      setGenerateRaportMsgV2(message.generateError);
       console.error(err);
     }
   };
@@ -233,6 +239,11 @@ const FKAddData = () => {
 
     }
   };
+
+  const handleGetRaport = () => {
+    setRaportInfoActive(true);
+  };
+
   const getRaportV2 = async () => {
     try {
       setPleaseWait(true);
@@ -271,13 +282,14 @@ const FKAddData = () => {
           NR_KLIENTA: item.NR_KLIENTA,
           DO_ROZLICZENIA_AS: item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : "NULL",
           ROZNICA: item.ROZNICA !== 0 ? item.ROZNICA : "NULL",
-          DATA_ROZLICZENIA_AS: item.DATA_ROZLICZENIA_AS ? item.DATA_ROZLICZENIA_AS : "NULL",
+          DATA_ROZLICZENIA_AS: item.DATA_ROZLICZENIA_AS ? convertToDateIfPossible(
+            item.DATA_ROZLICZENIA_AS) : "NULL",
           BRAK_DATY_WYSTAWIENIA_FV: item.BRAK_DATY_WYSTAWIENIA_FV ? item.BRAK_DATY_WYSTAWIENIA_FV : " ",
           JAKA_KANCELARIA: item.JAKA_KANCELARIA ? item.JAKA_KANCELARIA : " ",
           ETAP_SPRAWY: item.ETAP_SPRAWY ? item.ETAP_SPRAWY : " ",
           KWOTA_WPS: item.KWOTA_WPS ? item.KWOTA_WPS : " ",
           CZY_SAMOCHOD_WYDANY_AS: item.CZY_SAMOCHOD_WYDANY_AS ? item.CZY_SAMOCHOD_WYDANY_AS : " ",
-          DATA_WYDANIA_AUTA: item.DATA_WYDANIA_AUTA ? item.DATA_WYDANIA_AUTA : " ",
+          DATA_WYDANIA_AUTA: item.DATA_WYDANIA_AUTA ? convertToDateIfPossible(item.DATA_WYDANIA_AUTA) : " ",
           OPIEKUN_OBSZARU_CENTRALI: Array.isArray(item.OPIEKUN_OBSZARU_CENTRALI)
             ? item.OPIEKUN_OBSZARU_CENTRALI.join("\n")
             : item.OPIEKUN_OBSZARU_CENTRALI,
@@ -288,13 +300,13 @@ const FKAddData = () => {
           DATA_WYSTAWIENIA_FV: convertToDateIfPossible(
             item.DATA_WYSTAWIENIA_FV
           ),
-          DATA_ROZLICZENIA_AS: convertToDateIfPossible(
-            item.DATA_ROZLICZENIA_AS
-          ),
+          // DATA_ROZLICZENIA_AS: convertToDateIfPossible(
+          //   item.DATA_ROZLICZENIA_AS
+          // ),
           TERMIN_PLATNOSCI_FV: convertToDateIfPossible(
             item.TERMIN_PLATNOSCI_FV
           ),
-          DATA_WYDANIA_AUTA: convertToDateIfPossible(item.DATA_WYDANIA_AUTA),
+          // DATA_WYDANIA_AUTA: convertToDateIfPossible(item.DATA_WYDANIA_AUTA),
         };
       }
       );
@@ -402,204 +414,207 @@ const FKAddData = () => {
       {pleaseWait ? (
         <PleaseWait />
       ) : (
-        <section className="fk_add_data">
-          <section className="fk_add_data__title">
-            <span>Dodaj dane do Raportu FK</span>
-          </section>
-          <section className="fk_add_data__container">
-            <section className="fk_add_data__container-item">
-              <span>Dane</span>
-              <span>Data dodanych danych</span>
-              <span>Ilość dodanych danych</span>
-              <span></span>
-            </section>
 
-            <section className="fk_add_data__container-item">
-              {!fKAccountancy ? (
-                <>
-                  <span>Wiekowanie - plik księgowość</span>
-                  <span>{dateCounter?.accountancy?.date}</span>
-                  <span>{dateCounter?.accountancy?.counter}</span>
-                  {!dateCounter?.accountancy ? (
-                    <section className="fk_add_data__container-file">
-                      <input
-                        type="file"
-                        name="uploadfile"
-                        id="accountancy"
-                        style={{ display: "none" }}
-                        onChange={(e) => handleSendFile(e, "accountancy")}
-                      />
-                      <label
-                        htmlFor="accountancy"
-                        className="fk_add_data-click-me"
-                      >
-                        DODAJ
-                      </label>
+        <>
+          {raportInfoActive ? <InfoForRaportFK setRaportInfoActive={setRaportInfoActive} /> :
+            <section className="fk_add_data">
+              <section className="fk_add_data__title">
+                <span>Dodaj dane do Raportu FK</span>
+              </section>
+              <section className="fk_add_data__container">
+                <section className="fk_add_data__container-item">
+                  <span>Dane</span>
+                  <span>Data dodanych danych</span>
+                  <span>Ilość dodanych danych</span>
+                  <span></span>
+                </section>
+
+                <section className="fk_add_data__container-item">
+                  {!fKAccountancy ? (
+                    <>
+                      <span>Wiekowanie - plik księgowość</span>
+                      <span>{dateCounter?.accountancy?.date}</span>
+                      <span>{dateCounter?.accountancy?.counter}</span>
+                      {!dateCounter?.accountancy ? (
+                        <section className="fk_add_data__container-file">
+                          <input
+                            type="file"
+                            name="uploadfile"
+                            id="accountancy"
+                            style={{ display: "none" }}
+                            onChange={(e) => handleSendFile(e, "accountancy")}
+                          />
+                          <label
+                            htmlFor="accountancy"
+                            className="fk_add_data-click-me"
+                          >
+                            DODAJ
+                          </label>
+                        </section>
+                      ) : (
+                        <section className="fk_add_data__container-file"></section>
+                      )}
+                    </>
+                  ) : (
+                    <p className="fk_add_data-error">{fKAccountancy}</p>
+                  )}
+                </section>
+
+                <section className="fk_add_data__container-item">
+                  <span className="fk_add_data__container-item--title">
+                    Rozrachunki z Autostacji
+                  </span>
+                  <span>{dateCounter?.dms?.date}</span>
+                  <span>{dateCounter?.dms?.hour}</span>
+
+                  <section className="fk_add_data__container-file"></section>
+                </section>
+
+                <section className="fk_add_data__container-item">
+                  <section className="fk_add_data__container-file">
+                    <Button
+                      variant="contained"
+                      color="error"
+                      disableElevation
+                      onClick={deleteDataRaport}
+                    >
+                      Usuń dane
+                      <br />
+                      Raportu FK
+                    </Button>
+                  </section>
+
+                  {!deleteRaport ? (
+                    <span className="fk_add_data__container-item--title">
+                      Jeśli chcesz dodać nowe pliki, skasuj poprzednie dane.
+                    </span>
+                  ) : (
+                    <span style={{ color: "red", fontWeight: "bold" }}>
+                      {deleteRaport}
+                    </span>
+                  )}
+                </section>
+
+                <section className="fk_add_data__container-item">
+                  {!generateRaportMsg ? (
+                    <section className="fk_add_data__container-data">
+                      <section className="fk_add_data__container-data--title">
+                        <span>
+                          {dateCounter?.raport?.date ? `Data raportu: ${dateCounter?.raport?.date}` : dateCounter?.accountancy ? "Generuj raport FK" : ""}
+
+                        </span>
+                        {/* <span>{dateCounter?.genrateRaport?.date}</span> */}
+                        {/* <span></span> */}
+                      </section>
+
+                      <section className="fk_add_data__container-data-file">
+                        {dateCounter?.accountancy && (
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            disableElevation
+                            onClick={generateRaport}
+                          >
+                            Generuj Raport FK
+                          </Button>
+                        )}
+                      </section>
                     </section>
                   ) : (
-                    <section className="fk_add_data__container-file"></section>
+                    <p className="fk_add_data-error">{generateRaportMsg}</p>
                   )}
-                </>
-              ) : (
-                <p className="fk_add_data-error">{fKAccountancy}</p>
-              )}
-            </section>
 
-            <section className="fk_add_data__container-item">
-              <span className="fk_add_data__container-item--title">
-                Rozrachunki z Autostacji
-              </span>
-              <span>{dateCounter?.dms?.date}</span>
-              <span>{dateCounter?.dms?.hour}</span>
 
-              <section className="fk_add_data__container-file"></section>
-            </section>
+                  {dateCounter?.raport?.date && <section className="fk_add_data__container-data">
+                    <section className="fk_add_data__container-data--title">
+                      <span>
+                        {dateCounter?.genrateRaport?.date ? dateCounter?.genrateRaport?.date : "Pobierz raport FK"}
 
-            <section className="fk_add_data__container-item">
-              <section className="fk_add_data__container-file">
-                <Button
-                  variant="contained"
-                  color="error"
-                  disableElevation
-                  onClick={deleteDataRaport}
-                >
-                  Usuń dane
-                  <br />
-                  Raportu FK
-                </Button>
+                      </span>
+                    </section>
+
+                    <section className="fk_add_data__container-data-file">
+                      {dateCounter?.accountancy && (
+                        <Button
+                          variant="contained"
+                          color="success"
+                          disableElevation
+                          onClick={getRaport}
+                        >
+                          Pobierz Raport FK
+                        </Button>
+                      )}
+                    </section>
+                  </section>}
+
+
+
+                </section>
+
+                <section className="fk_add_data__container-item" >
+                  <span style={{ flexGrow: 1, width: "100%" }}>
+                    Wersja testowa - generowanie raportu wg nowych ustaleń
+
+                  </span>
+                </section>
+
+                <section className="fk_add_data__container-item">
+                  {!generateRaportMsgV2 ? (
+                    <section className="fk_add_data__container-data">
+                      <section className="fk_add_data__container-data--title">
+                        <span>
+                          {dateCounter?.raport?.date ? `Data raportu: ${dateCounter?.raport_v2?.date}` : dateCounter?.accountancy ? "Generuj raport FK" : ""}
+
+                        </span>
+                        {/* <span>{dateCounter?.genrateRaport?.date}</span> */}
+                        {/* <span></span> */}
+                      </section>
+
+                      <section className="fk_add_data__container-data-file">
+                        {dateCounter?.accountancy && (
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            disableElevation
+                            onClick={generateRaportV2}
+                          >
+                            Generuj Raport FK v2
+                          </Button>
+                        )}
+                      </section>
+                    </section>
+                  ) : (
+                    <p className="fk_add_data-error">{generateRaportMsgV2}</p>
+                  )}
+
+
+                  {dateCounter?.raport_v2?.date && <section className="fk_add_data__container-data">
+                    <section className="fk_add_data__container-data--title">
+                      <span>
+                        {dateCounter?.genrateRaport?.date ? dateCounter?.genrateRaport?.date : "Pobierz raport FK"}
+
+                      </span>
+                    </section>
+
+                    <section className="fk_add_data__container-data-file">
+                      {dateCounter?.accountancy && (
+                        <Button
+                          variant="contained"
+                          color="success"
+                          disableElevation
+                          // onClick={getRaportV2}
+                          onClick={handleGetRaport}
+                        >
+                          Pobierz Raport FK v2
+                        </Button>
+                      )}
+                    </section>
+                  </section>}
+
+                </section>
               </section>
-
-              {!deleteRaport ? (
-                <span className="fk_add_data__container-item--title">
-                  Jeśli chcesz dodać nowe pliki, skasuj poprzednie dane.
-                </span>
-              ) : (
-                <span style={{ color: "red", fontWeight: "bold" }}>
-                  {deleteRaport}
-                </span>
-              )}
-            </section>
-
-            <section className="fk_add_data__container-item">
-              {!generateRaportMsg ? (
-                <section className="fk_add_data__container-data">
-                  <section className="fk_add_data__container-data--title">
-                    <span>
-                      {dateCounter?.raport?.date ? `Data raportu: ${dateCounter?.raport?.date}` : dateCounter?.accountancy ? "Generuj raport FK" : ""}
-
-                    </span>
-                    {/* <span>{dateCounter?.genrateRaport?.date}</span> */}
-                    {/* <span></span> */}
-                  </section>
-
-                  <section className="fk_add_data__container-data-file">
-                    {dateCounter?.accountancy && (
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        disableElevation
-                        onClick={generateRaport}
-                      >
-                        Generuj Raport FK
-                      </Button>
-                    )}
-                  </section>
-                </section>
-              ) : (
-                <p className="fk_add_data-error">{generateRaportMsg}</p>
-              )}
-
-
-              {dateCounter?.raport?.date && <section className="fk_add_data__container-data">
-                <section className="fk_add_data__container-data--title">
-                  <span>
-                    {dateCounter?.genrateRaport?.date ? dateCounter?.genrateRaport?.date : "Pobierz raport FK"}
-
-                  </span>
-                </section>
-
-                <section className="fk_add_data__container-data-file">
-                  {dateCounter?.accountancy && (
-                    <Button
-                      variant="contained"
-                      color="success"
-                      disableElevation
-                      onClick={getRaport}
-                    >
-                      Pobierz Raport FK
-                    </Button>
-                  )}
-                </section>
-              </section>}
-
-
-
-            </section>
-
-            <section className="fk_add_data__container-item" >
-              <span style={{ flexGrow: 1, width: "100%" }}>
-                Wersja testowa - generowanie raportu wg nowych ustaleń
-
-              </span>
-            </section>
-
-            <section className="fk_add_data__container-item">
-              {!generateRaportMsgV2 ? (
-                <section className="fk_add_data__container-data">
-                  <section className="fk_add_data__container-data--title">
-                    <span>
-                      {dateCounter?.raport?.date ? `Data raportu: ${dateCounter?.raport_v2?.date}` : dateCounter?.accountancy ? "Generuj raport FK" : ""}
-
-                    </span>
-                    {/* <span>{dateCounter?.genrateRaport?.date}</span> */}
-                    {/* <span></span> */}
-                  </section>
-
-                  <section className="fk_add_data__container-data-file">
-                    {dateCounter?.accountancy && (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        disableElevation
-                        onClick={generateRaportV2}
-                      >
-                        Generuj Raport FK v2
-                      </Button>
-                    )}
-                  </section>
-                </section>
-              ) : (
-                <p className="fk_add_data-error">{generateRaportMsgV2}</p>
-              )}
-
-
-              {dateCounter?.raport_v2?.date && <section className="fk_add_data__container-data">
-                <section className="fk_add_data__container-data--title">
-                  <span>
-                    {dateCounter?.genrateRaport?.date ? dateCounter?.genrateRaport?.date : "Pobierz raport FK"}
-
-                  </span>
-                </section>
-
-                <section className="fk_add_data__container-data-file">
-                  {dateCounter?.accountancy && (
-                    <Button
-                      variant="contained"
-                      color="success"
-                      disableElevation
-                      onClick={getRaportV2}
-                    >
-                      Pobierz Raport FK v2
-                    </Button>
-                  )}
-                </section>
-              </section>}
-
-
-
-            </section>
-          </section>
-        </section >
+            </section >}
+        </>
       )}
     </>
   );

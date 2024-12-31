@@ -1,0 +1,29 @@
+.info_for_raportFK {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.info_for_raportFK__wrapper {
+    padding: 10px;
+    border: 1px solid rgba(44, 123, 168, 0.6);
+    border-radius: 5px;
+
+}
+
+.info_for_raportFK-title {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.info_for_raportFK__container {
+    padding: 10px 0;
+}
+
+.info_for_raportFK-confirm {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}

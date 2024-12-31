@@ -448,7 +448,7 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
 // };
 
 
-export const getExcelRaportV2 = async (cleanData) => {
+export const getExcelRaportV2 = async (cleanData, raportInfo) => {
 
   // od którego wiersza mają się zaczynać dane w arkuszu
   const startRow = 6;
@@ -529,6 +529,8 @@ export const getExcelRaportV2 = async (cleanData) => {
           const headerCell = worksheet.getCell(startRow, columnIndex + 2);
           headerCell.font = { bold: true }; // Pogrubienie czcionki
           headerCell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+          const excelStartRow = startRow + 1;
+          const excelEndRow = worksheet.rowCount;
 
           // Stylizacja dla różnych kolumn
           if (header === 'TYP DOKUMENTU') {
@@ -574,20 +576,23 @@ export const getExcelRaportV2 = async (cleanData) => {
             column.width = 25;
 
             // Liczenie dokumentów w danej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 7)
-            let documentCount = 0;
-            const startRow = 7; // Zakładamy, że dane zaczynają się od wiersza 7
-            const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
+            // let documentCount = 0;
+            // const startRow = 7; // Zakładamy, że dane zaczynają się od wiersza 7
+            // const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
 
-            for (let i = startRow; i <= endRow; i++) {
-              const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
-              if (cellValue !== null && cellValue !== undefined && cellValue !== '') {
-                documentCount++; // Jeśli komórka nie jest pusta, zwiększamy licznik
-              }
-            }
+            // for (let i = startRow; i <= endRow; i++) {
+            //   const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
+            //   if (cellValue !== null && cellValue !== undefined && cellValue !== '') {
+            //     documentCount++; // Jeśli komórka nie jest pusta, zwiększamy licznik
+            //   }
+            // }
 
             // Wstawienie liczby dokumentów w wierszu 4 tej kolumny
             const countCell = worksheet.getCell(5, column.number);
-            countCell.value = documentCount; // Ustawienie wartości liczby dokumentów
+            // countCell.value = documentCount; // Ustawienie wartości liczby dokumentów?
+            // countCell.value = { formula: `AGGREGATE(9,5,G${startRow}:G${endRow})` };
+            countCell.value = { formula: `SUBTOTAL(103,G${excelStartRow}:G${excelEndRow})` };
+            // countCell.value = { formula: `SUM(G${startRow}:G${endRow})` };
             countCell.numFmt = '0'; // Formatowanie liczby
             countCell.font = { bold: true }; // Pogrubienie tekstu
             countCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
@@ -604,7 +609,7 @@ export const getExcelRaportV2 = async (cleanData) => {
             };
 
             const countCell1 = worksheet.getCell(1, column.number);
-            countCell1.value = "Jakaś data:";
+            countCell1.value = raportInfo.reportDate;
             countCell1.alignment = { horizontal: 'center', vertical: 'middle' };
             countCell1.border = {
               top: { style: 'thin' },
@@ -614,7 +619,7 @@ export const getExcelRaportV2 = async (cleanData) => {
             };
 
             const countCell2 = worksheet.getCell(2, column.number);
-            countCell2.value = "Inna data:";
+            countCell2.value = raportInfo.agingDate;
             countCell2.alignment = { horizontal: 'center', vertical: 'middle' };
             countCell2.border = {
               top: { style: 'thin' },
@@ -624,7 +629,7 @@ export const getExcelRaportV2 = async (cleanData) => {
             };
 
             const countCell3 = worksheet.getCell(3, column.number);
-            countCell3.value = "Przypadkowa nazwa:";
+            countCell3.value = raportInfo.reportName;
             countCell3.alignment = { horizontal: 'center', vertical: 'middle' };
             countCell3.border = {
               top: { style: 'thin' },
@@ -658,20 +663,22 @@ export const getExcelRaportV2 = async (cleanData) => {
             };
 
             // Obliczanie sumy w tej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 5)
-            let sum = 0;
-            const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
-            const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
+            // let sum = 0;
+            // const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
+            // const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
 
-            for (let i = startRow; i <= endRow; i++) {
-              const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
-              if (typeof cellValue === 'number') {
-                sum += cellValue; // Dodaj wartość liczbową do sumy
-              }
-            }
+            // for (let i = startRow; i <= endRow; i++) {
+            //   const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
+            //   if (typeof cellValue === 'number') {
+            //     sum += cellValue; // Dodaj wartość liczbową do sumy
+            //   }
+            // }
 
             // Wstawienie sumy w wierszu 4 tej kolumny
             const sumCell = worksheet.getCell(5, column.number); // Wiersz 4, odpowiednia kolumna
-            sumCell.value = sum; // Ustawienie wartości sumy
+            // sumCell.value = sum; // Ustawienie wartości sumy
+            sumCell.value = { formula: `SUBTOTAL(109,G${excelStartRow}:G${excelEndRow})` };
+            // sumCell.value = { formula: `AGGREGATE(9,5,G${startRow}:G${endRow})` };
             sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
             sumCell.font = { bold: true }; // Pogrubienie tekstu
             sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
@@ -698,20 +705,21 @@ export const getExcelRaportV2 = async (cleanData) => {
             };
 
             // Obliczanie sumy w tej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 5)
-            let sum = 0;
-            const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
-            const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
+            // let sum = 0;
+            // const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
+            // const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
 
-            for (let i = startRow; i <= endRow; i++) {
-              const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
-              if (typeof cellValue === 'number') {
-                sum += cellValue; // Dodaj wartość liczbową do sumy
-              }
-            }
+            // for (let i = startRow; i <= endRow; i++) {
+            //   const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
+            //   if (typeof cellValue === 'number') {
+            //     sum += cellValue; // Dodaj wartość liczbową do sumy
+            //   }
+            // }
 
             // Wstawienie sumy w wierszu 4 tej kolumny
             const sumCell = worksheet.getCell(5, column.number); // Wiersz 4, odpowiednia kolumna
-            sumCell.value = sum; // Ustawienie wartości sumy
+            // sumCell.value = sum; // Ustawienie wartości sumy
+            sumCell.value = { formula: `SUBTOTAL(109,H${excelStartRow}:H${excelEndRow})` };
             sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
             sumCell.font = { bold: true }; // Pogrubienie tekstu
             sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
@@ -738,20 +746,22 @@ export const getExcelRaportV2 = async (cleanData) => {
             };
 
             // Obliczanie sumy w tej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 5)
-            let sum = 0;
-            const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
-            const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
+            // let sum = 0;
+            // const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
+            // const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
 
-            for (let i = startRow; i <= endRow; i++) {
-              const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
-              if (typeof cellValue === 'number') {
-                sum += cellValue; // Dodaj wartość liczbową do sumy
-              }
-            }
+            // for (let i = startRow; i <= endRow; i++) {
+            //   const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
+            //   if (typeof cellValue === 'number') {
+            //     sum += cellValue; // Dodaj wartość liczbową do sumy
+            //   }
+            // }
 
             // Wstawienie sumy w wierszu 4 tej kolumny
             const sumCell = worksheet.getCell(5, column.number); // Wiersz 4, odpowiednia kolumna
-            sumCell.value = sum; // Ustawienie wartości sumy
+            // sumCell.value = sum; // Ustawienie wartości sumy
+            sumCell.value = { formula: `SUBTOTAL(109,I${excelStartRow}:I${excelEndRow})` };
+
             sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
             sumCell.font = { bold: true }; // Pogrubienie tekstu
             sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
