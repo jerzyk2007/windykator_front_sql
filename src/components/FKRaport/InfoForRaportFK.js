@@ -28,7 +28,6 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
             setPleaseWait(true);
             const result = await axiosPrivateIntercept.post("/fk/get-raport-data-v2");
 
-
             const accountArray = [
                 ...new Set(
                     result.data
@@ -79,13 +78,14 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                     DATA_WYSTAWIENIA_FV: convertToDateIfPossible(
                         item.DATA_WYSTAWIENIA_FV
                     ),
-                    // DATA_ROZLICZENIA_AS: convertToDateIfPossible(
-                    //   item.DATA_ROZLICZENIA_AS
-                    // ),
                     TERMIN_PLATNOSCI_FV: convertToDateIfPossible(
                         item.TERMIN_PLATNOSCI_FV
                     ),
-                    // DATA_WYDANIA_AUTA: convertToDateIfPossible(item.DATA_WYDANIA_AUTA),
+                    INFORMACJA_ZARZAD: Array.isArray(item.INFORMACJA_ZARZAD)
+                        ? item.INFORMACJA_ZARZAD.join("\n\n")
+                        : "NULL",
+                    HISTORIA_ZMIANY_DATY_ROZLICZENIA: item?.HISTORIA_ZMIANY_DATY_ROZLICZENIA > 0 ? item.HISTORIA_ZMIANY_DATY_ROZLICZENIA : " ",
+                    OSTATECZNA_DATA_ROZLICZENIA: item.OSTATECZNA_DATA_ROZLICZENIA ? convertToDateIfPossible(item.OSTATECZNA_DATA_ROZLICZENIA) : " ",
                 };
             }
             );
@@ -108,8 +108,20 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
             const finalResult = [{ name: 'RAPORT', data: eraseNull }, ...resultArray];
 
 
+            // usuwam wiekowanie starsze niż <0, 1-7 z innych niż arkusza RAPORT
+            const updateAging = finalResult.map((element) => {
+                if (element.name !== "RAPORT" && element.data) {
+                    const updatedData = element.data.filter((item) => {
+                        return item.PRZEDZIAL_WIEKOWANIE !== "1-7" && item.PRZEDZIAL_WIEKOWANIE !== "<0" && item.DO_ROZLICZENIA_AS > 0;
+                    });
+                    return { ...element, data: updatedData }; // Zwracamy zaktualizowany element
+                }
+
+                return element; // Zwracamy element bez zmian, jeśli name === "Raport" lub data jest niezdefiniowana
+            });
+
             //usuwam kolumny CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA z innych arkuszy niż Raport, SAMOCHODY NOWE, SAMOCHODY UŻYWANE
-            const updateCar = finalResult.map((element) => {
+            const updateCar = updateAging.map((element) => {
                 if (
                     element.name !== "RAPORT" &&
                     element.name !== "SAMOCHODY NOWE" &&

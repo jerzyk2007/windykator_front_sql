@@ -12,6 +12,9 @@ const columnsOrder = [
   "POZOSTAŁA KWOTA DO ROZLICZENIA W FK",
   "POZOSTAŁA KWOTA DO ROZLICZENIA W AS3",
   "RÓŻNICA MIĘDZY FK A AS3",
+  "DECYZJA BIZNES",
+  "OSTATECZNA DATA ROZLICZENIA",
+  "ILE ZMIAN OST DATY ROZL.",
   "DATA ROZLICZENIA AS",
   "OPIS ROZRACHUNKU",
   "DATA WYSTAWIENIA FAKTURY",
@@ -65,6 +68,18 @@ const columnsName = [
   {
     accessorKey: "ROZNICA",
     header: "RÓŻNICA MIĘDZY FK A AS3"
+  },
+  {
+    accessorKey: "INFORMACJA_ZARZAD",
+    header: "DECYZJA BIZNES"
+  },
+  {
+    accessorKey: "OSTATECZNA_DATA_ROZLICZENIA",
+    header: "OSTATECZNA DATA ROZLICZENIA"
+  },
+  {
+    accessorKey: "HISTORIA_ZMIANY_DATY_ROZLICZENIA",
+    header: "ILE ZMIAN OST DATY ROZL."
   },
   {
     accessorKey: "DATA_ROZLICZENIA_AS",
@@ -497,15 +512,11 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
         });
 
         // Stylizowanie nagłówków
-        // worksheet.getRow(6).font = { bold: true };
-
-        // Stylizowanie nagłówków
         const headerRow = worksheet.getRow(startRow);
         headerRow.font = { bold: true, size: 10 }; // Ustawienie pogrubionej czcionki o rozmiarze 10
         headerRow.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
         headerRow.eachCell((cell) => {
           cell.font = { bold: true, size: 10 };
-          // cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
           cell.fill = {
             type: 'pattern',
             pattern: 'solid',
@@ -518,10 +529,6 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
         const lpColumn = worksheet.getColumn(1); // Kolumna 'Lp' to zawsze pierwsza kolumna
         lpColumn.width = 10; // Szerokość kolumny
         lpColumn.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyśrodkowanie
-        // worksheet.getCell(6, 1).fill = {
-        //   type: 'pattern',
-        //   pattern: 'solid',
-        // };
 
         // Stylizowanie kolumn na podstawie ich nazw, pomijając 'Lp'
         headers.forEach((header, columnIndex) => {
@@ -531,77 +538,43 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
           headerCell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
           const excelStartRow = startRow + 1;
           const excelEndRow = worksheet.rowCount;
+          column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+          column.width = 15;
+
+          const extraCellBorder = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+          };
 
           // Stylizacja dla różnych kolumn
           if (header === 'TYP DOKUMENTU') {
-            // const headerCell = worksheet.getCell(startRow, column.number); // Nagłówek w odpowiedniej kolumnie
-            headerCell.alignment = { horizontal: 'center', vertical: 'middle' };
-            column.alignment = { horizontal: 'center', vertical: 'middle' };
             column.width = 20;
-
             const countCell1 = worksheet.getCell(1, column.number);
             countCell1.value = "Data zestawienia:";
-            countCell1.border = {
-              top: { style: 'thin' },
-              left: { style: 'thin' },
-              bottom: { style: 'thin' },
-              right: { style: 'thin' },
-            };
+            countCell1.border = extraCellBorder;
 
             const countCell2 = worksheet.getCell(2, column.number);
             countCell2.value = "Wiekowanie na dzień:";
-            countCell2.border = {
-              top: { style: 'thin' },
-              left: { style: 'thin' },
-              bottom: { style: 'thin' },
-              right: { style: 'thin' },
-            };
+            countCell2.border = extraCellBorder;
 
             const countCell3 = worksheet.getCell(3, column.number);
             countCell3.value = "Nazwa zestawienia:";
-            countCell3.border = {
-              top: { style: 'thin' },
-              left: { style: 'thin' },
-              bottom: { style: 'thin' },
-              right: { style: 'thin' },
-            };
+            countCell3.border = extraCellBorder;
           }
 
           else if (header === 'NR DOKUMENTU') {
-            // const headerCell = worksheet.getCell(startRow, column.number); // Nagłówek w odpowiedniej kolumnie
             headerCell.alignment = { horizontal: 'center', vertical: 'middle' };
             headerCell.font = { bold: true }; // Pogrubienie czcionki
-
-            column.alignment = { horizontal: 'left', vertical: 'middle' };
             column.width = 25;
-
-            // Liczenie dokumentów w danej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 7)
-            // let documentCount = 0;
-            // const startRow = 7; // Zakładamy, że dane zaczynają się od wiersza 7
-            // const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
-
-            // for (let i = startRow; i <= endRow; i++) {
-            //   const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
-            //   if (cellValue !== null && cellValue !== undefined && cellValue !== '') {
-            //     documentCount++; // Jeśli komórka nie jest pusta, zwiększamy licznik
-            //   }
-            // }
-
             // Wstawienie liczby dokumentów w wierszu 4 tej kolumny
             const countCell = worksheet.getCell(5, column.number);
-            // countCell.value = documentCount; // Ustawienie wartości liczby dokumentów?
-            // countCell.value = { formula: `AGGREGATE(9,5,G${startRow}:G${endRow})` };
             countCell.value = { formula: `SUBTOTAL(103,G${excelStartRow}:G${excelEndRow})` };
-            // countCell.value = { formula: `SUM(G${startRow}:G${endRow})` };
             countCell.numFmt = '0'; // Formatowanie liczby
             countCell.font = { bold: true }; // Pogrubienie tekstu
             countCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
-            countCell.border = {
-              top: { style: 'thin' },
-              left: { style: 'thin' },
-              bottom: { style: 'thin' },
-              right: { style: 'thin' },
-            };
+            countCell.border = extraCellBorder;
             countCell.fill = {
               type: 'pattern',
               pattern: 'solid',
@@ -611,49 +584,26 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
             const countCell1 = worksheet.getCell(1, column.number);
             countCell1.value = raportInfo.reportDate;
             countCell1.alignment = { horizontal: 'center', vertical: 'middle' };
-            countCell1.border = {
-              top: { style: 'thin' },
-              left: { style: 'thin' },
-              bottom: { style: 'thin' },
-              right: { style: 'thin' },
-            };
+            countCell1.border = extraCellBorder;
 
             const countCell2 = worksheet.getCell(2, column.number);
             countCell2.value = raportInfo.agingDate;
             countCell2.alignment = { horizontal: 'center', vertical: 'middle' };
-            countCell2.border = {
-              top: { style: 'thin' },
-              left: { style: 'thin' },
-              bottom: { style: 'thin' },
-              right: { style: 'thin' },
-            };
+            countCell2.border = extraCellBorder;
 
             const countCell3 = worksheet.getCell(3, column.number);
             countCell3.value = raportInfo.reportName;
             countCell3.alignment = { horizontal: 'center', vertical: 'middle' };
-            countCell3.border = {
-              top: { style: 'thin' },
-              left: { style: 'thin' },
-              bottom: { style: 'thin' },
-              right: { style: 'thin' },
-            };
+            countCell3.border = extraCellBorder;
 
-          }
-
-          else if (header === 'DZIAŁ') {
-            column.alignment = { horizontal: 'center', vertical: 'middle' };
-            column.width = 15;
           }
           else if (header === 'LOKALIZACJA') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
             column.width = 18;
           }
           else if (header === 'KONTRAHENT') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
             column.width = 30;
           }
           else if (header === 'POZOSTAŁA KWOTA DO ROZLICZENIA W FK') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
             column.width = 20;
             column.numFmt = '#,##0.00';
             headerCell.fill = {
@@ -662,32 +612,13 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
               fgColor: { argb: '8ac777' },
             };
 
-            // Obliczanie sumy w tej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 5)
-            // let sum = 0;
-            // const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
-            // const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
-
-            // for (let i = startRow; i <= endRow; i++) {
-            //   const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
-            //   if (typeof cellValue === 'number') {
-            //     sum += cellValue; // Dodaj wartość liczbową do sumy
-            //   }
-            // }
-
             // Wstawienie sumy w wierszu 4 tej kolumny
             const sumCell = worksheet.getCell(5, column.number); // Wiersz 4, odpowiednia kolumna
-            // sumCell.value = sum; // Ustawienie wartości sumy
-            sumCell.value = { formula: `SUBTOTAL(109,G${excelStartRow}:G${excelEndRow})` };
-            // sumCell.value = { formula: `AGGREGATE(9,5,G${startRow}:G${endRow})` };
+            sumCell.value = { formula: `SUBTOTAL(109,G${excelStartRow}:G${excelEndRow})` };// Ustawienie wartości sumy
             sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
             sumCell.font = { bold: true }; // Pogrubienie tekstu
             sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
-            sumCell.border = {
-              top: { style: 'thin' },
-              left: { style: 'thin' },
-              bottom: { style: 'thin' },
-              right: { style: 'thin' },
-            };
+            sumCell.border = extraCellBorder;
             sumCell.fill = {
               type: 'pattern',
               pattern: 'solid',
@@ -695,7 +626,7 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
             };
           }
           else if (header === 'POZOSTAŁA KWOTA DO ROZLICZENIA W AS3') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
+            // column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
             column.width = 20;
             column.numFmt = '#,##0.00';
             headerCell.fill = {
@@ -704,18 +635,6 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
               fgColor: { argb: '77a3c7' },
             };
 
-            // Obliczanie sumy w tej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 5)
-            // let sum = 0;
-            // const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
-            // const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
-
-            // for (let i = startRow; i <= endRow; i++) {
-            //   const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
-            //   if (typeof cellValue === 'number') {
-            //     sum += cellValue; // Dodaj wartość liczbową do sumy
-            //   }
-            // }
-
             // Wstawienie sumy w wierszu 4 tej kolumny
             const sumCell = worksheet.getCell(5, column.number); // Wiersz 4, odpowiednia kolumna
             // sumCell.value = sum; // Ustawienie wartości sumy
@@ -723,12 +642,7 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
             sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
             sumCell.font = { bold: true }; // Pogrubienie tekstu
             sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
-            sumCell.border = {
-              top: { style: 'thin' },
-              left: { style: 'thin' },
-              bottom: { style: 'thin' },
-              right: { style: 'thin' },
-            };
+            sumCell.border = extraCellBorder;
             sumCell.fill = {
               type: 'pattern',
               pattern: 'solid',
@@ -736,7 +650,7 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
             };
           }
           else if (header === 'RÓŻNICA MIĘDZY FK A AS3') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
+            // column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
             column.width = 20;
             column.numFmt = '#,##0.00';
             headerCell.fill = {
@@ -745,147 +659,64 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
               fgColor: { argb: 'c77777' },
             };
 
-            // Obliczanie sumy w tej kolumnie (przyjmujemy, że dane zaczynają się od wiersza 5)
-            // let sum = 0;
-            // const startRow = 6; // Zakładamy, że dane zaczynają się od wiersza 5
-            // const endRow = worksheet.rowCount; // Pobranie liczby wierszy w arkuszu
-
-            // for (let i = startRow; i <= endRow; i++) {
-            //   const cellValue = worksheet.getCell(i, column.number).value; // Pobierz wartość komórki
-            //   if (typeof cellValue === 'number') {
-            //     sum += cellValue; // Dodaj wartość liczbową do sumy
-            //   }
-            // }
-
             // Wstawienie sumy w wierszu 4 tej kolumny
             const sumCell = worksheet.getCell(5, column.number); // Wiersz 4, odpowiednia kolumna
             // sumCell.value = sum; // Ustawienie wartości sumy
             sumCell.value = { formula: `SUBTOTAL(109,I${excelStartRow}:I${excelEndRow})` };
-
             sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
             sumCell.font = { bold: true }; // Pogrubienie tekstu
             sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
-            sumCell.border = {
-              top: { style: 'thin' },
-              left: { style: 'thin' },
-              bottom: { style: 'thin' },
-              right: { style: 'thin' },
-            };
+            sumCell.border = extraCellBorder;
             sumCell.fill = {
               type: 'pattern',
               pattern: 'solid',
               fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
             };
           }
+          else if (header === 'DECYZJA BIZNES') {
+            column.width = 45;
+            headerCell.fill = {
+              type: 'pattern', // Wzór wypełnienia
+              pattern: 'solid', // Wypełnienie jednolite
+              fgColor: { argb: 'ff5b63' },
+            };
+          }
           else if (header === 'DATA ROZLICZENIA AS') {
             column.numFmt = 'yyyy-mm-dd'; // Formatowanie daty
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
             column.width = 18;
           }
           else if (header === 'OPIS ROZRACHUNKU') {
-            column.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
             column.width = 35;
           }
 
           else if (header === 'DATA WYSTAWIENIA FAKTURY') {
             column.numFmt = 'yyyy-mm-dd'; // Formatowanie daty
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-            column.width = 15;
-          }
-          else if (header === 'BRAK DATY WYSTAWIENIA FV') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-            column.width = 15;
           }
           else if (header === 'TERMIN PŁATNOŚCI FV') {
             column.numFmt = 'yyyy-mm-dd'; // Formatowanie daty
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-            column.width = 15;
-          }
-          else if (header === 'PRZEDZIAŁ WIEKOWANIE') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-            column.width = 15;
           }
           else if (header === 'ILE DNI NA PLATNOŚĆ NA FV') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
             column.numFmt = '0';
-            column.width = 15;
           }
           else if (header === 'KONTO') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
             column.numFmt = '0';
-            column.width = 15;
           }
           else if (header === 'PRZETERMINOWANE / NIEPRZETERMINOWANE') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
             column.width = 20;
-          }
-          else if (header === 'JAKA KANCELARIA') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-            column.width = 15;
-          }
-          else if (header === 'ETAP SPRAWY') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-            column.width = 15;
           }
           else if (header === 'KWOTA WPS') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
             column.numFmt = '0';
-            column.width = 15;
-          }
-          else if (header === 'CZY KANCELARIA TAK/ NIE') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-            column.width = 15;
-          }
-          else if (header === 'OBSZAR') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-            column.width = 15;
-          }
-          else if (header === 'CZY SAMOCHÓD WYDANY TAK/NIE') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-            column.width = 15;
           }
           else if (header === 'DATA WYDANIA AUTA W AS3') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
             column.numFmt = 'yyyy-mm-dd'; // Formatowanie daty
-            column.width = 15;
           }
           else if (header === 'OWNER') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
             column.width = 20;
           }
-          else if (header === 'NR KLIENTA') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-            column.width = 15;
-          }
           else if (header === 'OPIEKUN OBSZARU CENTRALI') {
-            column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
             column.width = 30;
           }
-          else {
-            column.alignment = { horizontal: 'left', vertical: 'middle' };
-            column.width = 15;
-          }
         });
-
-
-
-        // worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
-        //   row.eachCell({ includeEmpty: true }, (cell) => {
-        //     // Jeśli to nie jest wiersz nagłówków (np. 6), zastosuj standardową stylizację
-        //     if (rowIndex !== startRow) {
-        //       cell.font = { size: 10 }; // Ustawienie czcionki na rozmiar 10
-        //     }
-
-        //     // Ustawienie cienkiego obramowania dla każdej komórki
-        //     cell.border = {
-        //       top: { style: 'thin' },
-        //       left: { style: 'thin' },
-        //       bottom: { style: 'thin' },
-        //       right: { style: 'thin' },
-        //     };
-        //   });
-        // });
-
 
         worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
           // Sprawdzamy, czy jesteśmy w wierszach od 6 w górę
@@ -1233,206 +1064,4 @@ export const getAllDataRaport = async (allData, XLSX, orderColumns, info) => {
     console.error(err);
   }
 };
-
-// raport z dodatkowymi wierszami nad tabelą
-
-// export const getExcelRaport = async (buttonArea, settingsColumn) => {
-//   const cleanData = buttonArea.map((doc) => {
-//     const update = doc.data.map((item) => {
-//       const { OPIEKUN_OBSZARU_CENTRALI, OPIS_ROZRACHUNKU, OWNER, ...cleanDoc } =
-//         item;
-
-//       return {
-//         ...cleanDoc,
-//         OPIEKUN_OBSZARU_CENTRALI: Array.isArray(OPIEKUN_OBSZARU_CENTRALI)
-//           ? OPIEKUN_OBSZARU_CENTRALI.join(", ")
-//           : OPIEKUN_OBSZARU_CENTRALI,
-//         OPIS_ROZRACHUNKU: Array.isArray(OPIS_ROZRACHUNKU)
-//           ? OPIS_ROZRACHUNKU.join(", ")
-//           : OPIS_ROZRACHUNKU,
-//         OWNER: Array.isArray(OWNER) ? OWNER.join(", ") : OWNER,
-//       };
-//     });
-//     return {
-//       name: doc.name,
-//       data: update,
-//     };
-//   });
-
-//   try {
-//     const changeNameColumns = cleanData.map((doc) => {
-//       const update = doc.data.map((item) => {
-//         const newItem = {};
-//         for (const column of settingsColumn.columns) {
-//           if (item[column.accessorKey] !== undefined) {
-//             newItem[column.header] = item[column.accessorKey];
-//           } else {
-//             newItem[column.accessorKey] = item[column.accessorKey];
-//           }
-//         }
-//         return newItem;
-//       });
-//       return {
-//         name: doc.name,
-//         data: update,
-//       };
-//     });
-
-//     const wb = XLSX.utils.book_new();
-//     try {
-//       changeNameColumns.forEach((obj) => {
-//         const reorderedData = obj.data.map((item) => {
-//           const reorderedItem = {};
-//           settingsColumn.order.forEach((key) => {
-//             if (item[key] !== undefined) {
-//               reorderedItem[key] = item[key];
-//             }
-//           });
-//           return reorderedItem;
-//         });
-
-//         const ws = XLSX.utils.aoa_to_sheet([]);
-
-//         const totalAmount = obj.data.reduce((sum, item) => {
-//           let amount = item["POZOSTAŁA KWOTA DO ROZLICZENIA W FK"];
-//           if (typeof amount === "string") {
-//             amount = amount.replace(",", "."); // Zamiana przecinków na kropki
-//             amount = parseFloat(amount);
-//           }
-//           if (!isNaN(amount)) {
-//             sum += amount;
-//           }
-//           return sum;
-//         }, 0);
-
-//         // Funkcja do pobrania bieżącej daty i sformatowania jej jako yyyy-mm-dd
-//         function getCurrentDate() {
-//           const today = new Date();
-//           const year = today.getFullYear();
-//           const month = String(today.getMonth() + 1).padStart(2, "0"); // Miesiące są zerowane, więc dodajemy 1
-//           const day = String(today.getDate()).padStart(2, "0");
-//           return `${year}-${month}-${day}`;
-//         }
-
-//         const customData = [
-//           { cell: "A1", value: "Nazwa Raportu" },
-//           { cell: "B1", value: "Raport Finansowy" },
-//           { cell: "A3", value: "Data" },
-//           { cell: "B3", value: getCurrentDate() },
-//           { cell: "A8", value: "Autor" },
-//           { cell: "B8", value: "Jan Kowalski" },
-//           { cell: "D4", value: "Suma kwoty FK" },
-//           // { cell: "E4", value: totalAmount, format: "0.00" }, // Ustawienie formatu liczbowego
-//           { cell: "E4", value: totalAmount, format: "#,##0.00 zł" }, // Ustawienie formatu liczbowego
-//         ];
-
-//         customData.forEach(({ cell, value, format }) => {
-//           ws[cell] = {
-//             v: value,
-//             t: typeof value === "number" ? "n" : "s", // Ustawienie typu komórki
-//             s: {
-//               font: { bold: true },
-//               alignment: { horizontal: "center" },
-//               ...(format && { numFmt: format }), // Ustawienie formatu liczbowego jeśli istnieje
-//             },
-//           };
-//         });
-
-//         const jsonSheet = XLSX.utils.json_to_sheet(reorderedData, {
-//           origin: "A10",
-//         });
-//         // const jsonSheet = XLSX.utils.json_to_sheet(reorderedData, {
-//         //   origin: "A10",
-//         // });
-
-//         Object.keys(jsonSheet).forEach((key) => {
-//           ws[key] = jsonSheet[key];
-//         });
-
-//         XLSX.utils.book_append_sheet(wb, ws, obj.name);
-
-//         const dataRange = XLSX.utils.decode_range(ws["!ref"]);
-//         const filterRange = {
-//           s: { r: 9, c: dataRange.s.c },
-//           e: { r: dataRange.e.r, c: dataRange.e.c },
-//         };
-//         ws["!autofilter"] = { ref: XLSX.utils.encode_range(filterRange) };
-
-//         for (let col = filterRange.s.c; col <= filterRange.e.c; col++) {
-//           const cell = XLSX.utils.encode_cell({ r: 9, c: col });
-//           if (ws[cell]) {
-//             ws[cell].s = { ...ws[cell].s, font: { bold: true } };
-//           }
-//         }
-
-//         for (let i = filterRange.s.c; i <= filterRange.e.c; i++) {
-//           ws["!cols"] = ws["!cols"] || [];
-//           ws["!cols"][i] = { wch: 22 };
-//         }
-
-//         for (let row = filterRange.s.r; row <= filterRange.e.r; row++) {
-//           for (let col = filterRange.s.c; col <= filterRange.e.c; col++) {
-//             const cell = XLSX.utils.encode_cell({ r: row, c: col });
-//             if (ws[cell] && ws[cell].v && typeof ws[cell].v === "string") {
-//               const cellWidth = ws[cell].v.length * 8;
-//               if (cellWidth > 240) {
-//                 ws["!cols"][col] = { wch: 30 };
-//               }
-//             }
-//           }
-//         }
-
-//         for (let col = filterRange.s.c; col <= filterRange.e.c; col++) {
-//           const cell = XLSX.utils.encode_cell({ r: 9, c: col });
-//           if (ws[cell]) {
-//             ws[cell].s = {
-//               ...ws[cell].s,
-//               fill: { fgColor: { rgb: "B8B8B8" } },
-//               alignment: {
-//                 wrapText: true,
-//                 vertical: "center",
-//                 horizontal: "center",
-//               },
-//               border: {
-//                 top: { style: "thin" },
-//                 left: { style: "thin" },
-//                 right: { style: "thin" },
-//                 bottom: { style: "thin" },
-//               },
-//             };
-//           }
-//         }
-
-//         for (let row = filterRange.s.r + 1; row <= filterRange.e.r; row++) {
-//           for (let col = filterRange.s.c; col <= filterRange.e.c; col++) {
-//             const cell = XLSX.utils.encode_cell({ r: row, c: col });
-//             if (ws[cell]) {
-//               ws[cell].s = {
-//                 ...ws[cell].s,
-//                 border: {
-//                   top: { style: "thin" },
-//                   left: { style: "thin" },
-//                   bottom: { style: "thin" },
-//                   right: { style: "thin" },
-//                 },
-//                 alignment: {
-//                   wrapText: true,
-//                   vertical: "center",
-//                   horizontal: "center",
-//                 },
-//                 numFmt: "# ##0.00 zł",
-//               };
-//             }
-//           }
-//         }
-//       });
-
-//       XLSX.writeFile(wb, "Raport FK.xlsx");
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
 

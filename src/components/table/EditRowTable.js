@@ -117,6 +117,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
         }
       );
 
+
       updateDocuments(changeSingleDoc(rowData));
       setDataRowTable("");
     } catch (err) {
