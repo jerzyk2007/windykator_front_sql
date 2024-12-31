@@ -20,7 +20,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
     const [raportInfo, setRaportInfo] = useState({
         reportDate: new Date().toISOString().split('T')[0],
         agingDate: new Date().toISOString().split('T')[0],
-        reportName: 'Draft 201 203_należnośći'
+        reportName: 'Draft 201 203_należności'
     });
 
     const getRaport = async () => {
@@ -202,7 +202,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                                 color="success"
                                 onClick={getRaport}>
 
-                                Success
+                                Pobierz Raport
                             </Button>
                         </section>
                     </section>
