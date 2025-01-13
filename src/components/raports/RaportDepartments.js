@@ -445,10 +445,10 @@ const RaportDepartments = () => {
         setPercentTarget(resultDepartments.data.target);
 
         const preprareColumnsDep = columnsDepartments.map((item) => {
-          if (item.header === "Cele na bez R-K i CNP") {
+          if (item.header === "Cele na kwartał") {
             return {
               ...item,
-              header: `Cele na ${resultDepartments.data.target.time.Q} kwartał bez R-K i CNP`,
+              header: `Cele na ${resultDepartments.data.target.time.Q} kwartał`,
             };
           } else return item;
         });

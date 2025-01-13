@@ -146,7 +146,6 @@ export const grossTotalDepartments = (
   raportDate,
   percentTarget
 ) => {
-
   const departmentsObjective = { ...percentTarget };
   // suma Brutto
   let sumOfGross = new Map();
@@ -532,7 +531,7 @@ export const columnsDepartments = [
   },
   {
     accessorKey: "CEL",
-    header: "Cele na 3 kwartał",
+    header: "Cele na kwartał",
     // header: "Cele na bez R-K i CNP",
     enableColumnFilter: false,
     Cell: ({ cell }) => {
