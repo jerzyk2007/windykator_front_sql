@@ -8,7 +8,7 @@ import { prepareColumns } from "./utilsForTable/PrepareColumns";
 
 import "./PrepareTable.css";
 
-const PrepareTable = ({ info }) => {
+const PrepareTable = ({ info, raportDocuments }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const [columns, setColumns] = useState([]);
@@ -40,35 +40,81 @@ const PrepareTable = ({ info }) => {
     }
   };
 
+  // useEffect(() => {
+  //   let isMounted = true;
+
+  //   const getData = async () => {
+  //     try {
+  //       setPleaseWait(true);
+  //       if (info==="raport") {
+
+  //       }
+  //       const dataTable = await axiosPrivateIntercept.get(
+  //         `/documents/get-data-table/${auth.id_user}/${info}`
+  //       );
+
+  //       if (isMounted) {
+  //         setDocuments(dataTable.data.dataTable);
+  //         setTableSettings(dataTable.data.tableSettings);
+
+  //         const update = prepareColumns(
+  //           dataTable.data.columns,
+  //           dataTable.data.dataTable
+  //         );
+  //         setColumns(update);
+  //         setPleaseWait(false);
+  //       }
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+  //   getData();
+
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, [info, auth.id_user, setPleaseWait, axiosPrivateIntercept]);
+
   useEffect(() => {
-    let isMounted = true;
+    const controller = new AbortController();
 
     const getData = async () => {
       try {
         setPleaseWait(true);
-        const dataTable = await axiosPrivateIntercept.get(
-          `/documents/get-data-table/${auth.id_user}/${info}`
-        );
-
-        if (isMounted) {
-          setDocuments(dataTable.data.dataTable);
-          setTableSettings(dataTable.data.tableSettings);
-
-          const update = prepareColumns(
-            dataTable.data.columns,
-            dataTable.data.dataTable
+        if (info === "raport") {
+          setDocuments(raportDocuments);
+        } else {
+          const dataTable = await axiosPrivateIntercept.get(
+            `/documents/get-data-table/${auth.id_user}/${info}`,
+            { signal: controller.signal }
           );
-          setColumns(update);
-          setPleaseWait(false);
+          setDocuments(dataTable.data);
         }
+
+        const tableSettingsColumns = await axiosPrivateIntercept.get(
+          `/documents/get-settings-colums-table/${auth.id_user}`,
+          { signal: controller.signal });
+
+        setTableSettings(tableSettingsColumns.data.tableSettings);
+
+        const update = prepareColumns(
+          tableSettingsColumns.data.columns,
+          info === "raport" ? documents : raportDocuments
+          // dataTable.data.dataTable
+        );
+        setColumns(update);
+        setPleaseWait(false);
       } catch (err) {
-        console.error(err);
+        if (err.name !== "CanceledError") {
+          console.error(err);
+        }
       }
     };
+
     getData();
 
     return () => {
-      isMounted = false;
+      controller.abort(); // Anulowanie żądania przy odmontowaniu komponentu
     };
   }, [info, auth.id_user, setPleaseWait, axiosPrivateIntercept]);
 
