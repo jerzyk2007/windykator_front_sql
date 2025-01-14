@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 // import "./EditDocBeCared.css";
 
 export const EditDocBeCared = ({ rowData, setBeCared }) => {
+  console.log(rowData);
   return (
     // <section className="edit_doc_becared">
     <section className="edit_doc">
@@ -11,7 +12,7 @@ export const EditDocBeCared = ({ rowData, setBeCared }) => {
           Nr sprawy BeCared:
         </span>
         <span className="edit_doc--content">
-          {rowData.NUMER_SPRAWY_BECARED}
+          {rowData?.NUMER_SPRAWY_BECARED}
         </span>
       </section>
       <section className="edit_doc__container">

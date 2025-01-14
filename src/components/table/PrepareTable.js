@@ -81,6 +81,7 @@ const PrepareTable = ({ info, raportDocuments }) => {
     const getData = async () => {
       try {
         setPleaseWait(true);
+
         if (info === "raport") {
           setDocuments(raportDocuments);
         } else {
@@ -99,9 +100,9 @@ const PrepareTable = ({ info, raportDocuments }) => {
 
         const update = prepareColumns(
           tableSettingsColumns.data.columns,
-          info === "raport" ? documents : raportDocuments
-          // dataTable.data.dataTable
+          info !== "raport" ? documents : raportDocuments
         );
+
         setColumns(update);
         setPleaseWait(false);
       } catch (err) {

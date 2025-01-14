@@ -19,6 +19,7 @@ export const muiTableBodyCellProps = {
 };
 
 export const prepareColumns = (columnsData, data) => {
+
   const update = columnsData.map((item) => {
     const modifiedItem = { ...item };
     modifiedItem.muiTableBodyCellProps = muiTableBodyCellProps;
@@ -38,6 +39,8 @@ export const prepareColumns = (columnsData, data) => {
         }
       };
     }
+
+
 
     if (item.accessorKey === "UWAGI_ASYSTENT") {
       modifiedItem.Cell = ({ cell }) => {
@@ -115,7 +118,7 @@ export const prepareColumns = (columnsData, data) => {
           sx: {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
-              cell.column.id === "KONTRAHENT" && checkClient === "Tak"
+              cell.column.id === "KONTRAHENT" && checkClient === "TAK"
                 ? "#7fffd4"
                 : "white",
           },
@@ -123,11 +126,22 @@ export const prepareColumns = (columnsData, data) => {
       };
     }
 
+    // if (item.accessorKey === "ZAZNACZ_KONTRAHENTA") {
+    //   modifiedItem.Cell = ({ cell, row }) => {
+    //     const cellValue = cell.getValue();
+
+    //     return <span>{cellValue}</span>;
+    //   };
+    // }
+
     if (item.accessorKey === "ZAZNACZ_KONTRAHENTA") {
       modifiedItem.Cell = ({ cell, row }) => {
         const cellValue = cell.getValue();
 
-        return <span>{cellValue}</span>;
+        // Jeśli wartość komórki jest null, wyświetl "NIE", w przeciwnym razie wyświetl wartość
+        const displayValue = cellValue === null ? "NIE" : cellValue;
+
+        return <span>{displayValue}</span>;
       };
     }
 
@@ -241,26 +255,52 @@ export const prepareColumns = (columnsData, data) => {
         return formattedSalary;
       };
     }
+
+    // if (item.accessorKey === "KWOTA_WINDYKOWANA_BECARED") {
+    //   modifiedItem.accessorFn = (originalRow) => {
+    //     return originalRow[item.accessorKey]
+    //       ? originalRow[item.accessorKey]
+    //       : " ";
+    //   };
+    //   modifiedItem.Cell = ({ cell }) => {
+    //     const value = cell.getValue();
+    //     const formattedSalary =
+    //       value !== undefined && value !== null && value !== 0
+    //         ? value.toLocaleString("pl-PL", {
+    //           minimumFractionDigits: 2,
+    //           maximumFractionDigits: 2,
+    //           useGrouping: true,
+    //         })
+    //         : "0,00"; // Zastąp puste pola zerem
+
+    //     return `${formattedSalary}`;
+    //   };
+    // }
     if (item.accessorKey === "KWOTA_WINDYKOWANA_BECARED") {
       modifiedItem.accessorFn = (originalRow) => {
-        return originalRow[item.accessorKey]
+        return originalRow[item.accessorKey] !== null && originalRow[item.accessorKey] !== undefined
           ? originalRow[item.accessorKey]
-          : " ";
+          : ""; // Jeżeli wartość jest null lub undefined, zwracamy 'BRAK'
       };
+
       modifiedItem.Cell = ({ cell }) => {
         const value = cell.getValue();
-        const formattedSalary =
-          value !== undefined && value !== null && value !== 0
+
+        // Sprawdzenie, czy wartość jest liczbą
+        const formattedValue =
+          typeof value === "number"
             ? value.toLocaleString("pl-PL", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
               useGrouping: true,
             })
-            : "0,00"; // Zastąp puste pola zerem
+            : value; // Wartość pozostaje bez zmian, jeśli to nie liczba (np. 'BRAK')
 
-        return `${formattedSalary}`;
+        return <span>{formattedValue}</span>; // Zwracamy sformatowaną wartość
       };
     }
+
+
     delete modifiedItem.type;
     return modifiedItem;
   });

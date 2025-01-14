@@ -23,6 +23,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
   const [managementNote, setManagementNote] = useState("");
   const [toggleState, setToggleState] = useState(1);
 
+
   const handleAddNote = (info, text) => {
     const oldNote = rowData.UWAGI_ASYSTENT;
     const date = new Date();
@@ -92,11 +93,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
     } else {
       newNote = [addNote];
     }
-
+    console.log(newNote);
     setRowData((prev) => {
       return {
         ...prev,
-        HISTORIA_ZMIANY_DATY_ROZLICZENIA: newNote,
+        HISTORIA_ZMIANY_DATY_ROZLICZENIA: newNote ? newNote : null,
       };
     });
   };

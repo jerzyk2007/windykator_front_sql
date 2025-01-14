@@ -106,11 +106,6 @@ const AddDataFromFile = () => {
       //   `/sql/change-fullBrutto-fullNetto`
       // );
 
-
-      // const repairLawName = await axiosPrivateIntercept.get(
-      //   `/repair/laws-name`
-      // );
-
       // const repairAdviserName = await axiosPrivateIntercept.get(
       //   `/repair/advisers-name`
       // );

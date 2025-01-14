@@ -48,7 +48,7 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
         </span>
         <select
           className="edit_doc--select"
-          value={rowData.DZIALANIA ? rowData.DZIALANIA : ""}
+          value={rowData.DZIALANIA ? rowData.DZIALANIA : "BRAK"}
           onChange={(e) => {
             handleAddNote(
               "Rodzaj działania:",
@@ -62,7 +62,7 @@ const EditDocActions = ({ rowData, setRowData, setBeCared, handleAddNote }) => {
             });
           }}
         >
-          <option value="BRAK">BRAK</option>
+          <option value="">BRAK</option>
           <option value="W KOSZTY DZIAŁU">W KOSZTY DZIAŁU</option>
           <option value="DO KOREKTY">DO KOREKTY</option>
           <option value="DO DECYZJI KIEROWNIKA">DO DECYZJI KIEROWNIKA</option>

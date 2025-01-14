@@ -57,7 +57,7 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
 
           <select
             className="edit_doc--select"
-            value={rowData.BLAD_DORADCY ? rowData.BLAD_DORADCY : ""}
+            value={rowData.BLAD_DORADCY ? rowData.BLAD_DORADCY : "NIE"}
             onChange={(e) => {
               handleAddNote(
                 "Błąd doradcy:",
@@ -207,10 +207,10 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
               transform: "scale(0.7)",
             }}
             type="checkbox"
-            checked={rowData.ZAZNACZ_KONTRAHENTA === "Tak"}
+            checked={rowData.ZAZNACZ_KONTRAHENTA === "TAK"}
             onChange={(e) =>
               setRowData((prev) => {
-                const newValue = e.target.checked ? "Tak" : "Nie";
+                const newValue = e.target.checked ? "TAK" : null;
                 return {
                   ...prev,
                   ZAZNACZ_KONTRAHENTA: newValue,
