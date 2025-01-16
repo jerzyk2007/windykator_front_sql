@@ -715,6 +715,9 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
           else if (header === 'DATA WYDANIA AUTA W AS3') {
             column.numFmt = 'yyyy-mm-dd'; // Formatowanie daty
           }
+          else if (header === 'NR VIN') {
+            column.width = 20;
+          }
           else if (header === 'OWNER') {
             column.width = 20;
           }
