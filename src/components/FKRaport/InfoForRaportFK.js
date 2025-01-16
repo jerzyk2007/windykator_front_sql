@@ -86,6 +86,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                         : "NULL",
                     HISTORIA_ZMIANY_DATY_ROZLICZENIA: item?.HISTORIA_ZMIANY_DATY_ROZLICZENIA > 0 ? item.HISTORIA_ZMIANY_DATY_ROZLICZENIA : " ",
                     OSTATECZNA_DATA_ROZLICZENIA: item.OSTATECZNA_DATA_ROZLICZENIA ? convertToDateIfPossible(item.OSTATECZNA_DATA_ROZLICZENIA) : " ",
+                    VIN: item?.VIN ? item.VIN : ' '
                 };
             }
             );
@@ -104,13 +105,20 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
             }, []);
 
 
+            /// tworzę osobny element tablicy dla arkusza WYDANE/NIEZAPŁACONE z warunkami, jest data wydania i nie jest rozliczone w AS
+            const carDataSettlement = eraseNull.map(item => {
+                if ((item.OBSZAR === "SAMOCHODY NOWE" || item.OBSZAR === "SAMOCHODY UŻYWANE") && item.DO_ROZLICZENIA_AS > 0 && item.CZY_SAMOCHOD_WYDANY_AS === "TAK") {
+                    return item;
+                }
+
+            }).filter(Boolean);
             // // Dodajemy obiekt RAPORT na początku tablicy
-            const finalResult = [{ name: 'RAPORT', data: eraseNull }, ...resultArray];
+            const finalResult = [{ name: 'ALL', data: eraseNull }, { name: 'WYDANE - NIEZAPŁACONE', data: carDataSettlement }, ...resultArray];
 
 
             // usuwam wiekowanie starsze niż <0, 1-7 z innych niż arkusza RAPORT
             const updateAging = finalResult.map((element) => {
-                if (element.name !== "RAPORT" && element.data) {
+                if (element.name !== "ALL" && element.data) {
                     const updatedData = element.data.filter((item) => {
                         return item.PRZEDZIAL_WIEKOWANIE !== "1-7" && item.PRZEDZIAL_WIEKOWANIE !== "<0" && item.DO_ROZLICZENIA_AS > 0;
                     });
@@ -119,13 +127,13 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
 
                 return element; // Zwracamy element bez zmian, jeśli name === "Raport" lub data jest niezdefiniowana
             });
-
             //usuwam kolumny CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA z innych arkuszy niż Raport, SAMOCHODY NOWE, SAMOCHODY UŻYWANE
             const updateCar = updateAging.map((element) => {
                 if (
-                    element.name !== "RAPORT" &&
+                    element.name !== "ALL" &&
                     element.name !== "SAMOCHODY NOWE" &&
-                    element.name !== "SAMOCHODY UŻYWANE"
+                    element.name !== "SAMOCHODY UŻYWANE" &&
+                    element.name !== "WYDANE - NIEZAPŁACONE"
                 ) {
                     const updatedData = element.data.map((item) => {
                         const { CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA, ...rest } = item;
@@ -136,11 +144,28 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 return element;
             });
 
-            // usuwam kolumnę BRAK DATY WYSTAWIENIA FV ze wszytskich arkuszy oprócz RAPORT
-            const updateFvDate = updateCar.map((element) => {
-                if (element.name !== "RAPORT") {
+            const updateVIN = updateCar.map((element) => {
+                if (
+                    element.name === "BLACHARNIA" ||
+                    element.name === "CZĘŚCI"
+                ) {
                     const updatedData = element.data.map((item) => {
-                        const { BRAK_DATY_WYSTAWIENIA_FV, ...rest } = item;
+                        const { VIN, ...rest } = item;
+                        return rest; // Zwróć obiekt bez tych dwóch kluczy
+                    });
+                    return { ...element, data: updatedData };
+                }
+                return element;
+            });
+
+            // usuwam kolumnę BRAK DATY WYSTAWIENIA FV ze wszytskich arkuszy oprócz RAPORT
+            const updateFvDate = updateVIN.map((element) => {
+                if (element.name !== "ALL") {
+
+                    const filteredData = element.data.filter(item => item.CZY_W_KANCELARI === 'NIE');
+
+                    const updatedData = filteredData.map((item) => {
+                        const { BRAK_DATY_WYSTAWIENIA_FV, ROZNICA, JAKA_KANCELARIA, CZY_W_KANCELARI, KWOTA_WPS, ETAP_SPRAWY, ...rest } = item;
                         return rest;
                     });
                     return { ...element, data: updatedData };

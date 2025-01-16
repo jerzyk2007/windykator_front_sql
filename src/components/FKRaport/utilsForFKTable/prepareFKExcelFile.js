@@ -29,6 +29,7 @@ const columnsOrder = [
   "KWOTA WPS",
   "CZY KANCELARIA TAK/ NIE",
   "OBSZAR",
+  "NR VIN",
   "CZY SAMOCHÓD WYDANY TAK/NIE",
   "DATA WYDANIA AUTA W AS3",
   "OWNER",
@@ -136,6 +137,10 @@ const columnsName = [
   {
     accessorKey: "OBSZAR",
     header: "OBSZAR"
+  },
+  {
+    accessorKey: "VIN",
+    header: "NR VIN"
   },
   {
     accessorKey: "CZY_SAMOCHOD_WYDANY_AS",
