@@ -40,40 +40,6 @@ const PrepareTable = ({ info, raportDocuments }) => {
     }
   };
 
-  // useEffect(() => {
-  //   let isMounted = true;
-
-  //   const getData = async () => {
-  //     try {
-  //       setPleaseWait(true);
-  //       if (info==="raport") {
-
-  //       }
-  //       const dataTable = await axiosPrivateIntercept.get(
-  //         `/documents/get-data-table/${auth.id_user}/${info}`
-  //       );
-
-  //       if (isMounted) {
-  //         setDocuments(dataTable.data.dataTable);
-  //         setTableSettings(dataTable.data.tableSettings);
-
-  //         const update = prepareColumns(
-  //           dataTable.data.columns,
-  //           dataTable.data.dataTable
-  //         );
-  //         setColumns(update);
-  //         setPleaseWait(false);
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-  //   getData();
-
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  // }, [info, auth.id_user, setPleaseWait, axiosPrivateIntercept]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -89,7 +55,27 @@ const PrepareTable = ({ info, raportDocuments }) => {
             `/documents/get-data-table/${auth.id_user}/${info}`,
             { signal: controller.signal }
           );
-          setDocuments(dataTable.data);
+
+          // wyciągnięcie ostatniego elementu tabeli INFORMACJA_ZARZAD
+          const filteredData = dataTable.data.map(item => {
+            if (item.INFORMACJA_ZARZAD !== 'BRAK') {
+            }
+            const INFORMACJA_ZARZAD = item.INFORMACJA_ZARZAD !== 'BRAK'
+              ? (() => {
+                const parsedArray = JSON.parse(item.INFORMACJA_ZARZAD); // Parsowanie na tablicę
+                const lastString = parsedArray[parsedArray.length - 1]; // Ostatni element
+                return lastString.length > 50 ? lastString.slice(0, 50) + "..." : lastString; // Ograniczenie do 100 znaków z "..."
+              })()
+              : item.INFORMACJA_ZARZAD;
+
+
+            return {
+              ...item,
+              INFORMACJA_ZARZAD: item.INFORMACJA_ZARZAD !== 'BRAK' ? INFORMACJA_ZARZAD : item.INFORMACJA_ZARZAD
+            };
+          });
+
+          setDocuments(filteredData);
         }
 
         const tableSettingsColumns = await axiosPrivateIntercept.get(
