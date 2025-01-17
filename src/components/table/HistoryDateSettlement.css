@@ -3,7 +3,9 @@
 }
 
 .history_date_settlement--title {
-    background-color: rgba(226, 88, 253, 0.2);
+    /* background-color: rgba(226, 88, 253, 0.2); */
+    background-color: rgba(135, 253, 88, 0.2);
+
 }
 
 .history_date_settlement--content {

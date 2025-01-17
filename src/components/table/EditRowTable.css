@@ -201,6 +201,8 @@
 
 .edit_doc--button Button {
   width: 100%;
-  background-color: rgba(58, 247, 58, 0.2);
+  margin: 0 5px;
+  /* background-color: rgba(58, 247, 58, 0.2); */
+  background-color: rgba(58, 247, 58, 0.5);
   color: black;
 }
