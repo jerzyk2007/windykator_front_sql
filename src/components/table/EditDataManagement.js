@@ -1,10 +1,12 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import HistoryDateSettlement from "./HistoryDateSettlement";
 import { Button } from "@mui/material";
 import "./EditDataManagement.css";
 
 const EditDataManagement = ({ rowData, setRowData, setChangePanel, handleDateHistoryNote, managementNote, setManagementNote, handleAddManagementNote }) => {
     const textareaRef = useRef(null);
+    const [tempDate, setTempDate] = useState(rowData.OSTATECZNA_DATA_ROZLICZENIA || ""); // Tymczasowa data
+    const [isFirstRender, setIsFirstRender] = useState(true); // Czy to pierwsze uruchomienie?
 
     const scrollToBottom = () => {
         if (textareaRef.current) {
@@ -13,8 +15,28 @@ const EditDataManagement = ({ rowData, setRowData, setChangePanel, handleDateHis
     };
 
     useEffect(() => {
-        scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.UWAGI_ASYSTENT`
+        scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.INFORMACJA_ZARZAD`
     }, [rowData.INFORMACJA_ZARZAD]);
+
+    const handleSaveDate = () => {
+        // Zapisujemy datę, w tym "Brak", jeśli jest pusta
+        handleDateHistoryNote(
+            "Ostateczna data rozliczenia:",
+            tempDate || "Brak"
+        );
+
+        setRowData((prev) => ({
+            ...prev,
+            OSTATECZNA_DATA_ROZLICZENIA: tempDate, // Aktualizacja w głównych danych
+        }));
+
+        setIsFirstRender(false); // Odblokuj przycisk po pierwszym zapisie
+    };
+
+    const handleDateChange = (e) => {
+        setTempDate(e.target.value); // Aktualizujemy tymczasową datę
+        if (isFirstRender) setIsFirstRender(false); // Wyłącz tryb "pierwszego uruchomienia" przy dowolnej zmianie
+    };
 
     return (
         <section className="edit_doc edit_doc_actions ">
@@ -24,31 +46,25 @@ const EditDataManagement = ({ rowData, setRowData, setChangePanel, handleDateHis
                 dateHistory={rowData.HISTORIA_ZMIANY_DATY_ROZLICZENIA}
             />
 
-
             <section className="edit_doc__container">
-                <span className="edit_doc--title">
-                    Ostateczna data rozl.:
-                </span>
+                <span className="edit_doc--title">Ostateczna data rozl.:</span>
                 <input
                     className="edit_doc--select"
-                    style={
-                        !rowData.OSTATECZNA_DATA_ROZLICZENIA ? { backgroundColor: "yellow" } : null
-                    }
+                    style={!rowData.OSTATECZNA_DATA_ROZLICZENIA ? { backgroundColor: "yellow" } : null}
                     type="date"
-                    value={rowData.OSTATECZNA_DATA_ROZLICZENIA ? rowData.OSTATECZNA_DATA_ROZLICZENIA : ""}
-                    onChange={(e) => {
-                        handleDateHistoryNote(
-                            "Ostateczna data rozliczenia:",
-                            e.target.value.length > 3 ? e.target.value : "Brak"
-                        );
-                        setRowData((prev) => {
-                            return {
-                                ...prev,
-                                OSTATECZNA_DATA_ROZLICZENIA: e.target.value,
-                            };
-                        });
-                    }}
+                    value={tempDate} // Używamy lokalnej daty
+                    onChange={handleDateChange} // Obsługa zmiany daty
                 />
+                <Button
+                    variant="contained"
+                    onClick={handleSaveDate} // Zapisujemy datę
+                    disabled={
+                        isFirstRender || // Zablokowane przy pierwszym uruchomieniu
+                        tempDate === rowData.OSTATECZNA_DATA_ROZLICZENIA // Zablokowane, jeśli brak zmian
+                    }
+                >
+                    Zapisz
+                </Button>
             </section>
 
             <section className="edit-doc-chat edit_data_management-chat">
@@ -70,7 +86,7 @@ const EditDataManagement = ({ rowData, setRowData, setChangePanel, handleDateHis
                 />
                 <section className="edit-doc-chat__panel">
                     <Button
-                        disabled={!managementNote ? true : false}
+                        disabled={!managementNote}
                         variant="contained"
                         color="error"
                         onClick={() => setManagementNote("")}
@@ -80,7 +96,7 @@ const EditDataManagement = ({ rowData, setRowData, setChangePanel, handleDateHis
                     <Button
                         variant="contained"
                         onClick={() => handleAddManagementNote(managementNote, "")}
-                        disabled={!managementNote ? true : false}
+                        disabled={!managementNote}
                     >
                         Dodaj
                     </Button>
@@ -88,7 +104,7 @@ const EditDataManagement = ({ rowData, setRowData, setChangePanel, handleDateHis
             </section>
 
             <section className="edit_doc--button">
-                <Button variant="outlined" onClick={() => setChangePanel({ type: 'doc-actions' })}>
+                <Button variant="outlined" onClick={() => setChangePanel({ type: "doc-actions" })}>
                     Działania
                 </Button>
             </section>
