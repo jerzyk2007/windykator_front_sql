@@ -4,7 +4,6 @@ import useData from "./hooks/useData";
 const RequireAuth = ({ allowedRoles }) => {
   const { auth } = useData();
   const location = useLocation();
-
   return auth?.roles?.find((role) => allowedRoles?.includes(role)) ? (
     <Outlet />
   ) : auth?.accessToken ? ( //changed from user to accessToken to persist login after refresh

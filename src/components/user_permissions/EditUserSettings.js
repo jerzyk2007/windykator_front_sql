@@ -28,8 +28,6 @@ const EditUserSettings = ({ user, setEdit }) => {
     const getSettings = async () => {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/settings/get-settings");
-
-
       const checkDep = () => {
         const filteredDep = result.data.find(obj => obj.departments)?.departments || [];
         const filteredDepJI = result.data.find(obj => obj.departmentsJI)?.departmentsJI || [];

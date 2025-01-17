@@ -50,12 +50,12 @@ const UserChangeRoles = ({ user, roles }) => {
                 - edytowanie tabel i raportów
               </span>
             )}
-            {/* {role === "EditorPlus" && (
+            {role === "Controller" && (
               <span className="user-change-roles--information">
                 {" "}
-                - Editor + dodawanie danych
+                - Kontroler dokumentów
               </span>
-            )} */}
+            )}
             {role === "Admin" && (
               <span className="user-change-roles--information">
                 {" - Administrator"}
