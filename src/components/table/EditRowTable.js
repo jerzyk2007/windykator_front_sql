@@ -93,7 +93,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
     } else {
       newNote = [addNote];
     }
-    console.log(newNote);
     setRowData((prev) => {
       return {
         ...prev,

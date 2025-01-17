@@ -5,7 +5,7 @@ import useData from "../hooks/useData";
 import PleaseWait from "../PleaseWait";
 import Table from "./Table";
 import { prepareColumns } from "./utilsForTable/PrepareColumns";
-
+import { filteredArrayManagement } from '../table/utilsForTable/changeSingleDocument';
 import "./PrepareTable.css";
 
 const PrepareTable = ({ info, raportDocuments }) => {
@@ -58,20 +58,11 @@ const PrepareTable = ({ info, raportDocuments }) => {
 
           // wyciągnięcie ostatniego elementu tabeli INFORMACJA_ZARZAD
           const filteredData = dataTable.data.map(item => {
-            if (item.INFORMACJA_ZARZAD !== 'BRAK') {
-            }
-            const INFORMACJA_ZARZAD = item.INFORMACJA_ZARZAD !== 'BRAK'
-              ? (() => {
-                const parsedArray = JSON.parse(item.INFORMACJA_ZARZAD); // Parsowanie na tablicę
-                const lastString = parsedArray[parsedArray.length - 1]; // Ostatni element
-                return lastString.length > 50 ? lastString.slice(0, 50) + "..." : lastString; // Ograniczenie do 100 znaków z "..."
-              })()
-              : item.INFORMACJA_ZARZAD;
-
+            const parsedArray = item.INFORMACJA_ZARZAD !== 'BRAK' ? JSON.parse(item.INFORMACJA_ZARZAD) : item.INFORMACJA_ZARZAD;
 
             return {
               ...item,
-              INFORMACJA_ZARZAD: item.INFORMACJA_ZARZAD !== 'BRAK' ? INFORMACJA_ZARZAD : item.INFORMACJA_ZARZAD
+              INFORMACJA_ZARZAD: item.INFORMACJA_ZARZAD !== 'BRAK' ? filteredArrayManagement(parsedArray) : item.INFORMACJA_ZARZAD
             };
           });
 
