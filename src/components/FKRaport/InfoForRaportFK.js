@@ -173,7 +173,13 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 return element;
             });
 
-            getExcelRaportV2(updateFvDate, raportInfo);
+            //wysyłam dane do serwera, żeby zrobić znaczniki przy dokumentach w wygenerowanym raporcie, aby użytkownik mógł pracowac tylko na tych dokumentach
+            axiosPrivateIntercept.post(
+                `/fk/send-document-mark-fk`,
+                updateFvDate
+            );
+
+            // getExcelRaportV2(updateFvDate, raportInfo);
             setRaportInfoActive(false);
             setPleaseWait(false);
         }

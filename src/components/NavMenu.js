@@ -81,6 +81,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     Archiwum
                   </Link>
                 </li>
+
                 {/* <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Kancelaria
                             </Link>
                             </li> */}
@@ -93,6 +94,16 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     Kpl dane
                   </Link>
                 </li>
+                {auth?.roles?.includes(110) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link
+                      to="/fk-documents-table"
+                      className="nav_menu-link"
+                      onClick={handleLinkClick}
+                    >
+                      Dokumenty Raportu FK
+                    </Link>
+                  </li>)}
               </ul>
             </div>
           </li>

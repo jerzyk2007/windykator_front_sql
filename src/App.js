@@ -65,6 +65,12 @@ function App() {
                 element={<PrepareTable info={"all"} />}
               />
             </Route>
+            <Route element={<RequireAuth allowedRoles={[110]} />}>
+              <Route
+                path="/fk-documents-table"
+                element={<PrepareTable info={"raport_fk"} />}
+              />
+            </Route>
 
             <Route
               element={<RequireAuth allowedRoles={[100, 110, 150, 1000]} />}
