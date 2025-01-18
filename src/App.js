@@ -31,11 +31,11 @@ function App() {
           <Route path="/login" element={<Login />} />
           {/* protected routes */}
           <Route element={<PersistLogin />}>
-            <Route element={<RequireAuth allowedRoles={[100, 200, 1]} />}>
+            <Route element={<RequireAuth allowedRoles={[1, 100, 200]} />}>
               <Route path="/" element={<Home />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[1000, 150]} />}>
+            <Route element={<RequireAuth allowedRoles={[1000]} />}>
               <Route path="/register" element={<Register />} />
             </Route>
 
@@ -73,7 +73,7 @@ function App() {
             </Route>
 
             <Route
-              element={<RequireAuth allowedRoles={[100, 110, 150, 1000]} />}
+              element={<RequireAuth allowedRoles={[100, 110, 1000]} />}
             >
               <Route
                 path="/raport-departments"
@@ -82,7 +82,7 @@ function App() {
             </Route>
 
             <Route
-              element={<RequireAuth allowedRoles={[100, 110, 150, 1000]} />}
+              element={<RequireAuth allowedRoles={[100, 110, 1000]} />}
             >
               <Route path="/raport-advisers" element={<RaportAdvisers />} />
             </Route>
@@ -91,7 +91,7 @@ function App() {
               <Route path="/fk-raport" element={<FKRaportSettings />} />
             </Route> */}
 
-            <Route element={<RequireAuth allowedRoles={[200, 250, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/fk-add-data" element={<FKAddData />} />
             </Route>
 
@@ -99,11 +99,11 @@ function App() {
               <Route path="/fk-table-settings" element={<FKTableSettings />} />
             </Route> */}
 
-            <Route element={<RequireAuth allowedRoles={[200, 250, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/dept-mapper" element={<DeptMapper />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[200, 250, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/change-items" element={<Items />} />
             </Route>
 
@@ -119,15 +119,15 @@ function App() {
               <Route path="/contacts" element={<Contacts />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[120, 150, 250, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[120, 1000]} />}>
               <Route path="/add-data" element={<AddDataFromFile />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[150, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[1000]} />}>
               <Route path="/user-settings" element={<UserSettings />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[150, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[1000]} />}>
               <Route path="/table-settings" element={<TableSettings />} />
             </Route>
 

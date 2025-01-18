@@ -349,7 +349,6 @@ const Table = ({
           />
         )}
 
-        {/* {auth?.roles?.includes(110 || 120 || 150) && dataRowTable && ( */}
         {dataRowTable && (
           <EditRowTable
             dataRowTable={dataRowTable}

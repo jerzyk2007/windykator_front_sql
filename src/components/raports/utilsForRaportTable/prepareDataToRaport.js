@@ -526,8 +526,6 @@ export const columnsDepartments = [
     header: "Dział",
     filterVariant: "multi-select",
     enableColumnFilter: true,
-
-    // size: columnSizing?.Department ? columnSizing.Department : 150
   },
   {
     accessorKey: "CEL",

@@ -53,7 +53,7 @@ const UserChangeRoles = ({ user, roles }) => {
             {role === "Controller" && (
               <span className="user-change-roles--information">
                 {" "}
-                - Kontroler dokumentów
+                - kontroler dokumentów
               </span>
             )}
             {role === "Admin" && (
@@ -88,12 +88,15 @@ const UserChangeRoles = ({ user, roles }) => {
                 if (role === "Admin" && !isChecked) {
                   updatedRoles["User"] = true;
                   updatedRoles["Editor"] = true;
+                  updatedRoles["Controller"] = true;
+                  updatedRoles["FK"] = true;
+                  updatedRoles["Nora"] = true;
                 }
 
                 // Jeśli odznaczono 'Editor', ustaw także 'Admin' na 'false'
-                if (role === "Editor" && isChecked) {
-                  updatedRoles["Admin"] = false;
-                }
+                // if (role === "Editor" && isChecked) {
+                //   updatedRoles["Admin"] = false;
+                // }
 
                 //odznacz inne role jesli jest zaznaczany FK
                 // if (role === "FK" && !isChecked) {
@@ -134,21 +137,21 @@ const UserChangeRoles = ({ user, roles }) => {
     }
   };
 
-  useEffect(() => {
-    if (!auth?.roles?.includes(1000)) {
-      const acceptedRoles = ["User", "Editor", "EditorPlus"];
+  // useEffect(() => {
+  //   if (!auth?.roles?.includes(1000)) {
+  //     const acceptedRoles = ["User", "Editor"];
 
-      const filteredRoles = Object.keys(roles).reduce((acc, role) => {
-        if (acceptedRoles.includes(role)) {
-          acc[role] = roles[role];
-        }
-        return acc;
-      }, {});
+  //     const filteredRoles = Object.keys(roles).reduce((acc, role) => {
+  //       if (acceptedRoles.includes(role)) {
+  //         acc[role] = roles[role];
+  //       }
+  //       return acc;
+  //     }, {});
 
-      setUserRoles(filteredRoles);
-    }
-    setErrMsg("");
-  }, [roles]);
+  //     setUserRoles(filteredRoles);
+  //   }
+  //   setErrMsg("");
+  // }, [roles]);
 
   return (
     <section className="user-change-roles">
