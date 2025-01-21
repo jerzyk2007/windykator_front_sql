@@ -17,8 +17,7 @@ const sanitizeValue = (value) => {
 };
 
 export const getAllDataRaport = async (allData, orderColumns, info) => {
-  // console.log(info);
-  // console.log(orderColumns);
+
   try {
     // Tworzenie mapowania między accessorKey a header
     const keyMapping = orderColumns.columns.reduce((acc, column) => {

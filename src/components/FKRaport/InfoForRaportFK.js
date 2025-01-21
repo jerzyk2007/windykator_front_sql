@@ -83,7 +83,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                     ),
                     INFORMACJA_ZARZAD: Array.isArray(item.INFORMACJA_ZARZAD)
                         ? item.INFORMACJA_ZARZAD.join("\n\n")
-                        : "NULL",
+                        : " ",
                     HISTORIA_ZMIANY_DATY_ROZLICZENIA: item?.HISTORIA_ZMIANY_DATY_ROZLICZENIA > 0 ? item.HISTORIA_ZMIANY_DATY_ROZLICZENIA : " ",
                     OSTATECZNA_DATA_ROZLICZENIA: item.OSTATECZNA_DATA_ROZLICZENIA ? convertToDateIfPossible(item.OSTATECZNA_DATA_ROZLICZENIA) : " ",
                     VIN: item?.VIN ? item.VIN : ' '
@@ -179,7 +179,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 updateFvDate
             );
 
-            // getExcelRaportV2(updateFvDate, raportInfo);
+            getExcelRaportV2(updateFvDate, raportInfo);
             setRaportInfoActive(false);
             setPleaseWait(false);
         }
@@ -227,11 +227,9 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                                     label="Nazwa zestawienia:"
                                     variant="standard"
                                     value={raportInfo.reportName}
-                                    // onChange={(e) => console.log(e.target.value)}
                                     onChange={(e) => setRaportInfo({ ...raportInfo, reportName: e.target.value })}
                                 />
                             </Box>
-                            {/* <span>{raportInfo.reportDate}</span> */}
                         </section>
                         <section className='info_for_raportFK-confirm'>
                             <Button

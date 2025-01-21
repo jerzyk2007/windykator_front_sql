@@ -276,7 +276,6 @@ const RaportDepartments = () => {
   };
 
   const handleExportExcel = (data, type) => {
-
     const rowData = data.map((item) => {
       return item.original;
     });
@@ -308,6 +307,7 @@ const RaportDepartments = () => {
         })
         .filter(Boolean);
     }
+
     const newOrder = arrayOrder.map((key) => {
       const matchedColumn = newColumns.find(
         (column) => column.accessorKey === key

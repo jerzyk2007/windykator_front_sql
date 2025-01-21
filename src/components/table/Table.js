@@ -44,7 +44,6 @@ const Table = ({
   const [dataRowTable, setDataRowTable] = useState("");
   const [sorting, setSorting] = useState([
     { id: "ILE_DNI_PO_TERMINIE", desc: false },
-    // { id: "DO_ROZLICZENIA", desc: true },
   ]);
 
   const plLocale =
@@ -65,9 +64,7 @@ const Table = ({
         return item.original;
       });
     }
-    // console.log(arrayOrder);
     let newColumns = [];
-    // if (type === "Całość") {
     newColumns = columns
       .map((item) => {
         const matching = arrayOrder.find(
@@ -81,7 +78,6 @@ const Table = ({
         }
       })
       .filter(Boolean);
-    // }
 
     const newOrder = arrayOrder.map((key) => {
       const matchedColumn = newColumns.find(
@@ -103,19 +99,6 @@ const Table = ({
       return updatedItem;
     });
 
-
-    // const dataToString = updateData.map((item) => {
-    //   // if (item.ILE_DNI_PO_TERMINIE) {
-    //   //   item.ILE_DNI_PO_TERMINIE = Number(item.ILE_DNI_PO_TERMINIE);
-    //   // }
-
-    //   if (typeof item.KWOTA_WINDYKOWANA_BECARED === "object") {
-    //     item.KWOTA_WINDYKOWANA_BECARED = "NULL";
-    //   }
-
-    //   return item;
-    // });
-
     const orderColumns = {
       columns: newColumns,
       order: newOrder,
@@ -133,22 +116,12 @@ const Table = ({
         const response = await axiosPrivateIntercept.get(
           `/documents/get-single-document/${id}`
         );
-        // const getRowDB = response.data; // Zakładam, że dane są w 'data'
-        // for (const key in getRowDB) {
-        //   if (getRowDB.hasOwnProperty(key) && getRow[0].hasOwnProperty(key)) {
-        //     getRow[0][key] = getRowDB[key];
-        //   }
-        // }
 
         if (type === "quick") {
-          // setDataRowTable(response.data);
           setQuickNote(response.data);
-
-          // setQuickNote(getRow[0]);
         }
         if (type === "full") {
           setDataRowTable(response.data);
-          // setDataRowTable(getRow[0]);
         }
       } catch (error) {
         console.error("Error fetching data from the server:", error);
@@ -202,7 +175,6 @@ const Table = ({
     onSortingChange: setSorting,
     enableDensityToggle: false,
     enableSelectAll: false,
-    // isMultiSortEvent: () => true,
     initialState: {
       showColumnFilters: false,
       showGlobalFilter: true,
@@ -231,13 +203,11 @@ const Table = ({
     columnFilterDisplayMode: "popover",
     //filtr nad headerem - popover
     muiFilterTextFieldProps: {
-      // sx: { m: '0.5rem 0', width: '100%' },
       sx: { m: "0", width: "250px" },
       variant: "outlined",
     },
     muiPaginationProps: {
       rowsPerPageOptions: [10, 20, 30, 50, 100],
-      // rowsPerPageOptions: [10, 20, 30, 50, 100, { value: 10000, label: 'Całość' }],
       shape: "rounded",
       variant: "outlined",
     },
@@ -291,7 +261,6 @@ const Table = ({
       >
         <Button
           disabled={table.getRowModel().rows.length === 0}
-          // onClick={handleExportExcel}
           onClick={() => handleExportExel(documents, "Całość")}
         >
           <i className="fa-regular fa-file-excel table-export-excel"></i>

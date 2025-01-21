@@ -119,7 +119,7 @@ function App() {
               <Route path="/contacts" element={<Contacts />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[120, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[120, 200, 1000]} />}>
               <Route path="/add-data" element={<AddDataFromFile />} />
             </Route>
 
