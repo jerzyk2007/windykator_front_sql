@@ -13,15 +13,11 @@ const TableColumns = () => {
     const [newData, setNewData] = useState(false);
 
     const handleHeaderChange = (index, field, newValue) => {
-
         setColumns((prevColumns) => {
             const updatedColumns = [...prevColumns];
-
             updatedColumns[index] = {
                 ...updatedColumns[index],
                 [field]: newValue,
-                filterVariant: updatedColumns[index]?.filterVariant || "none", // Domyślna wartość dla filterVariant
-                type: updatedColumns[index]?.type || "text", // Domyślna wartość dla type
             };
 
             return updatedColumns;
@@ -39,8 +35,8 @@ const TableColumns = () => {
         const clearData = {
             accessorKey: "",
             header: "",
-            filterVariant: "",
-            type: "",
+            filterVariant: "none",
+            type: "text",
             description: null,
             areas: clearAreas,
             edit: true

@@ -76,7 +76,7 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
           </select>
         </section>
 
-        {rowData.area === "BLACHARNIA" && (
+        {rowData.AREA === "BLACHARNIA" && (
           <section className="edit_doc__container">
             <span className="edit_doc--title">
               Pobrany VAT ?
@@ -105,8 +105,8 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
           </section>
         )}
 
-        {(rowData.area === "SAMOCHODY NOWE" ||
-          rowData.area === "SAMOCHODY UŻYWANE") && (
+        {(rowData.AREA === "SAMOCHODY NOWE" ||
+          rowData.AREA === "SAMOCHODY UŻYWANE") && (
             <section className="edit_doc__container">
               <span className="edit_doc--title">
                 Data wydania auta:
@@ -135,7 +135,7 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
             </section>
           )}
 
-        {rowData.area === "BLACHARNIA" && (
+        {rowData.AREA === "BLACHARNIA" && (
           // <section className="edit_doc_actions__container">
           <section className="edit_doc__container">
             <span className="edit_doc--title">
@@ -224,7 +224,7 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
           <Button variant="outlined" onClick={() => setChangePanel({ type: 'management' })}>
             Dane dla Zarządu
           </Button>
-          {rowData.area === "BLACHARNIA" && (<Button variant="outlined" onClick={() => setChangePanel({ type: 'becared' })}>
+          {rowData.AREA === "BLACHARNIA" && (<Button variant="outlined" onClick={() => setChangePanel({ type: 'becared' })}>
             BeCared
           </Button>
           )}

@@ -23,7 +23,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
   const [managementNote, setManagementNote] = useState("");
   const [toggleState, setToggleState] = useState(1);
 
-
   const handleAddNote = (info, text) => {
     const oldNote = rowData.UWAGI_ASYSTENT;
     const date = new Date();
