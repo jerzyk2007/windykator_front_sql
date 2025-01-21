@@ -1,20 +1,14 @@
 import EditDocSettlements from "./EditDocSettlements";
-import { Button } from "@mui/material";
 import "./EditDocActions.css";
 
-const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, handleAddNote }) => {
+const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
   return (
     <section className="edit_doc_actions">
-      {/* <section className="edit_doc edit_doc_actions"> */}
       <section className="edit_doc edit_doc_actions__container">
         <section className="edit_doc__container">
           <span className="edit_doc--title">Jaka kancelaria:</span>
           <span className="edit_doc--content">{rowData?.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : "BRAK"}</span>
         </section>
-        {/* {rowData?.JAKA_KANCELARIA && <section className="edit_doc__container">
-        <span className="edit_doc--title">Data przek. do kanc.:</span>
-        <span className="edit_doc--content">{rowData?.DATA_PRZENIESIENIA_DO_WP ? rowData.DATA_PRZENIESIENIA_DO_WP : "BRAK"}</span>
-      </section>} */}
         {rowData?.JAKA_KANCELARIA && <section className="edit_doc__container">
           <span className="edit_doc--title">Status kancelaria:</span>
           <span className="edit_doc--content">{rowData?.STATUS_AKTUALNY ? rowData.STATUS_AKTUALNY : "BRAK"}</span>
@@ -23,7 +17,7 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
           <span className="edit_doc--title">
             Rodzaj działania:
           </span>
-          <select
+          {roles.includes(120) ? <select
             className="edit_doc--select"
             value={rowData.DZIALANIA ? rowData.DZIALANIA : ""}
             onChange={(e) => {
@@ -47,7 +41,8 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
               WYSŁANO WEZWANIE DO ZAPŁATY
             </option>
             <option value="GREEN PARTS">GREEN PARTS</option>
-          </select>
+          </select> :
+            <span className="edit_doc--content">{rowData?.DZIALANIA ? rowData.DZIALANIA : "BRAK"}</span>}
         </section>
 
         <section className="edit_doc__container">
@@ -55,7 +50,7 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
             Błąd doradcy:
           </span>
 
-          <select
+          {roles.includes(120) ? <select
             className="edit_doc--select"
             value={rowData.BLAD_DORADCY ? rowData.BLAD_DORADCY : "NIE"}
             onChange={(e) => {
@@ -73,7 +68,7 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
           >
             <option value="NIE">Nie</option>
             <option value="TAK">Tak</option>
-          </select>
+          </select> : <span className="edit_doc--content">{rowData?.BLAD_DORADCY ? rowData.BLAD_DORADCY : "NIE"}</span>}
         </section>
 
         {rowData.AREA === "BLACHARNIA" && (
@@ -81,7 +76,7 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
             <span className="edit_doc--title">
               Pobrany VAT ?
             </span>
-            <select
+            {roles.includes(120) ? <select
               className="edit_doc--select"
               value={rowData.POBRANO_VAT ? rowData.POBRANO_VAT : ""}
               onChange={(e) => {
@@ -101,7 +96,7 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
               <option value="TAK">Tak</option>
               <option value="50">Nie pobrano 50%</option>
               <option value="100">Nie pobrano 100%</option>
-            </select>
+            </select> : <span className="edit_doc--content">{rowData?.POBRANO_VAT ? rowData.POBRANO_VAT : "Nie dotyczy"}</span>}
           </section>
         )}
 
@@ -112,37 +107,16 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
                 Data wydania auta:
               </span>
               <span className="edit_doc--content">{rowData.DATA_WYDANIA_AUTA ? rowData.DATA_WYDANIA_AUTA : null}</span>
-              {/* <input
-              className="edit_doc--select"
-              style={
-                !rowData.DATA_WYDANIA_AUTA ? { backgroundColor: "yellow" } : null
-              }
-              type="date"
-              value={rowData.DATA_WYDANIA_AUTA ? rowData.DATA_WYDANIA_AUTA : ""}
-              onChange={(e) => {
-                handleAddNote(
-                  "Data wydania auta:",
-                  e.target.value.length > 3 ? e.target.value : "Brak"
-                );
-                setRowData((prev) => {
-                  return {
-                    ...prev,
-                    DATA_WYDANIA_AUTA: e.target.value,
-                  };
-                });
-              }}
-            /> */}
             </section>
           )}
 
         {rowData.AREA === "BLACHARNIA" && (
-          // <section className="edit_doc_actions__container">
           <section className="edit_doc__container">
             <span className="edit_doc--title">
               Wybierz kancelarię TU:
             </span>
 
-            <select
+            {roles.includes(120) ? <select
               className="edit_doc--select"
               value={rowData.JAKA_KANCELARIA_TU ? rowData.JAKA_KANCELARIA_TU : "BRAK"}
               onChange={(e) => {
@@ -167,41 +141,16 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
               <option value="ROK-KONOPA">ROK-KONOPA</option>
               <option value="CNP">CNP</option>
             </select>
+              : <span className="edit_doc--content">{rowData?.JAKA_KANCELARIA_TU ? rowData.JAKA_KANCELARIA_TU : "BRAK"}</span>
+            }
           </section>
         )}
-
-        {/* <section className="edit_doc__container">
-        <span className="edit_doc--title">
-          Ostateczna data rozliczenia:
-        </span>
-        <input
-          className="edit_doc--select"
-          style={
-            !rowData.OSTATECZNA_DATA_ROZLICZENIA ? { backgroundColor: "yellow" } : null
-          }
-          type="date"
-          value={rowData.OSTATECZNA_DATA_ROZLICZENIA ? rowData.OSTATECZNA_DATA_ROZLICZENIA : ""}
-          onChange={(e) => {
-            handleAddNote(
-              "Ostateczna data rozliczenia:",
-              e.target.value.length > 3 ? e.target.value : "Brak"
-            );
-            setRowData((prev) => {
-              return {
-                ...prev,
-                OSTATECZNA_DATA_ROZLICZENIA: e.target.value,
-              };
-            });
-          }}
-        />
-      </section> */}
-
 
         <section className="edit_doc__container">
           <span className="edit_doc--title">
             Wyróżnij kontrahenta:
           </span>
-          <input
+          {roles.includes(120) ? <input
             className="edit_doc--select"
             style={{
               transform: "scale(0.7)",
@@ -217,18 +166,18 @@ const EditDocActions = ({ rowData, setRowData, setChangePanel, changePanel, hand
                 };
               })
             }
-          />
+          /> :
+            <input
+              className="edit_doc--select"
+              style={{
+                transform: "scale(0.7)",
+              }}
+              type="checkbox"
+              checked={rowData.ZAZNACZ_KONTRAHENTA === "TAK"}
+              readOnly
+            />}
         </section>
 
-        <section className="edit_doc--button">
-          <Button variant="outlined" onClick={() => setChangePanel({ type: 'management' })}>
-            Dane dla Zarządu
-          </Button>
-          {rowData.AREA === "BLACHARNIA" && (<Button variant="outlined" onClick={() => setChangePanel({ type: 'becared' })}>
-            BeCared
-          </Button>
-          )}
-        </section>
       </section>
       <EditDocSettlements settlement={rowData.OPIS_ROZRACHUNKU} date={rowData?.DATA_ROZL_AS ? rowData.DATA_ROZL_AS : null} fv_zal={rowData.FV_ZALICZKOWA ? rowData.FV_ZALICZKOWA : null} fv_zal_kwota={rowData.KWOTA_FV_ZAL ? rowData.KWOTA_FV_ZAL : null} />
     </section>

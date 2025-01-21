@@ -1,10 +1,5 @@
-import { Button } from "@mui/material";
-
-// import "./EditDocBeCared.css";
-
-export const EditDocBeCared = ({ rowData, setChangePanel }) => {
+export const EditDocBeCared = ({ rowData }) => {
   return (
-    // <section className="edit_doc_becared">
     <section className="edit_doc">
       <section className="edit_doc__container">
         <span className="edit_doc--title">
@@ -71,12 +66,6 @@ export const EditDocBeCared = ({ rowData, setChangePanel }) => {
             })
             : ""}
         </span>
-      </section>
-
-      <section className="edit_doc--button">
-        <Button variant="outlined" onClick={() => setChangePanel({ type: "doc-actions" })}>
-          Działania
-        </Button>
       </section>
     </section >
   );

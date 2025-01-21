@@ -16,9 +16,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [rowData, setRowData] = useState(dataRowTable);
-  const [changePanel, setChangePanel] = useState({
-    type: 'doc-actions'
-  });
+  const [changePanel, setChangePanel] = useState('doc-actions');
   const [note, setNote] = useState("");
   const [managementNote, setManagementNote] = useState("");
   const [toggleState, setToggleState] = useState(1);
@@ -149,22 +147,59 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
 
                 </section>
                 <section className="edit-row-table_section-content-data">
-                  {changePanel.type === 'doc-actions' && (
+                  {changePanel === 'doc-actions' &&
+                    <section className="edit-row-table__change-panel">
+                      {auth.roles.includes(110) && <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setChangePanel('management')}
+
+                      >
+                        Raport FK
+                      </Button>}
+                      {rowData.AREA === 'BLACHARNIA' && < Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setChangePanel('becared')}
+                      >
+                        Becared
+                      </Button>}
+
+                      {auth.roles.includes(120) && <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setChangePanel('control')}
+                      >
+                        Kontrola
+                      </Button>}
+                    </section>}
+                  {changePanel !== 'doc-actions' &&
+                    <section className="edit-row-table__change-panel">
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setChangePanel('doc-actions')}
+                      >
+                        Powrót
+                      </Button>
+                    </section>}
+
+                  {changePanel === 'doc-actions' && (
                     <EditDocActions
                       rowData={rowData}
                       setRowData={setRowData}
                       setChangePanel={setChangePanel}
                       handleAddNote={handleAddNote}
+                      roles={auth.roles}
                     />
                   )}
-                  {changePanel.type === 'becared' && (
+                  {changePanel === 'becared' && (
                     <EditDocBeCared
                       rowData={rowData}
                       setRowData={setRowData}
-                      setChangePanel={setChangePanel}
                     />
                   )}
-                  {changePanel.type === 'management' && <EditDataManagement
+                  {changePanel === 'management' && <EditDataManagement
                     rowData={rowData}
                     setRowData={setRowData}
                     setChangePanel={setChangePanel}
@@ -173,6 +208,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
                     setManagementNote={setManagementNote}
                     handleAddManagementNote={handleAddManagementNote}
                   />}
+
                 </section>
               </section>
             </section>
@@ -223,7 +259,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
           </section>
         </section>
       </section>
-    </section>
+    </section >
   );
 };
 

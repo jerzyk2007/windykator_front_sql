@@ -117,18 +117,15 @@
   flex-basis: 33%;
   min-width: 450px;
   min-height: 500px;
-  /* max-height: calc(100vh - 100px); */
   padding: 2px;
   overflow: auto;
   display: flex;
   flex-direction: column;
-  /* justify-content: start; */
-  justify-content: space-between;
+  /* justify-content: space-between; */
 
 }
 
 .edit_doc {
-  /* flex-grow: 1; */
   font-family: "Source Sans 3", Calibri, sans-serif;
   font-size: 1.15rem;
   font-optical-sizing: auto;
@@ -202,7 +199,17 @@
 .edit_doc--button Button {
   width: 100%;
   margin: 0 5px;
-  /* background-color: rgba(58, 247, 58, 0.2); */
   background-color: rgba(58, 247, 58, 0.5);
   color: black;
+}
+
+.edit-row-table__change-panel {
+  padding: 5px 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.edit-row-table__change-panel Button {
+  width: 100%;
+  margin: 0 10px;
 }
