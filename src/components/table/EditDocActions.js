@@ -1,7 +1,7 @@
 import EditDocSettlements from "./EditDocSettlements";
 import "./EditDocActions.css";
 
-const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
+const EditDocActions = ({ rowData, setRowData, handleAddNote, roles, setChangePanel }) => {
   return (
     <section className="edit_doc_actions">
       <section className="edit_doc edit_doc_actions__container">
@@ -17,31 +17,32 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
           <span className="edit_doc--title">
             Rodzaj działania:
           </span>
-          {roles.includes(120) ? <select
-            className="edit_doc--select"
-            value={rowData.DZIALANIA ? rowData.DZIALANIA : ""}
-            onChange={(e) => {
-              handleAddNote(
-                "Rodzaj działania:",
-                e.target.options[e.target.selectedIndex].text
-              );
-              setRowData((prev) => {
-                return {
-                  ...prev,
-                  DZIALANIA: e.target.value,
-                };
-              });
-            }}
-          >
-            <option value="BRAK">BRAK</option>
-            <option value="W KOSZTY DZIAŁU">W KOSZTY DZIAŁU</option>
-            <option value="DO KOREKTY">DO KOREKTY</option>
-            <option value="DO DECYZJI KIEROWNIKA">DO DECYZJI KIEROWNIKA</option>
-            <option value="WYSŁANO WEZWANIE DO ZAPŁATY">
-              WYSŁANO WEZWANIE DO ZAPŁATY
-            </option>
-            <option value="GREEN PARTS">GREEN PARTS</option>
-          </select> :
+          {roles.includes(120) ?
+            <select
+              className="edit_doc--select"
+              value={rowData.DZIALANIA ? rowData.DZIALANIA : ""}
+              onChange={(e) => {
+                handleAddNote(
+                  "Rodzaj działania:",
+                  e.target.options[e.target.selectedIndex].text
+                );
+                setRowData((prev) => {
+                  return {
+                    ...prev,
+                    DZIALANIA: e.target.value,
+                  };
+                });
+              }}
+            >
+              <option value="BRAK">BRAK</option>
+              <option value="W KOSZTY DZIAŁU">W KOSZTY DZIAŁU</option>
+              <option value="DO KOREKTY">DO KOREKTY</option>
+              <option value="DO DECYZJI KIEROWNIKA">DO DECYZJI KIEROWNIKA</option>
+              <option value="WYSŁANO WEZWANIE DO ZAPŁATY">
+                WYSŁANO WEZWANIE DO ZAPŁATY
+              </option>
+              <option value="GREEN PARTS">GREEN PARTS</option>
+            </select> :
             <span className="edit_doc--content">{rowData?.DZIALANIA ? rowData.DZIALANIA : "BRAK"}</span>}
         </section>
 
@@ -66,8 +67,8 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
               });
             }}
           >
-            <option value="NIE">Nie</option>
-            <option value="TAK">Tak</option>
+            <option value="NIE">NIE</option>
+            <option value="TAK">TAK</option>
           </select> : <span className="edit_doc--content">{rowData?.BLAD_DORADCY ? rowData.BLAD_DORADCY : "NIE"}</span>}
         </section>
 

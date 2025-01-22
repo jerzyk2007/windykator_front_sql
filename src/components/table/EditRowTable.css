@@ -5,6 +5,8 @@
   bottom: 0;
   left: 0;
   right: 0;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.1rem;
   z-index: 5;
   background-color: #fff;
   overflow: auto;

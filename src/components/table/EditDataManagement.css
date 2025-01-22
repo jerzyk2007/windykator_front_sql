@@ -3,11 +3,10 @@
 }
 
 .edit_data_management--title {
-    /* background-color: rgba(255, 127, 170, 0.288); */
-    background-color: rgba(135, 253, 88, 0.2);
+    background-color: rgba(88, 228, 253, 0.2);
 
 }
 
 .edit_data_management--content {
-    height: 150px;
+    height: 180px;
 }

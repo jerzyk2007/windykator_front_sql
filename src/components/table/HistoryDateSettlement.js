@@ -16,7 +16,7 @@ const HistoryDateSettlement = ({ dateHistory }) => {
     }, [dateHistory]);
     return (
         <section className="edit-doc-chat history_date_settlement">
-            <span className="edit-doc-chat--title history_date_settlement--title">
+            <span className="edit-doc-chat--title edit_data_management--title">
                 Historia zmiany daty ostatecznego rozliczenia.
             </span>
             <textarea

@@ -67,6 +67,7 @@ export const EditDocBeCared = ({ rowData }) => {
             : ""}
         </span>
       </section>
+
     </section >
   );
 };

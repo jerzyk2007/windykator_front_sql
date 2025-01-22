@@ -8,18 +8,31 @@ import EditDocChat from "./EditDocChat";
 import EditDocActions from "./EditDocActions";
 import EditDocBeCared from "./EditDocBeCared";
 import EditDataManagement from "./EditDataManagement";
+import DocumentsControlBL from './DocumentsControlBL';
+import DocumentsControlChat from './DocumentsControlChat';
 import { changeSingleDoc } from './utilsForTable/changeSingleDocument';
 import "./EditRowTable.css";
 
 const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-
   const [rowData, setRowData] = useState(dataRowTable);
   const [changePanel, setChangePanel] = useState('doc-actions');
   const [note, setNote] = useState("");
   const [managementNote, setManagementNote] = useState("");
   const [toggleState, setToggleState] = useState(1);
+  const [documentControlBL, setDocumentControlBL] = useState({
+    upowaznienie: false,
+    oswiadczenieVAT: false,
+    prawoJazdy: false,
+    dowodRejestr: false,
+    polisaAC: false,
+    faktura: false,
+    odpowiedzialnosc: false,
+    platnoscVAT: false,
+  });
+  const [documentControlNote, setDocumentControlNote] = useState("");
+  const [documentControlChat, setDocumentControlChat] = useState([]);
 
   const handleAddNote = (info, text) => {
     const oldNote = rowData.UWAGI_ASYSTENT;
@@ -48,7 +61,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
     }
   };
 
-  const handleAddManagementNote = (info, text) => {
+  const handleAddManagementNote = (text) => {
     const oldNote = rowData.INFORMACJA_ZARZAD;
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
@@ -57,7 +70,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
     const formattedDate = `${day}-${month}-${year}`;
 
     let newNote = [];
-    let addNote = `${formattedDate} - ${auth.usersurname} - ${info} ${text}`;
+    let addNote = `${formattedDate} - ${auth.usersurname} - ${text}`;
     if (oldNote) {
       newNote = [...oldNote, addNote];
     } else {
@@ -70,9 +83,27 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
         INFORMACJA_ZARZAD: newNote,
       };
     });
-    if (!text) {
-      setManagementNote("");
+    setManagementNote("");
+  };
+
+  const handleAddDocumentsControlNote = (text) => {
+    // const oldNote = documentControlChat;
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+
+    let newNote = [];
+    let addNote = `${formattedDate} - ${auth.usersurname} - ${text}`;
+    if (documentControlChat.length) {
+      newNote = [...documentControlChat, addNote];
+    } else {
+      newNote = [addNote];
     }
+
+    setDocumentControlChat(newNote);
+    setDocumentControlNote("");
   };
 
   const handleDateHistoryNote = (info, text) => {
@@ -165,13 +196,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
                         Becared
                       </Button>}
 
-                      {auth.roles.includes(120) && <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => setChangePanel('control')}
-                      >
-                        Kontrola
-                      </Button>}
+
                     </section>}
                   {changePanel !== 'doc-actions' &&
                     <section className="edit-row-table__change-panel">
@@ -218,9 +243,25 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
               }
             >
               <section className="edit-row-table_section-content">
-                <section className="edit-row-table_section-content-data"></section>
-                <section className="edit-row-table_section-content-data"></section>
-                <section className="edit-row-table_section-content-data"></section>
+                <section className="edit-row-table_section-content-data">
+                  <EditDocBasicData rowData={rowData} setRowData={setRowData} />
+                </section>
+                <section className="edit-row-table_section-content-data">
+                  <DocumentsControlChat
+                    documentControlNote={documentControlNote}
+                    setDocumentControlNote={setDocumentControlNote}
+                    documentControlChat={documentControlChat}
+                    // setDocumentControlChat={setDocumentControlChat}
+                    handleAddDocumentsControlNote={handleAddDocumentsControlNote}
+                  />
+                </section>
+                <section className="edit-row-table_section-content-data">
+                  {auth.roles.includes(120) && dataRowTable.AREA === "BLACHARNIA" &&
+                    <DocumentsControlBL
+                      documentControlBL={documentControlBL}
+                      setDocumentControlBL={setDocumentControlBL}
+                    />}
+                </section>
               </section>
             </section>
             <section
@@ -236,6 +277,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
             </section>
           </section>
           <section className="edit-row-table__panel">
+            <section className="edit_row_table-buttons"></section>
+
             <section className="edit_row_table-buttons">
               <Button
                 className="mui-button"
@@ -256,6 +299,16 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
                 Zatwierdź
               </Button>
             </section>
+            <section className="edit_row_table-buttons">
+              {auth.roles.includes(120) && <Button
+                variant="contained"
+                // color="secondary"
+                onClick={() => setToggleState(prev => prev === 1 ? 2 : 1)}
+              >
+                Kontrola
+              </Button>}
+            </section>
+
           </section>
         </section>
       </section>

@@ -103,11 +103,6 @@ const EditDataManagement = ({ rowData, setRowData, setChangePanel, handleDateHis
                 </section>
             </section>
 
-            {/* <section className="edit_doc--button">
-                <Button variant="outlined" onClick={() => setChangePanel({ type: "doc-actions" })}>
-                    Działania
-                </Button>
-            </section> */}
         </section>
     );
 };
