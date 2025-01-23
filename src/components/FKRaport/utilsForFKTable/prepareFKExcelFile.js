@@ -661,7 +661,7 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
             headerCell.fill = {
               type: 'pattern', // Wzór wypełnienia
               pattern: 'solid', // Wypełnienie jednolite
-              fgColor: { argb: 'c77777' },
+              fgColor: { argb: 'ff0000' },
             };
 
             // Wstawienie sumy w wierszu 4 tej kolumny

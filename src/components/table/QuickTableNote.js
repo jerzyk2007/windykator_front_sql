@@ -34,7 +34,7 @@ const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
 
     try {
       await axiosPrivateIntercept.patch(
-        `/documents/change-single-document/${auth.id_user}`,
+        `/documents/change-single-document`,
         {
           id_document: id_document,
           documentItem: newRow,

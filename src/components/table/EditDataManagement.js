@@ -3,8 +3,10 @@ import HistoryDateSettlement from "./HistoryDateSettlement";
 import { Button } from "@mui/material";
 import "./EditDataManagement.css";
 
-const EditDataManagement = ({ rowData, setRowData, setChangePanel, handleDateHistoryNote, managementNote, setManagementNote, handleAddManagementNote }) => {
+const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
     const textareaRef = useRef(null);
+    const [managementNote, setManagementNote] = useState("");
+
     const [tempDate, setTempDate] = useState(rowData.OSTATECZNA_DATA_ROZLICZENIA || ""); // Tymczasowa data
     const [isFirstRender, setIsFirstRender] = useState(true); // Czy to pierwsze uruchomienie?
 
@@ -14,9 +16,54 @@ const EditDataManagement = ({ rowData, setRowData, setChangePanel, handleDateHis
         }
     };
 
-    useEffect(() => {
-        scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.INFORMACJA_ZARZAD`
-    }, [rowData.INFORMACJA_ZARZAD]);
+    const handleAddManagementNote = (text) => {
+        const oldNote = rowData.INFORMACJA_ZARZAD;
+        const date = new Date();
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        const formattedDate = `${day}-${month}-${year}`;
+
+        let newNote = [];
+        let addNote = `${formattedDate} - ${usersurname} - ${text}`;
+        if (oldNote) {
+            newNote = [...oldNote, addNote];
+        } else {
+            newNote = [addNote];
+        }
+
+        setRowData((prev) => {
+            return {
+                ...prev,
+                INFORMACJA_ZARZAD: newNote,
+            };
+        });
+        setManagementNote("");
+    };
+
+    const handleDateHistoryNote = (info, text) => {
+        const oldNote = rowData.HISTORIA_ZMIANY_DATY_ROZLICZENIA;
+        const date = new Date();
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        const formattedDate = `${day}-${month}-${year}`;
+
+        let newNote = [];
+        let addNote = `${formattedDate} - ${usersurname} - ${info} ${text}`;
+        if (oldNote) {
+            newNote = [...oldNote, addNote];
+        } else {
+            newNote = [addNote];
+        }
+        setRowData((prev) => {
+            return {
+                ...prev,
+                HISTORIA_ZMIANY_DATY_ROZLICZENIA: newNote ? newNote : null,
+            };
+        });
+    };
+
 
     const handleSaveDate = () => {
         // Zapisujemy datę, w tym "Brak", jeśli jest pusta
@@ -37,6 +84,10 @@ const EditDataManagement = ({ rowData, setRowData, setChangePanel, handleDateHis
         setTempDate(e.target.value); // Aktualizujemy tymczasową datę
         if (isFirstRender) setIsFirstRender(false); // Wyłącz tryb "pierwszego uruchomienia" przy dowolnej zmianie
     };
+
+    useEffect(() => {
+        scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.INFORMACJA_ZARZAD`
+    }, [rowData.INFORMACJA_ZARZAD]);
 
     return (
         <section className="edit_doc edit_doc_actions ">

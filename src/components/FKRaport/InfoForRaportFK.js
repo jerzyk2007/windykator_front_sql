@@ -20,6 +20,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
     const [raportInfo, setRaportInfo] = useState({
         reportDate: new Date().toISOString().split('T')[0],
         agingDate: new Date().toISOString().split('T')[0],
+        accountingDate: new Date().toISOString().split('T')[0],
         reportName: 'Draft 201 203_należności'
     });
 
@@ -118,7 +119,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
 
             // usuwam wiekowanie starsze niż <0, 1-7 z innych niż arkusza RAPORT
             const updateAging = finalResult.map((element) => {
-                if (element.name !== "ALL" && element.data) {
+                if (element.name !== "ALL" && element.name !== "KSIĘGOWOŚĆ" && element.data) {
                     const updatedData = element.data.filter((item) => {
                         return item.PRZEDZIAL_WIEKOWANIE !== "1-7" && item.PRZEDZIAL_WIEKOWANIE !== "<0" && item.DO_ROZLICZENIA_AS > 0;
                     });
@@ -127,6 +128,9 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
 
                 return element; // Zwracamy element bez zmian, jeśli name === "Raport" lub data jest niezdefiniowana
             });
+
+
+
             //usuwam kolumny CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA z innych arkuszy niż Raport, SAMOCHODY NOWE, SAMOCHODY UŻYWANE
             const updateCar = updateAging.map((element) => {
                 if (
@@ -157,7 +161,6 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 }
                 return element;
             });
-
             // usuwam kolumnę BRAK DATY WYSTAWIENIA FV ze wszytskich arkuszy oprócz RAPORT
             const updateFvDate = updateVIN.map((element) => {
                 if (element.name !== "ALL") {
@@ -173,13 +176,44 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 return element;
             });
 
+            // obrabiam tylko dane działu KSIĘGOWOŚĆ
+            const accountingData = updateFvDate.map(item => {
+                if (item.name === 'KSIĘGOWOŚĆ') {
+                    // pierwsze filtrowanie wszytskich danych
+                    const dataDoc = eraseNull.filter(doc =>
+                        doc.TYP_DOKUMENTU !== 'PK' &&
+                        doc.TYP_DOKUMENTU !== 'Inne' &&
+                        doc.TYP_DOKUMENTU !== 'Korekta' &&
+                        doc.ROZNICA !== "NULL" &&
+                        doc.DATA_ROZLICZENIA_AS !== "NULL" &&
+                        doc.DATA_ROZLICZENIA_AS <= new Date(raportInfo.accountingDate)
+                    );
+
+                    // drugie filtrowanie wszytskich danych
+                    const dataDoc2 = eraseNull.filter(doc =>
+                        doc.TYP_DOKUMENTU === 'Korekta' &&
+                        doc.DO_ROZLICZENIA_AS !== "NULL" &&
+                        doc.ROZNICA !== "NULL"
+                    );
+                    const joinData = [...dataDoc, ...dataDoc2];
+                    const updateDataDoc = joinData.map(prev => {
+                        const { INFORMACJA_ZARZAD, OSTATECZNA_DATA_ROZLICZENIA, HISTORIA_ZMIANY_DATY_ROZLICZENIA, ...rest } = prev;
+                        return rest;
+                    });
+                    return {
+                        name: item.name,
+                        data: updateDataDoc
+                    };
+                }
+                return item;
+            });
             //wysyłam dane do serwera, żeby zrobić znaczniki przy dokumentach w wygenerowanym raporcie, aby użytkownik mógł pracowac tylko na tych dokumentach
             axiosPrivateIntercept.post(
                 `/fk/send-document-mark-fk`,
                 updateFvDate
             );
 
-            getExcelRaportV2(updateFvDate, raportInfo);
+            getExcelRaportV2(accountingData, raportInfo);
             setRaportInfoActive(false);
             setPleaseWait(false);
         }
@@ -197,39 +231,60 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                             <label>Wprowadź dane do raportu.</label>
                         </section >
                         <section className='info_for_raportFK__container'>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}
-                                adapterLocale="pl"
-                            >
-                                <DatePicker
-                                    label="Data zestawienia:"
-                                    value={dayjs(raportInfo.reportDate)}
-                                    onChange={(newValue) => {
-                                        const formattedDate = newValue ? newValue.format('YYYY-MM-DD') : '';
-                                        setRaportInfo({ ...raportInfo, reportDate: formattedDate });
-                                    }}
-                                />
-                                <DatePicker
-                                    label="Wiekowanie na dzień:"
-                                    value={dayjs(raportInfo.agingDate)}
-                                    onChange={(newValue) => {
-                                        const formattedDate = newValue ? newValue.format('YYYY-MM-DD') : '';
-                                        setRaportInfo({ ...raportInfo, agingDate: formattedDate });
-                                    }}
-                                />
-                            </LocalizationProvider>
-                            <Box
-                                component="form"
-                                sx={{ '& > :not(style)': { m: 1, width: '100%' } }}
-                                noValidate
-                                autoComplete="off"
-                            >
-                                <TextField id="standard-basic"
-                                    label="Nazwa zestawienia:"
-                                    variant="standard"
-                                    value={raportInfo.reportName}
-                                    onChange={(e) => setRaportInfo({ ...raportInfo, reportName: e.target.value })}
-                                />
-                            </Box>
+                            <section className='info_for_raportFK__box'>
+
+                                <LocalizationProvider dateAdapter={AdapterDayjs}
+                                    adapterLocale="pl"
+                                >
+                                    <DatePicker
+                                        label="Data zestawienia:"
+                                        value={dayjs(raportInfo.reportDate)}
+                                        onChange={(newValue) => {
+                                            const formattedDate = newValue ? newValue.format('YYYY-MM-DD') : '';
+                                            setRaportInfo({ ...raportInfo, reportDate: formattedDate });
+                                        }}
+                                    />
+                                    <DatePicker
+                                        label="Wiekowanie na dzień:"
+                                        value={dayjs(raportInfo.agingDate)}
+                                        onChange={(newValue) => {
+                                            const formattedDate = newValue ? newValue.format('YYYY-MM-DD') : '';
+                                            setRaportInfo({ ...raportInfo, agingDate: formattedDate });
+                                        }}
+                                    />
+                                </LocalizationProvider>
+                            </section>
+                            <section className='info_for_raportFK__box'>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}
+                                    adapterLocale="pl"
+                                >
+                                    <DatePicker
+                                        label="Data rozliczenia AS:"
+                                        value={dayjs(raportInfo.reportDate)}
+                                        onChange={(newValue) => {
+                                            const formattedDate = newValue ? newValue.format('YYYY-MM-DD') : '';
+                                            setRaportInfo({ ...raportInfo, accountingDate: formattedDate });
+                                        }}
+                                    />
+
+                                </LocalizationProvider>
+                            </section>
+                            <section className='info_for_raportFK__box'>
+
+                                <Box
+                                    component="form"
+                                    sx={{ '& > :not(style)': { m: 1, width: '100%' } }}
+                                    noValidate
+                                    autoComplete="off"
+                                >
+                                    <TextField id="standard-basic"
+                                        label="Nazwa zestawienia:"
+                                        variant="standard"
+                                        value={raportInfo.reportName}
+                                        onChange={(e) => setRaportInfo({ ...raportInfo, reportName: e.target.value })}
+                                    />
+                                </Box>
+                            </section>
                         </section>
                         <section className='info_for_raportFK-confirm'>
                             <Button
