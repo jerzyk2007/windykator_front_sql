@@ -16,7 +16,7 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                             setDocumentControlBL(prev => {
                                 return {
                                     ...prev,
-                                    upowaznienie: e.target.options[e.target.selectedIndex].text
+                                    upowaznienie: e.target.value === "NULL" ? false : e.target.options[e.target.selectedIndex].text,
                                 };
                             });
                         }}
@@ -37,7 +37,7 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                             setDocumentControlBL(prev => {
                                 return {
                                     ...prev,
-                                    oswiadczenieVAT: e.target.options[e.target.selectedIndex].text
+                                    oswiadczenieVAT: e.target.value === "NULL" ? false : e.target.options[e.target.selectedIndex].text,
                                 };
                             });
                         }}
@@ -54,13 +54,19 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                     <select
                         className="edit_doc--select"
                         value={documentControlBL.prawoJazdy}
+                        // onChange={(e) => {
+                        //     setDocumentControlBL(prev => {
+                        //         return {
+                        //             ...prev,
+                        //             prawoJazdy: e.target.options[e.target.selectedIndex].text
+                        //         };
+                        //     });
+                        // }}
                         onChange={(e) => {
-                            setDocumentControlBL(prev => {
-                                return {
-                                    ...prev,
-                                    prawoJazdy: e.target.options[e.target.selectedIndex].text
-                                };
-                            });
+                            setDocumentControlBL((prev) => ({
+                                ...prev,
+                                prawoJazdy: e.target.value === "NULL" ? false : e.target.options[e.target.selectedIndex].text,
+                            }));
                         }}
                     >
                         <option value="NULL"></option>
@@ -79,7 +85,7 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                             setDocumentControlBL(prev => {
                                 return {
                                     ...prev,
-                                    dowodRejestr: e.target.options[e.target.selectedIndex].text
+                                    dowodRejestr: e.target.value === "NULL" ? false : e.target.options[e.target.selectedIndex].text,
                                 };
                             });
                         }}
@@ -100,7 +106,7 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                             setDocumentControlBL(prev => {
                                 return {
                                     ...prev,
-                                    polisaAC: e.target.options[e.target.selectedIndex].text
+                                    polisaAC: e.target.value === "NULL" ? false : e.target.options[e.target.selectedIndex].text,
                                 };
                             });
                         }}
@@ -122,7 +128,7 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                             setDocumentControlBL(prev => {
                                 return {
                                     ...prev,
-                                    faktura: e.target.options[e.target.selectedIndex].text
+                                    faktura: e.target.value === "NULL" ? false : e.target.options[e.target.selectedIndex].text,
                                 };
                             });
                         }}
@@ -143,7 +149,7 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                             setDocumentControlBL(prev => {
                                 return {
                                     ...prev,
-                                    odpowiedzialnosc: e.target.options[e.target.selectedIndex].text
+                                    odpowiedzialnosc: e.target.value === "NULL" ? false : e.target.options[e.target.selectedIndex].text,
                                 };
                             });
                         }}
@@ -164,17 +170,17 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                             setDocumentControlBL(prev => {
                                 return {
                                     ...prev,
-                                    platnoscVAT: e.target.value
+                                    platnoscVAT: e.target.value === "NULL" ? false : e.target.value
                                 };
                             });
                         }}
                     >
                         <option value="NULL"></option>
-                        <option value="BRAK">NIE DOTYCZY</option>
-                        <option value="UMOWA">PŁATNOŚĆ ODROCZONA</option>
-                        <option value="JEST">POBRANY</option>
-                        <option value="50">NIE POBRANY 50%</option>
-                        <option value="100">NIE POBRANY 100%</option>
+                        <option value="NIE DOTYCZY">NIE DOTYCZY</option>
+                        <option value="PŁATNOŚĆ ODROCZONA">PŁATNOŚĆ ODROCZONA</option>
+                        <option value="JPOBRANY">POBRANY</option>
+                        <option value="NIE POBRANY 50%">NIE POBRANY 50%</option>
+                        <option value="NIE POBRANY 100%">NIE POBRANY 100%</option>
                     </select>
                 </section>
             </section>

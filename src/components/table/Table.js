@@ -25,6 +25,7 @@ const Table = ({
   columns,
   settings,
   handleSaveSettings,
+  roles
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const theme = useTheme();
@@ -123,6 +124,7 @@ const Table = ({
         if (type === "full") {
           setDataRowTable(response.data);
         }
+
       } catch (error) {
         console.error("Error fetching data from the server:", error);
       }
@@ -320,6 +322,7 @@ const Table = ({
             dataRowTable={dataRowTable}
             setDataRowTable={setDataRowTable}
             updateDocuments={updateDocuments}
+            roles={roles}
           />
         )}
 

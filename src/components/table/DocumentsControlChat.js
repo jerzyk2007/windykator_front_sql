@@ -4,7 +4,7 @@ import "./DocumentsControlChat.css";
 
 const DocumentsControlChat = ({ usersurname, controlChat, setControlChat }) => {
     const textareaRef = useRef(null);
-
+    // console.log(controlChat);
     const controlsNote = (text) => {
         const date = new Date();
         const day = String(date.getDate()).padStart(2, "0");

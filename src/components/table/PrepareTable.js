@@ -40,7 +40,6 @@ const PrepareTable = ({ info, raportDocuments }) => {
     }
   };
 
-
   useEffect(() => {
     const controller = new AbortController();
 
@@ -110,6 +109,7 @@ const PrepareTable = ({ info, raportDocuments }) => {
             columns={columns}
             settings={tableSettings}
             handleSaveSettings={handleSaveSettings}
+            roles={auth.roles}
           // getSingleRow={getSingleRow}
           // quickNote={quickNote}
           // setQuickNote={setQuickNote}

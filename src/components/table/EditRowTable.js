@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useData from "../hooks/useData";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
@@ -13,7 +13,7 @@ import DocumentsControlChat from './DocumentsControlChat';
 import { changeSingleDoc } from './utilsForTable/changeSingleDocument';
 import "./EditRowTable.css";
 
-const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
+const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles }) => {
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const [rowData, setRowData] = useState(dataRowTable);
@@ -84,23 +84,64 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments }) => {
 
       );
 
+      if (roles.includes(120)) {
+        await axiosPrivateIntercept.patch(
+          `/documents/change-control-chat`,
+          {
+            NUMER_FV,
+            chat: controlChat.chat,
+          });
+
+        if (rowData.AREA === 'BLACHARNIA') {
+          await axiosPrivateIntercept.patch(
+            `/documents/change-document-control`,
+            {
+              NUMER_FV,
+              documentControlBL
+            }
+          );
+
+        }
+      }
+
 
       updateDocuments(changeSingleDoc(rowData));
       setDataRowTable("");
-
-      // await axiosPrivateIntercept.patch(
-      //   `/documents/change-control-chat`,
-      //   {
-      //     NUMER_FV,
-      //     chat: controlChat.chat,
-      //   });
-
-      // console.log(controlChat.chat);
 
     } catch (err) {
       console.error(err);
     }
   };
+
+  const getDocControl = async () => {
+    const dataChatControl = await axiosPrivateIntercept.get(
+      `/documents/get-control-document/${encodeURIComponent(rowData.NUMER_FV)}`,
+    );
+    setControlChat(prev => {
+      return {
+        ...prev,
+        chat: dataChatControl?.data?.CONTROL_UWAGI ? dataChatControl.data.CONTROL_UWAGI : []
+      };
+    });
+    if (rowData.AREA === 'BLACHARNIA') {
+      setDocumentControlBL({
+        upowaznienie: dataChatControl?.data?.CONTROL_UPOW ? dataChatControl.data.CONTROL_UPOW : false,
+        oswiadczenieVAT: dataChatControl?.data?.CONTROL_OSW_VAT ? dataChatControl.data.CONTROL_OSW_VAT : false,
+        prawoJazdy: dataChatControl?.data?.CONTROL_PR_JAZ ? dataChatControl.data.CONTROL_PR_JAZ : false,
+        dowodRejestr: dataChatControl?.data?.CONTROL_DOW_REJ ? dataChatControl.data.CONTROL_DOW_REJ : false,
+        polisaAC: dataChatControl?.data?.CONTROL_POLISA ? dataChatControl.data.CONTROL_POLISA : false,
+        faktura: dataChatControl?.data?.CONTROL_FV ? dataChatControl.data.CONTROL_FV : false,
+        odpowiedzialnosc: dataChatControl?.data?.CONTROL_UPOW ? dataChatControl.data.CONTROL_UPOW : false,
+        platnoscVAT: dataChatControl?.data?.CONTROL_PLATNOSC_VAT ? dataChatControl.data.CONTROL_PLATNOSC_VAT : false,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (roles.includes(120)) {
+      getDocControl();
+    }
+  }, [rowData.NUMER_FV]);
 
   return (
     <section className="edit-row-table">
