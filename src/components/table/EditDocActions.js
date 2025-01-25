@@ -1,7 +1,7 @@
 import EditDocSettlements from "./EditDocSettlements";
 import "./EditDocActions.css";
 
-const EditDocActions = ({ rowData, setRowData, handleAddNote, roles, setChangePanel }) => {
+const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
   return (
     <section className="edit_doc_actions">
       <section className="edit_doc edit_doc_actions__container">
@@ -17,7 +17,7 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles, setChangePa
           <span className="edit_doc--title">
             Rodzaj działania:
           </span>
-          {roles.includes(110) ?
+          {(roles.includes(110) || roles.includes(120)) ?
             <select
               className="edit_doc--select"
               value={rowData.DZIALANIA ? rowData.DZIALANIA : ""}
@@ -51,7 +51,7 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles, setChangePa
             Błąd doradcy:
           </span>
 
-          {roles.includes(110) ? <select
+          {(roles.includes(110) || roles.includes(120)) ? <select
             className="edit_doc--select"
             value={rowData.BLAD_DORADCY ? rowData.BLAD_DORADCY : "NIE"}
             onChange={(e) => {
@@ -77,7 +77,7 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles, setChangePa
             <span className="edit_doc--title">
               Pobrany VAT ?
             </span>
-            {roles.includes(110) ? <select
+            {(roles.includes(110) || roles.includes(120)) ? <select
               className="edit_doc--select"
               value={rowData.POBRANO_VAT ? rowData.POBRANO_VAT : ""}
               onChange={(e) => {
@@ -117,7 +117,7 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles, setChangePa
               Wybierz kancelarię TU:
             </span>
 
-            {roles.includes(110) ? <select
+            {(roles.includes(110) || roles.includes(120)) ? <select
               className="edit_doc--select"
               value={rowData.JAKA_KANCELARIA_TU ? rowData.JAKA_KANCELARIA_TU : "BRAK"}
               onChange={(e) => {
@@ -151,7 +151,7 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles, setChangePa
           <span className="edit_doc--title">
             Wyróżnij kontrahenta:
           </span>
-          {roles.includes(110) ? <input
+          {(roles.includes(110) || roles.includes(120)) ? <input
             className="edit_doc--select"
             style={{
               transform: "scale(0.7)",

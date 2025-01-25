@@ -171,7 +171,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles })
                 <section className="edit-row-table_section-content-data">
                   {changePanel === 'doc-actions' &&
                     <section className="edit-row-table__change-panel">
-                      {auth.roles.includes(110) && <Button
+                      {(auth.roles.includes(110) || auth.roles.includes(120)) && <Button
                         variant="contained"
                         color="secondary"
                         onClick={() => setChangePanel('management')}

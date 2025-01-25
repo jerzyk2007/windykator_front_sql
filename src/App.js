@@ -65,7 +65,7 @@ function App() {
                 element={<PrepareTable info={"all"} />}
               />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[110]} />}>
+            <Route element={<RequireAuth allowedRoles={[110, 120, 1000]} />}>
               <Route
                 path="/fk-documents-table"
                 element={<PrepareTable info={"raport_fk"} />}
@@ -73,7 +73,7 @@ function App() {
             </Route>
 
             <Route
-              element={<RequireAuth allowedRoles={[100, 110, 1000]} />}
+              element={<RequireAuth allowedRoles={[100, 110, 120, 1000]} />}
             >
               <Route
                 path="/raport-departments"
@@ -82,7 +82,7 @@ function App() {
             </Route>
 
             <Route
-              element={<RequireAuth allowedRoles={[100, 110, 1000]} />}
+              element={<RequireAuth allowedRoles={[100, 110, 120, 1000]} />}
             >
               <Route path="/raport-advisers" element={<RaportAdvisers />} />
             </Route>
@@ -119,7 +119,7 @@ function App() {
               <Route path="/contacts" element={<Contacts />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[120, 200, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/add-data" element={<AddDataFromFile />} />
             </Route>
 

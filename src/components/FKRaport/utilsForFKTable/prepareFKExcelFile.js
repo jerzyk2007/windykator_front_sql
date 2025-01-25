@@ -469,6 +469,7 @@ export const getExcelRaport = async (cleanData, settingsColumn) => {
 
 
 export const getExcelRaportV2 = async (cleanData, raportInfo) => {
+  console.log(cleanData);
 
   // od którego wiersza mają się zaczynać dane w arkuszu
   const startRow = 6;

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import useData from "./hooks/useData";
 import useLogout from "./hooks/useLogout";
 import useWindowSize from "./hooks/useWindow";
+import { useControlRaportBL } from './FKRaport/RaportConrolDocumentsBL';
 
 import "./NavMenu.css";
 
@@ -12,6 +13,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
   const navigate = useNavigate();
   const { auth } = useData();
   const { width } = useWindowSize();
+  const controlRaportBL = useControlRaportBL();
 
   const [menuActive, setMenuActive] = useState(false);
   const handleLinkClick = () => {
@@ -20,7 +22,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     }
     setMenuActive(false);
   };
-
   const handleLogout = async () => {
     handleLinkClick();
     await logout();
@@ -33,13 +34,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
         onClick={
           width ? () => setMenuActive(!menuActive) : () => setMenuActive(true)
         }
-        // onClick={
-        //   width && width >= 960
-        //     ? () => setMenuActive(!menuActive)
-        //     : () => setMenuActive(true)
-        // }
         onMouseLeave={
-          // width && width >= 960 ? () => setMenuActive(false) : undefined
           width ? () => setMenuActive(false) : undefined
         }
       >
@@ -94,7 +89,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     Kpl dane
                   </Link>
                 </li>
-                {auth?.roles?.includes(110) && (
+                {(auth?.roles?.includes(110) || auth?.roles?.includes(120) || auth?.roles?.includes(1000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/fk-documents-table"
@@ -108,10 +103,32 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
             </div>
           </li>
         )}
+        {(auth?.roles?.includes(120) || auth?.roles?.includes(200) || auth?.roles?.includes(1000)) && (
+          <li className="nav_menu__menu-item">
+            <Link className="nav_menu-link">Kontrola</Link>
+            <div
+              className={
+                menuActive
+                  ? "nav_menu-dropdown__menu"
+                  : "nav_menu-dropdown__menu-disabled"
+              }
+            >
+              <ul className="nav_menu__menu-dropmenu">
+                <li className="nav_menu-item-dropmenu">
+                  <span
+                    className="nav_menu-link"
+                    onClick={controlRaportBL}>
+                    Raport kontroli BL
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </li>
+        )}
 
         {(auth?.roles?.includes(100) ||
           auth?.roles?.includes(200) ||
-          auth?.roles?.includes(300)) && (
+          auth?.roles?.includes(300) || auth?.roles?.includes(1000)) && (
             <li className="nav_menu__menu-item">
               <Link className="nav_menu-link">Raporty</Link>
               <div
@@ -156,22 +173,13 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </li>
                   )}
 
-                  {auth?.roles?.includes(200) && (
+                  {(auth?.roles?.includes(200) || auth?.roles?.includes(1000)) && (
                     <li className="nav_menu-item-dropmenu">
                       <Link className="nav_menu-link">
                         <i className="fas fa-caret-left"></i>Raporty - FK
                       </Link>
                       <div className="nav_menu-dropdown__menu--side_left">
                         <ul className="nav_menu__menu--side">
-                          {/* <li className="nav_menu-item-dropmenu">
-                            <Link
-                              to="/fk-raport"
-                              className="nav_menu-link"
-                              onClick={handleLinkClick}
-                            >
-                              Raport
-                            </Link>
-                          </li> */}
                           {auth?.roles?.includes(200) && (
                             <li className="nav_menu-item-dropmenu">
                               <Link
@@ -183,66 +191,11 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                               </Link>
                             </li>
                           )}
-                          {/* {auth?.roles?.includes(200) && (
-                            <li className="nav_menu-item-dropmenu">
-                              <Link
-                                to="/fk-table-settings"
-                                className="nav_menu-link"
-                                onClick={handleLinkClick}
-                              >
-                                Tabela
-                              </Link>
-                            </li>
-                          )} */}
-                          {/* {auth?.roles?.includes(200) && (
-                          <li className="nav_menu-item-dropmenu">
-                            <Link
-                              to="/fk-change-items"
-                              className="nav_menu-link"
-                              onClick={handleLinkClick}
-                            >
-                              Zmień stałe
-                            </Link>
-                          </li>
-                        )} */}
-                          {/* {auth?.roles?.includes(200) && (
-                          <li className="nav_menu-item-dropmenu">
-                            <Link
-                              to="/fk-data-settings"
-                              className="nav_menu-link"
-                              onClick={handleLinkClick}
-                            >
-                              Dopasuj dane
-                            </Link>
-                          </li>
-                        )} */}
                         </ul>
                       </div>
                     </li>
                   )}
 
-                  {/* {auth?.permissions?.Standard && (
-                  <li className="nav_menu-item-dropmenu">
-                    <Link
-                      to="/raport-departments"
-                      className="nav_menu-link"
-                      onClick={handleLinkClick}
-                    >
-                      Raport - Dział
-                    </Link>
-                  </li>
-                )}
-                {auth?.roles?.includes(100) && (
-                  <li className="nav_menu-item-dropmenu">
-                    <Link
-                      to="/raport-advisers"
-                      className="nav_menu-link"
-                      onClick={handleLinkClick}
-                    >
-                      Raport - Doradca
-                    </Link>
-                  </li>
-                )} */}
                   {(auth?.roles?.includes(300) ||
                     auth?.roles?.includes(1000)) && (
                       <li className="nav_menu-item-dropmenu">
