@@ -10,20 +10,23 @@ import EditDocBeCared from "./EditDocBeCared";
 import EditDataManagement from "./EditDataManagement";
 import DocumentsControlBL from './DocumentsControlBL';
 import DocumentsControlChat from './DocumentsControlChat';
-import { changeSingleDoc } from './utilsForTable/changeSingleDocument';
+import { changeSingleDoc, changeSingleDocNoExit } from './utilsForTable/changeSingleDocument';
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 import "./EditRowTable.css";
 
 const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, nextDoc, getSingleRow }) => {
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
+
+
   const [rowData, setRowData] = useState(dataRowTable);
   const [changePanel, setChangePanel] = useState('doc-actions');
   const [toggleState, setToggleState] = useState(1);
   const [note, setNote] = useState("");
-  const [nextPrevButton, setNextPrevButton] = useState({
-    nextButton: true,
-    prevButton: true
+
+  const [nextPrevDoc, SetNextPrevDoc] = useState({
+    prev: null,
+    next: null,
   });
 
   // dane dla kontroli dokumentacji obszaru Blacharnia
@@ -76,7 +79,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
   //   setToggleState(index);
   // };
 
-  const handleSaveData = async () => {
+  const handleSaveData = async (type) => {
     const { id_document, NUMER_FV } = rowData;
 
     try {
@@ -105,13 +108,16 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
               documentControlBL
             }
           );
-
         }
       }
 
-
-      updateDocuments(changeSingleDoc(rowData));
-      setDataRowTable("");
+      if (type !== "no_exit") {
+        updateDocuments(changeSingleDoc(rowData));
+        setDataRowTable("");
+      } else if (type === "no_exit") {
+        updateDocuments(rowData);
+        // changeSingleDocNoExit(rowData);
+      }
 
     } catch (err) {
       console.error(err);
@@ -143,15 +149,18 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
   };
 
   const checkNextDoc = (type) => {
+
     if (type === "prev") {
       const index = nextDoc.indexOf(dataRowTable.id_document);
       const previousElement = nextDoc[index - 1];
-      getSingleRow(previousElement, "full");
+      // getSingleRow(previousElement, "full");
+      getSingleRow(nextPrevDoc.prev, "full");
     }
     if (type === "next") {
       const index = nextDoc.indexOf(dataRowTable.id_document);
       const previousElement = nextDoc[index + 1];
-      getSingleRow(previousElement, "full");
+      // getSingleRow(previousElement, "full");
+      getSingleRow(nextPrevDoc.next, "full");
     }
 
   };
@@ -160,26 +169,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
 
   useEffect(() => {
     const index = nextDoc.indexOf(dataRowTable.id_document);
-    if (index === 0) {
-      setNextPrevButton(prev => {
-        return {
-          ...prev,
-          prevButton: false
-        };
-      });
-    } else if (index + 1 === nextDoc.length) {
-      setNextPrevButton(prev => {
-        return {
-          ...prev,
-          nextButton: false
-        };
-      });
-    } else {
-      setNextPrevButton({
-        prevButton: true,
-        nextButton: true
-      });
-    }
+
+    SetNextPrevDoc({
+      prev: nextDoc[index - 1] ? nextDoc[index - 1] : null,
+      next: nextDoc[index + 1] ? nextDoc[index + 1] : null,
+    });
 
   }, [rowData.NUMER_FV]);
 
@@ -192,6 +186,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
   useEffect(() => {
     setRowData(dataRowTable);
   }, [dataRowTable]);
+
 
   return (
     <section className="edit-row-table">
@@ -314,15 +309,22 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
           <section className="edit-row-table__panel">
             <section className="edit_row_table-buttons">
 
-              {/* <section className="edit_row_table-icon_buttons"> */}
               <RxDoubleArrowLeft
-                className={nextPrevButton.prevButton ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
-                onClick={() => nextPrevButton.prevButton && checkNextDoc("prev")}
+                className={nextPrevDoc.prev ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
+                onClick={() => nextPrevDoc.prev && checkNextDoc("prev")}
               />
-
+              <Button
+                className="mui-button"
+                variant="contained"
+                size="medium"
+                color="secondary"
+                onClick={() => handleSaveData('no_exit')}
+              >
+                Zapisz
+              </Button>
               <RxDoubleArrowRight
-                className={nextPrevButton.nextButton ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
-                onClick={() => nextPrevButton.nextButton && checkNextDoc("next")}
+                className={nextPrevDoc.next ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
+                onClick={() => nextPrevDoc.next && checkNextDoc("next")}
 
               />
 
@@ -346,6 +348,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
               >
                 Zatwierdź
               </Button>
+
             </section>
             <section className="edit_row_table-buttons">
               {auth.roles.includes(120) && <Button

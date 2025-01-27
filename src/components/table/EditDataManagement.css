@@ -8,5 +8,10 @@
 }
 
 .edit_data_management--content {
-    height: 180px;
+    height: 150px;
+}
+
+.edit_data_management--edit {
+    height: 100px;
+
 }

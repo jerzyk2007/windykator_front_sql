@@ -9,10 +9,10 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
           <span className="edit_doc--title">Jaka kancelaria:</span>
           <span className="edit_doc--content">{rowData?.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : "BRAK"}</span>
         </section>
-        {rowData?.JAKA_KANCELARIA && <section className="edit_doc__container">
+        <section className="edit_doc__container">
           <span className="edit_doc--title">Status kancelaria:</span>
           <span className="edit_doc--content">{rowData?.STATUS_AKTUALNY ? rowData.STATUS_AKTUALNY : "BRAK"}</span>
-        </section>}
+        </section>
         <section className="edit_doc__container">
           <span className="edit_doc--title">
             Rodzaj działania:

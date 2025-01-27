@@ -71,7 +71,6 @@ const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
             "Ostateczna data rozliczenia:",
             tempDate || "Brak"
         );
-
         setRowData((prev) => ({
             ...prev,
             OSTATECZNA_DATA_ROZLICZENIA: tempDate, // Aktualizacja w głównych danych
@@ -127,10 +126,15 @@ const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
                     ref={textareaRef}
                     className="edit-doc-chat--content edit_data_management--content"
                     readOnly
-                    value={rowData.INFORMACJA_ZARZAD ? rowData.INFORMACJA_ZARZAD.join("\n") : ""}
+                    // value={rowData.INFORMACJA_ZARZAD ? rowData.INFORMACJA_ZARZAD.join("\n") : ""}
+                    value={
+                        Array.isArray(rowData.INFORMACJA_ZARZAD)
+                            ? rowData.INFORMACJA_ZARZAD.join("\n")
+                            : ""
+                    }
                 ></textarea>
                 <textarea
-                    className="edit-doc-chat--edit"
+                    className="edit-doc-chat--edit edit_data_management--edit"
                     placeholder="dodaj informacje"
                     value={managementNote}
                     onChange={(e) => setManagementNote(e.target.value)}

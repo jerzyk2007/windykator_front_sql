@@ -26,3 +26,8 @@ export const changeSingleDoc = (data) => {
     data.STATUS_SPRAWY_WINDYKACJA = data.STATUS_SPRAWY_WINDYKACJA ? data.STATUS_SPRAWY_WINDYKACJA : 'BRAK';
     return data;
 };
+
+// zmiana danych dla przewijania dokumentów, zapisania, ale bez wychodzenia z EditROwData
+// export const changeSingleDocNoExit = (data) => {
+//     console.log(data);
+// };
