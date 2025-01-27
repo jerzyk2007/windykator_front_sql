@@ -178,7 +178,7 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                         <option value="NULL"></option>
                         <option value="NIE DOTYCZY">NIE DOTYCZY</option>
                         <option value="PŁATNOŚĆ ODROCZONA">PŁATNOŚĆ ODROCZONA</option>
-                        <option value="JPOBRANY">POBRANY</option>
+                        <option value="POBRANY">POBRANY</option>
                         <option value="NIE POBRANY 50%">NIE POBRANY 50%</option>
                         <option value="NIE POBRANY 100%">NIE POBRANY 100%</option>
                     </select>
