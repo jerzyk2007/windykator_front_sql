@@ -46,6 +46,8 @@ const Table = ({
   const [sorting, setSorting] = useState([
     { id: "ILE_DNI_PO_TERMINIE", desc: false },
   ]);
+  const [nextDoc, setNextDoc] = useState([]);
+
 
   const plLocale =
     plPL.components.MuiLocalizationProvider.defaultProps.localeText;
@@ -109,7 +111,7 @@ const Table = ({
     getAllDataRaport(updateData, orderColumns, type);
   };
 
-  const getSingleRow = async (id, type, dep) => {
+  const getSingleRow = async (id, type) => {
     const getRow = documents.filter((row) => row.id_document === id);
 
     if (getRow.length > 0) {
@@ -296,6 +298,8 @@ const Table = ({
     ),
   });
 
+
+
   useEffect(() => {
     setTableSize(height - 151);
   }, [height]);
@@ -303,6 +307,12 @@ const Table = ({
   useEffect(() => {
     setData(documents);
   }, [documents]);
+
+
+  useEffect(() => {
+    const visibleData = table.getPrePaginationRowModel().rows.map((row) => row.original.id_document);
+    setNextDoc(visibleData);
+  }, [table.getPrePaginationRowModel().rows]);
 
 
 
@@ -323,6 +333,8 @@ const Table = ({
             setDataRowTable={setDataRowTable}
             updateDocuments={updateDocuments}
             roles={roles}
+            nextDoc={nextDoc}
+            getSingleRow={getSingleRow}
           />
         )}
 

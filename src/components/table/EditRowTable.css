@@ -45,6 +45,22 @@
   flex-basis: 50%;
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
+}
+
+.edit_row_table-icon_buttons {
+  color: rgb(32, 90, 175);
+  transform: scale(1.8);
+  cursor: pointer;
+}
+
+.edit_row_table-icon_buttons:active {
+  color: red;
+  transform: scale(2);
+}
+
+.edit_row_table-icon_buttons--disable {
+  color: rgba(0, 0, 0, 0.2);
 }
 
 /* .tabs {

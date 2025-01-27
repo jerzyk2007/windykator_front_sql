@@ -11,15 +11,20 @@ import EditDataManagement from "./EditDataManagement";
 import DocumentsControlBL from './DocumentsControlBL';
 import DocumentsControlChat from './DocumentsControlChat';
 import { changeSingleDoc } from './utilsForTable/changeSingleDocument';
+import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 import "./EditRowTable.css";
 
-const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles }) => {
+const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, nextDoc, getSingleRow }) => {
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const [rowData, setRowData] = useState(dataRowTable);
   const [changePanel, setChangePanel] = useState('doc-actions');
   const [toggleState, setToggleState] = useState(1);
   const [note, setNote] = useState("");
+  const [nextPrevButton, setNextPrevButton] = useState({
+    nextButton: true,
+    prevButton: true
+  });
 
   // dane dla kontroli dokumentacji obszaru Blacharnia
   const [documentControlBL, setDocumentControlBL] = useState({
@@ -137,11 +142,56 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles })
     }
   };
 
+  const checkNextDoc = (type) => {
+    if (type === "prev") {
+      const index = nextDoc.indexOf(dataRowTable.id_document);
+      const previousElement = nextDoc[index - 1];
+      getSingleRow(previousElement, "full");
+    }
+    if (type === "next") {
+      const index = nextDoc.indexOf(dataRowTable.id_document);
+      const previousElement = nextDoc[index + 1];
+      getSingleRow(previousElement, "full");
+    }
+
+  };
+
+
+
+  useEffect(() => {
+    const index = nextDoc.indexOf(dataRowTable.id_document);
+    if (index === 0) {
+      setNextPrevButton(prev => {
+        return {
+          ...prev,
+          prevButton: false
+        };
+      });
+    } else if (index + 1 === nextDoc.length) {
+      setNextPrevButton(prev => {
+        return {
+          ...prev,
+          nextButton: false
+        };
+      });
+    } else {
+      setNextPrevButton({
+        prevButton: true,
+        nextButton: true
+      });
+    }
+
+  }, [rowData.NUMER_FV]);
+
   useEffect(() => {
     if (roles.includes(120)) {
       getDocControl();
     }
-  }, [rowData.NUMER_FV]);
+  }, [rowData.id_document]);
+
+  useEffect(() => {
+    setRowData(dataRowTable);
+  }, [dataRowTable]);
 
   return (
     <section className="edit-row-table">
@@ -262,8 +312,21 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles })
             </section>
           </section>
           <section className="edit-row-table__panel">
-            <section className="edit_row_table-buttons"></section>
+            <section className="edit_row_table-buttons">
 
+              {/* <section className="edit_row_table-icon_buttons"> */}
+              <RxDoubleArrowLeft
+                className={nextPrevButton.prevButton ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
+                onClick={() => nextPrevButton.prevButton && checkNextDoc("prev")}
+              />
+
+              <RxDoubleArrowRight
+                className={nextPrevButton.nextButton ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
+                onClick={() => nextPrevButton.nextButton && checkNextDoc("next")}
+
+              />
+
+            </section>
             <section className="edit_row_table-buttons">
               <Button
                 className="mui-button"
