@@ -14,12 +14,10 @@ import { changeSingleDoc } from './utilsForTable/changeSingleDocument';
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 import "./EditRowTable.css";
 
-const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, nextDoc, getSingleRow }) => {
+const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, nextDoc }) => {
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
-
-  // const [rowData, setRowData] = useState(dataRowTable);
   const [rowData, setRowData] = useState([]);
   const [changePanel, setChangePanel] = useState('doc-actions');
   const [toggleState, setToggleState] = useState(1);

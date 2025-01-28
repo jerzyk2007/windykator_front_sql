@@ -6,7 +6,6 @@ import "./EditDataManagement.css";
 const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
     const textareaRef = useRef(null);
     const [managementNote, setManagementNote] = useState("");
-
     // Tymczasowa data
     const [tempDate, setTempDate] = useState(rowData.OSTATECZNA_DATA_ROZLICZENIA || ""); // 
     const [isFirstRender, setIsFirstRender] = useState(true); // Czy to pierwsze uruchomienie?
@@ -83,7 +82,7 @@ const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
 
     const handleDateChange = (e) => {
         setTempDate(e.target.value); // Aktualizujemy tymczasową datę
-        // if (isFirstRender) setIsFirstRender(false); // Wyłącz tryb "pierwszego uruchomienia" przy dowolnej zmianie
+        if (isFirstRender) setIsFirstRender(false); // Wyłącz tryb "pierwszego uruchomienia" przy dowolnej zmianie
     };
 
     useEffect(() => {
