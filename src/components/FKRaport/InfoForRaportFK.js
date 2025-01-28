@@ -28,7 +28,6 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
         try {
             setPleaseWait(true);
             const result = await axiosPrivateIntercept.post("/fk/get-raport-data-v2");
-
             const accountArray = [
                 ...new Set(
                     result.data
@@ -207,6 +206,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 }
                 return item;
             });
+
             //wysyłam dane do serwera, żeby zrobić znaczniki przy dokumentach w wygenerowanym raporcie, aby użytkownik mógł pracowac tylko na tych dokumentach
             axiosPrivateIntercept.post(
                 `/fk/send-document-mark-fk`,

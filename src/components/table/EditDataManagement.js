@@ -7,7 +7,8 @@ const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
     const textareaRef = useRef(null);
     const [managementNote, setManagementNote] = useState("");
 
-    const [tempDate, setTempDate] = useState(rowData.OSTATECZNA_DATA_ROZLICZENIA || ""); // Tymczasowa data
+    // Tymczasowa data
+    const [tempDate, setTempDate] = useState(rowData.OSTATECZNA_DATA_ROZLICZENIA || ""); // 
     const [isFirstRender, setIsFirstRender] = useState(true); // Czy to pierwsze uruchomienie?
 
     const scrollToBottom = () => {
@@ -71,6 +72,7 @@ const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
             "Ostateczna data rozliczenia:",
             tempDate || "Brak"
         );
+
         setRowData((prev) => ({
             ...prev,
             OSTATECZNA_DATA_ROZLICZENIA: tempDate, // Aktualizacja w głównych danych
@@ -81,12 +83,17 @@ const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
 
     const handleDateChange = (e) => {
         setTempDate(e.target.value); // Aktualizujemy tymczasową datę
-        if (isFirstRender) setIsFirstRender(false); // Wyłącz tryb "pierwszego uruchomienia" przy dowolnej zmianie
+        // if (isFirstRender) setIsFirstRender(false); // Wyłącz tryb "pierwszego uruchomienia" przy dowolnej zmianie
     };
 
     useEffect(() => {
         scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.INFORMACJA_ZARZAD`
     }, [rowData.INFORMACJA_ZARZAD]);
+
+    useEffect(() => {
+        setTempDate(rowData.OSTATECZNA_DATA_ROZLICZENIA || "");
+        setIsFirstRender(true);
+    }, [rowData]);
 
     return (
         <section className="edit_doc edit_doc_actions ">
@@ -126,15 +133,10 @@ const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
                     ref={textareaRef}
                     className="edit-doc-chat--content edit_data_management--content"
                     readOnly
-                    // value={rowData.INFORMACJA_ZARZAD ? rowData.INFORMACJA_ZARZAD.join("\n") : ""}
-                    value={
-                        Array.isArray(rowData.INFORMACJA_ZARZAD)
-                            ? rowData.INFORMACJA_ZARZAD.join("\n")
-                            : ""
-                    }
+                    value={Array.isArray(rowData.INFORMACJA_ZARZAD) ? rowData.INFORMACJA_ZARZAD.join("\n") : ''}
                 ></textarea>
                 <textarea
-                    className="edit-doc-chat--edit edit_data_management--edit"
+                    className="edit-doc-chat--edit"
                     placeholder="dodaj informacje"
                     value={managementNote}
                     onChange={(e) => setManagementNote(e.target.value)}

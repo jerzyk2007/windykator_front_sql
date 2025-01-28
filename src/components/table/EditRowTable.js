@@ -10,7 +10,7 @@ import EditDocBeCared from "./EditDocBeCared";
 import EditDataManagement from "./EditDataManagement";
 import DocumentsControlBL from './DocumentsControlBL';
 import DocumentsControlChat from './DocumentsControlChat';
-import { changeSingleDoc, changeSingleDocNoExit } from './utilsForTable/changeSingleDocument';
+import { changeSingleDoc } from './utilsForTable/changeSingleDocument';
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 import "./EditRowTable.css";
 
@@ -19,7 +19,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
 
-  const [rowData, setRowData] = useState(dataRowTable);
+  // const [rowData, setRowData] = useState(dataRowTable);
+  const [rowData, setRowData] = useState([]);
   const [changePanel, setChangePanel] = useState('doc-actions');
   const [toggleState, setToggleState] = useState(1);
   const [note, setNote] = useState("");
@@ -110,13 +111,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
           );
         }
       }
+      // await updateDocuments(changeSingleDoc(rowData));
+      await updateDocuments(changeSingleDoc(rowData));
 
       if (type !== "no_exit") {
-        updateDocuments(changeSingleDoc(rowData));
         setDataRowTable("");
-      } else if (type === "no_exit") {
-        updateDocuments(rowData);
-        // changeSingleDocNoExit(rowData);
       }
 
     } catch (err) {
@@ -148,19 +147,23 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
     }
   };
 
-  const checkNextDoc = (type) => {
+  const checkNextDoc = async (type) => {
+    await handleSaveData('no_exit');
 
     if (type === "prev") {
-      const index = nextDoc.indexOf(dataRowTable.id_document);
-      const previousElement = nextDoc[index - 1];
-      // getSingleRow(previousElement, "full");
-      getSingleRow(nextPrevDoc.prev, "full");
+      // getSingleRow(nextPrevDoc.prev, "full");
+      const response = await axiosPrivateIntercept.get(
+        `/documents/get-single-document/${nextPrevDoc.prev}`
+      );
+      setRowData(response.data);
     }
     if (type === "next") {
-      const index = nextDoc.indexOf(dataRowTable.id_document);
-      const previousElement = nextDoc[index + 1];
-      // getSingleRow(previousElement, "full");
-      getSingleRow(nextPrevDoc.next, "full");
+      // getSingleRow(nextPrevDoc.next, "full");
+
+      const response = await axiosPrivateIntercept.get(
+        `/documents/get-single-document/${nextPrevDoc.next}`
+      );
+      setRowData(response.data);
     }
 
   };
@@ -168,8 +171,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
 
 
   useEffect(() => {
-    const index = nextDoc.indexOf(dataRowTable.id_document);
-
+    const index = nextDoc.indexOf(rowData.id_document);
     SetNextPrevDoc({
       prev: nextDoc[index - 1] ? nextDoc[index - 1] : null,
       next: nextDoc[index + 1] ? nextDoc[index + 1] : null,
@@ -185,7 +187,12 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
 
   useEffect(() => {
     setRowData(dataRowTable);
-  }, [dataRowTable]);
+  }, []);
+  // useEffect(() => {
+  //   setRowData(dataRowTable);
+  // }, [dataRowTable]);
+
+
 
 
   return (
@@ -313,15 +320,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                 className={nextPrevDoc.prev ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
                 onClick={() => nextPrevDoc.prev && checkNextDoc("prev")}
               />
-              <Button
-                className="mui-button"
-                variant="contained"
-                size="medium"
-                color="secondary"
-                onClick={() => handleSaveData('no_exit')}
-              >
-                Zapisz
-              </Button>
               <RxDoubleArrowRight
                 className={nextPrevDoc.next ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
                 onClick={() => nextPrevDoc.next && checkNextDoc("next")}

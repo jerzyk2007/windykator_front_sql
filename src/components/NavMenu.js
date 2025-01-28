@@ -5,6 +5,7 @@ import useData from "./hooks/useData";
 import useLogout from "./hooks/useLogout";
 import useWindowSize from "./hooks/useWindow";
 import { useControlRaportBL } from './FKRaport/RaportConrolDocumentsBL';
+import { useOrganizationStructureL } from './organization_structure/RaportOrganizationStructure';
 
 import "./NavMenu.css";
 
@@ -14,6 +15,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
   const { auth } = useData();
   const { width } = useWindowSize();
   const controlRaportBL = useControlRaportBL();
+  const organizationStructure = useOrganizationStructureL();
 
   const [menuActive, setMenuActive] = useState(false);
   const handleLinkClick = () => {
@@ -119,6 +121,15 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     className="nav_menu-link"
                     onClick={controlRaportBL}>
                     Raport kontroli BL
+                  </span>
+                </li>
+              </ul>
+              <ul className="nav_menu__menu-dropmenu">
+                <li className="nav_menu-item-dropmenu">
+                  <span
+                    className="nav_menu-link"
+                    onClick={organizationStructure}>
+                    Struktura organizacji
                   </span>
                 </li>
               </ul>

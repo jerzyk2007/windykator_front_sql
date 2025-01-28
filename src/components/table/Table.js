@@ -48,7 +48,6 @@ const Table = ({
   ]);
   const [nextDoc, setNextDoc] = useState([]);
 
-
   const plLocale =
     plPL.components.MuiLocalizationProvider.defaultProps.localeText;
 
@@ -113,7 +112,6 @@ const Table = ({
 
   const getSingleRow = async (id, type) => {
     const getRow = documents.filter((row) => row.id_document === id);
-
     if (getRow.length > 0) {
       try {
         const response = await axiosPrivateIntercept.get(
@@ -313,8 +311,6 @@ const Table = ({
     const visibleData = table.getPrePaginationRowModel().rows.map((row) => row.original.id_document);
     setNextDoc(visibleData);
   }, [table.getPrePaginationRowModel().rows]);
-
-
 
   return (
     <section className="table">

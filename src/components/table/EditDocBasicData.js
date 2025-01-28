@@ -32,21 +32,21 @@ const EditDocBasicData = ({ rowData }) => {
       <section className="edit_doc__container">
         <span className="edit_doc--title">Brutto:</span>
         <span className="edit_doc--content">
-          {rowData.BRUTTO.toLocaleString("pl-PL", {
+          {rowData?.BRUTTO ? rowData.BRUTTO.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
-          })}
+          }) : ""}
         </span>
       </section>
       <section className="edit_doc__container">
         <span className="edit_doc--title">Netto:</span>
         <span className="edit_doc--content">
-          {rowData.NETTO.toLocaleString("pl-PL", {
+          {rowData?.NETTO ? rowData.NETTO.toLocaleString("pl-PL", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
             useGrouping: true,
-          })}
+          }) : ''}
         </span>
       </section>
       {rowData.AREA === "BLACHARNIA" && (
