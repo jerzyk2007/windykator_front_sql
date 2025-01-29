@@ -28,6 +28,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
         try {
             setPleaseWait(true);
             const result = await axiosPrivateIntercept.post("/fk/get-raport-data-v2");
+
             const accountArray = [
                 ...new Set(
                     result.data
@@ -36,7 +37,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 ),
             ].sort();
 
-            // usuwam wartości null, bo excel ma z tym problem
+            // // usuwam wartości null, bo excel ma z tym problem
             const eraseNull = result.data.map(item => {
 
                 const convertToDateIfPossible = (value) => {
@@ -90,7 +91,8 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 };
             }
             );
-            // rozdziela dane na poszczególne obszary BLACHARNIA, CZĘŚCI itd
+
+            // // rozdziela dane na poszczególne obszary BLACHARNIA, CZĘŚCI itd
             const resultArray = accountArray.reduce((acc, area) => {
                 // Filtrujemy obiekty, które mają odpowiedni OBSZAR
                 const filteredData = eraseNull.filter(item => item.OBSZAR === area);
@@ -105,7 +107,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
             }, []);
 
 
-            /// tworzę osobny element tablicy dla arkusza WYDANE/NIEZAPŁACONE z warunkami, jest data wydania i nie jest rozliczone w AS
+            // /// tworzę osobny element tablicy dla arkusza WYDANE/NIEZAPŁACONE z warunkami, jest data wydania i nie jest rozliczone w AS
             const carDataSettlement = eraseNull.map(item => {
                 if ((item.OBSZAR === "SAMOCHODY NOWE" || item.OBSZAR === "SAMOCHODY UŻYWANE") && item.DO_ROZLICZENIA_AS > 0 && item.CZY_SAMOCHOD_WYDANY_AS === "TAK") {
                     return item;
@@ -120,7 +122,12 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
             const updateAging = finalResult.map((element) => {
                 if (element.name !== "ALL" && element.name !== "KSIĘGOWOŚĆ" && element.data) {
                     const updatedData = element.data.filter((item) => {
-                        return item.PRZEDZIAL_WIEKOWANIE !== "1-7" && item.PRZEDZIAL_WIEKOWANIE !== "<0" && item.DO_ROZLICZENIA_AS > 0;
+                        return item.PRZEDZIAL_WIEKOWANIE !== "1-7" && item.PRZEDZIAL_WIEKOWANIE !== "<0" && item.DO_ROZLICZENIA_AS > 0
+                            &&
+                            (item.TYP_DOKUMENTU === 'Faktura'
+                                || item.TYP_DOKUMENTU === 'Faktura zaliczkowa'
+                                || item.TYP_DOKUMENTU === 'Korekta'
+                                || item.TYP_DOKUMENTU === 'Nota');
                     });
                     return { ...element, data: updatedData }; // Zwracamy zaktualizowany element
                 }
@@ -167,7 +174,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                     const filteredData = element.data.filter(item => item.CZY_W_KANCELARI === 'NIE');
 
                     const updatedData = filteredData.map((item) => {
-                        const { BRAK_DATY_WYSTAWIENIA_FV, ROZNICA, JAKA_KANCELARIA, CZY_W_KANCELARI, KWOTA_WPS, ETAP_SPRAWY, ...rest } = item;
+                        const { BRAK_DATY_WYSTAWIENIA_FV, ROZNICA, JAKA_KANCELARIA, CZY_W_KANCELARI, KWOTA_WPS, ETAP_SPRAWY, DATA_ROZLICZENIA_AS, OPIS_ROZRACHUNKU, ILE_DNI_NA_PLATNOSC_FV, RODZAJ_KONTA, NR_KLIENTA, ...rest } = item;
                         return rest;
                     });
                     return { ...element, data: updatedData };
@@ -207,10 +214,17 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 return item;
             });
 
+            //wyciągam tylko nr documentów do tablicy, żeby postawić znacznik przy danej fakturze, żeby mozna było pobrać do tabeli wyfiltrowane dane z tabeli
+            const excludedNames = ['ALL', 'KSIĘGOWOŚĆ', 'WYDANE - NIEZAPŁACONE'];
+            const markDocuments = updateFvDate
+                .filter(doc => !excludedNames.includes(doc.name)) // Filtruj obiekty o nazwach do wykluczenia
+                .flatMap(doc => doc.data) // Rozbij tablice data na jedną tablicę
+                .map(item => item.NR_DOKUMENTU); // Wyciągnij klucz NR_DOKUMENTU
+
             //wysyłam dane do serwera, żeby zrobić znaczniki przy dokumentach w wygenerowanym raporcie, aby użytkownik mógł pracowac tylko na tych dokumentach
-            axiosPrivateIntercept.post(
+            await axiosPrivateIntercept.post(
                 `/fk/send-document-mark-fk`,
-                updateFvDate
+                markDocuments
             );
 
             getExcelRaportV2(accountingData, raportInfo);
