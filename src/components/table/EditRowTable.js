@@ -163,10 +163,30 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
       );
       setRowData(response.data);
     }
-
   };
 
+  const changeMarkDoc = async (NUMER_FV, MARK_FK) => {
+    try {
+      await axiosPrivateIntercept.patch(
+        `/fk/change-mark-document`,
+        {
+          NUMER_FV,
+          MARK_FK
+        }
+      );
 
+      setRowData(prev => {
+        return {
+          ...prev,
+          MARK_FK: prev.MARK_FK === 1 ? 0 : 1
+        };
+      });
+
+    }
+    catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const index = nextDoc.indexOf(rowData.id_document);
@@ -186,12 +206,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
   useEffect(() => {
     setRowData(dataRowTable);
   }, []);
-  // useEffect(() => {
-  //   setRowData(dataRowTable);
-  // }, [dataRowTable]);
-
-
-
 
   return (
     <section className="edit-row-table">
@@ -347,6 +361,13 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
 
             </section>
             <section className="edit_row_table-buttons">
+              {auth.roles.includes(200) && rowData.MARK_FV && <Button
+                variant="contained"
+                color={rowData.MARK_FK ? "secondary" : "error"}
+                onClick={() => changeMarkDoc(rowData.NUMER_FV, rowData.MARK_FK === 1 ? 0 : 1)}
+              >
+                {rowData.MARK_FK ? "FK ON" : "FK OFF"}
+              </Button>}
               {auth.roles.includes(120) && <Button
                 variant="contained"
                 // color="secondary"
