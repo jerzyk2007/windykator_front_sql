@@ -235,14 +235,13 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                 <section className="edit-row-table_section-content-data">
                   {changePanel === 'doc-actions' &&
                     <section className="edit-row-table__change-panel">
-                      {(auth.roles.includes(110) || auth.roles.includes(120)) && <Button
+                      {(auth.roles.includes(110) || auth.roles.includes(120)) && rowData.MARK_FV && rowData.MARK_FK ? (< Button
                         variant="contained"
                         color="secondary"
                         onClick={() => setChangePanel('management')}
-
                       >
                         Raport FK
-                      </Button>}
+                      </Button>) : null}
                       {rowData.AREA === 'BLACHARNIA' && < Button
                         variant="contained"
                         color="secondary"
@@ -250,9 +249,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                       >
                         Becared
                       </Button>}
-
-
-                    </section>}
+                    </section>
+                  }
                   {changePanel !== 'doc-actions' &&
                     <section className="edit-row-table__change-panel">
                       <Button
@@ -262,8 +260,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                       >
                         Powrót
                       </Button>
-                    </section>}
-
+                    </section>
+                  }
                   {changePanel === 'doc-actions' && (
                     <EditDocActions
                       rowData={rowData}
