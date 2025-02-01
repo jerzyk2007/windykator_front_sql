@@ -369,15 +369,23 @@ const FKAddData = () => {
   const deleteDataRaport = async () => {
     try {
       setPleaseWait(true);
-      const result = await axiosPrivateIntercept.get("/fk/delete-data-raport");
-      if (result.data.result === "delete") {
-        setDateCounter({});
-        setDeleteRaport("Dane usunięte.");
-        setFKAccountancy("");
-        setPleaseWait(false);
-      } else {
-        setDeleteRaport("Wystąpił błąd podczas usuwania danych");
+
+      // jeśli istnieje data wgrania pliku wiekowanie, to można rozpocząć generowanie hitorii wpisów przed usunięciem danych
+      if (dateCounter?.accountancy?.date) {
+        await axiosPrivateIntercept.get("/fk/generate-history-documents");
+
       }
+      // const result = await axiosPrivateIntercept.get("/fk/delete-data-raport");
+      // if (result.data.result === "delete") {
+      //   setDateCounter({});
+      //   setDeleteRaport("Dane usunięte.");
+      //   setFKAccountancy("");
+      //   setPleaseWait(false);
+      // } else {
+      //   setDeleteRaport("Wystąpił błąd podczas usuwania danych");
+      // }
+      setPleaseWait(false);
+
     } catch (err) {
       console.error(err);
     }

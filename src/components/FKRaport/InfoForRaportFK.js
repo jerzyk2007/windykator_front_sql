@@ -28,7 +28,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
         try {
             setPleaseWait(true);
             const result = await axiosPrivateIntercept.post("/fk/get-raport-data-v2");
-
+            console.log(result.data[0]);
             const accountArray = [
                 ...new Set(
                     result.data
