@@ -69,14 +69,11 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
 
                         ];
                     });
-                    if (infoFK.length > 1) {
-                        // console.log(infoFK);
-                    }
+
                     const mergedInfoFK = infoFK.flat();
 
                     mergedInfoFK.unshift(raportCounter);
                     return mergedInfoFK.join("\n");
-                    // return "ok";
                 };
 
                 return {
