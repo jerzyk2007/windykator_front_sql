@@ -28,7 +28,6 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
         try {
             setPleaseWait(true);
             const result = await axiosPrivateIntercept.post("/fk/get-raport-data-v2");
-            console.log(result.data[0]);
             const accountArray = [
                 ...new Set(
                     result.data
@@ -53,6 +52,32 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                     return "NULL";
                 };
 
+                const historyDoc = (value) => {
+                    const raportCounter = `Dokument pojawił się w raporcie ${value.length} raz.`;
+                    const infoFK = value.map(item => {
+                        return [
+                            " ",
+                            item.history.info,
+                            "Daty rozliczenia: ",
+                            ...(Array.isArray(item.history.historyDate) && item.history.historyDate.length
+                                ? item.history.historyDate
+                                : ["brak daty rozliczenia"]),
+                            "Decyzja: ",
+                            ...(Array.isArray(item.history.historyText) && item.history.historyText.length
+                                ? item.history.historyText
+                                : ["brak decyzji biznesu"]),
+
+                        ];
+                    });
+                    if (infoFK.length > 1) {
+                        // console.log(infoFK);
+                    }
+                    const mergedInfoFK = infoFK.flat();
+
+                    mergedInfoFK.unshift(raportCounter);
+                    return mergedInfoFK.join("\n");
+                    // return "ok";
+                };
 
                 return {
                     ...item,
@@ -87,7 +112,8 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                         : " ",
                     HISTORIA_ZMIANY_DATY_ROZLICZENIA: item?.HISTORIA_ZMIANY_DATY_ROZLICZENIA > 0 ? item.HISTORIA_ZMIANY_DATY_ROZLICZENIA : " ",
                     OSTATECZNA_DATA_ROZLICZENIA: item.OSTATECZNA_DATA_ROZLICZENIA ? convertToDateIfPossible(item.OSTATECZNA_DATA_ROZLICZENIA) : " ",
-                    VIN: item?.VIN ? item.VIN : ' '
+                    VIN: item?.VIN ? item.VIN : ' ',
+                    HISTORIA_WPISÓW_W_RAPORCIE: item?.HISTORIA_WPISOW ? historyDoc(item.HISTORIA_WPISOW) : null
                 };
             }
             );
@@ -130,9 +156,15 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                                 || item.TYP_DOKUMENTU === 'Nota');
                     });
                     return { ...element, data: updatedData }; // Zwracamy zaktualizowany element
+                } else {
+                    const updatedData = element.data.map((item) => {
+                        const { HISTORIA_WPISÓW_W_RAPORCIE, ...rest } = item;
+                        return rest; // Zwróć obiekt bez tych dwóch kluczy
+                    });
+                    return { ...element, data: updatedData };
                 }
 
-                return element; // Zwracamy element bez zmian, jeśli name === "Raport" lub data jest niezdefiniowana
+                // Zwracamy element bez zmian, jeśli name === "Raport" lub data jest niezdefiniowana
             });
 
 
@@ -203,7 +235,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                     );
                     const joinData = [...dataDoc, ...dataDoc2];
                     const updateDataDoc = joinData.map(prev => {
-                        const { INFORMACJA_ZARZAD, OSTATECZNA_DATA_ROZLICZENIA, HISTORIA_ZMIANY_DATY_ROZLICZENIA, ...rest } = prev;
+                        const { INFORMACJA_ZARZAD, OSTATECZNA_DATA_ROZLICZENIA, HISTORIA_ZMIANY_DATY_ROZLICZENIA, HISTORIA_WPISÓW_W_RAPORCIE, ...rest } = prev;
                         return rest;
                     });
                     return {
