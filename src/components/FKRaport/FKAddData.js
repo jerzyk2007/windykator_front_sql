@@ -15,6 +15,7 @@ const FKAddData = () => {
   const [dateCounter, setDateCounter] = useState({});
   const [generateRaportMsg, setGenerateRaportMsg] = useState("");
   const [generateRaportMsgV2, setGenerateRaportMsgV2] = useState("");
+  const [errorGenerateMsg, setErrorGenerateMsg] = useState(true);
   const [message, setMessage] = useState({
     prepare: "Przygotowywanie danych.",
     progress: "Trwa dopasowywanie danych.",
@@ -391,6 +392,7 @@ const FKAddData = () => {
     }
   };
 
+
   useEffect(() => {
     // pobieram daty i licznik ustawień dla aktualizowanych plików excel
     const getDateAndCounter = async () => {
@@ -424,7 +426,11 @@ const FKAddData = () => {
       ) : (
 
         <>
-          {raportInfoActive ? <InfoForRaportFK setRaportInfoActive={setRaportInfoActive} /> :
+          {raportInfoActive ?
+            <InfoForRaportFK
+              setRaportInfoActive={setRaportInfoActive}
+              setErrorGenerateMsg={setErrorGenerateMsg}
+            /> :
             <section className="fk_add_data">
               <section className="fk_add_data__title">
                 <span>Dodaj dane do Raportu FK</span>
@@ -533,27 +539,28 @@ const FKAddData = () => {
                   )}
 
 
-                  {dateCounter?.raport?.date && <section className="fk_add_data__container-data">
-                    <section className="fk_add_data__container-data--title">
-                      <span>
-                        {dateCounter?.genrateRaport?.date ? dateCounter?.genrateRaport?.date : "Pobierz raport FK"}
+                  {dateCounter?.raport?.date &&
+                    <section className="fk_add_data__container-data">
+                      <section className="fk_add_data__container-data--title">
+                        <span>
+                          {dateCounter?.genrateRaport?.date ? dateCounter?.genrateRaport?.date : "Pobierz raport FK"}
 
-                      </span>
-                    </section>
+                        </span>
+                      </section>
 
-                    <section className="fk_add_data__container-data-file">
-                      {dateCounter?.accountancy && (
-                        <Button
-                          variant="contained"
-                          color="success"
-                          disableElevation
-                          onClick={getRaport}
-                        >
-                          Pobierz Raport FK
-                        </Button>
-                      )}
-                    </section>
-                  </section>}
+                      <section className="fk_add_data__container-data-file">
+                        {dateCounter?.accountancy && (
+                          <Button
+                            variant="contained"
+                            color="success"
+                            disableElevation
+                            onClick={getRaport}
+                          >
+                            Pobierz Raport FK
+                          </Button>
+                        )}
+                      </section>
+                    </section>}
 
 
 
@@ -598,10 +605,10 @@ const FKAddData = () => {
 
                   {dateCounter?.raport_v2?.date && <section className="fk_add_data__container-data">
                     <section className="fk_add_data__container-data--title">
-                      <span>
+                      {errorGenerateMsg ? <span>
                         {dateCounter?.genrateRaport?.date ? dateCounter?.genrateRaport?.date : "Pobierz raport FK"}
 
-                      </span>
+                      </span> : <span style={{ color: "red", fontWeight: "bold" }}>Brak danych do Raportu FK.</span>}
                     </section>
 
                     <section className="fk_add_data__container-data-file">
@@ -623,7 +630,8 @@ const FKAddData = () => {
               </section>
             </section >}
         </>
-      )}
+      )
+      }
     </>
   );
 };

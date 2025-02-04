@@ -15,6 +15,7 @@ import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 import "./EditRowTable.css";
 
 const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, nextDoc }) => {
+
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 

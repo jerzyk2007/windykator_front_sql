@@ -13,7 +13,7 @@ import { getExcelRaportV2 } from "./utilsForFKTable/prepareFKExcelFile";
 
 import './InfoForRaportFK.css';
 
-const InfoForRaportFK = ({ setRaportInfoActive }) => {
+const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
     const [pleaseWait, setPleaseWait] = useState(false);
@@ -24,33 +24,43 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
         reportName: 'Draft 201 203_należności'
     });
 
+
+
     const getRaport = async () => {
         try {
             setPleaseWait(true);
             const result = await axiosPrivateIntercept.post("/fk/get-raport-data-v2");
+
+            if (result.data.dataRaport.length === 0) {
+                setErrorGenerateMsg(false);
+                setRaportInfoActive(false);
+                return setPleaseWait(false);
+
+            }
             const accountArray = [
                 ...new Set(
-                    result.data
+                    result.data.dataRaport
                         .filter((item) => item.RODZAJ_KONTA)
                         .map((item) => item.OBSZAR)
                 ),
             ].sort();
 
-            // // usuwam wartości null, bo excel ma z tym problem
-            const eraseNull = result.data.map(item => {
-
-                const convertToDateIfPossible = (value) => {
-                    // Sprawdź, czy wartość jest stringiem w formacie yyyy-mm-dd
-                    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-                    if (typeof value === 'string' && datePattern.test(value)) {
-                        const date = new Date(value);
-                        if (!isNaN(date.getTime())) {
-                            return date;
-                        }
+            //zamieniam daty w stringu na typ Date, jeżeli zapis jest odpowiedni 
+            const convertToDateIfPossible = (value) => {
+                // Sprawdź, czy wartość jest stringiem w formacie yyyy-mm-dd
+                const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+                if (typeof value === 'string' && datePattern.test(value)) {
+                    const date = new Date(value);
+                    if (!isNaN(date.getTime())) {
+                        return date;
                     }
-                    // Jeśli nie spełnia warunku lub nie jest datą, zwróć oryginalną wartość
-                    return "NULL";
-                };
+                }
+                // Jeśli nie spełnia warunku lub nie jest datą, zwróć oryginalną wartość
+                return "NULL";
+            };
+
+            // // usuwam wartości null, bo excel ma z tym problem
+            const eraseNull = result.data.dataRaport.map(item => {
 
                 const historyDoc = (value) => {
                     const raportCounter = `Dokument pojawił się w raporcie ${value.length} raz.`;
@@ -75,7 +85,6 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                     mergedInfoFK.unshift(raportCounter);
                     return mergedInfoFK.join("\n");
                 };
-
                 return {
                     ...item,
                     ILE_DNI_NA_PLATNOSC_FV: item.ILE_DNI_NA_PLATNOSC_FV,
@@ -115,6 +124,23 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
             }
             );
 
+            const cleanDifferences = result.data.differences.map(item => {
+                return {
+                    ...item,
+                    OWNER: Array.isArray(item.OWNER) ? item.OWNER.join("\n") : item.OWNER,
+                    OPIEKUN_OBSZARU_CENTRALI: Array.isArray(item.OPIEKUN_OBSZARU_CENTRALI)
+                        ? item.OPIEKUN_OBSZARU_CENTRALI.join("\n")
+                        : item.OPIEKUN_OBSZARU_CENTRALI,
+                    TERMIN_PLATNOSCI_FV: convertToDateIfPossible(
+                        item.TERMIN_PLATNOSCI_FV
+                    ),
+                    DATA_WYSTAWIENIA_FV: convertToDateIfPossible(
+                        item.DATA_WYSTAWIENIA_FV
+                    ),
+                };
+            });
+            // console.log(cleanDifferences);
+
             // // rozdziela dane na poszczególne obszary BLACHARNIA, CZĘŚCI itd
             const resultArray = accountArray.reduce((acc, area) => {
                 // Filtrujemy obiekty, które mają odpowiedni OBSZAR
@@ -137,13 +163,14 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 }
 
             }).filter(Boolean);
-            // // Dodajemy obiekt RAPORT na początku tablicy
-            const finalResult = [{ name: 'ALL', data: eraseNull }, { name: 'WYDANE - NIEZAPŁACONE', data: carDataSettlement }, ...resultArray];
+            // // Dodajemy obiekt RAPORT na początku tablicy i  dodtkowy arkusz z róznicami księgowosć AS-FK
+            const finalResult = [{ name: 'ALL', data: eraseNull }, { name: 'RÓŻNICE FK-AS', data: cleanDifferences }, { name: 'WYDANE - NIEZAPŁACONE', data: carDataSettlement }, ...resultArray];
+
 
 
             // usuwam wiekowanie starsze niż <0, 1-7 z innych niż arkusza RAPORT
             const updateAging = finalResult.map((element) => {
-                if (element.name !== "ALL" && element.name !== "KSIĘGOWOŚĆ" && element.data) {
+                if (element.name !== "ALL" && element.name !== "KSIĘGOWOŚĆ" && element.name !== 'RÓŻNICE FK-AS' && element.data) {
                     const updatedData = element.data.filter((item) => {
                         return item.PRZEDZIAL_WIEKOWANIE !== "1-7" && item.PRZEDZIAL_WIEKOWANIE !== "<0" && item.DO_ROZLICZENIA_AS > 0
                             &&
@@ -198,7 +225,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
             });
             // usuwam kolumnę BRAK DATY WYSTAWIENIA FV ze wszytskich arkuszy oprócz RAPORT
             const updateFvDate = updateVIN.map((element) => {
-                if (element.name !== "ALL") {
+                if (element.name !== "ALL" && element.name !== 'RÓŻNICE FK-AS') {
 
                     const filteredData = element.data.filter(item => item.CZY_W_KANCELARI === 'NIE');
 
@@ -244,7 +271,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
             });
 
             //wyciągam tylko nr documentów do tablicy, żeby postawić znacznik przy danej fakturze, żeby mozna było pobrać do tabeli wyfiltrowane dane z tabeli
-            const excludedNames = ['ALL', 'KSIĘGOWOŚĆ', 'WYDANE - NIEZAPŁACONE'];
+            const excludedNames = ['ALL', 'KSIĘGOWOŚĆ', 'WYDANE - NIEZAPŁACONE', 'RÓŻNICE FK-AS'];
             const markDocuments = updateFvDate
                 .filter(doc => !excludedNames.includes(doc.name)) // Filtruj obiekty o nazwach do wykluczenia
                 .flatMap(doc => doc.data) // Rozbij tablice data na jedną tablicę
@@ -255,6 +282,8 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 `/fk/send-document-mark-fk`,
                 markDocuments
             );
+
+
 
             getExcelRaportV2(accountingData, raportInfo);
             setRaportInfoActive(false);
