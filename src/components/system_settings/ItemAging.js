@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import { Button } from "@mui/material";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 
 import "./ItemAging.css";
 
-const FKItemAging = ({ data, info, title }) => {
+const FKItemAging = ({ data, info, title, setPleaseWait }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [dataItem, setDataItem] = useState([]);
@@ -179,7 +180,8 @@ const FKItemAging = ({ data, info, title }) => {
         )}
 
         {editIndex === index && item.type === "some" && (
-          <>
+          <section className="item_component-title__container-add">
+
             <section className="item_aging-title__container-number">
               <input
                 className="item_aging-title__container-add--edit"
@@ -194,19 +196,39 @@ const FKItemAging = ({ data, info, title }) => {
                 onChange={(e) => handleSomeEdit(e, index, "second")}
               />
             </section>
-            <i
+            {/* <i
               className="fa-solid fa-xmark item_component--fa-xmark"
               onClick={handleEditCancel}
             ></i>
             <i
               className="fa-solid fa-check item_component--fa-check"
               onClick={handleUpdateItem}
-            ></i>
-          </>
+            ></i> */}
+            <section className="item_component-title__container-add--panel">
+              < Button
+                variant="contained"
+                color="error"
+                size="small"
+                onClick={handleEditCancel}
+              >
+                Anuluj
+              </Button>
+              < Button
+                variant="contained"
+                color="success"
+                size="small"
+                onClick={handleUpdateItem}
+              >
+                Zatwierdź
+              </Button>
+            </section>
+          </section>
+
         )}
 
         {editIndex === index && item.type !== "some" && (
-          <>
+          <section className="item_component-title__container-add">
+
             <section className="item_aging-title__container-number">
               {item.type === "first" && (
                 <>
@@ -232,15 +254,25 @@ const FKItemAging = ({ data, info, title }) => {
                 </>
               )}
             </section>
-            <i
-              className="fa-solid fa-xmark item_component--fa-xmark"
-              onClick={handleEditCancel}
-            ></i>
-            <i
-              className="fa-solid fa-check item_component--fa-check"
-              onClick={handleUpdateItem}
-            ></i>
-          </>
+            <section className="item_component-title__container-add--panel">
+              < Button
+                variant="contained"
+                color="error"
+                size="small"
+                onClick={handleEditCancel}
+              >
+                Anuluj
+              </Button>
+              < Button
+                variant="contained"
+                color="success"
+                size="small"
+                onClick={handleUpdateItem}
+              >
+                Zatwierdź
+              </Button>
+            </section>
+          </section>
         )}
       </section>
     );
@@ -272,9 +304,12 @@ const FKItemAging = ({ data, info, title }) => {
   };
 
   const saveData = async () => {
+    setPleaseWait(true);
     await axiosPrivateIntercept.patch(`/fk/save-items-data/${info}`, {
       [info]: dataItem,
     });
+    setPleaseWait(false);
+
   };
 
   useEffect(() => {
@@ -333,14 +368,27 @@ const FKItemAging = ({ data, info, title }) => {
           </section>
 
           <section className="item_component-title__container-add--panel">
-            <i
-              className="fa-solid fa-xmark item_component--fa-xmark"
+            < Button
+              variant="contained"
+              color="error"
+              size="small"
               onClick={cancelAddItem}
-            ></i>
-            <i
+            >
+              Anuluj
+            </Button>
+            {/* <i
               className="fa-solid fa-check item_component--fa-check"
               onClick={handleAcceptNewItem}
-            ></i>
+            ></i> */}
+            < Button
+              variant="contained"
+              color="success"
+              size="small"
+              // disabled={info === "owners" ? !checkMail : addItem.newName && !duplicate ? false : true}
+              onClick={handleAcceptNewItem}
+            >
+              Zatwierdź
+            </Button>
           </section>
         </section>
       )}

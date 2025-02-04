@@ -78,43 +78,21 @@ const FKItems = () => {
               {/* <section className="items--bloc-tabs"> */}
               <section className="bloc-tabs">
                 <button
-                  // className={
-                  //   toggleState === 1
-                  //     ? "items--bloc-area items--bloc-active-tabs"
-                  //     : "items--bloc-area"
-                  // }
                   className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
                   onClick={() => toggleTab(1)}
                 ></button>
                 <button
-                  // className={
-                  //   toggleState === 2
-                  //     ? "items--bloc-area items--bloc-active-tabs"
-                  //     : "items--bloc-area"
-                  // }
                   className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
                   onClick={() => toggleTab(2)}
                 ></button>
                 <button
-                  // className={
-                  //   toggleState === 3
-                  //     ? "items--bloc-area items--bloc-active-tabs"
-                  //     : "items--bloc-area"
-                  // }
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
 
                   onClick={() => toggleTab(3)}
                 ></button>
               </section>
-
-              {/* <section className="items__content-tabs"> */}
               <section className="content-tabs">
                 <section
-                  // className={
-                  //   toggleState === 1
-                  //     ? "items__content  items__active-content"
-                  //     : "items__content"
-                  // }
                   className={
                     toggleState === 1
                       ? "content  active-content"
@@ -127,6 +105,7 @@ const FKItems = () => {
                         data={dataItems.departments}
                         info="departments"
                         title="Działy"
+                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                     <section className="items__section-content-data">
@@ -134,6 +113,7 @@ const FKItems = () => {
                         data={dataItems.localizations}
                         info="localizations"
                         title="Lokalizacje"
+                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                     <section className="items__section-content-data">
@@ -141,6 +121,7 @@ const FKItems = () => {
                         data={dataItems.areas}
                         info="areas"
                         title="Obszary"
+                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                   </section>
@@ -156,6 +137,7 @@ const FKItems = () => {
                         data={dataItems.owners}
                         info="owners"
                         title="Ownerzy"
+                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                     <section className="items__section-content-data">
@@ -163,6 +145,7 @@ const FKItems = () => {
                         data={dataItems.guardians}
                         info="guardians"
                         title="Opiekun"
+                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                     <section className="items__section-content-data">
@@ -170,6 +153,7 @@ const FKItems = () => {
                         data={dataItems.aging}
                         info="aging"
                         title="Wiekowanie"
+                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                   </section>
@@ -181,7 +165,9 @@ const FKItems = () => {
                 >
                   <section className="items__section-content">
                     <section className="items__section-content-data">
-                      <PercentageTarget departments={departments} />
+                      <PercentageTarget departments={departments}
+                        setPleaseWait={setPleaseWait}
+                      />
                       {/* <PercentageTarget /> */}
 
                     </section>

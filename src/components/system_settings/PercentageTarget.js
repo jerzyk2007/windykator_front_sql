@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 
 import "./PercentageTarget.css";
 
-const PercentageTarget = ({ departments }) => {
+const PercentageTarget = ({ departments, setPleaseWait }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [errMsg, setErrMsg] = useState("");
@@ -53,9 +53,12 @@ const PercentageTarget = ({ departments }) => {
 
   const handleSavePercentageTarget = async () => {
     try {
+      setPleaseWait(true);
       await axiosPrivateIntercept.patch("/settings/save-target-percent", {
         target: percentDep,
       });
+      setPleaseWait(false);
+
       setErrMsg(`Sukces.`);
     } catch (err) {
       setErrMsg(`Zmiana się nie powiodła.`);
