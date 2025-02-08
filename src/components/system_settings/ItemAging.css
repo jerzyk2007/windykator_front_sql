@@ -135,18 +135,18 @@
   align-items: center;
 } */
 
-/* .item_aging-title__container-number {
+.item_aging-title__container-number {
   flex-grow: 1;
   display: flex;
   justify-content: space-evenly;
   justify-content: center;
   align-items: center;
-} */
+}
 
 .item_aging-title__container-add--edit {
-  width: 40%;
+  width: 35%;
   padding: 5px;
-  margin: 0px 4px;
+  margin: 2px 4px;
   font-size: 1.1rem;
   border: none;
   text-align: center;

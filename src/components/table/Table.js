@@ -307,6 +307,7 @@ const Table = ({
   }, [documents]);
 
 
+
   useEffect(() => {
     const visibleData = table.getPrePaginationRowModel().rows.map((row) => row.original.id_document);
     setNextDoc(visibleData);

@@ -13,7 +13,7 @@ import { getExcelRaportV2 } from "./utilsForFKTable/prepareFKExcelFile";
 
 import './InfoForRaportFK.css';
 
-const InfoForRaportFK = ({ setRaportInfoActive }) => {
+const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
     const [pleaseWait, setPleaseWait] = useState(false);
@@ -24,36 +24,67 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
         reportName: 'Draft 201 203_należności'
     });
 
+
+
     const getRaport = async () => {
         try {
             setPleaseWait(true);
             const result = await axiosPrivateIntercept.post("/fk/get-raport-data-v2");
 
+            if (result.data.dataRaport.length === 0) {
+                setErrorGenerateMsg(false);
+                setRaportInfoActive(false);
+                return setPleaseWait(false);
+
+            }
             const accountArray = [
                 ...new Set(
-                    result.data
+                    result.data.dataRaport
                         .filter((item) => item.RODZAJ_KONTA)
                         .map((item) => item.OBSZAR)
                 ),
             ].sort();
 
-            // // usuwam wartości null, bo excel ma z tym problem
-            const eraseNull = result.data.map(item => {
-
-                const convertToDateIfPossible = (value) => {
-                    // Sprawdź, czy wartość jest stringiem w formacie yyyy-mm-dd
-                    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-                    if (typeof value === 'string' && datePattern.test(value)) {
-                        const date = new Date(value);
-                        if (!isNaN(date.getTime())) {
-                            return date;
-                        }
+            //zamieniam daty w stringu na typ Date, jeżeli zapis jest odpowiedni 
+            const convertToDateIfPossible = (value) => {
+                // Sprawdź, czy wartość jest stringiem w formacie yyyy-mm-dd
+                const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+                if (typeof value === 'string' && datePattern.test(value)) {
+                    const date = new Date(value);
+                    if (!isNaN(date.getTime())) {
+                        return date;
                     }
-                    // Jeśli nie spełnia warunku lub nie jest datą, zwróć oryginalną wartość
-                    return "NULL";
+                }
+                // Jeśli nie spełnia warunku lub nie jest datą, zwróć oryginalną wartość
+                return "NULL";
+            };
+
+            // // usuwam wartości null, bo excel ma z tym problem
+            const eraseNull = result.data.dataRaport.map(item => {
+
+                const historyDoc = (value) => {
+                    const raportCounter = `Dokument pojawił się w raporcie ${value.length} raz.`;
+                    const infoFK = value.map(item => {
+                        return [
+                            " ",
+                            item.history.info,
+                            "Daty rozliczenia: ",
+                            ...(Array.isArray(item.history.historyDate) && item.history.historyDate.length
+                                ? item.history.historyDate
+                                : ["brak daty rozliczenia"]),
+                            "Decyzja: ",
+                            ...(Array.isArray(item.history.historyText) && item.history.historyText.length
+                                ? item.history.historyText
+                                : ["brak decyzji biznesu"]),
+
+                        ];
+                    });
+
+                    const mergedInfoFK = infoFK.flat();
+
+                    mergedInfoFK.unshift(raportCounter);
+                    return mergedInfoFK.join("\n");
                 };
-
-
                 return {
                     ...item,
                     ILE_DNI_NA_PLATNOSC_FV: item.ILE_DNI_NA_PLATNOSC_FV,
@@ -87,11 +118,32 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                         : " ",
                     HISTORIA_ZMIANY_DATY_ROZLICZENIA: item?.HISTORIA_ZMIANY_DATY_ROZLICZENIA > 0 ? item.HISTORIA_ZMIANY_DATY_ROZLICZENIA : " ",
                     OSTATECZNA_DATA_ROZLICZENIA: item.OSTATECZNA_DATA_ROZLICZENIA ? convertToDateIfPossible(item.OSTATECZNA_DATA_ROZLICZENIA) : " ",
-                    VIN: item?.VIN ? item.VIN : ' '
+                    VIN: item?.VIN ? item.VIN : ' ',
+                    HISTORIA_WPISÓW_W_RAPORCIE: item?.HISTORIA_WPISOW ? historyDoc(item.HISTORIA_WPISOW) : null
                 };
             }
             );
 
+            const cleanDifferences = result.data.differences.map(item => {
+                return {
+                    ...item,
+                    OWNER: Array.isArray(item.OWNER) ? item.OWNER.join("\n") : item.OWNER,
+                    OPIEKUN_OBSZARU_CENTRALI: Array.isArray(item.OPIEKUN_OBSZARU_CENTRALI)
+                        ? item.OPIEKUN_OBSZARU_CENTRALI.join("\n")
+                        : item.OPIEKUN_OBSZARU_CENTRALI,
+                    TERMIN_PLATNOSCI_FV: convertToDateIfPossible(
+                        item.TERMIN_PLATNOSCI_FV
+                    ),
+                    DATA_WYSTAWIENIA_FV: convertToDateIfPossible(
+                        item.DATA_WYSTAWIENIA_FV
+                    ),
+                    DO_ROZLICZENIA_AS: Number(item.DO_ROZLICZENIA_AS),
+                    KONTROLA_DOC: item.NR_DOKUMENTU &&
+                        !["PO", "NO"].includes(item.NR_DOKUMENTU.slice(0, 2)) && item.DO_ROZLICZENIA_AS > 0
+                        ? "TAK"
+                        : "NIE"
+                };
+            });
             // // rozdziela dane na poszczególne obszary BLACHARNIA, CZĘŚCI itd
             const resultArray = accountArray.reduce((acc, area) => {
                 // Filtrujemy obiekty, które mają odpowiedni OBSZAR
@@ -114,15 +166,16 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 }
 
             }).filter(Boolean);
-            // // Dodajemy obiekt RAPORT na początku tablicy
-            const finalResult = [{ name: 'ALL', data: eraseNull }, { name: 'WYDANE - NIEZAPŁACONE', data: carDataSettlement }, ...resultArray];
+            // // Dodajemy obiekt RAPORT na początku tablicy i  dodtkowy arkusz z róznicami księgowosć AS-FK
+            const finalResult = [{ name: 'ALL', data: eraseNull }, { name: 'KSIĘGOWOŚĆ AS', data: cleanDifferences }, { name: 'WYDANE - NIEZAPŁACONE', data: carDataSettlement }, ...resultArray];
 
 
-            // usuwam wiekowanie starsze niż <0, 1-7 z innych niż arkusza RAPORT
+
+            // usuwam wiekowanie starsze niż < 0, 1 - 7 z innych niż arkusza RAPORT
             const updateAging = finalResult.map((element) => {
-                if (element.name !== "ALL" && element.name !== "KSIĘGOWOŚĆ" && element.data) {
+                if (element.name !== "ALL" && element.name !== "KSIĘGOWOŚĆ" && element.name !== 'KSIĘGOWOŚĆ AS' && element.data) {
                     const updatedData = element.data.filter((item) => {
-                        return item.PRZEDZIAL_WIEKOWANIE !== "1-7" && item.PRZEDZIAL_WIEKOWANIE !== "<0" && item.DO_ROZLICZENIA_AS > 0
+                        return item.PRZEDZIAL_WIEKOWANIE !== "1 - 7" && item.PRZEDZIAL_WIEKOWANIE !== "< 0" && item.DO_ROZLICZENIA_AS > 0
                             &&
                             (item.TYP_DOKUMENTU === 'Faktura'
                                 || item.TYP_DOKUMENTU === 'Faktura zaliczkowa'
@@ -130,9 +183,15 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                                 || item.TYP_DOKUMENTU === 'Nota');
                     });
                     return { ...element, data: updatedData }; // Zwracamy zaktualizowany element
+                } else {
+                    const updatedData = element.data.map((item) => {
+                        const { HISTORIA_WPISÓW_W_RAPORCIE, ...rest } = item;
+                        return rest; // Zwróć obiekt bez tych dwóch kluczy
+                    });
+                    return { ...element, data: updatedData };
                 }
 
-                return element; // Zwracamy element bez zmian, jeśli name === "Raport" lub data jest niezdefiniowana
+                // Zwracamy element bez zmian, jeśli name === "Raport" lub data jest niezdefiniowana
             });
 
 
@@ -169,7 +228,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
             });
             // usuwam kolumnę BRAK DATY WYSTAWIENIA FV ze wszytskich arkuszy oprócz RAPORT
             const updateFvDate = updateVIN.map((element) => {
-                if (element.name !== "ALL") {
+                if (element.name !== "ALL" && element.name !== 'KSIĘGOWOŚĆ AS') {
 
                     const filteredData = element.data.filter(item => item.CZY_W_KANCELARI === 'NIE');
 
@@ -182,8 +241,23 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 return element;
             });
 
+
+            // usuwam kolumnę KONTROLA ze wszytskich arkuszy oprócz KSIĘGOWOŚĆ AS
+            const updateControlColumn = updateFvDate.map((element) => {
+                if (element.name !== 'KSIĘGOWOŚĆ AS') {
+
+
+                    const updatedData = element.data.map((item) => {
+                        const { KONTROLA, ...rest } = item;
+                        return rest;
+                    });
+                    return { ...element, data: updatedData };
+                }
+                return element;
+            });
+
             // obrabiam tylko dane działu KSIĘGOWOŚĆ
-            const accountingData = updateFvDate.map(item => {
+            const accountingData = updateControlColumn.map(item => {
                 if (item.name === 'KSIĘGOWOŚĆ') {
                     // pierwsze filtrowanie wszytskich danych
                     const dataDoc = eraseNull.filter(doc =>
@@ -203,7 +277,7 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                     );
                     const joinData = [...dataDoc, ...dataDoc2];
                     const updateDataDoc = joinData.map(prev => {
-                        const { INFORMACJA_ZARZAD, OSTATECZNA_DATA_ROZLICZENIA, HISTORIA_ZMIANY_DATY_ROZLICZENIA, ...rest } = prev;
+                        const { INFORMACJA_ZARZAD, OSTATECZNA_DATA_ROZLICZENIA, HISTORIA_ZMIANY_DATY_ROZLICZENIA, HISTORIA_WPISÓW_W_RAPORCIE, ...rest } = prev;
                         return rest;
                     });
                     return {
@@ -215,8 +289,8 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
             });
 
             //wyciągam tylko nr documentów do tablicy, żeby postawić znacznik przy danej fakturze, żeby mozna było pobrać do tabeli wyfiltrowane dane z tabeli
-            const excludedNames = ['ALL', 'KSIĘGOWOŚĆ', 'WYDANE - NIEZAPŁACONE'];
-            const markDocuments = updateFvDate
+            const excludedNames = ['ALL', 'KSIĘGOWOŚĆ', 'WYDANE - NIEZAPŁACONE', 'KSIĘGOWOŚĆ AS'];
+            const markDocuments = updateControlColumn
                 .filter(doc => !excludedNames.includes(doc.name)) // Filtruj obiekty o nazwach do wykluczenia
                 .flatMap(doc => doc.data) // Rozbij tablice data na jedną tablicę
                 .map(item => item.NR_DOKUMENTU); // Wyciągnij klucz NR_DOKUMENTU
@@ -227,7 +301,14 @@ const InfoForRaportFK = ({ setRaportInfoActive }) => {
                 markDocuments
             );
 
-            getExcelRaportV2(accountingData, raportInfo);
+            //sortowanie obiektów wg kolejności, żeby arkusze w excel były odpowiednio posortowane
+            const sortOrder = ["ALL", "WYDANE - NIEZAPŁACONE", "BLACHARNIA", "CZĘŚCI", "F&I", "KSIĘGOWOŚĆ", "KSIĘGOWOŚĆ AS", "SAMOCHODY NOWE", "SAMOCHODY UŻYWANE", "SERWIS", "WDT",];
+
+            const sortedArray = accountingData.sort((a, b) =>
+                sortOrder.indexOf(a.name) - sortOrder.indexOf(b.name)
+            );
+
+            getExcelRaportV2(sortedArray, raportInfo);
             setRaportInfoActive(false);
             setPleaseWait(false);
         }

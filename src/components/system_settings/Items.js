@@ -47,9 +47,11 @@ const FKItems = () => {
     try {
       setPleaseWait(true);
 
-      const result = await axiosPrivateIntercept.get("/fk/get-items-data");
+      const result1 = await axiosPrivateIntercept.get("/items/get-user-items");
 
-      setDataItems(result.data.data);
+      // const result = await axiosPrivateIntercept.get("/fk/get-items-data");
+
+      setDataItems(result1.data.data);
 
       const resultDepartments = await axiosPrivateIntercept.get(
         "/settings/get-departments"
@@ -78,43 +80,21 @@ const FKItems = () => {
               {/* <section className="items--bloc-tabs"> */}
               <section className="bloc-tabs">
                 <button
-                  // className={
-                  //   toggleState === 1
-                  //     ? "items--bloc-area items--bloc-active-tabs"
-                  //     : "items--bloc-area"
-                  // }
                   className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
                   onClick={() => toggleTab(1)}
                 ></button>
                 <button
-                  // className={
-                  //   toggleState === 2
-                  //     ? "items--bloc-area items--bloc-active-tabs"
-                  //     : "items--bloc-area"
-                  // }
                   className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
                   onClick={() => toggleTab(2)}
                 ></button>
                 <button
-                  // className={
-                  //   toggleState === 3
-                  //     ? "items--bloc-area items--bloc-active-tabs"
-                  //     : "items--bloc-area"
-                  // }
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
 
                   onClick={() => toggleTab(3)}
                 ></button>
               </section>
-
-              {/* <section className="items__content-tabs"> */}
               <section className="content-tabs">
                 <section
-                  // className={
-                  //   toggleState === 1
-                  //     ? "items__content  items__active-content"
-                  //     : "items__content"
-                  // }
                   className={
                     toggleState === 1
                       ? "content  active-content"
@@ -125,21 +105,21 @@ const FKItems = () => {
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.departments}
-                        info="departments"
+                        info="DEPARTMENT"
                         title="Działy"
                       />
                     </section>
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.localizations}
-                        info="localizations"
+                        info="LOCALIZATION"
                         title="Lokalizacje"
                       />
                     </section>
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.areas}
-                        info="areas"
+                        info="AREA"
                         title="Obszary"
                       />
                     </section>
@@ -154,22 +134,23 @@ const FKItems = () => {
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.owners}
-                        info="owners"
+                        info="OWNER"
                         title="Ownerzy"
                       />
                     </section>
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.guardians}
-                        info="guardians"
+                        info="GUARDIAN"
                         title="Opiekun"
                       />
                     </section>
                     <section className="items__section-content-data">
                       <ItemAging
                         data={dataItems.aging}
-                        info="aging"
+                        info="AGING"
                         title="Wiekowanie"
+                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                   </section>
@@ -181,7 +162,9 @@ const FKItems = () => {
                 >
                   <section className="items__section-content">
                     <section className="items__section-content-data">
-                      <PercentageTarget departments={departments} />
+                      <PercentageTarget departments={departments}
+                        setPleaseWait={setPleaseWait}
+                      />
                       {/* <PercentageTarget /> */}
 
                     </section>

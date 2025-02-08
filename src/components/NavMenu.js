@@ -101,6 +101,16 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       Dokumenty Raportu FK
                     </Link>
                   </li>)}
+                {(auth?.roles?.includes(200) || auth?.roles?.includes(1000)) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link
+                      to="/fk-disabled-documents-table"
+                      className="nav_menu-link"
+                      onClick={handleLinkClick}
+                    >
+                      Wyłączenia Raportu FK
+                    </Link>
+                  </li>)}
               </ul>
             </div>
           </li>

@@ -8,6 +8,7 @@ const columnsOrder = [
     "Obszar",
     "Owner",
     "Opiekun",
+    "Mail"
 ];
 
 const columnsName = [
@@ -30,6 +31,10 @@ const columnsName = [
     {
         accessorKey: "guardian",
         header: "Opiekun"
+    },
+    {
+        accessorKey: "mail",
+        header: "Mail"
     },
 ];
 
@@ -109,8 +114,9 @@ const generateExcel = async (cleanData) => {
                     headerCell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
                     column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
                     column.width = 25;
-
-
+                    if (header === "Mail") {
+                        column.width = 40; // np. dla kolumny 'Lokalizacja'
+                    }
                 });
 
                 worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
@@ -183,11 +189,15 @@ export const useOrganizationStructureL = () => {
                     guardian: Array.isArray(item.guardian)
                         ? item.guardian.join("\n")
                         : item.guardian,
+                    mail: Array.isArray(item.mail)
+                        ? item.mail.join("\n")
+                        : item.mail,
                 };
             });
 
             const addObject = [{ name: "struktura", data: cleanData }];
 
+            // console.log(addObject);
             generateExcel(addObject);
         } catch (error) {
             console.error(error);

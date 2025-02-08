@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from "react";
 import "./EditDocSettlements.css";
 
 const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
-
   const textareaRef = useRef(null);
 
   const [settlementData, setSettlementData] = useState(settlement || []);
@@ -15,20 +14,25 @@ const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
   };
 
   useEffect(() => {
-    scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.UWAGI_ASYSTENT`
+    scrollToBottom();
   }, [settlement]);
 
+
   useEffect(() => {
-    if (fv_zal) {
-      const newData = `${fv_zal} - ${fv_zal_kwota.toLocaleString("pl-PL", {
+    const fvZalData = (title, value) => {
+      const newData = `${title} - ${value.toLocaleString("pl-PL", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
         useGrouping: true,
       })}`;
-      setSettlementData(prevData => [newData, ...(settlement || prevData || [])]);
-    }
-  }, [fv_zal, fv_zal_kwota]);
+      return settlement ? [newData, ...settlement] : [newData];
+    };
 
+    const settlementsInfo = fv_zal && typeof fv_zal_kwota === 'number' && !isNaN(fv_zal_kwota) ? fvZalData(fv_zal, fv_zal_kwota) : settlement ? settlement : "";
+    setSettlementData(
+      settlementsInfo
+    );
+  }, [settlement, date, fv_zal, fv_zal_kwota]);
 
   return (
     // <section className="edit-doc-settlements">
@@ -42,7 +46,7 @@ const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
         ref={textareaRef}
         className="edit-doc-settlements--content"
         readOnly
-        value={settlementData ? settlementData.join("\n") : ""}
+        value={Array.isArray(settlementData) ? settlementData.join("\n") : ""}
       ></textarea>
     </section>
   );

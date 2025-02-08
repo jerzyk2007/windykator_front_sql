@@ -166,7 +166,7 @@
   text-align: left;
   border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;
-  padding: 2px;
+  padding: 1px;
   margin: 1px 2px;
   background-color: rgba(220, 241, 253, 0.2);
   display: flex;
@@ -222,12 +222,12 @@
 }
 
 .edit-row-table__change-panel {
-  padding: 5px 0;
+  /* padding: 5px 0; */
   display: flex;
   justify-content: space-around;
 }
 
 .edit-row-table__change-panel Button {
   width: 100%;
-  margin: 0 10px;
+  margin: 5px 10px;
 }

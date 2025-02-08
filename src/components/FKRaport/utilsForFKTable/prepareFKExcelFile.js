@@ -9,9 +9,11 @@ const columnsOrder = [
   "DZIAŁ",
   "LOKALIZACJA",
   "KONTRAHENT",
+  "KONTROLA",
   "POZOSTAŁA KWOTA DO ROZLICZENIA W FK",
   "POZOSTAŁA KWOTA DO ROZLICZENIA W AS3",
   "RÓŻNICA MIĘDZY FK A AS3",
+  "HISTORIA DECYZJI",
   "DECYZJA BIZNES",
   "OSTATECZNA DATA ROZLICZENIA",
   "ILE ZMIAN OST DATY ROZL.",
@@ -69,6 +71,10 @@ const columnsName = [
   {
     accessorKey: "ROZNICA",
     header: "RÓŻNICA MIĘDZY FK A AS3"
+  },
+  {
+    accessorKey: "KONTROLA_DOC",
+    header: "KONTROLA"
   },
   {
     accessorKey: "INFORMACJA_ZARZAD",
@@ -161,6 +167,10 @@ const columnsName = [
   {
     accessorKey: "OPIEKUN_OBSZARU_CENTRALI",
     header: "OPIEKUN OBSZARU CENTRALI"
+  },
+  {
+    accessorKey: "HISTORIA_WPISÓW_W_RAPORCIE",
+    header: "HISTORIA DECYZJI"
   },
 ];
 
@@ -630,6 +640,14 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
               fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
             };
           }
+          else if (header === 'KONTROLA') {
+
+            headerCell.fill = {
+              type: 'pattern', // Wzór wypełnienia
+              pattern: 'solid', // Wypełnienie jednolite
+              fgColor: { argb: 'fd87f7' },
+            };
+          }
           else if (header === 'POZOSTAŁA KWOTA DO ROZLICZENIA W AS3') {
             // column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Zawijanie tekstu
             column.width = 20;
@@ -676,6 +694,15 @@ export const getExcelRaportV2 = async (cleanData, raportInfo) => {
               type: 'pattern',
               pattern: 'solid',
               fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
+            };
+          }
+
+          else if (header === 'HISTORIA DECYZJI') {
+            column.width = 40;
+            headerCell.fill = {
+              type: 'pattern', // Wzór wypełnienia
+              pattern: 'solid', // Wypełnienie jednolite
+              fgColor: { argb: 'fd87f7' },
             };
           }
           else if (header === 'DECYZJA BIZNES') {
