@@ -171,11 +171,11 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
 
 
 
-            // usuwam wiekowanie starsze niż <0, 1-7 z innych niż arkusza RAPORT
+            // usuwam wiekowanie starsze niż < 0, 1 - 7 z innych niż arkusza RAPORT
             const updateAging = finalResult.map((element) => {
                 if (element.name !== "ALL" && element.name !== "KSIĘGOWOŚĆ" && element.name !== 'KSIĘGOWOŚĆ AS' && element.data) {
                     const updatedData = element.data.filter((item) => {
-                        return item.PRZEDZIAL_WIEKOWANIE !== "1-7" && item.PRZEDZIAL_WIEKOWANIE !== "<0" && item.DO_ROZLICZENIA_AS > 0
+                        return item.PRZEDZIAL_WIEKOWANIE !== "1 - 7" && item.PRZEDZIAL_WIEKOWANIE !== "< 0" && item.DO_ROZLICZENIA_AS > 0
                             &&
                             (item.TYP_DOKUMENTU === 'Faktura'
                                 || item.TYP_DOKUMENTU === 'Faktura zaliczkowa'
