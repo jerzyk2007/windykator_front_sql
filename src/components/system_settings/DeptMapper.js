@@ -39,9 +39,9 @@ const DeptMapper = () => {
   const getData = async () => {
     try {
       setPleaseWait(true);
-      const result = await axiosPrivateIntercept.get("/fk/get-fksettings-data");
+      const result = await axiosPrivateIntercept.get("/items/get-fksettings-data");
       setData(result.data);
-      const uniqueDep = await axiosPrivateIntercept.get("/fk/get-uniques-dep");
+      const uniqueDep = await axiosPrivateIntercept.get("/items/get-uniques-dep");
       setRaportDep(uniqueDep.data);
 
 
@@ -49,7 +49,7 @@ const DeptMapper = () => {
       // checkMissingDepartments(result.data.departments, uniqueDep.data);
 
       const preparedItems = await axiosPrivateIntercept.get(
-        "/fk/get-prepared-items"
+        "/items/get-prepared-items"
       );
       setItemsDB(preparedItems.data);
       const combinedArray = result.data.departments.concat(uniqueDep.data);
@@ -57,11 +57,14 @@ const DeptMapper = () => {
       setMergeDep(uniqueArray);
       createMergeDep(uniqueArray, preparedItems.data);
 
-      setPleaseWait(false);
 
       // setTimeout(() => setPleaseWait(false), 5000);
     } catch (error) {
       console.error(error);
+    }
+    finally {
+      setPleaseWait(false);
+
     }
   };
 
@@ -97,7 +100,7 @@ const DeptMapper = () => {
       // Aktualizujemy stan itemsDB
       setItemsDB(dataArray);
 
-      await axiosPrivateIntercept.patch("/fk/save-prepared-items", {
+      await axiosPrivateIntercept.patch("/items/save-prepared-items", {
         department: itemData.department,
         localization: itemData.localization,
         area: itemData.area,
@@ -163,7 +166,8 @@ const DeptMapper = () => {
   return (
     <>
       {pleaseWait ? (
-        <PleaseWait />
+        // <PleaseWait />
+        <section className="dept_mapper"></section>
       ) : (
         <section className="dept_mapper">
           <section className="dept_mapper__title">

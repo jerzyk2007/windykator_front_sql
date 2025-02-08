@@ -137,10 +137,13 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
                     DATA_WYSTAWIENIA_FV: convertToDateIfPossible(
                         item.DATA_WYSTAWIENIA_FV
                     ),
+                    DO_ROZLICZENIA_AS: Number(item.DO_ROZLICZENIA_AS),
+                    KONTROLA_DOC: item.NR_DOKUMENTU &&
+                        !["PO", "NO"].includes(item.NR_DOKUMENTU.slice(0, 2)) && item.DO_ROZLICZENIA_AS > 0
+                        ? "TAK"
+                        : "NIE"
                 };
             });
-            // console.log(cleanDifferences);
-
             // // rozdziela dane na poszczególne obszary BLACHARNIA, CZĘŚCI itd
             const resultArray = accountArray.reduce((acc, area) => {
                 // Filtrujemy obiekty, które mają odpowiedni OBSZAR
@@ -164,13 +167,13 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
 
             }).filter(Boolean);
             // // Dodajemy obiekt RAPORT na początku tablicy i  dodtkowy arkusz z róznicami księgowosć AS-FK
-            const finalResult = [{ name: 'ALL', data: eraseNull }, { name: 'RÓŻNICE FK-AS', data: cleanDifferences }, { name: 'WYDANE - NIEZAPŁACONE', data: carDataSettlement }, ...resultArray];
+            const finalResult = [{ name: 'ALL', data: eraseNull }, { name: 'KSIĘGOWOŚĆ AS', data: cleanDifferences }, { name: 'WYDANE - NIEZAPŁACONE', data: carDataSettlement }, ...resultArray];
 
 
 
             // usuwam wiekowanie starsze niż <0, 1-7 z innych niż arkusza RAPORT
             const updateAging = finalResult.map((element) => {
-                if (element.name !== "ALL" && element.name !== "KSIĘGOWOŚĆ" && element.name !== 'RÓŻNICE FK-AS' && element.data) {
+                if (element.name !== "ALL" && element.name !== "KSIĘGOWOŚĆ" && element.name !== 'KSIĘGOWOŚĆ AS' && element.data) {
                     const updatedData = element.data.filter((item) => {
                         return item.PRZEDZIAL_WIEKOWANIE !== "1-7" && item.PRZEDZIAL_WIEKOWANIE !== "<0" && item.DO_ROZLICZENIA_AS > 0
                             &&
@@ -225,7 +228,7 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
             });
             // usuwam kolumnę BRAK DATY WYSTAWIENIA FV ze wszytskich arkuszy oprócz RAPORT
             const updateFvDate = updateVIN.map((element) => {
-                if (element.name !== "ALL" && element.name !== 'RÓŻNICE FK-AS') {
+                if (element.name !== "ALL" && element.name !== 'KSIĘGOWOŚĆ AS') {
 
                     const filteredData = element.data.filter(item => item.CZY_W_KANCELARI === 'NIE');
 
@@ -238,8 +241,23 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
                 return element;
             });
 
+
+            // usuwam kolumnę KONTROLA ze wszytskich arkuszy oprócz KSIĘGOWOŚĆ AS
+            const updateControlColumn = updateFvDate.map((element) => {
+                if (element.name !== 'KSIĘGOWOŚĆ AS') {
+
+
+                    const updatedData = element.data.map((item) => {
+                        const { KONTROLA, ...rest } = item;
+                        return rest;
+                    });
+                    return { ...element, data: updatedData };
+                }
+                return element;
+            });
+
             // obrabiam tylko dane działu KSIĘGOWOŚĆ
-            const accountingData = updateFvDate.map(item => {
+            const accountingData = updateControlColumn.map(item => {
                 if (item.name === 'KSIĘGOWOŚĆ') {
                     // pierwsze filtrowanie wszytskich danych
                     const dataDoc = eraseNull.filter(doc =>
@@ -271,8 +289,8 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
             });
 
             //wyciągam tylko nr documentów do tablicy, żeby postawić znacznik przy danej fakturze, żeby mozna było pobrać do tabeli wyfiltrowane dane z tabeli
-            const excludedNames = ['ALL', 'KSIĘGOWOŚĆ', 'WYDANE - NIEZAPŁACONE', 'RÓŻNICE FK-AS'];
-            const markDocuments = updateFvDate
+            const excludedNames = ['ALL', 'KSIĘGOWOŚĆ', 'WYDANE - NIEZAPŁACONE', 'KSIĘGOWOŚĆ AS'];
+            const markDocuments = updateControlColumn
                 .filter(doc => !excludedNames.includes(doc.name)) // Filtruj obiekty o nazwach do wykluczenia
                 .flatMap(doc => doc.data) // Rozbij tablice data na jedną tablicę
                 .map(item => item.NR_DOKUMENTU); // Wyciągnij klucz NR_DOKUMENTU
@@ -283,9 +301,14 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
                 markDocuments
             );
 
+            //sortowanie obiektów wg kolejności, żeby arkusze w excel były odpowiednio posortowane
+            const sortOrder = ["ALL", "WYDANE - NIEZAPŁACONE", "BLACHARNIA", "CZĘŚCI", "F&I", "KSIĘGOWOŚĆ", "KSIĘGOWOŚĆ AS", "SAMOCHODY NOWE", "SAMOCHODY UŻYWANE", "SERWIS", "WDT",];
 
+            const sortedArray = accountingData.sort((a, b) =>
+                sortOrder.indexOf(a.name) - sortOrder.indexOf(b.name)
+            );
 
-            getExcelRaportV2(accountingData, raportInfo);
+            getExcelRaportV2(sortedArray, raportInfo);
             setRaportInfoActive(false);
             setPleaseWait(false);
         }

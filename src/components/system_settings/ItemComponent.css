@@ -29,7 +29,6 @@
 
 .item_component--title {
   flex-grow: 1;
-
   font-size: 1.3rem;
   color: rgb(25, 60, 255);
   font-weight: 600;
@@ -39,6 +38,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.item_component-message {
+  font-size: 1.1rem;
 }
 
 .item_component--counter-info {
@@ -104,6 +107,7 @@
   border-radius: 5px;
   display: flex;
   align-items: center;
+  user-select: none;
 }
 
 .item_component-items__columns--counter {

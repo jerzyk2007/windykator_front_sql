@@ -47,9 +47,11 @@ const FKItems = () => {
     try {
       setPleaseWait(true);
 
-      const result = await axiosPrivateIntercept.get("/fk/get-items-data");
+      const result1 = await axiosPrivateIntercept.get("/items/get-user-items");
 
-      setDataItems(result.data.data);
+      // const result = await axiosPrivateIntercept.get("/fk/get-items-data");
+
+      setDataItems(result1.data.data);
 
       const resultDepartments = await axiosPrivateIntercept.get(
         "/settings/get-departments"
@@ -103,25 +105,22 @@ const FKItems = () => {
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.departments}
-                        info="departments"
+                        info="DEPARTMENT"
                         title="Działy"
-                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.localizations}
-                        info="localizations"
+                        info="LOCALIZATION"
                         title="Lokalizacje"
-                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.areas}
-                        info="areas"
+                        info="AREA"
                         title="Obszary"
-                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                   </section>
@@ -135,23 +134,21 @@ const FKItems = () => {
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.owners}
-                        info="owners"
+                        info="OWNER"
                         title="Ownerzy"
-                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.guardians}
-                        info="guardians"
+                        info="GUARDIAN"
                         title="Opiekun"
-                        setPleaseWait={setPleaseWait}
                       />
                     </section>
                     <section className="items__section-content-data">
                       <ItemAging
                         data={dataItems.aging}
-                        info="aging"
+                        info="AGING"
                         title="Wiekowanie"
                         setPleaseWait={setPleaseWait}
                       />
