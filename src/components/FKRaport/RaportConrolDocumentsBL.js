@@ -98,7 +98,7 @@ const columnsName = [
 const generateExcel = async (cleanData) => {
 
     // od którego wiersza mają się zaczynać dane w arkuszu
-    const startRow = 1;
+    const startRow = 2;
     try {
         const changeNameColumns = cleanData.map((doc) => {
             const update = doc.data.map((item) => {
@@ -185,24 +185,52 @@ const generateExcel = async (cleanData) => {
                         headerCell.font = { bold: true }; // Pogrubienie czcionki
                         column.width = 25;
                         // Wstawienie liczby dokumentów w wierszu 4 tej kolumny
-                        // const countCell = worksheet.getCell(5, column.number);
-                        // countCell.value = { formula: `SUBTOTAL(103,G${excelStartRow}:G${excelEndRow})` };
-                        // countCell.numFmt = '0'; // Formatowanie liczby
-                        // countCell.font = { bold: true }; // Pogrubienie tekstu
-                        // countCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
-                        // countCell.border = extraCellBorder;
-                        // countCell.fill = {
-                        //     type: 'pattern',
-                        //     pattern: 'solid',
-                        //     fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
-                        // };
+                        const countCell = worksheet.getCell(startRow - 1, column.number);
+                        countCell.value = { formula: `SUBTOTAL(103,B${excelStartRow}:B${excelEndRow})` };
+                        countCell.numFmt = '0'; // Formatowanie liczby
+                        countCell.font = { bold: true }; // Pogrubienie tekstu
+                        countCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
+                        countCell.border = extraCellBorder;
+                        countCell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
+                        };
 
                     }
                     else if (header === 'Kwota brutto') {
                         column.numFmt = '#,##0.00';
+                        // headerCell.fill = {
+                        //     type: 'pattern', // Wzór wypełnienia
+                        //     pattern: 'solid', // Wypełnienie jednolite
+                        //     fgColor: { argb: '8ac777' },
+                        // };
+                        const sumCell = worksheet.getCell(startRow - 1, column.number); // Wiersz 4, odpowiednia kolumna
+                        sumCell.value = { formula: `SUBTOTAL(109,E${excelStartRow}:E${excelEndRow})` };// Ustawienie wartości sumy
+                        sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
+                        sumCell.font = { bold: true }; // Pogrubienie tekstu
+                        sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
+                        sumCell.border = extraCellBorder;
+                        sumCell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
+                        };
                     }
                     else if (header === 'Do rozliczenia') {
                         column.numFmt = '#,##0.00';
+
+                        const sumCell = worksheet.getCell(startRow - 1, column.number); // Wiersz 4, odpowiednia kolumna
+                        sumCell.value = { formula: `SUBTOTAL(109,F${excelStartRow}:F${excelEndRow})` };// Ustawienie wartości sumy
+                        sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
+                        sumCell.font = { bold: true }; // Pogrubienie tekstu
+                        sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
+                        sumCell.border = extraCellBorder;
+                        sumCell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
+                        };
 
                         // zamienia wartość null, undefined na 0
                         worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
@@ -217,15 +245,59 @@ const generateExcel = async (cleanData) => {
                             }
                         });
                     }
+
                     else if (header === 'Kontrahent') {
-                        column.width = 30;
+                        column.width = 25;
                     }
                     else if (header === 'Nr szkody') {
-                        column.width = 25;
+                        column.width = 20;
                     }
                     else if (header === 'Uwagi do sprawy') {
                         column.width = 35;
                     }
+                    else if (header === 'Upoważnienie') {
+                        // Ustawienie formatu liczbowego (opcjonalne – możesz zmienić format, gdyż wynik będzie liczbą całkowitą)
+                        column.numFmt = '0';
+
+                        // Pobranie komórki, w której ma być wyświetlona liczba wystąpień słowa "BRAK"
+                        const sumCell = worksheet.getCell(startRow - 1, column.number); // np. wiersz 4, odpowiednia kolumna
+
+                        // Ustawienie formuły COUNTIF, która zliczy komórki z wartością "BRAK" w zadanym zakresie
+                        sumCell.value = { formula: `COUNTIF(K${excelStartRow}:K${excelEndRow},"BRAK")` };
+
+                        // Stylizacja komórki z wynikiem
+                        sumCell.font = { bold: true };
+                        sumCell.alignment = { horizontal: 'center', vertical: 'middle' };
+                        sumCell.border = extraCellBorder;
+                        sumCell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'FF7070' } // Żółte tło dla wyróżnienia
+                        };
+                    }
+                    else if (header === 'Płatność VAT') {
+                        // Ustawienie formatu liczbowego (opcjonalne – możesz zmienić format, gdyż wynik będzie liczbą całkowitą)
+                        column.numFmt = '0';
+
+                        // Pobranie komórki, w której ma być wyświetlona liczba wystąpień słowa "BRAK"
+                        const sumCell = worksheet.getCell(startRow - 1, column.number); // np. wiersz 4, odpowiednia kolumna
+
+                        // Ustawienie formuły COUNTIF, która zliczy komórki z wartością "BRAK" w zadanym zakresie
+                        sumCell.value = {
+                            formula: `COUNTIF(L${excelStartRow}:L${excelEndRow},"NIE POBRANY 100%") + COUNTIF(L${excelStartRow}:L${excelEndRow},"NIE POBRANY 50%")`
+                        };
+
+                        // Stylizacja komórki z wynikiem
+                        sumCell.font = { bold: true };
+                        sumCell.alignment = { horizontal: 'center', vertical: 'middle' };
+                        sumCell.border = extraCellBorder;
+                        sumCell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'FF7070' }, // Żółte tło dla wyróżnienia
+                        };
+                    }
+
                 });
 
                 worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
@@ -255,8 +327,9 @@ const generateExcel = async (cleanData) => {
 
                 // Ustawienie autofiltrowania od wiersza 6 (nagłówki) dla całego zakresu
                 worksheet.autoFilter = {
-                    from: 'A1', // Pierwsza kolumna (Lp)
-                    to: worksheet.getColumn(headers.length + 1).letter + '1', // Ostatnia kolumna na podstawie liczby kolumn
+                    from: `A${startRow}`, // Pierwsza kolumna (Lp)
+                    to: worksheet.getColumn(headers.length + 1).letter + `${startRow}`, // Ostatnia kolumna na podstawie liczby kolumn
+                    // to: worksheet.getColumn(headers.length + 1).letter + '1', // Ostatnia kolumna na podstawie liczby kolumn
                 };
 
                 // Blokowanie 5 pierwszych wierszy, aby wiersz 6 (nagłówki) został widoczny
@@ -265,8 +338,8 @@ const generateExcel = async (cleanData) => {
                         state: 'frozen',
                         xSplit: 2,
                         ySplit: startRow, // Zablokowanie do wiersza 6, aby nagłówki zostały widoczne
-                        topLeftCell: 'C2',
-                        activeCell: 'C2',
+                        topLeftCell: `C${startRow + 1}`,
+                        activeCell: `C${startRow + 1}`,
                     },
                 ];
             }
@@ -280,7 +353,6 @@ const generateExcel = async (cleanData) => {
         console.error(err);
     }
 };
-
 
 export const useControlRaportBL = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
