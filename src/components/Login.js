@@ -70,25 +70,27 @@ const Login = () => {
           </label>
           <input
             className="login__container-text"
-            type="text"
             id="userlogin"
+            type="text"
             placeholder="userlogin"
             ref={userRef}
             value={userlogin}
             onChange={(e) => setUserlogin(e.target.value.toLocaleLowerCase())}
             required
+            autoComplete="username"
           />
           <label htmlFor="password" className="login__container-title">
             Hasło:
           </label>
           <input
             className="login__container-text"
-            type="password"
             id="password"
+            type="password"
             placeholder="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete="password"
           />
           <Button variant="contained" type="submit" size="large">
             Zaloguj
