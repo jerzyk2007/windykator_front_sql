@@ -1100,3 +1100,80 @@ export const getAllDataRaport = async (allData, XLSX, orderColumns, info) => {
   }
 };
 
+
+// generowanie pliku excel dla danych: pracownicy i do jakich działów mają dostępy
+export const generateExcel = async (data) => {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Dostępy do programu');
+
+  if (data.length === 0) {
+    console.warn('Brak danych do wygenerowania pliku Excel.');
+    return;
+  }
+
+  // Nagłówki na podstawie kluczy pierwszego obiektu
+  const headers = Object.keys(data[0]);
+  const headerRow = worksheet.addRow(headers);
+  headerRow.height = 20; // Zwiększona wysokość nagłówka
+
+  // Zamrożenie pierwszego wiersza
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+
+  // Styl nagłówków
+  headerRow.eachCell((cell, colNumber) => {
+    cell.font = { bold: true };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D3D3D3' } }; // Szary nagłówek
+    cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+    cell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+    if (headers[colNumber - 1] === 'działy') {
+      worksheet.getColumn(colNumber).width = 20;
+    } else if (headers[colNumber - 1] === 'imię') {
+      worksheet.getColumn(colNumber).width = 15; // Możesz dostosować wartość
+    } else if (headers[colNumber - 1] === 'nazwisko') {
+      worksheet.getColumn(colNumber).width = 20; // Możesz dostosować wartość
+    } else if (headers[colNumber - 1] === 'mail / login') {
+      worksheet.getColumn(colNumber).width = 40; // Możesz dostosować wartość
+    } else if (headers[colNumber - 1] === 'hasło') {
+      worksheet.getColumn(colNumber).width = 20; // Możesz dostosować wartość
+    }
+  });
+
+  // Dodanie wierszy z danymi
+  data.forEach(item => {
+    const rowValues = headers.map(header => {
+      if (header === 'działy' && Array.isArray(item[header])) {
+        return item[header].join('\n');
+      }
+      return item[header];
+    });
+    const row = worksheet.addRow(rowValues);
+    row.height = Math.max(20, item['działy'] ? item['działy'].length * 15 : 20);
+    row.eachCell(cell => {
+      cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' }
+      };
+    });
+  });
+
+  // Włączenie filtrowania dla pierwszego wiersza
+  worksheet.autoFilter = {
+    from: { row: 1, column: 1 },
+    to: { row: 1, column: headers.length }
+  };
+
+  // Generowanie pliku
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  saveAs(blob, 'Konta.xlsx');
+};
+
+export default generateExcel;

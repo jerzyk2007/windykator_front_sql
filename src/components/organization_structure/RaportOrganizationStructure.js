@@ -177,6 +177,19 @@ export const useOrganizationStructureL = () => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
     const organizationStructure = async () => {
         try {
+            // dane od lini 180 do 192 przeniesione z innego komponentu, moze czasem tzreba będzie połączyć te dane :)
+            // const createAccounts = await axiosPrivateIntercept.get(`/repair/get-accounts-data`);
+
+            // const filteredData = createAccounts.data.existUser.map(item => {
+            //   return {
+            //     "nazwisko": item.usersurname,
+            //     "imię": item.username,
+            //     "mail / login": item.userlogin,
+            //     "działy": item.dzial,
+            //     "hasło": item.haslo
+            //   };
+            // });
+            // generateExcel(filteredData);
 
             const result = await axiosPrivateIntercept.get("/fk/get-organization-structure");
 
