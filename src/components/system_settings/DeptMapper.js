@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
-import PleaseWait from "../PleaseWait";
 // import useData from "../hooks/useData";
 // import FKItemSettings from "./FKItemsData/FKItemSettings";
 import DeptMapperSettings from "./DeptMapperSettings";
@@ -112,19 +111,26 @@ const DeptMapper = () => {
     }
   };
 
+  const handleDeleteItem = async (dep) => {
+    await axiosPrivateIntercept.delete(`/items/delete-prepared-item/${dep}`);
+    const filteredData = createItem.filter(item => item.department !== dep);
+    setCreateItem(filteredData);
+  };
+
   const itemsArray = mergeDep?.map((dep, index) => {
     // sprawdzam czy działy potrzebne do raportu są zapisane w "zmień stałe"
     const checkDepStyle = raportDep.find((item) => item === dep);
-
     return (
       <DeptMapperSettings
         key={index}
         id={index}
         dep={dep}
         dataItem={createItem ? createItem[index] : {}}
+        // dataItem={createItem ? {} : {}}
         settings={data}
         style={checkDepStyle ? "exist" : "noexist"}
         handleSaveToDB={handleSaveToDB}
+        handleDeleteItem={handleDeleteItem}
       />
     );
   });

@@ -12,10 +12,12 @@ const DeptMapperSettings = ({
   settings,
   style,
   handleSaveToDB,
+  handleDeleteItem
 }) => {
   const [settingsItem, setSettingsItem] = useState([]);
   const [itemsValue, setItemsValue] = useState({});
   const [activeSave, setActiveSave] = useState(false);
+  const [activeDelete, setActiveDelete] = useState(false);
 
   const handleLocalization = (e, info) => {
     const newValue = e.target.value;
@@ -239,12 +241,8 @@ const DeptMapperSettings = ({
       <section className="dept_mapper-counter__container">
         <span
           className="dept_mapper-counter"
-        // style={
-        //   style === "exist"
-        //     ? { backgroundColor: "#aeffe4" }
-        //     : { backgroundColor: "red", color: "white", padding: "5px" }
-        // }
         >
+
           {id + 1}
         </span>
         {activeSave && (
@@ -298,6 +296,26 @@ const DeptMapperSettings = ({
       </section>
       <section className="dept_mapper-owner">{ownerItems}</section>
       <section className="dept_mapper-owner">{guardianItems}</section>
+      {!activeDelete ? (
+        <i
+          className="fas fa-trash dept_mapper--fa-trash"
+          onDoubleClick={() => {
+            setActiveDelete(true);
+            // handleDeleteItem(itemsValue);
+          }}
+        ></i>
+      ) :
+        <section>
+          <i className="fas fa-check dept_mapper--fa-check"
+            style={{ color: "red" }}
+            onDoubleClick={() => {
+              setActiveDelete(false);
+              handleDeleteItem(itemsValue.department);
+            }}></i>
+          <i className="fas fa-cancel dept_mapper--fa-cancel"
+            onClick={() => setActiveDelete(false)}
+          ></i>
+        </section>}
     </section>
   );
 };
