@@ -8,7 +8,11 @@ const columnsOrder = [
     "Obszar",
     "Owner",
     "Opiekun",
-    "Mail"
+    "Mail",
+    "Nazwisko",
+    "Imię",
+    "Login / mail",
+    "Działy"
 ];
 
 const columnsName = [
@@ -35,6 +39,22 @@ const columnsName = [
     {
         accessorKey: "mail",
         header: "Mail"
+    },
+    {
+        accessorKey: "username",
+        header: "Imię"
+    },
+    {
+        accessorKey: "usersurname",
+        header: "Nazwisko"
+    },
+    {
+        accessorKey: "userlogin",
+        header: "Login / mail"
+    },
+    {
+        accessorKey: "departments",
+        header: "Działy"
     },
 ];
 
@@ -114,7 +134,7 @@ const generateExcel = async (cleanData) => {
                     headerCell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
                     column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
                     column.width = 25;
-                    if (header === "Mail") {
+                    if (header === "Mail" || header === "Login / mail" || header === "Działy") {
                         column.width = 40; // np. dla kolumny 'Lokalizacja'
                     }
                 });
@@ -193,7 +213,7 @@ export const useOrganizationStructureL = () => {
 
             const result = await axiosPrivateIntercept.get("/fk/get-organization-structure");
 
-            const cleanData = result.data.map(item => {
+            const structureData = result.data.structure.map(item => {
                 return {
                     ...item,
                     owner: Array.isArray(item.owner)
@@ -208,7 +228,29 @@ export const useOrganizationStructureL = () => {
                 };
             });
 
-            const addObject = [{ name: "struktura", data: cleanData }];
+            const accountsData = result.data.accounts.map(item => {
+                return {
+                    usersurname: item.usersurname,
+                    username: item.username,
+                    userlogin: item.userlogin,
+                    departments: Array.isArray(item.departments)
+                        ? item.departments.join(", ")
+                        : item.departments,
+                };
+            });
+            const sortedAccountsData = accountsData.sort((a, b) => {
+                // Porównaj 'usersurname' w obu obiektach
+                if (a.usersurname < b.usersurname) {
+                    return -1; // Jeśli a jest mniejsze niż b, a pojawi się wcześniej
+                }
+                if (a.usersurname > b.usersurname) {
+                    return 1; // Jeśli a jest większe niż b, b pojawi się wcześniej
+                }
+                return 0; // Jeśli są równe, pozostaw porządek bez zmian
+            });
+
+
+            const addObject = [{ name: "struktura", data: structureData }, { name: "konta", data: sortedAccountsData }];
 
             // console.log(addObject);
             generateExcel(addObject);
