@@ -296,7 +296,7 @@ const DeptMapperSettings = ({
       </section>
       <section className="dept_mapper-owner">{ownerItems}</section>
       <section className="dept_mapper-owner">{guardianItems}</section>
-      {!activeDelete ? (
+      {activeSave && (!activeDelete ? (
         <i
           className="fas fa-trash dept_mapper--fa-trash"
           onDoubleClick={() => {
@@ -315,7 +315,7 @@ const DeptMapperSettings = ({
           <i className="fas fa-cancel dept_mapper--fa-cancel"
             onClick={() => setActiveDelete(false)}
           ></i>
-        </section>}
+        </section>)}
     </section>
   );
 };
