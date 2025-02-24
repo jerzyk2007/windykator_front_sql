@@ -30,6 +30,7 @@ const columnsOrder = [
   "ETAP SPRAWY",
   "KWOTA WPS",
   "CZY KANCELARIA TAK/ NIE",
+  "DORADCA",
   "OBSZAR",
   "NR VIN",
   "CZY SAMOCHÓD WYDANY TAK/NIE",
@@ -143,6 +144,10 @@ const columnsName = [
   {
     accessorKey: "OBSZAR",
     header: "OBSZAR"
+  },
+  {
+    accessorKey: "DORADCA_FV",
+    header: "DORADCA"
   },
   {
     accessorKey: "VIN",
