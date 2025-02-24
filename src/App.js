@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import Contacts from "./components/contacts/Contacts";
 import Home from "./components/Home";
@@ -12,8 +12,6 @@ import UserSettings from "./components/user_permissions/UserSettings";
 import TableSettings from "./components/system_settings/TableSettings";
 import RaportDepartments from "./components/raports/RaportDepartments";
 import RaportAdvisers from "./components/raports/RaportAdvisers";
-// import FKRaportSettings from "./components/FKRaport/FKRaportSettings";
-// import FKTableSettings from "./components/FKRaport/FKTableSettings";
 import FKAddData from "./components/FKRaport/FKAddData";
 import DeptMapper from './components/system_settings/DeptMapper';
 import Items from './components/system_settings/Items';
@@ -99,17 +97,9 @@ function App() {
               <Route path="/raport-advisers" element={<RaportAdvisers />} />
             </Route>
 
-            {/* <Route element={<RequireAuth allowedRoles={[200]} />}>
-              <Route path="/fk-raport" element={<FKRaportSettings />} />
-            </Route> */}
-
             <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/fk-add-data" element={<FKAddData />} />
             </Route>
-
-            {/* <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
-              <Route path="/fk-table-settings" element={<FKTableSettings />} />
-            </Route> */}
 
             <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/dept-mapper" element={<DeptMapper />} />
@@ -147,6 +137,8 @@ function App() {
               <Route path="/change-password" element={<ChangePassword />} />
             </Route>
           </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         {/* <Footer /> */}
       </Router>
