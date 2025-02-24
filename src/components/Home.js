@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "./hooks/useAxiosPrivate";
 import useData from "./hooks/useData";
 import UpdateData from "./user/UpdateData";
+import { generateExcel } from "./FKRaport/utilsForFKTable/prepareFKExcelFile";
 
 import "./Home.css";
 

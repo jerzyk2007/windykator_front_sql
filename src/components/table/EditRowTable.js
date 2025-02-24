@@ -24,6 +24,12 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
   const [toggleState, setToggleState] = useState(1);
   const [note, setNote] = useState("");
 
+  //zmienna do tworzenia histori decyzji dla zarządu wykorzystywane później w raporcie
+  const [managementDescription, setManagementDescription] = useState({
+    INFORMACJA_ZARZAD: [],
+    HISTORIA_ZMIANY_DATY_ROZLICZENIA: [],
+  });
+
   const [nextPrevDoc, SetNextPrevDoc] = useState({
     prev: null,
     next: null,
@@ -81,7 +87,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
 
   const handleSaveData = async (type) => {
     const { id_document, NUMER_FV } = rowData;
-
     try {
       await axiosPrivateIntercept.patch(
         `/documents/change-single-document`,
@@ -110,7 +115,22 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
           );
         }
       }
-      // await updateDocuments(changeSingleDoc(rowData));
+
+      if (managementDescription.INFORMACJA_ZARZAD.length || managementDescription.HISTORIA_ZMIANY_DATY_ROZLICZENIA.length) {
+        await axiosPrivateIntercept.post(
+          `/fk/add-decision-date-fk`,
+          {
+            NUMER_FV,
+            data: managementDescription
+          }
+        );
+      }
+
+
+      setManagementDescription({
+        INFORMACJA_ZARZAD: [],
+        HISTORIA_ZMIANY_DATY_ROZLICZENIA: [],
+      });
       await updateDocuments(changeSingleDoc(rowData));
 
       if (type !== "no_exit") {
@@ -282,6 +302,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                     rowData={rowData}
                     setRowData={setRowData}
                     usersurname={auth.usersurname}
+                    managementDescription={managementDescription}
+                    setManagementDescription={setManagementDescription}
                   />}
 
                 </section>
@@ -353,7 +375,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                 variant="contained"
                 size="large"
                 color="success"
-                onClick={handleSaveData}
+                onClick={() => handleSaveData()}
               >
                 Zatwierdź
               </Button>

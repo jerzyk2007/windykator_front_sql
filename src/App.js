@@ -77,6 +77,12 @@ function App() {
                 element={<PrepareTable info={"disabled_fk"} />}
               />
             </Route>
+            <Route element={<RequireAuth allowedRoles={[120, 1000]} />}>
+              <Route
+                path="/control-bl-documents-table"
+                element={<PrepareTable info={"control-bl"} />}
+              />
+            </Route>
 
             <Route
               element={<RequireAuth allowedRoles={[100, 110, 120, 1000]} />}

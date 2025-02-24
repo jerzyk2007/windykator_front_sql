@@ -64,17 +64,19 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
 
                 const historyDoc = (value) => {
                     const raportCounter = `Dokument pojawił się w raporcie ${value.length} raz.`;
+
                     const infoFK = value.map(item => {
+
                         return [
                             " ",
-                            item.history.info,
+                            item.info,
                             "Daty rozliczenia: ",
-                            ...(Array.isArray(item.history.historyDate) && item.history.historyDate.length
-                                ? item.history.historyDate
+                            ...(Array.isArray(item.historyDate) && item.historyDate.length
+                                ? item.historyDate
                                 : ["brak daty rozliczenia"]),
                             "Decyzja: ",
-                            ...(Array.isArray(item.history.historyText) && item.history.historyText.length
-                                ? item.history.historyText
+                            ...(Array.isArray(item.historyText) && item.historyText.length
+                                ? item.historyText
                                 : ["brak decyzji biznesu"]),
 
                         ];
@@ -114,7 +116,8 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
                         item.TERMIN_PLATNOSCI_FV
                     ),
                     INFORMACJA_ZARZAD: Array.isArray(item.INFORMACJA_ZARZAD)
-                        ? item.INFORMACJA_ZARZAD.join("\n\n")
+                        // ? item.INFORMACJA_ZARZAD.join("\n\n")
+                        ? item.INFORMACJA_ZARZAD[item.INFORMACJA_ZARZAD.length - 1]
                         : " ",
                     HISTORIA_ZMIANY_DATY_ROZLICZENIA: item?.HISTORIA_ZMIANY_DATY_ROZLICZENIA > 0 ? item.HISTORIA_ZMIANY_DATY_ROZLICZENIA : " ",
                     OSTATECZNA_DATA_ROZLICZENIA: item.OSTATECZNA_DATA_ROZLICZENIA ? convertToDateIfPossible(item.OSTATECZNA_DATA_ROZLICZENIA) : " ",

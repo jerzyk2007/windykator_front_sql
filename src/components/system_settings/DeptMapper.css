@@ -83,15 +83,26 @@
   align-items: center;
 }
 
-.dept_mapper--fa-save {
+.dept_mapper--fa-save,
+.dept_mapper--fa-trash,
+.dept_mapper--fa-check,
+.dept_mapper--fa-cancel {
   margin-top: 10px;
   font-size: 1.4rem;
   cursor: pointer;
 }
 
+.dept_mapper--fa-trash {
+  color: red;
+  margin: 0 10px;
+
+}
+
 .dept_mapper--fa-save:active {
   color: red;
 }
+
+
 
 .dept_mapper-counter {
   flex-basis: 5%;

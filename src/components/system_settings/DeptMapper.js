@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
-import PleaseWait from "../PleaseWait";
 // import useData from "../hooks/useData";
 // import FKItemSettings from "./FKItemsData/FKItemSettings";
 import DeptMapperSettings from "./DeptMapperSettings";
@@ -18,23 +17,37 @@ const DeptMapper = () => {
   const [itemsDB, setItemsDB] = useState([]);
   const [missingDeps, setMissingDeps] = useState([]);
 
-  const checkMissingDepartments = (saveDeps, docDeps) => {
-    let checkgDeps = [];
+  const checkMissingDepartments = async (saveDeps, docDeps) => {
+    let checkDeps = [];
     for (const dep of docDeps) {
 
       const checkDep = saveDeps.find((item) => item === dep);
       if (!checkDep) {
-        checkgDeps.push(dep);
+        checkDeps.push(dep);
       }
     }
-    setMissingDeps(checkgDeps);
+    // sprawdzam czy brakujące działy mają do rozliczenia fv czy nie
+    const checkDocPayment = await axiosPrivateIntercept.post("/items/check-doc-payment", { departments: checkDeps });
+    // console.log(checkDocPayment.data);
+    setMissingDeps(checkDocPayment.data);
+    // setMissingDeps(checkDeps);
   };
 
-  const itemsDep = missingDeps.map((dep, index) => {
-    return (
-      <span key={index} className="dept_mapper__container-dep--info">{dep}</span>
-    );
-  });
+  const itemsDepExist = missingDeps?.checkDoc?.map((dep, index) => {
+    if (dep.exist === true) {
+      return (
+        <span key={index} className="dept_mapper__container-dep--info">{dep.dep}</span>
+      );
+    }
+  }).filter(Boolean);;
+
+  const itemsDepNoExist = missingDeps?.checkDoc?.map((dep, index) => {
+    if (dep.exist === false) {
+      return (
+        <span key={index} className="dept_mapper__container-dep--info">{dep.dep}</span>
+      );
+    }
+  }).filter(Boolean);;
 
   const getData = async () => {
     try {
@@ -112,19 +125,26 @@ const DeptMapper = () => {
     }
   };
 
+  const handleDeleteItem = async (dep) => {
+    await axiosPrivateIntercept.delete(`/items/delete-prepared-item/${encodeURIComponent(dep)}`);
+    const filteredData = createItem.filter(item => item.department !== dep);
+    setCreateItem(filteredData);
+  };
+
   const itemsArray = mergeDep?.map((dep, index) => {
     // sprawdzam czy działy potrzebne do raportu są zapisane w "zmień stałe"
     const checkDepStyle = raportDep.find((item) => item === dep);
-
     return (
       <DeptMapperSettings
         key={index}
         id={index}
         dep={dep}
         dataItem={createItem ? createItem[index] : {}}
+        // dataItem={createItem ? {} : {}}
         settings={data}
         style={checkDepStyle ? "exist" : "noexist"}
         handleSaveToDB={handleSaveToDB}
+        handleDeleteItem={handleDeleteItem}
       />
     );
   });
@@ -173,12 +193,23 @@ const DeptMapper = () => {
           <section className="dept_mapper__title">
             <span>Dopasuj wyświetlanie danych</span>
           </section>
-          <section className="dept_mapper__container-dep">
-            <span className="dept_mapper__container-dep--title">Uzupełnij dane dla działów: </span>
+          {itemsDepExist?.length ? <section className="dept_mapper__container-dep">
+            <span className="dept_mapper__container-dep--title">Uzupełnij dane dla działów - posiadające nierozl. FV: </span>
             <section className="dept_mapper-dep__container">
-              {itemsDep}
+              {itemsDepExist}
             </section>
-          </section>
+          </section> : null}
+
+          {itemsDepNoExist?.length ? <section className="dept_mapper__container-dep"
+            style={{ backgroundColor: "#ff8282" }}>
+            <span className="dept_mapper__container-dep--title"
+
+            >Uzupełnij dane dla działów - nie posiadających nierozl. FV: </span>
+            <section className="dept_mapper-dep__container">
+              {itemsDepNoExist}
+            </section>
+          </section> : null}
+
           <section className="dept_mapper__container">
             <section className="dept_mapper__container-item">
               <section className="dept_mapper-counter__container">

@@ -3,7 +3,7 @@ import HistoryDateSettlement from "./HistoryDateSettlement";
 import { Button } from "@mui/material";
 import "./EditDataManagement.css";
 
-const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
+const EditDataManagement = ({ rowData, setRowData, usersurname, managementDescription, setManagementDescription }) => {
     const textareaRef = useRef(null);
     const [managementNote, setManagementNote] = useState("");
     // Tymczasowa data
@@ -38,6 +38,12 @@ const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
                 INFORMACJA_ZARZAD: newNote,
             };
         });
+
+        setManagementDescription(prev => ({
+            ...prev,
+            INFORMACJA_ZARZAD: [...(prev.INFORMACJA_ZARZAD || []), addNote]
+        }));
+
         setManagementNote("");
     };
 
@@ -62,6 +68,12 @@ const EditDataManagement = ({ rowData, setRowData, usersurname }) => {
                 HISTORIA_ZMIANY_DATY_ROZLICZENIA: newNote ? newNote : null,
             };
         });
+
+
+        setManagementDescription(prev => ({
+            ...prev,
+            HISTORIA_ZMIANY_DATY_ROZLICZENIA: [...(prev.HISTORIA_ZMIANY_DATY_ROZLICZENIA || []), addNote]
+        }));
     };
 
 
