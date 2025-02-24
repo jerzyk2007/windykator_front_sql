@@ -10,6 +10,7 @@ const columnsOrder = [
     "Do rozliczenia",
     "Kontrahent",
     "Dział",
+    "Doradca",
     "Nr szkody",
     "Uwagi do sprawy",
     "Upoważnienie",
@@ -68,6 +69,10 @@ const columnsName = [
         header: "Dział"
     },
     {
+        accessorKey: "DORADCA",
+        header: "Doradca"
+    },
+    {
         accessorKey: "KONTRAHENT",
         header: "Kontrahent"
     },
@@ -76,7 +81,7 @@ const columnsName = [
         header: "Do rozliczenia"
     },
     {
-        accessorKey: "NR_DOKUMENTU",
+        accessorKey: "NUMER_FV",
         header: "Nr faktury"
     },
     {
@@ -378,8 +383,9 @@ export const useControlRaportBL = () => {
                     ILE_DNI_NA_PLATNOSC: item.ILE_DNI_NA_PLATNOSC ? item.ILE_DNI_NA_PLATNOSC : " ",
                     ILE_DNI_PO_TERMINIE: item.ILE_DNI_PO_TERMINIE ? item.ILE_DNI_PO_TERMINIE : " ",
                     KONTRAHENT: item.KONTRAHENT ? item.KONTRAHENT : " ",
+                    DORADCA: item.DORADCA ? item.DORADCA : " ",
                     NALEZNOSC: item.NALEZNOSC ? item.NALEZNOSC : 0,
-                    NR_DOKUMENTU: item.NR_DOKUMENTU ? item.NR_DOKUMENTU : " ",
+                    NUMER_FV: item.NUMER_FV ? item.NUMER_FV : " ",
                     NR_SZKODY: item.NR_SZKODY ? item.NR_SZKODY : " ",
 
 
