@@ -56,7 +56,9 @@ const InstructionTable = () => {
                     <span className='instruction_component-content--element'>Wyłączenia Raportu FK</span>
                     {` - niektóre dokumenty mogą zostać wyłączone z procesu  Raportowania FK, wybranie tej pozycji menu spowoduje wczytanie dokumentów „ręcznie” wyłączonych,`}
                 </span>
-
+                <div className='instruction_custom-image'>
+                    <img src="/instruction_image/table.png" alt="Logo" className="w-32 h-auto" style={{ maxWidth: "100%" }} />
+                </div>
                 <br />
                 <span className='instruction_component-content--title'>Opis poszczególnych elementów tabeli:
                 </span>
