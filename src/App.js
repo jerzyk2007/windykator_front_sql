@@ -18,6 +18,7 @@ import Items from './components/system_settings/Items';
 import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
 import TradeCredit from "./components/trade_credit/TradeCredit";
+import Instruction from "./components/instruction/Instruction";
 import "./App.css";
 
 function App() {
@@ -135,6 +136,10 @@ function App() {
 
             <Route element={<RequireAuth allowedRoles={[1]} />}>
               <Route path="/change-password" element={<ChangePassword />} />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={[1]} />}>
+              <Route path="/instruction" element={<Instruction />} />
             </Route>
           </Route>
 
