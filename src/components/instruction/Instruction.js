@@ -5,6 +5,19 @@ import InstructionAuthor from "./InstructionAuthor";
 import InstructionAccess from "./InstructionAccess";
 import InstructionTable from "./InstructionTable";
 import InstructionMenu from "./InstructionMenu";
+import ReportDepartment from "./ReportDepartment";
+import ReportAdviser from "./ReportAdviser";
+import DocumentEdition from "./DocumentEdition";
+import ReportFK from "./ReportFK";
+import DocumentControl from "./DocumentControl";
+import ReportDocumentControl from "./ReportDocumentControl";
+import ReportNora from "./ReportNora";
+import OrganizationStructure from "./OrganizationStructure";
+import InstructionUpdate from "./InstructionUpdate";
+import InstructionUser from "./InstructionUser";
+import InstructionLogout from "./InstructionLogout";
+import InstructionAddUser from "./InstructionAddUser";
+import InstructionPassword from "./InstructionPassword";
 import './Instruction.css';
 
 
@@ -48,14 +61,16 @@ const menuStructure = [
                     { id: 14, name: "Raport kontroli BL" },
                 ],
             },
-            {
-                id: 15,
-                category: "Inne",
-                items: [
-                    { id: 16, name: "Raport NORA" },
-                    { id: 17, name: "Struktura organizacji" },
-                ],
-            },
+            // {
+            //     id: 15,
+            //     category: "Inne",
+            //     items: [
+            //         { id: 16, name: "Raport NORA" },
+            //         { id: 17, name: "Struktura organizacji" },
+            //     ],
+            // },
+            { id: 16, name: "Raport NORA" },
+            { id: 17, name: "Struktura organizacji" },
         ],
     },
     {
@@ -146,8 +161,47 @@ const Instruction = () => {
 
     const renderContent = () => {
         switch (selectedMenuItem) {
+            case 1:
+                return <InstructionTable />;
+            case 2:
+                return <InstructionTable />;
+            case 3:
+                return <InstructionTable />;
+            case 4:
+                return <InstructionTable />;
+            case 5:
+                return <InstructionTable />;
+            case 6:
+                return <InstructionTable />;
+            case 8:
+                return <ReportDepartment setSelectedMenuItem={setSelectedMenuItem} />;
+            case 9:
+                return <ReportAdviser setSelectedMenuItem={setSelectedMenuItem} />;
+            case 11:
+                return <ReportFK />;
+            case 13:
+                return <DocumentControl setSelectedMenuItem={setSelectedMenuItem} />;
+            case 14:
+                return <ReportDocumentControl />;
+            case 16:
+                return <ReportNora />;
+            case 17:
+                return <OrganizationStructure />;
+
+            case 26:
+                return <InstructionUpdate />;
+            case 27:
+                return <InstructionUser />;
+            case 28:
+                return <InstructionAddUser />;
+            case 29:
+                return <InstructionPassword />;
+            case 30:
+                return <InstructionLogout />;
             case 100:
                 return <InstructionHelp />;
+            case 101:
+                return <InstructionAuthor />;
             case 101:
                 return <InstructionAuthor />;
             case 102:
@@ -155,15 +209,16 @@ const Instruction = () => {
             case 103:
                 return <InstructionTable />;
             case 104:
+                return <DocumentEdition />;
+            case 200:
                 return <InstructionMenu />;
             // Dodaj inne przypadki dla innych elementów menu
             default:
-                return <div>Wybierz element menu, aby wyświetlić zawartość</div>;
+                return <div>Instrukcja w przygotowaniu ...</div>;
         }
     };
 
     useEffect(() => {
-        console.log(selectedMenuItem);
     }, [selectedMenuItem]);
     return (
         <section className="instruction">
@@ -196,12 +251,19 @@ const Instruction = () => {
                     </div>
                     <span className="instruction__menu-item--title">Tabela z danymi</span>
                 </section>
+                <section className="instruction__menu-item"
+                    onClick={() => setSelectedMenuItem(104)}>
+                    <div className="instruction__menu-item--logo">
+                        <FcRight />
+                    </div>
+                    <span className="instruction__menu-item--title">Edycja dokumentu</span>
+                </section>
 
                 <section className="instruction__menu-item"
                     onClick={() => {
                         setHideMenu(prev => !prev);
                         setOpenMainMenu("");
-                        setSelectedMenuItem(104);
+                        setSelectedMenuItem(200);
                     }
 
                     }>

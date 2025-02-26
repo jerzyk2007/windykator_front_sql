@@ -27,3 +27,13 @@
     font-weight: 500;
     color: red;
 }
+
+.instruction_custom-image {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.instruction_custom-image img {
+    width: 100%;
+}
