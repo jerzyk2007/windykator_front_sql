@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FcRight, FcRightDown2 } from "react-icons/fc";
 import InstructionHelp from "./InstructionHelp";
 import InstructionAuthor from "./InstructionAuthor";
-import InstructionAccess from "./InstructionAccess";
+import InstructionInfo from "./InstructionInfo";
 import InstructionTable from "./InstructionTable";
 import InstructionMenu from "./InstructionMenu";
 import ReportDepartment from "./ReportDepartment";
@@ -18,6 +18,11 @@ import InstructionUser from "./InstructionUser";
 import InstructionLogout from "./InstructionLogout";
 import InstructionAddUser from "./InstructionAddUser";
 import InstructionPassword from "./InstructionPassword";
+import InstructionAddData from "./InstructionAddData";
+import InstructionAccess from "./InstructionAccess";
+import InstructionTableColumns from "./InstructionTableColumns";
+import InstructionMathData from "./InstructionMathData";
+import InstructionChangeData from "./InstructionChangeData";
 import './Instruction.css';
 
 
@@ -187,7 +192,16 @@ const Instruction = () => {
                 return <ReportNora />;
             case 17:
                 return <OrganizationStructure />;
-
+            case 19:
+                return <InstructionAccess />;
+            case 20:
+                return <InstructionAddData />;
+            case 22:
+                return <InstructionTableColumns />;
+            case 23:
+                return <InstructionChangeData />;
+            case 24:
+                return <InstructionMathData />;
             case 26:
                 return <InstructionUpdate />;
             case 27:
@@ -205,7 +219,7 @@ const Instruction = () => {
             case 101:
                 return <InstructionAuthor />;
             case 102:
-                return <InstructionAccess />;
+                return <InstructionInfo />;
             case 103:
                 return <InstructionTable />;
             case 104:

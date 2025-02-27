@@ -66,7 +66,7 @@ const DocumentEdition = () => {
                 <span className='instruction_custom-content--text'>przycisk pojawi się tylko wtedy jeśli wybierzemy wczytanie danych z menu: Tabelka / Dokumenty Raportu FK
                 </span>
                 <div className='instruction_custom-image'>
-                    <img src="/instruction_image/raport_fk_edit.png" alt="Logo" className="w-32 h-auto" style={{ maxWidth: "50vw" }} />
+                    <img src="/instruction_image/raport_fk_edit.png" alt="Logo" className="w-32 h-auto" style={{ maxWidth: "50%" }} />
                 </div>
                 <span className='instruction_custom-content--text'>Wpisy w tej części będą dodawane do Raportu FK, oczekiwane jest aby użytkownik wybrał datę ostatecznego rozliczenia dokumentu oraz komentarz z którego będzie wynikać dlaczego do tej pory nie został rozliczony. Historia tych komentarzy, ilość wpisów i ilość zmiany daty wygeneruje się w odpowiednim raporcie dla Zarządu.
                 </span>
@@ -83,7 +83,7 @@ const DocumentEdition = () => {
                 <span className='instruction_custom-content--text'>Prezentowane informacje dotyczą etapu sprawy w kancelarii
                 </span>
                 <div className='instruction_custom-image'>
-                    <img src="/instruction_image/becared_edit.png" alt="Logo" className="w-32 h-auto" style={{ maxWidth: "50vw" }} />
+                    <img src="/instruction_image/becared_edit.png" alt="Logo" className="w-32 h-auto" style={{ maxWidth: "50%" }} />
                 </div>
 
                 <section className='instruction_component__wrapper'>
