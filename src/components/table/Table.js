@@ -10,7 +10,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "dayjs/locale/pl";
 import { plPL } from "@mui/x-date-pickers/locales";
-// import useData from "../hooks/useData";
+import useData from "../hooks/useData";
 import useWindowSize from "../hooks/useWindow";
 import QuickTableNote from "./QuickTableNote";
 import EditRowTable from "./EditRowTable";
@@ -29,7 +29,7 @@ const Table = ({
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const theme = useTheme();
-
+  const { auth } = useData();
   const { height } = useWindowSize();
 
   const [columnVisibility, setColumnVisibility] = useState(settings.visible);
@@ -306,8 +306,6 @@ const Table = ({
     setData(documents);
   }, [documents]);
 
-
-
   useEffect(() => {
     const visibleData = table.getPrePaginationRowModel().rows.map((row) => row.original.id_document);
     setNextDoc(visibleData);
@@ -324,7 +322,7 @@ const Table = ({
           />
         )}
 
-        {dataRowTable && (
+        {auth?.roles?.includes(110 || 120 || 1100) && dataRowTable && (
           <EditRowTable
             dataRowTable={dataRowTable}
             setDataRowTable={setDataRowTable}

@@ -383,10 +383,19 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       className="nav_menu-link"
                       onClick={handleLinkClick}
                     >
-                      Informacje
+                      Aktualizacja danych
                     </Link>
                   </li>
                 )}
+                <li className="nav_menu-item-dropmenu">
+                  <Link
+                    to="/instruction"
+                    className="nav_menu-link"
+                    onClick={handleLinkClick}
+                  >
+                    Instrukcja obsługi
+                  </Link>
+                </li>
                 {auth?.roles?.includes(1000) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
@@ -398,8 +407,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {/* {auth?.roles?.includes(300) && <li className='nav_menu-item-dropmenu'><Link className="nav_menu-link" onClick={handleLinkClick}>Zmień uprawnienia
-                            </Link></li>} */}
                 <li className="nav_menu-item-dropmenu">
                   <Link
                     to="/change-password"

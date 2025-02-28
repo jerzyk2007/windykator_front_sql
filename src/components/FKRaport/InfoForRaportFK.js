@@ -93,6 +93,7 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
                     RODZAJ_KONTA: item.RODZAJ_KONTA,
                     NR_KLIENTA: item.NR_KLIENTA,
                     DO_ROZLICZENIA_AS: item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : "NULL",
+                    DORADCA_FV: item.DORADCA ? item.DORADCA : "Brak danych",
                     ROZNICA: item.ROZNICA !== 0 ? item.ROZNICA : "NULL",
                     DATA_ROZLICZENIA_AS: item.DATA_ROZLICZENIA_AS ? convertToDateIfPossible(
                         item.DATA_ROZLICZENIA_AS) : "NULL",
@@ -248,8 +249,6 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
             // usuwam kolumnę KONTROLA ze wszytskich arkuszy oprócz KSIĘGOWOŚĆ AS
             const updateControlColumn = updateFvDate.map((element) => {
                 if (element.name !== 'KSIĘGOWOŚĆ AS') {
-
-
                     const updatedData = element.data.map((item) => {
                         const { KONTROLA, ...rest } = item;
                         return rest;
@@ -259,8 +258,20 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
                 return element;
             });
 
+            // usuwam kolumnę DORADCA ze wszytskich arkuszy oprócz BLACHARNIA
+            const updateAdvisersColumn = updateFvDate.map((element) => {
+                if (element.name !== 'BLACHARNIA') {
+                    const updatedData = element.data.map((item) => {
+                        const { DORADCA_FV, ...rest } = item;
+                        return rest;
+                    });
+                    return { ...element, data: updatedData };
+                }
+                return element;
+            });
+
             // obrabiam tylko dane działu KSIĘGOWOŚĆ
-            const accountingData = updateControlColumn.map(item => {
+            const accountingData = updateAdvisersColumn.map(item => {
                 if (item.name === 'KSIĘGOWOŚĆ') {
                     // pierwsze filtrowanie wszytskich danych
                     const dataDoc = eraseNull.filter(doc =>
