@@ -268,7 +268,7 @@ const generateExcel = async (cleanData) => {
                         const sumCell = worksheet.getCell(startRow - 1, column.number); // np. wiersz 4, odpowiednia kolumna
 
                         // Ustawienie formuły COUNTIF, która zliczy komórki z wartością "BRAK" w zadanym zakresie
-                        sumCell.value = { formula: `COUNTIF(K${excelStartRow}:K${excelEndRow},"BRAK")` };
+                        sumCell.value = { formula: `COUNTIF(L${excelStartRow}:L${excelEndRow},"BRAK")` };
 
                         // Stylizacja komórki z wynikiem
                         sumCell.font = { bold: true };
@@ -289,7 +289,7 @@ const generateExcel = async (cleanData) => {
 
                         // Ustawienie formuły COUNTIF, która zliczy komórki z wartością "BRAK" w zadanym zakresie
                         sumCell.value = {
-                            formula: `COUNTIF(L${excelStartRow}:L${excelEndRow},"NIE POBRANY 100%") + COUNTIF(L${excelStartRow}:L${excelEndRow},"NIE POBRANY 50%")`
+                            formula: `COUNTIF(M${excelStartRow}:M${excelEndRow},"NIE POBRANY 100%") + COUNTIF(M${excelStartRow}:M${excelEndRow},"NIE POBRANY 50%")`
                         };
 
                         // Stylizacja komórki z wynikiem
