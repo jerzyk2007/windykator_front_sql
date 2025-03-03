@@ -1,12 +1,10 @@
 import { useState } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
-import useData from "../hooks/useData";
 import { Button } from "@mui/material";
 import "./UserChangeRoles.css";
 
 const UserChangeRoles = ({ user, roles }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  // const { auth } = useData();
 
   const [userRoles, setUserRoles] = useState(roles);
   const [errMsg, setErrMsg] = useState("");

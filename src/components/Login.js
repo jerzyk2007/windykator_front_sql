@@ -3,18 +3,19 @@ import { useNavigate } from "react-router-dom";
 import useData from "./hooks/useData";
 import { axiosPrivate } from "../api/axios";
 import { Button } from "@mui/material";
+import ForgotPassword from './user/ForgotPassword';
 import "./Login.css";
 
 const Login = () => {
   const { setAuth } = useData();
   const navigate = useNavigate();
-
   const userRef = useRef();
   const errRef = useRef();
 
   const [userlogin, setUserlogin] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [forgotPass, setForgotPass] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,6 +28,7 @@ const Login = () => {
           withCredentials: true,
         }
       );
+
       const { username, usersurname, roles, id_user, permissions } =
         response?.data;
       setAuth({
@@ -55,11 +57,15 @@ const Login = () => {
     setErrMsg("");
   }, [userlogin, password]);
 
+  useEffect(() => {
+    userRef.current?.focus();
+  }, []);
+
   return (
     <section className="login__fixed">
-      <section className="login">
+      {!forgotPass ? <section className="login">
         {errMsg && (
-          <p className="login-error-message" ref={errRef}>
+          <p className="user-error-message" ref={errRef}>
             {errMsg}
           </p>
         )}
@@ -96,7 +102,12 @@ const Login = () => {
             Zaloguj
           </Button>
         </form>
-      </section>
+        <section className="login__password" onClick={() => setForgotPass(true)}>
+          <span>Zapomniałem hasła</span>
+        </section>
+
+      </section> : <ForgotPassword setForgotPass={setForgotPass} />}
+
     </section>
   );
 };

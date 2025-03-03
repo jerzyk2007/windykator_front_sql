@@ -115,7 +115,7 @@ const Register = () => {
 
                 </section>) :
                 (<section className="register">
-                    {errMsg && <p className="register-error-message" ref={errRef}>{errMsg}</p>}
+                    {errMsg && <p className="user-error-message" ref={errRef}>{errMsg}</p>}
                     {!errMsg && <h1 className="register-title">Rejestracja użytkownika.</h1>}
                     <form className="register__container" onSubmit={handleSubmit}>
 

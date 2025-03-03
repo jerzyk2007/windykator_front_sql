@@ -19,6 +19,8 @@ import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
 import TradeCredit from "./components/trade_credit/TradeCredit";
 import Instruction from "./components/instruction/Instruction";
+import ResetPassword from "./components/user/ResetPassword";
+import ConfirmResetPassword from "./components/user/ConfirmResetPassword";
 import "./App.css";
 
 function App() {
@@ -28,6 +30,9 @@ function App() {
         <Header />
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/confirm-reset-password/:token/:email" element={<ConfirmResetPassword />} />
+
           {/* protected routes */}
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedRoles={[1, 100, 200]} />}>

@@ -59,17 +59,16 @@
 }
 
 
-.login-error-message {
-    color: red;
+/* .login-error-message {
+    color: rgb(0, 0, 0);
     text-align: center;
     font-weight: 600;
-    font-size: 1.3rem;
     letter-spacing: 1px;
-    background-color: #fffd7d;
-    border-radius: 5px;
+    background-color: rgba(255, 154, 196, 0.5);
+    border-radius: 10px;
     border: none;
     padding: 10px 20px;
-}
+} */
 
 .login Button {
     margin: 10px auto;
@@ -94,4 +93,25 @@
     -webkit-text-fill-color: #000 !important;
     background-color: #fff !important;
     transition: background-color 5000s ease-in-out 0s;
+}
+
+.login__password {
+    width: 100%;
+    text-align: right;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #a01313;
+    user-select: none;
+}
+
+.login__password:hover {
+    color: rgb(3, 46, 46);
+}
+
+.login__information {
+    text-align: justify;
+}
+
+.forgot_password-accept {
+    display: flex;
 }

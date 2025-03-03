@@ -86,7 +86,7 @@ const ChangePassword = () => {
   return (
     <section className="change_password">
       {errMsg && (
-        <p className="change_password-error-message" ref={errRef}>
+        <p className="user-error-message" ref={errRef}>
           {errMsg}
         </p>
       )}
