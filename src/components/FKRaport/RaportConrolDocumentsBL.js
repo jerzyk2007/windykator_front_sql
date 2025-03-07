@@ -19,6 +19,7 @@ const columnsOrder = [
     "Prawo jazdy",
     "Dowód rej.",
     "Polisa AC",
+    "Decyzja",
     "Fv w SVCloud",
     "Czy jest odpowiedzilność",
 ];
@@ -27,6 +28,10 @@ const columnsName = [
     {
         accessorKey: "BRUTTO",
         header: "Kwota brutto"
+    },
+    {
+        accessorKey: "CONTROL_DECYZJA",
+        header: "Decyzja"
     },
     {
         accessorKey: "CONTROL_DOW_REJ",
@@ -101,7 +106,6 @@ const columnsName = [
 
 
 const generateExcel = async (cleanData) => {
-
     // od którego wiersza mają się zaczynać dane w arkuszu
     const startRow = 2;
     try {
@@ -268,8 +272,11 @@ const generateExcel = async (cleanData) => {
                         const sumCell = worksheet.getCell(startRow - 1, column.number); // np. wiersz 4, odpowiednia kolumna
 
                         // Ustawienie formuły COUNTIF, która zliczy komórki z wartością "BRAK" w zadanym zakresie
-                        sumCell.value = { formula: `COUNTIF(L${excelStartRow}:L${excelEndRow},"BRAK")` };
-
+                        // sumCell.value = { formula: `COUNTIF(L${excelStartRow}:L${excelEndRow},"BRAK")` };
+                        sumCell.value = {
+                            formula: `SUMPRODUCT(SUBTOTAL(3, OFFSET(L${excelStartRow}:L${excelEndRow}, ROW(L${excelStartRow}:L${excelEndRow})-ROW(L${excelStartRow}), 0, 1)), --(L${excelStartRow}:L${excelEndRow}="BRAK"))`
+                        };
+                        // countCell.value = { formula: `SUBTOTAL(103,B${excelStartRow}:B${excelEndRow})` };
                         // Stylizacja komórki z wynikiem
                         sumCell.font = { bold: true };
                         sumCell.alignment = { horizontal: 'center', vertical: 'middle' };
@@ -277,9 +284,25 @@ const generateExcel = async (cleanData) => {
                         sumCell.fill = {
                             type: 'pattern',
                             pattern: 'solid',
-                            fgColor: { argb: 'FF7070' } // Żółte tło dla wyróżnienia
+                            fgColor: { argb: 'FF7070' }
                         };
+                        // headerCell.alignment = { horizontal: 'center', vertical: 'middle' };
+                        // headerCell.font = { bold: true }; // Pogrubienie czcionki
+                        // column.width = 25;
+                        // // Wstawienie liczby dokumentów w wierszu 4 tej kolumny
+                        // const countCell = worksheet.getCell(startRow - 1, column.number);
+                        // countCell.value = { formula: `SUBTOTAL(103,L${excelStartRow}:L${excelEndRow})` };
+                        // countCell.numFmt = '0'; // Formatowanie liczby
+                        // countCell.font = { bold: true }; // Pogrubienie tekstu
+                        // countCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
+                        // countCell.border = extraCellBorder;
+                        // countCell.fill = {
+                        //     type: 'pattern',
+                        //     pattern: 'solid',
+                        //     fgColor: { argb: 'FF7070' }, // Żółte tło dla wyróżnienia
+                        // };
                     }
+                    // fgColor: { argb: 'FF7070' }
                     else if (header === 'Płatność VAT') {
                         // Ustawienie formatu liczbowego (opcjonalne – możesz zmienić format, gdyż wynik będzie liczbą całkowitą)
                         column.numFmt = '0';
@@ -288,9 +311,15 @@ const generateExcel = async (cleanData) => {
                         const sumCell = worksheet.getCell(startRow - 1, column.number); // np. wiersz 4, odpowiednia kolumna
 
                         // Ustawienie formuły COUNTIF, która zliczy komórki z wartością "BRAK" w zadanym zakresie
+                        // sumCell.value = {
+                        //     formula: `COUNTIF(M${excelStartRow}:M${excelEndRow},"NIE POBRANY 100%") + COUNTIF(M${excelStartRow}:M${excelEndRow},"NIE POBRANY 50%")`
+                        // };
+
                         sumCell.value = {
-                            formula: `COUNTIF(M${excelStartRow}:M${excelEndRow},"NIE POBRANY 100%") + COUNTIF(M${excelStartRow}:M${excelEndRow},"NIE POBRANY 50%")`
+                            formula: `SUMPRODUCT(SUBTOTAL(3, OFFSET(M${excelStartRow}:M${excelEndRow}, ROW(M${excelStartRow}:M${excelEndRow})-ROW(M${excelStartRow}), 0, 1)), 
+                                      --((M${excelStartRow}:M${excelEndRow}="NIE POBRANY 100%") + (M${excelStartRow}:M${excelEndRow}="NIE POBRANY 50%")))`
                         };
+
 
                         // Stylizacja komórki z wynikiem
                         sumCell.font = { bold: true };
@@ -299,11 +328,29 @@ const generateExcel = async (cleanData) => {
                         sumCell.fill = {
                             type: 'pattern',
                             pattern: 'solid',
-                            fgColor: { argb: 'FF7070' }, // Żółte tło dla wyróżnienia
+                            fgColor: { argb: 'FF7070' },
                         };
                     }
+                    if (header === 'Decyzja') {
+                        column.numFmt = '0';
 
+                        const sumCell = worksheet.getCell(startRow - 1, column.number); // np. wiersz 4, odpowiednia kolumna
+                        sumCell.value = {
+                            formula: `SUMPRODUCT(SUBTOTAL(3, OFFSET(Q${excelStartRow}:Q${excelEndRow}, ROW(Q${excelStartRow}:Q${excelEndRow})-ROW(Q${excelStartRow}), 0, 1)), --(Q${excelStartRow}:Q${excelEndRow}="BRAK"))`
+                        };
+                        // Stylizacja komórki z wynikiem
+                        sumCell.font = { bold: true };
+                        sumCell.alignment = { horizontal: 'center', vertical: 'middle' };
+                        sumCell.border = extraCellBorder;
+                        sumCell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'FF7070' }
+                        };
+
+                    }
                 });
+
 
                 worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
                     // Sprawdzamy, czy jesteśmy w wierszach od 6 w górę
@@ -370,6 +417,7 @@ export const useControlRaportBL = () => {
                 return {
                     BRUTTO: item.BRUTTO ? item.BRUTTO : 0,
                     CONTROL_DOW_REJ: item.CONTROL_DOW_REJ ? item.CONTROL_DOW_REJ : " ",
+                    CONTROL_DECYZJA: item.CONTROL_DECYZJA ? item.CONTROL_DECYZJA : " ",
                     CONTROL_FV: item.CONTROL_FV ? item.CONTROL_FV : " ",
                     CONTROL_ODPOWIEDZIALNOSC: item.CONTROL_ODPOWIEDZIALNOSC ? item.CONTROL_ODPOWIEDZIALNOSC : " ",
                     CONTROL_PLATNOSC_VAT: item.CONTROL_PLATNOSC_VAT ? item.CONTROL_PLATNOSC_VAT : " ",

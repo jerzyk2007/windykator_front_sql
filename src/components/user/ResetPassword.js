@@ -8,16 +8,16 @@ const ResetPassword = () => {
     const { token } = useParams(); // Pobiera token z URL
     const navigate = useNavigate();
     const sentRequest = useRef(false); // Zapobiega wielokrotnemu wysyłaniu
+
     useEffect(() => {
+
         const sendToken = async () => {
             if (!token || sentRequest.current) return;
-
             const decodedToken = decodeURIComponent(token); // Dekodowanie tokena
             sentRequest.current = true; // Zapobiega ponownemu wywołaniu
 
             try {
-
-                axiosPrivate.post(
+                await axiosPrivate.post(
                     "/reset-password/confirm",
                     JSON.stringify({ decodedToken }),
                     {

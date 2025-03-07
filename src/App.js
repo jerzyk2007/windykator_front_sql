@@ -30,8 +30,8 @@ function App() {
         <Header />
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/confirm-reset-password/:token/:email" element={<ConfirmResetPassword />} />
+          <Route path="/password-reset/:token" element={<ResetPassword />} />
+          <Route path="/password-confirm-reset/:token/:email" element={<ConfirmResetPassword />} />
 
           {/* protected routes */}
           <Route element={<PersistLogin />}>

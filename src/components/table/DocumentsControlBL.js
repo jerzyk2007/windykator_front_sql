@@ -1,7 +1,6 @@
 import './DocumentsControlBL.css';
 
 const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
-
     return (
         <section className="edit_doc documentControlBLs_control">
             <section className="edit_doc documentControlBLs_control__container">
@@ -115,6 +114,27 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                         <option value="BRAK">BRAK</option>
                         <option value="JEST">JEST</option>
                         <option value="NIE DOTYCZY">NIE DOTYCZY</option>
+                    </select>
+                </section>
+                <section className="edit_doc__container">
+                    <span className="edit_doc--title">
+                        Decyzja TU:
+                    </span>
+                    <select
+                        className="edit_doc--select"
+                        value={documentControlBL.decyzja}
+                        onChange={(e) => {
+                            setDocumentControlBL(prev => {
+                                return {
+                                    ...prev,
+                                    decyzja: e.target.value === "NULL" ? false : e.target.options[e.target.selectedIndex].text,
+                                };
+                            });
+                        }}
+                    >
+                        <option value="NULL"></option>
+                        <option value="BRAK">BRAK</option>
+                        <option value="JEST">JEST</option>
                     </select>
                 </section>
                 <section className="edit_doc__container">

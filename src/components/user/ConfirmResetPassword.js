@@ -1,8 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router";
 import { axiosPrivate } from "../../api/axios";
-import useLogout from "../hooks/useLogout";
-import useData from "../hooks/useData";
 import {
     faCheck,
     faTimes,
@@ -16,13 +14,9 @@ import "./ChangePassword.css";
 
 const ConfirmResetPassword = () => {
     const { token, email } = useParams(); // Pobiera token z URL
-
     const passRef = useRef();
     const errRef = useRef();
     const navigate = useNavigate();
-    // const logout = useLogout();
-
-    const { auth } = useData();
 
     const [confirmPass, setConfirmPass] = useState(false);
     const [password, setPassword] = useState("");
@@ -93,9 +87,9 @@ const ConfirmResetPassword = () => {
                 {
                     headers: { "Content-Type": "application/json" },
                     withCredentials: true,
+
                 }
             );
-            console.log(result);
 
             if (result?.data?.checkDate) {
                 setConfirmPass(true);
@@ -110,8 +104,6 @@ const ConfirmResetPassword = () => {
         }
     };
     useEffect(() => {
-
-        // passRef.current.focus();
 
         veryfiResetPass();
     }, []);

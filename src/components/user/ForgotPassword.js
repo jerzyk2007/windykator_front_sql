@@ -1,30 +1,21 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import useData from "../hooks/useData";
-import { axiosPrivate } from "../../api/axios";
+import { axiosPrivate, } from "../../api/axios";
 
 import { Button } from "@mui/material";
 import "../Login.css";
 
 const ForgotPassword = ({ setForgotPass }) => {
-    const { setAuth } = useData();
-    const navigate = useNavigate();
-
     const userRef = useRef();
 
     const [userlogin, setUserlogin] = useState("");
 
     const handleReset = async () => {
         try {
+
             await axiosPrivate.post(
                 "/reset-password",
                 JSON.stringify({ userlogin }),
-                {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-                }
             );
-
         }
         catch (error) {
             console.error(error);

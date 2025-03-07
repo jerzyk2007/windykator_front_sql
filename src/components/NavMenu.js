@@ -6,6 +6,7 @@ import useLogout from "./hooks/useLogout";
 import useWindowSize from "./hooks/useWindow";
 import { useControlRaportBL } from './FKRaport/RaportConrolDocumentsBL';
 import { useOrganizationStructureL } from './organization_structure/RaportOrganizationStructure';
+// import { resetMail } from "./Reset";
 
 import "./NavMenu.css";
 
@@ -407,6 +408,17 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
+                {/* {auth?.roles?.includes(1000) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <span
+                      className="nav_menu-link"
+                      onClick={resetMail}>
+                      Reset
+                    </span>
+                  </li>
+                )} */}
+
+
                 <li className="nav_menu-item-dropmenu">
                   <Link
                     to="/change-password"
