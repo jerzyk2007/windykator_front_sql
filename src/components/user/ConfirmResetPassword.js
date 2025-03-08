@@ -13,7 +13,7 @@ import PleaseWait from "../PleaseWait";
 import "./ChangePassword.css";
 
 const ConfirmResetPassword = () => {
-    const { token, email } = useParams(); // Pobiera token z URL
+    const { token } = useParams(); // Pobiera token z URL
     const passRef = useRef();
     const errRef = useRef();
     const navigate = useNavigate();
@@ -44,7 +44,7 @@ const ConfirmResetPassword = () => {
 
             await axiosPrivate.patch(
                 `/reset-password/change-pass`,
-                JSON.stringify({ password, token, email }),
+                JSON.stringify({ password, token }),
                 {
                     headers: { "Content-Type": "application/json" },
                     withCredentials: true,
@@ -83,7 +83,7 @@ const ConfirmResetPassword = () => {
         try {
             const result = await axiosPrivate.post(
                 `/reset-password/verify-pass`,
-                JSON.stringify({ token, email }),
+                JSON.stringify({ token }),
                 {
                     headers: { "Content-Type": "application/json" },
                     withCredentials: true,
