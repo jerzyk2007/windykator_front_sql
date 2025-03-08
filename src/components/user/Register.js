@@ -21,34 +21,23 @@ const Register = () => {
     const [validUserlogin, setValidUserlogin] = useState(false);
     const [userFocus, setUserFocus] = useState(false);
 
-    const [password, setPassword] = useState('');
-    const [validPassword, setValidPassword] = useState(false);
-    const [passwordFocus, setPasswordFocus] = useState(false);
-
-    const [matchPassword, setMatchPassword] = useState('');
-    const [validMatchPassword, setValidMatchPassword] = useState(false);
-    const [matchPasswordFocus, setMatchPasswordFocus] = useState(false);
-
-
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState('');
 
     const USER_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const v1 = USER_REGEX.test(userlogin);
-            const v2 = PASSWORD_REGEX.test(password);
 
-            if (!v1 || !v2) {
+            if (!v1) {
                 setErrMsg("Invalid entry");
                 return;
             }
             const result = await axiosPrivateIntercept.post('/user/register',
 
-                JSON.stringify({ userlogin, password, username, usersurname }),
+                JSON.stringify({ userlogin, username, usersurname }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true,
@@ -56,8 +45,6 @@ const Register = () => {
             );
             setSuccess(result.data);
             setUserlogin('');
-            setPassword('');
-            setMatchPassword('');
 
         }
         catch (err) {
@@ -88,16 +75,10 @@ const Register = () => {
         setValidUserlogin(result);
     }, [userlogin]);
 
-    useEffect(() => {
-        const result = PASSWORD_REGEX.test(password);
-        setValidPassword(result);
-        const match = password === matchPassword;
-        setValidMatchPassword(match);
-    }, [password, matchPassword]);
 
     useEffect(() => {
         setErrMsg('');
-    }, [userlogin, password, matchPassword]);
+    }, [userlogin]);
 
     return (
         <>
@@ -174,56 +155,11 @@ const Register = () => {
                             onFocus={() => setUserFocus(true)}
                             onBlur={() => setUserFocus(false)}
                         />
-
-
-                        <label htmlFor="password" className="register__container-title">
-                            Hasło:
-                            <span className={validPassword ? "register__container-title--valid" : "register__container-title--hide"}><FontAwesomeIcon icon={faCheck} /></span>
-                            <span className={validPassword || !password ? "register__container-title--hide" : "register__container-title--invalid"}><FontAwesomeIcon icon={faTimes} /></span>
-                        </label>
-                        <input
-                            className="register__container-text"
-                            type="password"
-                            id="password"
-                            autoComplete="off"
-                            name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            onFocus={() => setPasswordFocus(true)}
-                            onBlur={() => setPasswordFocus(false)}
-                        />
-                        {passwordFocus && !validPassword && <p className="register__container-instructions">
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            od 8 od 24 znaków.<br />
-                            Musi zawierać małe i duże litery, cyfrę i znak specjalny.<br />
-                            Dostępne znaki specjalne: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
-                        </p>}
-                        <label htmlFor="confirm_password" className="register__container-title">
-                            Powtórz hasło:
-                            <span className={validMatchPassword && matchPassword ? "register__container-title--valid" : "register__container-title--hide"}><FontAwesomeIcon icon={faCheck} /></span>
-                            <span className={validMatchPassword || !matchPassword ? "register__container-title--hide" : "register__container-title--invalid"}><FontAwesomeIcon icon={faTimes} /></span>
-                        </label>
-                        <input
-                            className="register__container-text"
-                            type="password"
-                            id="confirm_password"
-                            autoComplete="off"
-                            name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie 
-                            value={matchPassword}
-                            onChange={(e) => setMatchPassword(e.target.value)}
-                            required
-                            onFocus={() => setMatchPasswordFocus(true)}
-                            onBlur={() => setMatchPasswordFocus(false)}
-                        />
-                        {matchPasswordFocus && !validMatchPassword && <p className="register__container-instructions">
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            Hasła musza być takie same.
-                        </p>}
+                        <span className="register-info">Jeśli rejestracja zakońćzy się sukcesem do użytkownika zostanie wysłany email z hasłem dostępu. Pamiętaj, aby nadać mu odpowiednie uprawnienia i zapewnić dostęp do wymaganych danych.</span>
                         <Button
                             variant='contained'
                             type="submit"
-                            disabled={!validUserlogin || !validPassword || !validMatchPassword}
+                            disabled={!validUserlogin || !username || !usersurname}
                             size='large'
                         >
                             Zarejestruj
