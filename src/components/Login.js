@@ -103,7 +103,7 @@ const Login = () => {
           </Button>
         </form>
         <section className="login__password" onClick={() => setForgotPass(true)}>
-          <span>Zapomniałem hasła</span>
+          <span>Zresetuj hasło</span>
         </section>
 
       </section> : <ForgotPassword setForgotPass={setForgotPass} />}

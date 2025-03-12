@@ -123,7 +123,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
             const countCell = worksheet.getCell(startRow - 1, column.number);
             // countCell.value = { formula: `SUBTOTAL(103,B${excelStartRow}:B${excelEndRow})` };
 
-            const columnIndex = headers.indexOf('Do rozl.') + 2; // Znajduje indeks kolumny (Excel używa numeracji od 1)
+            const columnIndex = headers.indexOf('Faktura') + 2; // Znajduje indeks kolumny (Excel używa numeracji od 1)
             const columnLetter = String.fromCharCode(64 + columnIndex); // Konwersja na literę kolumny
 
             sumCell.value = { formula: `SUBTOTAL(103,${columnLetter}${excelStartRow}:${columnLetter}${excelEndRow})` };
@@ -161,18 +161,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
               fgColor: { argb: 'FFFF00' }, // Żółte tło dla wyróżnienia
             };
 
-            // zamienia wartość null, undefined na 0
-            worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
-              if (rowIndex > startRow) { // Pomijamy nagłówki
-                const cell = row.getCell(columnIndex + 2); // Kolumna "Do rozliczenia"
-                const cellValue = cell.value;
-
-                // Sprawdzenie, czy wartość nie jest liczbą
-                if (typeof cellValue !== 'number' || isNaN(cellValue)) {
-                  cell.value = 0; // Zamiana na 0
-                }
-              }
-            });
           }
           else if (header === 'Do rozl.') {
             column.numFmt = '#,##0.00';
