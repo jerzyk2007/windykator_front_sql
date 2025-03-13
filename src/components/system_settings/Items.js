@@ -47,11 +47,9 @@ const FKItems = () => {
     try {
       setPleaseWait(true);
 
-      const result1 = await axiosPrivateIntercept.get("/items/get-user-items");
+      const itemsData = await axiosPrivateIntercept.get("/items/get-items");
 
-      // const result = await axiosPrivateIntercept.get("/fk/get-items-data");
-
-      setDataItems(result1.data.data);
+      setDataItems(itemsData.data.data);
 
       const resultDepartments = await axiosPrivateIntercept.get(
         "/settings/get-departments"
@@ -105,23 +103,24 @@ const FKItems = () => {
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.departments}
+                        company={dataItems?.company}
                         info="DEPARTMENT"
                         title="Działy"
                       />
                     </section>
                     <section className="items__section-content-data">
-                      <ItemComponent
+                      {/* <ItemComponent
                         data={dataItems.localizations}
                         info="LOCALIZATION"
                         title="Lokalizacje"
-                      />
+                      /> */}
                     </section>
                     <section className="items__section-content-data">
-                      <ItemComponent
+                      {/* <ItemComponent
                         data={dataItems.areas}
                         info="AREA"
                         title="Obszary"
-                      />
+                      /> */}
                     </section>
                   </section>
                 </section>
@@ -132,18 +131,18 @@ const FKItems = () => {
                 >
                   <section className="items__section-content">
                     <section className="items__section-content-data">
-                      <ItemComponent
+                      {/* <ItemComponent
                         data={dataItems.owners}
                         info="OWNER"
                         title="Ownerzy"
-                      />
+                      /> */}
                     </section>
                     <section className="items__section-content-data">
-                      <ItemComponent
+                      {/* <ItemComponent
                         data={dataItems.guardians}
                         info="GUARDIAN"
                         title="Opiekun"
-                      />
+                      /> */}
                     </section>
                     <section className="items__section-content-data">
                       <ItemAging

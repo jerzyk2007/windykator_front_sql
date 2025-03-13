@@ -3,7 +3,7 @@
   position: relative;
   width: 30%;
   max-height: 89vh;
-  min-width: 400px;
+  min-width: 500px;
   margin: 0 5px;
   padding: 5px;
   border: 1px solid rgba(44, 123, 168, 0.6);
@@ -127,7 +127,7 @@
 .item_component--fa-xmark,
 .item_component--fa-check {
   font-size: 1.2rem;
-  margin: 0 5px;
+  /* margin: 0 2px; */
   color: rgb(92, 133, 32);
   flex-basis: 10%;
   cursor: pointer;
