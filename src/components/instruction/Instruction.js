@@ -23,6 +23,7 @@ import InstructionAccess from "./InstructionAccess";
 import InstructionTableColumns from "./InstructionTableColumns";
 import InstructionMathData from "./InstructionMathData";
 import InstructionChangeData from "./InstructionChangeData";
+import InstructionRaportFK from "./InstructionRaportFK";
 import './Instruction.css';
 
 
@@ -224,6 +225,8 @@ const Instruction = () => {
                 return <InstructionTable />;
             case 104:
                 return <DocumentEdition />;
+            case 105:
+                return <InstructionRaportFK />;
             case 200:
                 return <InstructionMenu />;
             // Dodaj inne przypadki dla innych elementów menu
@@ -258,6 +261,7 @@ const Instruction = () => {
                     </div>
                     <span className="instruction__menu-item--title">Dostęp do programu</span>
                 </section>
+
                 <section className="instruction__menu-item"
                     onClick={() => setSelectedMenuItem(103)}>
                     <div className="instruction__menu-item--logo">
@@ -272,7 +276,13 @@ const Instruction = () => {
                     </div>
                     <span className="instruction__menu-item--title">Edycja dokumentu</span>
                 </section>
-
+                <section className="instruction__menu-item"
+                    onClick={() => setSelectedMenuItem(105)}>
+                    <div className="instruction__menu-item--logo">
+                        <FcRight />
+                    </div>
+                    <span className="instruction__menu-item--title">Raport Należności dla Zarządu</span>
+                </section>
                 <section className="instruction__menu-item"
                     onClick={() => {
                         setHideMenu(prev => !prev);
