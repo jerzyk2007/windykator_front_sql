@@ -37,7 +37,7 @@ const InstructionRaportFK = () => {
                 <br />
                 <span className='instruction_component-content--text'>Datę ostatecznego rozliczenia możesz zmieniać wielokrotnie, jednak wszystkie wprowadzone przez Ciebie zmiany będą widoczne w ostatecznym raporcie.
                 </span>
-                <span className='instruction_component-content--text'>Tekst decyzji powinien zawierać wyjaśnienie, dlaczego sprawa nie została jeszcze rozliczona, oraz opis działań podjętych przez Twój dział w celu zapewnienia, że rozliczenie nastąpi zgodnie z deklarowaną ostateczną datą rozliczenia.
+                <span className='instruction_component-content--text'>Tekst decyzji powinien zawierać wyjaśnienie, dlaczego sprawa nie została jeszcze rozliczona oraz opis działań podjętych przez Twój dział w celu zapewnienia, że rozliczenie nastąpi zgodnie z deklarowaną ostateczną datą rozliczenia.
                 </span>
                 <br />
 
