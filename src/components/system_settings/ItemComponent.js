@@ -52,12 +52,13 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
           ...item,
           newName: item.oldName,
           newMail: item.oldMail,
-          company: item.COMPANY
+          company: item.company
         };
       } else {
         return item;
       }
     });
+
     setNewDataItem(update);
     setEditIndex(null);
   };
@@ -75,8 +76,6 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
       // const result = await axiosPrivateIntercept.delete(`/items/delete-item/${id}/${info}`);
       const result = true;
       if (result) {
-        console.log(id);
-        // console.log(newDataItem);
         setNewDataItem(prevItems => prevItems.filter(item => item.id !== id));
       }
 
@@ -166,9 +165,9 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
     setPleaseWait(true);
 
     try {
-      const result1 = await axiosPrivateIntercept.patch(`/items/change-item/${data.id}/${info}`, {
-        data
-      });
+      // const result = await axiosPrivateIntercept.patch(`/items/change-item/${data.id}/${info}`, {
+      //   data
+      // });
       const result = true;
       if (result) {
         const update = newDataItem.map((item, index) => {
@@ -309,13 +308,42 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
                 onChange={(e) => handleEdit(e, index)}
               />
 
-              {info === "OWNER" && <input
-                style={mailDuplicate ? { color: "red", fontWeight: "bold" } : null}
+
+              <select
                 className="item_component-title__container-data--text"
-                type="text"
-                value={item.newMail ? item.newMail : ""}
-                onChange={(e) => handleEditMail(e, index)}
-              />}
+                value={item.company}
+              // value={rowData.JAKA_KANCELARIA_TU ? rowData.JAKA_KANCELARIA_TU : "BRAK"}
+              // onChange={(e) => {
+              //   handleAddNote(
+              //     "Wybierz kancelarię:",
+              //     e.target.options[e.target.selectedIndex].text
+              //   );
+              //   setRowData((prev) => {
+              //     return {
+              //       ...prev,
+              //       JAKA_KANCELARIA_TU: e.target.value ? e.target.value : null,
+              //     };
+              //   });
+              // }}
+              >
+                <option value="KRT">KRT</option>
+                <option value="KEM">KEM</option>
+
+              </select>
+
+
+
+
+              {info === "OWNER" &&
+                <input
+                  style={mailDuplicate ? { color: "red", fontWeight: "bold" } : null}
+                  className="item_component-title__container-data--text"
+                  type="text"
+                  value={item.newMail ? item.newMail : ""}
+                  onChange={(e) => handleEditMail(e, index)}
+                />
+
+              }
             </section>
             <section className="item_component-title__container-add--panel">
               < Button
@@ -387,7 +415,6 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
     if (data?.length) {
       if (info !== "OWNER") {
         const update = data.map((item, index) => {
-          console.log(index);
           return {
             // id: `id_${info.toLowerCase()}_items`,
             id: index,
