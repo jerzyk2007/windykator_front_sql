@@ -61,7 +61,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
       const worksheet = workbook.addWorksheet(sheet.name);
 
       if (sheet.data && sheet.data.length > 0) {
-        // Dodaj 5 pustych wierszy na początku arkusza
+        // Dodaj x pustych wierszy na początku arkusza
         for (let i = 0; i < startRow - 1; i++) {
           worksheet.addRow([]);
         }
@@ -77,6 +77,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
         // Dodaj dane z każdego obiektu jako wiersze, zaczynając od 1 w kolumnie 'Lp'
         sheet.data.forEach((row, index) => {
           const rowData = [index + 1, ...headers.map((header) => row[header] || '')]; // Dodaj numer porządkowy
+
           worksheet.addRow(rowData);
         });
 
@@ -204,6 +205,18 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
             column.width = 35;
 
           }
+          else if (header === 'Ile') {
+            const columnIndex = headers.indexOf('Ile') + 2; // Znajduje indeks kolumny (Excel używa numeracji od 1)
+            const columnLetter = String.fromCharCode(64 + columnIndex); // Konwersja na literę kolumny
+            for (let rowIndex = excelStartRow; rowIndex <= excelEndRow; rowIndex++) {
+              const cell = worksheet.getCell(`${columnLetter}${rowIndex}`);
+
+              // Jeśli wartość jest pusta lub nie jest liczbą, ustaw wartość na 0
+              if (!cell.value || isNaN(parseFloat(cell.value))) {
+                cell.value = 0;
+              }
+            }
+          }
         });
 
         headers.forEach((header, columnIndex) => {
@@ -264,7 +277,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
         worksheet.autoFilter = {
           from: `A${startRow}`, // Pierwsza kolumna (Lp)
           to: worksheet.getColumn(headers.length + 1).letter + `${startRow}`, // Ostatnia kolumna na podstawie liczby kolumn
-          // to: worksheet.getColumn(headers.length + 1).letter + '1', // Ostatnia kolumna na podstawie liczby kolumn
         };
 
         // Blokowanie 5 pierwszych wierszy, aby wiersz 6 (nagłówki) został widoczny
