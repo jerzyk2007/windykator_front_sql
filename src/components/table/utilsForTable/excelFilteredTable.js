@@ -17,14 +17,22 @@ const sanitizeValue = (value) => {
 };
 
 export const getAllDataRaport = async (allData, orderColumns, info) => {
+
   const cleanData = allData.map(item => {
+    const limitText = (text, maxLength = 42) =>
+      text && text.length > maxLength ? text.slice(0, maxLength) + "..." : text || "";
+
+    const dzialania = Array.isArray(item.UWAGI_ASYSTENT) && item.UWAGI_ASYSTENT.length > 0
+      ? item.AREA === 'BLACHARNIA' ? limitText(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1]) : item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1]
+      : "";
+
+
     return {
       ...item,
-      UWAGI_ASYSTENT: Array.isArray(item.UWAGI_ASYSTENT)
-        ? item.UWAGI_ASYSTENT.join("\n\n")
-        : " ",
+      UWAGI_ASYSTENT: dzialania ? dzialania : ''
     };
   });
+
   const startRow = 2;
   try {
     const changeNameColumns = cleanData.map((doc) => {
@@ -38,11 +46,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
         }
       }
       return newItem;
-      // });
-      // return {
-      //   name: 'info1',
-      //   data: newItem,
-      // };
+
     });
     const newData = [
       {
@@ -57,7 +61,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
       const worksheet = workbook.addWorksheet(sheet.name);
 
       if (sheet.data && sheet.data.length > 0) {
-        // Dodaj 5 pustych wierszy na początku arkusza
+        // Dodaj x pustych wierszy na początku arkusza
         for (let i = 0; i < startRow - 1; i++) {
           worksheet.addRow([]);
         }
@@ -73,6 +77,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
         // Dodaj dane z każdego obiektu jako wiersze, zaczynając od 1 w kolumnie 'Lp'
         sheet.data.forEach((row, index) => {
           const rowData = [index + 1, ...headers.map((header) => row[header] || '')]; // Dodaj numer porządkowy
+
           worksheet.addRow(rowData);
         });
 
@@ -165,11 +170,22 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
           else if (header === 'Do rozl.') {
             column.numFmt = '#,##0.00';
 
+
+
             const sumCell = worksheet.getCell(startRow - 1, column.number); // Wiersz 4, odpowiednia kolumna
             // sumCell.value = { formula: `SUBTOTAL(109,F${excelStartRow}:F${excelEndRow})` };// 
 
             const columnIndex = headers.indexOf('Do rozl.') + 2; // Znajduje indeks kolumny (Excel używa numeracji od 1)
             const columnLetter = String.fromCharCode(64 + columnIndex); // Konwersja na literę kolumny
+
+            for (let rowIndex = excelStartRow; rowIndex <= excelEndRow; rowIndex++) {
+              const cell = worksheet.getCell(`${columnLetter}${rowIndex}`);
+
+              // Jeśli wartość jest pusta lub nie jest liczbą, ustaw wartość na 0
+              if (!cell.value || isNaN(parseFloat(cell.value))) {
+                cell.value = 0;
+              }
+            }
 
             sumCell.value = { formula: `SUBTOTAL(109,${columnLetter}${excelStartRow}:${columnLetter}${excelEndRow})` };
 
@@ -185,7 +201,22 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
             };
 
           }
+          else if (header === 'Podjęte działania') {
+            column.width = 35;
 
+          }
+          else if (header === 'Ile') {
+            const columnIndex = headers.indexOf('Ile') + 2; // Znajduje indeks kolumny (Excel używa numeracji od 1)
+            const columnLetter = String.fromCharCode(64 + columnIndex); // Konwersja na literę kolumny
+            for (let rowIndex = excelStartRow; rowIndex <= excelEndRow; rowIndex++) {
+              const cell = worksheet.getCell(`${columnLetter}${rowIndex}`);
+
+              // Jeśli wartość jest pusta lub nie jest liczbą, ustaw wartość na 0
+              if (!cell.value || isNaN(parseFloat(cell.value))) {
+                cell.value = 0;
+              }
+            }
+          }
         });
 
         headers.forEach((header, columnIndex) => {
@@ -246,7 +277,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
         worksheet.autoFilter = {
           from: `A${startRow}`, // Pierwsza kolumna (Lp)
           to: worksheet.getColumn(headers.length + 1).letter + `${startRow}`, // Ostatnia kolumna na podstawie liczby kolumn
-          // to: worksheet.getColumn(headers.length + 1).letter + '1', // Ostatnia kolumna na podstawie liczby kolumn
         };
 
         // Blokowanie 5 pierwszych wierszy, aby wiersz 6 (nagłówki) został widoczny
@@ -271,114 +301,3 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
     console.error(err);
   }
 };
-// export const getAllDataRaport = async (allData, orderColumns, info) => {
-
-//   try {
-//     // Tworzenie mapowania między accessorKey a header
-//     const keyMapping = orderColumns.columns.reduce((acc, column) => {
-//       acc[column.accessorKey] = column.header;
-//       return acc;
-//     }, {});
-
-//     // Tworzenie nowego workbooka
-//     const workbook = new ExcelJS.Workbook();
-//     const worksheet = workbook.addWorksheet('Dane');
-
-//     // Pobierz wszystkie unikalne klucze z obiektów, ale z uwzględnieniem zamiany nazw
-//     const allKeys = [...new Set(allData.flatMap(Object.keys))]; // Unikalne klucze jako nagłówki
-
-//     // Mapowanie kluczy na ich nagłówki
-//     const mappedHeaders = allKeys.map(key => keyMapping[key] || key); // Jeśli klucz istnieje w mapie, podmienia na header, w przeciwnym razie zostaje bez zmian
-
-//     // Określenie kolejności kolumn na podstawie order
-//     const orderedHeaders = orderColumns.order.filter(header => mappedHeaders.includes(header));
-
-//     // Dodaj nagłówki kolumn w odpowiedniej kolejności
-//     worksheet.addRow(orderedHeaders);
-
-//     // Dodaj wiersze z danymi, zastępując brakujące wartości pustym tekstem
-//     allData.forEach((data) => {
-//       const row = orderedHeaders.map((header) => {
-//         // Znalezienie klucza odpowiadającego nagłówkowi
-//         const key = Object.keys(keyMapping).find(k => keyMapping[k] === header) || header;
-//         let value = data[key] !== null && data[key] !== undefined ? data[key] : ""; // Zastąpienie null/undefined pustym tekstem
-//         value = sanitizeValue(value); // Oczyszczenie wartości
-//         if (typeof value === 'string' && value.length > 255) {
-//           value = value.substring(0, 255); // Ograniczenie długości tekstu
-//         }
-//         return value;
-//       });
-//       worksheet.addRow(row);
-//     });
-
-//     // Formatowanie nagłówków
-//     orderedHeaders.forEach((header, index) => {
-//       const column = worksheet.getColumn(index + 1);
-//       column.width = header.length < 22 ? 22 : header.length; // Ustaw szerokość kolumn
-//       column.font = { size: 10 }; // Nagłówki pogrubione
-//       column.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-//       column.numFmt = '#,##0.00';
-
-
-//       if (header === 'Ile') {
-//         column.numFmt = '0';
-//       }
-//     });
-
-//     // Stylizacja komórek
-//     worksheet.eachRow((row, rowNumber) => {
-//       row.eachCell((cell) => {
-//         cell.border = {
-//           top: { style: "thin" },
-//           left: { style: "thin" },
-//           bottom: { style: "thin" },
-//           right: { style: "thin" },
-//         };
-//         cell.font = { bold: false };
-
-//         // Sprawdzenie, czy komórka zawiera string w formacie 'yyyy-mm-dd'
-//         if (typeof cell.value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(cell.value)) {
-//           // Sprawdzenie, czy string jest poprawną datą
-//           const parsedDate = new Date(cell.value);
-
-//           // Sprawdzamy, czy data jest prawidłowa
-//           if (!isNaN(parsedDate)) {
-//             // Ustawiamy komórkę jako datę
-//             cell.value = parsedDate;
-//             cell.numFmt = 'yyyy-mm-dd'; // Format daty
-//           }
-//         }
-//       });
-
-//       if (rowNumber === 1) {
-//         row.height = 25;
-//         row.eachCell((cell) => {
-//           cell.fill = {
-//             type: "pattern",
-//             pattern: "solid",
-//             fgColor: { argb: "FFD3D3D3" }, // Szary kolor tła dla nagłówków
-//           };
-//           cell.font = { bold: true };
-
-//         });
-//       }
-//     });
-
-//     // Dodanie autofilter do całego zakresu danych (od wiersza 1 do ostatniego wiersza z danymi)
-//     worksheet.autoFilter = {
-//       from: { row: 1, column: 1 },
-//       to: { row: allData.length + 1, column: orderedHeaders.length }, // Zakres obejmujący wszystkie dane
-//     };
-
-//     // blokowanie komórek - przewijanie
-//     worksheet.views = [{ state: "frozen", xSplit: 1, ySplit: 1 }];
-
-//     // Eksport do pliku
-//     const buffer = await workbook.xlsx.writeBuffer();
-//     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-//     saveAs(blob, `${info}.xlsx`);
-
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };

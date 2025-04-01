@@ -106,6 +106,7 @@ const columnsName = [
 
 
 const generateExcel = async (cleanData) => {
+    console.log(cleanData);
     // od którego wiersza mają się zaczynać dane w arkuszu
     const startRow = 2;
     try {

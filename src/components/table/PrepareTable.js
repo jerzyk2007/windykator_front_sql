@@ -64,7 +64,6 @@ const PrepareTable = ({ info, raportDocuments }) => {
               INFORMACJA_ZARZAD: item.INFORMACJA_ZARZAD !== 'BRAK' ? filteredArrayManagement(parsedArray) : item.INFORMACJA_ZARZAD
             };
           });
-
           setDocuments(filteredData);
         }
 
