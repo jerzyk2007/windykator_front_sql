@@ -39,7 +39,7 @@ const DocumentEdition = () => {
                     <FcInfo />
                     <span className='instruction_component-content--element'
                         style={{ margin: "0 20px" }}
-                    >Następny / poprzedni element:
+                    >Poprzedni / następny element:
                     </span>
                     <img src="/instruction_image/arrows.png" alt="Logo" className="w-32 h-auto" />
                 </section>

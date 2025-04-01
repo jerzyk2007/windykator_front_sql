@@ -39,9 +39,11 @@ const InstructionRaportFK = () => {
                 </span>
                 <span className='instruction_component-content--text'>Tekst decyzji powinien zawierać wyjaśnienie, dlaczego sprawa nie została jeszcze rozliczona oraz opis działań podjętych przez Twój dział w celu zapewnienia, że rozliczenie nastąpi zgodnie z deklarowaną ostateczną datą rozliczenia.
                 </span>
+                <span className='instruction_component-content--text'>Nie masz możliwości usunięcia ani edytowania już wpisanej decyzji. Jedyną opcją jest dodanie nowej decyzji, w której wyjaśnisz, że poprzednia była nieprawidłowa, a następnie wpiszesz poprawną, właściwą decyzję.
+                </span>
                 <br />
 
-                <span className='instruction_component-content--text'>Przyciskiem <span style={{ fontWeight: 'bold' }}>Zatwierdź</span> zapisujesz zmiany, wychodzisz z educji dokumentu, powinieneś przejść do kolejnego dokumentu i kontynuować proces uzupełniania dat oraz decyzji, aż wszystkie dokumenty będą miały przypisaną ostateczną datę rozliczenia i decyzję.</span >
+                <span className='instruction_component-content--text'>Przyciskiem <span style={{ fontWeight: 'bold' }}>Zatwierdź</span> zapisujesz zmiany, wychodzisz z edycji dokumentu, powinieneś przejść do kolejnego dokumentu i kontynuować proces uzupełniania dat oraz decyzji, aż wszystkie dokumenty będą miały przypisaną ostateczną datę rozliczenia i decyzję.</span >
                 <br />
                 <span className='instruction_component-content--text'>Możesz również skorzystać z przycisków <span style={{ fontWeight: 'bold' }}>poprzedni / następny</span> dokument.
                 </span>
@@ -49,7 +51,7 @@ const InstructionRaportFK = () => {
                     <FcInfo />
                     <span className='instruction_component-content--element'
                         style={{ margin: "0 20px" }}
-                    >Następny / poprzedni dokument:
+                    >Poprzedni / następny dokument:
                     </span>
                     <img src="/instruction_image/arrows.png" alt="Logo" className="w-32 h-auto" />
                 </section>
