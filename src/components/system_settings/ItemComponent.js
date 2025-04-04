@@ -4,10 +4,10 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 
 import "./ItemComponent.css";
 
-const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }] }) => {
+const FKItemComponent = ({ data, info, title, multiCompany }) => {
 
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-
+  const [startData, setStartData] = useState(data || []);
   const [pleaseWait, setPleaseWait] = useState(false);
   const [newDataItem, setNewDataItem] = useState([]);
   const [duplicate, setDuplicate] = useState(false);
@@ -15,26 +15,29 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
   const [editIndex, setEditIndex] = useState(null);
   const [addActive, setAddActive] = useState(false);
   const [deleteActive, setDeleteActive] = useState(false);
-  // const [addItem, setAddItem] = useState({ oldName: "", newName: "" });
   const [addItem, setAddItem] = useState({
     oldName: "", newName: "",
-    oldMail: '', newMail: ""
+    oldMail: '', newMail: "",
+    company: "", oldCompany: ""
   });
   const [checkMail, setCheckMail] = useState(false);
+  const [company, setCompany] = useState([]);
+  const [addItemCompany, setAddItemCompany] = useState([]);
+  const [changeCompany, setChangeCompany] = useState(multiCompany.length > 1 ? "ALL" : multiCompany.length === 1 ? multiCompany[0] : '');
 
   //sprawdzenie czy zapis ma formę adresu mailowego
   const MAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   //sortowanie z uwzględnieniem polskich znaków
-  const sorted = (items) => {
-    const collator = new Intl.Collator("pl", { sensitivity: "base" });
+  // const sorted = (items) => {
+  //   const collator = new Intl.Collator("pl", { sensitivity: "base" });
 
-    // Sortowanie tablicy obiektów na podstawie klucza 'oldName'
-    const dataSort = items.sort((a, b) =>
-      collator.compare(a.oldName, b.oldName)
-    );
-    return dataSort;
-  };
+  //   // Sortowanie tablicy obiektów na podstawie klucza 'oldName'
+  //   const dataSort = items.sort((a, b) =>
+  //     collator.compare(a.oldName, b.oldName)
+  //   );
+  //   return dataSort;
+  // };
 
   //włącza możliwość edycji
   const handleActiveItem = (index) => {
@@ -47,12 +50,12 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
   const handleEditCancel = (id) => {
     const updateNewDataIltem = [...newDataItem];
     const update = updateNewDataIltem.map((item, index) => {
-      if (index === id) {
+      if (item.id === id) {
         return {
           ...item,
           newName: item.oldName,
           newMail: item.oldMail,
-          company: item.company
+          company: item.oldCompany
         };
       } else {
         return item;
@@ -73,8 +76,8 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
   const handleDeleteItems = async (id) => {
     try {
       setPleaseWait(true);
-      // const result = await axiosPrivateIntercept.delete(`/items/delete-item/${id}/${info}`);
-      const result = true;
+      const result = await axiosPrivateIntercept.delete(`/items/delete-item/${id}/${info}`);
+      // const result = true;
       if (result) {
         setNewDataItem(prevItems => prevItems.filter(item => item.id !== id));
       }
@@ -98,36 +101,49 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
       oldName: "",
       newName: "",
       oldMail: '',
-      newMail: ""
+      newMail: "",
+      company: "",
+      oldCompany: ""
     });
   };
 
   // funkcja wywoływana podczas pisania w input - edycja tekstu
-  const handleEdit = (e, id) => {
+  const handleEdit = (e, id, type) => {
     const newValue = e.target.value;
-    const updateNewDataIltem = [...newDataItem];
+    let update = [...newDataItem];
 
-    const checkDuplicate = newDataItem.some(
-      (item) => item.oldName.toLowerCase() === newValue.toLowerCase()
-    );
-    if (checkDuplicate) {
-      setDuplicate(true);
-    } else {
-      setDuplicate(false);
+    const newFilterData = [...newDataItem];
+    if (type === "name") {
+      update = update.map((item) =>
+        item.id === id ? { ...item, newName: newValue } : item
+      );
+    } else if (type === "company") {
+      update = update.map((item) =>
+        item.id === id ? { ...item, company: newValue } : item
+      );
     }
 
-    const update = updateNewDataIltem.map((item, index) => {
-      if (index === id) {
-        return {
-          ...item,
-          newName: newValue,
-        };
-      } else {
-        return item;
-      }
-    });
-
     setNewDataItem(update);
+
+    const nameFilter = newFilterData.filter(item => item.id === id);
+    const name = type === 'name' ? newValue : nameFilter[0].oldName;
+    const company = type === 'company' ? newValue : nameFilter[0].company;
+
+    const checkDuplicate = startData.some(
+      (item) =>
+        (item[`id_${info.toLowerCase()}_items`] !== id && item.COMPANY === company && item[info].toLowerCase() === name.toLowerCase()) ||
+        (item[`id_${info.toLowerCase()}_items`] === id && item.COMPANY === company && item[info].toLowerCase() === name.toLowerCase())
+
+    );
+    // const checkDuplicate = startData.some(
+    //   (item) =>
+    //     (item.id !== id && item.company === company && item.oldName.toLowerCase() === name.toLowerCase()) ||
+    //     (item.id === id && item.company === item.oldCompany && item.oldName.toLowerCase() === item.newName.toLowerCase())
+    //     ||
+    //     (item.id === id && item.company === item.oldCompany && item.oldName.toLowerCase() === name.toLowerCase())
+    // );
+    setDuplicate(checkDuplicate);
+
   };
 
   const handleEditMail = (e, id) => {
@@ -138,14 +154,13 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
         item.oldMail === newValue.toLowerCase()
 
     );
-    if (checkDuplicate) {
-      setMailDuplicate(true);
-    } else {
-      setMailDuplicate(false);
-    }
+    setMailDuplicate(checkDuplicate);
 
-    const update = updateNewDataIltem.map((item, index) => {
-      if (index === id) {
+    const mailVerify = MAIL_REGEX.test(newValue);
+    setCheckMail(mailVerify);
+
+    const update = updateNewDataIltem.map((item) => {
+      if (item.id === id) {
         return {
           ...item,
           newMail: newValue,
@@ -155,26 +170,26 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
       }
     });
 
-    const mailVerify = MAIL_REGEX.test(e.target.value);
-    setCheckMail(mailVerify);
     setNewDataItem(update);
   };
 
   // // zatwierdzenie danych po edycji
-  const handleUpdateItem = async (data, id) => {
+  const handleUpdateItem = async (updateData) => {
     setPleaseWait(true);
-
     try {
-      // const result = await axiosPrivateIntercept.patch(`/items/change-item/${data.id}/${info}`, {
-      //   data
-      // });
-      const result = true;
+
+      const result = await axiosPrivateIntercept.patch(`/items/change-item/${updateData.id}/${info}`, {
+        updateData
+      });
+
+      // const result = true;
       if (result) {
-        const update = newDataItem.map((item, index) => {
-          if (index === id) {
+        const update = newDataItem.map((item) => {
+          if (item.id === updateData.id) {
             return {
-              ...data,
-              oldName: data.newName
+              ...item,
+              oldName: item.newName,
+              oldCompany: item.company
             };
           }
           else {
@@ -182,11 +197,32 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
           }
         });
         setNewDataItem(update);
+        const updateStartData = startData.map(item => {
+          if (item[`id_${info.toLowerCase()}_items`] === updateData.id && info !== "OWNER") {
+            return {
+              ...item,
+              [info]: updateData.newName,
+              COMPANY: updateData.company,
+            };
 
+          } else if (item[`id_${info.toLowerCase()}_items`] === updateData.id && info === "OWNER") {
+            return {
+              ...item,
+              [info]: updateData.newName,
+              COMPANY: updateData.company,
+              OWNER_MAIL: updateData.newMail,
+            };
+          }
+
+          else {
+            return item;
+          }
+        });
+
+        setStartData(updateStartData);
       }
       setEditIndex(null);
     }
-
 
     catch (error) {
       console.error(error);
@@ -197,24 +233,35 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
   };
 
   // funkcja wywoływana w inpucie dodawania nowego wpisu
-  const handleAddItem = (e) => {
-    setAddItem(prev => {
-      return {
-        ...prev,
-        oldName: e.target.value,
-        newName: e.target.value,
-      };
-    });
+  const handleAddItem = (e, type) => {
     const newValue = e.target.value;
-    // const updateNewDataIltem = [...newDataItem];
-    const checkDuplicate = newDataItem.some(
-      (item) => item.oldName.toLowerCase() === newValue.toLowerCase()
-    );
-    if (checkDuplicate) {
-      setDuplicate(true);
-    } else {
-      setDuplicate(false);
+    if (type === "name") {
+      setAddItem(prev => {
+        return {
+          ...prev,
+          oldName: newValue,
+          newName: newValue,
+        };
+      });
+    } else if (type === "company") {
+      setAddItem(prev => {
+        return {
+          ...prev,
+          company: newValue,
+          oldCompany: newValue,
+        };
+      });
     }
+
+    const name = type === 'name' ? newValue : addItem.oldName;
+    const company = type === 'company' ? newValue : addItem.company;
+
+    const checkDuplicate = startData.some(
+      (item) =>
+        (item.COMPANY === company && item[info].toLowerCase() === name.toLowerCase())
+    );
+    setDuplicate(checkDuplicate);
+
   };
 
   // // funkcja wywoływana w inpucie dodawania nowego wpisu
@@ -236,20 +283,24 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
     try {
       setPleaseWait(true);
       if (addItem) {
-        // await axiosPrivateIntercept.post(`/items/new-item/${info}`
-        //   , {
-        //     // [info]: addItem,
-        //     data: addItem,
-        //   }
-        // );
-        const update = [...newDataItem, addItem];
-        const sortedData = sorted(update);
-        setNewDataItem(sortedData);
+        const result = await axiosPrivateIntercept.post(`/items/new-item/${info}`
+          , {
+            // [info]: addItem,
+            data: addItem,
+          }
+        );
+
+        if (result) {
+          const update = [...newDataItem, addItem];
+          setNewDataItem(update);
+
+          setStartData(result.data);
+        }
       }
 
       setAddItem({
         oldName: "", newName: "",
-        oldMail: '', newMail: ""
+        oldMail: '', newMail: "", company: "", oldCompany: ""
       });
       setCheckMail(false);
 
@@ -275,11 +326,11 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
             <span className="item_component-items__columns--item">
               {item.oldName}
             </span>
-            <span className="item_component-items__columns--item">
+            <span className="item_component-items__columns--company">
               {item.company}
             </span>
             {!addActive && (
-              <>
+              <section className="item_component-items__columns--panel">
                 <i
                   className="fa-regular fa-pen-to-square item_component--fa-pen-to-square"
                   onClick={() => handleActiveItem(index)}
@@ -292,7 +343,7 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
                     setDeleteActive(true);
                   }}
                 ></i>
-              </>
+              </section>
             )}
           </>
         )}
@@ -305,34 +356,21 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
                 className="item_component-title__container-data--text"
                 type="text"
                 value={item.newName}
-                onChange={(e) => handleEdit(e, index)}
+                onChange={(e) => handleEdit(e, item.id, 'name')}
               />
-
 
               <select
                 className="item_component-title__container-data--text"
                 value={item.company}
-              // value={rowData.JAKA_KANCELARIA_TU ? rowData.JAKA_KANCELARIA_TU : "BRAK"}
-              // onChange={(e) => {
-              //   handleAddNote(
-              //     "Wybierz kancelarię:",
-              //     e.target.options[e.target.selectedIndex].text
-              //   );
-              //   setRowData((prev) => {
-              //     return {
-              //       ...prev,
-              //       JAKA_KANCELARIA_TU: e.target.value ? e.target.value : null,
-              //     };
-              //   });
-              // }}
+                onChange={(e) => handleEdit(e, item.id, 'company')}
               >
-                <option value="KRT">KRT</option>
-                <option value="KEM">KEM</option>
 
+                {multiCompany.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
               </select>
-
-
-
 
               {info === "OWNER" &&
                 <input
@@ -340,7 +378,7 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
                   className="item_component-title__container-data--text"
                   type="text"
                   value={item.newMail ? item.newMail : ""}
-                  onChange={(e) => handleEditMail(e, index)}
+                  onChange={(e) => handleEditMail(e, item.id)}
                 />
 
               }
@@ -350,7 +388,7 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
                 variant="contained"
                 color="error"
                 size="small"
-                onClick={() => handleEditCancel(index)}
+                onClick={() => handleEditCancel(item.id)}
               >
                 Anuluj
               </Button>
@@ -361,7 +399,7 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
                 // disabled={info === "owner" ? (!mailDuplicate || !duplicate) : !duplicate ? false : true}
                 // disabled={!duplicate ? false : true}
                 disabled={info === "OWNER" ? (mailDuplicate && duplicate) : !duplicate && item.newName ? false : true}
-                onClick={() => handleUpdateItem(item, index)}
+                onClick={() => handleUpdateItem(item)}
               >
                 Zatwierdź
               </Button>
@@ -410,37 +448,55 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
     );
   });
 
+  const filteredData = (companyName) => {
+    if (startData?.length) {
+      if (companyName === "ALL") {
+        return (startData);
+      } else {
 
-  useEffect(() => {
-    if (data?.length) {
+        return startData.filter(item => item.COMPANY === companyName);
+      }
+    } else return [];
+  };
+
+  const sortedData = (dataset) => {
+    if (dataset?.length) {
       if (info !== "OWNER") {
-        const update = data.map((item, index) => {
+
+        const update = dataset.map((item) => {
           return {
-            // id: `id_${info.toLowerCase()}_items`,
-            id: index,
+            id: item[`id_${info.toLowerCase()}_items`],
+            // id: index,
             oldName: item[info],
             newName: item[info],
-            company: item.COMPANY
+            company: item.COMPANY,
+            oldCompany: item.COMPANY,
           };
         }).sort((a, b) => a.newName.localeCompare(b.newName));
         setNewDataItem(update);
       }
       else {
-        const update = data.map((item) => {
+        const update = dataset.map((item) => {
           return {
             // id: `id_${info.toLowerCase()}_items`,
+            id: item[`id_${info.toLowerCase()}_items`],
             oldName: item[info],
             newName: item[info],
             oldMail: item.OWNER_MAIL,
             newMail: item.OWNER_MAIL,
-            company: item.COMPANY
+            company: item.COMPANY,
+            oldCompany: item.COMPANY,
           };
         }).sort((a, b) => a.newName.localeCompare(b.newName));
         setNewDataItem(update);
       }
 
+    } else {
+      setNewDataItem([]);
+
     }
-  }, [data]);
+  };
+
 
   useEffect(() => {
     if (addActive) {
@@ -448,6 +504,18 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
     }
   }, [addActive]);
 
+  useEffect(() => {
+
+    setCompany(multiCompany.length > 1 ? ['ALL', ...multiCompany] : multiCompany.length === 1 ? multiCompany : []);
+    setAddItemCompany(multiCompany.length ? ['', ...multiCompany] : []);
+  }, [multiCompany]);
+
+  useEffect(() => {
+    const newData = filteredData(changeCompany);
+    sortedData(newData);
+    setEditIndex(null);
+    handleAddCancel();
+  }, [company, changeCompany, startData]);
 
   return (
     <section className="item_component">
@@ -460,6 +528,17 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
           </section>
           <section className="item_component--title">
             <span >{title}</span>
+            {multiCompany.length > 1 ? <select
+              className="edit_doc--select"
+              value={changeCompany}
+              onChange={(e) => setChangeCompany(e.target.value)}
+            >
+              {company.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select> : <span>{multiCompany}</span>}
           </section>
           <section className="item_component--choice">
             {!addActive && (
@@ -483,8 +562,19 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
                 type="text"
                 placeholder={(info === "OWNER" || info === "GUARDIAN") ? "nazwisko i imię" : ""}
                 value={addItem.newName}
-                onChange={(e) => handleAddItem(e)}
+                onChange={(e) => handleAddItem(e, "name")}
               />
+              <select
+                className="item_component-title__container-data--text"
+                value={addItem.company}
+                onChange={(e) => handleAddItem(e, 'company')}
+              >
+                {addItemCompany.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
               {info === "OWNER" && <input
                 style={duplicate ? { color: "red", fontWeight: "bold" } : null}
                 className="item_component-title__container-data--text"
@@ -511,7 +601,7 @@ const FKItemComponent = ({ data, info, title, company = [{ 'company': ['KRT'] }]
                 variant="contained"
                 color="success"
                 size="small"
-                disabled={info === "OWNER" ? !checkMail : addItem.newName && !duplicate ? false : true}
+                disabled={info === "OWNER" ? !checkMail : addItem.newName && addItem.company && !duplicate ? false : true}
                 onClick={handleAcceptNewItem}
               >
                 Dodaj

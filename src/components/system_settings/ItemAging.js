@@ -173,7 +173,7 @@ const FKItemAging = ({ data, info, title }) => {
       const filteredItem = dataItem.filter(item => item.id_aging_items === id);
 
       await axiosPrivateIntercept.patch(`/items/change-item/${id}/${info}`, {
-        data: filteredItem[0]
+        updateData: filteredItem[0]
       });
 
       setEditIndex(null);
@@ -197,25 +197,31 @@ const FKItemAging = ({ data, info, title }) => {
             <span className="item_component-items__columns--item">
               {item.TITLE}
             </span>
+
             <i
               className="fa-regular fa-pen-to-square item_component--fa-pen-to-square"
               onClick={() => handleActiveItem(index)}
             ></i>
+            <section className="item_component-items__columns--panel">
 
-            {item.TYPE === "some" && (
-              <i
-                className="fa-regular fa-trash-can item_component--fa-trash-can"
-                onDoubleClick={() => {
-                  setEditIndex(index);
-                  setDeleteActive(true);
-                }
+              {item.TYPE === "some" && (
+                <i
+                  className="fa-regular fa-trash-can item_component--fa-trash-can"
+                  onDoubleClick={() => {
+                    setEditIndex(index);
+                    setDeleteActive(true);
+                  }
 
-                }
-              ></i>
-            )}
-            {item.TYPE !== "some" && (
-              <i className="item_aging--fa-trash-can"></i>
-            )}
+                  }
+                ></i>
+              )}
+              {item.TYPE !== "some" && (
+
+                <i className="item_aging--fa-trash-can"></i>
+
+              )}
+            </section>
+
           </>
         )
         }

@@ -48,7 +48,6 @@ const FKItems = () => {
       setPleaseWait(true);
 
       const itemsData = await axiosPrivateIntercept.get("/items/get-items");
-
       setDataItems(itemsData.data.data);
 
       const resultDepartments = await axiosPrivateIntercept.get(
@@ -103,24 +102,29 @@ const FKItems = () => {
                     <section className="items__section-content-data">
                       <ItemComponent
                         data={dataItems.departments}
-                        company={dataItems?.company}
+                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
+                        // multiCompany={['KRT', "KOD"]}
+                        // multiCompany={['KEM']}
                         info="DEPARTMENT"
                         title="Działy"
+
                       />
                     </section>
                     <section className="items__section-content-data">
-                      {/* <ItemComponent
+                      <ItemComponent
                         data={dataItems.localizations}
+                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
                         info="LOCALIZATION"
                         title="Lokalizacje"
-                      /> */}
+                      />
                     </section>
                     <section className="items__section-content-data">
-                      {/* <ItemComponent
+                      <ItemComponent
                         data={dataItems.areas}
+                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
                         info="AREA"
                         title="Obszary"
-                      /> */}
+                      />
                     </section>
                   </section>
                 </section>
@@ -131,18 +135,20 @@ const FKItems = () => {
                 >
                   <section className="items__section-content">
                     <section className="items__section-content-data">
-                      {/* <ItemComponent
+                      <ItemComponent
                         data={dataItems.owners}
+                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
                         info="OWNER"
                         title="Ownerzy"
-                      /> */}
+                      />
                     </section>
                     <section className="items__section-content-data">
-                      {/* <ItemComponent
+                      <ItemComponent
                         data={dataItems.guardians}
+                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
                         info="GUARDIAN"
                         title="Opiekun"
-                      /> */}
+                      />
                     </section>
                     <section className="items__section-content-data">
                       <ItemAging
