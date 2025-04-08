@@ -20,16 +20,19 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
 
   const cleanData = allData.map(item => {
     const limitText = (text, maxLength = 42) =>
-      text && text.length > maxLength ? text.slice(0, maxLength) + "..." : text || "";
+      text && text.length > maxLength ? text.slice(0, maxLength) + "..." : text || " ";
 
+    // const dzialania = Array.isArray(item.UWAGI_ASYSTENT) && item.UWAGI_ASYSTENT.length > 0
+    //   ? item.AREA === 'BLACHARNIA' ? limitText(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1]) : item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1]
+    //   : "BRAK";
     const dzialania = Array.isArray(item.UWAGI_ASYSTENT) && item.UWAGI_ASYSTENT.length > 0
-      ? item.AREA === 'BLACHARNIA' ? limitText(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1]) : item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1]
-      : "";
+      ? limitText(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1])
+      : "BRAK";
 
-
+    // }
     return {
       ...item,
-      UWAGI_ASYSTENT: dzialania ? dzialania : ''
+      UWAGI_ASYSTENT: dzialania ? dzialania : 'BRAK'
     };
   });
 
