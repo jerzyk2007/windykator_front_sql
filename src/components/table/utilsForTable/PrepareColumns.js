@@ -65,6 +65,8 @@ export const prepareColumns = (columnsData, data) => {
               ))}
             </div>
           );
+        } else {
+          <p>Brak</p>;
         }
       };
 
