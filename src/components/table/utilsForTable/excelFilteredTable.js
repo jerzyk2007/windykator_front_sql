@@ -17,7 +17,6 @@ const sanitizeValue = (value) => {
 };
 
 export const getAllDataRaport = async (allData, orderColumns, info) => {
-  console.log(allData);
 
   const cleanData = allData.map(item => {
     const limitText = (text, maxLength = 42) =>
