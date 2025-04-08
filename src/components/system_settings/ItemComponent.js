@@ -80,6 +80,7 @@ const FKItemComponent = ({ data, info, title, multiCompany }) => {
       // const result = true;
       if (result) {
         setNewDataItem(prevItems => prevItems.filter(item => item.id !== id));
+        setStartData(prevItems => prevItems.filter(item => item[`id_${info.toLowerCase()}_items`] !== id));
       }
 
       setDeleteActive(false);
@@ -196,6 +197,7 @@ const FKItemComponent = ({ data, info, title, multiCompany }) => {
             return item;
           }
         });
+
         setNewDataItem(update);
         const updateStartData = startData.map(item => {
           if (item[`id_${info.toLowerCase()}_items`] === updateData.id && info !== "OWNER") {
@@ -285,15 +287,13 @@ const FKItemComponent = ({ data, info, title, multiCompany }) => {
       if (addItem) {
         const result = await axiosPrivateIntercept.post(`/items/new-item/${info}`
           , {
-            // [info]: addItem,
             data: addItem,
           }
         );
-
+        // const result = true;
         if (result) {
           const update = [...newDataItem, addItem];
           setNewDataItem(update);
-
           setStartData(result.data);
         }
       }
@@ -398,7 +398,7 @@ const FKItemComponent = ({ data, info, title, multiCompany }) => {
                 size="small"
                 // disabled={info === "owner" ? (!mailDuplicate || !duplicate) : !duplicate ? false : true}
                 // disabled={!duplicate ? false : true}
-                disabled={info === "OWNER" ? (mailDuplicate && duplicate) : !duplicate && item.newName ? false : true}
+                disabled={info === "OWNER" ? (mailDuplicate || !checkMail) : !duplicate && item.newName ? false : true}
                 onClick={() => handleUpdateItem(item)}
               >
                 Zatwierdź

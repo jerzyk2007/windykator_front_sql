@@ -3,6 +3,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 // import useData from "../hooks/useData";
 // import FKItemSettings from "./FKItemsData/FKItemSettings";
 import DeptMapperSettings from "./DeptMapperSettings";
+import MissingDepartments from "./MissingDepartments";
 // import FKItemSettings from "../FKRaport/FKItemsData/FKItemSettings";
 import "./DeptMapper.css";
 
@@ -17,21 +18,32 @@ const DeptMapper = () => {
   const [itemsDB, setItemsDB] = useState([]);
   const [missingDeps, setMissingDeps] = useState([]);
 
-  const checkMissingDepartments = async (saveDeps, docDeps) => {
-    let checkDeps = [];
-    for (const dep of docDeps) {
+  // const checkMissingDepartments = async (saveDeps, docDeps) => {
+  //   let checkDeps = [];
+  //   for (const dep of docDeps) {
 
-      const checkDep = saveDeps.find((item) => item === dep);
-      if (!checkDep) {
-        checkDeps.push(dep);
-      }
-    }
-    // sprawdzam czy brakujące działy mają do rozliczenia fv czy nie
-    const checkDocPayment = await axiosPrivateIntercept.post("/items/check-doc-payment", { departments: checkDeps });
-    // console.log(checkDocPayment.data);
-    setMissingDeps(checkDocPayment.data);
-    // setMissingDeps(checkDeps);
+  //     const checkDep = saveDeps.find((item) => item === dep);
+  //     if (!checkDep) {
+  //       checkDeps.push(dep);
+  //     }
+  //   }
+
+
+  //   // sprawdzam czy brakujące działy mają do rozliczenia fv czy nie
+  //   const checkDocPayment = await axiosPrivateIntercept.post("/items/check-doc-payment", { departments: checkDeps });
+  //   // console.log(checkDocPayment.data);
+  //   setMissingDeps(checkDocPayment.data);
+  //   // setMissingDeps(checkDeps);
+  // };
+
+
+
+  const checkMissingDepartments2 = (saveDeps, docDeps) => {
+    return docDeps.filter(
+      dep => !saveDeps.some(item => item.DEPARTMENT === dep.DZIAL && item.COMPANY === dep.FIRMA)
+    );
   };
+
 
   const itemsDepExist = missingDeps?.checkDoc?.map((dep, index) => {
     if (dep.exist === true) {
@@ -54,17 +66,24 @@ const DeptMapper = () => {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/items/get-fksettings-data");
       setData(result.data);
+
+      // pobiera unikalne nazwy działów z tabeli documents
       const uniqueDep = await axiosPrivateIntercept.get("/items/get-uniques-dep");
       setRaportDep(uniqueDep.data);
 
+      // sprawdzam czy sa jakies nieopisane działy
+      const checkMissingDeps = checkMissingDepartments2(result.data.uniqeDepFromCompanyJI, result.data.uniqeDepFromDocuments);
 
-      checkMissingDepartments(result.data.uniqueDepartments, uniqueDep.data);
-      // checkMissingDepartments(result.data.departments, uniqueDep.data);
+      if (checkMissingDeps?.length) {
+        const checkDocPayment = await axiosPrivateIntercept.post("/items/check-doc-payment", { departments: checkMissingDeps });
+        setMissingDeps(checkDocPayment.data.checkDoc);
+      }
 
       const preparedItems = await axiosPrivateIntercept.get(
         "/items/get-prepared-items"
       );
       setItemsDB(preparedItems.data);
+
       const combinedArray = result.data.departments.concat(uniqueDep.data);
       const uniqueArray = [...new Set(combinedArray)].sort();
       setMergeDep(uniqueArray);
@@ -190,10 +209,10 @@ const DeptMapper = () => {
         <section className="dept_mapper"></section>
       ) : (
         <section className="dept_mapper">
-          <section className="dept_mapper__title">
-            <span>Dopasuj wyświetlanie danych</span>
-          </section>
-          {itemsDepExist?.length ? <section className="dept_mapper__container-dep">
+          {missingDeps && <MissingDepartments
+            departments={missingDeps} />}
+
+          {/* {itemsDepExist?.length ? <section className="dept_mapper__container-dep">
             <span className="dept_mapper__container-dep--title">Uzupełnij dane dla działów - posiadające nierozl. FV: </span>
             <section className="dept_mapper-dep__container">
               {itemsDepExist}
@@ -208,8 +227,11 @@ const DeptMapper = () => {
             <section className="dept_mapper-dep__container">
               {itemsDepNoExist}
             </section>
-          </section> : null}
+          </section> : null} */}
 
+          <section className="dept_mapper__title">
+            <span>Dopasuj wyświetlanie danych</span>
+          </section>
           <section className="dept_mapper__container">
             <section className="dept_mapper__container-item">
               <section className="dept_mapper-counter__container">
