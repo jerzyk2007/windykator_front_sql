@@ -7,8 +7,9 @@ const MissingDepartments = ({ departments }) => {
 
     const companyFilter = company?.map((item, index) => {
         const missingDeps = departments.filter(prev => prev.company === item);
-        const existDep = missingDeps.filter(missDeps => missDeps.exist === true);
-        const noExistDep = missingDeps.filter(missDeps => missDeps.exist === false);
+        const existDep = missingDeps.filter(missDeps => missDeps.exist === true).sort((a, b) =>
+            a.dep.localeCompare(b.dep));
+        const noExistDep = missingDeps.filter(missDeps => missDeps.exist === false).sort((a, b) => a.dep.localeCompare(b.dep));
 
         const exist = existDep.length > 0 ? (
             existDep.map((prev, index) => (
@@ -52,6 +53,7 @@ const MissingDepartments = ({ departments }) => {
         if (departments?.length) {
             setCompany([...new Set(departments.map(dep => dep.company))]);
         }
+
     }, [departments]);
 
     // useEffect(() => {

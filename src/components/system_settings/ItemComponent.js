@@ -5,6 +5,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import "./ItemComponent.css";
 
 const FKItemComponent = ({ data, info, title, multiCompany }) => {
+  console.log(multiCompany);
 
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const [startData, setStartData] = useState(data || []);

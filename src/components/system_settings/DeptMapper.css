@@ -1,23 +1,36 @@
 .dept_mapper {
-  flex-grow: 1;
+  /* flex-grow: 1; */
   user-select: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
   background-color: rgba(195, 255, 235, .2);
   font-family: "Source Sans 3", Calibri, sans-serif;
   font-size: 1.1rem;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .dept_mapper__title {
-  display: block;
   width: 100%;
+  /* display: block; */
+  /* width: 100%; */
   font-size: 1.35rem;
   font-weight: 500;
   padding: 10px;
   background-color: #fff;
+  display: flex;
+}
+
+.dept_mapper__title--company {
+  flex-basis: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dept_mapper__title--info {
+  flex-grow: 1;
   text-align: center;
 }
 
@@ -29,20 +42,22 @@
 }
 
 .dept_mapper__container-item {
-  flex-grow: 1;
-  padding: 10px;
+  /* flex-grow: 1; */
+  min-width: 1200px;
+  padding: 10px 5px;
   margin: 1px 0;
   text-align: center;
   font-weight: bold;
   border: 1px solid rgba(191, 196, 199, 0.6);
   border-radius: 5px;
   background-color: #fff;
-  align-items: center;
   display: flex;
+  align-items: center;
+
 }
 
 .dept_mapper__container-dep {
-  width: 100%;
+  /* width: 100%; */
   padding: 5px;
   border: 1px solid rgba(191, 196, 199, 0.6);
   border-radius: 5px;
@@ -83,11 +98,33 @@
   align-items: center;
 }
 
+.dept_mapper_settings-icon {
+  flex-basis: 3%;
+  display: flex;
+  justify-content: center;
+}
+
+.dept_mapper_settings-icon--accept {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dept_mapper_settings-icon--accept i:first-child {
+  color: red;
+}
+
+.dept_mapper_settings-icon--accept i:hover {
+  color: blueviolet;
+}
+
+
 .dept_mapper--fa-save,
 .dept_mapper--fa-trash,
 .dept_mapper--fa-check,
 .dept_mapper--fa-cancel {
-  margin-top: 10px;
+  /* margin-top: 10px; */
   font-size: 1.4rem;
   cursor: pointer;
 }
@@ -105,23 +142,37 @@
 
 
 .dept_mapper-counter {
-  flex-basis: 5%;
+  flex-basis: 3%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .dept_mapper-department,
 .dept_mapper-dep {
-  flex-basis: 15%;
+  flex-basis: 12%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.dept_mapper-department {
+  border: 1px solid rgba(191, 196, 199, 0.6);
+  border-radius: 5px;
+  /* height: 50%; */
 }
 
 .dept_mapper-dep {
   border-radius: 5px;
   font-weight: 500;
-  padding: 10px;
+  /* padding: 10px; */
 }
 
 .dept_mapper-localization,
 .dept_mapper-area {
-  flex-basis: 18%;
+  flex-basis: 22%;
   margin: 0 10px;
 }
 

@@ -4,6 +4,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 // import FKItemSettings from "./FKItemsData/FKItemSettings";
 import DeptMapperSettings from "./DeptMapperSettings";
 import MissingDepartments from "./MissingDepartments";
+import PleaseWait from "../PleaseWait";
 // import FKItemSettings from "../FKRaport/FKItemsData/FKItemSettings";
 import "./DeptMapper.css";
 
@@ -18,79 +19,115 @@ const DeptMapper = () => {
   const [itemsDB, setItemsDB] = useState([]);
   const [missingDeps, setMissingDeps] = useState([]);
 
-  // const checkMissingDepartments = async (saveDeps, docDeps) => {
-  //   let checkDeps = [];
-  //   for (const dep of docDeps) {
+  const [loadedData, setLoadedData] = useState(
+    {
+      uniqueDepFromCompanyJI: [],
+      uniqueDepFromDocuments: [],
+      missingDeps: [],
+      preparedItems: []
+    }
+  );
+  const [filteredData, setFilteredData] = useState(
+    {
+      uniqueDepFromCompanyJI: [],
+      uniqueDepFromDocuments: [],
+      missingDeps: [],
+      preparedItems: []
+    }
+  );
 
-  //     const checkDep = saveDeps.find((item) => item === dep);
-  //     if (!checkDep) {
-  //       checkDeps.push(dep);
-  //     }
-  //   }
+  const [company, setCompany] = useState({
+    selectCompany: "",
+    companyNames: []
+  });
 
 
-  //   // sprawdzam czy brakujące działy mają do rozliczenia fv czy nie
-  //   const checkDocPayment = await axiosPrivateIntercept.post("/items/check-doc-payment", { departments: checkDeps });
-  //   // console.log(checkDocPayment.data);
-  //   setMissingDeps(checkDocPayment.data);
-  //   // setMissingDeps(checkDeps);
-  // };
-
-
-
-  const checkMissingDepartments2 = (saveDeps, docDeps) => {
+  const checkMissingDepartments = (saveDeps, docDeps) => {
     return docDeps.filter(
       dep => !saveDeps.some(item => item.DEPARTMENT === dep.DZIAL && item.COMPANY === dep.FIRMA)
     );
   };
-
-
-  const itemsDepExist = missingDeps?.checkDoc?.map((dep, index) => {
-    if (dep.exist === true) {
-      return (
-        <span key={index} className="dept_mapper__container-dep--info">{dep.dep}</span>
-      );
-    }
-  }).filter(Boolean);;
-
-  const itemsDepNoExist = missingDeps?.checkDoc?.map((dep, index) => {
-    if (dep.exist === false) {
-      return (
-        <span key={index} className="dept_mapper__container-dep--info">{dep.dep}</span>
-      );
-    }
-  }).filter(Boolean);;
 
   const getData = async () => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/items/get-fksettings-data");
       setData(result.data);
+      console.log(result.data);
 
-      // pobiera unikalne nazwy działów z tabeli documents
+      // do usunięcia -  pobiera unikalne nazwy działów z tabeli documents
       const uniqueDep = await axiosPrivateIntercept.get("/items/get-uniques-dep");
       setRaportDep(uniqueDep.data);
 
       // sprawdzam czy sa jakies nieopisane działy
-      const checkMissingDeps = checkMissingDepartments2(result.data.uniqeDepFromCompanyJI, result.data.uniqeDepFromDocuments);
+      const checkMissingDeps = checkMissingDepartments(result.data.uniqueDepFromCompanyJI, result.data.uniqueDepFromDocuments);
+      // console.log(checkMissingDeps);
+      // do usunięcia
+      // if (checkMissingDeps?.length) {
+      //   const checkDocPayment = await axiosPrivateIntercept.post("/items/check-doc-payment", { departments: checkMissingDeps });
+      //   setMissingDeps(checkDocPayment.data.checkDoc);
+      // }
 
-      if (checkMissingDeps?.length) {
-        const checkDocPayment = await axiosPrivateIntercept.post("/items/check-doc-payment", { departments: checkMissingDeps });
-        setMissingDeps(checkDocPayment.data.checkDoc);
-      }
+      const checkDocPayment = checkMissingDeps?.length ? await axiosPrivateIntercept.post("/items/check-doc-payment", { departments: checkMissingDeps }) : null;
+
+
+
+
+      // setSelectCompany(result.data.company.length > 1 ? "ALL" : result.data.company.length === 1 ? result.data.company[0] : '');
+
+      // setCompany(result.data.company.length > 1 ? ['ALL', ...result.data.company] : result.data.company.length === 1 ? result.data.company[0] : []);
+
+      setCompany({
+        selectCompany: result.data.company.length > 1 ? "ALL" : result.data.company.length === 1 ? result.data.company[0] : '',
+        companyNames: result.data.company.length > 1 ? ['ALL', ...result.data.company] : result.data.company.length === 1 ? result.data.company[0] : []
+      });
+
 
       const preparedItems = await axiosPrivateIntercept.get(
         "/items/get-prepared-items"
       );
       setItemsDB(preparedItems.data);
+      // console.log(preparedItems.data);
 
       const combinedArray = result.data.departments.concat(uniqueDep.data);
+      // 
       const uniqueArray = [...new Set(combinedArray)].sort();
       setMergeDep(uniqueArray);
       createMergeDep(uniqueArray, preparedItems.data);
 
 
-      // setTimeout(() => setPleaseWait(false), 5000);
+      // łączę unikalne nazwy działów z danych document i join_items
+      const transformUniqDep = result.data.uniqueDepFromDocuments.map(item => {
+        return {
+          DEPARTMENT: item.DZIAL,
+          COMPANY: item.FIRMA
+        };
+      });
+      const mergedUniqDep = [...result.data.uniqueDepFromCompanyJI, ...transformUniqDep];
+      const uniqueDeps = mergedUniqDep.filter(
+        (item, index, self) =>
+          index ===
+          self.findIndex(
+            (t) =>
+              t.DEPARTMENT === item.DEPARTMENT && t.COMPANY === item.COMPANY
+          )
+      );
+
+      // console.log(uniqueDeps.sort((a, b) => a.DEPARTMENT.localeCompare(b.DEPARTMENT)));
+      createMergeDepMulti(uniqueDeps, result.data.preparedItems);
+
+      setLoadedData(prev => {
+        return {
+          ...prev,
+          uniqueDepFromCompanyJI: result.data.uniqueDepFromCompanyJI || [],
+          uniqueDepFromDocuments: result.data.uniqueDepFromDocuments || [],
+          missingDeps: checkDocPayment ? checkDocPayment.data.checkDoc : [],
+          preparedItems: result.data.preparedItems || [],
+          mergeDeps: uniqueDeps.sort((a, b) => a.DEPARTMENT.localeCompare(b.DEPARTMENT)),
+          localization: result.data.companyLoacalizations || [],
+          area: result.data.companyAreas || [],
+        };
+      });
     } catch (error) {
       console.error(error);
     }
@@ -150,9 +187,35 @@ const DeptMapper = () => {
     setCreateItem(filteredData);
   };
 
-  const itemsArray = mergeDep?.map((dep, index) => {
+  // const itemsArray = mergeDep?.map((dep, index) => {
+  //   // sprawdzam czy działy potrzebne do raportu są zapisane w "zmień stałe"
+  //   const checkDepStyle = raportDep.find((item) => item === dep);
+  //   return (
+  //     <DeptMapperSettings
+  //       key={index}
+  //       id={index}
+  //       dep={dep}
+  //       dataItem={createItem ? createItem[index] : {}}
+  //       // dataItem={createItem ? {} : {}}
+  //       settings={data}
+  //       style={checkDepStyle ? "exist" : "noexist"}
+  //       handleSaveToDB={handleSaveToDB}
+  //       handleDeleteItem={handleDeleteItem}
+  //     />
+  //   );
+  // });
+
+  const itemsArray3 = filteredData?.preparedItems?.map((dep, index) => {
+    // console.log(filteredData.mergeDeps);
+    // console.log(dep);
+
     // sprawdzam czy działy potrzebne do raportu są zapisane w "zmień stałe"
-    const checkDepStyle = raportDep.find((item) => item === dep);
+    const checkDepStyle = filteredData.mergeDeps.find((item) => item.DEPARTMENT === dep.DEPARTMENT && item.COMPANY === dep.COMPANY);
+
+    const checkItem = createItem.find((item) => item.department === dep.DEPARTMENT && item.company === dep.COMPANY);
+    // console.log(checkItem);
+    // console.log(createItem);
+
     return (
       <DeptMapperSettings
         key={index}
@@ -168,8 +231,44 @@ const DeptMapper = () => {
     );
   });
 
+  const itemsArray = filteredData?.mergeDeps?.map((dep, index) => {
+    const checkDepStyle = filteredData?.preparedItems.find((item) => item.DEPARTMENT === dep.DEPARTMENT && item.COMPANY === dep.COMPANY);
+    const checkItem = createItem.find((item) => item.department === dep.DEPARTMENT && item.company === dep.COMPANY);
+    const company = dep.COMPANY;
+    const localization = filteredData?.localization.map(item => {
+      if (item.COMPANY === company) {
+        return item.LOCALIZATION;
+      }
+    }).filter(Boolean);
+    const area = filteredData?.area.map(item => {
+      if (item.COMPANY === company) {
+        return item.AREA;
+      }
+    }).filter(Boolean);
+
+    return (
+      <DeptMapperSettings
+        key={index}
+        id={index}
+        // dep={dep}
+        // dataItem={createItem ? createItem[index] : {}}
+        company={company}
+        dataItem={checkItem}
+        localization={localization}
+        area={area}
+        // dataItem={createItem ? {} : {}}
+        settings={data}
+        style={checkDepStyle ? "exist" : "noexist"}
+        handleSaveToDB={handleSaveToDB}
+        handleDeleteItem={handleDeleteItem}
+      />
+    );
+  });
+
 
   const createMergeDep = (uniqueArray, itemsDB) => {
+
+
     const createDataDep = uniqueArray.map((item) => {
       //sprawdz czy jakieś dane są zapisane w DB
       const dbItem = itemsDB.find((dbItem) => dbItem.department === item);
@@ -177,6 +276,7 @@ const DeptMapper = () => {
       if (dbItem) {
         return {
           department: item,
+          company: "KRT",
           localization: dbItem.localization || "",
           area: dbItem.area || "",
           owner: dbItem.owner || [""],
@@ -186,6 +286,7 @@ const DeptMapper = () => {
         // Jeśli nie znaleziono obiektu w tablicy itemsDB, utwórz pusty obiekt
         return {
           department: item,
+          company: "",
           localization: "",
           area: "",
           owner: [""],
@@ -193,55 +294,138 @@ const DeptMapper = () => {
         };
       }
     });
-    setCreateItem(createDataDep);
+    // setCreateItem(createDataDep);
+  };
+
+  const createMergeDepMulti = (uniqueArray, itemsDB) => {
+    // console.log(uniqueArray);
+    // console.log(itemsDB);
+
+    const createDataDep = uniqueArray.map((item) => {
+      // console.log(item);
+
+      //sprawdz czy jakieś dane są zapisane w DB
+      const dbItem = itemsDB.find((dbItem) => dbItem.DEPARTMENT === item.DEPARTMENT && dbItem.COMPANY === item.COMPANY);
+
+      if (dbItem) {
+        return {
+          department: item.DEPARTMENT,
+          company: item.COMPANY,
+          localization: dbItem.LOCALIZATION || "",
+          area: dbItem.AREA || "",
+          owner: dbItem.OWNER || [""],
+          guardian: dbItem.GUARDIAN || [""],
+        };
+      } else {
+        // Jeśli nie znaleziono obiektu w tablicy itemsDB, utwórz pusty obiekt
+        return {
+          department: item.DEPARTMENT,
+          company: item.COMPANY,
+          localization: "",
+          area: "",
+          owner: [""],
+          guardian: [""],
+        };
+      }
+    });
+    // console.log(createDataDep.sort((a, b) => a.department.localeCompare(b.department)));
+    // console.log(createDataDep);
+    setCreateItem(createDataDep.sort((a, b) => a.department.localeCompare(b.department)));
   };
 
   useEffect(() => {
     getData();
   }, []);
 
+  useEffect(() => {
+    setFilteredData(loadedData);
+    // console.log(loadedData);
+  }, [loadedData]);
 
+  // useEffect(() => {
+  //   console.log(filteredData);
+  // }, [filteredData]);
+
+
+  useEffect(() => {
+    const filteredMissDeps = company.selectCompany !== 'ALL' ? loadedData?.missingDeps?.filter(item => item.company === company.selectCompany) : loadedData.missingDeps;
+    const preparedItems = company.selectCompany !== 'ALL' ? loadedData?.preparedItems?.filter(item => item.COMPANY === company.selectCompany) : loadedData.preparedItems;
+    const mergeDeps = company.selectCompany !== 'ALL' ? loadedData?.mergeDeps?.filter(item => item.COMPANY === company.selectCompany) : loadedData.mergeDeps;
+
+    // console.log(mergeDeps);
+    setFilteredData(prev => {
+      return {
+        ...prev,
+        missingDeps: filteredMissDeps,
+        preparedItems,
+        mergeDeps
+      };
+    });
+  }, [company.selectCompany]);
+
+  // useEffect(() => {
+  //   console.log(filteredData);
+  // }, [filteredData]);
 
   return (
     <>
       {pleaseWait ? (
-        // <PleaseWait />
-        <section className="dept_mapper"></section>
+        <PleaseWait />
+        // <section className="dept_mapper"></section>
       ) : (
         <section className="dept_mapper">
-          {missingDeps && <MissingDepartments
-            departments={missingDeps} />}
-
-          {/* {itemsDepExist?.length ? <section className="dept_mapper__container-dep">
-            <span className="dept_mapper__container-dep--title">Uzupełnij dane dla działów - posiadające nierozl. FV: </span>
-            <section className="dept_mapper-dep__container">
-              {itemsDepExist}
-            </section>
-          </section> : null}
-
-          {itemsDepNoExist?.length ? <section className="dept_mapper__container-dep"
-            style={{ backgroundColor: "#ff8282" }}>
-            <span className="dept_mapper__container-dep--title"
-
-            >Uzupełnij dane dla działów - nie posiadających nierozl. FV: </span>
-            <section className="dept_mapper-dep__container">
-              {itemsDepNoExist}
-            </section>
-          </section> : null} */}
+          {filteredData?.missingDeps?.length ? <MissingDepartments
+            departments={filteredData.missingDeps} /> : null}
 
           <section className="dept_mapper__title">
-            <span>Dopasuj wyświetlanie danych</span>
+            <section className="dept_mapper__title--company">
+              <select
+                className="item_component-title__container-data--text"
+                value={company.selectCompany}
+                onChange={(e) => setCompany(prev => {
+                  return {
+                    ...prev,
+                    selectCompany: e.target.value
+                  };
+                })}
+              >
+
+                {company.companyNames.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </section>
+            <span className="dept_mapper__title--info">Dopasuj wyświetlanie danych</span>
+            <section className="dept_mapper__title--company"></section>
+
           </section>
           <section className="dept_mapper__container">
             <section className="dept_mapper__container-item">
-              <section className="dept_mapper-counter__container">
-                <span className="dept_mapper-counter">Lp</span>
+              <section className="dept_mapper-counter">
+                <span >Lp</span>
               </section>
-              <span className="dept_mapper-department">Dział</span>
-              <span className="dept_mapper-localization">Lokalizacja</span>
-              <span className="dept_mapper-area">Obszar</span>
-              <span className="dept_mapper-owner">Owner</span>
-              <span className="dept_mapper-guardian">Opiekun</span>
+              <section className="dept_mapper-department">
+                <span >Dział</span>
+              </section>
+              <section className="dept_mapper-localization">
+                <span >Lokalizacja</span>
+              </section>
+              <section className="dept_mapper-area">
+                <span >Obszar</span>
+              </section>
+              <section className="dept_mapper-owner">
+                <span >Owner</span>
+              </section>
+              <section className="dept_mapper-guardian">
+                <span >Opiekun</span>
+
+              </section>
+
+              <section className="dept_mapper_settings-icon"
+                style={{ marginRight: "15px" }}>
+              </section>
             </section>
           </section>
 

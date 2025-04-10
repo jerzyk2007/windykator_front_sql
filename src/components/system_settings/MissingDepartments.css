@@ -1,5 +1,5 @@
 .missing_department {
-    flex-grow: 1;
+    /* flex-grow: 1; */
     width: 100%;
     padding: 5px;
     margin: 4px;
@@ -20,23 +20,35 @@
 }
 
 .missing_department__container {
-    flex-basis: 40%;
+    max-height: 180px;
+    overflow: hidden;
+    flex-basis: 100%;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
 }
 
 
-.missing_department__company--title,
+
 .missing_department__company--exist,
 .missing_department__company--noexist {
     padding: 10px 0;
+    flex-basis: 100%;
+    overflow-y: auto;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
 }
 
+.missing_department__company--title {
+    flex-basis: 20%;
+    min-height: 50px;
+    overflow-y: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .missing_department__company {
     flex-grow: 1;
