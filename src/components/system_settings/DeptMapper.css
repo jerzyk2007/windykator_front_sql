@@ -44,7 +44,7 @@
 .dept_mapper__container-item {
   /* flex-grow: 1; */
   min-width: 1200px;
-  padding: 10px 5px;
+  padding: 5px 5px;
   margin: 1px 0;
   text-align: center;
   font-weight: bold;
@@ -186,8 +186,7 @@
 
 .dept_mapper-owner-many {
   width: 100%;
-
-  margin: 5px 0;
+  margin: 2px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -200,7 +199,7 @@
 .dept_mapper--fa-plus,
 .dept_mapper--fa-minus {
   margin-left: 4px;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   cursor: pointer;
 }
 

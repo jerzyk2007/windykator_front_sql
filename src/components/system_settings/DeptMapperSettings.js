@@ -1,26 +1,22 @@
 import { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import './DeptMapperSettings.css';
 
 const DeptMapperSettings = ({
   id,
-  // dep,
   dataItem,
-  settings,
-  style,
+  // style,
   handleSaveToDB,
   handleDeleteItem,
   localization,
-  area
+  area,
+  owner,
+  guardian
 }) => {
-  const [settingsItem, setSettingsItem] = useState([]);
+  // const [settingsItem, setSettingsItem] = useState([]);
   const [itemsValue, setItemsValue] = useState({});
   const [activeSave, setActiveSave] = useState(false);
   const [activeDelete, setActiveDelete] = useState(false);
+
 
   const handleLocalization = (e, info) => {
     const newValue = e.target.value;
@@ -31,25 +27,6 @@ const DeptMapperSettings = ({
       };
     });
   };
-
-
-  // tworzy dla listy rozwijanej wszytskie nazwy lokalizacji
-  // const localizationItems = settingsItem.localizations?.map((loc, index) => {
-  //   return (
-  //     <MenuItem value={loc} key={index}>
-  //       {loc}
-  //     </MenuItem>
-  //   );
-  // });
-
-  // // tworzy dla listy rozwijanej wszytskie nazwy obszarów
-  // const areaItems = settingsItem.areas?.map((area, index) => {
-  //   return (
-  //     <MenuItem value={area} key={index}>
-  //       {area}
-  //     </MenuItem>
-  //   );
-  // });
 
   // usuwa nadplanowego ownera, ale zawsze zostanie jeden
   const handleDeleteOwner = (id) => {
@@ -91,48 +68,43 @@ const DeptMapperSettings = ({
   };
 
   // tworzy obiekt ownera, z listą, dodawaniem, usuwaniem
-  // const ownerItems = itemsValue?.owner?.map((own, index) => {
-  //   const menuItems = settingsItem.owners?.map((ownItem, id) => {
-  //     return (
-  //       <MenuItem value={ownItem} key={id}>
-  //         {ownItem}
-  //       </MenuItem>
-  //     );
-  //   });
-
-  //   return (
-  //     <section className="dept_mapper-owner-many" key={index}>
-  //       <Box className="dept_mapper-owner__container">
-  //         <FormControl fullWidth>
-  //           <InputLabel id="simple-select-label">Owner</InputLabel>
-  //           <Select
-  //             labelId="simple-select-label"
-  //             id="simple-select"
-  //             value={itemsValue?.owner[index] ? itemsValue.owner[index] : ""}
-  //             label="Obszar"
-  //             onChange={(e) => handleUpdateOwner(e, index, "owner")}
-  //           >
-  //             {menuItems}
-  //           </Select>
-  //         </FormControl>
-  //       </Box>
-  //       {index === 0 && (
-  //         <i
-  //           className="fa-solid fa-plus dept_mapper--fa-plus"
-  //           onClick={handleAddOwner}
-  //         ></i>
-  //       )}
-  //       {index !== 0 && (
-  //         <i
-  //           className="fa-solid fa-minus dept_mapper--fa-minus"
-  //           onClick={() => {
-  //             handleDeleteOwner(index);
-  //           }}
-  //         ></i>
-  //       )}
-  //     </section>
-  //   );
-  // });
+  const ownerItems = itemsValue?.owner?.map((own, index) => {
+    return (
+      <section className="dept_mapper-owner-many" key={index}>
+        <div className="dept_mapper-owner__container">
+          <label className="dept_mapper_settings-label" htmlFor={`owner-select-${index}`}>
+            {/* Owner */}
+          </label>
+          <select
+            id={`owner-select-${index}`}
+            className="dept_mapper_settings-select"
+            value={itemsValue?.owner[index] ?? ""}
+            onChange={(e) => handleUpdateOwner(e, index, "owner")}
+          >
+            <option value="" disabled hidden>
+              -- Wybierz Ownera --
+            </option>
+            {owner?.map((ownItem, id) => (
+              <option key={id} value={ownItem}>
+                {ownItem}
+              </option>
+            ))}
+          </select>
+        </div>
+        {index === 0 ? (
+          <i
+            className="fa-solid fa-plus dept_mapper--fa-plus"
+            onClick={handleAddOwner}
+          ></i>
+        ) : (
+          <i
+            className="fa-solid fa-minus dept_mapper--fa-minus"
+            onClick={() => handleDeleteOwner(index)}
+          ></i>
+        )}
+      </section>
+    );
+  });
 
   // usuwa nadplanowego ownera, ale zawsze zostanie jeden
   const handleDeleteGuardian = (id) => {
@@ -174,56 +146,47 @@ const DeptMapperSettings = ({
   };
 
   // tworzy obiekt opiekuna, z listą, dodawaniem, usuwaniem
-  // const guardianItems = itemsValue?.guardian?.map((guard, index) => {
-  //   const menuItems = settingsItem.guardians?.map((guardItem, id) => {
-  //     return (
-  //       <MenuItem value={guardItem} key={id}>
-  //         {guardItem}
-  //       </MenuItem>
-  //     );
-  //   });
-
-  //   return (
-  //     <section className="dept_mapper-owner-many" key={index}>
-  //       <Box className="dept_mapper-owner__container">
-  //         <FormControl fullWidth>
-  //           <InputLabel id="simple-select-label">Opiekun</InputLabel>
-  //           <Select
-  //             labelId="simple-select-label"
-  //             id="simple-select"
-  //             value={
-  //               itemsValue?.guardian[index] ? itemsValue.guardian[index] : ""
-  //             }
-  //             label="Obszar"
-  //             onChange={(e) => handleUpdateGuardian(e, index, "guardian")}
-  //           >
-  //             {menuItems}
-  //           </Select>
-  //         </FormControl>
-  //       </Box>
-  //       {index === 0 && (
-  //         <i
-  //           className="fa-solid fa-plus dept_mapper--fa-plus"
-  //           onClick={handleAddGuardian}
-  //         ></i>
-  //       )}
-  //       {index !== 0 && (
-  //         <i
-  //           className="fa-solid fa-minus dept_mapper--fa-minus"
-  //           onClick={() => {
-  //             handleDeleteGuardian(index);
-  //           }}
-  //         ></i>
-  //       )}
-  //     </section>
-  //   );
-  // });
+  const guardianItems = itemsValue?.guardian?.map((guard, index) => {
+    return (
+      <section className="dept_mapper-owner-many" key={index}>
+        <div className="dept_mapper-owner__container">
+          <label className="dept_mapper_settings-label" htmlFor={`guardian-select-${index}`}>
+            {/* Owner */}
+          </label>
+          <select
+            id={`owner-select-${index}`}
+            className="dept_mapper_settings-select"
+            value={itemsValue?.guardian[index] ?? ""}
+            onChange={(e) => handleUpdateGuardian(e, index, "guardian")}
+          >
+            <option value="" disabled hidden>
+              -- Wybierz Opiekuna --
+            </option>
+            {guardian?.map((guardItem, id) => (
+              <option key={id} value={guardItem}>
+                {guardItem}
+              </option>
+            ))}
+          </select>
+        </div>
+        {index === 0 ? (
+          <i
+            className="fa-solid fa-plus dept_mapper--fa-plus"
+            onClick={handleAddGuardian}
+          ></i>
+        ) : (
+          <i
+            className="fa-solid fa-minus dept_mapper--fa-minus"
+            onClick={() => handleUpdateGuardian(index)}
+          ></i>
+        )}
+      </section>
+    );
+  });
 
   useEffect(() => {
-    setSettingsItem(settings);
     setItemsValue(dataItem);
-    // console.log(dataItem);
-  }, [settings, dataItem]);
+  }, [dataItem]);
 
   useEffect(() => {
     if (
@@ -236,7 +199,6 @@ const DeptMapperSettings = ({
     } else {
       setActiveSave(false);
     }
-    // console.log(itemsValue);
   }, [itemsValue]);
 
   return (
@@ -244,13 +206,9 @@ const DeptMapperSettings = ({
       className="dept_mapper__container-item"
     // style={!activeSave ? { backgroundColor: "yellow" } : null}
     >
-      {/* <section className="dept_mapper__container-item"> */}
-
       <section className="dept_mapper-counter">
         <span
-        // className="dept_mapper-counter"
         >
-
           {id + 1}
         </span>
         {activeSave && (
@@ -262,7 +220,9 @@ const DeptMapperSettings = ({
           ></i>
         )}
       </section>
-      <section className="dept_mapper-department" style={!activeSave ? { backgroundColor: "yellow", border: "1px solid rgba(44, 123, 168, 0.6)" } : null}>
+      <section className="dept_mapper-department"
+        style={!activeSave ? { backgroundColor: "yellow", border: "1px solid rgba(44, 123, 168, 0.6)" } : null}
+      >
         <span className="dept_mapper-dep"
         >
           {itemsValue?.department}
@@ -273,34 +233,6 @@ const DeptMapperSettings = ({
         </span>
       </section>
       <section className="dept_mapper-localization">
-        {/* <Box>
-          <FormControl fullWidth>
-            <InputLabel id="simple-select-label">Lokalizacja</InputLabel>
-            <Select
-              labelId="simple-select-label"
-              id="simple-select"
-              value={itemsValue?.localization ? itemsValue.localization : ""}
-              label="Lokalizacja"
-              onChange={(e) => handleLocalization(e, "localization")}
-            >
-              {localizationItems}
-            </Select>
-          </FormControl>
-        </Box> */}
-
-        {/* <select
-            className="dept_mapper_settings-select"
-            // value={itemsValue?.localization ? itemsValue.localization : " "}
-            value={itemsValue?.localization ?? ""}
-            onChange={(e) => handleLocalization(e, "localization")}
-          >
-
-            {settings.localizations.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select> */}
         <select
           className="dept_mapper_settings-select"
           value={itemsValue?.localization ?? ""}
@@ -316,25 +248,8 @@ const DeptMapperSettings = ({
             </option>
           ))}
         </select>
-
-
       </section>
       <section className="dept_mapper-area">
-        {/* <Box>
-          <FormControl fullWidth>
-            <InputLabel id="simple-select-label">Obszar</InputLabel>
-            <Select
-              labelId="simple-select-label"
-              id="simple-select"
-              value={itemsValue?.area ? itemsValue.area : ""}
-              label="Obszar"
-              onChange={(e) => handleLocalization(e, "area")}
-            >
-              {areaItems}
-            </Select>
-          </FormControl>
-        </Box> */}
-
         <select
           className="dept_mapper_settings-select"
           value={itemsValue?.area ? itemsValue.area : ""}
@@ -351,34 +266,10 @@ const DeptMapperSettings = ({
         </select>
       </section>
       <section className="dept_mapper-owner">
-        {/* {ownerItems} */}
-        <select
-          className="dept_mapper_settings-select"
-          value={itemsValue?.area ? itemsValue.area : ""}
-          onChange={(e) => handleLocalization(e, "area")}
-        >
-
-          {settings.areas.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+        {ownerItems}
       </section>
       <section className="dept_mapper-guardian">
-        {/* {guardianItems} */}
-        <select
-          className="dept_mapper_settings-select"
-          value={itemsValue?.area ? itemsValue.area : ""}
-          onChange={(e) => handleLocalization(e, "area")}
-        >
-
-          {settings.areas.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+        {guardianItems}
       </section>
       <section className="dept_mapper_settings-icon">
 
@@ -390,11 +281,9 @@ const DeptMapperSettings = ({
               // handleDeleteItem(itemsValue);
             }}
           ></i>
-
         ) :
           <section className="dept_mapper_settings-icon--accept">
             <i className="fas fa-check dept_mapper--fa-check"
-              // style={{ color: "red" }}
               onDoubleClick={() => {
                 setActiveDelete(false);
                 handleDeleteItem(itemsValue.department);
@@ -404,8 +293,6 @@ const DeptMapperSettings = ({
             ></i>
           </section>)}
       </section>
-
-      {/* </section> */}
     </section>
   );
 };

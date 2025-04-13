@@ -12,12 +12,12 @@ const DeptMapper = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [pleaseWait, setPleaseWait] = useState(false);
-  const [data, setData] = useState([]);
-  const [raportDep, setRaportDep] = useState([]);
-  const [mergeDep, setMergeDep] = useState([]);
+  // const [data, setData] = useState([]);
+  // const [raportDep, setRaportDep] = useState([]);
+  // const [mergeDep, setMergeDep] = useState([]);
   const [createItem, setCreateItem] = useState([]);
-  const [itemsDB, setItemsDB] = useState([]);
-  const [missingDeps, setMissingDeps] = useState([]);
+  // const [itemsDB, setItemsDB] = useState([]);
+  // const [missingDeps, setMissingDeps] = useState([]);
 
   const [loadedData, setLoadedData] = useState(
     {
@@ -52,49 +52,16 @@ const DeptMapper = () => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/items/get-fksettings-data");
-      setData(result.data);
-      console.log(result.data);
-
-      // do usunięcia -  pobiera unikalne nazwy działów z tabeli documents
-      const uniqueDep = await axiosPrivateIntercept.get("/items/get-uniques-dep");
-      setRaportDep(uniqueDep.data);
 
       // sprawdzam czy sa jakies nieopisane działy
       const checkMissingDeps = checkMissingDepartments(result.data.uniqueDepFromCompanyJI, result.data.uniqueDepFromDocuments);
-      // console.log(checkMissingDeps);
-      // do usunięcia
-      // if (checkMissingDeps?.length) {
-      //   const checkDocPayment = await axiosPrivateIntercept.post("/items/check-doc-payment", { departments: checkMissingDeps });
-      //   setMissingDeps(checkDocPayment.data.checkDoc);
-      // }
 
       const checkDocPayment = checkMissingDeps?.length ? await axiosPrivateIntercept.post("/items/check-doc-payment", { departments: checkMissingDeps }) : null;
-
-
-
-
-      // setSelectCompany(result.data.company.length > 1 ? "ALL" : result.data.company.length === 1 ? result.data.company[0] : '');
-
-      // setCompany(result.data.company.length > 1 ? ['ALL', ...result.data.company] : result.data.company.length === 1 ? result.data.company[0] : []);
 
       setCompany({
         selectCompany: result.data.company.length > 1 ? "ALL" : result.data.company.length === 1 ? result.data.company[0] : '',
         companyNames: result.data.company.length > 1 ? ['ALL', ...result.data.company] : result.data.company.length === 1 ? result.data.company[0] : []
       });
-
-
-      const preparedItems = await axiosPrivateIntercept.get(
-        "/items/get-prepared-items"
-      );
-      setItemsDB(preparedItems.data);
-      // console.log(preparedItems.data);
-
-      const combinedArray = result.data.departments.concat(uniqueDep.data);
-      // 
-      const uniqueArray = [...new Set(combinedArray)].sort();
-      setMergeDep(uniqueArray);
-      createMergeDep(uniqueArray, preparedItems.data);
-
 
       // łączę unikalne nazwy działów z danych document i join_items
       const transformUniqDep = result.data.uniqueDepFromDocuments.map(item => {
@@ -113,8 +80,7 @@ const DeptMapper = () => {
           )
       );
 
-      // console.log(uniqueDeps.sort((a, b) => a.DEPARTMENT.localeCompare(b.DEPARTMENT)));
-      createMergeDepMulti(uniqueDeps, result.data.preparedItems);
+      // createMergeDepMulti(uniqueDeps, result.data.preparedItems);
 
       setLoadedData(prev => {
         return {
@@ -126,6 +92,8 @@ const DeptMapper = () => {
           mergeDeps: uniqueDeps.sort((a, b) => a.DEPARTMENT.localeCompare(b.DEPARTMENT)),
           localization: result.data.companyLoacalizations || [],
           area: result.data.companyAreas || [],
+          owner: result.data.companyOwners || [],
+          guardian: result.data.companyGuardians || [],
         };
       });
     } catch (error) {
@@ -133,7 +101,6 @@ const DeptMapper = () => {
     }
     finally {
       setPleaseWait(false);
-
     }
   };
 
@@ -141,7 +108,9 @@ const DeptMapper = () => {
     try {
       // Tworzymy kopię tablicy stanu itemsDB
       // const dataArray = [];
-      const dataArray = [...itemsDB];
+      const dataArray = [...loadedData.preparedItems];
+
+
 
       // Sprawdzamy, czy istnieje już obiekt o danym department
       const existingItemIndex = dataArray.findIndex(
@@ -151,6 +120,7 @@ const DeptMapper = () => {
         // Jeśli istnieje, aktualizujemy istniejący obiekt
         dataArray[existingItemIndex] = {
           ...dataArray[existingItemIndex],
+          company: itemData.company,
           localization: itemData.localization,
           area: itemData.area,
           owner: itemData.owner,
@@ -160,6 +130,7 @@ const DeptMapper = () => {
         // Jeśli nie istnieje, dodajemy nowy obiekt na koniec tablicy
         dataArray.push({
           department: itemData.department,
+          company: itemData.company,
           localization: itemData.localization,
           area: itemData.area,
           owner: itemData.owner,
@@ -167,15 +138,24 @@ const DeptMapper = () => {
         });
       }
       // Aktualizujemy stan itemsDB
-      setItemsDB(dataArray);
+      // setItemsDB(dataArray);
+      // console.log(dataArray);
+      // console.log(loadedData);
+      setLoadedData(prev => ({
+        ...prev,
+        preparedItems: dataArray // ← tu podstawiasz swoją nową wartość
+      }));
+      // const updateLoadaedData = loadedData.map(item => {
+      //   console.log(item);
+      // });
 
-      await axiosPrivateIntercept.patch("/items/save-prepared-items", {
-        department: itemData.department,
-        localization: itemData.localization,
-        area: itemData.area,
-        owner: itemData.owner,
-        guardian: itemData.guardian,
-      });
+      // await axiosPrivateIntercept.patch("/items/save-prepared-items", {
+      //   department: itemData.department,
+      //   localization: itemData.localization,
+      //   area: itemData.area,
+      //   owner: itemData.owner,
+      //   guardian: itemData.guardian,
+      // });
     } catch (error) {
       console.error(error);
     }
@@ -187,52 +167,8 @@ const DeptMapper = () => {
     setCreateItem(filteredData);
   };
 
-  // const itemsArray = mergeDep?.map((dep, index) => {
-  //   // sprawdzam czy działy potrzebne do raportu są zapisane w "zmień stałe"
-  //   const checkDepStyle = raportDep.find((item) => item === dep);
-  //   return (
-  //     <DeptMapperSettings
-  //       key={index}
-  //       id={index}
-  //       dep={dep}
-  //       dataItem={createItem ? createItem[index] : {}}
-  //       // dataItem={createItem ? {} : {}}
-  //       settings={data}
-  //       style={checkDepStyle ? "exist" : "noexist"}
-  //       handleSaveToDB={handleSaveToDB}
-  //       handleDeleteItem={handleDeleteItem}
-  //     />
-  //   );
-  // });
-
-  const itemsArray3 = filteredData?.preparedItems?.map((dep, index) => {
-    // console.log(filteredData.mergeDeps);
-    // console.log(dep);
-
-    // sprawdzam czy działy potrzebne do raportu są zapisane w "zmień stałe"
-    const checkDepStyle = filteredData.mergeDeps.find((item) => item.DEPARTMENT === dep.DEPARTMENT && item.COMPANY === dep.COMPANY);
-
-    const checkItem = createItem.find((item) => item.department === dep.DEPARTMENT && item.company === dep.COMPANY);
-    // console.log(checkItem);
-    // console.log(createItem);
-
-    return (
-      <DeptMapperSettings
-        key={index}
-        id={index}
-        dep={dep}
-        dataItem={createItem ? createItem[index] : {}}
-        // dataItem={createItem ? {} : {}}
-        settings={data}
-        style={checkDepStyle ? "exist" : "noexist"}
-        handleSaveToDB={handleSaveToDB}
-        handleDeleteItem={handleDeleteItem}
-      />
-    );
-  });
-
   const itemsArray = filteredData?.mergeDeps?.map((dep, index) => {
-    const checkDepStyle = filteredData?.preparedItems.find((item) => item.DEPARTMENT === dep.DEPARTMENT && item.COMPANY === dep.COMPANY);
+    // const checkDepStyle = filteredData?.preparedItems.find((item) => item.DEPARTMENT === dep.DEPARTMENT && item.COMPANY === dep.COMPANY);
     const checkItem = createItem.find((item) => item.department === dep.DEPARTMENT && item.company === dep.COMPANY);
     const company = dep.COMPANY;
     const localization = filteredData?.localization.map(item => {
@@ -240,9 +176,25 @@ const DeptMapper = () => {
         return item.LOCALIZATION;
       }
     }).filter(Boolean);
+
     const area = filteredData?.area.map(item => {
-      if (item.COMPANY === company) {
+      if (item.COMPANY === "ALL") {
         return item.AREA;
+      } else
+        if (item.COMPANY === company) {
+          return item.AREA;
+        }
+    }).filter(Boolean);
+
+    const owner = filteredData?.owner.map(item => {
+      if (item.COMPANY === company) {
+        return item.OWNER;
+      }
+    }).filter(Boolean);
+
+    const guardian = filteredData?.guardian.map(item => {
+      if (item.COMPANY === company) {
+        return item.GUARDIAN;
       }
     }).filter(Boolean);
 
@@ -250,60 +202,21 @@ const DeptMapper = () => {
       <DeptMapperSettings
         key={index}
         id={index}
-        // dep={dep}
-        // dataItem={createItem ? createItem[index] : {}}
         company={company}
         dataItem={checkItem}
         localization={localization}
         area={area}
-        // dataItem={createItem ? {} : {}}
-        settings={data}
-        style={checkDepStyle ? "exist" : "noexist"}
+        owner={owner}
+        guardian={guardian}
+        // style={checkDepStyle ? "exist" : "noexist"}
         handleSaveToDB={handleSaveToDB}
         handleDeleteItem={handleDeleteItem}
       />
     );
   });
 
-
-  const createMergeDep = (uniqueArray, itemsDB) => {
-
-
-    const createDataDep = uniqueArray.map((item) => {
-      //sprawdz czy jakieś dane są zapisane w DB
-      const dbItem = itemsDB.find((dbItem) => dbItem.department === item);
-
-      if (dbItem) {
-        return {
-          department: item,
-          company: "KRT",
-          localization: dbItem.localization || "",
-          area: dbItem.area || "",
-          owner: dbItem.owner || [""],
-          guardian: dbItem.guardian || [""],
-        };
-      } else {
-        // Jeśli nie znaleziono obiektu w tablicy itemsDB, utwórz pusty obiekt
-        return {
-          department: item,
-          company: "",
-          localization: "",
-          area: "",
-          owner: [""],
-          guardian: [""],
-        };
-      }
-    });
-    // setCreateItem(createDataDep);
-  };
-
   const createMergeDepMulti = (uniqueArray, itemsDB) => {
-    // console.log(uniqueArray);
-    // console.log(itemsDB);
-
     const createDataDep = uniqueArray.map((item) => {
-      // console.log(item);
-
       //sprawdz czy jakieś dane są zapisane w DB
       const dbItem = itemsDB.find((dbItem) => dbItem.DEPARTMENT === item.DEPARTMENT && dbItem.COMPANY === item.COMPANY);
 
@@ -328,31 +241,18 @@ const DeptMapper = () => {
         };
       }
     });
-    // console.log(createDataDep.sort((a, b) => a.department.localeCompare(b.department)));
-    // console.log(createDataDep);
     setCreateItem(createDataDep.sort((a, b) => a.department.localeCompare(b.department)));
   };
 
   useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {
     setFilteredData(loadedData);
-    // console.log(loadedData);
   }, [loadedData]);
-
-  // useEffect(() => {
-  //   console.log(filteredData);
-  // }, [filteredData]);
-
 
   useEffect(() => {
     const filteredMissDeps = company.selectCompany !== 'ALL' ? loadedData?.missingDeps?.filter(item => item.company === company.selectCompany) : loadedData.missingDeps;
     const preparedItems = company.selectCompany !== 'ALL' ? loadedData?.preparedItems?.filter(item => item.COMPANY === company.selectCompany) : loadedData.preparedItems;
     const mergeDeps = company.selectCompany !== 'ALL' ? loadedData?.mergeDeps?.filter(item => item.COMPANY === company.selectCompany) : loadedData.mergeDeps;
 
-    // console.log(mergeDeps);
     setFilteredData(prev => {
       return {
         ...prev,
@@ -361,22 +261,23 @@ const DeptMapper = () => {
         mergeDeps
       };
     });
+    console.log(createItem);
+    createMergeDepMulti(uniqueDeps, loadedData.preparedItems);
+
   }, [company.selectCompany]);
 
-  // useEffect(() => {
-  //   console.log(filteredData);
-  // }, [filteredData]);
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
       {pleaseWait ? (
         <PleaseWait />
-        // <section className="dept_mapper"></section>
       ) : (
         <section className="dept_mapper">
           {filteredData?.missingDeps?.length ? <MissingDepartments
             departments={filteredData.missingDeps} /> : null}
-
           <section className="dept_mapper__title">
             <section className="dept_mapper__title--company">
               <select
@@ -389,7 +290,6 @@ const DeptMapper = () => {
                   };
                 })}
               >
-
                 {company.companyNames.map((option, index) => (
                   <option key={index} value={option}>
                     {option}
@@ -420,16 +320,12 @@ const DeptMapper = () => {
               </section>
               <section className="dept_mapper-guardian">
                 <span >Opiekun</span>
-
               </section>
-
               <section className="dept_mapper_settings-icon"
                 style={{ marginRight: "15px" }}>
               </section>
             </section>
           </section>
-
-
           <section className="dept_mapper__container-array">
             {itemsArray}
           </section>
