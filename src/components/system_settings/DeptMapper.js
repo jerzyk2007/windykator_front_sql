@@ -262,7 +262,7 @@ const DeptMapper = () => {
       };
     });
     console.log(createItem);
-    createMergeDepMulti(uniqueDeps, loadedData.preparedItems);
+    // createMergeDepMulti(uniqueDeps, loadedData.preparedItems);
 
   }, [company.selectCompany]);
 
