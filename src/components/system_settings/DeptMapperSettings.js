@@ -177,7 +177,7 @@ const DeptMapperSettings = ({
         ) : (
           <i
             className="fa-solid fa-minus dept_mapper--fa-minus"
-            onClick={() => handleUpdateGuardian(index)}
+            onClick={() => handleDeleteGuardian(index)}
           ></i>
         )}
       </section>
@@ -286,7 +286,7 @@ const DeptMapperSettings = ({
             <i className="fas fa-check dept_mapper--fa-check"
               onDoubleClick={() => {
                 setActiveDelete(false);
-                handleDeleteItem(itemsValue.department);
+                handleDeleteItem(itemsValue.department, itemsValue.company);
               }}></i>
             <i className="fas fa-cancel dept_mapper--fa-cancel"
               onClick={() => setActiveDelete(false)}
