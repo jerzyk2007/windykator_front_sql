@@ -262,24 +262,6 @@ const DeptMapper = () => {
   });
 
   const createMergeDepMulti = () => {
-    // const transformUniqDep = loadedData.uniqueDepFromDocuments.map(item => {
-    //   return {
-    //     DEPARTMENT: item.DZIAL,
-    //     COMPANY: item.FIRMA
-    //   };
-    // });
-
-    // const mergedUniqDep = [...loadedData.uniqueDepFromCompanyJI, ...transformUniqDep];
-
-    // const uniqueDeps = mergedUniqDep.filter(
-    //   (item, index, self) =>
-    //     index ===
-    //     self.findIndex(
-    //       (t) =>
-    //         t.DEPARTMENT === item.DEPARTMENT && t.COMPANY === item.COMPANY
-    //     )
-    // );
-
     const createDataDep = loadedData?.mergeDeps?.map((item) => {
       //sprawdz czy jakieś dane są zapisane w DB
       const dbItem = loadedData?.preparedItems?.find((dbItem) => dbItem.DEPARTMENT === item.DEPARTMENT && dbItem.COMPANY === item.COMPANY);
@@ -295,7 +277,6 @@ const DeptMapper = () => {
         };
       } else {
         // Jeśli nie znaleziono obiektu w tablicy itemsDB, utwórz pusty obiekt
-        // console.log('nie ma');
         return {
           department: item.DEPARTMENT,
           company: item.COMPANY,
@@ -311,7 +292,6 @@ const DeptMapper = () => {
 
   useEffect(() => {
     setFilteredData(loadedData);
-    // console.log(loadedData);
     createMergeDepMulti();
 
   }, [loadedData]);
@@ -325,12 +305,6 @@ const DeptMapper = () => {
       const missingDeps = company.selectCompany !== 'ALL' ? docPay?.filter(item => item.company === company.selectCompany) : docPay;
       const preparedItems = company.selectCompany !== 'ALL' ? loadedData?.preparedItems?.filter(item => item.COMPANY === company.selectCompany) : loadedData.preparedItems;
       const mergeDeps = company.selectCompany !== 'ALL' ? loadedData?.mergeDeps?.filter(item => item.COMPANY === company.selectCompany) : loadedData.mergeDeps;
-
-      // console.log(checkDocPayment);
-      // console.log(loadedData.preparedItems);
-      // console.log(loadedData.uniqueDepFromCompanyJI);
-      // console.log(loadedData.uniqueDepFromDocuments);
-
 
       setFilteredData(prev => {
         return {
@@ -347,23 +321,7 @@ const DeptMapper = () => {
   };
 
   useEffect(() => {
-    // const missingDeps = company.selectCompany !== 'ALL' ? loadedData?.missingDeps?.filter(item => item.company === company.selectCompany) : loadedData.missingDeps;
-    // const preparedItems = company.selectCompany !== 'ALL' ? loadedData?.preparedItems?.filter(item => item.COMPANY === company.selectCompany) : loadedData.preparedItems;
-    // const mergeDeps = company.selectCompany !== 'ALL' ? loadedData?.mergeDeps?.filter(item => item.COMPANY === company.selectCompany) : loadedData.mergeDeps;
-
-
-    // const checkMissingDeps = checkMissingDepartments(loadedData.uniqueDepFromCompanyJI, loadedData.uniqueDepFromDocuments);
-    // console.log(checkMissingDeps);
-    // setFilteredData(prev => {
-    //   return {
-    //     ...prev,
-    //     missingDeps,
-    //     preparedItems,
-    //     mergeDeps
-    //   };
-    // });
     updateFilteredData();
-
   }, [company.selectCompany, loadedData]);
 
   useEffect(() => {
