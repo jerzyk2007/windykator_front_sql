@@ -112,12 +112,13 @@ const Table = ({
 
   const getSingleRow = async (id, type) => {
     const getRow = documents.filter((row) => row.id_document === id);
+
     if (getRow.length > 0) {
+
       try {
         const response = await axiosPrivateIntercept.get(
           `/documents/get-single-document/${id}`
         );
-
         if (type === "quick") {
           setQuickNote(response.data);
         }
