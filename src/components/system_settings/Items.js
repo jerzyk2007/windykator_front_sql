@@ -84,11 +84,11 @@ const FKItems = () => {
                   className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
                   onClick={() => toggleTab(2)}
                 ></button>
-                <button
+                {/* <button
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
 
                   onClick={() => toggleTab(3)}
-                ></button>
+                ></button> */}
               </section>
               <section className="content-tabs">
                 <section
@@ -100,15 +100,20 @@ const FKItems = () => {
                 >
                   <section className="items__section-content">
                     <section className="items__section-content-data">
-                      <ItemComponent
+                      {/* <ItemComponent
                         data={dataItems.departments}
                         multiCompany={dataItems?.company ? dataItems.company[0].company : []}
-                        // multiCompany={['KRT', "KOD"]}
-                        // multiCompany={['KEM']}
                         info="DEPARTMENT"
                         title="Działy"
 
+                      /> */}
+                      <ItemComponent
+                        data={dataItems.areas}
+                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
+                        info="AREA"
+                        title="Obszary"
                       />
+
                     </section>
                     <section className="items__section-content-data">
                       <ItemComponent
@@ -117,13 +122,25 @@ const FKItems = () => {
                         info="LOCALIZATION"
                         title="Lokalizacje"
                       />
-                    </section>
-                    <section className="items__section-content-data">
-                      <ItemComponent
+                      {/* <ItemComponent
                         data={dataItems.areas}
                         multiCompany={dataItems?.company ? dataItems.company[0].company : []}
                         info="AREA"
                         title="Obszary"
+                      /> */}
+                    </section>
+                    <section className="items__section-content-data">
+                      {/* <ItemComponent
+                        data={dataItems.areas}
+                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
+                        info="AREA"
+                        title="Obszary"
+                      /> */}
+                      <ItemComponent
+                        data={dataItems.owners}
+                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
+                        info="OWNER"
+                        title="Ownerzy"
                       />
                     </section>
                   </section>
@@ -135,14 +152,12 @@ const FKItems = () => {
                 >
                   <section className="items__section-content">
                     <section className="items__section-content-data">
-                      <ItemComponent
+                      {/* <ItemComponent
                         data={dataItems.owners}
                         multiCompany={dataItems?.company ? dataItems.company[0].company : []}
                         info="OWNER"
                         title="Ownerzy"
-                      />
-                    </section>
-                    <section className="items__section-content-data">
+                      /> */}
                       <ItemComponent
                         data={dataItems.guardians}
                         multiCompany={dataItems?.company ? dataItems.company[0].company : []}
@@ -151,32 +166,44 @@ const FKItems = () => {
                       />
                     </section>
                     <section className="items__section-content-data">
+                      {/* <ItemComponent
+                        data={dataItems.guardians}
+                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
+                        info="GUARDIAN"
+                        title="Opiekun"
+                      /> */}
+                      <section className="items__section-content-data">
+                        <ItemAging
+                          data={dataItems.aging}
+                          info="AGING"
+                          title="Wiekowanie"
+                          setPleaseWait={setPleaseWait}
+                        />
+                      </section>
+                      {/* <section className="items__section-content-data">
                       <ItemAging
                         data={dataItems.aging}
                         info="AGING"
                         title="Wiekowanie"
                         setPleaseWait={setPleaseWait}
-                      />
-                    </section>
-                  </section>
-                </section>
-                <section
-                  className={
-                    toggleState === 3 ? "content  active-content" : "content"
-                  }
-                >
-                  <section className="items__section-content">
-                    <section className="items__section-content-data">
+                      /> */}
                       <PercentageTarget departments={departments}
                         setPleaseWait={setPleaseWait}
                       />
-                      {/* <PercentageTarget /> */}
-
                     </section>
-                    <section className="items__section-content-data"></section>
-                    <section className="items__section-content-data"></section>
                   </section>
                 </section>
+                {/* <section
+                  className={
+                    toggleState === 3 ? "content  active-content" : "content"
+                  }
+                > */}
+                {/* <section className="items__section-content"> */}
+                {/* <section className="items__section-content-data"></section>
+                    <section className="items__section-content-data"></section>
+                    <section className="items__section-content-data"></section> */}
+                {/* </section> */}
+                {/* </section> */}
               </section>
             </section>
           </section>
@@ -184,6 +211,124 @@ const FKItems = () => {
       )}
     </>
   );
+  // return (
+  //   <>
+  //     {pleaseWait ? (
+  //       <PleaseWait />
+  //     ) : (
+  //       <section className="items">
+  //         <section className="items-wrapper">
+  //           <section className="items__container">
+  //             {/* <section className="items--bloc-tabs"> */}
+  //             <section className="bloc-tabs">
+  //               <button
+  //                 className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+  //                 onClick={() => toggleTab(1)}
+  //               ></button>
+  //               <button
+  //                 className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+  //                 onClick={() => toggleTab(2)}
+  //               ></button>
+  //               <button
+  //                 className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+
+  //                 onClick={() => toggleTab(3)}
+  //               ></button>
+  //             </section>
+  //             <section className="content-tabs">
+  //               <section
+  //                 className={
+  //                   toggleState === 1
+  //                     ? "content  active-content"
+  //                     : "content"
+  //                 }
+  //               >
+  //                 <section className="items__section-content">
+  //                   <section className="items__section-content-data">
+  //                     <ItemComponent
+  //                       data={dataItems.departments}
+  //                       multiCompany={dataItems?.company ? dataItems.company[0].company : []}
+  //                       // multiCompany={['KRT', "KOD"]}
+  //                       // multiCompany={['KEM']}
+  //                       info="DEPARTMENT"
+  //                       title="Działy"
+
+  //                     />
+  //                   </section>
+  //                   <section className="items__section-content-data">
+  //                     <ItemComponent
+  //                       data={dataItems.localizations}
+  //                       multiCompany={dataItems?.company ? dataItems.company[0].company : []}
+  //                       info="LOCALIZATION"
+  //                       title="Lokalizacje"
+  //                     />
+  //                   </section>
+  //                   <section className="items__section-content-data">
+  //                     <ItemComponent
+  //                       data={dataItems.areas}
+  //                       multiCompany={dataItems?.company ? dataItems.company[0].company : []}
+  //                       info="AREA"
+  //                       title="Obszary"
+  //                     />
+  //                   </section>
+  //                 </section>
+  //               </section>
+  //               <section
+  //                 className={
+  //                   toggleState === 2 ? "content  active-content" : "content"
+  //                 }
+  //               >
+  //                 <section className="items__section-content">
+  //                   <section className="items__section-content-data">
+  //                     <ItemComponent
+  //                       data={dataItems.owners}
+  //                       multiCompany={dataItems?.company ? dataItems.company[0].company : []}
+  //                       info="OWNER"
+  //                       title="Ownerzy"
+  //                     />
+  //                   </section>
+  //                   <section className="items__section-content-data">
+  //                     <ItemComponent
+  //                       data={dataItems.guardians}
+  //                       multiCompany={dataItems?.company ? dataItems.company[0].company : []}
+  //                       info="GUARDIAN"
+  //                       title="Opiekun"
+  //                     />
+  //                   </section>
+  //                   <section className="items__section-content-data">
+  //                     <ItemAging
+  //                       data={dataItems.aging}
+  //                       info="AGING"
+  //                       title="Wiekowanie"
+  //                       setPleaseWait={setPleaseWait}
+  //                     />
+  //                   </section>
+  //                 </section>
+  //               </section>
+  //               <section
+  //                 className={
+  //                   toggleState === 3 ? "content  active-content" : "content"
+  //                 }
+  //               >
+  //                 <section className="items__section-content">
+  //                   <section className="items__section-content-data">
+  //                     <PercentageTarget departments={departments}
+  //                       setPleaseWait={setPleaseWait}
+  //                     />
+  //                     {/* <PercentageTarget /> */}
+
+  //                   </section>
+  //                   <section className="items__section-content-data"></section>
+  //                   <section className="items__section-content-data"></section>
+  //                 </section>
+  //               </section>
+  //             </section>
+  //           </section>
+  //         </section>
+  //       </section>
+  //     )}
+  //   </>
+  // );
 };
 
 export default FKItems;

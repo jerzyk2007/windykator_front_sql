@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import "./UserChangeDepartments.css";
 
 const UserChangeDepartments = ({ user, departments }) => {
+
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [userDepartments, setUserDepartments] = useState(departments);
@@ -77,7 +78,7 @@ const UserChangeDepartments = ({ user, departments }) => {
         <h3 className="user_change_departments--name">
           {!errMsg ? "Dostęp do działów" : errMsg}
         </h3>
-        <section className="user_change_departments__select">
+        {/* <section className="user_change_departments__select">
           <Button
             variant="contained"
             onClick={() => handleChangeChecked("all")}
@@ -95,18 +96,41 @@ const UserChangeDepartments = ({ user, departments }) => {
           >
             Odznacz
           </Button>
-        </section>
+        </section> */}
+      </section>
+      <section className="user_change_departments__select">
+        <Button
+          variant="contained"
+          onClick={() => handleChangeChecked("all")}
+          size="small"
+          color="secondary"
+        >
+          Zaznacz
+        </Button>
+
+        <Button
+          variant="outlined"
+          onClick={() => handleChangeChecked("none")}
+          size="small"
+          color="secondary"
+        >
+          Odznacz
+        </Button>
       </section>
       <section className="user_change_departments__container">
         {departmentsItem}
       </section>
-      <Button
-        variant="contained"
-        onClick={handleSaveUserDepartments}
-        size="small"
-      >
-        Zmień
-      </Button>
+
+      <section className="user_change_departments__select">
+        <Button
+          variant="contained"
+          onClick={handleSaveUserDepartments}
+          size="small"
+        >
+          Zmień
+        </Button>
+      </section>
+
     </section>
   );
 };

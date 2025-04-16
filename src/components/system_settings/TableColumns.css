@@ -1,6 +1,6 @@
 .table_columns {
     flex-grow: 1;
-    max-height: 87vh;
+    max-height: calc(100vh - 50px);
     margin: 0 5px;
     font-family: "Source Sans 3", Calibri, sans-serif;
     font-size: 1rem;
@@ -17,7 +17,7 @@
 
 
 .table_columns--name {
-    margin: 10px;
+    /* margin: 10px; */
     padding: 10px;
     border-radius: 5px;
 }

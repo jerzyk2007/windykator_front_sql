@@ -86,7 +86,7 @@ const FKItemAging = ({ data, info, title }) => {
   };
 
   const handleAddItem = (e, info) => {
-    const newValue = e.target.value;
+    const newValue = Number(e.target.value);
 
     if (info === "first") {
       setAddItem((prev) => {
@@ -368,15 +368,16 @@ const FKItemAging = ({ data, info, title }) => {
           TITLE: title,
           TYPE: "some",
         };
-        await axiosPrivateIntercept.post(`/items/new-item/${info}`
+        const result = await axiosPrivateIntercept.post(`/items/new-item/${info}`
           , {
             data: newItem,
           }
         );
-        const updateItems = [...dataItem, newItem];
-        const sortedItems = sorted(updateItems);
+        if (result) {
+          const sortedItems = sorted(result.data);
+          setDataItem(sortedItems);
+        }
 
-        setDataItem(sortedItems);
       }
 
       setAddItem((prev) => {

@@ -9,7 +9,7 @@ import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import ChangePassword from "./components/user/ChangePassword";
 import UserSettings from "./components/user_permissions/UserSettings";
-import TableSettings from "./components/system_settings/TableSettings";
+import TableColumns from "./components/system_settings/TableColumns";
 import RaportDepartments from "./components/raports/RaportDepartments";
 import RaportAdvisers from "./components/raports/RaportAdvisers";
 import FKAddData from "./components/FKRaport/FKAddData";
@@ -17,7 +17,7 @@ import DeptMapper from './components/system_settings/DeptMapper';
 import Items from './components/system_settings/Items';
 import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
-import TradeCredit from "./components/trade_credit/TradeCredit";
+// import TradeCredit from "./components/trade_credit/TradeCredit";
 import Instruction from "./components/instruction/Instruction";
 import ResetPassword from "./components/user/ResetPassword";
 import ConfirmResetPassword from "./components/user/ConfirmResetPassword";
@@ -119,9 +119,9 @@ function App() {
               <Route path="/raport-nora" element={<RaportsNora />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[300, 1000]} />}>
+            {/* <Route element={<RequireAuth allowedRoles={[300, 1000]} />}>
               <Route path="/trade-credit" element={<TradeCredit />} />
-            </Route>
+            </Route> */}
 
             <Route element={<RequireAuth allowedRoles={[110, 1000]} />}>
               <Route path="/contacts" element={<Contacts />} />
@@ -136,7 +136,7 @@ function App() {
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[1000]} />}>
-              <Route path="/table-settings" element={<TableSettings />} />
+              <Route path="/table-settings" element={<TableColumns />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[1]} />}>
