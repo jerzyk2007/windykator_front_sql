@@ -37,6 +37,7 @@
   padding: 10px;
   border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;
+  outline: none;
   overflow-y: auto;
 }
 

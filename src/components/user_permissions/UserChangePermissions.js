@@ -3,7 +3,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./UserChangePermissions.css";
 
-const UserChangePermissions = ({ user, permissions }) => {
+const UserChangePermissions = ({ id, permissions }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [userPermissions, setUserPermissions] = useState(permissions);
@@ -51,7 +51,7 @@ const UserChangePermissions = ({ user, permissions }) => {
   const handleChangePermission = async () => {
     try {
       await axiosPrivateIntercept.patch(
-        `/user/change-permissions/${user.id_user}`,
+        `/user/change-permissions/${id}`,
         {
           permissions: userPermissions,
         }

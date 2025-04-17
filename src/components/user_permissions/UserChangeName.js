@@ -3,7 +3,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./UserChangeName.css";
 
-const UserChangeName = ({ user }) => {
+const UserChangeName = ({ id, name, surname }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [username, setUsername] = useState("");
@@ -12,7 +12,7 @@ const UserChangeName = ({ user }) => {
 
   const handleChangeNameSurname = async () => {
     try {
-      await axiosPrivateIntercept.patch(`/user/change-name/${user.id_user}`, {
+      await axiosPrivateIntercept.patch(`/user/change-name/${id}`, {
         name: username,
         surname: usersurname,
       });
@@ -39,14 +39,14 @@ const UserChangeName = ({ user }) => {
         <input
           className="user_change_name__container--edit"
           type="text"
-          placeholder={user.username}
+          placeholder={name}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         <input
           className="user_change_name__container--edit"
           type="text"
-          placeholder={user.usersurname}
+          placeholder={surname}
           value={usersurname}
           onChange={(e) => setUsersurname(e.target.value)}
         />

@@ -3,7 +3,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./UserChangePass.css";
 
-const UserChangePass = ({ user }) => {
+const UserChangePass = ({ id }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [userPass, setUserPass] = useState("");
@@ -16,7 +16,7 @@ const UserChangePass = ({ user }) => {
   const handleChangePass = async () => {
     try {
       await axiosPrivateIntercept.patch(
-        `/user/another-user-change-pass/${user.id_user}`,
+        `/user/another-user-change-pass/${id}`,
         {
           password: userPass,
         }

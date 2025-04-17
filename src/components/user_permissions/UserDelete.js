@@ -3,7 +3,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./UserDelete.css";
 
-const UserDelete = ({ user, setEdit }) => {
+const UserDelete = ({ id, login, setEdit }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -11,8 +11,8 @@ const UserDelete = ({ user, setEdit }) => {
 
   const handleConfirmDeleteUser = async () => {
     try {
-      await axiosPrivateIntercept.delete(`/user/delete-user/${user.id_user}`, {
-        userlogin: user.userlogin,
+      await axiosPrivateIntercept.delete(`/user/delete-user/${id}`, {
+        userlogin: login,
       });
       setEdit(false);
     } catch (err) {
@@ -36,7 +36,7 @@ const UserDelete = ({ user, setEdit }) => {
         )}
       </section>
       <section className="user_delete__container">
-        <p className="user_delete__container--edit">{user.userlogin}</p>
+        <p className="user_delete__container--edit">{login}</p>
       </section>
 
       {!confirmDelete ? (

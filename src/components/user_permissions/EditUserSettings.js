@@ -9,6 +9,8 @@ import UserChangeLogin from "./UserChangeLogin";
 import UserDelete from "./UserDelete";
 import PleaseWait from "../PleaseWait";
 import { FiX } from "react-icons/fi";
+import { Button } from "@mui/material";
+
 
 import "./EditUserSettings.css";
 
@@ -18,34 +20,64 @@ const EditUserSettings = ({ user, setEdit }) => {
   const [permissions, setPermissions] = useState({});
   const [roles, setRoles] = useState({});
   const [departments, setDepartments] = useState([]);
+  const [company, setCompany] = useState([]);
   const [pleaseWait, setPleaseWait] = useState(false);
   // const [toggleState, setToggleState] = useState(1);
   // const toggleTab = (index) => {
   //   setToggleState(index);
   // };
 
+
+  //sprawdzanie działów przypisanych do użytkownika, występujących w dokumentach i opisanych company_join_items
+  const checkMergeDep = (data) => {
+    const departmentsFromCompDocs = (
+      data.find(obj => obj.departmentsFromCompDocs)?.departmentsFromCompDocs || []
+    ).map(({ DZIAL, FIRMA }) => ({
+      DEPARTMENT: DZIAL,
+      COMPANY: FIRMA
+    }));
+    const departmentsFromCJI = data.find(obj => obj.departmentsFromCJI)?.departmentsFromCJI || [];
+    const userDepartments = user?.departments.map(dep => {
+      return {
+        COMPANY: dep.company,
+        DEPARTMENT: dep.department
+      };
+    }) || [];
+
+    const getKey = ({ DEPARTMENT, COMPANY }) => `${DEPARTMENT}__${COMPANY}`;
+
+    // Tworzymy zbiór unikalnych obiektów po DEPARTMENT i COMPANY
+    const uniqueMap = new Map();
+
+    [...departmentsFromCompDocs, ...departmentsFromCJI].forEach(obj => {
+      uniqueMap.set(getKey(obj), obj);
+    });
+
+    const uniqueDepartments = [...uniqueMap.values()];
+
+    const finalArray = uniqueDepartments.map(dep => ({
+      department: dep,
+      available: departmentsFromCJI.some(
+        d => d.DEPARTMENT === dep.DEPARTMENT && d.COMPANY === dep.COMPANY
+      ),
+      user: userDepartments.some(
+        d => d.DEPARTMENT === dep.DEPARTMENT && d.COMPANY === dep.COMPANY
+      )
+    }));
+
+    // Sortujemy po nazwie działu, a jeśli są takie same – po firmie
+    finalArray.sort((a, b) =>
+      a.department.DEPARTMENT.localeCompare(b.department.DEPARTMENT) ||
+      a.department.COMPANY.localeCompare(b.department.COMPANY)
+    );
+
+    return finalArray;
+  };
+
   useEffect(() => {
     const getSettings = async () => {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/settings/get-settings");
-      console.log(user);
-      const checkDep = () => {
-        const filteredDep = result.data.find(obj => obj.departments)?.departments || [];
-        const filteredDepJI = result.data.find(obj => obj.departmentsJI)?.departmentsJI || [];
-        const userDepartments = user?.departments || []; // Sprawdzamy, czy tablica user?.departments istnieje
-        const uniqueDepartments = new Set([...filteredDep, ...filteredDepJI]);
-        const finalArray = [];
-
-        uniqueDepartments.forEach(department => {
-          finalArray.push({
-            dep: department,
-            available: filteredDepJI.includes(department),
-            user: userDepartments.includes(department)
-          });
-        });
-        finalArray.sort((a, b) => a.dep.localeCompare(b.dep));
-        return finalArray;
-      };
 
       const filteredRoles = result.data
         .map((item) => item.roles)
@@ -56,11 +88,9 @@ const EditUserSettings = ({ user, setEdit }) => {
         return acc;
       }, {});
 
-
       const filteredPermissions = result.data
         .map((item) => item.permissions)
         .filter(Boolean)[0];
-
 
       const permissions = filteredPermissions.reduce((acc, perm, index) => {
         // Ustawiamy user.permissions jako pusty obiekt, jeśli nie istnieje
@@ -68,8 +98,15 @@ const EditUserSettings = ({ user, setEdit }) => {
         acc[perm] = userPermissions[perm] ? true : false;
         return acc;
       }, {});
+
+      const company = result.data
+        .map((item) => item.company)
+        .filter(Boolean)[0];
+
+
       setPermissions(permissions);
-      setDepartments(checkDep());
+      setCompany(company);
+      setDepartments(checkMergeDep(result.data));
       setRoles(roles);
       setPleaseWait(false);
     };
@@ -87,37 +124,64 @@ const EditUserSettings = ({ user, setEdit }) => {
               className="edit_user_settings_section-content-data"
             >
               {roles && Object.keys(roles).length > 0 && (
-                <UserChangeRoles user={user} roles={roles} />
+                <UserChangeRoles
+                  id={user.id_user}
+                  roles={roles} />
               )}
               {permissions && Object.keys(permissions).length > 0 && (
                 <UserChangePermissions
-                  user={user}
+                  id={user.id_user}
                   permissions={permissions}
                 />
               )}
             </section>
 
             <section className="edit_user_settings_section-content-data">
-              <UserChangeName user={user} />
-              <UserChangePass user={user} />
-              <UserChangeLogin user={user} />
-              <UserDelete user={user} setEdit={setEdit} />
+              <UserChangeName
+                id={user.id_user}
+                name={user.username}
+                surname={user.usersurname}
+              />
+              <UserChangePass
+                id={user.id_user}
+              />
+              <UserChangeLogin
+                id={user.id_user}
+                login={user.userlogin}
+              />
+              <UserDelete
+                id={user.id_user}
+                login={user.userlogin}
+                setEdit={setEdit} />
             </section>
             <section className="edit_user_settings_section-content-data">
               {departments && Object.keys(departments).length > 0 && (
                 <UserChangeDepartments
-                  user={user}
+                  id={user.id_user}
                   departments={departments}
+                  multiCompany={company}
                 />
               )}
             </section>
           </section>
-          <FiX
+          {/* <FiX
             className="edit_user_settings-button"
             onClick={() => setEdit(false)}
-          />
+          /> */}
+
         </>
       )}
+      <section className="edit_user_settings-button">
+        <Button
+          className="mui-button"
+          variant="contained"
+          size="large"
+          color="error"
+          onClick={() => setEdit(false)}
+        >
+          Wyjście
+        </Button>
+      </section>
     </section>
   );
   // return (

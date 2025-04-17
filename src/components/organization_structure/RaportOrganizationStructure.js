@@ -4,6 +4,7 @@ import { saveAs } from "file-saver";
 
 const columnsOrder = [
     "Dział",
+    "Firma",
     "Lokalizacja",
     "Obszar",
     "Owner",
@@ -19,6 +20,10 @@ const columnsName = [
     {
         accessorKey: "department",
         header: "Dział"
+    },
+    {
+        accessorKey: "company",
+        header: "Firma"
     },
     {
         accessorKey: "area",
@@ -215,16 +220,19 @@ export const useOrganizationStructureL = () => {
 
             const structureData = result.data.structure.map(item => {
                 return {
-                    ...item,
-                    owner: Array.isArray(item.owner)
-                        ? item.owner.join("\n")
-                        : item.owner,
-                    guardian: Array.isArray(item.guardian)
-                        ? item.guardian.join("\n")
-                        : item.guardian,
-                    mail: Array.isArray(item.mail)
-                        ? item.mail.join("\n")
-                        : item.mail,
+                    area: item.AREA,
+                    company: item.COMPANY,
+                    department: item.DEPARTMENT,
+                    localization: item.LOCALIZATION,
+                    owner: Array.isArray(item.OWNER)
+                        ? item.OWNER.join("\n")
+                        : item.OWNER,
+                    guardian: Array.isArray(item.GUARDIAN)
+                        ? item.GUARDIAN.join("\n")
+                        : item.GUARDIAN,
+                    mail: Array.isArray(item.MAIL)
+                        ? item.MAIL.join("\n")
+                        : item.MAIL,
                 };
             });
 

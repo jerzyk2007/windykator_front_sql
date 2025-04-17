@@ -3,7 +3,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./UserChangeLogin.css";
 
-const UserChangeLogin = ({ user }) => {
+const UserChangeLogin = ({ id, login }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [userLogin, setUserLogin] = useState("");
@@ -14,7 +14,7 @@ const UserChangeLogin = ({ user }) => {
 
   const handleChangeLogin = async () => {
     try {
-      await axiosPrivateIntercept.patch(`/user/change-login/${user.id_user}`, {
+      await axiosPrivateIntercept.patch(`/user/change-login/${id}`, {
         newUserlogin: userLogin,
       });
       setErrMsg(`Sukces.`);
@@ -45,7 +45,7 @@ const UserChangeLogin = ({ user }) => {
         <input
           className="user_change_login__container--edit"
           type="text"
-          placeholder={user.userlogin}
+          placeholder={login}
           value={userLogin}
           onChange={(e) => setUserLogin(e.target.value.toLocaleLowerCase())}
         />

@@ -3,7 +3,7 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./UserChangeRoles.css";
 
-const UserChangeRoles = ({ user, roles }) => {
+const UserChangeRoles = ({ id, roles }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [userRoles, setUserRoles] = useState(roles);
@@ -125,7 +125,7 @@ const UserChangeRoles = ({ user, roles }) => {
       // dodaje role Start - podstwawowa rola startowa
       arrayRoles.push("Start");
 
-      await axiosPrivateIntercept.patch(`/user/change-roles/${user.id_user}`, {
+      await axiosPrivateIntercept.patch(`/user/change-roles/${id}`, {
         roles: arrayRoles,
       });
       setErrMsg("Sukces.");

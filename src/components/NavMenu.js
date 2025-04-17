@@ -161,7 +161,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </li>
                   )}
 
-                  {(auth?.roles?.includes(200) || auth?.roles?.includes(1000)) && (
+                  {(auth?.roles?.includes(200)) && (
                     <li className="nav_menu-item-dropmenu">
                       <Link className="nav_menu-link">
                         <i className="fas fa-caret-left"></i>Raporty - FK
@@ -190,7 +190,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       </Link>
                       <div className="nav_menu-dropdown__menu--side_left">
                         <ul className="nav_menu__menu--side">
-                          {(auth?.roles?.includes(110) || auth?.roles?.includes(120) || auth?.roles?.includes(1000)) && (
+                          {(auth?.roles?.includes(120) || auth?.roles?.includes(1000)) && (
                             <li className="nav_menu-item-dropmenu">
                               <Link
                                 to="/control-bl-documents-table"
@@ -200,7 +200,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                                 Dokumenty kontroli BL
                               </Link>
                             </li>)}
-                          {auth?.roles?.includes(200) && (
+                          {auth?.roles?.includes(120) && (
                             <li className="nav_menu-item-dropmenu">
                               <span
                                 className="nav_menu-link"

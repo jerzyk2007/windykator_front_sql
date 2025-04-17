@@ -63,6 +63,8 @@ const DeptMapper = () => {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/items/get-fksettings-data");
 
+      console.log(result.data);
+
       // sprawdzam czy sa jakies nieopisane działy
       const checkMissingDeps = checkMissingDepartments(result.data.uniqueDepFromCompanyJI, result.data.uniqueDepFromDocuments);
 
