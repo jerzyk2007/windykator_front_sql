@@ -32,7 +32,7 @@
 
 .missing_department__company--exist,
 .missing_department__company--noexist {
-    padding: 5px 0;
+    padding: 5px;
     flex-basis: 100%;
     overflow-y: auto;
     display: flex;
