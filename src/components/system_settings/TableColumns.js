@@ -288,7 +288,6 @@ const TableColumns = () => {
         }
     };
 
-
     // pobiera wszytskie nazwy kolumn z pierwszego dokumnetu w DB
     const handleGetData = async () => {
         try {
