@@ -175,7 +175,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                                 className="nav_menu-link"
                                 onClick={handleLinkClick}
                               >
-                                Generuj raport
+                                Generuj raport KRT
                               </Link>
                             </li>
                           )}

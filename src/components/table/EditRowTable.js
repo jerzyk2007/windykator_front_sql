@@ -188,13 +188,14 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
     }
   };
 
-  const changeMarkDoc = async (NUMER_FV, MARK_FK) => {
+  const changeMarkDoc = async (NUMER_FV, MARK_FK, FIRMA) => {
     try {
       await axiosPrivateIntercept.patch(
         `/fk/change-mark-document`,
         {
           NUMER_FV,
-          MARK_FK
+          MARK_FK,
+          FIRMA
         }
       );
 
@@ -387,7 +388,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
               {auth.roles.includes(200) && rowData.MARK_FV && <Button
                 variant="contained"
                 color={rowData.MARK_FK ? "secondary" : "error"}
-                onClick={() => changeMarkDoc(rowData.NUMER_FV, rowData.MARK_FK === 1 ? 0 : 1)}
+                onClick={() => changeMarkDoc(rowData.NUMER_FV, rowData.MARK_FK === 1 ? 0 : 1, rowData.FIRMA)}
               >
                 {rowData.MARK_FK ? "FK ON" : "FK OFF"}
               </Button>}

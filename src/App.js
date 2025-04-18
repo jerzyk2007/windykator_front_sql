@@ -104,7 +104,7 @@ function App() {
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
-              <Route path="/fk-add-data" element={<FKAddData />} />
+              <Route path="/fk-add-data" element={<FKAddData company={"KRT"} />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>

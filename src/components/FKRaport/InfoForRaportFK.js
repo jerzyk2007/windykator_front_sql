@@ -310,10 +310,10 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
                 .map(item => item.NR_DOKUMENTU); // Wyciągnij klucz NR_DOKUMENTU
 
             //wysyłam dane do serwera, żeby zrobić znaczniki przy dokumentach w wygenerowanym raporcie, aby użytkownik mógł pracowac tylko na tych dokumentach
-            await axiosPrivateIntercept.post(
-                `/fk/send-document-mark-fk`,
-                markDocuments
-            );
+            // await axiosPrivateIntercept.post(
+            //     `/fk/send-document-mark-fk`,
+            //     markDocuments
+            // );
 
             //sortowanie obiektów wg kolejności, żeby arkusze w excel były odpowiednio posortowane
             const sortOrder = ["ALL", "WYDANE - NIEZAPŁACONE", "BLACHARNIA", "CZĘŚCI", "F&I", "KSIĘGOWOŚĆ", "KSIĘGOWOŚĆ AS", "SAMOCHODY NOWE", "SAMOCHODY UŻYWANE", "SERWIS", "WDT",];
