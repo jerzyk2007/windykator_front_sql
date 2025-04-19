@@ -71,7 +71,7 @@ const AddDataFromFile = () => {
           >{errFile ? errFile : "Prześlij dane z plików Excel"}</p>
         </section>
         <section className="add_data_from_file__container--data">
-          {!errSettlements ? (
+          {/* {!errSettlements ? (
             <section className="add_data_from_file__container-documents">
               <input
                 type="file"
@@ -88,7 +88,7 @@ const AddDataFromFile = () => {
             <section className="add_data_from_file__container-documents">
               <span className="add_data_file-click-me">{errSettlements}</span>
             </section>
-          )}
+          )} */}
 
           {!errRubicon ? (
             <section className="add_data_from_file__container-documents">

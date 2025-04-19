@@ -13,7 +13,7 @@ import { getExcelRaportV2 } from "./utilsForFKTable/prepareFKExcelFile";
 
 import './InfoForRaportFK.css';
 
-const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
+const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg, setGetRaportInfo, company }) => {
     const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
     const [pleaseWait, setPleaseWait] = useState(false);
@@ -29,7 +29,7 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
     const getRaport = async () => {
         try {
             setPleaseWait(true);
-            const result = await axiosPrivateIntercept.post("/fk/get-raport-data-v2");
+            const result = await axiosPrivateIntercept.post(`/fk/get-raport-data-v2/${company}`);
 
             if (result.data.dataRaport.length === 0) {
                 setErrorGenerateMsg(false);
@@ -399,7 +399,7 @@ const InfoForRaportFK = ({ setRaportInfoActive, setErrorGenerateMsg }) => {
                             <Button
                                 color="secondary"
                                 variant="contained"
-                                onClick={() => setRaportInfoActive(false)}
+                                onClick={() => { setRaportInfoActive(false); setGetRaportInfo(true); }}
                             >Anuluj</Button>
 
                             <Button

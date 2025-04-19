@@ -2,13 +2,11 @@
   flex-grow: 1;
   user-select: none;
   font-family: "Source Sans 3", Calibri, sans-serif;
-  /* font-size: 1.15rem; */
   font-optical-sizing: auto;
   font-style: 700;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* background-color: #fd87f7; */
 }
 
 .fk_add_data__title {
