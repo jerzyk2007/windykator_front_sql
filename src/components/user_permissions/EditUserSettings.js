@@ -37,7 +37,7 @@ const EditUserSettings = ({ user, setEdit }) => {
       COMPANY: FIRMA
     }));
     const departmentsFromCJI = data.find(obj => obj.departmentsFromCJI)?.departmentsFromCJI || [];
-    const userDepartments = user?.departments.map(dep => {
+    const userDepartments = user?.departments?.map(dep => {
       return {
         COMPANY: dep.company,
         DEPARTMENT: dep.department

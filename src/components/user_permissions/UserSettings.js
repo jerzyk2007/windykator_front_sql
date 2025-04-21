@@ -34,7 +34,7 @@ const UserSetting = () => {
     setEdit(true);
   };
 
-  const userItem = users.map((userItem, index) => {
+  const userItem = users?.map((userItem, index) => {
     return (
       <section className="user_settings__result" key={index}>
         <p className="user_settings__result--name">{userItem.userlogin}</p>

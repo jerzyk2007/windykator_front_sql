@@ -32,6 +32,7 @@ const UserChangeDepartments = ({ id, departments, multiCompany }) => {
         return item;
       }
     });
+
     setStartData(updatedUserDepartments);
   };
 
@@ -52,7 +53,7 @@ const UserChangeDepartments = ({ id, departments, multiCompany }) => {
 
   const handleSaveUserDepartments = async () => {
 
-    const activeDepartments = userDepartments
+    const activeDepartments = startData
       .filter(item => item.user) // Zatrzymaj tylko obiekty, gdzie user === true
       .map(item => {
         return {
