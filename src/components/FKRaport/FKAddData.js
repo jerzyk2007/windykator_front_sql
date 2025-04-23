@@ -10,7 +10,6 @@ const FKAddData = ({ company }) => {
 
   const [pleaseWait, setPleaseWait] = useState(false);
   const [fKAccountancy, setFKAccountancy] = useState("");
-  const [deleteRaport, setDeleteRaport] = useState("");
   const [dateCounter, setDateCounter] = useState({});
   const [generateRaportMsgV2, setGenerateRaportMsgV2] = useState("");
   const [errorGenerateMsg, setErrorGenerateMsg] = useState(true);
@@ -32,7 +31,6 @@ const FKAddData = ({ company }) => {
 
   const handleSendFile = async (e, type) => {
     setPleaseWait(true);
-    setDeleteRaport("");
     const file = e.target.files[0];
     if (!file.name.endsWith(".xlsx") && !file.name.endsWith(".xls")) {
       setFKAccountancy("Akceptowany jest tylko plik z rozszerzeniem .xlsx lub .xls");
@@ -43,7 +41,6 @@ const FKAddData = ({ company }) => {
     try {
       const formData = new FormData();
       formData.append("excelFile", file);
-
       const result = await axiosPrivateIntercept.post(
         `/add-data/send-documents-accountancy/${company}`,
         formData,
@@ -66,7 +63,7 @@ const FKAddData = ({ company }) => {
   };
 
   // funkcja generująca raport z już pobranych danych z pliku excel, każde generowanie nadaje nowe wiekowanie, kwote faktur do rozliczenia oraz od nowa przypisuje Obszary, Ownerów, Lokalizacje itd
-  const generateRaportV2 = async () => {
+  const generateRaport = async () => {
     try {
       setPleaseWait(true);
       await axiosPrivateIntercept.get(
@@ -83,288 +80,22 @@ const FKAddData = ({ company }) => {
     }
   };
 
-
-  // const getRaport = async () => {
-  //   try {
-  //     setPleaseWait(true);
-  //     const result = await axiosPrivateIntercept.post("/fk/get-raport-data");
-
-  //     const accountArray = [
-  //       ...new Set(
-  //         result.data
-  //           .filter((item) => item.RODZAJ_KONTA)
-  //           .map((item) => item.OBSZAR)
-  //       ),
-  //     ].sort();
-
-  //     // usuwam wartości null, bo excel ma z tym problem
-  //     const eraseNull = result.data.map(item => {
-
-  //       return {
-  //         ...item,
-  //         ILE_DNI_NA_PLATNOSC_FV: String(item.ILE_DNI_NA_PLATNOSC_FV),
-  //         RODZAJ_KONTA: String(item.RODZAJ_KONTA),
-  //         NR_KLIENTA: String(item.NR_KLIENTA),
-  //         DO_ROZLICZENIA_AS: item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : "NULL",
-  //         ROZNICA: item.ROZNICA !== 0 ? item.ROZNICA : "NULL",
-  //         DATA_ROZLICZENIA_AS: item.DATA_ROZLICZENIA_AS ? item.DATA_ROZLICZENIA_AS : "NULL",
-  //         BRAK_DATY_WYSTAWIENIA_FV: item.BRAK_DATY_WYSTAWIENIA_FV ? item.BRAK_DATY_WYSTAWIENIA_FV : " ",
-  //         JAKA_KANCELARIA: item.JAKA_KANCELARIA ? item.JAKA_KANCELARIA : " ",
-  //         ETAP_SPRAWY: item.ETAP_SPRAWY ? item.ETAP_SPRAWY : " ",
-  //         KWOTA_WPS: item.KWOTA_WPS ? item.KWOTA_WPS : " ",
-  //         CZY_SAMOCHOD_WYDANY_AS: item.CZY_SAMOCHOD_WYDANY_AS ? item.CZY_SAMOCHOD_WYDANY_AS : " ",
-  //         DATA_WYDANIA_AUTA: item.DATA_WYDANIA_AUTA ? item.DATA_WYDANIA_AUTA : " ",
-  //         OPIEKUN_OBSZARU_CENTRALI: Array.isArray(item.OPIEKUN_OBSZARU_CENTRALI)
-  //           ? item.OPIEKUN_OBSZARU_CENTRALI.join("\n")
-  //           : item.OPIEKUN_OBSZARU_CENTRALI,
-  //         OPIS_ROZRACHUNKU: Array.isArray(item.OPIS_ROZRACHUNKU)
-  //           ? item.OPIS_ROZRACHUNKU.join("\n\n")
-  //           : "NULL",
-  //         OWNER: Array.isArray(item.OWNER) ? item.OWNER.join("\n") : item.OWNER,
-  //       };
-  //     }
-  //     );
-
-  //     // rozdziela dane na poszczególne obszary BLACHARNIA, CZĘŚCI itd
-  //     const resultArray = accountArray.reduce((acc, area) => {
-  //       // Filtrujemy obiekty, które mają odpowiedni OBSZAR
-  //       const filteredData = eraseNull.filter(item => item.OBSZAR === area);
-
-  //       // Jeśli są dane, dodajemy obiekt do wynikowej tablicy
-  //       if (filteredData.length > 0) {
-  //         // acc.push({ [area]: filteredData });
-  //         acc.push({ name: area, data: filteredData });
-  //       }
-
-  //       return acc;
-  //     }, []);
-
-
-  //     // // Dodajemy obiekt RAPORT na początku tablicy
-  //     const finalResult = [{ name: 'RAPORT', data: eraseNull }, ...resultArray];
-
-  //     // usuwam wiekowanie starsze niż <0, 1-7 z innych niż arkusza RAPORT
-  //     const updateAging = finalResult.map((element) => {
-  //       if (element.name !== "RAPORT" && element.data) {
-  //         const updatedData = element.data.filter((item) => {
-  //           return item.PRZEDZIAL_WIEKOWANIE !== "1-7" && item.PRZEDZIAL_WIEKOWANIE !== "<0";
-  //         });
-  //         return { ...element, data: updatedData }; // Zwracamy zaktualizowany element
-  //       }
-
-  //       return element; // Zwracamy element bez zmian, jeśli name === "Raport" lub data jest niezdefiniowana
-  //     });
-
-  //     //usuwam kolumny CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA z innych arkuszy niż Raport, SAMOCHODY NOWE, SAMOCHODY UŻYWANE
-  //     const updateCar = updateAging.map((element) => {
-  //       if (
-  //         element.name !== "RAPORT" &&
-  //         element.name !== "SAMOCHODY NOWE" &&
-  //         element.name !== "SAMOCHODY UŻYWANE"
-  //       ) {
-  //         const updatedData = element.data.map((item) => {
-  //           const { CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA, ...rest } = item;
-  //           return rest; // Zwróć obiekt bez tych dwóch kluczy
-  //         });
-  //         return { ...element, data: updatedData };
-  //       }
-  //       return element;
-  //     });
-
-  //     // usuwam kolumnę BRAK DATY WYSTAWIENIA FV ze wszytskich arkuszy oprócz RAPORT
-  //     const updateFvDate = updateCar.map((element) => {
-  //       if (element.name !== "RAPORT") {
-  //         const updatedData = element.data.map((item) => {
-  //           const { BRAK_DATY_WYSTAWIENIA_FV, ...rest } = item;
-  //           return rest;
-  //         });
-  //         return { ...element, data: updatedData };
-  //       }
-  //       return element;
-  //     });
-
-  //     // zmieniam zapis daty string na zapis date
-  //     const updateDate = updateFvDate.map((element) => {
-  //       const updatedData = element.data.map((item) => {
-  //         const convertToDateIfPossible = (value) => {
-  //           const date = new Date(value);
-  //           if (!isNaN(date.getTime())) {
-  //             return date;
-  //           }
-  //           return value;
-  //         };
-
-  //         return {
-  //           ...item,
-  //           DATA_WYSTAWIENIA_FV: convertToDateIfPossible(
-  //             item.DATA_WYSTAWIENIA_FV
-  //           ),
-  //           DATA_ROZLICZENIA_AS: convertToDateIfPossible(
-  //             item.DATA_ROZLICZENIA_AS
-  //           ),
-  //           TERMIN_PLATNOSCI_FV: convertToDateIfPossible(
-  //             item.TERMIN_PLATNOSCI_FV
-  //           ),
-  //           DATA_WYDANIA_AUTA: convertToDateIfPossible(item.DATA_WYDANIA_AUTA),
-  //         };
-  //       });
-  //       return { ...element, data: updatedData };
-  //     });
-
-  //     getExcelRaport(updateDate);
-  //     setPleaseWait(false);
-  //   }
-  //   catch (error) {
-  //     console.error(error);
-
-  //   }
-  // };
-
-  const handleGetRaport = () => {
+  const getRaport = () => {
     setRaportInfoActive(true);
     setGetRaportInfo(false);
   };
-
-  // const getRaportV2 = async () => {
-  //   try {
-  //     setPleaseWait(true);
-  //     const result = await axiosPrivateIntercept.post("/fk/get-raport-data-v2");
-
-
-  //     const accountArray = [
-  //       ...new Set(
-  //         result.data
-  //           .filter((item) => item.RODZAJ_KONTA)
-  //           .map((item) => item.OBSZAR)
-  //       ),
-  //     ].sort();
-
-  //     // usuwam wartości null, bo excel ma z tym problem
-  //     const eraseNull = result.data.map(item => {
-
-  //       const convertToDateIfPossible = (value) => {
-  //         // Sprawdź, czy wartość jest stringiem w formacie yyyy-mm-dd
-  //         const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-  //         if (typeof value === 'string' && datePattern.test(value)) {
-  //           const date = new Date(value);
-  //           if (!isNaN(date.getTime())) {
-  //             return date;
-  //           }
-  //         }
-  //         // Jeśli nie spełnia warunku lub nie jest datą, zwróć oryginalną wartość
-  //         return "NULL";
-  //       };
-
-
-  //       return {
-  //         ...item,
-  //         ILE_DNI_NA_PLATNOSC_FV: item.ILE_DNI_NA_PLATNOSC_FV,
-  //         RODZAJ_KONTA: item.RODZAJ_KONTA,
-  //         NR_KLIENTA: item.NR_KLIENTA,
-  //         DO_ROZLICZENIA_AS: item.DO_ROZLICZENIA_AS ? item.DO_ROZLICZENIA_AS : "NULL",
-  //         ROZNICA: item.ROZNICA !== 0 ? item.ROZNICA : "NULL",
-  //         DATA_ROZLICZENIA_AS: item.DATA_ROZLICZENIA_AS ? convertToDateIfPossible(
-  //           item.DATA_ROZLICZENIA_AS) : "NULL",
-  //         BRAK_DATY_WYSTAWIENIA_FV: item.BRAK_DATY_WYSTAWIENIA_FV ? item.BRAK_DATY_WYSTAWIENIA_FV : " ",
-  //         JAKA_KANCELARIA: item.JAKA_KANCELARIA ? item.JAKA_KANCELARIA : " ",
-  //         ETAP_SPRAWY: item.ETAP_SPRAWY ? item.ETAP_SPRAWY : " ",
-  //         KWOTA_WPS: item.KWOTA_WPS ? item.KWOTA_WPS : " ",
-  //         CZY_SAMOCHOD_WYDANY_AS: item.CZY_SAMOCHOD_WYDANY_AS ? item.CZY_SAMOCHOD_WYDANY_AS : " ",
-  //         DATA_WYDANIA_AUTA: item.DATA_WYDANIA_AUTA ? convertToDateIfPossible(item.DATA_WYDANIA_AUTA) : " ",
-  //         OPIEKUN_OBSZARU_CENTRALI: Array.isArray(item.OPIEKUN_OBSZARU_CENTRALI)
-  //           ? item.OPIEKUN_OBSZARU_CENTRALI.join("\n")
-  //           : item.OPIEKUN_OBSZARU_CENTRALI,
-  //         OPIS_ROZRACHUNKU: Array.isArray(item.OPIS_ROZRACHUNKU)
-  //           ? item.OPIS_ROZRACHUNKU.join("\n\n")
-  //           : "NULL",
-  //         OWNER: Array.isArray(item.OWNER) ? item.OWNER.join("\n") : item.OWNER,
-  //         DATA_WYSTAWIENIA_FV: convertToDateIfPossible(
-  //           item.DATA_WYSTAWIENIA_FV
-  //         ),
-  //         // DATA_ROZLICZENIA_AS: convertToDateIfPossible(
-  //         //   item.DATA_ROZLICZENIA_AS
-  //         // ),
-  //         TERMIN_PLATNOSCI_FV: convertToDateIfPossible(
-  //           item.TERMIN_PLATNOSCI_FV
-  //         ),
-  //         // DATA_WYDANIA_AUTA: convertToDateIfPossible(item.DATA_WYDANIA_AUTA),
-  //       };
-  //     }
-  //     );
-  //     // rozdziela dane na poszczególne obszary BLACHARNIA, CZĘŚCI itd
-  //     const resultArray = accountArray.reduce((acc, area) => {
-  //       // Filtrujemy obiekty, które mają odpowiedni OBSZAR
-  //       const filteredData = eraseNull.filter(item => item.OBSZAR === area);
-
-  //       // Jeśli są dane, dodajemy obiekt do wynikowej tablicy
-  //       if (filteredData.length > 0) {
-  //         // acc.push({ [area]: filteredData });
-  //         acc.push({ name: area, data: filteredData });
-  //       }
-
-  //       return acc;
-  //     }, []);
-
-
-  //     // // Dodajemy obiekt RAPORT na początku tablicy
-  //     const finalResult = [{ name: 'RAPORT', data: eraseNull }, ...resultArray];
-
-
-  //     //usuwam kolumny CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA z innych arkuszy niż Raport, SAMOCHODY NOWE, SAMOCHODY UŻYWANE
-  //     const updateCar = finalResult.map((element) => {
-  //       if (
-  //         element.name !== "RAPORT" &&
-  //         element.name !== "SAMOCHODY NOWE" &&
-  //         element.name !== "SAMOCHODY UŻYWANE"
-  //       ) {
-  //         const updatedData = element.data.map((item) => {
-  //           const { CZY_SAMOCHOD_WYDANY_AS, DATA_WYDANIA_AUTA, ...rest } = item;
-  //           return rest; // Zwróć obiekt bez tych dwóch kluczy
-  //         });
-  //         return { ...element, data: updatedData };
-  //       }
-  //       return element;
-  //     });
-
-  //     // usuwam kolumnę BRAK DATY WYSTAWIENIA FV ze wszytskich arkuszy oprócz RAPORT
-  //     const updateFvDate = updateCar.map((element) => {
-  //       if (element.name !== "RAPORT") {
-  //         const updatedData = element.data.map((item) => {
-  //           const { BRAK_DATY_WYSTAWIENIA_FV, ...rest } = item;
-  //           return rest;
-  //         });
-  //         return { ...element, data: updatedData };
-  //       }
-  //       return element;
-  //     });
-
-  //     getExcelRaportV2(updateFvDate);
-  //     setPleaseWait(false);
-  //   }
-  //   catch (error) {
-  //     console.error(error);
-
-  //   }
-  // };
 
   const deleteDataRaport = async () => {
     try {
       setPleaseWait(true);
 
-      // jeśli istnieje data wgrania pliku wiekowanie, to można rozpocząć generowanie hitorii wpisów przed usunięciem danych
-      if (dateCounter?.accountancy?.date) {
-        // await axiosPrivateIntercept.get("/fk/generate-history-documents");
-      }
-
       const result = await axiosPrivateIntercept.get(`/fk/delete-data-raport/${company}`);
       if (result.data.result === "delete") {
         setDateCounter({});
-        setDeleteRaport("Dane usunięte.");
         setFKAccountancy("");
         setPleaseWait(false);
-      } else {
-        setDeleteRaport("Wystąpił błąd podczas usuwania danych");
       }
+
       setPleaseWait(false);
 
     } catch (err) {
@@ -379,11 +110,7 @@ const FKAddData = ({ company }) => {
       try {
         setPleaseWait(true);
         const result = await axiosPrivateIntercept.get(`/fk/get-date-counter/${company}`);
-        // if (result.data?.updateData?.accountancy?.date && result.data?.updateData?.accountancy?.counter) {
-        //   setDateCounter(result.data.updateData);
-        // }
         setDateCounter(result.data.updateData);
-
         setPleaseWait(false);
       } catch (err) {
         console.error(err);
@@ -503,7 +230,7 @@ const FKAddData = ({ company }) => {
                                 variant="contained"
                                 color="primary"
                                 disableElevation
-                                onClick={generateRaportV2}
+                                onClick={generateRaport}
                               >
                                 Generuj Raport FK
                               </Button>
@@ -526,7 +253,7 @@ const FKAddData = ({ company }) => {
                                   variant="contained"
                                   color="success"
                                   disableElevation
-                                  onClick={handleGetRaport}
+                                  onClick={getRaport}
                                 >
                                   Pobierz Raport FK
                                 </Button>

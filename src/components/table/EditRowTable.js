@@ -87,7 +87,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
   // };
 
   const handleSaveData = async (type) => {
-    const { id_document, NUMER_FV } = rowData;
+    const { id_document, NUMER_FV, FIRMA } = rowData;
     try {
       await axiosPrivateIntercept.patch(
         `/documents/change-single-document`,
@@ -118,11 +118,13 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
       }
 
       if (managementDescription.INFORMACJA_ZARZAD.length || managementDescription.HISTORIA_ZMIANY_DATY_ROZLICZENIA.length) {
+        console.log(FIRMA);
         await axiosPrivateIntercept.post(
           `/fk/add-decision-date-fk`,
           {
             NUMER_FV,
-            data: managementDescription
+            data: managementDescription,
+            FIRMA
           }
         );
       }
@@ -172,15 +174,12 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
     await handleSaveData('no_exit');
 
     if (type === "prev") {
-      // getSingleRow(nextPrevDoc.prev, "full");
       const response = await axiosPrivateIntercept.get(
         `/documents/get-single-document/${nextPrevDoc.prev}`
       );
       setRowData(response.data);
     }
     if (type === "next") {
-      // getSingleRow(nextPrevDoc.next, "full");
-
       const response = await axiosPrivateIntercept.get(
         `/documents/get-single-document/${nextPrevDoc.next}`
       );
@@ -198,14 +197,12 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
           FIRMA
         }
       );
-
       setRowData(prev => {
         return {
           ...prev,
           MARK_FK: prev.MARK_FK === 1 ? 0 : 1
         };
       });
-
     }
     catch (error) {
       console.error(error);

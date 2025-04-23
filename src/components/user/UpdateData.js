@@ -5,10 +5,10 @@ const UpdateData = ({ data }) => {
     const updateItems = data.map((item, index) => {
         return (
             <section key={index} className='update-data__container'>
-                <span className='update-data--info'>{item.DATA_NAME}</span>
-                <span className='update-data--info'>{item.DATE}</span>
-                <span className='update-data--info'>{item.HOUR}</span>
-                <span className='update-data--info'>{item.UPDATE_SUCCESS}</span>
+                <span className='update-data--name'>{item.DATA_NAME}</span>
+                <span className='update-data--date'>{item.DATE}</span>
+                <span className='update-data--hour'>{item.HOUR}</span>
+                <span className='update-data--update'>{item.UPDATE_SUCCESS}</span>
 
             </section>
         );
@@ -17,10 +17,10 @@ const UpdateData = ({ data }) => {
     return (
         <section className='update-data'>
             <section className='update-data__container'>
-                <span className='update-data--info'>Nazwa:</span>
-                <span className='update-data--info'>Data:</span>
-                <span className='update-data--info'>Godzina:</span>
-                <span className='update-data--info'>Status:</span>
+                <span className='update-data--name'>Nazwa:</span>
+                <span className='update-data--date'>Data:</span>
+                <span className='update-data--hour'>Godzina:</span>
+                <span className='update-data--update'>Status:</span>
             </section>
             {updateItems}
 

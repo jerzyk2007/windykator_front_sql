@@ -56,12 +56,28 @@ const PrepareTable = ({ info, raportDocuments }) => {
           );
 
           // wyciągnięcie ostatniego elementu tabeli INFORMACJA_ZARZAD
-          const filteredData = dataTable.data.map(item => {
-            const parsedArray = item.INFORMACJA_ZARZAD !== 'BRAK' ? JSON.parse(item.INFORMACJA_ZARZAD) : item.INFORMACJA_ZARZAD;
+          const filteredData = dataTable?.data?.map(item => {
+            if (!item.INFORMACJA_ZARZAD) {
+              return item; // Zostawiamy oryginalny obiekt bez zmian
+            }
+            // const parsedArray = item.INFORMACJA_ZARZAD !== 'BRAK' ? JSON.parse(item.INFORMACJA_ZARZAD) : item.INFORMACJA_ZARZAD;
+
+
+            const newInfo = item.INFORMACJA_ZARZAD && item.INFORMACJA_ZARZAD !== 'BRAK'
+              ? Array.isArray(JSON.parse(item.INFORMACJA_ZARZAD))  // Parsujemy tylko jeśli nie jest 'BRAK'
+                ? JSON.parse(item.INFORMACJA_ZARZAD).length > 0
+                  // ? JSON.parse(item.INFORMACJA_ZARZAD)[JSON.parse(item.INFORMACJA_ZARZAD).length - 1].slice(0, 50)  // Ostatni element, pierwsze 50 znaków
+                  ? JSON.parse(item.INFORMACJA_ZARZAD)[JSON.parse(item.INFORMACJA_ZARZAD).length - 1] // Ostatni element, pierwsze 50 znaków
+                  : "BRAK"
+                : "BRAK"
+              : "BRAK";
+
 
             return {
               ...item,
-              INFORMACJA_ZARZAD: item.INFORMACJA_ZARZAD !== 'BRAK' ? filteredArrayManagement(parsedArray) : item.INFORMACJA_ZARZAD
+              INFORMACJA_ZARZAD: newInfo
+              // INFORMACJA_ZARZAD: item.INFORMACJA_ZARZAD !== 'BRAK' ? filteredArrayManagement(item.INFORMACJA_ZARZAD) : item.INFORMACJA_ZARZAD
+              // INFORMACJA_ZARZAD: item.INFORMACJA_ZARZAD !== 'BRAK' ? filteredArrayManagement(parsedArray) : item.INFORMACJA_ZARZAD
             };
           });
           setDocuments(filteredData);

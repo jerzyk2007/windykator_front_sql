@@ -1,6 +1,7 @@
 .update-data {
     flex-grow: 1;
-    max-width: 60%;
+    max-width: 80%;
+    min-width: 800px;
     font-family: "Source Sans 3", Calibri, sans-serif;
     font-size: 1.15rem;
     display: flex;
@@ -9,7 +10,6 @@
 
 .update-data__container {
     flex-grow: 1;
-    min-width: 600px;
     margin: 2px 0;
     border: 1px solid rgba(191, 196, 199, 0.6);
     background-color: rgba(202, 219, 230, 0.1);
@@ -20,18 +20,28 @@
 
 .update-data__container:first-child {
     background-color: rgba(193, 230, 255, 0.3);
+    font-weight: bold;
 }
 
-.update-data--info {
-    flex-basis: 15%;
-    padding: 5px;
-    margin: 0 10px;
-    white-space: nowrap;
-}
-
-.update-data--info:first-child,
-.update-data--info:last-child {
-    min-width: 150px;
+.update-data--name,
+.update-data--update {
     flex-basis: 35%;
+    padding: 0 10px;
+}
 
+.update-data--update {
+    flex-basis: 30%;
+}
+
+.update-data--date,
+.update-data--hour {
+    flex-basis: 20%;
+}
+
+.update-data__container:hover {
+    background-color: rgba(193, 230, 255, 0.5);
+}
+
+.update-data__container:first-child:hover {
+    background-color: rgba(193, 230, 255, 0.3);
 }
