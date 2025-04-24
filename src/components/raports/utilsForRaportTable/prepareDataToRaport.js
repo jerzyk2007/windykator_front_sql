@@ -18,14 +18,25 @@
 const muiTableBodyCellProps = {
   align: "center",
   sx: {
+    fontFamily: "Calibri, sans-serif",
     backgroundColor: "#fff",
     borderRight: "1px solid #000",
-    borderBottom: "1px solid #000",
+    borderTop: "1px solid #000",
     fontSize: "14px",
     fontWeight: "bold",
     padding: "2px",
     minHeight: "3rem",
   },
+  // sx: {
+  //   fontFamily: "Calibri, sans-serif",
+  //   fontSize: "15px",
+  //   borderRight: "1px solid #000",
+  //   border: "1px solid #000",
+  //   fontWeight: "500",
+  //   minHeight: "65px",
+  //   textWrap: "balance",
+  //   whiteSpace: "pre-wrap",
+  // },
 };
 
 const addedAllToRaportsDep = (generatingRaport) => {

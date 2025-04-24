@@ -1,5 +1,6 @@
 .header_notification {
     flex-basis: 50%;
+    min-width: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
