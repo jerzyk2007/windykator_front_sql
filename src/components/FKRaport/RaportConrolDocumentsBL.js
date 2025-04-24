@@ -469,10 +469,15 @@ export const useControlRaportBL = () => {
                 return acc;
             }, []);
 
-            const sortedData = resultArray.sort((a, b) => a.name.localeCompare(b.name));
-            const addObject = [{ name: "Blacharnie", data: filteredData }, ...sortedData];
-
-            generateExcel(addObject);
+            const addObject = [{ name: "Blacharnie", data: filteredData }, ...resultArray];
+            // const sortedData = addObject.sort((a, b) => a.name.localeCompare(b.name));
+            const sortedData = addObject
+                .map(item => ({
+                    ...item,
+                    data: item.data.sort((a, b) => a.ILE_DNI_PO_TERMINIE - b.ILE_DNI_PO_TERMINIE)
+                }))
+                .sort((a, b) => a.name.localeCompare(b.name));
+            generateExcel(sortedData);
         } catch (error) {
             console.error(error);
         }
