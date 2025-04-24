@@ -181,68 +181,70 @@ const RaportAdvisers = () => {
             flexWrap: "wrap",
           }}
         >
-          <section className="raport_advisers-date">
-            <section className="raport_advisers-date__title">
-              <h3>Wybierz przedział dat dla raportu</h3>
-            </section>
-            <section className="raport_advisers-date__content">
-              <h3 className="raport_advisers-date__content-name">od: </h3>
-              <input
-                className="raport_advisers-date-select"
-                style={errRaportDate ? { backgroundColor: "red" } : null}
-                name="minDate"
-                type="date"
-                min={minMaxDateGlobal.minGlobalDate}
-                max={minMaxDateGlobal.maxGlobalDate}
-                value={raportDate.minRaportDate}
-                onChange={(e) =>
-                  setRaportDate((prev) => {
-                    return {
-                      ...prev,
-                      minRaportDate: e.target.value
-                        ? e.target.value
-                        : minMaxDateGlobal.minGlobalDate,
-                    };
-                  })
-                }
-              />
-              <h3 className="raport_advisers-date__content-name">do: </h3>
+          <section className="raport_departments__box-panel">
+            <section className="raport_departments-date">
+              <section className="raport_departments-date__title">
+                <h3>Wybierz przedział dat dla raportu</h3>
+              </section>
+              <section className="raport_departments-date__content">
+                <h3 className="raport_departments-date__content-name">od: </h3>
+                <input
+                  className="raport_departments-date-select"
+                  style={errRaportDate ? { backgroundColor: "red" } : null}
+                  name="minDate"
+                  type="date"
+                  min={minMaxDateGlobal.minGlobalDate}
+                  max={minMaxDateGlobal.maxGlobalDate}
+                  value={raportDate.minRaportDate}
+                  onChange={(e) =>
+                    setRaportDate((prev) => {
+                      return {
+                        ...prev,
+                        minRaportDate: e.target.value
+                          ? e.target.value
+                          : minMaxDateGlobal.minGlobalDate,
+                      };
+                    })
+                  }
+                />
+                <h3 className="raport_departments-date__content-name">do: </h3>
 
-              <input
-                className="raport_advisers-date-select"
-                style={errRaportDate ? { backgroundColor: "red" } : null}
-                name="maxDate"
-                type="date"
-                min={minMaxDateGlobal.minGlobalDate}
-                max={minMaxDateGlobal.maxGlobalDate}
-                value={raportDate?.maxRaportDate}
-                onChange={(e) =>
-                  setRaportDate((prev) => {
-                    return {
-                      ...prev,
-                      maxRaportDate: e.target.value
-                        ? e.target.value
-                        : minMaxDateGlobal.maxGlobalDate,
-                    };
-                  })
-                }
-              />
+                <input
+                  className="raport_departments-date-select"
+                  style={errRaportDate ? { backgroundColor: "red" } : null}
+                  name="maxDate"
+                  type="date"
+                  min={minMaxDateGlobal.minGlobalDate}
+                  max={minMaxDateGlobal.maxGlobalDate}
+                  value={raportDate?.maxRaportDate}
+                  onChange={(e) =>
+                    setRaportDate((prev) => {
+                      return {
+                        ...prev,
+                        maxRaportDate: e.target.value
+                          ? e.target.value
+                          : minMaxDateGlobal.maxGlobalDate,
+                      };
+                    })
+                  }
+                />
+              </section>
             </section>
-          </section>
-          <section className="raport_advisers-panel">
-            <i
-              className="fa-regular fa-file-excel raport_advisers-export-excel"
-              onClick={() =>
-                handleExportExcel(
-                  table.getPrePaginationRowModel().rows,
-                  "Doradca"
-                )
-              }
-            ></i>
-            <i
-              className="fas fa-save raport_departments-save-settings"
-              onClick={handleSaveSettings}
-            ></i>
+            <section className="raport_departments-panel">
+              <i
+                className="fa-regular fa-file-excel raport_departments-export-excel"
+                onClick={() =>
+                  handleExportExcel(
+                    table.getPrePaginationRowModel().rows,
+                    "Doradca"
+                  )
+                }
+              ></i>
+              <i
+                className="fas fa-save raport_departments-save-settings"
+                onClick={handleSaveSettings}
+              ></i>
+            </section>
           </section>
         </Box>
       );

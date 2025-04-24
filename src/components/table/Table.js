@@ -218,14 +218,17 @@ const Table = ({
       sx: {
         fontWeight: "600",
         fontFamily: "'Source Sans 3', Calibri, sans-serif",
-        fontSize: "15px",
+        // fontSize: "15px",
+        fontSize: ".95rem",
         color: "black",
-        backgroundColor: "#a7d3f7",
+        // backgroundColor: "#a7d3f7",
+        backgroundColor: "rgba(169, 211, 255, 0.6)",
         borderRight: "1px solid #c9c7c7",
         minHeight: "3rem",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+
         "& .Mui-TableHeadCell-Content": {
           display: "flex",
           alignItems: "center",
@@ -233,8 +236,17 @@ const Table = ({
           textAlign: "center",
           textWrap: "balance",
         },
+        "& .Mui-TableHeadCell-Content-Labels": {
+          padding: 0,
+        },
         "& .Mui-TableHeadCell-Content-Actions": {
           display: "none",
+        },
+        "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
+          borderWidth: "1px",
+          background: "none",
+          marginRight: "-9px",
+          borderColor: "rgba(75, 75, 75, .1)"
         },
       },
     }),

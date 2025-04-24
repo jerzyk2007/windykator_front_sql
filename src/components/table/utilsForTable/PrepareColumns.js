@@ -2,17 +2,14 @@ import { format } from "date-fns";
 
 export const muiTableBodyCellProps = {
   align: "center",
+
   sx: {
-    // fontFamily: "'Source Sans 3', Calibri, sans-serif",
-    fontFamily: " Calibri, sans-serif",
+    fontFamily: "Calibri, sans-serif",
     fontSize: "15px",
-    borderRight: "1px solid #000",
-    borderBottom: "1px solid #000",
-    padding: "5px",
+    borderRight: "1px solid rgba(99, 99, 99, .8)",
+    borderTop: "1px solid rgba(99, 99, 99, .8)",
     fontWeight: "500",
-    // minHeight: "2rem",
     minHeight: "65px",
-    // maxHeight: "8rem",
     textWrap: "balance",
     whiteSpace: "pre-wrap",
   },
