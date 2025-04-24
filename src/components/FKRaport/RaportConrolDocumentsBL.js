@@ -106,7 +106,6 @@ const columnsName = [
 
 
 const generateExcel = async (cleanData) => {
-    console.log(cleanData);
     // od którego wiersza mają się zaczynać dane w arkuszu
     const startRow = 2;
     try {
@@ -415,6 +414,14 @@ export const useControlRaportBL = () => {
             const result = await axiosPrivateIntercept.get("/fk/get-data-raports-control-BL");
 
             const filteredData = result.data.map(item => {
+                const uwagi = Array.isArray(item.CONTROL_UWAGI) ? (
+                    item.CONTROL_UWAGI.length === 1 ? (
+                        item.CONTROL_UWAGI[0]
+                    ) : (
+                        `Ilość poprzednich wpisów - ${item.CONTROL_UWAGI.length - 1}\n\n${item.CONTROL_UWAGI[item.CONTROL_UWAGI.length - 1]}`
+                    )
+                ) : " ";
+
                 return {
                     BRUTTO: item.BRUTTO ? item.BRUTTO : 0,
                     CONTROL_DOW_REJ: item.CONTROL_DOW_REJ ? item.CONTROL_DOW_REJ : " ",
@@ -425,9 +432,10 @@ export const useControlRaportBL = () => {
                     CONTROL_POLISA: item.CONTROL_POLISA ? item.CONTROL_POLISA : " ",
                     CONTROL_PR_JAZ: item.CONTROL_PR_JAZ ? item.CONTROL_PR_JAZ : " ",
                     CONTROL_UPOW: item.CONTROL_UPOW ? item.CONTROL_UPOW : " ",
-                    CONTROL_UWAGI: Array.isArray(item.CONTROL_UWAGI)
-                        ? item.CONTROL_UWAGI.join("\n\n")
-                        : " ",
+                    // CONTROL_UWAGI: Array.isArray(item.CONTROL_UWAGI)
+                    //     ? item.CONTROL_UWAGI.join("\n\n")
+                    //     : " ",
+                    CONTROL_UWAGI: uwagi,
                     DZIAL: item.DZIAL ? item.DZIAL : " ",
                     ILE_DNI_NA_PLATNOSC: item.ILE_DNI_NA_PLATNOSC ? item.ILE_DNI_NA_PLATNOSC : " ",
                     ILE_DNI_PO_TERMINIE: item.ILE_DNI_PO_TERMINIE ? item.ILE_DNI_PO_TERMINIE : " ",
@@ -461,7 +469,8 @@ export const useControlRaportBL = () => {
                 return acc;
             }, []);
 
-            const addObject = [{ name: "Blacharnie", data: filteredData }, ...resultArray];
+            const sortedData = resultArray.sort((a, b) => a.name.localeCompare(b.name));
+            const addObject = [{ name: "Blacharnie", data: filteredData }, ...sortedData];
 
             generateExcel(addObject);
         } catch (error) {
