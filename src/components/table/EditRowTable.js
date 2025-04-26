@@ -389,7 +389,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
               >
                 {rowData.MARK_FK ? "FK ON" : "FK OFF"}
               </Button>}
-              {auth.roles.includes(120) && <Button
+              {auth.roles.includes(120) && dataRowTable.AREA === "BLACHARNIA" && <Button
                 variant="contained"
                 // color="secondary"
                 onClick={() => setToggleState(prev => prev === 1 ? 2 : 1)}
