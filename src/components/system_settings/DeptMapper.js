@@ -91,10 +91,6 @@ const DeptMapper = () => {
               t.DEPARTMENT === item.DEPARTMENT && t.COMPANY === item.COMPANY
           )
       );
-      // createMergeDepMulti();
-
-      // createMergeDepMulti(uniqueDeps, result.data.preparedItems);
-      // console.log(uniqueDeps);
       setLoadedData(prev => {
         return {
           ...prev,
@@ -184,9 +180,6 @@ const DeptMapper = () => {
         uniqueDepFromCompanyJI: updateDep // ← tu podstawiasz swoją nową wartość
       }));
 
-      // const updateLoadaedData = loadedData.map(item => {
-      //   console.log(item);
-      // });
 
       await axiosPrivateIntercept.patch("/items/save-prepared-items", {
         DEPARTMENT: itemData.department,

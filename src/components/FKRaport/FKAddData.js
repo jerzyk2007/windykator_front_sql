@@ -117,6 +117,7 @@ const FKAddData = ({ company }) => {
       }
     };
     getDateAndCounter();
+    // }, []);
   }, [axiosPrivateIntercept, setPleaseWait]);
 
 

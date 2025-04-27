@@ -171,11 +171,22 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                           {auth?.roles?.includes(200) && (
                             <li className="nav_menu-item-dropmenu">
                               <Link
-                                to="/fk-add-data"
+                                to="/generate-raport-fk-KRT"
                                 className="nav_menu-link"
                                 onClick={handleLinkClick}
                               >
                                 Generuj raport KRT
+                              </Link>
+                            </li>
+                          )}
+                          {auth?.roles?.includes(200) && (
+                            <li className="nav_menu-item-dropmenu">
+                              <Link
+                                to="/generate-raport-fk-KEM"
+                                className="nav_menu-link"
+                                onClick={handleLinkClick}
+                              >
+                                Generuj raport KEM
                               </Link>
                             </li>
                           )}

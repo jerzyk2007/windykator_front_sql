@@ -56,10 +56,6 @@ const MissingDepartments = ({ departments }) => {
 
     }, [departments]);
 
-    // useEffect(() => {
-    //     console.log(company);
-    // }, [company]);
-
     return (
         <section className="missing_department">
             <section className="missing_department__wrapper">

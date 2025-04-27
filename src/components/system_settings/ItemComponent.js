@@ -291,8 +291,6 @@ const FKItemComponent = ({ data, info, title, multiCompany }) => {
     const mailVerify = MAIL_REGEX.test(newValue);
     setCheckMail(mailVerify);
 
-    // console.log('addMail duplicate: ', duplicate);
-    // console.log('addMail mail duplicate: ', checkDuplicate);
 
 
   };

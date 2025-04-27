@@ -260,7 +260,6 @@ export const useOrganizationStructureL = () => {
 
             const addObject = [{ name: "struktura", data: structureData }, { name: "konta", data: sortedAccountsData }];
 
-            // console.log(addObject);
             generateExcel(addObject);
         } catch (error) {
             console.error(error);

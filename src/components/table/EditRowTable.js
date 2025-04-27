@@ -118,7 +118,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
       }
 
       if (managementDescription.INFORMACJA_ZARZAD.length || managementDescription.HISTORIA_ZMIANY_DATY_ROZLICZENIA.length) {
-        console.log(FIRMA);
         await axiosPrivateIntercept.post(
           `/fk/add-decision-date-fk`,
           {

@@ -103,9 +103,23 @@ function App() {
               <Route path="/raport-advisers" element={<RaportAdvisers />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
-              <Route path="/fk-add-data" element={<FKAddData company={"KRT"} />} />
+            {/* <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
+              <Route path="/generate-raport-fk-KRT" element={<FKAddData company={"KRT"} />} />
             </Route>
+
+            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
+              <Route path="/generate-raport-fk-KEM" element={<FKAddData company={"KEM"} />} />
+            </Route> */}
+
+            {/* dodanie key powoduje, że kompnent się odświeża */}
+            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
+              <Route path="/generate-raport-fk-KRT" element={<FKAddData key="KRT" company="KRT" />} />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
+              <Route path="/generate-raport-fk-KEM" element={<FKAddData key="KEM" company="KEM" />} />
+            </Route>
+
 
             <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/dept-mapper" element={<DeptMapper />} />
