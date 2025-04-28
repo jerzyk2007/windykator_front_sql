@@ -196,9 +196,8 @@ const DeptMapper = () => {
 
   const handleDeleteItem = async (dep, comp) => {
     await axiosPrivateIntercept.delete(`/items/delete-prepared-item/${encodeURIComponent(dep)}/${encodeURIComponent(comp)}`);
-    const filteredPreparedItems = loadedData?.preparedItems?.filter(item => item.DEPARTMENT !== dep && item.COMPANY !== comp);
-    const filteredUniqueDepFromCompanyJI = loadedData?.uniqueDepFromCompanyJI?.filter(item => item.DEPARTMENT !== dep && item.COMPANY !== comp);
-
+    const filteredPreparedItems = loadedData?.preparedItems?.filter(item => !(item.DEPARTMENT === dep && item.COMPANY === comp));
+    const filteredUniqueDepFromCompanyJI = loadedData?.uniqueDepFromCompanyJI?.filter(item => !(item.DEPARTMENT === dep && item.COMPANY === comp));
     setLoadedData(prev => ({
       ...prev,
       preparedItems: filteredPreparedItems,
