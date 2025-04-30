@@ -414,7 +414,8 @@ export const useControlRaportBL = () => {
             const result = await axiosPrivateIntercept.get("/fk/get-data-raports-control-BL");
 
             const filteredData = result.data.map(item => {
-                const uwagi = Array.isArray(item.CONTROL_UWAGI) ? (
+
+                const uwagi = Array.isArray(item.CONTROL_UWAGI) && item?.CONTROL_UWAGI?.length ? (
                     item.CONTROL_UWAGI.length === 1 ? (
                         item.CONTROL_UWAGI[0]
                     ) : (
@@ -432,9 +433,6 @@ export const useControlRaportBL = () => {
                     CONTROL_POLISA: item.CONTROL_POLISA ? item.CONTROL_POLISA : " ",
                     CONTROL_PR_JAZ: item.CONTROL_PR_JAZ ? item.CONTROL_PR_JAZ : " ",
                     CONTROL_UPOW: item.CONTROL_UPOW ? item.CONTROL_UPOW : " ",
-                    // CONTROL_UWAGI: Array.isArray(item.CONTROL_UWAGI)
-                    //     ? item.CONTROL_UWAGI.join("\n\n")
-                    //     : " ",
                     CONTROL_UWAGI: uwagi,
                     DZIAL: item.DZIAL ? item.DZIAL : " ",
                     ILE_DNI_NA_PLATNOSC: item.ILE_DNI_NA_PLATNOSC ? item.ILE_DNI_NA_PLATNOSC : " ",
@@ -477,7 +475,9 @@ export const useControlRaportBL = () => {
                     data: item.data.sort((a, b) => a.ILE_DNI_PO_TERMINIE - b.ILE_DNI_PO_TERMINIE)
                 }))
                 .sort((a, b) => a.name.localeCompare(b.name));
+
             generateExcel(sortedData);
+
         } catch (error) {
             console.error(error);
         }
