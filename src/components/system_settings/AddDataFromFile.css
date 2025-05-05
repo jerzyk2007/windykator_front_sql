@@ -1,8 +1,6 @@
 .add_data_from_file {
   flex-grow: 1;
   display: flex;
-  /* justify-content: center; */
-  /* align-items: center; */
 }
 
 .add_data_from_file__container {
@@ -69,5 +67,4 @@
 
 .add_data_file-click-me:hover {
   background-color: rgba(22, 171, 81, 0.3);
-  /* color: #fff; */
 }

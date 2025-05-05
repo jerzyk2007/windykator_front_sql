@@ -29,7 +29,6 @@
 
 .user_delete__container--edit {
   display: block;
-  /* width: 80%; */
   font-size: 1rem;
   margin: 5px auto;
   padding: 5px;
@@ -59,10 +58,4 @@
 
 .user_delete__confirm--confirm {
   flex-basis: 40%;
-}
-
-@media screen and (max-width: 960px) {
-  .user_delete__container--edit {
-    width: 100%;
-  }
 }

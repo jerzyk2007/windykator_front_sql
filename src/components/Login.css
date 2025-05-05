@@ -59,34 +59,14 @@
 }
 
 
-/* .login-error-message {
-    color: rgb(0, 0, 0);
-    text-align: center;
-    font-weight: 600;
-    letter-spacing: 1px;
-    background-color: rgba(255, 154, 196, 0.5);
-    border-radius: 10px;
-    border: none;
-    padding: 10px 20px;
-} */
-
 .login Button {
     margin: 10px auto;
 }
 
 .login__container-text {
     background-color: #fff !important;
-    /* Wymuś biały kolor tła */
     color: #a01313 !important;
-    /* Wymuś czarny kolor tekstu */
 }
-
-/* .login__container-text:-webkit-autofill {
-    font-size: 1.2rem;
-    background-color: #fff !important;
-    color: #000 !important;
-    transition: background-color 5000s ease-in-out 0s;
-} */
 
 .login__container-text:-webkit-autofill {
     appearance: none;

@@ -41,9 +41,3 @@
   width: 30%;
   margin: 5px auto;
 }
-
-@media screen and (max-width: 960px) {
-  .user_change_name__container--edit {
-    width: 100%;
-  }
-}

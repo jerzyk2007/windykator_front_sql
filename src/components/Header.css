@@ -1,5 +1,4 @@
 .header {
-  /* background-color: #a7d3f7; */
   background-color: #bfe2ff;
   display: flex;
   position: relative;
@@ -10,21 +9,3 @@
   display: none;
   height: 50px;
 }
-
-/* @media screen and (max-width: 960px) {
-  .header {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    justify-content: end;
-  }
-
-  .header-menu {
-    margin: 0 20px;
-    font-size: 1.9rem;
-    color: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-} */

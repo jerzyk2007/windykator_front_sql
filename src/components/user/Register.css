@@ -75,20 +75,6 @@
     transition: background-color 5000s ease-in-out 0s;
 }
 
-
-/* .register-error-message {
-    color: red;
-    text-align: center;
-    font-weight: 600;
-    font-size: 1.3rem;
-    letter-spacing: 1px;
-    background-color: #fffd7d;
-    border-radius: 5px;
-    border: none;
-    padding: 10px 20px;
-} */
-
-
 .register__container-instructions {
     font-size: 0.9rem;
     letter-spacing: 1px;
@@ -98,7 +84,6 @@
     padding: 0.25rem;
     position: relative;
 }
-
 
 .register-close-button {
     position: absolute;
@@ -113,7 +98,6 @@
 }
 
 .register Button {
-    /* width: 50%; */
     margin: 10px auto;
 }
 

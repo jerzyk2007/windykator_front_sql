@@ -1,7 +1,6 @@
 .nav_menu {
   height: 100%;
   flex-basis: 50%;
-  /* font-family: "Source Sans 3", Calibri, sans-serif; */
   font-family: Arial, sans-serif;
   font-size: 1rem;
   font-optical-sizing: auto;
@@ -18,8 +17,6 @@
   list-style: none;
   display: flex;
   justify-content: flex-end;
-  /* justify-content: space-evenly; */
-  /* justify-content: space-between; */
 }
 
 .nav_menu__menu--side {
@@ -152,91 +149,3 @@
 .nav_menu-link {
   display: block;
 }
-
-/* @media screen and (max-width: 960px) {
-  .nav_menu {
-    flex-basis: 5%;
-  }
-
-  .nav_menu__menu.active {
-    left: 0;
-    background-color: rgba(0, 0, 0);
-  }
-
-  .nav_menu__menu {
-    position: absolute;
-    top: 100%;
-    left: -100%;
-    width: 100%;
-    height: calc(100vh - 50px);
-    flex-direction: column;
-    justify-content: flex-start;
-    transition: all 0.2s ease;
-  }
-
-  .nav_menu__menu-item {
-    margin: 0 10px;
-    width: 50%;
-    flex-grow: 1;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-
-  .nav_menu__menu-item .nav_menu-link {
-    color: rgb(255, 255, 255);
-    flex-grow: 1;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .nav_menu-item-dropmenu .nav_menu-link {
-    font-size: 1rem;
-    color: rgb(0, 0, 0);
-  }
-
-  .nav_menu__menu-item:hover .nav_menu-dropdown__menu {
-    top: 50%;
-    left: 100%;
-    width: 90%;
-    transform: translateX(0%);
-    transform: translateY(-50%);
-  }
-
-  .nav_menu__menu-item:first-child .nav_menu-dropdown__menu {
-    top: 0;
-    transform: translateY(0%);
-  }
-
-  .nav_menu__menu-item:last-child .nav_menu-dropdown__menu {
-    top: auto;
-    bottom: 0%;
-    transform: translateY(0%);
-  }
-
-  .nav_menu__menu-item:hover .nav_menu-item-dropmenu {
-    width: 100%;
-    padding: 10px;
-  }
-
-  .nav_menu__menu-item:hover .nav_menu-item-dropmenu--side {
-    padding: 10px;
-    width: 100%;
-  }
-
-  .nav_menu-dropdown__menu .fas {
-    position: absolute;
-    left: 0;
-    padding-top: 3px;
-    transform: rotate(180deg);
-  }
-
-  .nav_menu-item-dropmenu:hover .nav_menu-dropdown__menu--side {
-    left: -95%;
-    width: 100%;
-  }
-} */

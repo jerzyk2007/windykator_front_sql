@@ -1,5 +1,4 @@
 .dept_mapper {
-  /* flex-grow: 1; */
   user-select: none;
   background-color: rgba(195, 255, 235, .2);
   font-family: "Source Sans 3", Calibri, sans-serif;
@@ -13,8 +12,6 @@
 
 .dept_mapper__title {
   width: 100%;
-  /* display: block; */
-  /* width: 100%; */
   font-size: 1.35rem;
   font-weight: 500;
   padding: 10px;
@@ -42,7 +39,6 @@
 }
 
 .dept_mapper__container-item {
-  /* flex-grow: 1; */
   min-width: 1200px;
   padding: 5px 5px;
   margin: 1px 0;
@@ -57,7 +53,6 @@
 }
 
 .dept_mapper__container-dep {
-  /* width: 100%; */
   padding: 5px;
   border: 1px solid rgba(191, 196, 199, 0.6);
   border-radius: 5px;
@@ -123,12 +118,10 @@
   color: blueviolet;
 }
 
-
 .dept_mapper--fa-save,
 .dept_mapper--fa-trash,
 .dept_mapper--fa-check,
 .dept_mapper--fa-cancel {
-  /* margin-top: 10px; */
   font-size: 1.4rem;
   cursor: pointer;
 }
@@ -142,8 +135,6 @@
 .dept_mapper--fa-save:active {
   color: red;
 }
-
-
 
 .dept_mapper-counter {
   flex-basis: 3%;
@@ -165,13 +156,11 @@
 .dept_mapper-department {
   border: 1px solid rgba(191, 196, 199, 0.6);
   border-radius: 5px;
-  /* height: 50%; */
 }
 
 .dept_mapper-dep {
   border-radius: 5px;
   font-weight: 500;
-  /* padding: 10px; */
 }
 
 .dept_mapper-localization,

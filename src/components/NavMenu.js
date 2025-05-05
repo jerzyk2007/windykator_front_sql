@@ -156,6 +156,17 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                               </Link>
                             </li>
                           )}
+                          {auth?.roles?.includes(1000) && (
+                            <li className="nav_menu-item-dropmenu">
+                              <Link
+                                to="/raport-areas"
+                                className="nav_menu-link"
+                                onClick={handleLinkClick}
+                              >
+                                Raport wg obszarów
+                              </Link>
+                            </li>
+                          )}
                         </ul>
                       </div>
                     </li>
@@ -266,7 +277,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
             </li>
           )}
 
-        {auth?.roles?.includes(5000) && (
+        {/* {auth?.roles?.includes(5000) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Kontakty</Link>
             <div
@@ -294,7 +305,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
               </ul>
             </div>
           </li>
-        )}
+        )} */}
 
         {(auth?.roles?.includes(1000) ||
           auth?.roles?.includes(200)) && (

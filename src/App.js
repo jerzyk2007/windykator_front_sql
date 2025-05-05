@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
-import Contacts from "./components/contacts/Contacts";
 import Home from "./components/Home";
 import AddDataFromFile from "./components/system_settings/AddDataFromFile";
 import Login from "./components/Login";
@@ -21,6 +20,7 @@ import RaportsNora from "./components/Nora/RaportsNora";
 import Instruction from "./components/instruction/Instruction";
 import ResetPassword from "./components/user/ResetPassword";
 import ConfirmResetPassword from "./components/user/ConfirmResetPassword";
+import RaportAreas from "./components/raports/RaportAreas";
 import "./App.css";
 
 function App() {
@@ -102,6 +102,11 @@ function App() {
             >
               <Route path="/raport-advisers" element={<RaportAdvisers />} />
             </Route>
+            <Route
+              element={<RequireAuth allowedRoles={[1000]} />}
+            >
+              <Route path="/raport-areas" element={<RaportAreas />} />
+            </Route>
 
             {/* <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/generate-raport-fk-KRT" element={<FKAddData company={"KRT"} />} />
@@ -131,14 +136,6 @@ function App() {
 
             <Route element={<RequireAuth allowedRoles={[300, 1000]} />}>
               <Route path="/raport-nora" element={<RaportsNora />} />
-            </Route>
-
-            {/* <Route element={<RequireAuth allowedRoles={[300, 1000]} />}>
-              <Route path="/trade-credit" element={<TradeCredit />} />
-            </Route> */}
-
-            <Route element={<RequireAuth allowedRoles={[110, 1000]} />}>
-              <Route path="/contacts" element={<Contacts />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>

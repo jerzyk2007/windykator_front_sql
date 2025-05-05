@@ -1,8 +1,4 @@
 .percentage-department {
-  /* width: 100%;
-  padding: 5px 10px;*/
-  /* height: 50%; */
-  /* margin: 5px 20px; */
   flex-grow: 1;
   max-height: 89vh;
   min-width: 450px;
@@ -43,7 +39,6 @@
 
 .percentage-department__container {
   padding: 5px;
-  /* font-size: 1rem; */
   overflow-y: auto;
   display: flex;
   flex-wrap: wrap;

@@ -84,14 +84,3 @@
 .user-table-columns Button {
   width: 30%;
 }
-
-@media screen and (max-width: 960px) {
-  .user-table-columns {
-    padding: 5px;
-  }
-
-  .user-table-columns__container {
-    padding: 10px 5px;
-    font-size: 0.9rem;
-  }
-}

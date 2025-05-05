@@ -10,7 +10,6 @@
 
 .edit-doc-chat--title {
   font-size: 1.05rem;
-  /* border: 1px solid rgba(191, 196, 199, 0.6); */
   border: 1px solid rgba(0, 92, 145, 0.6);
   border-radius: 5px;
   padding: 3px;
@@ -23,7 +22,6 @@
   height: 250px;
   max-height: 250px;
   resize: none;
-  /* font-size: 1.2rem; */
   padding: 5px;
   font-family: "Source Sans 3", Calibri, sans-serif;
   font-size: 1.05rem;
