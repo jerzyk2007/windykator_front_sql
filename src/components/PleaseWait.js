@@ -1,14 +1,39 @@
-import { LuLoader } from "react-icons/lu";
 import './PleaseWait.css';
 
 const PleaseWait = () => {
     return (
         <section className="please-wait">
+            <h1 className="please-wait__title">Proszę czekać ...</h1>
             <section className="please-wait__container">
-                <p className='please-wait__container-text'>Proszę czekać ...</p>
-                <LuLoader className='please-wait__container-icon' />
+                <div className="boxes">
+                    <div className="box">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div className="box">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div className="box">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div className="box">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
             </section>
         </section>
+
     );
 };
 

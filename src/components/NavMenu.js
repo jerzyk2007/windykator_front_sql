@@ -260,52 +260,12 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         </span>
                       </li>
                     </ul>}
-                  {/* {(
-                    auth?.roles?.includes(1000)) && (
-                      <li className="nav_menu-item-dropmenu">
-                        <Link
-                          to="/trade-credit"
-                          className="nav_menu-link"
-                          onClick={handleLinkClick}
-                        >
-                          Kredyt Kupiecki
-                        </Link>
-                      </li>
-                    )} */}
+
                 </ul>
               </div>
             </li>
           )}
 
-        {/* {auth?.roles?.includes(5000) && (
-          <li className="nav_menu__menu-item">
-            <Link className="nav_menu-link">Kontakty</Link>
-            <div
-              className={
-                menuActive
-                  ? "nav_menu-dropdown__menu"
-                  : "nav_menu-dropdown__menu-disabled"
-              }
-            >
-              <ul className="nav_menu__menu-dropmenu">
-                <li className="nav_menu-item-dropmenu">
-                  <Link
-                    to="/contacts"
-                    className="nav_menu-link"
-                    onClick={handleLinkClick}
-                  >
-                    Wyszukaj
-                  </Link>
-                </li>
-                <li className="nav_menu-item-dropmenu">
-                  <Link className="nav_menu-link" onClick={handleLinkClick}>
-                    Dodaj
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </li>
-        )} */}
 
         {(auth?.roles?.includes(1000) ||
           auth?.roles?.includes(200)) && (

@@ -219,11 +219,9 @@ const Table = ({
       sx: {
         fontWeight: "600",
         fontFamily: "'Source Sans 3', Calibri, sans-serif",
-        // fontSize: "15px",
         fontSize: ".95rem",
         color: "black",
-        // backgroundColor: "#a7d3f7",
-        backgroundColor: "rgba(169, 211, 255, 0.6)",
+        backgroundColor: "#bfe2ff",
         borderRight: "1px solid #c9c7c7",
         minHeight: "3rem",
         display: "flex",
