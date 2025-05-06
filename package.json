@@ -8,6 +8,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@mui/icons-material": "^6.1.0",
+    "@mui/joy": "^5.0.0-beta.52",
     "@mui/material": "^6.1.0",
     "@mui/x-date-pickers": "^7.17.0",
     "@testing-library/jest-dom": "^5.17.0",
@@ -26,8 +27,7 @@
     "react-router-dom": "^6.21.1",
     "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4",
-    "xlsx": "^0.18.5",
-    "xlsx-js-style": "^1.2.0"
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",
