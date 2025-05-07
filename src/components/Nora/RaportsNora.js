@@ -4,7 +4,7 @@ import { isExcelFile } from "../utilsForExcel/isExcelFile";
 import * as XLSX from "xlsx";
 import { getExcelRaport } from "./utilsForExcel/prepareExcelFile";
 
-import "./RaportsNora.css";
+// import "./RaportsNora.css";
 
 const RaportsNora = () => {
   const [errCodeRaport, setErrCodeRaport] = useState("");
@@ -388,14 +388,14 @@ const RaportsNora = () => {
   return pleaseWait ? (
     <PleaseWait />
   ) : (
-    <section className="raports_nora">
-      <section className="raports_nora__container">
-        <section className="raports_nora__container--title">
+    <section className="add_data_from_file">
+      <section className="add_data_from_file__container">
+        <section className="add_data_from_file__container--title">
           <p>Raporty Nora</p>
         </section>
-        <section className="raports_nora__container--data">
+        <section className="add_data_from_file__container--data">
           {!errCodeRaport ? (
-            <section className="raports_nora__container-documents">
+            <section className="add_data_from_file__container-documents">
               <input
                 type="file"
                 name="uploadfile"
@@ -408,7 +408,7 @@ const RaportsNora = () => {
               </label>
             </section>
           ) : (
-            <section className="raports_nora__container-documents">
+            <section className="add_data_from_file__container-documents">
               <span className="add_data_file-click-me">{errCodeRaport}</span>
             </section>
           )}

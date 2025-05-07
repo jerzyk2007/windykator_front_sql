@@ -354,7 +354,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
               </div>
             </li>
           )}
-        <li className="nav_menu__menu-item">
+        {auth?.roles?.includes(100) && <li className="nav_menu__menu-item">
           <Link className="nav_menu-link">Użytkownik</Link>
           {menuActive && (
             <div className="nav_menu-dropdown__menu">
@@ -390,16 +390,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </Link>
                   </li>
                 )}
-                {/* {auth?.roles?.includes(1000) && (
-                  <li className="nav_menu-item-dropmenu">
-                    <span
-                      className="nav_menu-link"
-                      onClick={resetMail}>
-                      Reset
-                    </span>
-                  </li>
-                )} */}
-
 
                 <li className="nav_menu-item-dropmenu">
                   <Link
@@ -418,7 +408,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
               </ul>
             </div>
           )}
-        </li>
+        </li>}
       </ul>
     </nav>
   );

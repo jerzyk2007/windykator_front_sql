@@ -45,6 +45,7 @@ const UserDelete = ({ id, login, setEdit }) => {
           variant="contained"
           onClick={() => setConfirmDelete(true)}
           size="small"
+          color="error"
         >
           Usuń użytkownika
         </Button>

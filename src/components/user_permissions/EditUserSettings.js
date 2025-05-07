@@ -176,7 +176,7 @@ const EditUserSettings = ({ user, setEdit }) => {
           className="mui-button"
           variant="contained"
           size="large"
-          color="error"
+          color="secondary"
           onClick={() => setEdit(false)}
         >
           Wyjście

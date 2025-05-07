@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
-import "./UserChangePermissions.css";
+// import "./UserChangePermissions.css";
 
 const UserChangePermissions = ({ id, permissions }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
@@ -11,12 +11,12 @@ const UserChangePermissions = ({ id, permissions }) => {
 
   const permissionsItem = Object.entries(userPermissions).map(
     ([permission, isChecked], index) => (
-      <section key={index} className=".user_change_permissions__container">
+      <section key={index} className=".user-change-roles__container">
         <label
-          className="user_change_permissions__container--info"
+          className="user-change-roles__container--info"
           id={`permission${index}`}
         >
-          <span className="user_change_permissions__container--text">
+          <span className="user-change-roles__container--text">
             {permission === "Basic" && (
               <span className="edit_system_change--roles__container--information">
                 Basic - widzi tylko swoje faktury
@@ -29,7 +29,7 @@ const UserChangePermissions = ({ id, permissions }) => {
             )}
           </span>
           <input
-            className="user_change_permissions__container--check"
+            className="user-change-roles--check"
             name={`permission${index}`}
             type="checkbox"
             checked={isChecked}
@@ -68,9 +68,9 @@ const UserChangePermissions = ({ id, permissions }) => {
   }, [userPermissions]);
 
   return (
-    <section className="user_change_permissions">
-      <section className="user_change_permissions__title">
-        <h3 className="user_change_permissions__title--name">
+    <section className="user-change-roles">
+      <section className="user-change-roles__title">
+        <h3 className="user-change-roles__title--name">
           {!errMsg ? "Zmień dostęp użytkownika" : errMsg}
         </h3>
       </section>

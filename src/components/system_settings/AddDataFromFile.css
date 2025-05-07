@@ -1,14 +1,12 @@
 .add_data_from_file {
   flex-grow: 1;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.2rem;
   display: flex;
 }
 
 .add_data_from_file__container {
   flex-grow: 1;
-  flex-basis: 50%;
-  padding: 10px;
-  margin: 10px;
-  border: 1px solid black;
   user-select: none;
   display: flex;
   flex-direction: column;
@@ -18,40 +16,31 @@
 .add_data_from_file__container--title {
   padding: 10px;
   font-weight: bold;
-}
-
-.add_data_from_file__container--title p {
   font-size: 1.5rem;
 }
 
 .add_data_from_file__container--data {
-  width: 100%;
-  flex-grow: 1;
+  width: 30%;
+  flex-basis: 40%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.add_data_from_file__container-documents,
-.add_data_from_file__container-contacts,
-.add_data_from_file__container-settlements,
-.add_data_from_file__container-corrections {
-  flex-basis: 20%;
+.add_data_from_file__container-documents {
   margin: 10px;
-  width: 70%;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 2px 2px 2px 2px rgb(106, 132, 134);
+  width: 100%;
+  height: 100%;
+  max-height: 100px;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
   font-size: 1.2rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.add_data_from_file__container-documents:active,
-.add_data_from_file__container-contacts:active,
-.add_data_from_file__container-settlements:active,
-.add_data_from_file__container-corrections:active {
+.add_data_from_file__container-documents:active {
   background-color: rgb(22, 171, 81);
   color: #fff;
 }
@@ -66,5 +55,5 @@
 }
 
 .add_data_file-click-me:hover {
-  background-color: rgba(22, 171, 81, 0.3);
+  background-color: rgba(14, 142, 201, 0.3);
 }

@@ -70,11 +70,8 @@ const UserChangeRoles = ({ id, roles }) => {
             className="user-change-roles--check"
             name={`role${index}`}
             type="checkbox"
-            // checked={isChecked || role === 'User'}
             checked={isChecked}
             onChange={() => {
-              // Jeśli rola to 'User', nie zmieniaj wartości
-              // if (role === 'User') return;
               setUserRoles((prevRoles) => {
                 const updatedRoles = { ...prevRoles, [role]: !isChecked };
 
@@ -90,18 +87,6 @@ const UserChangeRoles = ({ id, roles }) => {
                   updatedRoles["FK"] = true;
                   updatedRoles["Nora"] = true;
                 }
-
-                // Jeśli odznaczono 'Editor', ustaw także 'Admin' na 'false'
-                // if (role === "Editor" && isChecked) {
-                //   updatedRoles["Admin"] = false;
-                // }
-
-                //odznacz inne role jesli jest zaznaczany FK
-                // if (role === "FK" && !isChecked) {
-                //   updatedRoles["User"] = false;
-                //   updatedRoles["Editor"] = false;
-                //   updatedRoles["Admin"] = false;
-                // }
 
                 return updatedRoles;
               });
@@ -135,22 +120,6 @@ const UserChangeRoles = ({ id, roles }) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (!auth?.roles?.includes(1000)) {
-  //     const acceptedRoles = ["User", "Editor"];
-
-  //     const filteredRoles = Object.keys(roles).reduce((acc, role) => {
-  //       if (acceptedRoles.includes(role)) {
-  //         acc[role] = roles[role];
-  //       }
-  //       return acc;
-  //     }, {});
-
-  //     setUserRoles(filteredRoles);
-  //   }
-  //   setErrMsg("");
-  // }, [roles]);
-
   return (
     <section className="user-change-roles">
       <section className="user-change-roles__title">
@@ -159,7 +128,6 @@ const UserChangeRoles = ({ id, roles }) => {
         </h3>
       </section>
       {rolesItem}
-      {/* <button className='user-change-roles--button' onClick={handleChangeRoles} >Zmień</button> */}
       <Button variant="contained" onClick={handleChangeRoles} size="small">
         Zmień
       </Button>

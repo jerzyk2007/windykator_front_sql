@@ -7,7 +7,6 @@ const AddDataFromFile = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [errBecared, setErrBecared] = useState("");
-  const [errSettlements, setSettlements] = useState("");
   const [errRubicon, setErrRubicon] = useState("");
   const [errFile, setErrFile] = useState("");
   const [pleaseWait, setPleaseWait] = useState(false);
@@ -38,9 +37,6 @@ const AddDataFromFile = () => {
       if (type === "becared") {
         setErrBecared("Dokumenty zaktualizowane.");
       }
-      else if (type === "settlements") {
-        setSettlements("Dokumenty zaktualizowane.");
-      }
       else if (type === "rubicon") {
         setErrRubicon("Dokumenty zaktualizowane.");
       }
@@ -49,8 +45,6 @@ const AddDataFromFile = () => {
     } catch (error) {
       if (type === "becared") {
         setErrBecared("Błąd aktualizacji dokumentów.");
-      } else if (type === "settlements") {
-        setSettlements("Błąd aktualizacji dokumentów.");
       }
       else if (type === "rubicon") {
         setErrRubicon("Błąd aktualizacji dokumentów.");
@@ -71,24 +65,6 @@ const AddDataFromFile = () => {
           >{errFile ? errFile : "Prześlij dane z plików Excel"}</p>
         </section>
         <section className="add_data_from_file__container--data">
-          {/* {!errSettlements ? (
-            <section className="add_data_from_file__container-documents">
-              <input
-                type="file"
-                name="uploadfile"
-                id="settlements"
-                style={{ display: "none" }}
-                onChange={(e) => handleSendFileBL(e, "settlements")}
-              />
-              <label htmlFor="settlements" className="add_data_file-click-me">
-                Prześlij rozrachunki
-              </label>
-            </section>
-          ) : (
-            <section className="add_data_from_file__container-documents">
-              <span className="add_data_file-click-me">{errSettlements}</span>
-            </section>
-          )} */}
 
           {!errRubicon ? (
             <section className="add_data_from_file__container-documents">

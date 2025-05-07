@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { LiaEditSolid } from "react-icons/lia";
 import PleaseWait from "../PleaseWait";
@@ -8,7 +8,7 @@ import "./UserSettings.css";
 
 const UserSetting = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  // const searchRef = useRef();
+  const searchRef = useRef();
 
   const [search, setSearch] = useState("");
   const [pleaseWait, setPleaseWait] = useState(false);
@@ -51,6 +51,10 @@ const UserSetting = () => {
     setSearch("");
   }, [edit]);
 
+  useEffect(() => {
+    searchRef.current?.focus();
+  }, []);
+
   return (
     <section className="user_settings">
       {!edit ? (
@@ -63,7 +67,7 @@ const UserSetting = () => {
               <input
                 className="user_settings__search-text"
                 type="text"
-                // ref={searchRef}
+                ref={searchRef}
                 placeholder="Wyszukaj użytkownika - min 5 znaków"
                 value={search}
                 onChange={(e) => setSearch(e.target.value.toLocaleLowerCase())}

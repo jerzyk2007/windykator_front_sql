@@ -16,7 +16,7 @@ import {
 // import { getAllDataRaport } from "./pliki_do_usuniecia/utilsForTable/excelFilteredTable";
 import { getAllDataRaport } from "../table/utilsForTable/excelFilteredTable";
 
-import "./RaportAdvisers.css";
+// import "./RaportAdvisers.css";
 
 const RaportAdvisers = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
@@ -496,11 +496,11 @@ const RaportAdvisers = () => {
   }, [raportDate]);
 
   return (
-    <section className="raport_advisers">
+    <section className="raport_departments">
       {pleaseWait ? (
         <PleaseWait />
       ) : (
-        <MaterialReactTable className="raport_advisers-table" table={table} />
+        <MaterialReactTable className="raport_departments-table" table={table} />
       )}
     </section>
   );

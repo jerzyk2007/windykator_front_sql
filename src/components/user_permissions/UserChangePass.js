@@ -1,7 +1,6 @@
 import { useState } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
-import "./UserChangePass.css";
 
 const UserChangePass = ({ id }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
@@ -38,15 +37,15 @@ const UserChangePass = ({ id }) => {
   };
 
   return (
-    <section className="user_change_pass">
-      <section className="user_change_pass__title">
-        <h3 className="user_change_pass__title--name">
+    <section className="user_change_name">
+      <section className="user_change_name__title">
+        <h3 className="user_change_name__title--name">
           {!errMsg ? "Zmień hasło użytkownika" : errMsg}
         </h3>
       </section>
-      <section className="user_change_pass__container">
+      <section className="user_change_name__container">
         <input
-          className="user_change_pass__container--edit"
+          className="user_change_name__container--edit"
           type="text"
           placeholder="podaj nowe hasło"
           value={userPass}
