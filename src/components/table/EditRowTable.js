@@ -170,7 +170,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
   };
 
   const checkNextDoc = async (type) => {
-    await handleSaveData('no_exit');
 
     if (type === "prev") {
       const response = await axiosPrivateIntercept.get(
@@ -184,6 +183,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
       );
       setRowData(response.data);
     }
+    await handleSaveData('no_exit');
+
   };
 
   const changeMarkDoc = async (NUMER_FV, MARK_FK, FIRMA) => {

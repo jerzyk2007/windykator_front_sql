@@ -8,6 +8,7 @@ const AddDataFromFile = () => {
 
   const [errBecared, setErrBecared] = useState("");
   const [errRubicon, setErrRubicon] = useState("");
+  const [errRandomFile, setErrRandomFile] = useState("");
   const [errFile, setErrFile] = useState("");
   const [pleaseWait, setPleaseWait] = useState(false);
 
@@ -40,8 +41,10 @@ const AddDataFromFile = () => {
       else if (type === "rubicon") {
         setErrRubicon("Dokumenty zaktualizowane.");
       }
+      else if (type === "random") {
+        setErrRandomFile("Dokumenty zaktualizowane.");
+      }
 
-      setPleaseWait(false);
     } catch (error) {
       if (type === "becared") {
         setErrBecared("Błąd aktualizacji dokumentów.");
@@ -49,7 +52,11 @@ const AddDataFromFile = () => {
       else if (type === "rubicon") {
         setErrRubicon("Błąd aktualizacji dokumentów.");
       }
+      else if (type === "random") {
+        setErrRandomFile("Błąd aktualizacji dokumentów.");
+      }
       console.error("Błąd przesyłania pliku:", error);
+    } finally {
       setPleaseWait(false);
     }
   };
@@ -71,12 +78,12 @@ const AddDataFromFile = () => {
               <input
                 type="file"
                 name="uploadfile"
-                id="settlements_description"
+                id="rubicon"
                 style={{ display: "none" }}
                 onChange={(e) => handleSendFileBL(e, "rubicon")}
               />
               <label
-                htmlFor="settlements_description"
+                htmlFor="rubicon"
                 className="add_data_file-click-me"
               >
                 Prześlij plik Rubicon
@@ -89,16 +96,17 @@ const AddDataFromFile = () => {
               </span>
             </section>
           )}
+
           {!errBecared ? (
             <section className="add_data_from_file__container-documents">
               <input
                 type="file"
                 name="uploadfile"
-                id="sharepoint"
+                id="becared"
                 style={{ display: "none" }}
                 onChange={(e) => handleSendFileBL(e, "becared")}
               />
-              <label htmlFor="sharepoint" className="add_data_file-click-me">
+              <label htmlFor="becared" className="add_data_file-click-me">
                 Prześlij plik Becared
               </label>
             </section>
@@ -107,6 +115,25 @@ const AddDataFromFile = () => {
               <span className="add_data_file-click-me">{errBecared}</span>
             </section>
           )}
+
+          {/* {!errRandomFile ? (
+            <section className="add_data_from_file__container-documents">
+              <input
+                type="file"
+                name="uploadfile"
+                id="random"
+                style={{ display: "none" }}
+                onChange={(e) => handleSendFileBL(e, "random")}
+              />
+              <label htmlFor="random" className="add_data_file-click-me">
+                Przesyłanie pliku jednorazowego
+              </label>
+            </section>
+          ) : (
+            <section className="add_data_from_file__container-documents">
+              <span className="add_data_file-click-me">{errRandomFile}</span>
+            </section>
+          )} */}
         </section>
       </section>
 
