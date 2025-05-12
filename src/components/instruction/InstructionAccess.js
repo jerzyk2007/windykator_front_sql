@@ -50,7 +50,7 @@ const InstructionAccess = () => {
                 <span className='instruction_component-content--text'>Trwałe usunięcie uzytkownika z systemu,</span>
                 <br />
                 <span className='instruction_component-content--text' style={{ fontWeight: 700, textAlign: "center" }}>Dostęp do działów.</span>
-                <span className='instruction_component-content--text'>Możliwość dodania dostępu do działów dla użytkownika.</span>
+                <span className='instruction_component-content--text'>Możliwość dodania dostępu do działów dla użytkownika. Z uwględnieniem wyfiltrowania działów dla KRT i KEM.</span>
 
             </section>
         </section>

@@ -1,19 +1,18 @@
 import { FcInfo } from "react-icons/fc";
 import './InstructionCustom.css';
 
-const ReportFK = () => {
+const ReportFK = ({ company }) => {
     return (
         <section className='instruction_custom'>
             <section className='instruction_custom-title'>
-                <label>Przygotowanie Raportu FK</label>
+                <label>Przygotowanie Raportu FK - {company}</label>
             </section>
             <section className='instruction_custom-content'>
-                <span className='instruction_custom-content--text'>Pozycja służy do wygenerowania Raportu FK. Po dodaniu odpowiednio przygotowanego pliku excel z danymi od Księgowości, należy go wczytać do programu.
-                    Obecnie Dział KOntroli i Nadzoru korzysta tylko z wersji nr 2.
-                    Wersja ta tworzy raport z historią decyzji podjętych przez biznes.
+                <span className='instruction_custom-content--text'>Pozycja służy do wygenerowania Raportu FK dla firmy {company}. Po dodaniu odpowiednio przygotowanego pliku excel z danymi od Księgowości, należy go wczytać do programu.
+                    Tworzony jest raport z historią decyzji podjętych przez biznes.
                 </span>
                 <div className='instruction_custom-image'>
-                    <img src="/instruction_image/report_fk_edit.png" alt="Logo" className="w-32 h-auto" />
+                    <img src={company === "KRT" ? "/instruction_image/report_fk_edit_KRT.png" : "/instruction_image/report_fk_edit_KEM.png"} alt="Logo" className="w-32 h-auto" />
                 </div>
                 <section className='instruction_component__wrapper'>
                     <FcInfo />
@@ -56,7 +55,7 @@ const ReportFK = () => {
                 <span className='instruction_custom-content--text'>Pobierasz raport do pliku excel.
                 </span>
             </section>
-        </section>
+        </section >
     );
 };
 

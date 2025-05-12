@@ -55,8 +55,12 @@ const menuStructure = [
             {
                 id: 10,
                 category: "Raporty FK",
+                // items: [
+                //     { id: 11, name: "Generuj Raport" },
+                // ],
                 items: [
-                    { id: 11, name: "Generuj Raport" },
+                    { id: 11, name: "Generuj Raport KRT" },
+                    { id: 12, name: "Generuj Raport KEM" },
                 ],
             },
             {
@@ -184,7 +188,9 @@ const Instruction = () => {
             case 9:
                 return <ReportAdviser setSelectedMenuItem={setSelectedMenuItem} />;
             case 11:
-                return <ReportFK />;
+                return <ReportFK company='KRT' />;
+            case 12:
+                return <ReportFK company='KEM' />;
             case 13:
                 return <DocumentControl setSelectedMenuItem={setSelectedMenuItem} />;
             case 14:
