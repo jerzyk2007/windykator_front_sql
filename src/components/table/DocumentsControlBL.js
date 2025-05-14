@@ -6,6 +6,27 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
             <section className="edit_doc documentControlBLs_control__container">
                 <section className="edit_doc__container">
                     <span className="edit_doc--title">
+                        Dowód rejestracyjny:
+                    </span>
+                    <select
+                        className="edit_doc--select"
+                        value={documentControlBL.dowodRejestr}
+                        onChange={(e) => {
+                            setDocumentControlBL(prev => {
+                                return {
+                                    ...prev,
+                                    dowodRejestr: e.target.value === "NULL" ? false : e.target.options[e.target.selectedIndex].text,
+                                };
+                            });
+                        }}
+                    >
+                        <option value="NULL"></option>
+                        <option value="BRAK">BRAK</option>
+                        <option value="JEST">JEST</option>
+                    </select>
+                </section>
+                <section className="edit_doc__container">
+                    <span className="edit_doc--title">
                         Upoważnienie:
                     </span>
                     <select
@@ -53,14 +74,6 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                     <select
                         className="edit_doc--select"
                         value={documentControlBL.prawoJazdy}
-                        // onChange={(e) => {
-                        //     setDocumentControlBL(prev => {
-                        //         return {
-                        //             ...prev,
-                        //             prawoJazdy: e.target.options[e.target.selectedIndex].text
-                        //         };
-                        //     });
-                        // }}
                         onChange={(e) => {
                             setDocumentControlBL((prev) => ({
                                 ...prev,
@@ -73,27 +86,7 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                         <option value="JEST">JEST</option>
                     </select>
                 </section>
-                <section className="edit_doc__container">
-                    <span className="edit_doc--title">
-                        Dowód rejestracyjny:
-                    </span>
-                    <select
-                        className="edit_doc--select"
-                        value={documentControlBL.dowodRejestr}
-                        onChange={(e) => {
-                            setDocumentControlBL(prev => {
-                                return {
-                                    ...prev,
-                                    dowodRejestr: e.target.value === "NULL" ? false : e.target.options[e.target.selectedIndex].text,
-                                };
-                            });
-                        }}
-                    >
-                        <option value="NULL"></option>
-                        <option value="BRAK">BRAK</option>
-                        <option value="JEST">JEST</option>
-                    </select>
-                </section>
+
                 <section className="edit_doc__container">
                     <span className="edit_doc--title">
                         Polisa AC:
