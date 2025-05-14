@@ -12,11 +12,10 @@ import DocumentsControlBL from './DocumentsControlBL';
 import DocumentsControlChat from './DocumentsControlChat';
 import { changeSingleDoc } from './utilsForTable/changeSingleDocument';
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
-import PleaseWait from "../PleaseWait";
+
 import "./EditRowTable.css";
 
-const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, nextDoc }) => {
-
+const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, nextDoc, getSingleRow }) => {
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
@@ -24,7 +23,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
   const [changePanel, setChangePanel] = useState('doc-actions');
   const [toggleState, setToggleState] = useState(1);
   const [note, setNote] = useState("");
-  const [pleaseWait, setPleaseWait] = useState(false);
 
   //zmienna do tworzenia histori decyzji dla zarządu wykorzystywane później w raporcie
   const [managementDescription, setManagementDescription] = useState({
@@ -55,6 +53,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
     note: '',
     chat: []
   });
+
 
   //dodawane są notatki z czatu i logi przy zmianie np błąd doradcy, pobrany VAT
   const handleAddNote = (info, text) => {
@@ -88,10 +87,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
   //   setToggleState(index);
   // };
 
-  const handleSaveData = async (type) => {
+  const handleSaveData = async (type = 'exit') => {
     const { id_document, NUMER_FV, FIRMA } = rowData;
-    setPleaseWait(true);
+
     try {
+
       await axiosPrivateIntercept.patch(
         `/documents/change-single-document`,
         {
@@ -107,6 +107,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
           {
             NUMER_FV,
             chat: controlChat.chat,
+            FIRMA
           });
 
         if (rowData.AREA === 'BLACHARNIA') {
@@ -114,7 +115,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
             `/documents/change-document-control`,
             {
               NUMER_FV,
-              documentControlBL
+              documentControlBL,
+              FIRMA
             }
           );
         }
@@ -138,112 +140,32 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
       await updateDocuments(changeSingleDoc(rowData));
 
       if (type !== "no_exit") {
-        setDataRowTable("");
-        setControlChat(
-          {
-            note: '',
-            chat: []
-          }
-        );
-        setDocumentControlBL(
-          {
-            upowaznienie: false,
-            oswiadczenieVAT: false,
-            prawoJazdy: false,
-            dowodRejestr: false,
-            polisaAC: false,
-            decyzja: false,
-            faktura: false,
-            odpowiedzialnosc: false,
-            platnoscVAT: false,
-          }
-        );
+        setDataRowTable({
+          edit: false,
+          singleDoc: {},
+          controlDoc: {},
+        });
+
       }
 
     } catch (err) {
       console.error(err);
     }
-    finally {
-      setPleaseWait(false);
 
-    }
   };
 
-  const getDocControl = async (docNr, area) => {
-    console.log('test 1');
-    setPleaseWait(true);
-    try {
-      const dataChatControl = await axiosPrivateIntercept.get(
-        `/documents/get-control-document/${encodeURIComponent(docNr)}`,
-      );
-      setControlChat(prev => {
-        return {
-          ...prev,
-          chat: dataChatControl?.data?.CONTROL_UWAGI ? dataChatControl.data.CONTROL_UWAGI : []
-        };
-      });
-      console.log(rowData);
-
-      if (area === 'BLACHARNIA') {
-        console.log('test 3');
-
-        setDocumentControlBL({
-          upowaznienie: dataChatControl?.data?.CONTROL_UPOW ? dataChatControl.data.CONTROL_UPOW : false,
-          oswiadczenieVAT: dataChatControl?.data?.CONTROL_OSW_VAT ? dataChatControl.data.CONTROL_OSW_VAT : false,
-          prawoJazdy: dataChatControl?.data?.CONTROL_PR_JAZ ? dataChatControl.data.CONTROL_PR_JAZ : false,
-          dowodRejestr: dataChatControl?.data?.CONTROL_DOW_REJ ? dataChatControl.data.CONTROL_DOW_REJ : false,
-          polisaAC: dataChatControl?.data?.CONTROL_POLISA ? dataChatControl.data.CONTROL_POLISA : false,
-          decyzja: dataChatControl?.data?.CONTROL_DECYZJA ? dataChatControl.data.CONTROL_DECYZJA : false,
-          faktura: dataChatControl?.data?.CONTROL_FV ? dataChatControl.data.CONTROL_FV : false,
-          odpowiedzialnosc: dataChatControl?.data?.CONTROL_UPOW ? dataChatControl.data.CONTROL_UPOW : false,
-          platnoscVAT: dataChatControl?.data?.CONTROL_PLATNOSC_VAT ? dataChatControl.data.CONTROL_PLATNOSC_VAT : false,
-        });
-      }
-    }
-    catch (error) {
-      console.error(error);
-    }
-    finally {
-      setPleaseWait(false);
-    }
-  };
 
   const checkNextDoc = async (type) => {
     try {
-      setPleaseWait(true);
       await handleSaveData('no_exit');
-
-      if (type === "prev") {
-        const response = await axiosPrivateIntercept.get(
-          `/documents/get-single-document/${nextPrevDoc.prev}`
-        );
-        if (response?.data?.NUMER_FV) {
-          await getDocControl(response.data.NUMER_FV, response.data.AREA);
-        }
-        setRowData(response.data);
-
-      }
-      if (type === "next") {
-        const response = await axiosPrivateIntercept.get(
-          `/documents/get-single-document/${nextPrevDoc.next}`
-        );
-        if (response?.data?.NUMER_FV) {
-          await getDocControl(response.data.NUMER_FV, response.data.AREA);
-
-
-        }
-        setRowData(response.data);
-      }
-      // await handleSaveData('no_exit');
+      await getSingleRow(nextPrevDoc[type], 'full');
 
     }
 
     catch (error) {
       console.error(error);
     }
-    finally {
-      setPleaseWait(false);
-    }
+
 
   };
 
@@ -280,189 +202,215 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
 
 
   useEffect(() => {
+    setRowData(dataRowTable?.singleDoc ? dataRowTable.singleDoc : {});
+    setControlChat(prev => {
+      return {
+        ...prev,
+        chat: dataRowTable?.controlDoc?.CONTROL_UWAGI ? dataRowTable.controlDoc.CONTROL_UWAGI : []
+      };
+    });
 
-    setRowData(dataRowTable);
-    if (roles.includes(120)) {
-      getDocControl(dataRowTable.NUMER_FV, dataRowTable.AREA);
+    if (dataRowTable.singleDoc.AREA === 'BLACHARNIA') {
+      setDocumentControlBL({
+        upowaznienie: dataRowTable?.controlDoc?.CONTROL_UPOW ? dataRowTable.controlDoc.CONTROL_UPOW : false,
+        oswiadczenieVAT: dataRowTable?.controlDoc?.CONTROL_OSW_VAT ? dataRowTable.controlDoc.CONTROL_OSW_VAT : false,
+        prawoJazdy: dataRowTable?.controlDoc?.CONTROL_PR_JAZ ? dataRowTable.controlDoc.CONTROL_PR_JAZ : false,
+        dowodRejestr: dataRowTable?.controlDoc?.CONTROL_DOW_REJ ? dataRowTable.controlDoc.CONTROL_DOW_REJ : false,
+        polisaAC: dataRowTable?.controlDoc?.CONTROL_POLISA ? dataRowTable.controlDoc.CONTROL_POLISA : false,
+        decyzja: dataRowTable?.controlDoc?.CONTROL_DECYZJA ? dataRowTable.controlDoc.CONTROL_DECYZJA : false,
+        faktura: dataRowTable?.controlDoc?.CONTROL_FV ? dataRowTable.controlDoc.CONTROL_FV : false,
+        odpowiedzialnosc: dataRowTable?.controlDoc?.CONTROL_UPOW ? dataRowTable.controlDoc.CONTROL_UPOW : false,
+        platnoscVAT: dataRowTable?.controlDoc?.CONTROL_PLATNOSC_VAT ? dataRowTable.controlDoc.CONTROL_PLATNOSC_VAT : false,
+      });
     }
-  }, []);
+
+  }, [dataRowTable]);
+
+
 
   return (
-    <>
-      {pleaseWait ? <PleaseWait /> : <section className="edit-row-table">
-        <section className="edit-row-table-wrapper">
-          <section className="edit-row-table__container">
-            <section className="content-tabs">
-              <section
-                className={
-                  toggleState === 1 ? "content  active-content" : "content"
-                }
-              >
-                <section className="edit-row-table_section-content">
-                  <section className="edit-row-table_section-content-data">
-                    <EditDocBasicData rowData={rowData} setRowData={setRowData} />
-                  </section>
-                  <section className="edit-row-table_section-content-data">
-                    <EditDocChat
+
+    <section className="edit-row-table">
+      <section className="edit-row-table-wrapper">
+        <section className="edit-row-table__container">
+          <section className="content-tabs">
+            <section
+              className={
+                toggleState === 1 ? "content  active-content" : "content"
+              }
+            >
+              <section className="edit-row-table_section-content">
+                <section className="edit-row-table_section-content-data">
+                  <EditDocBasicData rowData={rowData} setRowData={setRowData} />
+                </section>
+                <section className="edit-row-table_section-content-data">
+                  <EditDocChat
+                    rowData={rowData}
+                    setRowData={setRowData}
+                    usersurname={auth.usersurname}
+                    handleAddNote={handleAddNote}
+                    note={note}
+                    setNote={setNote}
+                  />
+
+                </section>
+                <section className="edit-row-table_section-content-data">
+                  {changePanel === 'doc-actions' &&
+                    <section className="edit-row-table__change-panel">
+                      {(auth.roles.includes(110) || auth.roles.includes(120)) && rowData.MARK_FK ? (< Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setChangePanel('management')}
+                      >
+                        Raport FK
+                      </Button>) : null}
+                      {rowData.AREA === 'BLACHARNIA' && < Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setChangePanel('becared')}
+                      >
+                        Becared
+                      </Button>}
+                    </section>
+                  }
+                  {changePanel !== 'doc-actions' &&
+                    <section className="edit-row-table__change-panel">
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setChangePanel('doc-actions')}
+                      >
+                        Powrót
+                      </Button>
+                    </section>
+                  }
+                  {changePanel === 'doc-actions' && (
+                    <EditDocActions
                       rowData={rowData}
                       setRowData={setRowData}
-                      usersurname={auth.usersurname}
+                      setChangePanel={setChangePanel}
                       handleAddNote={handleAddNote}
-                      note={note}
-                      setNote={setNote}
+                      roles={auth.roles}
                     />
-
-                  </section>
-                  <section className="edit-row-table_section-content-data">
-                    {changePanel === 'doc-actions' &&
-                      <section className="edit-row-table__change-panel">
-                        {(auth.roles.includes(110) || auth.roles.includes(120)) && rowData.MARK_FV && rowData.MARK_FK ? (< Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => setChangePanel('management')}
-                        >
-                          Raport FK
-                        </Button>) : null}
-                        {rowData.AREA === 'BLACHARNIA' && < Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => setChangePanel('becared')}
-                        >
-                          Becared
-                        </Button>}
-                      </section>
-                    }
-                    {changePanel !== 'doc-actions' &&
-                      <section className="edit-row-table__change-panel">
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => setChangePanel('doc-actions')}
-                        >
-                          Powrót
-                        </Button>
-                      </section>
-                    }
-                    {changePanel === 'doc-actions' && (
-                      <EditDocActions
-                        rowData={rowData}
-                        setRowData={setRowData}
-                        setChangePanel={setChangePanel}
-                        handleAddNote={handleAddNote}
-                        roles={auth.roles}
-                      />
-                    )}
-                    {changePanel === 'becared' && (
-                      <EditDocBeCared
-                        rowData={rowData}
-                        setRowData={setRowData}
-                      />
-                    )}
-                    {changePanel === 'management' && <EditDataManagement
+                  )}
+                  {changePanel === 'becared' && (
+                    <EditDocBeCared
                       rowData={rowData}
                       setRowData={setRowData}
-                      usersurname={auth.usersurname}
-                      managementDescription={managementDescription}
-                      setManagementDescription={setManagementDescription}
-                    />}
-
-                  </section>
-                </section>
-              </section>
-              <section
-                className={
-                  toggleState === 2 ? "content  active-content" : "content"
-                }
-              >
-                <section className="edit-row-table_section-content">
-                  <section className="edit-row-table_section-content-data">
-                    <EditDocBasicData rowData={rowData} setRowData={setRowData} />
-                  </section>
-                  <section className="edit-row-table_section-content-data">
-                    <DocumentsControlChat
-                      usersurname={auth.usersurname}
-                      controlChat={controlChat}
-                      setControlChat={setControlChat}
                     />
-                  </section>
-                  <section className="edit-row-table_section-content-data">
-                    {auth.roles.includes(120) && dataRowTable.AREA === "BLACHARNIA" &&
-                      <DocumentsControlBL
-                        documentControlBL={documentControlBL}
-                        setDocumentControlBL={setDocumentControlBL}
-                      />}
-                  </section>
-                </section>
-              </section>
-              <section
-                className={
-                  toggleState === 3 ? "content  active-content" : "content"
-                }
-              >
-                <section className="edit-row-table_section-content">
-                  <section className="section-data"></section>
-                  <section className="section-data"></section>
-                  <section className="section-data"></section>
+                  )}
+                  {changePanel === 'management' && <EditDataManagement
+                    rowData={rowData}
+                    setRowData={setRowData}
+                    usersurname={auth.usersurname}
+                    managementDescription={managementDescription}
+                    setManagementDescription={setManagementDescription}
+                  />}
+
                 </section>
               </section>
             </section>
-            <section className="edit-row-table__panel">
-              <section className="edit_row_table-buttons">
-
-                <RxDoubleArrowLeft
-                  className={nextPrevDoc.prev ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
-                  onClick={() => nextPrevDoc.prev && checkNextDoc("prev")}
-                />
-                <RxDoubleArrowRight
-                  className={nextPrevDoc.next ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
-                  onClick={() => nextPrevDoc.next && checkNextDoc("next")}
-
-                />
-
+            <section
+              className={
+                toggleState === 2 ? "content  active-content" : "content"
+              }
+            >
+              <section className="edit-row-table_section-content">
+                <section className="edit-row-table_section-content-data">
+                  <EditDocBasicData rowData={rowData} setRowData={setRowData} />
+                </section>
+                <section className="edit-row-table_section-content-data">
+                  <DocumentsControlChat
+                    usersurname={auth.usersurname}
+                    controlChat={controlChat}
+                    setControlChat={setControlChat}
+                  />
+                </section>
+                <section className="edit-row-table_section-content-data">
+                  {auth.roles.includes(120) && dataRowTable.singleDoc.AREA === "BLACHARNIA" &&
+                    <DocumentsControlBL
+                      documentControlBL={documentControlBL}
+                      setDocumentControlBL={setDocumentControlBL}
+                    />}
+                </section>
               </section>
-              <section className="edit_row_table-buttons">
-                <Button
-                  className="mui-button"
-                  variant="contained"
-                  size="large"
-                  color="error"
-                  onClick={() => setDataRowTable("")}
-                >
-                  Anuluj
-                </Button>
-                <Button
-                  className="mui-button"
-                  variant="contained"
-                  size="large"
-                  color="success"
-                  onClick={() => handleSaveData()}
-                >
-                  Zatwierdź
-                </Button>
-
+            </section>
+            <section
+              className={
+                toggleState === 3 ? "content  active-content" : "content"
+              }
+            >
+              <section className="edit-row-table_section-content">
+                <section className="section-data"></section>
+                <section className="section-data"></section>
+                <section className="section-data"></section>
               </section>
-              <section className="edit_row_table-buttons">
-                {auth.roles.includes(200) && rowData.MARK_FV && <Button
-                  variant="contained"
-                  color={rowData.MARK_FK ? "secondary" : "error"}
-                  onClick={() => changeMarkDoc(rowData.NUMER_FV, rowData.MARK_FK === 1 ? 0 : 1, rowData.FIRMA)}
-                >
-                  {rowData.MARK_FK ? "FK ON" : "FK OFF"}
-                </Button>}
-                {auth.roles.includes(120) && dataRowTable.AREA === "BLACHARNIA" && <Button
-                  variant="contained"
-                  // color="secondary"
-                  onClick={() => setToggleState(prev => prev === 1 ? 2 : 1)}
-                >
-                  Kontrola
-                </Button>}
-              </section>
-
             </section>
           </section>
+          <section className="edit-row-table__panel">
+            <section className="edit_row_table-buttons">
+
+              <RxDoubleArrowLeft
+                className={nextPrevDoc.prev ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
+                // onClick={() => nextPrevDoc.prev && checkNextDoc("prev")}
+                onClick={() => nextPrevDoc.prev && getSingleRow(nextPrevDoc.prev, 'full')
+                }
+              />
+              <RxDoubleArrowRight
+                className={nextPrevDoc.next ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
+                onClick={() => nextPrevDoc.next && checkNextDoc("next")}
+              // onClick={() => nextPrevDoc.next && getSingleRow(nextPrevDoc.next, 'full')}
+
+              />
+
+            </section>
+            <section className="edit_row_table-buttons">
+              <Button
+                className="mui-button"
+                variant="contained"
+                size="large"
+                color="error"
+                onClick={() => setDataRowTable({
+                  edit: false,
+                  singleDoc: {},
+                  controlDoc: {},
+                })}
+              >
+                Anuluj
+              </Button>
+              <Button
+                className="mui-button"
+                variant="contained"
+                size="large"
+                color="success"
+                onClick={() => handleSaveData()}
+              >
+                Zatwierdź
+              </Button>
+
+            </section>
+            <section className="edit_row_table-buttons">
+              {auth.roles.includes(200) && rowData.MARK_FV && <Button
+                variant="contained"
+                color={rowData.MARK_FK ? "secondary" : "error"}
+                onClick={() => changeMarkDoc(rowData.NUMER_FV, rowData.MARK_FK === 1 ? 0 : 1, rowData.FIRMA)}
+              >
+                {rowData.MARK_FK ? "FK ON" : "FK OFF"}
+              </Button>}
+              {auth.roles.includes(120) && dataRowTable.singleDoc.AREA === "BLACHARNIA" && <Button
+                variant="contained"
+                // color="secondary"
+                onClick={() =>
+                  setToggleState(prev => prev === 1 ? 2 : 1)}
+              >
+                Kontrola
+              </Button>}
+            </section>
+
+          </section>
         </section>
-      </section >}
-    </>
+      </section>
+    </section >
   );
 };
 

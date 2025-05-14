@@ -16,6 +16,7 @@ import QuickTableNote from "./QuickTableNote";
 import EditRowTable from "./EditRowTable";
 import { Box, Button } from "@mui/material";
 import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
+import PleaseWait from "../PleaseWait";
 
 import "./Table.css";
 
@@ -31,6 +32,7 @@ const Table = ({
   const theme = useTheme();
   const { auth } = useData();
   const { height } = useWindowSize();
+  const [pleaseWait, setPleaseWait] = useState(false);
 
   const [columnVisibility, setColumnVisibility] = useState(settings.visible);
   const [columnSizing, setColumnSizing] = useState(settings.size);
@@ -42,7 +44,11 @@ const Table = ({
   const [tableSize, setTableSize] = useState(500);
   const [data, setData] = useState([]);
   const [quickNote, setQuickNote] = useState("");
-  const [dataRowTable, setDataRowTable] = useState("");
+  const [dataRowTable, setDataRowTable] = useState({
+    edit: false,
+    singleDoc: {},
+    controlDoc: {},
+  });
   const [sorting, setSorting] = useState([
     { id: "ILE_DNI_PO_TERMINIE", desc: false },
   ]);
@@ -116,18 +122,27 @@ const Table = ({
     if (getRow.length > 0) {
 
       try {
+        setPleaseWait(true);
         const response = await axiosPrivateIntercept.get(
           `/documents/get-single-document/${id}`
         );
         if (type === "quick") {
-          setQuickNote(response.data);
+          setQuickNote(response.data.singleDoc);
         }
         if (type === "full") {
-          setDataRowTable(response.data);
+
+          setDataRowTable({
+            edit: true,
+            singleDoc: response?.data?.singleDoc ? response.data.singleDoc : {},
+            controlDoc: response?.data?.controlDoc ? response.data.controlDoc : {},
+          });
         }
 
       } catch (error) {
         console.error("Error fetching data from the server:", error);
+      } finally {
+        setPleaseWait(false);
+
       }
     } else {
       console.error("No row found with the specified ID");
@@ -253,10 +268,11 @@ const Table = ({
     muiTableBodyCellProps: ({ column, row, cell }) => ({
       onDoubleClick: () => {
         if (column.id === "UWAGI_ASYSTENT") {
-          getSingleRow(row.original.id_document, "quick", row.original.DZIAL);
+          getSingleRow(row.original.id_document, "quick");
         } else {
-          getSingleRow(row.original.id_document, "full", row.original.DZIAL);
+          getSingleRow(row.original.id_document, "full");
         }
+
       },
     }),
 
@@ -333,7 +349,7 @@ const Table = ({
           />
         )}
 
-        {auth?.roles?.includes(110 || 120 || 1100) && dataRowTable && (
+        {/* {auth?.roles?.includes(110 || 120 || 1100) && dataRowTable.edit && (
           <EditRowTable
             dataRowTable={dataRowTable}
             setDataRowTable={setDataRowTable}
@@ -342,7 +358,27 @@ const Table = ({
             nextDoc={nextDoc}
             getSingleRow={getSingleRow}
           />
-        )}
+        )} */}
+
+        {
+          pleaseWait ? (
+            <PleaseWait />
+          ) : (
+            [110, 120, 1100].some(role => auth?.roles?.includes(role)) && dataRowTable.edit && (
+              <EditRowTable
+                dataRowTable={dataRowTable}
+                setDataRowTable={setDataRowTable}
+                updateDocuments={updateDocuments}
+                roles={roles}
+                nextDoc={nextDoc}
+                getSingleRow={getSingleRow}
+
+
+              />
+            )
+          )
+        }
+
 
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
