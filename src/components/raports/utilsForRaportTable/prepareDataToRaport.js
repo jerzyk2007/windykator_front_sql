@@ -157,6 +157,7 @@ export const grossTotalDepartments = (
   raportDate,
   percentTarget
 ) => {
+
   const departmentsObjective = { ...percentTarget };
   // suma Brutto
   let sumOfGross = new Map();
