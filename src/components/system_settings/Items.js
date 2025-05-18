@@ -165,28 +165,32 @@ const FKItems = () => {
                         title="Opiekun"
                       />
                     </section>
-                    <section className="items__section-content-data">
-                      {/* <ItemComponent
+                    {/*    <section className="items__section-content-data">
+                    <ItemComponent
                         data={dataItems.guardians}
                         multiCompany={dataItems?.company ? dataItems.company[0].company : []}
                         info="GUARDIAN"
                         title="Opiekun"
-                      /> */}
-                      <section className="items__section-content-data">
-                        <ItemAging
-                          data={dataItems.aging}
-                          info="AGING"
-                          title="Wiekowanie"
-                          setPleaseWait={setPleaseWait}
-                        />
-                      </section>
-                      {/* <section className="items__section-content-data">
+                      /> 
+                    </section>*/}
+
+                    <section className="items__section-content-data">
+                      <ItemAging
+                        data={dataItems.aging}
+                        info="AGING"
+                        title="Wiekowanie"
+                        setPleaseWait={setPleaseWait}
+                      />
+                    </section>
+                    {/* <section className="items__section-content-data">
                       <ItemAging
                         data={dataItems.aging}
                         info="AGING"
                         title="Wiekowanie"
                         setPleaseWait={setPleaseWait}
                       /> */}
+                    <section className="items__section-content-data">
+
                       <PercentageTarget departments={departments}
                         setPleaseWait={setPleaseWait}
                       />
