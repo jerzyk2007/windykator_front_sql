@@ -171,7 +171,6 @@ const FKItemComponent = ({ data, info, title, multiCompany }) => {
   const handleUpdateItem = async (updateData) => {
     setPleaseWait(true);
     try {
-
       const result = await axiosPrivateIntercept.patch(`/items/change-item/${updateData.id}/${info}`, {
         updateData
       });

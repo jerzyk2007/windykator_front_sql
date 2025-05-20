@@ -172,6 +172,7 @@ const FKItemAging = ({ data, info, title }) => {
     try {
       const filteredItem = dataItem.filter(item => item.id_aging_items === id);
 
+
       await axiosPrivateIntercept.patch(`/items/change-item/${id}/${info}`, {
         updateData: filteredItem[0]
       });
