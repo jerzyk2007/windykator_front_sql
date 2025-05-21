@@ -259,7 +259,7 @@ const DeptMapperEdit = ({ id, data, localization, area, owner, guardian, setEdit
                     variant="contained"
                     color="success"
                     disabled={!activ}
-                    onClick={() => handleSaveToDB(editData.department, editData.company)}
+                    onClick={() => handleSaveToDB(editData)}
                 >
                     Zapisz zmiany
                 </Button>

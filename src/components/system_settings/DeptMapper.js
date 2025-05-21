@@ -185,7 +185,6 @@ const DeptMapper = () => {
         uniqueDepFromCompanyJI: updateDep // ← tu podstawiasz swoją nową wartość
       }));
 
-
       await axiosPrivateIntercept.patch("/items/save-prepared-items", {
         itemData
       });
@@ -200,7 +199,6 @@ const DeptMapper = () => {
       company: ""
     });
 
-    console.log(dep, comp);
     try {
 
 

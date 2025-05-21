@@ -94,8 +94,8 @@ const menuStructure = [
                 category: "Ustawienia",
                 items: [
                     { id: 22, name: "Tabela - kolumny" },
-                    { id: 23, name: "Zmień stałe" },
-                    { id: 24, name: "Dopasuj dane" },
+                    { id: 23, name: "Dane struktury organizacji" },
+                    { id: 24, name: "Zmiana struktury organizacji" },
                 ],
             },
         ],
