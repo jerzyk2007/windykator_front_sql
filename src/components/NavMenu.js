@@ -330,7 +330,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                                     className="nav_menu-link"
                                     onClick={handleLinkClick}
                                   >
-                                    Zmień stałe
+                                    Dane struktury organizacji
                                   </Link>
                                 </li>
                               )}
@@ -342,7 +342,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                                     className="nav_menu-link"
                                     onClick={handleLinkClick}
                                   >
-                                    Dopasuj dane
+                                    Zmiana struktury organizacji
                                   </Link>
                                 </li>
                               )}

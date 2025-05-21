@@ -33,7 +33,7 @@ const DocumentsControlChat = ({ usersurname, controlChat, setControlChat }) => {
 
     useEffect(() => {
         scrollToBottom();
-    }, [controlChat.chat]);
+    }, [controlChat]);
 
     return (
         <section className="edit-doc-chat">

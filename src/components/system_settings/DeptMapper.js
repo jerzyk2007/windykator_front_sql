@@ -1,23 +1,15 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
-// import useData from "../hooks/useData";
-// import FKItemSettings from "./FKItemsData/FKItemSettings";
-import DeptMapperSettings from "./DeptMapperSettings";
+import DeptMapperEdit from "./DeptMapperEdit";
 import MissingDepartments from "./MissingDepartments";
 import PleaseWait from "../PleaseWait";
-// import FKItemSettings from "../FKRaport/FKItemsData/FKItemSettings";
 import "./DeptMapper.css";
 
 const DeptMapper = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [pleaseWait, setPleaseWait] = useState(false);
-  // const [data, setData] = useState([]);
-  // const [raportDep, setRaportDep] = useState([]);
-  // const [mergeDep, setMergeDep] = useState([]);
   const [createItem, setCreateItem] = useState([]);
-  // const [itemsDB, setItemsDB] = useState([]);
-  // const [missingDeps, setMissingDeps] = useState([]);
 
   const [loadedData, setLoadedData] = useState(
     {
@@ -39,6 +31,11 @@ const DeptMapper = () => {
   const [company, setCompany] = useState({
     selectCompany: "",
     companyNames: []
+  });
+
+  const [editDep, setEditDep] = useState({
+    department: "",
+    company: ""
   });
 
 
@@ -114,14 +111,20 @@ const DeptMapper = () => {
   };
 
   const handleSaveToDB = async (itemData) => {
+
+    setEditDep({
+      department: "",
+      company: ""
+    });
     try {
       // Tworzymy kopię tablicy stanu preparedItems
       const dataArray = [...loadedData.preparedItems];
 
       // Sprawdzamy, czy istnieje już obiekt o danym department
       const existingItemIndex = dataArray.findIndex(
-        (item) => item.DEPARTMENT === itemData.department
+        (item) => item.DEPARTMENT === itemData.department && item.COMPANY === itemData.company
       );
+
       if (existingItemIndex !== -1) {
         // Jeśli istnieje, aktualizujemy istniejący obiekt
         dataArray[existingItemIndex] = {
@@ -132,7 +135,9 @@ const DeptMapper = () => {
           OWNER: itemData.owner,
           GUARDIAN: itemData.guardian,
         };
-      } else {
+      }
+
+      else {
         // Jeśli nie istnieje, dodajemy nowy obiekt na koniec tablicy
         dataArray.push({
           DEPARTMENT: itemData.department,
@@ -182,12 +187,7 @@ const DeptMapper = () => {
 
 
       await axiosPrivateIntercept.patch("/items/save-prepared-items", {
-        DEPARTMENT: itemData.department,
-        COMPANY: itemData.company,
-        LOCALIZATION: itemData.localization,
-        AREA: itemData.area,
-        OWNER: itemData.owner,
-        GUARDIAN: itemData.guardian,
+        itemData
       });
     } catch (error) {
       console.error(error);
@@ -195,101 +195,154 @@ const DeptMapper = () => {
   };
 
   const handleDeleteItem = async (dep, comp) => {
-    await axiosPrivateIntercept.delete(`/items/delete-prepared-item/${encodeURIComponent(dep)}/${encodeURIComponent(comp)}`);
-    const filteredPreparedItems = loadedData?.preparedItems?.filter(item => !(item.DEPARTMENT === dep && item.COMPANY === comp));
-    const filteredUniqueDepFromCompanyJI = loadedData?.uniqueDepFromCompanyJI?.filter(item => !(item.DEPARTMENT === dep && item.COMPANY === comp));
-    setLoadedData(prev => ({
-      ...prev,
-      preparedItems: filteredPreparedItems,
-      uniqueDepFromCompanyJI: filteredUniqueDepFromCompanyJI
-    }));
-  };
-
-  const itemsArray = filteredData?.mergeDeps?.map((dep, index) => {
-    // const checkDepStyle = filteredData?.preparedItems.find((item) => item.DEPARTMENT === dep.DEPARTMENT && item.COMPANY === dep.COMPANY);
-    const checkItem = createItem.find((item) => item.department === dep.DEPARTMENT && item.company === dep.COMPANY);
-    const company = dep.COMPANY;
-    const localization = filteredData?.localization.map(item => {
-      if (item.COMPANY === company) {
-        return item.LOCALIZATION;
-      }
-    }).filter(Boolean);
-
-    const area = filteredData?.area.map(item => {
-      if (item.COMPANY === "ALL") {
-        return item.AREA;
-      } else
-        if (item.COMPANY === company) {
-          return item.AREA;
-        }
-    }).filter(Boolean);
-
-    const owner = filteredData?.owner.map(item => {
-      if (item.COMPANY === company) {
-        return item.OWNER;
-      }
-    }).filter(Boolean);
-
-    const guardian = filteredData?.guardian.map(item => {
-      if (item.COMPANY === company) {
-        return item.GUARDIAN;
-      }
-    }).filter(Boolean);
-
-    return (
-      <DeptMapperSettings
-        key={index}
-        id={index}
-        company={company}
-        dataItem={checkItem}
-        localization={localization}
-        area={area}
-        owner={owner}
-        guardian={guardian}
-        // style={checkDepStyle ? "exist" : "noexist"}
-        handleSaveToDB={handleSaveToDB}
-        handleDeleteItem={handleDeleteItem}
-      />
-    );
-  });
-
-  const createMergeDepMulti = () => {
-    const createDataDep = loadedData?.mergeDeps?.map((item) => {
-      //sprawdz czy jakieś dane są zapisane w DB
-      const dbItem = loadedData?.preparedItems?.find((dbItem) => dbItem.DEPARTMENT === item.DEPARTMENT && dbItem.COMPANY === item.COMPANY);
-
-      if (dbItem) {
-        return {
-          department: item.DEPARTMENT,
-          company: item.COMPANY,
-          localization: dbItem.LOCALIZATION || "",
-          area: dbItem.AREA || "",
-          owner: dbItem.OWNER || [""],
-          guardian: dbItem.GUARDIAN || [""],
-        };
-      } else {
-        // Jeśli nie znaleziono obiektu w tablicy itemsDB, utwórz pusty obiekt
-        return {
-          department: item.DEPARTMENT,
-          company: item.COMPANY,
-          localization: "",
-          area: "",
-          owner: [""],
-          guardian: [""],
-        };
-      }
+    setEditDep({
+      department: "",
+      company: ""
     });
-    setCreateItem(createDataDep?.sort((a, b) => a.department.localeCompare(b.department)));
+
+    console.log(dep, comp);
+    try {
+
+
+      await axiosPrivateIntercept.delete(`/items/delete-prepared-item/${encodeURIComponent(dep)}/${encodeURIComponent(comp)}`);
+
+      // await axiosPrivateIntercept.delete(`/items/delete-prepared-item`, {
+      //   department: dep,
+      //   company: comp
+      // });
+      const filteredPreparedItems = loadedData?.preparedItems?.filter(item => !(item.DEPARTMENT === dep && item.COMPANY === comp));
+      const filteredUniqueDepFromCompanyJI = loadedData?.uniqueDepFromCompanyJI?.filter(item => !(item.DEPARTMENT === dep && item.COMPANY === comp));
+      setLoadedData(prev => ({
+        ...prev,
+        preparedItems: filteredPreparedItems,
+        uniqueDepFromCompanyJI: filteredUniqueDepFromCompanyJI
+      }));
+    }
+    catch (error) {
+      console.error(error);
+    }
   };
 
-  useEffect(() => {
-    setFilteredData(loadedData);
-    createMergeDepMulti();
+  const itemsArray = createItem?.map((item, index) => {
 
-  }, [loadedData]);
+    if (item.department === editDep.department && item.company === editDep.company) {
+
+      const localization = loadedData?.localization.map(loc => {
+        if (loc.COMPANY === item.company) {
+
+          return loc.LOCALIZATION;
+        }
+      }).filter(Boolean);
+
+      const area = loadedData?.area.map(area => {
+
+        if (area.COMPANY === "ALL") {
+          return area.AREA;
+        } else
+          if (area.COMPANY === item.company) {
+            return area.AREA;
+          }
+      }).filter(Boolean);
+
+
+      const owner = loadedData?.owner.map(own => {
+        if (own.COMPANY === item.company) {
+          return own.OWNER;
+        }
+      }).filter(Boolean);
+
+      const guardian = loadedData?.guardian.map(guard => {
+        if (guard.COMPANY === item.company) {
+          return guard.GUARDIAN;
+        }
+      }).filter(Boolean);
+
+      return (
+        <DeptMapperEdit
+          key={index}
+          id={index}
+          localization={localization}
+          area={area}
+          owner={owner}
+          guardian={guardian}
+          data={item}
+          setEditDep={setEditDep}
+          handleSaveToDB={handleSaveToDB}
+          handleDeleteItem={handleDeleteItem}
+        />
+      );
+    }
+    else {
+
+      return (
+        <section
+          key={index}
+          className={`dept_mapper__container-item dept_mapper__container-item__array ${!item.exist ? 'dept_mapper__highlight-yellow' : ''}`
+          }
+          onDoubleClick={() => {
+            if (!editDep.department && !editDep.company) {
+              setEditDep(
+                {
+                  department: item.department,
+                  company: item.company
+                }
+              );
+            }
+          }}
+        >
+          <section className="dept_mapper-counter">
+            <span
+            >
+              {index + 1}
+            </span>
+          </section>
+
+          <section className="dept_mapper-department">
+            <section className="dept_mapper-department__container">
+
+              <span>{item.department}</span>
+              <span>{item.company}</span>
+            </section>
+          </section>
+          <section className="dept_mapper-localization">
+            <span className="dept_mapper-span">{item.localization}</span>
+          </section>
+          <section className="dept_mapper-area">
+            <span className="dept_mapper-span">{item.area}</span>
+          </section>
+          <section className="dept_mapper-owner_guard__container">
+
+            {item.owner.map((own, index) => {
+              return (
+                <section
+                  key={index}
+                  className="dept_mapper-owner">
+                  <span className="dept_mapper-span">{own}</span>
+                </section>
+              );
+            })}
+          </section>
+          <section className="dept_mapper-owner_guard__container">
+
+            {item.guardian.map((guard, index) => {
+              return (
+                <section
+                  key={index}
+                  className="dept_mapper-owner">
+                  <span className="dept_mapper-span">{guard}</span>
+                </section>
+              );
+            })}
+          </section>
+        </section>
+      );
+
+    }
+  });
 
   const updateFilteredData = async () => {
     try {
+      setPleaseWait(true);
       const checkMissingDeps = checkMissingDepartments(loadedData.uniqueDepFromCompanyJI, loadedData.uniqueDepFromDocuments);
       const checkDocPayment = await checkDocPay(checkMissingDeps);
       const docPay = checkDocPayment ? checkDocPayment.data.checkDoc : [];
@@ -306,6 +359,40 @@ const DeptMapper = () => {
           mergeDeps
         };
       });
+
+      const createDataDep = mergeDeps?.map((item) => {
+        //sprawdz czy jakieś dane są zapisane w DB
+        const dbItem = preparedItems.find((dbItem) => dbItem.DEPARTMENT === item.DEPARTMENT && dbItem.COMPANY === item.COMPANY);
+
+        if (dbItem) {
+          return {
+            department: item.DEPARTMENT,
+            company: item.COMPANY,
+            localization: dbItem.LOCALIZATION || "",
+            area: dbItem.AREA || "",
+            owner: dbItem.OWNER || [""],
+            guardian: dbItem.GUARDIAN || [""],
+            exist: true
+          };
+        }
+        else {
+          // Jeśli nie znaleziono obiektu w tablicy itemsDB, utwórz pusty obiekt
+          return {
+            department: item.DEPARTMENT,
+            company: item.COMPANY,
+            localization: "",
+            area: "",
+            owner: [""],
+            guardian: [""],
+            exist: false
+
+          };
+        }
+      });
+      setCreateItem(createDataDep?.sort((a, b) => a.department.localeCompare(b.department)));
+
+      setPleaseWait(false);
+
     }
     catch (err) {
       console.error(err);
@@ -327,7 +414,7 @@ const DeptMapper = () => {
       ) : (
         <section className="dept_mapper">
           {filteredData?.missingDeps?.length ? <MissingDepartments
-            departments={filteredData.missingDeps} /> : null}
+            departments={filteredData.missingDeps} /> : <PleaseWait />}
           <section className="dept_mapper__title">
             <section className="dept_mapper__title--company">
               <select
@@ -339,6 +426,7 @@ const DeptMapper = () => {
                     selectCompany: e.target.value
                   };
                 })}
+                disabled={editDep.department}
               >
                 {company.companyNames.map((option, index) => (
                   <option key={index} value={option}>
@@ -352,7 +440,7 @@ const DeptMapper = () => {
 
           </section>
           <section className="dept_mapper__container">
-            <section className="dept_mapper__container-item">
+            <section className="dept_mapper__container-item--title dept_mapper__container-item">
               <section className="dept_mapper-counter">
                 <span >Lp</span>
               </section>
@@ -365,21 +453,28 @@ const DeptMapper = () => {
               <section className="dept_mapper-area">
                 <span >Obszar</span>
               </section>
-              <section className="dept_mapper-owner">
-                <span >Owner</span>
+              <section className="dept_mapper-owner_guard__container">
+                <section className="dept_mapper-owner">
+                  <span >Owner</span>
+                </section>
               </section>
-              <section className="dept_mapper-guardian">
-                <span >Opiekun</span>
+              <section className="dept_mapper-owner_guard__container">
+
+                <section className="dept_mapper-guardian">
+                  <span >Opiekun</span>
+                </section>
+
               </section>
-              <section className="dept_mapper_settings-icon"
-                style={{ marginRight: "15px" }}>
-              </section>
+              {/* <section className="dept_mapper-scroll">
+
+              </section> */}
+
             </section>
           </section>
           <section className="dept_mapper__container-array">
             {itemsArray}
           </section>
-        </section>
+        </section >
       )}
     </>
   );

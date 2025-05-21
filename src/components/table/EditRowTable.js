@@ -264,13 +264,15 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                       >
                         Raport FK
                       </Button>) : null}
-                      {rowData.AREA === 'BLACHARNIA' && < Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => setChangePanel('becared')}
-                      >
-                        Becared
-                      </Button>}
+                      {rowData.AREA === 'BLACHARNIA' &&
+                        < Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => setChangePanel('becared')}
+                        >
+                          Becared
+                        </Button>
+                      }
                     </section>
                   }
                   {changePanel !== 'doc-actions' &&
@@ -320,11 +322,11 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                   <EditDocBasicData rowData={rowData} setRowData={setRowData} />
                 </section>
                 <section className="edit-row-table_section-content-data">
-                  <DocumentsControlChat
+                  {toggleState === 2 && <DocumentsControlChat
                     usersurname={auth.usersurname}
                     controlChat={controlChat}
                     setControlChat={setControlChat}
-                  />
+                  />}
                 </section>
                 <section className="edit-row-table_section-content-data">
                   {auth.roles.includes(120) && dataRowTable.singleDoc.AREA === "BLACHARNIA" &&
