@@ -126,6 +126,7 @@ const Table = ({
         const response = await axiosPrivateIntercept.get(
           `/documents/get-single-document/${id}`
         );
+
         if (type === "quick") {
           setQuickNote(response.data.singleDoc);
         }

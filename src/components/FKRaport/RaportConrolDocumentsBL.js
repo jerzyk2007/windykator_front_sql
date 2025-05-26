@@ -2,7 +2,18 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
+// Funkcja do zamiany indeksu liczbowego na literę kolumny (Excel-style)
+const getExcelColumnLetter = (colIndex) => {
+    let letter = '';
+    while (colIndex >= 0) {
+        letter = String.fromCharCode((colIndex % 26) + 65) + letter;
+        colIndex = Math.floor(colIndex / 26) - 1;
+    }
+    return letter;
+};
+
 const columnsOrder = [
+    "Lp",
     "Nr faktury",
     "Ile dni - PRZELEW",
     "Ile po terminie",
@@ -14,15 +25,23 @@ const columnsOrder = [
     "Nr szkody",
     "Uwagi do sprawy",
     "Upoważnienie",
-    "Ośw o VAT",
+    // "Ośw o VAT",
     "Płatność VAT",
+    "Decyzja",
+    "Działania od ostatniej kontroli",
     "Prawo jazdy",
     "Dowód rej.",
     "Polisa AC",
-    "Decyzja",
     "Fv w SVCloud",
     "Czy jest odpowiedzilność",
 ];
+
+// Mapa nazw kolumn do liter Excela
+const excelColumnMap = {};
+columnsOrder.forEach((name, index) => {
+    const colLetter = getExcelColumnLetter(index);
+    excelColumnMap[name] = colLetter;
+});
 
 const columnsName = [
     {
@@ -32,6 +51,10 @@ const columnsName = [
     {
         accessorKey: "CONTROL_DECYZJA",
         header: "Decyzja"
+    },
+    {
+        accessorKey: "CONTROL_BRAK_DZIALAN_OD_OST",
+        header: "Działania od ostatniej kontroli"
     },
     {
         accessorKey: "CONTROL_DOW_REJ",
@@ -195,7 +218,8 @@ const generateExcel = async (cleanData) => {
                         column.width = 25;
                         // Wstawienie liczby dokumentów w wierszu 4 tej kolumny
                         const countCell = worksheet.getCell(startRow - 1, column.number);
-                        countCell.value = { formula: `SUBTOTAL(103,B${excelStartRow}:B${excelEndRow})` };
+                        const dzialaniaCol = excelColumnMap['Nr faktury'];
+                        countCell.value = { formula: `SUBTOTAL(103,${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow})` };
                         countCell.numFmt = '0'; // Formatowanie liczby
                         countCell.font = { bold: true }; // Pogrubienie tekstu
                         countCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
@@ -209,13 +233,9 @@ const generateExcel = async (cleanData) => {
                     }
                     else if (header === 'Kwota brutto') {
                         column.numFmt = '#,##0.00';
-                        // headerCell.fill = {
-                        //     type: 'pattern', // Wzór wypełnienia
-                        //     pattern: 'solid', // Wypełnienie jednolite
-                        //     fgColor: { argb: '8ac777' },
-                        // };
                         const sumCell = worksheet.getCell(startRow - 1, column.number); // Wiersz 4, odpowiednia kolumna
-                        sumCell.value = { formula: `SUBTOTAL(109,E${excelStartRow}:E${excelEndRow})` };// Ustawienie wartości sumy
+                        const dzialaniaCol = excelColumnMap['Kwota brutto'];
+                        sumCell.value = { formula: `SUBTOTAL(109,${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow})` };// Ustawienie wartości sumy
                         sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
                         sumCell.font = { bold: true }; // Pogrubienie tekstu
                         sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
@@ -228,9 +248,9 @@ const generateExcel = async (cleanData) => {
                     }
                     else if (header === 'Do rozliczenia') {
                         column.numFmt = '#,##0.00';
-
                         const sumCell = worksheet.getCell(startRow - 1, column.number); // Wiersz 4, odpowiednia kolumna
-                        sumCell.value = { formula: `SUBTOTAL(109,F${excelStartRow}:F${excelEndRow})` };// Ustawienie wartości sumy
+                        const dzialaniaCol = excelColumnMap['Do rozliczenia'];
+                        sumCell.value = { formula: `SUBTOTAL(109,${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow})` };// Ustawienie wartości sumy
                         sumCell.numFmt = '#,##0.00 zł'; // Formatowanie liczby
                         sumCell.font = { bold: true }; // Pogrubienie tekstu
                         sumCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
@@ -273,8 +293,9 @@ const generateExcel = async (cleanData) => {
 
                         // Ustawienie formuły COUNTIF, która zliczy komórki z wartością "BRAK" w zadanym zakresie
                         // sumCell.value = { formula: `COUNTIF(L${excelStartRow}:L${excelEndRow},"BRAK")` };
+                        const dzialaniaCol = excelColumnMap['Upoważnienie'];
                         sumCell.value = {
-                            formula: `SUMPRODUCT(SUBTOTAL(3, OFFSET(L${excelStartRow}:L${excelEndRow}, ROW(L${excelStartRow}:L${excelEndRow})-ROW(L${excelStartRow}), 0, 1)), --(L${excelStartRow}:L${excelEndRow}="BRAK"))`
+                            formula: `SUMPRODUCT(SUBTOTAL(3, OFFSET(${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow}, ROW(${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow})-ROW(${dzialaniaCol}${excelStartRow}), 0, 1)), --(${dzialaniaCol}${excelStartRow}:L${excelEndRow}="BRAK"))`
                         };
                         // countCell.value = { formula: `SUBTOTAL(103,B${excelStartRow}:B${excelEndRow})` };
                         // Stylizacja komórki z wynikiem
@@ -286,21 +307,6 @@ const generateExcel = async (cleanData) => {
                             pattern: 'solid',
                             fgColor: { argb: 'FF7070' }
                         };
-                        // headerCell.alignment = { horizontal: 'center', vertical: 'middle' };
-                        // headerCell.font = { bold: true }; // Pogrubienie czcionki
-                        // column.width = 25;
-                        // // Wstawienie liczby dokumentów w wierszu 4 tej kolumny
-                        // const countCell = worksheet.getCell(startRow - 1, column.number);
-                        // countCell.value = { formula: `SUBTOTAL(103,L${excelStartRow}:L${excelEndRow})` };
-                        // countCell.numFmt = '0'; // Formatowanie liczby
-                        // countCell.font = { bold: true }; // Pogrubienie tekstu
-                        // countCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Wyrównanie tekstu
-                        // countCell.border = extraCellBorder;
-                        // countCell.fill = {
-                        //     type: 'pattern',
-                        //     pattern: 'solid',
-                        //     fgColor: { argb: 'FF7070' }, // Żółte tło dla wyróżnienia
-                        // };
                     }
                     // fgColor: { argb: 'FF7070' }
                     else if (header === 'Płatność VAT') {
@@ -309,15 +315,11 @@ const generateExcel = async (cleanData) => {
 
                         // Pobranie komórki, w której ma być wyświetlona liczba wystąpień słowa "BRAK"
                         const sumCell = worksheet.getCell(startRow - 1, column.number); // np. wiersz 4, odpowiednia kolumna
-
-                        // Ustawienie formuły COUNTIF, która zliczy komórki z wartością "BRAK" w zadanym zakresie
-                        // sumCell.value = {
-                        //     formula: `COUNTIF(M${excelStartRow}:M${excelEndRow},"NIE POBRANY 100%") + COUNTIF(M${excelStartRow}:M${excelEndRow},"NIE POBRANY 50%")`
-                        // };
-
+                        const dzialaniaCol = excelColumnMap['Płatność VAT'];
+                        // console.log(dzialaniaCol);
                         sumCell.value = {
-                            formula: `SUMPRODUCT(SUBTOTAL(3, OFFSET(M${excelStartRow}:M${excelEndRow}, ROW(M${excelStartRow}:M${excelEndRow})-ROW(M${excelStartRow}), 0, 1)), 
-                                      --((M${excelStartRow}:M${excelEndRow}="NIE POBRANY 100%") + (M${excelStartRow}:M${excelEndRow}="NIE POBRANY 50%")))`
+                            formula: `SUMPRODUCT(SUBTOTAL(3, OFFSET(${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow}, ROW(${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow})-ROW(${dzialaniaCol}${excelStartRow}), 0, 1)), 
+                                      --((${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow}="NIE POBRANY 100%") + (${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow}="NIE POBRANY 50%")))`
                         };
 
 
@@ -335,8 +337,28 @@ const generateExcel = async (cleanData) => {
                         column.numFmt = '0';
 
                         const sumCell = worksheet.getCell(startRow - 1, column.number); // np. wiersz 4, odpowiednia kolumna
+                        const dzialaniaCol = excelColumnMap['Decyzja'];
                         sumCell.value = {
-                            formula: `SUMPRODUCT(SUBTOTAL(3, OFFSET(Q${excelStartRow}:Q${excelEndRow}, ROW(Q${excelStartRow}:Q${excelEndRow})-ROW(Q${excelStartRow}), 0, 1)), --(Q${excelStartRow}:Q${excelEndRow}="BRAK"))`
+                            formula: `SUMPRODUCT(SUBTOTAL(3, OFFSET(${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow}, ROW(${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow})-ROW(${dzialaniaCol}${excelStartRow}), 0, 1)), --(${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow}="BRAK"))`
+                        };
+                        // Stylizacja komórki z wynikiem
+                        sumCell.font = { bold: true };
+                        sumCell.alignment = { horizontal: 'center', vertical: 'middle' };
+                        sumCell.border = extraCellBorder;
+                        sumCell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'FF7070' }
+                        };
+
+                    }
+                    if (header === "Działania od ostatniej kontroli") {
+                        column.numFmt = '0';
+                        column.width = 21;
+                        const sumCell = worksheet.getCell(startRow - 1, column.number); // np. wiersz 4, odpowiednia kolumna
+                        const dzialaniaCol = excelColumnMap["Działania od ostatniej kontroli"];
+                        sumCell.value = {
+                            formula: `SUMPRODUCT(SUBTOTAL(3, OFFSET(${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow}, ROW(${dzialaniaCol}${excelStartRow}:${dzialaniaCol}${excelEndRow})-ROW(${dzialaniaCol}${excelStartRow}), 0, 1)), --(O${excelStartRow}:O${excelEndRow}="BRAK DZIAŁAŃ"))`
                         };
                         // Stylizacja komórki z wynikiem
                         sumCell.font = { bold: true };
@@ -414,7 +436,6 @@ export const useControlRaportBL = () => {
             const result = await axiosPrivateIntercept.get("/fk/get-data-raports-control-BL");
 
             const filteredData = result.data.map(item => {
-
                 const uwagi = Array.isArray(item.CONTROL_UWAGI) && item?.CONTROL_UWAGI?.length ? (
                     item.CONTROL_UWAGI.length === 1 ? (
                         item.CONTROL_UWAGI[0]
@@ -434,6 +455,7 @@ export const useControlRaportBL = () => {
                     CONTROL_PR_JAZ: item.CONTROL_PR_JAZ ? item.CONTROL_PR_JAZ : " ",
                     CONTROL_UPOW: item.CONTROL_UPOW ? item.CONTROL_UPOW : " ",
                     CONTROL_UWAGI: uwagi,
+                    CONTROL_BRAK_DZIALAN_OD_OST: item.CONTROL_BRAK_DZIALAN_OD_OST ? item.CONTROL_BRAK_DZIALAN_OD_OST : " ",
                     DZIAL: item.DZIAL ? item.DZIAL : " ",
                     ILE_DNI_NA_PLATNOSC: item.ILE_DNI_NA_PLATNOSC ? item.ILE_DNI_NA_PLATNOSC : " ",
                     ILE_DNI_PO_TERMINIE: item.ILE_DNI_PO_TERMINIE ? item.ILE_DNI_PO_TERMINIE : " ",

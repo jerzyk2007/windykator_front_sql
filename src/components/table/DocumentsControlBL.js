@@ -1,6 +1,7 @@
 import './DocumentsControlBL.css';
 
 const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
+
     return (
         <section className="edit_doc documentControlBLs_control">
             <section className="edit_doc documentControlBLs_control__container">
@@ -194,6 +195,28 @@ const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
                         <option value="POBRANY">POBRANY</option>
                         <option value="NIE POBRANY 50%">NIE POBRANY 50%</option>
                         <option value="NIE POBRANY 100%">NIE POBRANY 100%</option>
+                    </select>
+                </section>
+                <section className="edit_doc__container">
+                    <span className="edit_doc--title">
+                        Działania od ostatniej kontroli:
+                    </span>
+                    <select
+                        className="edit_doc--select"
+                        value={documentControlBL.zmianyOstatniaKontrola}
+                        onChange={(e) => {
+                            setDocumentControlBL(prev => {
+                                return {
+                                    ...prev,
+                                    zmianyOstatniaKontrola: e.target.value === "NULL" ? false : e.target.value
+                                };
+                            });
+                        }}
+                    >
+                        <option value="NULL"></option>
+                        <option value="BRAK DZIAŁAŃ">BRAK DZIAŁAŃ</option>
+                        <option value="PODJĘTO DZIAŁANIA">PODJĘTO DZIAŁANIA</option>
+                        <option value="NIE DOTYCZY">NIE DOTYCZY</option>
                     </select>
                 </section>
             </section>

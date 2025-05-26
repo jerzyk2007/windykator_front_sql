@@ -10,6 +10,12 @@ const EditDataManagement = ({ rowData, setRowData, usersurname, managementDescri
     const [tempDate, setTempDate] = useState(rowData.OSTATECZNA_DATA_ROZLICZENIA || ""); // 
     const [isFirstRender, setIsFirstRender] = useState(true); // Czy to pierwsze uruchomienie?
 
+    const maxDate = (() => {
+        const date = new Date();
+        date.setDate(date.getDate() + 45);
+        return date.toISOString().split("T")[0];
+    })();
+
     const scrollToBottom = () => {
         if (textareaRef.current) {
             textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
@@ -120,7 +126,8 @@ const EditDataManagement = ({ rowData, setRowData, usersurname, managementDescri
                     className="edit_doc--select"
                     style={!rowData.OSTATECZNA_DATA_ROZLICZENIA ? { backgroundColor: "yellow" } : null}
                     type="date"
-                    value={tempDate} // Używamy lokalnej daty
+                    max={maxDate}
+                    value={tempDate || " "}
                     onChange={handleDateChange} // Obsługa zmiany daty
                 />
                 <Button
