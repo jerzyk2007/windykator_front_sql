@@ -46,6 +46,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
     faktura: false,
     odpowiedzialnosc: false,
     platnoscVAT: false,
+    zmianyOstatniaKontrola: false
   });
 
   // dane dla DocumentsControlChat
@@ -221,6 +222,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
         faktura: dataRowTable?.controlDoc?.CONTROL_FV ? dataRowTable.controlDoc.CONTROL_FV : false,
         odpowiedzialnosc: dataRowTable?.controlDoc?.CONTROL_UPOW ? dataRowTable.controlDoc.CONTROL_UPOW : false,
         platnoscVAT: dataRowTable?.controlDoc?.CONTROL_PLATNOSC_VAT ? dataRowTable.controlDoc.CONTROL_PLATNOSC_VAT : false,
+        zmianyOstatniaKontrola: dataRowTable?.controlDoc?.CONTROL_BRAK_DZIALAN_OD_OST ? dataRowTable.controlDoc.CONTROL_BRAK_DZIALAN_OD_OST : false,
       });
     }
 
