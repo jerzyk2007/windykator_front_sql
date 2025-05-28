@@ -1,7 +1,6 @@
 import './DocumentsControlBL.css';
 
 const DocumentsControlBL = ({ documentControlBL, setDocumentControlBL }) => {
-
     return (
         <section className="edit_doc documentControlBLs_control">
             <section className="edit_doc documentControlBLs_control__container">
