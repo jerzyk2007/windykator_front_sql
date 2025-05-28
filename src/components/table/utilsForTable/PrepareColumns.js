@@ -22,8 +22,13 @@ export const prepareColumns = (columnsData, data) => {
     modifiedItem.muiTableBodyCellProps = muiTableBodyCellProps;
 
     if (item.filterVariant === "date-range") {
-      modifiedItem.accessorFn = (originalRow) =>
-        new Date(originalRow[item.accessorKey]);
+      modifiedItem.accessorFn = (originalRow) => {
+        const date = new Date(originalRow[item.accessorKey]);
+        // ustaw godzinę na początek dnia, by uniknąć problemów z filtrowaniem
+        date.setHours(0, 0, 0, 0);
+        return date;
+      };
+
       modifiedItem.Cell = ({ cell }) => {
         // Parsowanie wartości komórki jako data
         const date = new Date(cell.getValue());
@@ -36,6 +41,7 @@ export const prepareColumns = (columnsData, data) => {
         }
       };
     }
+
 
 
 
