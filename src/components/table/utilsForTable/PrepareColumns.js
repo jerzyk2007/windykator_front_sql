@@ -44,6 +44,7 @@ export const prepareColumns = (columnsData, data) => {
 
 
 
+
     if (item.accessorKey === "UWAGI_ASYSTENT") {
       modifiedItem.Cell = ({ cell }) => {
         const cellValue = cell.getValue();
