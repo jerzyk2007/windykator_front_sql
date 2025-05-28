@@ -6,10 +6,14 @@ import {
 } from "material-react-table";
 import { MRT_Localization_PL } from "material-react-table/locales/pl";
 import { ThemeProvider, useTheme } from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "dayjs/locale/pl";
 import { plPL } from "@mui/x-date-pickers/locales";
+
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { pl } from 'date-fns/locale';
 import useData from "../hooks/useData";
 import useWindowSize from "../hooks/useWindow";
 import QuickTableNote from "./QuickTableNote";
@@ -382,9 +386,14 @@ const Table = ({
 
 
         <LocalizationProvider
-          dateAdapter={AdapterDayjs}
-          adapterLocale="pl"
+          // dateAdapter={AdapterDayjs}
+          // adapterLocale="pl"
+          // localeText={plLocale}
+
+          dateAdapter={AdapterDateFns}
+          adapterLocale={pl}
           localeText={plLocale}
+
         >
           <MaterialReactTable table={table} />
         </LocalizationProvider>
