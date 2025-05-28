@@ -220,7 +220,7 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
         polisaAC: dataRowTable?.controlDoc?.CONTROL_POLISA ? dataRowTable.controlDoc.CONTROL_POLISA : false,
         decyzja: dataRowTable?.controlDoc?.CONTROL_DECYZJA ? dataRowTable.controlDoc.CONTROL_DECYZJA : false,
         faktura: dataRowTable?.controlDoc?.CONTROL_FV ? dataRowTable.controlDoc.CONTROL_FV : false,
-        odpowiedzialnosc: dataRowTable?.controlDoc?.CONTROL_UPOW ? dataRowTable.controlDoc.CONTROL_UPOW : false,
+        odpowiedzialnosc: dataRowTable?.controlDoc?.CONTROL_ODPOWIEDZIALNOSC ? dataRowTable.controlDoc.CONTROL_ODPOWIEDZIALNOSC : false,
         platnoscVAT: dataRowTable?.controlDoc?.CONTROL_PLATNOSC_VAT ? dataRowTable.controlDoc.CONTROL_PLATNOSC_VAT : false,
         zmianyOstatniaKontrola: dataRowTable?.controlDoc?.CONTROL_BRAK_DZIALAN_OD_OST ? dataRowTable.controlDoc.CONTROL_BRAK_DZIALAN_OD_OST : false,
       });
@@ -356,9 +356,8 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
 
               <RxDoubleArrowLeft
                 className={nextPrevDoc.prev ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
-                // onClick={() => nextPrevDoc.prev && checkNextDoc("prev")}
-                onClick={() => nextPrevDoc.prev && getSingleRow(nextPrevDoc.prev, 'full')
-                }
+                onClick={() => nextPrevDoc.prev && checkNextDoc("prev")}
+              // onClick={() => nextPrevDoc.prev && getSingleRow(nextPrevDoc.prev, 'full')                }
               />
               <RxDoubleArrowRight
                 className={nextPrevDoc.next ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
