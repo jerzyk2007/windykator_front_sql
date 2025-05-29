@@ -5,7 +5,7 @@ import useData from "../hooks/useData";
 import PleaseWait from "../PleaseWait";
 import Table from "./Table";
 import { prepareColumns } from "./utilsForTable/PrepareColumns";
-import { filteredArrayManagement } from '../table/utilsForTable/changeSingleDocument';
+// import { filteredArrayManagement } from '../table/utilsForTable/changeSingleDocument';
 import "./PrepareTable.css";
 
 const PrepareTable = ({ info, raportDocuments }) => {
