@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useData from "../hooks/useData";
 import { Button } from "@mui/material";
 import "./UserChangeRoles.css";
 
-const UserChangeRoles = ({ id, roles }) => {
-  const axiosPrivateIntercept = useAxiosPrivateIntercept();
+const UserChangeRoles = ({ id, roles, user }) => {
 
-  const [userRoles, setUserRoles] = useState(roles);
+  const axiosPrivateIntercept = useAxiosPrivateIntercept();
+  const { auth } = useData();
+
+  const [userRoles, setUserRoles] = useState({});
   const [errMsg, setErrMsg] = useState("");
+
 
   const rolesItem = Object.entries(userRoles).map(
     ([role, isChecked], index) => (
+
       <section key={index} className="user-change-roles__container">
         <label
           className="user-change-roles__container--info"
@@ -80,13 +85,13 @@ const UserChangeRoles = ({ id, roles }) => {
                 }
 
                 // Jeśli zaznaczono 'Admin', ustaw także 'Editor' na 'true'
-                if (role === "Admin" && !isChecked) {
-                  updatedRoles["User"] = true;
-                  updatedRoles["Editor"] = true;
-                  updatedRoles["Controller"] = true;
-                  updatedRoles["FK"] = true;
-                  updatedRoles["Nora"] = true;
-                }
+                // if (role === "Admin" && !isChecked) {
+                //   updatedRoles["User"] = true;
+                //   updatedRoles["Editor"] = true;
+                //   updatedRoles["Controller"] = true;
+                //   updatedRoles["FK"] = true;
+                //   updatedRoles["Nora"] = true;
+                // }
 
                 return updatedRoles;
               });
@@ -119,6 +124,28 @@ const UserChangeRoles = ({ id, roles }) => {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    const superAdmin = auth.roles.filter(item => item == 2000);
+
+
+    const newRoles = superAdmin.length ? {
+      User: roles?.User ? roles.User : false,
+      Editor: roles?.Editor ? roles.Editor : false,
+      Admin: roles?.Admin ? roles.Admin : false,
+      Controller: roles?.Controller ? roles.Controller : false,
+      FK: roles?.FK ? roles.FK : false,
+      Nora: roles?.Nora ? roles.Nora : false,
+      SuperAdmin: roles?.SuperAdmin ? roles.SuperAdmin : false,
+    } : {
+      User: roles?.User ? roles.User : false,
+      Editor: roles?.Editor ? roles.Editor : false,
+      Admin: roles?.Admin ? roles.Admin : false,
+    };
+
+    setUserRoles(newRoles);
+
+  }, [roles]);
 
   return (
     <section className="user-change-roles">
