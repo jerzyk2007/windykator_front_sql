@@ -11,7 +11,6 @@ const ForgotPassword = ({ setForgotPass }) => {
 
     const handleReset = async () => {
         try {
-
             await axiosPrivate.post(
                 "/reset-password",
                 JSON.stringify({ userlogin }),
@@ -31,7 +30,7 @@ const ForgotPassword = ({ setForgotPass }) => {
 
             <section className="login" style={{ width: "50%" }}>
                 <h1 className="login-title">Resetowanie hasła</h1>
-                <span className="login__information">Proszę podać adres e-mail konta, dla którego ma zostać zresetowane hasło. Na wskazany adres zostanie wysłana wiadomość zawierająca link do resetu. Należy kliknąć w link w ciągu 15 minut od zatwierdzenia operacji – po tym czasie procedura zostanie anulowana. Po kliknięciu w link otrzymasz kolejną wiadomość z nowym linkiem, który pozwoli Ci na zmianę hasła. <br />
+                <span className="login__information">Proszę podać adres e-mail konta, dla którego ma zostać zresetowane hasło. Na wskazany adres zostanie wysłana wiadomość zawierająca link do resetu. Należy kliknąć w link w ciągu 15 minut od zatwierdzenia operacji – po tym czasie procedura zostanie anulowana. Po kliknięciu w link pojawi się panel, który pozwoli Ci na zmianę hasła. <br />
                     Zapoznaj się z treścią maila zanim klikniesz w link <br />
                     Ze względów bezpieczeństwa, w przypadku podania nieprawidłowego adresu e-mail, nie zostanie wyświetlony żaden komunikat o błędzie.</span>
                 <form className="login__container" onSubmit={handleReset}>
