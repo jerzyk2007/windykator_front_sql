@@ -8,7 +8,6 @@ import UserChangePass from "./UserChangePass";
 import UserChangeLogin from "./UserChangeLogin";
 import UserDelete from "./UserDelete";
 import PleaseWait from "../PleaseWait";
-import { FiX } from "react-icons/fi";
 import { Button } from "@mui/material";
 
 
@@ -82,6 +81,7 @@ const EditUserSettings = ({ user, setEdit }) => {
       const filteredRoles = result.data
         .map((item) => item.roles)
         .filter(Boolean)[0];
+
       const roles = filteredRoles.reduce((acc, role, index) => {
         // acc[role] = user?.roles[index] ? true : false;
         acc[role] = user?.roles.includes(role);
@@ -126,7 +126,9 @@ const EditUserSettings = ({ user, setEdit }) => {
               {roles && Object.keys(roles).length > 0 && (
                 <UserChangeRoles
                   id={user.id_user}
-                  roles={roles} />
+                  roles={roles}
+                  user={user.roles}
+                />
               )}
               {permissions && Object.keys(permissions).length > 0 && (
                 <UserChangePermissions

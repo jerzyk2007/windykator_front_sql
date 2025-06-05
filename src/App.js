@@ -18,7 +18,6 @@ import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
 // import TradeCredit from "./components/trade_credit/TradeCredit";
 import Instruction from "./components/instruction/Instruction";
-import ResetPassword from "./components/user/ResetPassword";
 import ConfirmResetPassword from "./components/user/ConfirmResetPassword";
 import RaportAreas from "./components/raports/RaportAreas";
 import "./App.css";
@@ -30,7 +29,6 @@ function App() {
         <Header />
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/password-reset/:token" element={<ResetPassword />} />
           <Route path="/password-confirm-reset/:token/" element={<ConfirmResetPassword />} />
 
           {/* protected routes */}
