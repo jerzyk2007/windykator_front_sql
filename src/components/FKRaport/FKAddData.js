@@ -51,9 +51,8 @@ const FKAddData = ({ company }) => {
 
 
       if (result?.data?.info) {
-        setMissingDeps(result?.data?.info);
+        return setMissingDeps(result?.data?.info);
       }
-
       await getRaport();
 
       await getDateAndCounter();
