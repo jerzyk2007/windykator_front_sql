@@ -48,7 +48,7 @@ const FKAddData = ({ company }) => {
       const result = await axiosPrivateIntercept.get(
         `/fk/generate-raport/${company}`
       );
-
+      console.log(result.data.info);
 
       if (result?.data?.info) {
         return setMissingDeps(result?.data?.info);

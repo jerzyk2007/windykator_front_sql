@@ -39,11 +39,37 @@ const DeptMapper = () => {
   });
 
 
-  const checkMissingDepartments = (saveDeps, docDeps) => {
-    return docDeps.filter(
-      dep => !saveDeps.some(item => item.DEPARTMENT === dep.DZIAL && item.COMPANY === dep.FIRMA)
+  // const checkMissingDepartments = (saveDeps, docDeps) => {
+  //   return docDeps.filter(
+  //     dep => !saveDeps.some(item => item.DEPARTMENT === dep.DZIAL && item.COMPANY === dep.FIRMA)
+  //   );
+  // };
+
+  const checkMissingDepartments = (saveDeps, docDeps, manualDeps = []) => {
+    // Filtrowanie brakujących działów z docDeps względem saveDeps
+    const missingFromDocs = docDeps
+      .filter(
+        dep =>
+          !saveDeps.some(
+            item => item.DEPARTMENT === dep.DZIAL && item.COMPANY === dep.FIRMA
+          )
+      )
+      .map(dep => ({ ...dep, manual: false })); // oznacz jako nie-manualne
+
+    // Dodanie flagi manual: true do manualDeps
+    const manualMarked = manualDeps.map(dep => ({ ...dep, manual: true }));
+
+    // Połączenie wyników
+    const combined = [...missingFromDocs, ...manualMarked];
+
+    // Usunięcie duplikatów (priorytet: manualDeps nad zwykłymi)
+    const unique = Array.from(
+      new Map(combined.map(dep => [`${dep.DZIAL}_${dep.FIRMA}`, dep])).values()
     );
+
+    return unique;
   };
+
 
   // sprawdza czy dział ma nierozliczone fv
   const checkDocPay = async (checkDeps) => {
@@ -61,9 +87,7 @@ const DeptMapper = () => {
       const result = await axiosPrivateIntercept.get("/items/get-fksettings-data");
 
       // sprawdzam czy sa jakies nieopisane działy
-      const checkMissingDeps = checkMissingDepartments(result.data.uniqueDepFromCompanyJI, result.data.uniqueDepFromDocuments);
-
-      // const checkDocPayment = checkMissingDeps?.length ? await axiosPrivateIntercept.post("/items/check-doc-payment", { departments: checkMissingDeps }) : null;
+      const checkMissingDeps = checkMissingDepartments(result.data.uniqueDepFromCompanyJI, result.data.uniqueDepFromDocuments, result.data.manualAddDep);
 
       const checkDocPayment = await checkDocPay(checkMissingDeps);
 
@@ -79,7 +103,16 @@ const DeptMapper = () => {
           COMPANY: item.FIRMA
         };
       });
-      const mergedUniqDep = [...result.data.uniqueDepFromCompanyJI, ...transformUniqDep];
+      const transformManualDep = result.data.manualAddDep.map(item => {
+        return {
+          DEPARTMENT: item.DZIAL,
+          COMPANY: item.FIRMA
+        };
+      });
+
+      const mergedUniqDep = [...result.data.uniqueDepFromCompanyJI, ...transformUniqDep, ...transformManualDep];
+
+
       const uniqueDeps = mergedUniqDep.filter(
         (item, index, self) =>
           index ===
@@ -93,6 +126,7 @@ const DeptMapper = () => {
           ...prev,
           uniqueDepFromCompanyJI: result.data.uniqueDepFromCompanyJI || [],
           uniqueDepFromDocuments: result.data.uniqueDepFromDocuments || [],
+          manualAddDep: result.data.manualAddDep || [],
           missingDeps: checkDocPayment ? checkDocPayment.data.checkDoc : [],
           preparedItems: result.data.preparedItems || [],
           mergeDeps: uniqueDeps.sort((a, b) => a.DEPARTMENT.localeCompare(b.DEPARTMENT)),
@@ -201,13 +235,8 @@ const DeptMapper = () => {
 
     try {
 
-
       await axiosPrivateIntercept.delete(`/items/delete-prepared-item/${encodeURIComponent(dep)}/${encodeURIComponent(comp)}`);
 
-      // await axiosPrivateIntercept.delete(`/items/delete-prepared-item`, {
-      //   department: dep,
-      //   company: comp
-      // });
       const filteredPreparedItems = loadedData?.preparedItems?.filter(item => !(item.DEPARTMENT === dep && item.COMPANY === comp));
       const filteredUniqueDepFromCompanyJI = loadedData?.uniqueDepFromCompanyJI?.filter(item => !(item.DEPARTMENT === dep && item.COMPANY === comp));
       setLoadedData(prev => ({
@@ -341,7 +370,7 @@ const DeptMapper = () => {
   const updateFilteredData = async () => {
     try {
       setPleaseWait(true);
-      const checkMissingDeps = checkMissingDepartments(loadedData.uniqueDepFromCompanyJI, loadedData.uniqueDepFromDocuments);
+      const checkMissingDeps = checkMissingDepartments(loadedData.uniqueDepFromCompanyJI, loadedData.uniqueDepFromDocuments, loadedData.manualAddDep);
       const checkDocPayment = await checkDocPay(checkMissingDeps);
       const docPay = checkDocPayment ? checkDocPayment.data.checkDoc : [];
 
@@ -411,8 +440,11 @@ const DeptMapper = () => {
         <PleaseWait />
       ) : (
         <section className="dept_mapper">
-          {filteredData?.missingDeps?.length ? <MissingDepartments
-            departments={filteredData.missingDeps} /> : <PleaseWait />}
+          {filteredData?.missingDeps?.length ?
+            <MissingDepartments
+              departments={filteredData.missingDeps}
+            /> :
+            <PleaseWait />}
           <section className="dept_mapper__title">
             <section className="dept_mapper__title--company">
               <select
