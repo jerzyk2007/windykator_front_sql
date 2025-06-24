@@ -4,7 +4,6 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import EditDocBasicData from "./EditDocBasicData";
 import EditDocChat from "./EditDocChat";
-// import EditDocSettlements from "./EditDocSettlements";
 import EditDocActions from "./EditDocActions";
 import EditDocBeCared from "./EditDocBeCared";
 import EditDataManagement from "./EditDataManagement";
@@ -55,7 +54,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
     chat: []
   });
 
-
   //dodawane są notatki z czatu i logi przy zmianie np błąd doradcy, pobrany VAT
   const handleAddNote = (info, text) => {
     const oldNote = rowData.UWAGI_ASYSTENT;
@@ -83,10 +81,6 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
       setNote("");
     }
   };
-
-  // const toggleTab = (index) => {
-  //   setToggleState(index);
-  // };
 
   const handleSaveData = async (type = 'exit') => {
     const { id_document, NUMER_FV, FIRMA } = rowData;
@@ -160,14 +154,10 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
     try {
       await handleSaveData('no_exit');
       await getSingleRow(nextPrevDoc[type], 'full');
-
     }
-
     catch (error) {
       console.error(error);
     }
-
-
   };
 
   const changeMarkDoc = async (NUMER_FV, MARK_FK, FIRMA) => {

@@ -17,92 +17,7 @@ const sanitizeValue = (value) => {
 };
 
 export const getAllDataRaport = async (allData, orderColumns, info) => {
-  // const cleanData = allData.map(item => {
-  //   const limitText = (text, maxLength = 42) =>
-  //     text && text.length > maxLength ? text.slice(0, maxLength) + "..." : text || " ";
 
-  //   // const dzialania = Array.isArray(item.UWAGI_ASYSTENT) && item.UWAGI_ASYSTENT.length > 0
-  //   //   ? item.AREA === 'BLACHARNIA' ? limitText(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1]) : item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1]
-  //   //   : "BRAK";
-  //   const dzialania = Array.isArray(item.UWAGI_ASYSTENT) && item.UWAGI_ASYSTENT.length > 0
-  //     ? limitText(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1])
-  //     : "BRAK";
-
-  //   // }
-  //   return {
-  //     ...item,
-  //     UWAGI_ASYSTENT: dzialania ? dzialania : 'BRAK'
-  //   };
-  // });
-
-  // const cleanData = allData.map(item => {
-  //   const limitText = (text, maxLength = 62) => {
-  //     if (text.length > maxLength) {
-  //       console.log(text);
-  //     }
-  //     return text && text.length > maxLength ? text.slice(0, maxLength) + "..." : text || " ";
-  //   };
-
-
-
-  //   let dzialania = "BRAK";
-
-  //   if (Array.isArray(item.UWAGI_ASYSTENT) && item.UWAGI_ASYSTENT.length > 0) {
-  //     const len = item.UWAGI_ASYSTENT.length;
-  //     const lastEntry = limitText(item.UWAGI_ASYSTENT[len - 1]);
-
-  //     if (len === 1) {
-  //       dzialania = lastEntry;
-  //     } else {
-  //       dzialania = `Liczba wcześniejszych wpisów: ${len - 1}\n${lastEntry}`;
-  //     }
-  //   }
-
-  //   return {
-  //     ...item,
-  //     UWAGI_ASYSTENT: dzialania
-  //   };
-  // });
-
-
-  // const cleanData = allData.map(item => {
-  //   const sanitize = (text) => {
-  //     // Jeśli nie ma tekstu, zwróć pusty ciąg
-  //     if (!text) return " ";
-
-  //     // Usuń znaki niewidoczne/niedrukowalne, ale ZOSTAW polskie znaki i interpunkcję
-  //     return text.replace(
-  //       /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
-  //       ' '
-  //     );
-  //   };
-
-  //   const limitText = (text, maxLength = 62) => {
-  //     const cleaned = sanitize(text);
-  //     if (cleaned.length > maxLength) {
-  //       console.log("Przycięty tekst:", cleaned);
-  //     }
-  //     return cleaned.length > maxLength ? cleaned.slice(0, maxLength) + "..." : cleaned;
-  //   };
-
-  //   let dzialania = "BRAK";
-
-  //   if (Array.isArray(item.UWAGI_ASYSTENT) && item.UWAGI_ASYSTENT.length > 0) {
-  //     const len = item.UWAGI_ASYSTENT.length;
-  //     const lastEntry = limitText(item.UWAGI_ASYSTENT[len - 1]);
-
-  //     if (len === 1) {
-  //       dzialania = lastEntry;
-  //     } else {
-  //       dzialania = `Liczba wcześniejszych wpisów: ${len - 1}\n${lastEntry}`;
-  //     }
-  //   }
-
-  //   return {
-  //     ...item,
-  //     UWAGI_ASYSTENT: dzialania
-  //   };
-  // });
 
   const cleanData = allData.map(item => {
     const sanitize = (text) => {
@@ -133,8 +48,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
       UWAGI_ASYSTENT: dzialania
     };
   });
-
-
+  console.log(cleanData);
   const startRow = 2;
   try {
     const changeNameColumns = cleanData.map((doc) => {
