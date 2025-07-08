@@ -97,7 +97,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       Dokumenty Raportu FK
                     </Link>
                   </li>)}
-                {(auth?.roles?.includes(200)) && (
+                {((auth?.roles?.includes(200)) || (auth?.roles?.includes(201)) || (auth?.roles?.includes(202))) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/fk-disabled-documents-table"
@@ -114,6 +114,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
 
         {(auth?.roles?.includes(100) ||
           auth?.roles?.includes(200) ||
+          auth?.roles?.includes(201) ||
+          auth?.roles?.includes(202) ||
           auth?.roles?.includes(300) || auth?.roles?.includes(1000)) && (
             <li className="nav_menu__menu-item">
               <Link className="nav_menu-link">Raporty</Link>
@@ -170,7 +172,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </li>
                   )}
 
-                  {(auth?.roles?.includes(200)) && (
+                  {((auth?.roles?.includes(200)) || (auth?.roles?.includes(201)) || (auth?.roles?.includes(202))) && (
                     <li className="nav_menu-item-dropmenu">
                       <Link className="nav_menu-link">
                         <i className="fas fa-caret-left"></i>Raporty - FK
@@ -188,7 +190,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                               </Link>
                             </li>
                           )}
-                          {auth?.roles?.includes(200) && (
+                          {auth?.roles?.includes(201) && (
                             <li className="nav_menu-item-dropmenu">
                               <Link
                                 to="/generate-raport-fk-KEM"
@@ -196,6 +198,17 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                                 onClick={handleLinkClick}
                               >
                                 Generuj raport KEM
+                              </Link>
+                            </li>
+                          )}
+                          {auth?.roles?.includes(202) && (
+                            <li className="nav_menu-item-dropmenu">
+                              <Link
+                                to="/generate-raport-fk-RAC"
+                                className="nav_menu-link"
+                                onClick={handleLinkClick}
+                              >
+                                Generuj raport RAC
                               </Link>
                             </li>
                           )}
@@ -247,7 +260,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </li>
                   )}
 
-                  {(auth?.roles?.includes(200)) && <ul className="nav_menu__menu-dropmenu">
+                  {((auth?.roles?.includes(200)) || (auth?.roles?.includes(201)) || (auth?.roles?.includes(202))) && <ul className="nav_menu__menu-dropmenu">
                     <li className="nav_menu-item-dropmenu">
                       <span
                         className="nav_menu-link"
@@ -264,7 +277,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
 
 
         {(auth?.roles?.includes(1000) ||
-          auth?.roles?.includes(200)) && (
+          auth?.roles?.includes(200) || auth?.roles?.includes(201) || auth?.roles?.includes(202)) && (
             <li className="nav_menu__menu-item">
               <Link className="nav_menu-link">System</Link>
               <div
@@ -287,7 +300,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </li>
                   )}
                   {(auth?.roles?.includes(1000) ||
-                    auth?.roles?.includes(200)) && (
+                    auth?.roles?.includes(200) || auth?.roles?.includes(201) || auth?.roles?.includes(202)) && (
                       <li className="nav_menu-item-dropmenu">
                         <Link
                           to="/add-data"
@@ -299,7 +312,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       </li>
                     )}
                   {(auth?.roles?.includes(1000) ||
-                    auth?.roles?.includes(200)) && (
+                    auth?.roles?.includes(200) || auth?.roles?.includes(201) || auth?.roles?.includes(202)) && (
                       <li className="nav_menu-item-dropmenu">
                         <Link className="nav_menu-link">
                           <i className="fas fa-caret-left"></i>Ustawienia
@@ -318,7 +331,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                               </li>
                             )}
                             {(auth?.roles?.includes(1000) ||
-                              auth?.roles?.includes(200)) && (
+                              auth?.roles?.includes(200) || auth?.roles?.includes(201) || auth?.roles?.includes(202)) && (
                                 <li className="nav_menu-item-dropmenu">
                                   <Link
                                     to="/change-items"
@@ -330,7 +343,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                                 </li>
                               )}
                             {(auth?.roles?.includes(1000) ||
-                              auth?.roles?.includes(200)) && (
+                              auth?.roles?.includes(200) || auth?.roles?.includes(201) || auth?.roles?.includes(202)) && (
                                 <li className="nav_menu-item-dropmenu">
                                   <Link
                                     to="/dept-mapper"
