@@ -11,7 +11,6 @@ const UserChangeRoles = ({ id, roles }) => {
   const [userRoles, setUserRoles] = useState({});
   const [errMsg, setErrMsg] = useState("");
 
-
   const rolesItem = Object.entries(userRoles).map(
     ([role, isChecked], index) => (
 
