@@ -28,7 +28,7 @@ const InstructionTable = () => {
                 >{`b) `}
                     <span className='instruction_component-content--element'>Pilne
                     </span>
-                    {` – tylko dokumenty, których wartość do rozliczenia jest większa od zera, nie sa w kancelarii i od 3 dni do terminu płatności + przeterminowane `}
+                    {` – tylko dokumenty, których wartość do rozliczenia jest większa od zera, nie są w kancelarii i mają termin od minus 3 dni`}
                 </span>
                 <span className='instruction_component-content--text'
                     style={{ marginLeft: "20px" }}
