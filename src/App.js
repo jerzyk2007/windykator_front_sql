@@ -49,6 +49,12 @@ function App() {
             </Route>
             <Route element={<RequireAuth allowedRoles={[100]} />}>
               <Route
+                path="/critical-table"
+                element={<PrepareTable info={"critical"} />}
+              />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[100]} />}>
+              <Route
                 path="/obligations-table"
                 element={<PrepareTable info={"obligations"} />}
               />
