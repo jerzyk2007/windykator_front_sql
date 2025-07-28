@@ -84,11 +84,11 @@ const FKItems = () => {
                   className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
                   onClick={() => toggleTab(2)}
                 ></button>
-                {/* <button
+                <button
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
 
                   onClick={() => toggleTab(3)}
-                ></button> */}
+                ></button>
               </section>
               <section className="content-tabs">
                 <section
@@ -122,20 +122,10 @@ const FKItems = () => {
                         info="LOCALIZATION"
                         title="Lokalizacje"
                       />
-                      {/* <ItemComponent
-                        data={dataItems.areas}
-                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
-                        info="AREA"
-                        title="Obszary"
-                      /> */}
+
                     </section>
                     <section className="items__section-content-data">
-                      {/* <ItemComponent
-                        data={dataItems.areas}
-                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
-                        info="AREA"
-                        title="Obszary"
-                      /> */}
+
                       <ItemComponent
                         data={dataItems.owners}
                         multiCompany={dataItems?.company ? dataItems.company[0].company : []}
@@ -152,12 +142,7 @@ const FKItems = () => {
                 >
                   <section className="items__section-content">
                     <section className="items__section-content-data">
-                      {/* <ItemComponent
-                        data={dataItems.owners}
-                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
-                        info="OWNER"
-                        title="Ownerzy"
-                      /> */}
+
                       <ItemComponent
                         data={dataItems.guardians}
                         multiCompany={dataItems?.company ? dataItems.company[0].company : []}
@@ -165,14 +150,6 @@ const FKItems = () => {
                         title="Opiekun"
                       />
                     </section>
-                    {/*    <section className="items__section-content-data">
-                    <ItemComponent
-                        data={dataItems.guardians}
-                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
-                        info="GUARDIAN"
-                        title="Opiekun"
-                      /> 
-                    </section>*/}
 
                     <section className="items__section-content-data">
                       <ItemAging
@@ -182,32 +159,34 @@ const FKItems = () => {
                         setPleaseWait={setPleaseWait}
                       />
                     </section>
-                    {/* <section className="items__section-content-data">
-                      <ItemAging
-                        data={dataItems.aging}
-                        info="AGING"
-                        title="Wiekowanie"
-                        setPleaseWait={setPleaseWait}
-                      /> */}
+
                     <section className="items__section-content-data">
 
-                      <PercentageTarget departments={departments}
-                        setPleaseWait={setPleaseWait}
+                      <ItemComponent
+                        data={dataItems.departments}
+                        multiCompany={dataItems?.company ? dataItems.company[0].company : []}
+                        info="DEPARTMENT"
+                        title="Działy"
+
                       />
                     </section>
                   </section>
                 </section>
-                {/* <section
+                <section
                   className={
                     toggleState === 3 ? "content  active-content" : "content"
                   }
-                > */}
-                {/* <section className="items__section-content"> */}
-                {/* <section className="items__section-content-data"></section>
+                >
+                  <section className="items__section-content">
+                    <section className="items__section-content-data">
+                      <PercentageTarget departments={departments}
+                        setPleaseWait={setPleaseWait}
+                      />
+                    </section>
                     <section className="items__section-content-data"></section>
-                    <section className="items__section-content-data"></section> */}
-                {/* </section> */}
-                {/* </section> */}
+                    <section className="items__section-content-data"></section>
+                  </section>
+                </section>
               </section>
             </section>
           </section>

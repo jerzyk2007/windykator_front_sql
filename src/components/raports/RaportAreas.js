@@ -36,7 +36,8 @@ const RaportAreas = () => {
                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             });
 
-            saveAs(blob, `${raportInfo.reportName}.xlsx`);
+            // saveAs(blob, `${raportInfo.reportName}.xlsx`);
+            saveAs(blob, `Votum.xlsx`);
 
         }
         catch (error) {

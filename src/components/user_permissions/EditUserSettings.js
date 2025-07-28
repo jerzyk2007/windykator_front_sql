@@ -77,11 +77,9 @@ const EditUserSettings = ({ user, setEdit }) => {
     const getSettings = async () => {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/settings/get-settings");
-
       const filteredRoles = result.data
         .map((item) => item.roles)
         .filter(Boolean)[0];
-
       const roles = filteredRoles.reduce((acc, role, index) => {
         // acc[role] = user?.roles[index] ? true : false;
         acc[role] = user?.roles.includes(role);
@@ -102,7 +100,6 @@ const EditUserSettings = ({ user, setEdit }) => {
       const company = result.data
         .map((item) => item.company)
         .filter(Boolean)[0];
-
 
       setPermissions(permissions);
       setCompany(company);
@@ -127,7 +124,7 @@ const EditUserSettings = ({ user, setEdit }) => {
                 <UserChangeRoles
                   id={user.id_user}
                   roles={roles}
-                  user={user.roles}
+                // user={user.roles}
                 />
               )}
               {permissions && Object.keys(permissions).length > 0 && (

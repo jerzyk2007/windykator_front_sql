@@ -29,46 +29,47 @@ import './Instruction.css';
 
 const menuStructure = [
     {
-        id: 1,
+        id: 10,
         category: "Tabelka",
         items: [
-            { id: 1, name: "Aktualne" },
-            { id: 2, name: "Zobowiązania" },
-            { id: 3, name: "Archiwum" },
-            { id: 4, name: "Kpl dane" },
-            { id: 5, name: "Dokumenty Raportu FK" },
-            { id: 6, name: "Wyłączenia Raportu FK" },
+            { id: 100, name: "Aktualne" },
+            { id: 100, name: "Pilne" },
+            { id: 100, name: "Zobowiązania" },
+            { id: 100, name: "Archiwum" },
+            { id: 100, name: "Kpl dane" },
+            { id: 100, name: "Dokumenty Raportu FK" },
+            { id: 100, name: "Wyłączenia Raportu FK" },
         ],
     },
     {
-        id: 2,
+        id: 20,
         category: "Raporty",
         items: [
             {
-                id: 7,
+                id: 201,
                 category: "Raporty",
                 items: [
-                    { id: 8, name: "Raport - Dział" },
-                    { id: 9, name: "Raport - Doradca" },
+                    { id: 2011, name: "Raport - Dział" },
+                    { id: 2012, name: "Raport - Doradca" },
                 ],
             },
             {
-                id: 10,
+                id: 202,
                 category: "Raporty FK",
                 // items: [
                 //     { id: 11, name: "Generuj Raport" },
                 // ],
                 items: [
-                    { id: 11, name: "Generuj Raport KRT" },
-                    { id: 12, name: "Generuj Raport KEM" },
+                    { id: 2021, name: "Generuj Raport KRT" },
+                    { id: 2022, name: "Generuj Raport KEM" },
                 ],
             },
             {
-                id: 12,
+                id: 203,
                 category: "Kontrola dokumentacji",
                 items: [
-                    { id: 13, name: "Dokumenty kontroli BL" },
-                    { id: 14, name: "Raport kontroli BL" },
+                    { id: 2031, name: "Dokumenty kontroli BL" },
+                    { id: 2032, name: "Raport kontroli BL" },
                 ],
             },
             // {
@@ -79,36 +80,36 @@ const menuStructure = [
             //         { id: 17, name: "Struktura organizacji" },
             //     ],
             // },
-            { id: 16, name: "Raport NORA" },
-            { id: 17, name: "Struktura organizacji" },
+            { id: 204, name: "Raport NORA" },
+            { id: 205, name: "Struktura organizacji" },
         ],
     },
     {
-        id: 18,
+        id: 30,
         category: "System",
         items: [
-            { id: 19, name: "Uprawnienia użytkownika" },
-            { id: 20, name: "Dodaj dane" },
+            { id: 301, name: "Uprawnienia użytkownika" },
+            { id: 302, name: "Dodaj dane" },
             {
-                id: 21,
+                id: 303,
                 category: "Ustawienia",
                 items: [
-                    { id: 22, name: "Tabela - kolumny" },
-                    { id: 23, name: "Dane struktury organizacji" },
-                    { id: 24, name: "Zmiana struktury organizacji" },
+                    { id: 3031, name: "Tabela - kolumny" },
+                    { id: 3032, name: "Dane struktury organizacji" },
+                    { id: 3033, name: "Zmiana struktury organizacji" },
                 ],
             },
         ],
     },
     {
-        id: 25,
+        id: 40,
         category: "Użytkownik",
         items: [
-            { id: 26, name: "Aktualizacja danych" },
-            { id: 27, name: "Instrukcja obsługi" },
-            { id: 28, name: "Dodaj użytkownika" },
-            { id: 29, name: "Zmień hasło" },
-            { id: 30, name: "Wyloguj" },
+            { id: 401, name: "Aktualizacja danych" },
+            { id: 402, name: "Instrukcja obsługi" },
+            { id: 403, name: "Dodaj użytkownika" },
+            { id: 404, name: "Zmień hasło" },
+            { id: 405, name: "Wyloguj" },
         ],
     },
 ];
@@ -171,69 +172,69 @@ const Instruction = () => {
 
     const renderContent = () => {
         switch (selectedMenuItem) {
-            case 1:
-                return <InstructionTable />;
-            case 2:
-                return <InstructionTable />;
-            case 3:
-                return <InstructionTable />;
-            case 4:
-                return <InstructionTable />;
-            case 5:
-                return <InstructionTable />;
-            case 6:
-                return <InstructionTable />;
-            case 8:
-                return <ReportDepartment setSelectedMenuItem={setSelectedMenuItem} />;
-            case 9:
-                return <ReportAdviser setSelectedMenuItem={setSelectedMenuItem} />;
-            case 11:
-                return <ReportFK company='KRT' />;
-            case 12:
-                return <ReportFK company='KEM' />;
-            case 13:
-                return <DocumentControl setSelectedMenuItem={setSelectedMenuItem} />;
-            case 14:
-                return <ReportDocumentControl />;
-            case 16:
-                return <ReportNora />;
-            case 17:
-                return <OrganizationStructure />;
-            case 19:
-                return <InstructionAccess />;
-            case 20:
-                return <InstructionAddData />;
-            case 22:
-                return <InstructionTableColumns />;
-            case 23:
-                return <InstructionChangeData />;
-            case 24:
-                return <InstructionMathData />;
-            case 26:
-                return <InstructionUpdate />;
-            case 27:
-                return <InstructionUser />;
-            case 28:
-                return <InstructionAddUser />;
-            case 29:
-                return <InstructionPassword />;
-            case 30:
-                return <InstructionLogout />;
             case 100:
-                return <InstructionHelp />;
-            case 101:
-                return <InstructionAuthor />;
-            case 101:
-                return <InstructionAuthor />;
-            case 102:
-                return <InstructionInfo />;
-            case 103:
                 return <InstructionTable />;
-            case 104:
+            // case 2:
+            //     return <InstructionTable />;
+            // case 3:
+            //     return <InstructionTable />;
+            // case 4:
+            //     return <InstructionTable />;
+            // case 5:
+            //     return <InstructionTable />;
+            // case 6:
+            //     return <InstructionTable />;
+            case 2011:
+                return <ReportDepartment setSelectedMenuItem={setSelectedMenuItem} />;
+            case 2012:
+                return <ReportAdviser setSelectedMenuItem={setSelectedMenuItem} />;
+            case 2021:
+                return <ReportFK company='KRT' />;
+            case 2022:
+                return <ReportFK company='KEM' />;
+            case 2031:
+                return <DocumentControl setSelectedMenuItem={setSelectedMenuItem} />;
+            case 2032:
+                return <ReportDocumentControl />;
+            case 204:
+                return <ReportNora />;
+            case 205:
+                return <OrganizationStructure />;
+            case 301:
+                return <InstructionAccess />;
+            case 302:
+                return <InstructionAddData />;
+            case 3031:
+                return <InstructionTableColumns />;
+            case 3032:
+                return <InstructionChangeData />;
+            case 3033:
+                return <InstructionMathData />;
+            case 401:
+                return <InstructionUpdate />;
+            case 402:
+                return <InstructionUser />;
+            case 403:
+                return <InstructionAddUser />;
+            case 404:
+                return <InstructionPassword />;
+            case 405:
+                return <InstructionLogout />;
+            case 9000:
+                return <InstructionHelp />;
+            case 9001:
+                return <InstructionAuthor />;
+            case 9001:
+                return <InstructionAuthor />;
+            case 9002:
+                return <InstructionInfo />;
+            case 9003:
+                return <InstructionTable />;
+            case 9004:
                 return <DocumentEdition />;
-            case 105:
+            case 9005:
                 return <InstructionRaportFK />;
-            case 200:
+            case 9006:
                 return <InstructionMenu />;
             // Dodaj inne przypadki dla innych elementów menu
             default:
@@ -247,21 +248,21 @@ const Instruction = () => {
         <section className="instruction">
             <section className="instruction__menu">
                 <section className="instruction__menu-item"
-                    onClick={() => setSelectedMenuItem(100)}>
+                    onClick={() => setSelectedMenuItem(9000)}>
                     <div className="instruction__menu-item--logo">
                         <FcRight />
                     </div>
                     <span className="instruction__menu-item--title">Informacje o programie</span>
                 </section>
                 <section className="instruction__menu-item"
-                    onClick={() => setSelectedMenuItem(101)}>
+                    onClick={() => setSelectedMenuItem(9001)}>
                     <div className="instruction__menu-item--logo">
                         <FcRight />
                     </div>
                     <span className="instruction__menu-item--title">Historia projektu</span>
                 </section>
                 <section className="instruction__menu-item"
-                    onClick={() => setSelectedMenuItem(102)}>
+                    onClick={() => setSelectedMenuItem(9002)}>
                     <div className="instruction__menu-item--logo">
                         <FcRight />
                     </div>
@@ -269,21 +270,21 @@ const Instruction = () => {
                 </section>
 
                 <section className="instruction__menu-item"
-                    onClick={() => setSelectedMenuItem(103)}>
+                    onClick={() => setSelectedMenuItem(9003)}>
                     <div className="instruction__menu-item--logo">
                         <FcRight />
                     </div>
                     <span className="instruction__menu-item--title">Tabela z danymi</span>
                 </section>
                 <section className="instruction__menu-item"
-                    onClick={() => setSelectedMenuItem(104)}>
+                    onClick={() => setSelectedMenuItem(9004)}>
                     <div className="instruction__menu-item--logo">
                         <FcRight />
                     </div>
                     <span className="instruction__menu-item--title">Edycja dokumentu</span>
                 </section>
                 <section className="instruction__menu-item"
-                    onClick={() => setSelectedMenuItem(105)}>
+                    onClick={() => setSelectedMenuItem(9005)}>
                     <div className="instruction__menu-item--logo">
                         <FcRight />
                     </div>

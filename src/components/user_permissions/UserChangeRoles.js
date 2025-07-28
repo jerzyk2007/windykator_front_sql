@@ -4,14 +4,12 @@ import useData from "../hooks/useData";
 import { Button } from "@mui/material";
 import "./UserChangeRoles.css";
 
-const UserChangeRoles = ({ id, roles, user }) => {
-
+const UserChangeRoles = ({ id, roles }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
 
   const [userRoles, setUserRoles] = useState({});
   const [errMsg, setErrMsg] = useState("");
-
 
   const rolesItem = Object.entries(userRoles).map(
     ([role, isChecked], index) => (
@@ -23,10 +21,22 @@ const UserChangeRoles = ({ id, roles, user }) => {
         >
           <span className="user-change-roles__container--text">
             {role}
-            {role === "FK" && (
+            {role === "FK_KRT" && (
               <span className="user-change-roles--information">
-                {" "}
-                - dodatkowy Raport FK
+                {" - dodatkowy Raport FK - KRT"}
+
+              </span>
+            )}
+            {role === "FK_KEM" && (
+              <span className="user-change-roles--information">
+                {" - dodatkowy Raport FK - KEM"}
+
+              </span>
+            )}
+            {role === "FK_RAC" && (
+              <span className="user-change-roles--information">
+                {" - dodatkowy Raport FK - RAC"}
+
               </span>
             )}
             {role === "FKAdmin" && (
@@ -104,6 +114,7 @@ const UserChangeRoles = ({ id, roles, user }) => {
 
   const handleChangeRoles = async () => {
     try {
+
       const arrayRoles = Object.entries(userRoles)
         .map(([role, isChecked]) => {
           if (isChecked) {
@@ -114,7 +125,6 @@ const UserChangeRoles = ({ id, roles, user }) => {
 
       // dodaje role Start - podstwawowa rola startowa
       arrayRoles.push("Start");
-
       await axiosPrivateIntercept.patch(`/user/change-roles/${id}`, {
         roles: arrayRoles,
       });
@@ -134,7 +144,9 @@ const UserChangeRoles = ({ id, roles, user }) => {
       Editor: roles?.Editor ? roles.Editor : false,
       Admin: roles?.Admin ? roles.Admin : false,
       Controller: roles?.Controller ? roles.Controller : false,
-      FK: roles?.FK ? roles.FK : false,
+      FK_KRT: roles?.FK_KRT ? roles.FK_KRT : false,
+      FK_KEM: roles?.FK_KEM ? roles.FK_KEM : false,
+      FK_RAC: roles?.FK_RAC ? roles.FK_RAC : false,
       Nora: roles?.Nora ? roles.Nora : false,
       SuperAdmin: roles?.SuperAdmin ? roles.SuperAdmin : false,
     } : {

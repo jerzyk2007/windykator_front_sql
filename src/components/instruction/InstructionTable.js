@@ -21,38 +21,45 @@ const InstructionTable = () => {
                 >{`a) `}
                     <span className='instruction_component-content--element'>Aktualne
                     </span>
-                    {` – tylko dokumenty,  których wartość do rozliczenia jest większa od zera,`}
+                    {` – tylko dokumenty, których wartość do rozliczenia jest większa od zera,`}
                 </span>
                 <span className='instruction_component-content--text'
                     style={{ marginLeft: "20px" }}
                 >{`b) `}
+                    <span className='instruction_component-content--element'>Pilne
+                    </span>
+                    {` – tylko dokumenty, których wartość do rozliczenia jest większa od zera, nie są w kancelarii i mają termin od minus 3 dni`}
+                </span>
+                <span className='instruction_component-content--text'
+                    style={{ marginLeft: "20px" }}
+                >{`c) `}
                     <span className='instruction_component-content--element'>Zobowiązania
                     </span>
                     {` - tylko dokumenty,  których wartość do rozliczenia jest mniejsza od zera (te dokumenty występują w Autostacji jako zobowiązania),`}
                 </span>
                 <span className='instruction_component-content--text'
                     style={{ marginLeft: "20px" }}
-                >{`c) `}
+                >{`d) `}
                     <span className='instruction_component-content--element'>Archiwum
                     </span> {` - tylko dokumenty rozliczone, których wartość jest równa zero,`}
                 </span>
                 <span className='instruction_component-content--text'
                     style={{ marginLeft: "20px" }}
-                >{`d) `}
+                >{`e) `}
                     <span className='instruction_component-content--element'>Kpl dane
                     </span>
                     {` – zostaną wczytane wszystkie dokumenty (jeśli masz dostęp do wszystkich działów wczytane zostanie kilkaset tysięcy dokumentów, może to spowolnić działanie programu),`}
                 </span>
                 <span className='instruction_component-content--text'
                     style={{ marginLeft: "20px" }}
-                >{`e) `}
+                >{`f) `}
                     <span className='instruction_component-content--element'>Dokumenty Raportu FK
                     </span>
                     {` – zostaną wczytane dokumenty, które zostały omówione w Raporcie FK i dla których dokumentów oczekiwane jest naniesienie decyzji biznesu oraz ostatecznej daty rozliczenia,`}
                 </span>
                 <span className='instruction_component-content--text'
                     style={{ marginLeft: "20px" }}
-                >{`f) `}
+                >{`g) `}
                     <span className='instruction_component-content--element'>Wyłączenia Raportu FK</span>
                     {` - niektóre dokumenty mogą zostać wyłączone z procesu  Raportowania FK, wybranie tej pozycji menu spowoduje wczytanie dokumentów „ręcznie” wyłączonych,`}
                 </span>
