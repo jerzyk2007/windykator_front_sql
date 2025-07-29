@@ -174,16 +174,6 @@ const Instruction = () => {
         switch (selectedMenuItem) {
             case 100:
                 return <InstructionTable />;
-            // case 2:
-            //     return <InstructionTable />;
-            // case 3:
-            //     return <InstructionTable />;
-            // case 4:
-            //     return <InstructionTable />;
-            // case 5:
-            //     return <InstructionTable />;
-            // case 6:
-            //     return <InstructionTable />;
             case 2011:
                 return <ReportDepartment setSelectedMenuItem={setSelectedMenuItem} />;
             case 2012:

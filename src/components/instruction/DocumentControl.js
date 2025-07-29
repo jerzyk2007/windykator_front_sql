@@ -15,7 +15,7 @@ const DocumentControl = ({ setSelectedMenuItem }) => {
                 </span>
                 <span className='instruction_custom-content--text'
                     style={{ textAlign: "center", color: "red", cursor: "pointer", textDecoration: "dashed" }}
-                    onClick={() => setSelectedMenuItem(103)}
+                    onClick={() => setSelectedMenuItem(100)}
                 >Instrukcja obsługi tabeli
                 </span>
             </section>
