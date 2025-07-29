@@ -13,8 +13,7 @@ import {
   grossTotalDepartments,
   columnsDepartments,
 } from "./utilsForRaportTable/prepareDataToRaport";
-// import { getAllDataRaport } from "./pliki_do_usuniecia/utilsForTable/excelFilteredTable";
-import { getAllDataRaport } from "../table/utilsForTable/excelFilteredTable";
+import { dataRaport } from "../table/utilsForTable/excelFilteredTable";
 
 import "./RaportDepartments.css";
 
@@ -367,7 +366,7 @@ const RaportDepartments = () => {
 
       return {
         ...item,
-        CEL: item.DZIALY !== "Całość" ? String(`${item.CEL} %`) : "",
+        CEL: item.DZIALY === "Całość" ? "" : item.CEL ? String(`${item.CEL} %`) : "Brak %",
         CEL_BEZ_PZU_LINK4: String(`${CEL_BEZ_PZU_LINK4} %`),
         CEL_BEZ_KANCELARII: String(`${CEL_BEZ_KANCELARII} %`),
         CEL_CALOSC: String(`${CEL_CALOSC} %`),
@@ -378,13 +377,11 @@ const RaportDepartments = () => {
         ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4,
       };
     });
-
     const orderColumns = {
       columns: newColumns,
       order: newOrder,
     };
-
-    getAllDataRaport(update, orderColumns, type);
+    dataRaport(update, orderColumns, type);
   };
 
   useEffect(() => {

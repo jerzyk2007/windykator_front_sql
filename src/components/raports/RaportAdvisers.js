@@ -13,8 +13,7 @@ import {
   columnsAdv,
   grossTotalAdv,
 } from "./utilsForRaportTable/prepareDataToRaport";
-// import { getAllDataRaport } from "./pliki_do_usuniecia/utilsForTable/excelFilteredTable";
-import { getAllDataRaport } from "../table/utilsForTable/excelFilteredTable";
+import { dataRaport } from "../table/utilsForTable/excelFilteredTable";
 
 // import "./RaportAdvisers.css";
 
@@ -360,7 +359,8 @@ const RaportAdvisers = () => {
       columns: newColumns,
       order: newOrder,
     };
-    getAllDataRaport(update, orderColumns, type);
+
+    dataRaport(update, orderColumns, type);
   };
 
   useEffect(() => {
