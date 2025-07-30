@@ -1,17 +1,33 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-import { head } from 'lodash';
 
 export const getAllDataRaport = async (allData, orderColumns, info) => {
-  const cleanData = allData.map(item => {
-    const sanitize = (text) => {
-      if (!text) return " ";
-      return text.replace(
-        /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
-        ' '
-      );
-    };
+  const sanitize = (text) => {
+    if (!text) return " ";
+    return text.replace(
+      /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
+      ' '
+    );
+  };
 
+  const sanitizeSheetName = (name) => {
+    if (!name || typeof name !== 'string') return 'Arkusz';
+    return name.replace(/[:\\\/\?\*\[\]]/g, ' ').trim().substring(0, 31);
+  };
+
+  const usedNames = new Set();
+
+  const getUniqueSheetName = (base) => {
+    let name = sanitizeSheetName(base);
+    let counter = 1;
+    while (usedNames.has(name)) {
+      name = sanitizeSheetName(base).substring(0, 28) + `_${counter++}`;
+    }
+    usedNames.add(name);
+    return name;
+  };
+
+  const cleanData = allData.map(item => {
     let dzialania = "";
 
     if (Array.isArray(item.UWAGI_ASYSTENT)) {
@@ -36,7 +52,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
   const startRow = 2;
 
   try {
-    // Grupowanie cleanData po DZIAL (przed zmianą nazw kolumn)
     const groupedByDzial = {};
     cleanData.forEach(item => {
       const dzial = item.DZIAL || "Brak działu";
@@ -46,7 +61,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
       groupedByDzial[dzial].push(item);
     });
 
-    // Arkusz zbiorczy
     const changeNameColumns = cleanData.map((doc) => {
       const newItem = {};
       for (const column of orderColumns.columns) {
@@ -58,12 +72,11 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
 
     const groupedSheets = [
       {
-        name: info,
+        name: getUniqueSheetName(info),
         data: changeNameColumns,
       },
     ];
 
-    // Pozostałe arkusze – posortowane alfabetycznie
     const sortedDzialNames = Object.keys(groupedByDzial).sort((a, b) => a.localeCompare(b));
 
     sortedDzialNames.forEach(dzialName => {
@@ -77,12 +90,11 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
       });
 
       groupedSheets.push({
-        name: dzialName.substring(0, 30),
+        name: getUniqueSheetName(dzialName),
         data: mappedGroup,
       });
     });
 
-    // Tworzenie arkuszy
     const workbook = new ExcelJS.Workbook();
 
     groupedSheets.forEach((sheet) => {
@@ -114,7 +126,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
         };
       });
 
-      // Formatowanie kolumn
       worksheet.getColumn(1).width = 10;
       worksheet.getColumn(1).alignment = { horizontal: 'center', vertical: 'middle' };
 
@@ -165,7 +176,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
         }
       });
 
-      // Auto-szerokość kolumn
       headers.forEach((header, columnIndex) => {
         const colIndex = columnIndex + 2;
         const column = worksheet.getColumn(colIndex);
@@ -211,7 +221,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
     });
 
     const buffer = await workbook.xlsx.writeBuffer();
-    saveAs(new Blob([buffer]), `${info}.xlsx`);
+    saveAs(new Blob([buffer]), `${sanitizeSheetName(info)}.xlsx`);
   } catch (err) {
     console.error(err);
   }
