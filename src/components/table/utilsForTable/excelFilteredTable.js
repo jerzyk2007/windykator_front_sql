@@ -151,7 +151,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
           column.width = 25;
           sumCell.value = { formula: `SUBTOTAL(103,${columnLetter}${startDataRow}:${columnLetter}${endDataRow})` };
           sumCell.numFmt = '0';
-        } else if (header === 'Brutto' || header === 'Do rozl.') {
+        } else if (header === 'Brutto' || header === 'Netto' || header === 'Do rozl.') {
           column.numFmt = '#,##0.00';
           for (let rowIndex = startDataRow; rowIndex <= endDataRow; rowIndex++) {
             const cell = worksheet.getCell(`${columnLetter}${rowIndex}`);
