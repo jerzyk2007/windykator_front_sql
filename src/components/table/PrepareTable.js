@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import useData from "../hooks/useData";
 import PleaseWait from "../PleaseWait";
 import Table from "./Table";
 import { prepareColumns } from "./utilsForTable/PrepareColumns";
-// import { filteredArrayManagement } from '../table/utilsForTable/changeSingleDocument';
 import "./PrepareTable.css";
 
 const PrepareTable = ({ info, raportDocuments }) => {
@@ -60,13 +58,10 @@ const PrepareTable = ({ info, raportDocuments }) => {
             if (!item.INFORMACJA_ZARZAD) {
               return item; // Zostawiamy oryginalny obiekt bez zmian
             }
-            // const parsedArray = item.INFORMACJA_ZARZAD !== 'BRAK' ? JSON.parse(item.INFORMACJA_ZARZAD) : item.INFORMACJA_ZARZAD;
-
 
             const newInfo = item.INFORMACJA_ZARZAD && item.INFORMACJA_ZARZAD !== 'BRAK'
               ? Array.isArray(JSON.parse(item.INFORMACJA_ZARZAD))  // Parsujemy tylko jeśli nie jest 'BRAK'
                 ? JSON.parse(item.INFORMACJA_ZARZAD).length > 0
-                  // ? JSON.parse(item.INFORMACJA_ZARZAD)[JSON.parse(item.INFORMACJA_ZARZAD).length - 1].slice(0, 50)  // Ostatni element, pierwsze 50 znaków
                   ? JSON.parse(item.INFORMACJA_ZARZAD)[JSON.parse(item.INFORMACJA_ZARZAD).length - 1] // Ostatni element, pierwsze 50 znaków
                   : "BRAK"
                 : "BRAK"
@@ -76,8 +71,6 @@ const PrepareTable = ({ info, raportDocuments }) => {
             return {
               ...item,
               INFORMACJA_ZARZAD: newInfo
-              // INFORMACJA_ZARZAD: item.INFORMACJA_ZARZAD !== 'BRAK' ? filteredArrayManagement(item.INFORMACJA_ZARZAD) : item.INFORMACJA_ZARZAD
-              // INFORMACJA_ZARZAD: item.INFORMACJA_ZARZAD !== 'BRAK' ? filteredArrayManagement(parsedArray) : item.INFORMACJA_ZARZAD
             };
           });
           setDocuments(filteredData);
@@ -116,8 +109,6 @@ const PrepareTable = ({ info, raportDocuments }) => {
         <PleaseWait />
       ) : (
         columns.length > 0 && (
-          // documents.length > 0 && (
-          // tableSettings.pagination &&
           <Table
             documents={documents}
             setDocuments={setDocuments}
@@ -125,12 +116,6 @@ const PrepareTable = ({ info, raportDocuments }) => {
             settings={tableSettings}
             handleSaveSettings={handleSaveSettings}
             roles={auth.roles}
-          // getSingleRow={getSingleRow}
-          // quickNote={quickNote}
-          // setQuickNote={setQuickNote}
-          // dataRowTable={dataRowTable}
-          // setDataRowTable={setDataRowTable}
-          // info={info}
           />
         )
       )}
