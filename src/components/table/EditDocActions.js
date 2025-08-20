@@ -134,7 +134,7 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
               }}
             >
               <option value="">BRAK</option>
-              <option value="WEWNĘTRZNA WINDYKACJA">WEWNĘTRZNA WINDYKACJA</option>
+              <option value="WINDYKACJA WEWNĘTRZNA">WINDYKACJA WEWNĘTRZNA</option>
               <option value="KANCELARIA KROTOSKI">KANCELARIA KROTOSKI</option>
               <option value="KRAUZE">KRAUZE</option>
               <option value="POSTEPOWANIE SANACYJNE">
