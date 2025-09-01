@@ -11,8 +11,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "dayjs/locale/pl";
 import { plPL } from "@mui/x-date-pickers/locales";
 
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { pl } from 'date-fns/locale';
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { pl } from "date-fns/locale";
 
 import useData from "../hooks/useData";
 import useWindowSize from "../hooks/useWindow";
@@ -30,7 +30,7 @@ const Table = ({
   columns,
   settings,
   handleSaveSettings,
-  roles
+  roles,
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const theme = useTheme();
@@ -79,9 +79,7 @@ const Table = ({
     let newColumns = [];
     newColumns = columns
       .map((item) => {
-        const matching = arrayOrder.find(
-          (match) => match === item.accessorKey
-        );
+        const matching = arrayOrder.find((match) => match === item.accessorKey);
         if (matching) {
           return {
             accessorKey: item.accessorKey,
@@ -97,7 +95,6 @@ const Table = ({
       );
       return matchedColumn ? matchedColumn.header : key;
     });
-
     const updateData = rowData.map((item) => {
       // Filtracja kluczy obiektu na podstawie arrayOrder
       const filteredKeys = Object.keys(item).filter((key) =>
@@ -116,7 +113,6 @@ const Table = ({
       order: newOrder,
     };
 
-
     getAllDataRaport(updateData, orderColumns, type);
   };
 
@@ -124,7 +120,6 @@ const Table = ({
     const getRow = documents.filter((row) => row.id_document === id);
 
     if (getRow.length > 0) {
-
       try {
         setPleaseWait(true);
         const response = await axiosPrivateIntercept.get(
@@ -134,19 +129,18 @@ const Table = ({
           setQuickNote(response.data.singleDoc);
         }
         if (type === "full") {
-
           setDataRowTable({
             edit: true,
             singleDoc: response?.data?.singleDoc ? response.data.singleDoc : {},
-            controlDoc: response?.data?.controlDoc ? response.data.controlDoc : {},
+            controlDoc: response?.data?.controlDoc
+              ? response.data.controlDoc
+              : {},
           });
         }
-
       } catch (error) {
         console.error("Error fetching data from the server:", error);
       } finally {
         setPleaseWait(false);
-
       }
     } else {
       console.error("No row found with the specified ID");
@@ -212,7 +206,8 @@ const Table = ({
     localization: MRT_Localization_PL,
     enableGlobalFilterModes: true,
     globalFilterModeOptions: ["fuzzy", "contains", "startsWith"],
-    globalFilterFn: "contains",
+    globalFilterFn: "fuzzy",
+    // globalFilterFn: "contains",
     positionGlobalFilter: "left",
     // opcja wyszukuje zbiory do select i multi-select
     enableFacetedValues: true,
@@ -264,7 +259,7 @@ const Table = ({
           borderWidth: "1px",
           background: "none",
           marginRight: "-9px",
-          borderColor: "rgba(75, 75, 75, .1)"
+          borderColor: "rgba(75, 75, 75, .1)",
         },
       },
     }),
@@ -276,7 +271,6 @@ const Table = ({
         } else {
           getSingleRow(row.original.id_document, "full");
         }
-
       },
     }),
 
@@ -327,8 +321,6 @@ const Table = ({
     ),
   });
 
-
-
   useEffect(() => {
     setTableSize(height - 151);
   }, [height]);
@@ -338,7 +330,9 @@ const Table = ({
   }, [documents]);
 
   useEffect(() => {
-    const visibleData = table.getPrePaginationRowModel().rows.map((row) => row.original.id_document);
+    const visibleData = table
+      .getPrePaginationRowModel()
+      .rows.map((row) => row.original.id_document);
     setNextDoc(visibleData);
   }, [table.getPrePaginationRowModel().rows]);
 
@@ -364,25 +358,21 @@ const Table = ({
           />
         )} */}
 
-        {
-          pleaseWait ? (
-            <PleaseWait />
-          ) : (
-            [110, 120, 1100].some(role => auth?.roles?.includes(role)) && dataRowTable.edit && (
-              <EditRowTable
-                dataRowTable={dataRowTable}
-                setDataRowTable={setDataRowTable}
-                updateDocuments={updateDocuments}
-                roles={roles}
-                nextDoc={nextDoc}
-                getSingleRow={getSingleRow}
-
-
-              />
-            )
+        {pleaseWait ? (
+          <PleaseWait />
+        ) : (
+          [110, 120, 1100].some((role) => auth?.roles?.includes(role)) &&
+          dataRowTable.edit && (
+            <EditRowTable
+              dataRowTable={dataRowTable}
+              setDataRowTable={setDataRowTable}
+              updateDocuments={updateDocuments}
+              roles={roles}
+              nextDoc={nextDoc}
+              getSingleRow={getSingleRow}
+            />
           )
-        }
-
+        )}
 
         <LocalizationProvider
           // dateAdapter={AdapterDayjs}
@@ -392,7 +382,6 @@ const Table = ({
           dateAdapter={AdapterDateFns}
           adapterLocale={pl}
           localeText={plLocale}
-
         >
           <MaterialReactTable table={table} />
         </LocalizationProvider>
