@@ -17,26 +17,40 @@ const FKAddData = ({ company }) => {
 
     try {
       const generateResponse = await axiosPrivateIntercept.get(
-        `/fk/get-raport-data/${company}`
+        `/fk/generate-data/${company}`
       );
-      if (!generateResponse?.data?.success) {
-        console.log("stop");
-      }
-      console.log(generateResponse.data);
-      // const response = await axiosPrivateIntercept.post(
-      //   `/fk/get-raport-data/${company}`,
+
+      const titleDate = generateResponse?.data?.date || "Błąd";
+
+      // const titleDate = "2025-09-02";
+
+      const getMainRaport = await axiosPrivateIntercept.post(
+        `/fk/get-main-report/${company}`,
+        {},
+        {
+          responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
+        }
+      );
+      const blobMain = new Blob([getMainRaport.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      saveAs(blobMain, `Raport_Draft 201 203_należności_${titleDate}.xlsx`);
+
+      // const getBusinessRaport = await axiosPrivateIntercept.post(
+      //   `/fk/get-business-report/${company}`,
       //   {},
       //   {
-      //     responseType: 'blob', // 👈 najważniejsze: pobieramy jako blob
+      //     responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
       //   }
       // );
-      // const blob = new Blob([response.data], {
-      //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      // const blobBusiness = new Blob([getBusinessRaport.data], {
+      //   type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       // });
 
-      // saveAs(blob, 'Raport_Draft 201 203_należności.xlsx');
+      // saveAs(blobBusiness, `Raport należności_biznes_stan _${titleDate}.xlsx`);
 
-      // await getDateAndCounter();
+      await getDateAndCounter();
     } catch (err) {
       console.error(err);
     } finally {
@@ -49,7 +63,7 @@ const FKAddData = ({ company }) => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get(
-        `/fk/generate-raport/${company}`
+        `/fk/create-raport/${company}`
       );
 
       if (result?.data?.message) {
