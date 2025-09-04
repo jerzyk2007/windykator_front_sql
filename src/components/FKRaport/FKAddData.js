@@ -21,7 +21,6 @@ const FKAddData = ({ company }) => {
       );
 
       const titleDate = generateResponse?.data?.date || "Błąd";
-
       // const titleDate = "2025-09-02";
 
       const getMainRaport = await axiosPrivateIntercept.post(
@@ -37,18 +36,18 @@ const FKAddData = ({ company }) => {
 
       saveAs(blobMain, `Raport_Draft 201 203_należności_${titleDate}.xlsx`);
 
-      // const getBusinessRaport = await axiosPrivateIntercept.post(
-      //   `/fk/get-business-report/${company}`,
-      //   {},
-      //   {
-      //     responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
-      //   }
-      // );
-      // const blobBusiness = new Blob([getBusinessRaport.data], {
-      //   type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      // });
+      const getBusinessRaport = await axiosPrivateIntercept.post(
+        `/fk/get-business-report/${company}`,
+        {},
+        {
+          responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
+        }
+      );
+      const blobBusiness = new Blob([getBusinessRaport.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
 
-      // saveAs(blobBusiness, `Raport należności_biznes_stan _${titleDate}.xlsx`);
+      saveAs(blobBusiness, `Raport należności_biznes_stan _${titleDate}.xlsx`);
 
       await getDateAndCounter();
     } catch (err) {
@@ -65,7 +64,6 @@ const FKAddData = ({ company }) => {
       const result = await axiosPrivateIntercept.get(
         `/fk/create-raport/${company}`
       );
-
       if (result?.data?.message) {
         return setMissingDeps(result.data.message);
       }
