@@ -1,0 +1,29 @@
+.header_notification {
+    flex-basis: 50%;
+    min-width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header_notification-icon {
+    font-size: 1.5rem;
+    color: rgb(31, 63, 167);
+    animation: logo 2s infinite linear;
+}
+
+@keyframes logo {
+    0% {
+        rotate: 0deg;
+        scale: 80%;
+    }
+
+    50% {
+        scale: 100%;
+    }
+
+    100% {
+        rotate: 360deg;
+        scale: 80%;
+    }
+}

@@ -1,0 +1,9 @@
+.home {
+    display: flex;
+}
+
+.home__update {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}

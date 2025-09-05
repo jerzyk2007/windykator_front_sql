@@ -1,0 +1,4 @@
+.prepare_table {
+  flex-grow: 1;
+  display: flex;
+}

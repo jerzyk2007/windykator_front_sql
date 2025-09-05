@@ -1,0 +1,16 @@
+.trade-credit {
+  display: flex;
+  justify-content: center;
+}
+
+.trade-credit__container {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.trade-credit__container button {
+  margin: 0 20px;
+  border: none;
+  padding: 5px 10px;
+}

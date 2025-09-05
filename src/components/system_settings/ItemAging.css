@@ -1,0 +1,36 @@
+.item_aging--fa-pen-to-square,
+.item_aging--fa-trash-can,
+.item_aging--fa-xmark,
+.item_aging--fa-check {
+  font-size: 1.2rem;
+  margin: 0 5px;
+  color: rgb(92, 133, 32);
+  flex-basis: 10%;
+  cursor: pointer;
+}
+
+.item_aging-title__container-number {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-evenly;
+  justify-content: center;
+  align-items: center;
+}
+
+.item_aging-title__container-add--edit {
+  width: 35%;
+  padding: 5px;
+  margin: 2px 4px;
+  font-size: 1.1rem;
+  border: none;
+  text-align: center;
+  border: 1px solid rgba(0, 92, 145, 0.6);
+  border-radius: 5px;
+  outline: none;
+}
+
+
+.item_aging-title__container-add--panel {
+  width: 20%;
+  display: flex;
+}

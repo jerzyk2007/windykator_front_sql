@@ -1,0 +1,34 @@
+.edit_user_settings {
+  position: relative;
+  flex-grow: 1;
+  min-width: 1200px;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.05rem;
+  font-optical-sizing: auto;
+  font-style: 700;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.edit_user_settings-button {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.edit_user_settings_section-content {
+  max-height: calc(100vh - 100px);
+  flex-grow: 1;
+  display: flex;
+}
+
+.edit_user_settings_section-content-data {
+  flex-basis: 50%;
+  min-width: 500px;
+  margin: 0 2px;
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,11 @@
+.edit_doc_actions {
+    flex-grow: 1;
+    font-size: 1.1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.edit_doc_actions__container {
+    flex-grow: 1;
+    flex-basis: 50%;
+}

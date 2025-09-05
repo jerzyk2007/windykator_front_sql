@@ -1,0 +1,66 @@
+.user_settings {
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.user_settings__container {
+  width: 70%;
+  min-width: 800px;
+  display: flex;
+  flex-direction: column;
+}
+
+.user_settings__search {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+.user_settings__search-form {
+  width: 70%;
+  margin: 0 auto;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user_settings__search-text {
+  display: block;
+  width: 80%;
+  font-size: 1.2rem;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  outline: none;
+  overflow-y: auto;
+}
+
+.user_settings__result {
+  width: 60%;
+  margin: 10px auto;
+  display: flex;
+  padding: 10px;
+  font-size: 1.2rem;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+}
+
+.user_settings__result--edit {
+  font-size: 2.5rem;
+  margin-left: auto;
+  color: rgb(46, 157, 24);
+  cursor: pointer;
+  min-width: 10%;
+  flex-shrink: 0;
+}
+
+.user_settings__result--name {
+  display: flex;
+  font-size: 1.2rem;
+  align-items: center;
+}

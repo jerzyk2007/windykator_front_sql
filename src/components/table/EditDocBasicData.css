@@ -1,0 +1,20 @@
+.edit_doc_basic-data {
+  flex-grow: 1;
+}
+
+.edit_doc_basic-data--document--input {
+  width: 100%;
+  flex-basis: 59%;
+  margin: 1px 2px;
+  padding: 1px 5px;
+  font-size: 1.2rem;
+  text-align: center;
+  border: 1px solid rgba(191, 196, 199, 0.6);
+  border-radius: 5px;
+  font-size: 1.15rem;
+  color: rgb(18, 48, 10);
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  background-color: rgba(223, 222, 222, 0.6);
+  display: flex;
+  align-items: center;
+}

@@ -1,0 +1,107 @@
+.user_change_departments {
+  flex-grow: 1;
+  margin: 2px 0;
+  border: 1px solid rgba(0, 92, 145, 0.6);
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.user_change_departments__title {
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.user_change_departments--counter {
+  flex-basis: 50px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+}
+
+.user_change_departments--counter--info {
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+  font-size: 1.4rem;
+  background-color: #007bff;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user_change_departments__title--name {
+  flex-basis: 60%;
+  text-align: center;
+}
+
+.user_change_departments__title--select {
+  outline: none;
+  flex-basis: 20%;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2px;
+  margin: 2px;
+}
+
+.user_change_departments__select,
+.user_change_departments__accept {
+  padding: 5px;
+  margin: 5px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.user_change_departments__accept {
+  margin-top: auto;
+}
+
+.user_change_departments Button {
+  width: 30%;
+  margin: 0px auto;
+}
+
+.user_change_departments__container {
+  padding: 5px;
+  font-size: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.user_change_departments__info {
+  flex-basis: 48%;
+  min-width: 120px;
+  padding: 5px 5px;
+  margin: 2px;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(0, 92, 145, 0.6);
+  border-radius: 5px;
+}
+
+.user_change_departments__text {
+  flex-grow: 1;
+  margin: 0 10px 0 5px;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+}
+
+.user_change_departments__container--check {
+  width: 1rem;
+  height: 1rem;
+}

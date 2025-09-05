@@ -1,0 +1,11 @@
+.header {
+  background-color: #bfe2ff;
+  display: flex;
+  position: relative;
+  z-index: 6;
+}
+
+.header-menu {
+  display: none;
+  height: 50px;
+}
