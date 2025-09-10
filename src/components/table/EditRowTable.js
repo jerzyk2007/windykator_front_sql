@@ -7,19 +7,25 @@ import EditDocChat from "./EditDocChat";
 import EditDocActions from "./EditDocActions";
 import EditDocBeCared from "./EditDocBeCared";
 import EditDataManagement from "./EditDataManagement";
-import DocumentsControlBL from './DocumentsControlBL';
-import DocumentsControlChat from './DocumentsControlChat';
-import { changeSingleDoc } from './utilsForTable/changeSingleDocument';
+import DocumentsControlBL from "./DocumentsControlBL";
+import DocumentsControlChat from "./DocumentsControlChat";
+import { changeSingleDoc } from "./utilsForTable/changeSingleDocument";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 
 import "./EditRowTable.css";
 
-const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, nextDoc, getSingleRow }) => {
+const EditRowTable = ({
+  dataRowTable,
+  setDataRowTable,
+  updateDocuments,
+  roles,
+  nextDoc,
+  getSingleRow,
+}) => {
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-
   const [rowData, setRowData] = useState([]);
-  const [changePanel, setChangePanel] = useState('doc-actions');
+  const [changePanel, setChangePanel] = useState("doc-actions");
   const [toggleState, setToggleState] = useState(1);
   const [note, setNote] = useState("");
 
@@ -45,13 +51,13 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
     faktura: false,
     odpowiedzialnosc: false,
     platnoscVAT: false,
-    zmianyOstatniaKontrola: false
+    zmianyOstatniaKontrola: false,
   });
 
   // dane dla DocumentsControlChat
   const [controlChat, setControlChat] = useState({
-    note: '',
-    chat: []
+    note: "",
+    chat: [],
   });
 
   //dodawane są notatki z czatu i logi przy zmianie np błąd doradcy, pobrany VAT
@@ -82,50 +88,43 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
     }
   };
 
-  const handleSaveData = async (type = 'exit') => {
+  const handleSaveData = async (type = "exit") => {
     const { id_document, NUMER_FV, FIRMA } = rowData;
 
     try {
-
-      await axiosPrivateIntercept.patch(
-        `/documents/change-single-document`,
-        {
-          id_document,
-          documentItem: rowData,
-        }
-
-      );
+      await axiosPrivateIntercept.patch(`/documents/change-single-document`, {
+        id_document,
+        documentItem: rowData,
+      });
 
       if (roles.includes(120)) {
-        await axiosPrivateIntercept.patch(
-          `/documents/change-control-chat`,
-          {
-            NUMER_FV,
-            chat: controlChat.chat,
-            FIRMA
-          });
+        await axiosPrivateIntercept.patch(`/documents/change-control-chat`, {
+          NUMER_FV,
+          chat: controlChat.chat,
+          FIRMA,
+        });
 
-        if (rowData.AREA === 'BLACHARNIA') {
+        if (rowData.AREA === "BLACHARNIA") {
           await axiosPrivateIntercept.patch(
             `/documents/change-document-control`,
             {
               NUMER_FV,
               documentControlBL,
-              FIRMA
+              FIRMA,
             }
           );
         }
       }
 
-      if (managementDescription.INFORMACJA_ZARZAD.length || managementDescription.HISTORIA_ZMIANY_DATY_ROZLICZENIA.length) {
-        await axiosPrivateIntercept.post(
-          `/fk/add-decision-date-fk`,
-          {
-            NUMER_FV,
-            data: managementDescription,
-            FIRMA
-          }
-        );
+      if (
+        managementDescription.INFORMACJA_ZARZAD.length ||
+        managementDescription.HISTORIA_ZMIANY_DATY_ROZLICZENIA.length
+      ) {
+        await axiosPrivateIntercept.post(`/fk/add-decision-date-fk`, {
+          NUMER_FV,
+          data: managementDescription,
+          FIRMA,
+        });
       }
 
       setManagementDescription({
@@ -140,44 +139,35 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
           singleDoc: {},
           controlDoc: {},
         });
-
       }
-
     } catch (err) {
       console.error(err);
     }
-
   };
-
 
   const checkNextDoc = async (type) => {
     try {
-      await handleSaveData('no_exit');
-      await getSingleRow(nextPrevDoc[type], 'full');
-    }
-    catch (error) {
+      await handleSaveData("no_exit");
+      await getSingleRow(nextPrevDoc[type], "full");
+    } catch (error) {
       console.error(error);
     }
   };
 
   const changeMarkDoc = async (NUMER_FV, MARK_FK, FIRMA) => {
     try {
-      await axiosPrivateIntercept.patch(
-        `/fk/change-mark-document`,
-        {
-          NUMER_FV,
-          MARK_FK,
-          FIRMA
-        }
-      );
-      setRowData(prev => {
+      await axiosPrivateIntercept.patch(`/fk/change-mark-document`, {
+        NUMER_FV,
+        MARK_FK,
+        FIRMA,
+      });
+      setRowData((prev) => {
         return {
           ...prev,
-          MARK_FK: prev.MARK_FK === 1 ? 0 : 1
+          MARK_FK: prev.MARK_FK === 1 ? 0 : 1,
         };
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -188,40 +178,57 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
       prev: nextDoc[index - 1] ? nextDoc[index - 1] : null,
       next: nextDoc[index + 1] ? nextDoc[index + 1] : null,
     });
-
   }, [rowData.NUMER_FV]);
-
 
   useEffect(() => {
     setRowData(dataRowTable?.singleDoc ? dataRowTable.singleDoc : {});
-    setControlChat(prev => {
+    setControlChat((prev) => {
       return {
         ...prev,
-        chat: dataRowTable?.controlDoc?.CONTROL_UWAGI ? dataRowTable.controlDoc.CONTROL_UWAGI : []
+        chat: dataRowTable?.controlDoc?.CONTROL_UWAGI
+          ? dataRowTable.controlDoc.CONTROL_UWAGI
+          : [],
       };
     });
 
-    if (dataRowTable.singleDoc.AREA === 'BLACHARNIA') {
+    if (dataRowTable.singleDoc.AREA === "BLACHARNIA") {
       setDocumentControlBL({
-        upowaznienie: dataRowTable?.controlDoc?.CONTROL_UPOW ? dataRowTable.controlDoc.CONTROL_UPOW : false,
-        oswiadczenieVAT: dataRowTable?.controlDoc?.CONTROL_OSW_VAT ? dataRowTable.controlDoc.CONTROL_OSW_VAT : false,
-        prawoJazdy: dataRowTable?.controlDoc?.CONTROL_PR_JAZ ? dataRowTable.controlDoc.CONTROL_PR_JAZ : false,
-        dowodRejestr: dataRowTable?.controlDoc?.CONTROL_DOW_REJ ? dataRowTable.controlDoc.CONTROL_DOW_REJ : false,
-        polisaAC: dataRowTable?.controlDoc?.CONTROL_POLISA ? dataRowTable.controlDoc.CONTROL_POLISA : false,
-        decyzja: dataRowTable?.controlDoc?.CONTROL_DECYZJA ? dataRowTable.controlDoc.CONTROL_DECYZJA : false,
-        faktura: dataRowTable?.controlDoc?.CONTROL_FV ? dataRowTable.controlDoc.CONTROL_FV : false,
-        odpowiedzialnosc: dataRowTable?.controlDoc?.CONTROL_ODPOWIEDZIALNOSC ? dataRowTable.controlDoc.CONTROL_ODPOWIEDZIALNOSC : false,
-        platnoscVAT: dataRowTable?.controlDoc?.CONTROL_PLATNOSC_VAT ? dataRowTable.controlDoc.CONTROL_PLATNOSC_VAT : false,
-        zmianyOstatniaKontrola: dataRowTable?.controlDoc?.CONTROL_BRAK_DZIALAN_OD_OST ? dataRowTable.controlDoc.CONTROL_BRAK_DZIALAN_OD_OST : false,
+        upowaznienie: dataRowTable?.controlDoc?.CONTROL_UPOW
+          ? dataRowTable.controlDoc.CONTROL_UPOW
+          : false,
+        oswiadczenieVAT: dataRowTable?.controlDoc?.CONTROL_OSW_VAT
+          ? dataRowTable.controlDoc.CONTROL_OSW_VAT
+          : false,
+        prawoJazdy: dataRowTable?.controlDoc?.CONTROL_PR_JAZ
+          ? dataRowTable.controlDoc.CONTROL_PR_JAZ
+          : false,
+        dowodRejestr: dataRowTable?.controlDoc?.CONTROL_DOW_REJ
+          ? dataRowTable.controlDoc.CONTROL_DOW_REJ
+          : false,
+        polisaAC: dataRowTable?.controlDoc?.CONTROL_POLISA
+          ? dataRowTable.controlDoc.CONTROL_POLISA
+          : false,
+        decyzja: dataRowTable?.controlDoc?.CONTROL_DECYZJA
+          ? dataRowTable.controlDoc.CONTROL_DECYZJA
+          : false,
+        faktura: dataRowTable?.controlDoc?.CONTROL_FV
+          ? dataRowTable.controlDoc.CONTROL_FV
+          : false,
+        odpowiedzialnosc: dataRowTable?.controlDoc?.CONTROL_ODPOWIEDZIALNOSC
+          ? dataRowTable.controlDoc.CONTROL_ODPOWIEDZIALNOSC
+          : false,
+        platnoscVAT: dataRowTable?.controlDoc?.CONTROL_PLATNOSC_VAT
+          ? dataRowTable.controlDoc.CONTROL_PLATNOSC_VAT
+          : false,
+        zmianyOstatniaKontrola: dataRowTable?.controlDoc
+          ?.CONTROL_BRAK_DZIALAN_OD_OST
+          ? dataRowTable.controlDoc.CONTROL_BRAK_DZIALAN_OD_OST
+          : false,
       });
     }
-
   }, [dataRowTable]);
 
-
-
   return (
-
     <section className="edit-row-table">
       <section className="edit-row-table-wrapper">
         <section className="edit-row-table__container">
@@ -244,41 +251,43 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                     note={note}
                     setNote={setNote}
                   />
-
                 </section>
                 <section className="edit-row-table_section-content-data">
-                  {changePanel === 'doc-actions' &&
+                  {changePanel === "doc-actions" && (
                     <section className="edit-row-table__change-panel">
-                      {(auth.roles.includes(110) || auth.roles.includes(120)) && rowData.MARK_FK ? (< Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => setChangePanel('management')}
-                      >
-                        Raport FK
-                      </Button>) : null}
-                      {rowData.AREA === 'BLACHARNIA' &&
-                        < Button
+                      {(auth.roles.includes(110) || auth.roles.includes(120)) &&
+                      rowData.MARK_FK ? (
+                        <Button
                           variant="contained"
                           color="secondary"
-                          onClick={() => setChangePanel('becared')}
+                          onClick={() => setChangePanel("management")}
+                        >
+                          Raport FK
+                        </Button>
+                      ) : null}
+                      {rowData.AREA === "BLACHARNIA" && (
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => setChangePanel("becared")}
                         >
                           Becared
                         </Button>
-                      }
+                      )}
                     </section>
-                  }
-                  {changePanel !== 'doc-actions' &&
+                  )}
+                  {changePanel !== "doc-actions" && (
                     <section className="edit-row-table__change-panel">
                       <Button
                         variant="contained"
                         color="secondary"
-                        onClick={() => setChangePanel('doc-actions')}
+                        onClick={() => setChangePanel("doc-actions")}
                       >
                         Powrót
                       </Button>
                     </section>
-                  }
-                  {changePanel === 'doc-actions' && (
+                  )}
+                  {changePanel === "doc-actions" && (
                     <EditDocActions
                       rowData={rowData}
                       setRowData={setRowData}
@@ -287,20 +296,18 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                       roles={auth.roles}
                     />
                   )}
-                  {changePanel === 'becared' && (
-                    <EditDocBeCared
+                  {changePanel === "becared" && (
+                    <EditDocBeCared rowData={rowData} setRowData={setRowData} />
+                  )}
+                  {changePanel === "management" && (
+                    <EditDataManagement
                       rowData={rowData}
                       setRowData={setRowData}
+                      usersurname={auth.usersurname}
+                      managementDescription={managementDescription}
+                      setManagementDescription={setManagementDescription}
                     />
                   )}
-                  {changePanel === 'management' && <EditDataManagement
-                    rowData={rowData}
-                    setRowData={setRowData}
-                    usersurname={auth.usersurname}
-                    managementDescription={managementDescription}
-                    setManagementDescription={setManagementDescription}
-                  />}
-
                 </section>
               </section>
             </section>
@@ -314,18 +321,22 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                   <EditDocBasicData rowData={rowData} setRowData={setRowData} />
                 </section>
                 <section className="edit-row-table_section-content-data">
-                  {toggleState === 2 && <DocumentsControlChat
-                    usersurname={auth.usersurname}
-                    controlChat={controlChat}
-                    setControlChat={setControlChat}
-                  />}
+                  {toggleState === 2 && (
+                    <DocumentsControlChat
+                      usersurname={auth.usersurname}
+                      controlChat={controlChat}
+                      setControlChat={setControlChat}
+                    />
+                  )}
                 </section>
                 <section className="edit-row-table_section-content-data">
-                  {auth.roles.includes(120) && dataRowTable.singleDoc.AREA === "BLACHARNIA" &&
-                    <DocumentsControlBL
-                      documentControlBL={documentControlBL}
-                      setDocumentControlBL={setDocumentControlBL}
-                    />}
+                  {auth.roles.includes(120) &&
+                    dataRowTable.singleDoc.AREA === "BLACHARNIA" && (
+                      <DocumentsControlBL
+                        documentControlBL={documentControlBL}
+                        setDocumentControlBL={setDocumentControlBL}
+                      />
+                    )}
                 </section>
               </section>
             </section>
@@ -343,19 +354,24 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
           </section>
           <section className="edit-row-table__panel">
             <section className="edit_row_table-buttons">
-
               <RxDoubleArrowLeft
-                className={nextPrevDoc.prev ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
+                className={
+                  nextPrevDoc.prev
+                    ? `edit_row_table-icon_buttons`
+                    : `edit_row_table-icon_buttons--disable`
+                }
                 onClick={() => nextPrevDoc.prev && checkNextDoc("prev")}
-              // onClick={() => nextPrevDoc.prev && getSingleRow(nextPrevDoc.prev, 'full')                }
+                // onClick={() => nextPrevDoc.prev && getSingleRow(nextPrevDoc.prev, 'full')                }
               />
               <RxDoubleArrowRight
-                className={nextPrevDoc.next ? `edit_row_table-icon_buttons` : `edit_row_table-icon_buttons--disable`}
+                className={
+                  nextPrevDoc.next
+                    ? `edit_row_table-icon_buttons`
+                    : `edit_row_table-icon_buttons--disable`
+                }
                 onClick={() => nextPrevDoc.next && checkNextDoc("next")}
-              // onClick={() => nextPrevDoc.next && getSingleRow(nextPrevDoc.next, 'full')}
-
+                // onClick={() => nextPrevDoc.next && getSingleRow(nextPrevDoc.next, 'full')}
               />
-
             </section>
             <section className="edit_row_table-buttons">
               <Button
@@ -363,11 +379,13 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
                 variant="contained"
                 size="large"
                 color="error"
-                onClick={() => setDataRowTable({
-                  edit: false,
-                  singleDoc: {},
-                  controlDoc: {},
-                })}
+                onClick={() =>
+                  setDataRowTable({
+                    edit: false,
+                    singleDoc: {},
+                    controlDoc: {},
+                  })
+                }
               >
                 Anuluj
               </Button>
@@ -380,30 +398,40 @@ const EditRowTable = ({ dataRowTable, setDataRowTable, updateDocuments, roles, n
               >
                 Zatwierdź
               </Button>
-
             </section>
             <section className="edit_row_table-buttons">
-              {auth.roles.includes(200) && rowData.MARK_FV && <Button
-                variant="contained"
-                color={rowData.MARK_FK ? "secondary" : "error"}
-                onClick={() => changeMarkDoc(rowData.NUMER_FV, rowData.MARK_FK === 1 ? 0 : 1, rowData.FIRMA)}
-              >
-                {rowData.MARK_FK ? "FK ON" : "FK OFF"}
-              </Button>}
-              {auth.roles.includes(120) && dataRowTable.singleDoc.AREA === "BLACHARNIA" && <Button
-                variant="contained"
-                // color="secondary"
-                onClick={() =>
-                  setToggleState(prev => prev === 1 ? 2 : 1)}
-              >
-                Kontrola
-              </Button>}
+              {auth.roles.includes(200) && rowData.MARK_FV && (
+                <Button
+                  variant="contained"
+                  color={rowData.MARK_FK ? "secondary" : "error"}
+                  onClick={() =>
+                    changeMarkDoc(
+                      rowData.NUMER_FV,
+                      rowData.MARK_FK === 1 ? 0 : 1,
+                      rowData.FIRMA
+                    )
+                  }
+                >
+                  {rowData.MARK_FK ? "FK ON" : "FK OFF"}
+                </Button>
+              )}
+              {auth.roles.includes(120) &&
+                dataRowTable.singleDoc.AREA === "BLACHARNIA" && (
+                  <Button
+                    variant="contained"
+                    // color="secondary"
+                    onClick={() =>
+                      setToggleState((prev) => (prev === 1 ? 2 : 1))
+                    }
+                  >
+                    Kontrola
+                  </Button>
+                )}
             </section>
-
           </section>
         </section>
       </section>
-    </section >
+    </section>
   );
 };
 

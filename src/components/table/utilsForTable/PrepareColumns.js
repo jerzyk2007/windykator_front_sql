@@ -16,6 +16,7 @@ export const muiTableBodyCellProps = {
 };
 
 export const prepareColumns = (columnsData, data) => {
+
   const update = columnsData.map((item) => {
     const modifiedItem = { ...item };
     modifiedItem.muiTableBodyCellProps = muiTableBodyCellProps;
@@ -40,6 +41,9 @@ export const prepareColumns = (columnsData, data) => {
         }
       };
     }
+
+
+
 
     if (item.accessorKey === "UWAGI_ASYSTENT") {
       modifiedItem.Cell = ({ cell }) => {
@@ -170,18 +174,11 @@ export const prepareColumns = (columnsData, data) => {
     }
 
     if (item.accessorKey === "OSTATECZNA_DATA_ROZLICZENIA") {
+
       modifiedItem.accessorFn = (originalRow) => {
         return originalRow[item.accessorKey]
           ? originalRow[item.accessorKey]
           : "BRAK";
-      };
-    }
-
-    if (item.accessorKey === "NR_SZKODY") {
-      modifiedItem.accessorFn = (originalRow) => {
-        return originalRow[item.accessorKey]
-          ? originalRow[item.accessorKey]
-          : "";
       };
     }
 
@@ -196,7 +193,7 @@ export const prepareColumns = (columnsData, data) => {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
               cell.column.id === "50_VAT" &&
-              Math.abs(cellValue - dorozliczValue) <= 1
+                Math.abs(cellValue - dorozliczValue) <= 1
                 ? "rgb(250, 136, 136)"
                 : "white",
           },
@@ -214,7 +211,7 @@ export const prepareColumns = (columnsData, data) => {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
               cell.column.id === "100_VAT" &&
-              Math.abs(cellValue - dorozliczValue) <= 1
+                Math.abs(cellValue - dorozliczValue) <= 1
                 ? "rgb(250, 136, 136)"
                 : "white",
           },
@@ -254,10 +251,10 @@ export const prepareColumns = (columnsData, data) => {
         const formattedSalary =
           value !== undefined && value !== null && value !== 0
             ? value.toLocaleString("pl-PL", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-                useGrouping: true,
-              })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
             : "0,00";
 
         return formattedSalary;
@@ -286,8 +283,7 @@ export const prepareColumns = (columnsData, data) => {
     // }
     if (item.accessorKey === "KWOTA_WINDYKOWANA_BECARED") {
       modifiedItem.accessorFn = (originalRow) => {
-        return originalRow[item.accessorKey] !== null &&
-          originalRow[item.accessorKey] !== undefined
+        return originalRow[item.accessorKey] !== null && originalRow[item.accessorKey] !== undefined
           ? originalRow[item.accessorKey]
           : ""; // Jeżeli wartość jest null lub undefined, zwracamy 'BRAK'
       };
@@ -299,15 +295,16 @@ export const prepareColumns = (columnsData, data) => {
         const formattedValue =
           typeof value === "number"
             ? value.toLocaleString("pl-PL", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-                useGrouping: true,
-              })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
             : value; // Wartość pozostaje bez zmian, jeśli to nie liczba (np. 'BRAK')
 
         return <span>{formattedValue}</span>; // Zwracamy sformatowaną wartość
       };
     }
+
 
     delete modifiedItem.type;
     return modifiedItem;

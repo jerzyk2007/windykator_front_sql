@@ -52,25 +52,26 @@ const PrepareTable = ({ info, raportDocuments }) => {
             `/documents/get-data-table/${auth.id_user}/${info}`,
             { signal: controller.signal }
           );
-
           // wyciągnięcie ostatniego elementu tabeli INFORMACJA_ZARZAD
-          const filteredData = dataTable?.data?.map(item => {
+          const filteredData = dataTable?.data?.map((item) => {
             if (!item.INFORMACJA_ZARZAD) {
               return item; // Zostawiamy oryginalny obiekt bez zmian
             }
 
-            const newInfo = item.INFORMACJA_ZARZAD && item.INFORMACJA_ZARZAD !== 'BRAK'
-              ? Array.isArray(JSON.parse(item.INFORMACJA_ZARZAD))  // Parsujemy tylko jeśli nie jest 'BRAK'
-                ? JSON.parse(item.INFORMACJA_ZARZAD).length > 0
-                  ? JSON.parse(item.INFORMACJA_ZARZAD)[JSON.parse(item.INFORMACJA_ZARZAD).length - 1] // Ostatni element, pierwsze 50 znaków
+            const newInfo =
+              item.INFORMACJA_ZARZAD && item.INFORMACJA_ZARZAD !== "BRAK"
+                ? Array.isArray(JSON.parse(item.INFORMACJA_ZARZAD)) // Parsujemy tylko jeśli nie jest 'BRAK'
+                  ? JSON.parse(item.INFORMACJA_ZARZAD).length > 0
+                    ? JSON.parse(item.INFORMACJA_ZARZAD)[
+                        JSON.parse(item.INFORMACJA_ZARZAD).length - 1
+                      ] // Ostatni element, pierwsze 50 znaków
+                    : "BRAK"
                   : "BRAK"
-                : "BRAK"
-              : "BRAK";
-
+                : "BRAK";
 
             return {
               ...item,
-              INFORMACJA_ZARZAD: newInfo
+              INFORMACJA_ZARZAD: newInfo,
             };
           });
           setDocuments(filteredData);
@@ -78,7 +79,8 @@ const PrepareTable = ({ info, raportDocuments }) => {
 
         const tableSettingsColumns = await axiosPrivateIntercept.get(
           `/documents/get-settings-colums-table/${auth.id_user}`,
-          { signal: controller.signal });
+          { signal: controller.signal }
+        );
 
         setTableSettings(tableSettingsColumns.data.tableSettings);
 
