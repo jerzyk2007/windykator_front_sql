@@ -155,8 +155,8 @@ const AddDataFromFile = () => {
               <span className="add_data_file-click-me">{errBecared}</span>
             </section>
           )}
-          {/* 
-          {!errRandomFile ? (
+
+          {/* {!errRandomFile ? (
             <section className="add_data_from_file__container-documents">
               <input
                 type="file"

@@ -32,21 +32,25 @@ const EditDocBasicData = ({ rowData }) => {
       <section className="edit_doc__container">
         <span className="edit_doc--title">Brutto:</span>
         <span className="edit_doc--content">
-          {rowData?.BRUTTO ? rowData.BRUTTO.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          }) : ""}
+          {rowData?.BRUTTO
+            ? rowData.BRUTTO.toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+              })
+            : ""}
         </span>
       </section>
       <section className="edit_doc__container">
         <span className="edit_doc--title">Netto:</span>
         <span className="edit_doc--content">
-          {rowData?.NETTO ? rowData.NETTO.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          }) : ''}
+          {rowData?.NETTO
+            ? rowData.NETTO.toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+              })
+            : ""}
         </span>
       </section>
       {rowData.AREA === "BLACHARNIA" && (
@@ -117,61 +121,64 @@ const EditDocBasicData = ({ rowData }) => {
           className="edit_doc--content"
           style={{ backgroundColor: "rgba(248, 255, 152, .6)" }}
         >
-          {rowData.DO_ROZLICZENIA ? rowData.DO_ROZLICZENIA.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          }) : "0,00"}
+          {rowData.DO_ROZLICZENIA
+            ? rowData.DO_ROZLICZENIA.toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+              })
+            : "0,00"}
         </span>
       </section>
 
-      {rowData.AREA === "SERWIS" && (
-        <section className="edit_doc__container">
-          <span className="edit_doc--title">Typ płatności:</span>
-          <span
-            className="edit_doc--content"
-            style={
-              rowData.TYP_PLATNOSCI === "Gotówka"
-                ? { backgroundColor: "rgba(240, 69, 69, .7)" }
-                : null
-            }
-          >
-            {rowData.TYP_PLATNOSCI}
-          </span>
-        </section>
-      )}
+      {rowData.AREA === "SERWIS" ||
+        (rowData.FIRMA === "RAC" && (
+          <section className="edit_doc__container">
+            <span className="edit_doc--title">Typ płatności:</span>
+            <span
+              className="edit_doc--content"
+              style={
+                rowData.TYP_PLATNOSCI === "Gotówka"
+                  ? { backgroundColor: "rgba(240, 69, 69, .7)" }
+                  : null
+              }
+            >
+              {rowData.TYP_PLATNOSCI}
+            </span>
+          </section>
+        ))}
 
       {rowData.AREA === "BLACHARNIA" && (
         <section className="edit_doc__container">
           <span className="edit_doc--title">Nr szkody:</span>
-          <span className="edit_doc--content">
-            {rowData.NR_SZKODY}
-          </span>
+          <span className="edit_doc--content">{rowData.NR_SZKODY}</span>
         </section>
       )}
-      {rowData.AREA !== "BLACHARNIA" && (
+      {rowData.AREA !== "BLACHARNIA" && rowData.FIRMA !== "RAC" && (
         <section className="edit_doc__container">
           <span className="edit_doc--title">Nr autoryzacji:</span>
-          <span className="edit_doc--content">
-            {rowData.NR_AUTORYZACJI}
-          </span>
+          <span className="edit_doc--content">{rowData.NR_AUTORYZACJI}</span>
         </section>
       )}
 
-      {rowData.AREA !== "CZĘŚCI" && rowData.AREA !== "SAMOCHODY NOWE" && (
-        <section className="edit_doc__container">
-          <span className="edit_doc--title">Nr rejestracyjny:</span>
-          <span className="edit_doc--content">
-            {rowData.NR_REJESTRACYJNY}
-          </span>
-        </section>
-      )}
-      {rowData.AREA !== "CZĘŚCI" && rowData.AREA !== "BLACHARNIA" && (
-        <section className="edit_doc__container">
-          <span className="edit_doc--title">Nr VIN:</span>
-          <span className="edit_doc--content">{rowData.VIN}</span>
-        </section>
-      )}
+      {rowData.AREA !== "CZĘŚCI" &&
+        rowData.AREA !== "SAMOCHODY NOWE" &&
+        rowData.FIRMA !== "RAC" && (
+          <section className="edit_doc__container">
+            <span className="edit_doc--title">Nr rejestracyjny:</span>
+            <span className="edit_doc--content">
+              {rowData.NR_REJESTRACYJNY}
+            </span>
+          </section>
+        )}
+      {rowData.AREA !== "CZĘŚCI" &&
+        rowData.AREA !== "BLACHARNIA" &&
+        rowData.FIRMA !== "RAC" && (
+          <section className="edit_doc__container">
+            <span className="edit_doc--title">Nr VIN:</span>
+            <span className="edit_doc--content">{rowData.VIN}</span>
+          </section>
+        )}
 
       <section className="edit_doc__container">
         <span className="edit_doc--title">Doradca:</span>
@@ -180,7 +187,11 @@ const EditDocBasicData = ({ rowData }) => {
       <section className="edit_doc__container">
         <span className="edit_doc--title">Kontrahent:</span>
         <span
-          className={rowData?.KONTRAHENT?.length > 140 ? "edit_doc--content-scroll" : "edit_doc--content"}
+          className={
+            rowData?.KONTRAHENT?.length > 140
+              ? "edit_doc--content-scroll"
+              : "edit_doc--content"
+          }
           style={
             rowData?.KONTRAHENT?.length > 140 && rowData.AREA === "BLACHARNIA"
               ? { overflowY: "auto", maxHeight: "80px" }
@@ -201,10 +212,14 @@ const EditDocBasicData = ({ rowData }) => {
       <section className="edit_doc__container">
         <span className="edit_doc--title">Uwagi z faktury:</span>
         <span
-          className={rowData?.UWAGI_Z_FAKTURY?.length > 70 ? "edit_doc--content-scroll" : "edit_doc--content"}
+          className={
+            rowData?.UWAGI_Z_FAKTURY?.length > 70
+              ? "edit_doc--content-scroll"
+              : "edit_doc--content"
+          }
           style={
             rowData?.UWAGI_Z_FAKTURY?.length > 70 &&
-              rowData.AREA === "BLACHARNIA"
+            rowData.AREA === "BLACHARNIA"
               ? { overflowY: "auto", maxHeight: "70px" }
               : null
           }
