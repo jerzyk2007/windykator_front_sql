@@ -58,7 +58,7 @@ const FKAddData = ({ company }) => {
   };
 
   // funkcja generująca raport z już pobranych danych z pliku excel, każde generowanie nadaje nowe wiekowanie, kwote faktur do rozliczenia oraz od nowa przypisuje Obszary, Ownerów, Lokalizacje itd
-  const generateRaport = async () => {
+  const createNewRaport = async () => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get(
@@ -71,6 +71,8 @@ const FKAddData = ({ company }) => {
       if (result?.data?.info) {
         return setMissingDeps(result?.data?.info);
       }
+
+      // po pobraniu nowych danych wiekowania, generuję raport własciwy
       await getRaport();
 
       await getDateAndCounter();
@@ -130,7 +132,7 @@ const FKAddData = ({ company }) => {
                     variant="contained"
                     color="error"
                     disableElevation
-                    onClick={generateRaport}
+                    onClick={createNewRaport}
                   >
                     Przygotuj nowy raport
                   </Button>
