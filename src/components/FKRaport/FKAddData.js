@@ -12,8 +12,6 @@ const FKAddData = ({ company }) => {
   const [missongDeps, setMissingDeps] = useState("");
   const [dateCounter, setDateCounter] = useState({});
 
-
-
   const getRaport = async () => {
     setPleaseWait(true);
 
@@ -22,21 +20,19 @@ const FKAddData = ({ company }) => {
         `/fk/get-raport-data/${company}`,
         {},
         {
-          responseType: 'blob', // 👈 najważniejsze: pobieramy jako blob
+          responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
         }
       );
       const blob = new Blob([response.data], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
 
-      saveAs(blob, 'Raport_Draft 201 203_należności.xlsx');
+      saveAs(blob, "Raport_Draft 201 203_należności.xlsx");
 
       await getDateAndCounter();
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
-    }
-    finally {
+    } finally {
       setPleaseWait(false);
     }
   };
@@ -51,7 +47,6 @@ const FKAddData = ({ company }) => {
 
       if (result?.data?.message) {
         return setMissingDeps(result.data.message);
-
       }
 
       if (result?.data?.info) {
@@ -60,22 +55,20 @@ const FKAddData = ({ company }) => {
       await getRaport();
 
       await getDateAndCounter();
-
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
-    }
-    finally {
+    } finally {
       setPleaseWait(false);
     }
   };
-
 
   // pobieram daty i licznik ustawień dla aktualizowanych plików excel
   const getDateAndCounter = async () => {
     try {
       setPleaseWait(true);
-      const result = await axiosPrivateIntercept.get(`/fk/get-date-counter/${company}`);
+      const result = await axiosPrivateIntercept.get(
+        `/fk/get-date-counter/${company}`
+      );
       setDateCounter(result.data.updateData);
       setPleaseWait(false);
     } catch (err) {
@@ -87,28 +80,38 @@ const FKAddData = ({ company }) => {
     getDateAndCounter();
   }, []);
 
-
   return (
     <>
       {pleaseWait ? (
         <PleaseWait />
-      ) :
+      ) : (
         <section className="fk_add_data">
           <section className="fk_add_data__title">
-            <span>Dodaj dane do Raportu FK - <span style={{ color: "red" }}>{company}</span> </span>
+            <span>
+              {`Dodaj dane do Raportu FK - `}
+              <span style={{ color: "red" }}>{company}</span>{" "}
+            </span>
           </section>
 
           <section className="fk_add_data__container">
+            {dateCounter?.accountancy?.date && (
+              <section className="fk_add_data__container-item">
+                <span className="fk_add_data__container-item--title">
+                  Dane wiekowania z dnia:
+                </span>
+                <span>{dateCounter?.accountancy?.date}</span>
+              </section>
+            )}
+            {dateCounter?.raport?.date && (
+              <section className="fk_add_data__container-item">
+                <span className="fk_add_data__container-item--title">
+                  Dane pobrane dnia:
+                </span>
+                <span>{dateCounter?.raport?.date}</span>
+              </section>
+            )}
 
-            {dateCounter?.generate?.date && <section className="fk_add_data__container-item">
-              <span className="fk_add_data__container-item--title">
-                Raport wygenerowany dnia:
-              </span>
-              <span>{dateCounter?.generate?.date}</span>
-
-            </section>}
-
-            {!missongDeps ?
+            {!missongDeps ? (
               <section className="fk_add_data__container-item">
                 <section className="fk_add_data__container-file">
                   <Button
@@ -119,40 +122,41 @@ const FKAddData = ({ company }) => {
                     onClick={generateRaport}
                   >
                     Przygotuj nowy raport
-
                   </Button>
                 </section>
                 <section className="fk_add_data__container-item--title">
                   <span>Zakończ bieżący raport i wygeneruj kolejny.</span>
                 </section>
               </section>
-              :
+            ) : (
               <section className="fk_add_data__container-item">
-                <p className="fk_add_data__container-item--error">{missongDeps}</p>
+                <p className="fk_add_data__container-item--error">
+                  {missongDeps}
+                </p>
               </section>
-            }
+            )}
 
-            {dateCounter?.raport?.date && <section className="fk_add_data__container-item">
-              <span>{`Data pobrania raportu: `}
-
-              </span>
-              <span style={{ color: "red" }}>
-                {dateCounter?.raport?.date}</span>
-              <section className="fk_add_data__container-file">
-                <Button
-                  variant="contained"
-                  color="success"
-                  disableElevation
-                  onClick={getRaport}
-                >
-                  Pobierz Raport FK
-                </Button>
+            {dateCounter?.generate?.date && (
+              <section className="fk_add_data__container-item">
+                <span>Data pobrania raportu:</span>
+                <span style={{ color: "red" }}>
+                  {dateCounter?.generate?.date}
+                </span>
+                <section className="fk_add_data__container-file">
+                  <Button
+                    variant="contained"
+                    color="success"
+                    disableElevation
+                    onClick={getRaport}
+                  >
+                    Pobierz Raport FK
+                  </Button>
+                </section>
               </section>
-            </section>}
-
+            )}
           </section>
-        </section >
-      }
+        </section>
+      )}
     </>
   );
 };
