@@ -118,9 +118,17 @@ const FKAddData = ({ company }) => {
             {dateCounter?.generate?.date && (
               <section className="fk_add_data__container-item">
                 <span className="fk_add_data__container-item--title">
-                  Raport wygenerowany dnia:
+                  Dane wiekowania z dnia:
                 </span>
-                <span>{dateCounter?.generate?.date}</span>
+                <span>{dateCounter?.accountancy?.date}</span>
+              </section>
+            )}
+            {dateCounter?.generate?.date && (
+              <section className="fk_add_data__container-item">
+                <span className="fk_add_data__container-item--title">
+                  Dane pobrane dnia:
+                </span>
+                <span>{dateCounter?.raport?.date}</span>
               </section>
             )}
 
@@ -151,9 +159,9 @@ const FKAddData = ({ company }) => {
 
             {dateCounter?.raport?.date && (
               <section className="fk_add_data__container-item">
-                <span>{`Data pobrania raportu: `}</span>
+                <span>{`Data wygenerowania raportu: `}</span>
                 <span style={{ color: "red" }}>
-                  {dateCounter?.raport?.date}
+                  {dateCounter?.generate?.date}
                 </span>
                 <section className="fk_add_data__container-file">
                   <Button

@@ -206,7 +206,7 @@ const Table = ({
     localization: MRT_Localization_PL,
     enableGlobalFilterModes: true,
     globalFilterModeOptions: ["fuzzy", "contains", "startsWith"],
-    globalFilterFn: "fuzzy",
+    globalFilterFn: "contains",
     // globalFilterFn: "contains",
     positionGlobalFilter: "left",
     // opcja wyszukuje zbiory do select i multi-select
