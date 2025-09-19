@@ -184,6 +184,14 @@ export const prepareColumns = (columnsData, data) => {
           : "";
       };
     }
+
+    if (item.accessorKey === "NR_SZKODY") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return originalRow[item.accessorKey]
+          ? originalRow[item.accessorKey]
+          : "";
+      };
+    }
     if (item.accessorKey === "50_VAT") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         const cellValue = cell.getValue();

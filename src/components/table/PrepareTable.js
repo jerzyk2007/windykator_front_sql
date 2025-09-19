@@ -88,7 +88,6 @@ const PrepareTable = ({ info, raportDocuments }) => {
           tableSettingsColumns.data.columns,
           info !== "raport" ? documents : raportDocuments
         );
-
         setColumns(update);
         setPleaseWait(false);
       } catch (err) {

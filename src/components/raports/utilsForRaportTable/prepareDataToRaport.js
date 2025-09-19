@@ -157,7 +157,6 @@ export const grossTotalDepartments = (
   raportDate,
   percentTarget
 ) => {
-
   const departmentsObjective = { ...percentTarget };
   // suma Brutto
   let sumOfGross = new Map();
@@ -282,9 +281,21 @@ export const grossTotalDepartments = (
         howManyExpiredElements.set(dep, howManyExpiredElements.get(dep) + 1);
       }
 
+      // if (
+      //   item.DZIAL === dep &&
+      //   afterDeadlineDate > todayDate &&
+      //   documentDate >= minDate &&
+      //   documentDate <= maxDate
+      // ) {
+      //   notExpiredPayment.set(
+      //     dep,
+      //     notExpiredPayment.get(dep) + item.DO_ROZLICZENIA
+      //   );
+      // }
+
       if (
         item.DZIAL === dep &&
-        afterDeadlineDate > todayDate &&
+        afterDeadlineDate >= todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
       ) {
@@ -293,7 +304,6 @@ export const grossTotalDepartments = (
           notExpiredPayment.get(dep) + item.DO_ROZLICZENIA
         );
       }
-
       // if (
       //   item.DZIAL === dep &&
       //   item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
@@ -301,7 +311,7 @@ export const grossTotalDepartments = (
       //   afterDeadlineDate < todayDate &&
       //   documentDate >= minDate &&
       //   documentDate <= maxDate
-      // ) 
+      // )
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA_TU !== "ROK-KONOPA" &&
@@ -332,7 +342,7 @@ export const grossTotalDepartments = (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA_TU !== "ROK-KONOPA" &&
         item.JAKA_KANCELARIA_TU !== "CNP" &&
-        afterDeadlineDate > todayDate &&
+        afterDeadlineDate >= todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
       ) {
@@ -350,7 +360,7 @@ export const grossTotalDepartments = (
       //   afterDeadlineDate < todayDate &&
       //   documentDate >= minDate &&
       //   documentDate <= maxDate
-      // ) 
+      // )
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA !== "BRAK" &&
@@ -397,7 +407,7 @@ export const grossTotalDepartments = (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA === "BRAK" &&
         item.JAKA_KANCELARIA_TU === "BRAK" &&
-        afterDeadlineDate > todayDate &&
+        afterDeadlineDate >= todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
       ) {
@@ -560,10 +570,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          }) + "%"
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            }) + "%"
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -586,10 +596,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -625,10 +635,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -650,10 +660,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          }) + "%"
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            }) + "%"
           : "0,00"; // Zastąpuje puste pola zerem
 
       return `${formattedSalary}`;
@@ -676,10 +686,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -714,10 +724,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -739,10 +749,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          }) + "%"
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            }) + "%"
           : "0,00"; // Zastąpuje puste pola zerem
 
       return `${formattedSalary}`;
@@ -764,10 +774,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -801,10 +811,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -827,10 +837,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -864,10 +874,10 @@ export const columnsDepartments = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -918,10 +928,10 @@ export const columnsAdv = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          }) + "%"
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            }) + "%"
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -944,10 +954,10 @@ export const columnsAdv = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -983,10 +993,10 @@ export const columnsAdv = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -1009,10 +1019,10 @@ export const columnsAdv = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -1046,10 +1056,10 @@ export const columnsAdv = [
       const formattedSalary =
         value !== undefined && value !== null
           ? value.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-            useGrouping: true,
-          })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
           : "0,00"; // Zastąp puste pola zerem
 
       return `${formattedSalary}`;
@@ -1079,7 +1089,6 @@ export const columnsAdv = [
 
 export const grossTotalAdv = (departments, raportData, raportDate) => {
   let sumOfGross = new Map();
-
   //ile faktur
   let howManyElements = new Map();
 
@@ -1199,7 +1208,7 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
       if (
         item.DORADCA === dep.adviser &&
         dep.merge === `${dep.adviser}-${item.DZIAL}` &&
-        afterDeadlineDate > todayDate &&
+        afterDeadlineDate >= todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
       ) {
@@ -1217,7 +1226,7 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
       //   afterDeadlineDate < todayDate &&
       //   documentDate >= minDate &&
       //   documentDate <= maxDate
-      // ) 
+      // )
       if (
         item.DORADCA === dep.adviser &&
         dep.merge === `${dep.adviser}-${item.DZIAL}` &&
@@ -1272,13 +1281,13 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
       //   afterDeadlineDate > todayDate &&
       //   documentDate >= minDate &&
       //   documentDate <= maxDate
-      // ) 
+      // )
       if (
         item.DORADCA === dep.adviser &&
         dep.merge === `${dep.adviser}-${item.DZIAL}` &&
         item.JAKA_KANCELARIA_TU !== "ROK-KONOPA" &&
         item.JAKA_KANCELARIA_TU !== "CNP" &&
-        afterDeadlineDate > todayDate &&
+        afterDeadlineDate >= todayDate &&
         documentDate >= minDate &&
         documentDate <= maxDate
       ) {
@@ -1402,5 +1411,6 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
       generatingRaport.push(departmentObj);
     }
   });
+
   return generatingRaport;
 };

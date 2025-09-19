@@ -16,18 +16,38 @@ const FKAddData = ({ company }) => {
     setPleaseWait(true);
 
     try {
-      const response = await axiosPrivateIntercept.post(
-        `/fk/get-raport-data/${company}`,
+      const generateResponse = await axiosPrivateIntercept.get(
+        `/fk/generate-data/${company}`
+      );
+
+      const titleDate = generateResponse?.data?.date || "Błąd";
+      // const titleDate = "2025-09-02";
+
+      const getMainRaport = await axiosPrivateIntercept.post(
+        `/fk/get-main-report/${company}`,
         {},
         {
           responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
         }
       );
-      const blob = new Blob([response.data], {
+      const blobMain = new Blob([getMainRaport.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
 
-      saveAs(blob, "Raport_Draft 201 203_należności.xlsx");
+      saveAs(blobMain, `Raport_Draft 201 203_należności_${titleDate}.xlsx`);
+
+      const getBusinessRaport = await axiosPrivateIntercept.post(
+        `/fk/get-business-report/${company}`,
+        {},
+        {
+          responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
+        }
+      );
+      const blobBusiness = new Blob([getBusinessRaport.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      saveAs(blobBusiness, `Raport należności_biznes_stan _${titleDate}.xlsx`);
 
       await getDateAndCounter();
     } catch (err) {
@@ -38,13 +58,12 @@ const FKAddData = ({ company }) => {
   };
 
   // funkcja generująca raport z już pobranych danych z pliku excel, każde generowanie nadaje nowe wiekowanie, kwote faktur do rozliczenia oraz od nowa przypisuje Obszary, Ownerów, Lokalizacje itd
-  const generateRaport = async () => {
+  const createNewRaport = async () => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get(
-        `/fk/generate-raport/${company}`
+        `/fk/create-raport/${company}`
       );
-
       if (result?.data?.message) {
         return setMissingDeps(result.data.message);
       }
@@ -52,6 +71,8 @@ const FKAddData = ({ company }) => {
       if (result?.data?.info) {
         return setMissingDeps(result?.data?.info);
       }
+
+      // po pobraniu nowych danych wiekowania, generuję raport własciwy
       await getRaport();
 
       await getDateAndCounter();
@@ -88,7 +109,7 @@ const FKAddData = ({ company }) => {
         <section className="fk_add_data">
           <section className="fk_add_data__title">
             <span>
-              {`Dodaj dane do Raportu FK - `}
+              Dodaj dane do Raportu FK -{" "}
               <span style={{ color: "red" }}>{company}</span>{" "}
             </span>
           </section>
@@ -119,7 +140,7 @@ const FKAddData = ({ company }) => {
                     variant="contained"
                     color="error"
                     disableElevation
-                    onClick={generateRaport}
+                    onClick={createNewRaport}
                   >
                     Przygotuj nowy raport
                   </Button>
@@ -138,7 +159,7 @@ const FKAddData = ({ company }) => {
 
             {dateCounter?.generate?.date && (
               <section className="fk_add_data__container-item">
-                <span>Data pobrania raportu:</span>
+                <span>Data wygenerowania raportu:</span>
                 <span style={{ color: "red" }}>
                   {dateCounter?.generate?.date}
                 </span>

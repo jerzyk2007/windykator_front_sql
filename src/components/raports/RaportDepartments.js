@@ -316,7 +316,6 @@ const RaportDepartments = () => {
       return matchedColumn ? matchedColumn.header : key;
     });
 
-
     const updateData = rowData.map((item) => {
       // Filtracja kluczy obiektu na podstawie arrayOrder
       const filteredKeys = Object.keys(item).filter((key) =>
@@ -329,7 +328,6 @@ const RaportDepartments = () => {
       }, {});
       return updatedItem;
     });
-
 
     // przerabiam dane aby w excelu wyświetlały sie zgodnie z oczekiwaniem, jeśli liczba jest Number to wyświetlana jest jako waluta, w przypadku String mogę sam ustalić sposób wyświetlania
     const update = updateData.map((item) => {
@@ -366,7 +364,12 @@ const RaportDepartments = () => {
 
       return {
         ...item,
-        CEL: item.DZIALY === "Całość" ? "" : item.CEL ? String(`${item.CEL} %`) : "Brak %",
+        CEL:
+          item.DZIALY === "Całość"
+            ? ""
+            : item.CEL
+            ? String(`${item.CEL} %`)
+            : "Brak %",
         CEL_BEZ_PZU_LINK4: String(`${CEL_BEZ_PZU_LINK4} %`),
         CEL_BEZ_KANCELARII: String(`${CEL_BEZ_KANCELARII} %`),
         CEL_CALOSC: String(`${CEL_CALOSC} %`),
@@ -469,7 +472,7 @@ const RaportDepartments = () => {
         );
         setColumnOrder(
           settingsRaportUserDepartments?.data?.order?.map((order) => order) ||
-          []
+            []
         );
         setColumnPinning(
           settingsRaportUserDepartments?.data?.pinning || {
