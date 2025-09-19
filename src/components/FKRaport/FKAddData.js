@@ -159,7 +159,7 @@ const FKAddData = ({ company }) => {
 
             {dateCounter?.generate?.date && (
               <section className="fk_add_data__container-item">
-                <span>`Data wygenerowania raportu:</span>
+                <span>Data wygenerowania raportu:</span>
                 <span style={{ color: "red" }}>
                   {dateCounter?.generate?.date}
                 </span>
