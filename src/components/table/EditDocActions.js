@@ -176,6 +176,33 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
           </section>
         )}
 
+        {roles.includes(1000) && (
+          <section className="edit_doc__container">
+            <span className="edit_doc--title">Wpis do KRD:</span>
+
+            <select
+              className="edit_doc--select"
+              value={rowData.KRD ? rowData.KRD : "BRAK"}
+              onChange={(e) => {
+                handleAddNote(
+                  "Wpis do KRD:",
+                  e.target.options[e.target.selectedIndex].text
+                );
+                setRowData((prev) => {
+                  return {
+                    ...prev,
+                    KRD: e.target.value ? e.target.value : null,
+                  };
+                });
+              }}
+            >
+              <option value="">BRAK</option>
+              <option value="PRZEKAZANO DO KRD">PRZEKAZANO DO KRD</option>
+              <option value="WYCOFANO Z KRD">WYCOFANO Z KRD</option>
+            </select>
+          </section>
+        )}
+
         <section className="edit_doc__container">
           <span className="edit_doc--title">Wyróżnij kontrahenta:</span>
           {roles.includes(110) || roles.includes(120) ? (

@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import AddDataFromFile from "./components/system_settings/AddDataFromFile";
@@ -12,8 +17,8 @@ import TableColumns from "./components/system_settings/TableColumns";
 import RaportDepartments from "./components/raports/RaportDepartments";
 import RaportAdvisers from "./components/raports/RaportAdvisers";
 import FKAddData from "./components/FKRaport/FKAddData";
-import DeptMapper from './components/system_settings/DeptMapper';
-import Items from './components/system_settings/Items';
+import DeptMapper from "./components/system_settings/DeptMapper";
+import Items from "./components/system_settings/Items";
 import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
 // import TradeCredit from "./components/trade_credit/TradeCredit";
@@ -29,11 +34,16 @@ function App() {
         <Header />
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/password-confirm-reset/:token/" element={<ConfirmResetPassword />} />
+          <Route
+            path="/password-confirm-reset/:token/"
+            element={<ConfirmResetPassword />}
+          />
 
           {/* protected routes */}
           <Route element={<PersistLogin />}>
-            <Route element={<RequireAuth allowedRoles={[1, 100, 200, 201, 202]} />}>
+            <Route
+              element={<RequireAuth allowedRoles={[1, 100, 200, 201, 202]} />}
+            >
               <Route path="/" element={<Home />} />
             </Route>
 
@@ -73,13 +83,18 @@ function App() {
                 element={<PrepareTable info={"all"} />}
               />
             </Route>
+            <Route element={<RequireAuth allowedRoles={[1000]} />}>
+              <Route path="/krd" element={<PrepareTable info={"krd"} />} />
+            </Route>
             <Route element={<RequireAuth allowedRoles={[110, 120, 1000]} />}>
               <Route
                 path="/fk-documents-table"
                 element={<PrepareTable info={"raport_fk"} />}
               />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}>
+            <Route
+              element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}
+            >
               <Route
                 path="/fk-disabled-documents-table"
                 element={<PrepareTable info={"disabled_fk"} />}
@@ -106,9 +121,7 @@ function App() {
             >
               <Route path="/raport-advisers" element={<RaportAdvisers />} />
             </Route>
-            <Route
-              element={<RequireAuth allowedRoles={[1000]} />}
-            >
+            <Route element={<RequireAuth allowedRoles={[1000]} />}>
               <Route path="/raport-areas" element={<RaportAreas />} />
             </Route>
 
@@ -122,23 +135,35 @@ function App() {
 
             {/* dodanie key powoduje, że kompnent się odświeża */}
             <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
-              <Route path="/generate-raport-fk-KRT" element={<FKAddData key="KRT" company="KRT" />} />
+              <Route
+                path="/generate-raport-fk-KRT"
+                element={<FKAddData key="KRT" company="KRT" />}
+              />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[201, 1000]} />}>
-              <Route path="/generate-raport-fk-KEM" element={<FKAddData key="KEM" company="KEM" />} />
+              <Route
+                path="/generate-raport-fk-KEM"
+                element={<FKAddData key="KEM" company="KEM" />}
+              />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[202, 1000]} />}>
-              <Route path="/generate-raport-fk-RAC" element={<FKAddData key="RAC" company="RAC" />} />
+              <Route
+                path="/generate-raport-fk-RAC"
+                element={<FKAddData key="RAC" company="RAC" />}
+              />
             </Route>
 
-
-            <Route element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}>
+            <Route
+              element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}
+            >
               <Route path="/dept-mapper" element={<DeptMapper />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}>
+            <Route
+              element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}
+            >
               <Route path="/change-items" element={<Items />} />
             </Route>
 
@@ -146,7 +171,9 @@ function App() {
               <Route path="/raport-nora" element={<RaportsNora />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}>
+            <Route
+              element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}
+            >
               <Route path="/add-data" element={<AddDataFromFile />} />
             </Route>
 

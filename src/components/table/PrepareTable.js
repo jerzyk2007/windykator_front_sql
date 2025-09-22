@@ -74,6 +74,7 @@ const PrepareTable = ({ info, raportDocuments }) => {
               INFORMACJA_ZARZAD: newInfo,
             };
           });
+
           setDocuments(filteredData);
         }
 
