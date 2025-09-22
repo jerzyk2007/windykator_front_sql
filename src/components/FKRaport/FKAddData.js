@@ -16,13 +16,20 @@ const FKAddData = ({ company }) => {
     setPleaseWait(true);
 
     try {
-      const generateResponse = await axiosPrivateIntercept.get(
-        `/fk/generate-data/${company}`
-      );
+      // const generateResponse = await axiosPrivateIntercept.get(
+      //   `/fk/generate-data/${company}`
+      // );
+      await axiosPrivateIntercept.get(`/fk/generate-data/${company}`);
+      // const titleDate = generateResponse?.data?.date || "Błąd";
 
-      const titleDate = generateResponse?.data?.date || "Błąd";
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0"); // miesiące od 0-11
+      const dd = String(today.getDate()).padStart(2, "0");
+
+      const titleDate = `${yyyy}-${mm}-${dd}`;
       // const titleDate = "2025-09-02";
-
+      console.log(titleDate);
       const getMainRaport = await axiosPrivateIntercept.post(
         `/fk/get-main-report/${company}`,
         {},
