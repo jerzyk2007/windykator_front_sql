@@ -47,9 +47,9 @@
   cursor: pointer;
 }
 
-.edit_row_table-icon_buttons:active {
+.edit_row_table-icon_buttons:hover {
   color: red;
-  transform: scale(2);
+  transform: scale(2.1);
 }
 
 .edit_row_table-icon_buttons--disable {
@@ -108,6 +108,7 @@
 .edit_doc--content,
 .edit_doc--content-scroll {
   width: 100%;
+  word-break: break-all;
   line-height: 1;
   flex-basis: 59%;
   text-align: center;
