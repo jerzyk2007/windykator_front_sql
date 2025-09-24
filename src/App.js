@@ -83,7 +83,7 @@ function App() {
                 element={<PrepareTable info={"all"} />}
               />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[150, 1000]} />}>
               <Route path="/krd" element={<PrepareTable info={"krd"} />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[110, 120, 1000]} />}>

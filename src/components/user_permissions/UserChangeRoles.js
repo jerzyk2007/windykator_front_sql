@@ -7,13 +7,11 @@ import "./UserChangeRoles.css";
 const UserChangeRoles = ({ id, roles }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
-
   const [userRoles, setUserRoles] = useState({});
   const [errMsg, setErrMsg] = useState("");
 
   const rolesItem = Object.entries(userRoles).map(
     ([role, isChecked], index) => (
-
       <section key={index} className="user-change-roles__container">
         <label
           className="user-change-roles__container--info"
@@ -24,25 +22,21 @@ const UserChangeRoles = ({ id, roles }) => {
             {role === "FK_KRT" && (
               <span className="user-change-roles--information">
                 {" - dodatkowy Raport FK - KRT"}
-
               </span>
             )}
             {role === "FK_KEM" && (
               <span className="user-change-roles--information">
                 {" - dodatkowy Raport FK - KEM"}
-
               </span>
             )}
             {role === "FK_RAC" && (
               <span className="user-change-roles--information">
                 {" - dodatkowy Raport FK - RAC"}
-
               </span>
             )}
             {role === "FKAdmin" && (
               <span className="user-change-roles--information">
                 {" - administrator FK"}
-
               </span>
             )}
             {role === "User" && (
@@ -67,6 +61,11 @@ const UserChangeRoles = ({ id, roles }) => {
               <span className="user-change-roles--information">
                 {" "}
                 - kontroler dokumentów
+              </span>
+            )}
+            {role === "DNiKN" && (
+              <span className="user-change-roles--information">
+                - wszytskie uprawnienia windykacyjne
               </span>
             )}
             {role === "Admin" && (
@@ -114,7 +113,6 @@ const UserChangeRoles = ({ id, roles }) => {
 
   const handleChangeRoles = async () => {
     try {
-
       const arrayRoles = Object.entries(userRoles)
         .map(([role, isChecked]) => {
           if (isChecked) {
@@ -136,27 +134,28 @@ const UserChangeRoles = ({ id, roles }) => {
   };
 
   useEffect(() => {
-    const superAdmin = auth.roles.filter(item => item == 2000);
+    const superAdmin = auth.roles.filter((item) => item === 2000);
 
-
-    const newRoles = superAdmin.length ? {
-      User: roles?.User ? roles.User : false,
-      Editor: roles?.Editor ? roles.Editor : false,
-      Admin: roles?.Admin ? roles.Admin : false,
-      Controller: roles?.Controller ? roles.Controller : false,
-      FK_KRT: roles?.FK_KRT ? roles.FK_KRT : false,
-      FK_KEM: roles?.FK_KEM ? roles.FK_KEM : false,
-      FK_RAC: roles?.FK_RAC ? roles.FK_RAC : false,
-      Nora: roles?.Nora ? roles.Nora : false,
-      SuperAdmin: roles?.SuperAdmin ? roles.SuperAdmin : false,
-    } : {
-      User: roles?.User ? roles.User : false,
-      Editor: roles?.Editor ? roles.Editor : false,
-      Admin: roles?.Admin ? roles.Admin : false,
-    };
+    const newRoles = superAdmin.length
+      ? {
+          User: roles?.User ? roles.User : false,
+          Editor: roles?.Editor ? roles.Editor : false,
+          Admin: roles?.Admin ? roles.Admin : false,
+          Controller: roles?.Controller ? roles.Controller : false,
+          DNiKN: roles?.DNiKN ? roles.DNiKN : false,
+          FK_KRT: roles?.FK_KRT ? roles.FK_KRT : false,
+          FK_KEM: roles?.FK_KEM ? roles.FK_KEM : false,
+          FK_RAC: roles?.FK_RAC ? roles.FK_RAC : false,
+          Nora: roles?.Nora ? roles.Nora : false,
+          SuperAdmin: roles?.SuperAdmin ? roles.SuperAdmin : false,
+        }
+      : {
+          User: roles?.User ? roles.User : false,
+          Editor: roles?.Editor ? roles.Editor : false,
+          Admin: roles?.Admin ? roles.Admin : false,
+        };
 
     setUserRoles(newRoles);
-
   }, [roles]);
 
   return (

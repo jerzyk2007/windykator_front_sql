@@ -19,7 +19,7 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
         </section>
         <section className="edit_doc__container">
           <span className="edit_doc--title">Wpis do KRD:</span>
-          {roles.includes(1000) ? (
+          {roles.includes(150) ? (
             <select
               className="edit_doc--select"
               value={rowData.KRD ? rowData.KRD : "BRAK"}
