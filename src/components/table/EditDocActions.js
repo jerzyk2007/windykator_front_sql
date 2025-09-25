@@ -6,22 +6,28 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
     <section className="edit_doc_actions">
       <section className="edit_doc edit_doc_actions__container">
         <section className="edit_doc__container">
-          <span className="edit_doc--title">Jaka kancelaria:</span>
-          <span className="edit_doc--content">
+          <span className="edit_doc--title edit_doc--title__read-only">
+            Jaka kancelaria:
+          </span>
+          <span className="edit_doc--content edit_doc--title__read-only">
             {rowData?.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : "BRAK"}
           </span>
         </section>
         <section className="edit_doc__container">
-          <span className="edit_doc--title">Status kancelaria:</span>
-          <span className="edit_doc--content">
+          <span className="edit_doc--title edit_doc--title__read-only">
+            Status kancelaria:
+          </span>
+          <span className="edit_doc--content edit_doc--title__read-only">
             {rowData?.STATUS_AKTUALNY ? rowData.STATUS_AKTUALNY : "BRAK"}
           </span>
         </section>
         <section className="edit_doc__container">
-          <span className="edit_doc--title">Wpis do KRD:</span>
+          <span className="edit_doc--title edit_doc--title__read-only">
+            Wpis do KRD:
+          </span>
           {roles.includes(150) ? (
             <select
-              className="edit_doc--select"
+              className="edit_doc--select edit_doc--title__read-only"
               value={rowData.KRD ? rowData.KRD : "BRAK"}
               onChange={(e) => {
                 handleAddNote(

@@ -105,6 +105,10 @@
   cursor: help;
 }
 
+.edit_doc--title__read-only {
+  background-color: rgba(252, 220, 253, 0.8);
+}
+
 .edit_doc--content,
 .edit_doc--content-scroll {
   width: 100%;
