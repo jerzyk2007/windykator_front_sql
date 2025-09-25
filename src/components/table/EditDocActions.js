@@ -75,6 +75,9 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
                 WYSŁANO WEZWANIE DO ZAPŁATY
               </option>
               <option value="GREEN PARTS">GREEN PARTS</option>
+              <option value="WINDYKACJA WEWNĘTRZNA">
+                WINDYKACJA WEWNĘTRZNA
+              </option>
             </select>
           ) : (
             <span className="edit_doc--content">
@@ -184,9 +187,6 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
                 }}
               >
                 <option value="">BRAK</option>
-                <option value="WINDYKACJA WEWNĘTRZNA">
-                  WINDYKACJA WEWNĘTRZNA
-                </option>
                 <option value="KANCELARIA KROTOSKI">KANCELARIA KROTOSKI</option>
                 <option value="KRAUZE">KRAUZE</option>
                 <option value="POSTEPOWANIE SANACYJNE">
