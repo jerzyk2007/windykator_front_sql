@@ -29,7 +29,6 @@ const FKAddData = ({ company }) => {
 
       const titleDate = `${yyyy}-${mm}-${dd}`;
       // const titleDate = "2025-09-02";
-      console.log(titleDate);
       const getMainRaport = await axiosPrivateIntercept.post(
         `/fk/get-main-report/${company}`,
         {},
