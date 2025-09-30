@@ -60,6 +60,13 @@ const EditRowTable = ({
     chat: [],
   });
 
+  // zmienna dla zmiany DZIALu przez Blacharnie
+  const [changeDepartment, setChangeDepartment] = useState({
+    oldDep: "",
+    newDep: "",
+    optionsDep: [],
+  });
+
   //dodawane są notatki z czatu i logi przy zmianie np błąd doradcy, pobrany VAT
   const handleAddNote = (info, text) => {
     const oldNote = rowData.UWAGI_ASYSTENT;
@@ -95,6 +102,7 @@ const EditRowTable = ({
       await axiosPrivateIntercept.patch(`/documents/change-single-document`, {
         id_document,
         documentItem: rowData,
+        changeDeps: changeDepartment?.newDep ? changeDepartment.newDep : null,
       });
 
       if (roles.includes(120)) {
@@ -181,6 +189,34 @@ const EditRowTable = ({
   }, [rowData.NUMER_FV]);
 
   useEffect(() => {
+    setChangeDepartment((prev) => {
+      return {
+        ...prev,
+        oldDep: rowData.DZIAL,
+      };
+    });
+    const fetchData = async () => {
+      try {
+        const result = await axiosPrivateIntercept.get(
+          `/documents/get-available-deps/${rowData.FIRMA}`
+        );
+        setChangeDepartment((prev) => ({
+          ...prev,
+          optionsDep:
+            Array.isArray(result.data) && result.data.length > 0
+              ? result.data
+              : prev.optionsDep, // jeśli pusta, zostawiamy poprzednią wartość
+        }));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (rowData.AREA === "BLACHARNIA") {
+      fetchData();
+    }
+  }, [rowData.DZIAL]);
+
+  useEffect(() => {
     setRowData(dataRowTable?.singleDoc ? dataRowTable.singleDoc : {});
     setControlChat((prev) => {
       return {
@@ -240,7 +276,14 @@ const EditRowTable = ({
             >
               <section className="edit-row-table_section-content">
                 <section className="edit-row-table_section-content-data">
-                  <EditDocBasicData rowData={rowData} setRowData={setRowData} />
+                  <EditDocBasicData
+                    rowData={rowData}
+                    setRowData={setRowData}
+                    login={auth.userlogin || null}
+                    handleAddNote={handleAddNote}
+                    changeDepartment={changeDepartment}
+                    setChangeDepartment={setChangeDepartment}
+                  />
                 </section>
                 <section className="edit-row-table_section-content-data">
                   <EditDocChat
@@ -318,7 +361,14 @@ const EditRowTable = ({
             >
               <section className="edit-row-table_section-content">
                 <section className="edit-row-table_section-content-data">
-                  <EditDocBasicData rowData={rowData} setRowData={setRowData} />
+                  <EditDocBasicData
+                    rowData={rowData}
+                    setRowData={setRowData}
+                    login={auth.userlogin || null}
+                    handleAddNote={handleAddNote}
+                    changeDepartment={changeDepartment}
+                    setChangeDepartment={setChangeDepartment}
+                  />
                 </section>
                 <section className="edit-row-table_section-content-data">
                   {toggleState === 2 && (

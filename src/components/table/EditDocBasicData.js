@@ -1,6 +1,30 @@
+import { useState, useEffect } from "react";
 import "./EditDocBasicData.css";
 
-const EditDocBasicData = ({ rowData }) => {
+const EditDocBasicData = ({
+  rowData,
+  login,
+  handleAddNote,
+  changeDepartment,
+  setChangeDepartment,
+}) => {
+  const authLogin = [
+    "marta.bednarek@krotoski.com",
+    "amanda.nawrocka@krotoski.com",
+    "jolanta.maslowska@krotoski.com",
+    "anna.wylupek@krotoski.com",
+    "jerzy.komorowski@krotoski.com",
+  ];
+  // useEffect(() => {
+  //   console.log(login);
+  //   setChangeDepartment((prev) => {
+  //     return {
+  //       ...prev,
+  //       oldDep: rowData.DZIAL,
+  //     };
+  //   });
+  // }, [rowData]);
+
   return (
     <section className=" edit_doc edit_doc_basic-data">
       <section className="edit_doc__container">
@@ -28,6 +52,45 @@ const EditDocBasicData = ({ rowData }) => {
           {rowData.ILE_DNI_PO_TERMINIE}
         </span>
       </section>
+      {rowData?.AREA === "BLACHARNIA" && authLogin.includes(login) && (
+        <section className="edit_doc__container">
+          <span className="edit_doc--title">Przypisz inny dział:</span>
+          <select
+            className="edit_doc--select"
+            style={{ backgroundColor: "#f5ffe3" }}
+            value={changeDepartment.newDep || changeDepartment.oldDep} // pokażemy oldDep, jeśli newDep jest pusty
+            onChange={(e) => {
+              const newDep = e.target.value;
+
+              setChangeDepartment((prev) => ({
+                ...prev,
+                newDep: newDep,
+              }));
+
+              handleAddNote(
+                `Zmiana działu: ${changeDepartment.oldDep} na`,
+                newDep
+              );
+            }}
+          >
+            {/* Początkowa opcja, disabled */}
+            {changeDepartment.oldDep && (
+              <option value={changeDepartment.oldDep} disabled>
+                {changeDepartment.oldDep}
+              </option>
+            )}
+
+            {/* Pozostałe opcje */}
+            {changeDepartment.optionsDep
+              .filter((dep) => dep !== changeDepartment.oldDep)
+              .map((dep) => (
+                <option key={dep} value={dep}>
+                  {dep}
+                </option>
+              ))}
+          </select>
+        </section>
+      )}
 
       <section className="edit_doc__container">
         <span className="edit_doc--title">Brutto:</span>

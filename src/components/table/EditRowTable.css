@@ -66,7 +66,7 @@
 .edit-row-table_section-content-data {
   flex-grow: 1;
   flex-basis: 33%;
-  min-width: 450px;
+  min-width: 500px;
   min-height: 500px;
   padding: 2px;
   overflow: auto;
