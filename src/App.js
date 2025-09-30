@@ -121,9 +121,9 @@ function App() {
             >
               <Route path="/raport-advisers" element={<RaportAdvisers />} />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[1000]} />}>
+            {/* <Route element={<RequireAuth allowedRoles={[1000]} />}>
               <Route path="/raport-areas" element={<RaportAreas />} />
-            </Route>
+            </Route> */}
 
             {/* <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
               <Route path="/generate-raport-fk-KRT" element={<FKAddData company={"KRT"} />} />

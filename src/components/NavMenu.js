@@ -182,7 +182,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(2000) && (
+                        {/* {auth?.roles?.includes(2000) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/raport-areas"
@@ -192,7 +192,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                               Raport wg obszarów
                             </Link>
                           </li>
-                        )}
+                        )} */}
                       </ul>
                     </div>
                   </li>
