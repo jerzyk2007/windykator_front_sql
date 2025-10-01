@@ -193,6 +193,14 @@ export const prepareColumns = (columnsData, data) => {
       };
     }
 
+    if (item.accessorKey === "NR_REJESTRACYJNY") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return originalRow[item.accessorKey]
+          ? originalRow[item.accessorKey]
+          : "";
+      };
+    }
+
     if (item.accessorKey === "KRD") {
       modifiedItem.accessorFn = (originalRow) => {
         return originalRow[item.accessorKey]
