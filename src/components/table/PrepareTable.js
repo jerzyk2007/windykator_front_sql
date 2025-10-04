@@ -44,7 +44,6 @@ const PrepareTable = ({ info, raportDocuments }) => {
     const getData = async () => {
       try {
         setPleaseWait(true);
-
         if (info === "raport") {
           setDocuments(raportDocuments);
         } else {

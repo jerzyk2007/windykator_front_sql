@@ -94,6 +94,15 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     Kpl dane
                   </Link>
                 </li>
+                <li className="nav_menu-item-dropmenu">
+                  <Link
+                    to="/different-AS-FK"
+                    className="nav_menu-link"
+                    onClick={handleLinkClick}
+                  >
+                    Różnice AS - Symfonia
+                  </Link>
+                </li>
 
                 {auth?.roles?.includes(150) && (
                   <li className="nav_menu-item-dropmenu">

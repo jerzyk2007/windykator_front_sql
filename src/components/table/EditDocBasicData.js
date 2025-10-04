@@ -15,15 +15,9 @@ const EditDocBasicData = ({
     "anna.wylupek@krotoski.com",
     "jerzy.komorowski@krotoski.com",
   ];
-  // useEffect(() => {
-  //   console.log(login);
-  //   setChangeDepartment((prev) => {
-  //     return {
-  //       ...prev,
-  //       oldDep: rowData.DZIAL,
-  //     };
-  //   });
-  // }, [rowData]);
+
+  const differenceInSettlements =
+    rowData.DO_ROZLICZENIA - rowData.FK_DO_ROZLICZENIA !== 0;
 
   return (
     <section className=" edit_doc edit_doc_basic-data">
@@ -179,7 +173,7 @@ const EditDocBasicData = ({
       )}
 
       <section className="edit_doc__container">
-        <span className="edit_doc--title">Do rozliczenia:</span>
+        <span className="edit_doc--title">Do rozliczenia AS:</span>
         <span
           className="edit_doc--content"
           style={{ backgroundColor: "rgba(248, 255, 152, .6)" }}
@@ -193,6 +187,28 @@ const EditDocBasicData = ({
             : "0,00"}
         </span>
       </section>
+      {differenceInSettlements && (
+        <section className="edit_doc__container">
+          <span
+            className="edit_doc--title"
+            style={{ backgroundColor: "#b0f39b" }}
+          >
+            Do rozl. Symfonia:
+          </span>
+          <span
+            className="edit_doc--content"
+            style={{ backgroundColor: "#b0f39b" }}
+          >
+            {rowData.FK_DO_ROZLICZENIA
+              ? rowData.FK_DO_ROZLICZENIA.toLocaleString("pl-PL", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                  useGrouping: true,
+                })
+              : "0,00"}
+          </span>
+        </section>
+      )}
 
       {rowData.AREA === "SERWIS" ||
         (rowData.FIRMA === "RAC" && (
