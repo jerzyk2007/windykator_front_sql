@@ -214,7 +214,7 @@ const generateExcel = async (cleanData) => {
   }
 };
 
-export const useOrganizationStructureL = () => {
+export const useOrganizationStructure = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const organizationStructure = async () => {
     try {

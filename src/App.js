@@ -24,7 +24,7 @@ import RaportsNora from "./components/Nora/RaportsNora";
 // import TradeCredit from "./components/trade_credit/TradeCredit";
 import Instruction from "./components/instruction/Instruction";
 import ConfirmResetPassword from "./components/user/ConfirmResetPassword";
-import RaportAreas from "./components/raports/RaportAreas";
+// import RaportAreas from "./components/raports/RaportAreas";
 import "./App.css";
 
 function App() {

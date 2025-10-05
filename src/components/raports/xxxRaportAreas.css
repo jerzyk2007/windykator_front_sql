@@ -1,0 +1,34 @@
+.raport-areas {
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.1rem;
+  /* flex-grow: 1; */
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.raport-areas__container {
+  display: flex;
+  flex-direction: column;
+}
+
+.raport-areas__container-item {
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid rgba(191, 196, 199, 0.6);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.raport-areas__container-select {
+  /* padding: 10px; */
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 3;
+}
+
+.raport-areas__container-select--item {
+  margin: 10px;
+}

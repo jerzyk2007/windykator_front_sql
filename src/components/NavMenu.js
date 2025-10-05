@@ -5,7 +5,8 @@ import useData from "./hooks/useData";
 import useLogout from "./hooks/useLogout";
 import useWindowSize from "./hooks/useWindow";
 import { useControlRaportBL } from "./FKRaport/RaportConrolDocumentsBL";
-import { useOrganizationStructureL } from "./organization_structure/RaportOrganizationStructure";
+import { useOrganizationStructure } from "./raports/raportOrganizationStructure";
+import { useDifferenceAs_Fk } from "./raports/raportDifferenceAs_Fk";
 import "./NavMenu.css";
 
 const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
@@ -14,7 +15,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
   const { auth } = useData();
   const { width } = useWindowSize();
   const controlRaportBL = useControlRaportBL();
-  const organizationStructure = useOrganizationStructureL();
+  const organizationStructure = useOrganizationStructure();
+  const differenceAs_Fk = useDifferenceAs_Fk();
 
   const [menuActive, setMenuActive] = useState(false);
   const handleLinkClick = () => {
@@ -84,7 +86,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     Archiwum
                   </Link>
                 </li>
-
                 <li className="nav_menu-item-dropmenu">
                   <Link
                     to="/all-data-table"
@@ -94,15 +95,18 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     Kpl dane
                   </Link>
                 </li>
-                <li className="nav_menu-item-dropmenu">
-                  <Link
-                    to="/different-AS-FK"
-                    className="nav_menu-link"
-                    onClick={handleLinkClick}
-                  >
-                    Różnice AS - Symfonia
-                  </Link>
-                </li>
+
+                {auth?.roles?.includes(1000) && (
+                  <li className="nav_menu-item-dropmenu">
+                    <Link
+                      to="/different-AS-FK"
+                      className="nav_menu-link"
+                      onClick={handleLinkClick}
+                    >
+                      Różnice AS - Symfonia
+                    </Link>
+                  </li>
+                )}
 
                 {auth?.roles?.includes(150) && (
                   <li className="nav_menu-item-dropmenu">
@@ -308,6 +312,16 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         onClick={organizationStructure}
                       >
                         Struktura organizacji
+                      </span>
+                    </li>
+                  </ul>
+                )}
+
+                {auth?.roles?.includes(1000) && (
+                  <ul className="nav_menu__menu-dropmenu">
+                    <li className="nav_menu-item-dropmenu">
+                      <span className="nav_menu-link" onClick={differenceAs_Fk}>
+                        Raport różnic AS - FK
                       </span>
                     </li>
                   </ul>
