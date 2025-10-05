@@ -1,29 +1,44 @@
 .header_notification {
-    flex-basis: 50%;
-    min-width: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  flex-basis: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  background: transparent;
 }
 
-.header_notification-icon {
-    font-size: 1.5rem;
-    color: rgb(31, 63, 167);
-    animation: logo 2s infinite linear;
+.loader {
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 1.6rem;
+  white-space: nowrap;
+  background: linear-gradient(
+    90deg,
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    violet,
+    red
+  );
+  background-size: 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow 10s linear infinite;
 }
 
-@keyframes logo {
-    0% {
-        rotate: 0deg;
-        scale: 80%;
-    }
+.loader::before {
+  content: "Przygotowuję plik excel ...";
+}
 
-    50% {
-        scale: 100%;
-    }
-
-    100% {
-        rotate: 360deg;
-        scale: 80%;
-    }
+@keyframes rainbow {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 400%;
+  }
 }

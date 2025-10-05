@@ -1,12 +1,13 @@
-import { SiReactos } from "react-icons/si";
-import './HeaderNotification.css';
+import useData from "./hooks/useData";
+import "./HeaderNotification.css";
 
 const HeaderNotification = () => {
-    return (
-        <section className="header_notification">
-            {/* <SiReactos className="header_notification-icon" /> */}
-        </section>
-    );
+  const { excelFile } = useData();
+  return (
+    <section className="header_notification">
+      {excelFile && <div className="loader"></div>}
+    </section>
+  );
 };
 
 export default HeaderNotification;
