@@ -1,5 +1,6 @@
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import ExcelJS from "exceljs";
+import useData from "../hooks/useData";
 import { saveAs } from "file-saver";
 
 const columnsOrder = [
@@ -216,6 +217,8 @@ const generateExcel = async (cleanData) => {
 
 export const useOrganizationStructure = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
+  const { setExcelFile } = useData();
+
   const organizationStructure = async () => {
     try {
       // dane od lini 180 do 192 przeniesione z innego komponentu, moze czasem tzreba będzie połączyć te dane :)
@@ -231,6 +234,7 @@ export const useOrganizationStructure = () => {
       //   };
       // });
       // generateExcel(filteredData);
+      setExcelFile(true);
 
       const result = await axiosPrivateIntercept.get(
         "/raport/get-organization-structure"
@@ -279,6 +283,8 @@ export const useOrganizationStructure = () => {
       generateExcel(addObject);
     } catch (error) {
       console.error(error);
+    } finally {
+      setExcelFile(false);
     }
   };
 
