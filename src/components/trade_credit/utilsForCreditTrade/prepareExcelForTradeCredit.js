@@ -1,39 +1,6 @@
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
-// Funkcja do mapowania oznaczenia komórki na wiersz i kolumnę
-// const cellToIndex = (cell) => {
-//   const col = cell.replace(/[0-9]/g, "");
-//   const row = parseInt(cell.replace(/[A-Z]/g, ""), 10);
-//   return {
-//     col:
-//       col
-//         .split("")
-//         .reduce(
-//           (acc, char) => acc * 26 + char.charCodeAt(0) - "A".charCodeAt(0) + 1,
-//           0
-//         ) - 1,
-//     row: row - 1,
-//   };
-// };
-
-// const numberToLetter = (number) => {
-//   if (number < 1) {
-//     throw new Error("Number must be greater than or equal to 1.");
-//   }
-
-//   let result = "";
-//   while (number > 0) {
-//     // Zamień liczbę na literę (z uwagi na indeksowanie od 1, musisz odjąć 1)
-//     number--;
-//     const charCode = (number % 26) + "A".charCodeAt(0);
-//     result = String.fromCharCode(charCode) + result;
-//     number = Math.floor(number / 26);
-//   }
-
-//   return result;
-// };
-
 export const getExcelRaport = async (
   cleanData,
   settingsColumn,
