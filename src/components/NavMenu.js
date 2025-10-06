@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import useData from "./hooks/useData";
 import useLogout from "./hooks/useLogout";
 import useWindowSize from "./hooks/useWindow";
-import { useControlRaportBL } from "./FKRaport/RaportConrolDocumentsBL";
+import { useControlRaportBL } from "./raports/raportConrolDocumentsBL";
 import { useOrganizationStructure } from "./raports/raportOrganizationStructure";
 import { useDifferenceAs_Fk } from "./raports/raportDifferenceAs_Fk";
+import { useLawStatement } from "./raports/raportLawStatement";
 import "./NavMenu.css";
 
 const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
@@ -17,6 +18,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
   const controlRaportBL = useControlRaportBL();
   const organizationStructure = useOrganizationStructure();
   const differenceAs_Fk = useDifferenceAs_Fk();
+  const lawStatement = useLawStatement();
 
   const [menuActive, setMenuActive] = useState(false);
   const handleLinkClick = () => {
@@ -322,6 +324,16 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     <li className="nav_menu-item-dropmenu">
                       <span className="nav_menu-link" onClick={differenceAs_Fk}>
                         Raport różnic AS - FK
+                      </span>
+                    </li>
+                  </ul>
+                )}
+
+                {auth?.roles?.includes(150) && (
+                  <ul className="nav_menu__menu-dropmenu">
+                    <li className="nav_menu-item-dropmenu">
+                      <span className="nav_menu-link" onClick={lawStatement}>
+                        Zestawienie wpłat - kancelarie
                       </span>
                     </li>
                   </ul>
