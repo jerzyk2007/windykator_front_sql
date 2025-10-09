@@ -98,7 +98,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                   </Link>
                 </li>
 
-                {auth?.roles?.includes(1000) && (
+                {/* {auth?.roles?.includes(1000) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/different-AS-FK"
@@ -108,7 +108,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       Różnice AS - Symfonia
                     </Link>
                   </li>
-                )}
+                )} */}
 
                 {auth?.roles?.includes(150) && (
                   <li className="nav_menu-item-dropmenu">

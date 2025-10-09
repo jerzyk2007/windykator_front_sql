@@ -77,12 +77,12 @@ function App() {
               />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[100]} />}>
+            {/* <Route element={<RequireAuth allowedRoles={[100]} />}>
               <Route
                 path="/different-AS-FK"
                 element={<PrepareTable info={"different"} />}
               />
-            </Route>
+            </Route> */}
             <Route element={<RequireAuth allowedRoles={[100]} />}>
               <Route
                 path="/all-data-table"
