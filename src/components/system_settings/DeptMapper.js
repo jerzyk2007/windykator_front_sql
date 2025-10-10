@@ -101,7 +101,6 @@ const DeptMapper = () => {
       );
 
       const checkDocPayment = await checkDocPay(checkMissingDeps);
-      // console.log(result?.data?.company ? result.data.company : "brak company");
       setCompany({
         selectCompany:
           result.data.company.length > 1

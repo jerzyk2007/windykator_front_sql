@@ -50,12 +50,9 @@ const UserChangePermissions = ({ id, permissions }) => {
 
   const handleChangePermission = async () => {
     try {
-      await axiosPrivateIntercept.patch(
-        `/user/change-permissions/${id}`,
-        {
-          permissions: userPermissions,
-        }
-      );
+      await axiosPrivateIntercept.patch(`/user/change-permissions/${id}`, {
+        permissions: userPermissions,
+      });
       setErrMsg("Sukces.");
     } catch (err) {
       setErrMsg("Uprawnienia nie zostały zmienione.");

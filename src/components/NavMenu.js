@@ -41,7 +41,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
         }
         onMouseLeave={width ? () => setMenuActive(false) : undefined}
       >
-        {auth?.roles?.includes(100) && (
+        {(auth?.roles?.includes(100) || auth?.roles?.includes(2000)) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Tabelka</Link>
             <div
@@ -110,7 +110,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                   </li>
                 )} */}
 
-                {auth?.roles?.includes(150) && (
+                {(auth?.roles?.includes(150) ||
+                  auth?.roles?.includes(2000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/krd"
@@ -123,7 +124,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 )}
                 {(auth?.roles?.includes(110) ||
                   auth?.roles?.includes(120) ||
-                  auth?.roles?.includes(1000)) && (
+                  auth?.roles?.includes(1000) ||
+                  auth?.roles?.includes(2000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/fk-documents-table"
@@ -136,7 +138,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 )}
                 {(auth?.roles?.includes(200) ||
                   auth?.roles?.includes(201) ||
-                  auth?.roles?.includes(202)) && (
+                  auth?.roles?.includes(202) ||
+                  auth?.roles?.includes(2000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/fk-disabled-documents-table"
@@ -151,13 +154,14 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
             </div>
           </li>
         )}
-
         {(auth?.roles?.includes(100) ||
           auth?.roles?.includes(200) ||
           auth?.roles?.includes(201) ||
           auth?.roles?.includes(202) ||
           auth?.roles?.includes(300) ||
-          auth?.roles?.includes(1000)) && (
+          auth?.roles?.includes(400) ||
+          auth?.roles?.includes(1000) ||
+          auth?.roles?.includes(2000)) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Raporty</Link>
             <div
@@ -168,7 +172,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
               }
             >
               <ul className="nav_menu__menu-dropmenu">
-                {auth?.roles?.includes(100) && (
+                {(auth?.roles?.includes(100) ||
+                  auth?.roles?.includes(2000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link className="nav_menu-link">
                       <i className="fas fa-caret-left"></i>Raporty
@@ -186,7 +191,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(100) && (
+                        {(auth?.roles?.includes(100) ||
+                          auth?.roles?.includes(2000)) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/raport-advisers"
@@ -215,14 +221,16 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
 
                 {(auth?.roles?.includes(200) ||
                   auth?.roles?.includes(201) ||
-                  auth?.roles?.includes(202)) && (
+                  auth?.roles?.includes(202) ||
+                  auth?.roles?.includes(2000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link className="nav_menu-link">
                       <i className="fas fa-caret-left"></i>Raporty - FK
                     </Link>
                     <div className="nav_menu-dropdown__menu--side_left">
                       <ul className="nav_menu__menu--side">
-                        {auth?.roles?.includes(200) && (
+                        {(auth?.roles?.includes(200) ||
+                          auth?.roles?.includes(2000)) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/generate-raport-fk-KRT"
@@ -233,7 +241,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(201) && (
+                        {(auth?.roles?.includes(201) ||
+                          auth?.roles?.includes(2000)) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/generate-raport-fk-KEM"
@@ -244,7 +253,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(202) && (
+                        {(auth?.roles?.includes(202) ||
+                          auth?.roles?.includes(2000)) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/generate-raport-fk-RAC"
@@ -259,14 +269,16 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                     </div>
                   </li>
                 )}
-                {auth?.roles?.includes(120) && (
+                {(auth?.roles?.includes(120) ||
+                  auth?.roles?.includes(2000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link className="nav_menu-link">
                       <i className="fas fa-caret-left"></i>Kontrola dokumentacji
                     </Link>
                     <div className="nav_menu-dropdown__menu--side_left">
                       <ul className="nav_menu__menu--side">
-                        {auth?.roles?.includes(120) && (
+                        {(auth?.roles?.includes(120) ||
+                          auth?.roles?.includes(2000)) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/control-bl-documents-table"
@@ -277,7 +289,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                             </Link>
                           </li>
                         )}
-                        {auth?.roles?.includes(120) && (
+                        {(auth?.roles?.includes(120) ||
+                          auth?.roles?.includes(2000)) && (
                           <li className="nav_menu-item-dropmenu">
                             <span
                               className="nav_menu-link"
@@ -292,7 +305,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                   </li>
                 )}
 
-                {auth?.roles?.includes(300) && (
+                {(auth?.roles?.includes(300) ||
+                  auth?.roles?.includes(2000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/raport-nora"
@@ -306,7 +320,9 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
 
                 {(auth?.roles?.includes(200) ||
                   auth?.roles?.includes(201) ||
-                  auth?.roles?.includes(202)) && (
+                  auth?.roles?.includes(202) ||
+                  auth?.roles?.includes(150) ||
+                  auth?.roles?.includes(2000)) && (
                   <ul className="nav_menu__menu-dropmenu">
                     <li className="nav_menu-item-dropmenu">
                       <span
@@ -319,7 +335,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                   </ul>
                 )}
 
-                {auth?.roles?.includes(110) && (
+                {(auth?.roles?.includes(400) ||
+                  auth?.roles?.includes(2000)) && (
                   <ul className="nav_menu__menu-dropmenu">
                     <li className="nav_menu-item-dropmenu">
                       <span className="nav_menu-link" onClick={differenceAs_Fk}>
@@ -329,7 +346,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                   </ul>
                 )}
 
-                {auth?.roles?.includes(150) && (
+                {(auth?.roles?.includes(150) ||
+                  auth?.roles?.includes(2000)) && (
                   <ul className="nav_menu__menu-dropmenu">
                     <li className="nav_menu-item-dropmenu">
                       <span className="nav_menu-link" onClick={lawStatement}>
@@ -342,11 +360,11 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
             </div>
           </li>
         )}
-
         {(auth?.roles?.includes(1000) ||
           auth?.roles?.includes(200) ||
           auth?.roles?.includes(201) ||
-          auth?.roles?.includes(202)) && (
+          auth?.roles?.includes(202) ||
+          auth?.roles?.includes(2000)) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">System</Link>
             <div
@@ -357,7 +375,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
               }
             >
               <ul className="nav_menu__menu-dropmenu">
-                {auth?.roles?.includes(1000) && (
+                {(auth?.roles?.includes(1000) ||
+                  auth?.roles?.includes(2000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/user-settings"
@@ -371,7 +390,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 {(auth?.roles?.includes(1000) ||
                   auth?.roles?.includes(200) ||
                   auth?.roles?.includes(201) ||
-                  auth?.roles?.includes(202)) && (
+                  auth?.roles?.includes(202) ||
+                  auth?.roles?.includes(2000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link
                       to="/add-data"
@@ -385,7 +405,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 {(auth?.roles?.includes(1000) ||
                   auth?.roles?.includes(200) ||
                   auth?.roles?.includes(201) ||
-                  auth?.roles?.includes(202)) && (
+                  auth?.roles?.includes(202) ||
+                  auth?.roles?.includes(2000)) && (
                   <li className="nav_menu-item-dropmenu">
                     <Link className="nav_menu-link">
                       <i className="fas fa-caret-left"></i>Ustawienia
@@ -406,7 +427,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         {(auth?.roles?.includes(1000) ||
                           auth?.roles?.includes(200) ||
                           auth?.roles?.includes(201) ||
-                          auth?.roles?.includes(202)) && (
+                          auth?.roles?.includes(202) ||
+                          auth?.roles?.includes(2000)) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/change-items"
@@ -420,7 +442,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                         {(auth?.roles?.includes(1000) ||
                           auth?.roles?.includes(200) ||
                           auth?.roles?.includes(201) ||
-                          auth?.roles?.includes(202)) && (
+                          auth?.roles?.includes(202) ||
+                          auth?.roles?.includes(2000)) && (
                           <li className="nav_menu-item-dropmenu">
                             <Link
                               to="/dept-mapper"
@@ -439,13 +462,14 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
             </div>
           </li>
         )}
-        {auth?.roles?.includes(100) && (
+        {(auth?.roles?.includes(1) || auth?.roles?.includes(2000)) && (
           <li className="nav_menu__menu-item">
             <Link className="nav_menu-link">Użytkownik</Link>
             {menuActive && (
               <div className="nav_menu-dropdown__menu">
                 <ul className="nav_menu__menu-dropmenu">
-                  {auth?.roles?.includes(100) && (
+                  {(auth?.roles?.includes(1) ||
+                    auth?.roles?.includes(2000)) && (
                     <li className="nav_menu-item-dropmenu">
                       <Link
                         to="/"
@@ -465,7 +489,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                       Instrukcja obsługi
                     </Link>
                   </li>
-                  {auth?.roles?.includes(1000) && (
+                  {(auth?.roles?.includes(1000) ||
+                    auth?.roles?.includes(2000)) && (
                     <li className="nav_menu-item-dropmenu">
                       <Link
                         to="/register"
