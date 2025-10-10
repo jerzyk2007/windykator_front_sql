@@ -319,7 +319,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                   </ul>
                 )}
 
-                {auth?.roles?.includes(1000) && (
+                {auth?.roles?.includes(100) && (
                   <ul className="nav_menu__menu-dropmenu">
                     <li className="nav_menu-item-dropmenu">
                       <span className="nav_menu-link" onClick={differenceAs_Fk}>
