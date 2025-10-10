@@ -42,35 +42,37 @@ function App() {
           {/* protected routes */}
           <Route element={<PersistLogin />}>
             <Route
-              element={<RequireAuth allowedRoles={[1, 100, 200, 201, 202]} />}
+              element={
+                <RequireAuth allowedRoles={[1, 100, 200, 201, 202, 2000]} />
+              }
             >
               <Route path="/" element={<Home />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[1000, 2000]} />}>
               <Route path="/register" element={<Register />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[100]} />}>
+            <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/actual-table"
                 element={<PrepareTable info={"actual"} />}
               />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[100]} />}>
+            <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/critical-table"
                 element={<PrepareTable info={"critical"} />}
               />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[100]} />}>
+            <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/obligations-table"
                 element={<PrepareTable info={"obligations"} />}
               />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[100]} />}>
+            <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/archive-table"
                 element={<PrepareTable info={"archive"} />}
@@ -83,30 +85,34 @@ function App() {
                 element={<PrepareTable info={"different"} />}
               />
             </Route> */}
-            <Route element={<RequireAuth allowedRoles={[100]} />}>
+            <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/all-data-table"
                 element={<PrepareTable info={"all"} />}
               />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[150, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[150, 1000, 2000]} />}>
               <Route path="/krd" element={<PrepareTable info={"krd"} />} />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[110, 120, 1000]} />}>
+            <Route
+              element={<RequireAuth allowedRoles={[110, 120, 1000, 2000]} />}
+            >
               <Route
                 path="/fk-documents-table"
                 element={<PrepareTable info={"raport_fk"} />}
               />
             </Route>
             <Route
-              element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}
+              element={
+                <RequireAuth allowedRoles={[200, 201, 202, 1000, 2000]} />
+              }
             >
               <Route
                 path="/fk-disabled-documents-table"
                 element={<PrepareTable info={"disabled_fk"} />}
               />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[120, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[120, 1000, 2000]} />}>
               <Route
                 path="/control-bl-documents-table"
                 element={<PrepareTable info={"control-bl"} />}
@@ -114,7 +120,9 @@ function App() {
             </Route>
 
             <Route
-              element={<RequireAuth allowedRoles={[100, 110, 120, 1000]} />}
+              element={
+                <RequireAuth allowedRoles={[100, 110, 120, 1000, 2000]} />
+              }
             >
               <Route
                 path="/raport-departments"
@@ -123,7 +131,9 @@ function App() {
             </Route>
 
             <Route
-              element={<RequireAuth allowedRoles={[100, 110, 120, 1000]} />}
+              element={
+                <RequireAuth allowedRoles={[100, 110, 120, 1000, 2000]} />
+              }
             >
               <Route path="/raport-advisers" element={<RaportAdvisers />} />
             </Route>
@@ -140,21 +150,21 @@ function App() {
             </Route> */}
 
             {/* dodanie key powoduje, że kompnent się odświeża */}
-            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[200, 1000, 2000]} />}>
               <Route
                 path="/generate-raport-fk-KRT"
                 element={<FKAddData key="KRT" company="KRT" />}
               />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[201, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[201, 1000, 2000]} />}>
               <Route
                 path="/generate-raport-fk-KEM"
                 element={<FKAddData key="KEM" company="KEM" />}
               />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[202, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[202, 1000, 2000]} />}>
               <Route
                 path="/generate-raport-fk-RAC"
                 element={<FKAddData key="RAC" company="RAC" />}
@@ -162,40 +172,46 @@ function App() {
             </Route>
 
             <Route
-              element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}
+              element={
+                <RequireAuth allowedRoles={[200, 201, 202, 1000, 2000]} />
+              }
             >
               <Route path="/dept-mapper" element={<DeptMapper />} />
             </Route>
 
             <Route
-              element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}
+              element={
+                <RequireAuth allowedRoles={[200, 201, 202, 1000, 2000]} />
+              }
             >
               <Route path="/change-items" element={<Items />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[300, 1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[300, 1000, 2000]} />}>
               <Route path="/raport-nora" element={<RaportsNora />} />
             </Route>
 
             <Route
-              element={<RequireAuth allowedRoles={[200, 201, 202, 1000]} />}
+              element={
+                <RequireAuth allowedRoles={[200, 201, 202, 1000, 2000]} />
+              }
             >
               <Route path="/add-data" element={<AddDataFromFile />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[1000, 2000]} />}>
               <Route path="/user-settings" element={<UserSettings />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[1000]} />}>
+            <Route element={<RequireAuth allowedRoles={[1000, 2000]} />}>
               <Route path="/table-settings" element={<TableColumns />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[1]} />}>
+            <Route element={<RequireAuth allowedRoles={[1, 2000]} />}>
               <Route path="/change-password" element={<ChangePassword />} />
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={[1]} />}>
+            <Route element={<RequireAuth allowedRoles={[1, 2000]} />}>
               <Route path="/instruction" element={<Instruction />} />
             </Route>
           </Route>

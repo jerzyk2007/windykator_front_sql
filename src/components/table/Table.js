@@ -361,7 +361,7 @@ const Table = ({
         {pleaseWait ? (
           <PleaseWait />
         ) : (
-          [110, 120, 1100].some((role) => auth?.roles?.includes(role)) &&
+          [110, 120, 2000].some((role) => auth?.roles?.includes(role)) &&
           dataRowTable.edit && (
             <EditRowTable
               dataRowTable={dataRowTable}
