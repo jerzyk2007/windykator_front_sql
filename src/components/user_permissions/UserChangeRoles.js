@@ -172,7 +172,7 @@ const UserChangeRoles = ({ id, roles }) => {
           {!errMsg ? "Zmień uprawnienia użytkownika" : errMsg}
         </h3>
       </section>
-      {rolesItem}
+      <section className="user-change-roles__wrapper">{rolesItem}</section>
       <Button variant="contained" onClick={handleChangeRoles} size="small">
         Zmień
       </Button>

@@ -21,7 +21,7 @@ const Home = () => {
 
   return (
     <section className="home">
-      {(auth?.roles?.includes(100) || auth?.roles?.includes(2000)) &&
+      {(auth?.roles?.includes(1) || auth?.roles?.includes(2000)) &&
         updateData.length > 0 && (
           <section className="home__update">
             {<UpdateData data={updateData} />}
