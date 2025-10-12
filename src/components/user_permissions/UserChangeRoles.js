@@ -57,6 +57,12 @@ const UserChangeRoles = ({ id, roles }) => {
                 - edytowanie dokumentów
               </span>
             )}
+            {role === "Raports" && (
+              <span className="user-change-roles--information">
+                {" "}
+                - tylko pobieranie raportów excel
+              </span>
+            )}
             {role === "Controller" && (
               <span className="user-change-roles--information">
                 {" "}
@@ -140,6 +146,7 @@ const UserChangeRoles = ({ id, roles }) => {
       ? {
           User: roles?.User ? roles.User : false,
           Editor: roles?.Editor ? roles.Editor : false,
+          Raports: roles?.Raports ? roles.Raports : false,
           Admin: roles?.Admin ? roles.Admin : false,
           Controller: roles?.Controller ? roles.Controller : false,
           DNiKN: roles?.DNiKN ? roles.DNiKN : false,
@@ -165,7 +172,7 @@ const UserChangeRoles = ({ id, roles }) => {
           {!errMsg ? "Zmień uprawnienia użytkownika" : errMsg}
         </h3>
       </section>
-      {rolesItem}
+      <section className="user-change-roles__wrapper">{rolesItem}</section>
       <Button variant="contained" onClick={handleChangeRoles} size="small">
         Zmień
       </Button>

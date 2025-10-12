@@ -1,4 +1,5 @@
 .user-change-roles {
+  flex-grow: 1;
   width: 100%;
   margin: 2px 0;
   padding: 5px 10px;
@@ -6,7 +7,9 @@
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between; /* lepsze dopasowanie */
+  max-height: 100%; /* kluczowy limit */
+  overflow: hidden; /* ukrycie wychodzących elementów */
 }
 
 .user-change-roles__title {
@@ -14,6 +17,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.user-change-roles__wrapper {
+  flex: 1;
+  overflow-y: auto; /* ✅ pojawi się pionowy scroll */
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 5px; /* żeby nie zasłaniał scrollbar */
+}
+
+/* Wąski, estetyczny scrollbar */
+.user-change-roles__wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.user-change-roles__wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 92, 145, 0.4);
+  border-radius: 4px;
 }
 
 .user-change-roles__container {
@@ -40,6 +64,7 @@
 }
 
 .user-change-roles Button {
-  width: 30%;
-  margin: 5px auto;
+  width: 50%; /* lepsze dopasowanie do małych ekranów */
+  margin: 8px auto;
+  flex-shrink: 0;
 }

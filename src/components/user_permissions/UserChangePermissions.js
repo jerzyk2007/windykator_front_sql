@@ -1,40 +1,40 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
-// import "./UserChangePermissions.css";
+import "./UserChangePermissions.css";
 
-const UserChangePermissions = ({ id, permissions }) => {
+const UserChangePermissions = ({ id, permissions, setPermissions }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
-  const [userPermissions, setUserPermissions] = useState(permissions);
+  // const [userPermissions, setUserPermissions] = useState(permissions);
   const [errMsg, setErrMsg] = useState("");
 
-  const permissionsItem = Object.entries(userPermissions).map(
+  const permissionsItem = Object.entries(permissions).map(
     ([permission, isChecked], index) => (
-      <section key={index} className=".user-change-roles__container">
+      <section key={index} className=".user-change-permissions__container">
         <label
-          className="user-change-roles__container--info"
+          className="user-change-permissions__container--info"
           id={`permission${index}`}
         >
-          <span className="user-change-roles__container--text">
-            {permission === "Basic" && (
+          <span className="user-change-permissions__container--text">
+            {permission === "Pracownik" && (
               <span className="edit_system_change--roles__container--information">
-                Basic - widzi tylko swoje faktury
+                Pracownik - dotyczy osób zatrudnionych w strukturach Krotoski
               </span>
             )}
-            {permission === "Standard" && (
+            {permission === "Kancelaria" && (
               <span className="edit_system_change--roles__container--information">
-                Standard - widzi faktury całego działu
+                Kancelaria - dotyczy osób z kancelarii zewnętrznych
               </span>
             )}
           </span>
           <input
-            className="user-change-roles--check"
+            className="user-change-permissions--check"
             name={`permission${index}`}
             type="checkbox"
             checked={isChecked}
             onChange={() => {
-              setUserPermissions((prevRoles) => {
+              setPermissions((prevRoles) => {
                 const updatedRoles = {};
                 Object.keys(prevRoles).forEach((key) => {
                   updatedRoles[key] = key === permission;
@@ -50,12 +50,9 @@ const UserChangePermissions = ({ id, permissions }) => {
 
   const handleChangePermission = async () => {
     try {
-      await axiosPrivateIntercept.patch(
-        `/user/change-permissions/${id}`,
-        {
-          permissions: userPermissions,
-        }
-      );
+      await axiosPrivateIntercept.patch(`/user/change-permissions/${id}`, {
+        permissions: permissions,
+      });
       setErrMsg("Sukces.");
     } catch (err) {
       setErrMsg("Uprawnienia nie zostały zmienione.");
@@ -65,12 +62,12 @@ const UserChangePermissions = ({ id, permissions }) => {
 
   useEffect(() => {
     setErrMsg("");
-  }, [userPermissions]);
+  }, [permissions]);
 
   return (
-    <section className="user-change-roles">
-      <section className="user-change-roles__title">
-        <h3 className="user-change-roles__title--name">
+    <section className="user-change-permissions">
+      <section className="user-change-permissions__title">
+        <h3 className="user-change-permissions__title--name">
           {!errMsg ? "Zmień dostęp użytkownika" : errMsg}
         </h3>
       </section>

@@ -120,22 +120,6 @@ const EditUserSettings = ({ user, setEdit }) => {
         <>
           <section className="edit_user_settings_section-content">
             <section className="edit_user_settings_section-content-data">
-              {roles && Object.keys(roles).length > 0 && (
-                <UserChangeRoles
-                  id={user.id_user}
-                  roles={roles}
-                  // user={user.roles}
-                />
-              )}
-              {permissions && Object.keys(permissions).length > 0 && (
-                <UserChangePermissions
-                  id={user.id_user}
-                  permissions={permissions}
-                />
-              )}
-            </section>
-
-            <section className="edit_user_settings_section-content-data">
               <UserChangeName
                 id={user.id_user}
                 name={user.username}
@@ -149,14 +133,37 @@ const EditUserSettings = ({ user, setEdit }) => {
                 setEdit={setEdit}
               />
             </section>
+
             <section className="edit_user_settings_section-content-data">
-              {departments && Object.keys(departments).length > 0 && (
-                <UserChangeDepartments
+              {permissions && Object.keys(permissions).length > 0 && (
+                <UserChangePermissions
                   id={user.id_user}
-                  departments={departments}
-                  multiCompany={company}
+                  permissions={permissions}
+                  setPermissions={setPermissions}
                 />
               )}
+
+              {permissions?.Pracownik &&
+                roles &&
+                Object.keys(roles).length > 0 && (
+                  <UserChangeRoles
+                    id={user.id_user}
+                    roles={roles}
+                    // user={user.roles}
+                  />
+                )}
+            </section>
+
+            <section className="edit_user_settings_section-content-data">
+              {permissions?.Pracownik &&
+                departments &&
+                Object.keys(departments).length > 0 && (
+                  <UserChangeDepartments
+                    id={user.id_user}
+                    departments={departments}
+                    multiCompany={company}
+                  />
+                )}
             </section>
           </section>
           {/* <FiX
@@ -178,103 +185,6 @@ const EditUserSettings = ({ user, setEdit }) => {
       </section>
     </section>
   );
-  // return (
-  //   <section className="edit_user_settings">
-  //     {pleaseWait ? (
-  //       <PleaseWait />
-  //     ) : (
-  //       <>
-  //         <section className="edit_user_settings_items">
-  //           <section className="edit_user_settings-wrapper">
-  //             <section className="edit_user_settings__container">
-  //               <section className="bloc-tabs">
-  //                 <button
-  //                   className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
-  //                   onClick={() => toggleTab(1)}
-  //                 ></button>
-  //                 <button
-  //                   className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-  //                   onClick={() => toggleTab(2)}
-  //                 ></button>
-  //                 <button
-  //                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
-  //                   onClick={() => toggleTab(3)}
-  //                 ></button>
-  //               </section>
-
-  //               <section className="edit_user_settings_content-tabs">
-  //                 <section
-  //                   className={
-  //                     toggleState === 1 ? "content  active-content" : "content"
-  //                   }
-  //                 >
-  //                   <section className="edit_user_settings_section-content">
-  //                     <section
-  //                       className="edit_user_settings_section-content-data"
-  //                     >
-  //                       {roles && Object.keys(roles).length > 0 && (
-  //                         <UserChangeRoles user={user} roles={roles} />
-  //                       )}
-  //                       {permissions && Object.keys(permissions).length > 0 && (
-  //                         <UserChangePermissions
-  //                           user={user}
-  //                           permissions={permissions}
-  //                         />
-  //                       )}
-  //                     </section>
-
-  //                     <section className="edit_user_settings_section-content-data">
-  //                       <UserChangeName user={user} />
-  //                       <UserChangePass user={user} />
-  //                       <UserChangeLogin user={user} />
-  //                       <UserDelete user={user} setEdit={setEdit} />
-  //                     </section>
-  //                     <section className="edit_user_settings_section-content-data">
-  //                       {departments && Object.keys(departments).length > 0 && (
-  //                         <UserChangeDepartments
-  //                           user={user}
-  //                           departments={departments}
-  //                         />
-  //                       )}
-  //                     </section>
-  //                   </section>
-  //                 </section>
-  //                 <section
-  //                   className={
-  //                     toggleState === 2 ? "content  active-content" : "content"
-  //                   }
-  //                 >
-  //                   <section className="edit_user_settings_section-content">
-  //                     <section className="edit_user_settings_section-content-data">
-  //                     </section>
-  //                     <section className="edit_user_settings_section-content-data">
-  //                     </section>
-  //                     <section className="edit_user_settings_section-content-data"></section>
-  //                   </section>
-  //                 </section>
-  //                 <section
-  //                   className={
-  //                     toggleState === 3 ? "content  active-content" : "content"
-  //                   }
-  //                 >
-  //                   <section className="edit_user_settings_section-content">
-  //                     <section className="edit_user_settings_section-content-data"></section>
-  //                     <section className="edit_user_settings_section-content-data"></section>
-  //                   </section>
-  //                 </section>
-  //               </section>
-  //             </section>
-  //           </section>
-  //         </section>
-
-  //         <FiX
-  //           className="edit_user_settings-button"
-  //           onClick={() => setEdit(false)}
-  //         />
-  //       </>
-  //     )}
-  //   </section>
-  // );
 };
 
 export default EditUserSettings;
