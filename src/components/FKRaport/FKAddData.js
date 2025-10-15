@@ -11,16 +11,16 @@ const FKAddData = ({ company }) => {
   const [pleaseWait, setPleaseWait] = useState(false);
   const [missongDeps, setMissingDeps] = useState("");
   const [dateCounter, setDateCounter] = useState({});
+  const [mails, setMails] = useState({
+    generate: false,
+    data: [],
+  });
 
   const getRaport = async () => {
     setPleaseWait(true);
 
     try {
-      // const generateResponse = await axiosPrivateIntercept.get(
-      //   `/fk/generate-data/${company}`
-      // );
       await axiosPrivateIntercept.get(`/fk/generate-data/${company}`);
-      // const titleDate = generateResponse?.data?.date || "Błąd";
 
       const today = new Date();
       const yyyy = today.getFullYear();
@@ -103,6 +103,40 @@ const FKAddData = ({ company }) => {
     }
   };
 
+  const getOwnersMail = async () => {
+    try {
+      setPleaseWait(true);
+
+      const result = await axiosPrivateIntercept.get(
+        `/fk/get-owners-mail/${company}`
+      );
+      const sortedMails = result.data.mail.sort((a, b) => a.localeCompare(b));
+      setMails({
+        generate: true,
+        data: sortedMails || [],
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setPleaseWait(false);
+    }
+  };
+
+  const copyMails = () => {
+    if (mails?.data) {
+      const textToCopy = mails.data.join("; "); // łączysz maile w jeden string
+      navigator.clipboard.writeText(textToCopy);
+    }
+  };
+
+  const generateMails = mails.data.map((item, index) => {
+    return (
+      <section key={index} className="fk_add_data__mails-item">
+        {item}
+      </section>
+    );
+  });
+
   useEffect(() => {
     getDateAndCounter();
   }, []);
@@ -158,6 +192,9 @@ const FKAddData = ({ company }) => {
             ) : (
               <section className="fk_add_data__container-item">
                 <p className="fk_add_data__container-item--error">
+                  Anulowano generowanie raportu
+                </p>
+                <p className="fk_add_data__container-item--error">
                   {missongDeps}
                 </p>
               </section>
@@ -181,6 +218,40 @@ const FKAddData = ({ company }) => {
                 </section>
               </section>
             )}
+            <section className="fk_add_data__container-item fk_add_data__mails">
+              <section className="fk_add_data__mails__wrapper">
+                {!mails.generate && (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    disableElevation
+                    onClick={getOwnersMail}
+                  >
+                    Pobierz adresy mailowe Ownerów
+                  </Button>
+                )}
+                {mails.generate && !mails.data.length && (
+                  <p className="fk_add_data__mails-title">Brak danych</p>
+                )}
+                {mails.generate && mails.data.length ? (
+                  <>
+                    <section className="fk_add_data__mails__container">
+                      {generateMails}
+                    </section>
+                    <section className="fk_add_data__mails__copy">
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        disableElevation
+                        onClick={copyMails}
+                      >
+                        Skopiuj do schowka
+                      </Button>
+                    </section>
+                  </>
+                ) : null}
+              </section>
+            </section>
           </section>
         </section>
       )}
