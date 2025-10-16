@@ -94,7 +94,6 @@ export const prepareColumns = (columnsData, data) => {
     }
 
     if (item.accessorKey === "KONTRAHENT") {
-      console.log(modifiedItem);
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         // const cellValue = cell.getValue();
         const checkClient = cell.row.original.ZAZNACZ_KONTRAHENTA;
@@ -110,7 +109,7 @@ export const prepareColumns = (columnsData, data) => {
           },
         };
       };
-      //only allow these filter modes
+      modifiedItem.filterFn = "contains";
     }
 
     // if (item.accessorKey === "ZAZNACZ_KONTRAHENTA") {
