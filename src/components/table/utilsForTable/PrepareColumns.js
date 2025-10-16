@@ -18,6 +18,7 @@ export const muiTableBodyCellProps = {
 export const prepareColumns = (columnsData, data) => {
   const update = columnsData.map((item) => {
     const modifiedItem = { ...item };
+
     modifiedItem.muiTableBodyCellProps = muiTableBodyCellProps;
 
     if (item.filterVariant === "date-range") {
@@ -91,25 +92,9 @@ export const prepareColumns = (columnsData, data) => {
         return cellValue;
       };
     }
-    // if (item.accessorKey === "UWAGI_Z_FAKTURY") {
-    //   modifiedItem.Cell = ({ cell }) => {
-    //     const cellValue = cell.getValue();
-    //     if (Array.isArray(cellValue) && cellValue.length > 0) {
-    //       return (
-    //         <div style={{ whiteSpace: "pre-wrap" }}>
-    //           {cellValue.map((item, index) => (
-    //             <p key={index}>{item}</p>
-    //           ))}
-    //         </div>
-    //       );
-    //     }
-    //   };
-    //   const changeMuiTableBodyCellProps = { ...muiTableBodyCellProps };
-    //   changeMuiTableBodyCellProps.align = "left";
-    //   modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
-    // }
 
     if (item.accessorKey === "KONTRAHENT") {
+      console.log(modifiedItem);
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         // const cellValue = cell.getValue();
         const checkClient = cell.row.original.ZAZNACZ_KONTRAHENTA;
@@ -125,6 +110,7 @@ export const prepareColumns = (columnsData, data) => {
           },
         };
       };
+      //only allow these filter modes
     }
 
     // if (item.accessorKey === "ZAZNACZ_KONTRAHENTA") {
@@ -331,7 +317,7 @@ export const prepareColumns = (columnsData, data) => {
         return <span>{formattedValue}</span>; // Zwracamy sformatowaną wartość
       };
     }
-
+    modifiedItem.columnFilterModeOptions = [];
     delete modifiedItem.type;
     return modifiedItem;
   });
