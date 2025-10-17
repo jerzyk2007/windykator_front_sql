@@ -255,6 +255,7 @@ const Table = ({
         "& .Mui-TableHeadCell-Content-Actions": {
           display: "none",
         },
+
         "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
           borderWidth: "1px",
           background: "none",
@@ -265,6 +266,7 @@ const Table = ({
     }),
     // odczytanie danych po kliknięciu w wiersz
     muiTableBodyCellProps: ({ column, row, cell }) => ({
+      // align: "center",
       onDoubleClick: () => {
         if (column.id === "UWAGI_ASYSTENT") {
           getSingleRow(row.original.id_document, "quick");
