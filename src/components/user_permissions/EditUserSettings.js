@@ -15,7 +15,7 @@ import "./EditUserSettings.css";
 const EditUserSettings = ({ user, setEdit }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
-  const [permissions, setPermissions] = useState({});
+  const [permissions, setPermissions] = useState("");
   const [roles, setRoles] = useState({});
   const [departments, setDepartments] = useState([]);
   const [company, setCompany] = useState([]);
@@ -71,7 +71,6 @@ const EditUserSettings = ({ user, setEdit }) => {
         a.department.DEPARTMENT.localeCompare(b.department.DEPARTMENT) ||
         a.department.COMPANY.localeCompare(b.department.COMPANY)
     );
-
     return finalArray;
   };
 
@@ -89,22 +88,22 @@ const EditUserSettings = ({ user, setEdit }) => {
         return acc;
       }, {});
 
-      const filteredPermissions = result.data
-        .map((item) => item.permissions)
-        .filter(Boolean)[0];
+      // const filteredPermissions = result.data
+      //   .map((item) => item.permissions)
+      //   .filter(Boolean)[0];
 
-      const permissions = filteredPermissions.reduce((acc, perm, index) => {
-        // Ustawiamy user.permissions jako pusty obiekt, jeśli nie istnieje
-        const userPermissions = user?.permissions || {};
-        acc[perm] = userPermissions[perm] ? true : false;
-        return acc;
-      }, {});
+      // const permissions = filteredPermissions.reduce((acc, perm, index) => {
+      //   // Ustawiamy user.permissions jako pusty obiekt, jeśli nie istnieje
+      //   const userPermissions = user?.permissions || {};
+      //   acc[perm] = userPermissions[perm] ? true : false;
+      //   return acc;
+      // }, {});
 
       const company = result.data
         .map((item) => item.company)
         .filter(Boolean)[0];
 
-      setPermissions(permissions);
+      setPermissions(user?.permissions || "");
       setCompany(company);
       setDepartments(checkMergeDep(result.data));
       setRoles(roles);
@@ -136,15 +135,15 @@ const EditUserSettings = ({ user, setEdit }) => {
             </section>
 
             <section className="edit_user_settings_section-content-data">
-              {permissions && Object.keys(permissions).length > 0 && (
+              {/* {permissions && Object.keys(permissions).length > 0 && (
                 <UserChangePermissions
                   id={user.id_user}
                   permissions={permissions}
                   setPermissions={setPermissions}
                 />
-              )}
+              )} */}
 
-              {permissions?.Pracownik &&
+              {permissions === "Pracownik" &&
                 roles &&
                 Object.keys(roles).length > 0 && (
                   <UserChangeRoles
@@ -156,7 +155,7 @@ const EditUserSettings = ({ user, setEdit }) => {
             </section>
 
             <section className="edit_user_settings_section-content-data">
-              {permissions?.Pracownik &&
+              {permissions === "Pracownik" &&
                 departments &&
                 Object.keys(departments).length > 0 && (
                   <UserChangeDepartments

@@ -51,6 +51,7 @@ const PrepareTable = ({ info, raportDocuments }) => {
             `/documents/get-data-table/${auth.id_user}/${info}`,
             { signal: controller.signal }
           );
+
           // wyciągnięcie ostatniego elementu tabeli INFORMACJA_ZARZAD
           const filteredData = dataTable?.data?.map((item) => {
             if (!item.INFORMACJA_ZARZAD) {
@@ -73,7 +74,6 @@ const PrepareTable = ({ info, raportDocuments }) => {
               INFORMACJA_ZARZAD: newInfo,
             };
           });
-
           setDocuments(filteredData);
         }
 
