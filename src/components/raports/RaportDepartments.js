@@ -35,7 +35,7 @@ const RaportDepartments = () => {
     // { id: "DO_ROZLICZENIA", desc: true },
   ]);
   const [raportData, setRaportData] = useState([]);
-  const [permission, setPermission] = useState("");
+  // const [permission, setPermission] = useState("");
   const [departments, setDepartments] = useState([]);
   const [raport, setRaport] = useState([]);
   const [minMaxDateGlobal, setMinMaxDateGlobal] = useState({
@@ -389,20 +389,21 @@ const RaportDepartments = () => {
 
   useEffect(() => {
     const createDataRaport = () => {
-      if (permission === "Standard") {
-        let uniqueDepartments = [];
-        raportData.forEach((item) => {
-          if (item.DZIAL && typeof item.DZIAL === "string") {
-            if (!uniqueDepartments.includes(item.DZIAL)) {
-              uniqueDepartments.push(item.DZIAL);
-            }
+      // if (permission === "Standard") {
+      let uniqueDepartments = [];
+      raportData.forEach((item) => {
+        if (item.DZIAL && typeof item.DZIAL === "string") {
+          if (!uniqueDepartments.includes(item.DZIAL)) {
+            uniqueDepartments.push(item.DZIAL);
           }
-        });
-        setDepartments(uniqueDepartments);
-      }
+        }
+      });
+      setDepartments(uniqueDepartments);
     };
+    // };
     createDataRaport();
-  }, [raportData, permission, raportDate]);
+    // }, [raportData, permission, raportDate]);
+  }, [raportData, raportDate]);
 
   useEffect(() => {
     const update = grossTotalDepartments(
@@ -435,7 +436,6 @@ const RaportDepartments = () => {
         const resultData = await axiosPrivateIntercept.get(
           `/raport/get-data/${auth.id_user}`
         );
-
         if (resultData.data.data.length === 0) {
           setPleaseWait(false);
           return;
@@ -457,7 +457,7 @@ const RaportDepartments = () => {
 
         setColumnsDep(preprareColumnsDep);
         setRaportData(resultData.data.data);
-        setPermission(resultData.data.permission);
+        // setPermission(resultData.data.permission);
         checkMinMaxDateGlobal(resultData.data.data);
 
         const [settingsRaportUserDepartments] = await Promise.all([
