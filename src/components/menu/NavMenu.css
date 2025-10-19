@@ -46,10 +46,10 @@
   text-decoration: none;
 }
 
-.nav_menu__menu-item:hover>.nav_menu-link,
-.nav_menu__menu-item-dropmenu:hover>.nav_menu-link,
-.nav_menu-item-dropmenu:hover>.nav_menu-link,
-.nav_menu-item-dropmenu--side:hover>.nav_menu-link {
+.nav_menu__menu-item:hover > .nav_menu-link,
+.nav_menu__menu-item-dropmenu:hover > .nav_menu-link,
+.nav_menu-item-dropmenu:hover > .nav_menu-link,
+.nav_menu-item-dropmenu--side:hover > .nav_menu-link {
   color: rgb(192, 42, 230);
 }
 
@@ -148,4 +148,33 @@
 
 .nav_menu-link {
   display: block;
+}
+
+/* Ogólne style dla side-menu (domyślnie ukryte) */
+.nav_menu-dropdown__menu--side_left {
+  display: none;
+  position: absolute;
+  top: 0;
+  /* left: 0;  To była domyślna pozycja, która jest potem nadpisywana */
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px 1px rgba(44, 123, 168, 0.6);
+  background-color: #bfe2ff;
+  padding: 10px;
+  min-width: 200px;
+  z-index: 7; /* Upewnij się, że jest nad innymi elementami */
+}
+
+/* Styl dla aktywnego side-menu (pojawia się z lewej) */
+.nav_menu-item-dropmenu:hover .nav_menu-dropdown__menu--side_left {
+  display: block;
+  left: -95%; /* Kluczowa zmiana: przesuwamy na lewo */
+}
+
+.nav_menu-item-dropmenu {
+  position: relative; /* Ważne! */
+}
+
+/* Klasa do ukrywania, jeśli nie jest aktywne  */
+.nav_menu-dropdown__menu--side_left-disabled {
+  display: none;
 }
