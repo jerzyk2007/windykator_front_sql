@@ -80,21 +80,45 @@ export const menuItems = [
           },
         ],
       },
-      { label: "Raport - Nora", path: "/raport-nora", roles: [300, 2000] },
       {
-        label: "Struktura organizacji",
-        action: "organizationStructure",
+        label: "Raport - Nora",
+        // path: "/raport-nora",
+        roles: [300, 2000],
+        sideMenu: [
+          {
+            label: "Nora",
+            path: "/raport-nora",
+            roles: [300, 2000],
+          },
+        ],
+      },
+      {
+        label: "Systemowe",
+        // path: "/raport-nora",
         roles: [200, 201, 202, 150, 2000],
+        sideMenu: [
+          {
+            label: "Struktura organizacji",
+            action: "organizationStructure",
+            roles: [200, 201, 202, 150, 2000],
+          },
+        ],
       },
       {
-        label: "Raport różnic AS - FK",
-        action: "differenceAs_Fk",
+        label: "AS - Symfonia",
         roles: [400, 2000],
-      },
-      {
-        label: "Zestawienie wpłat - kancelarie",
-        action: "lawStatement",
-        roles: [150, 2000],
+        sideMenu: [
+          {
+            label: "Raport różnic AS - FK",
+            action: "differenceAs_Fk",
+            roles: [400, 2000],
+          },
+          {
+            label: "Zestawienie wpłat - kancelarie",
+            action: "lawStatement",
+            roles: [150, 2000],
+          },
+        ],
       },
     ],
   },

@@ -86,11 +86,15 @@ const RaportsNora = () => {
       ];
 
       // Sprawdzamy, czy wszystkie wymagane nagłówki są obecne
-      const missingHeaders = requiredHeaders.filter(header => !headers.includes(header));
+      const missingHeaders = requiredHeaders.filter(
+        (header) => !headers.includes(header)
+      );
 
       if (missingHeaders.length > 0) {
         setPleaseWait(false);
-        return setErrCodeRaport(`Brakuje następujących nagłówków: ${missingHeaders.join(', ')}`);
+        return setErrCodeRaport(
+          `Brakuje następujących nagłówków: ${missingHeaders.join(", ")}`
+        );
       }
       // if (
       //   !("Oddział" in decodedFile[0]) ||
@@ -234,9 +238,7 @@ const RaportsNora = () => {
         "Opiekun D.CZ ASO",
       ];
 
-      const allowedKeys = [
-        ...orderColumn
-      ];
+      const allowedKeys = [...orderColumn];
       const allowedKeysYear = [];
 
       const updatedFinalArray = finalArray.map(({ name, data }) => {
@@ -351,12 +353,12 @@ const RaportsNora = () => {
                 currentYearValue === 0 || maxCurrentYearValue === 0
                   ? 0
                   : Number(
-                    (
-                      ((maxCurrentYearValue - currentYearValue) /
-                        currentYearValue) *
-                      100
-                    ).toFixed(2)
-                  );
+                      (
+                        ((maxCurrentYearValue - currentYearValue) /
+                          currentYearValue) *
+                        100
+                      ).toFixed(2)
+                    );
             }
 
             if (!allowedKeys.includes(newKey.newName)) {
@@ -393,7 +395,10 @@ const RaportsNora = () => {
         <section className="add_data_from_file__container--title">
           <p>Raporty Nora</p>
         </section>
-        <section className="add_data_from_file__container--data">
+        <section
+          className="add_data_from_file__container--data"
+          style={{ minWidth: "500px" }}
+        >
           {!errCodeRaport ? (
             <section className="add_data_from_file__container-documents">
               <input

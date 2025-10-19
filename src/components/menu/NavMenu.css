@@ -106,7 +106,7 @@
 }
 
 .nav_menu__menu-item:hover .nav_menu-item-dropmenu--side {
-  width: 200px;
+  width: 220px;
   padding: 10px;
 }
 
@@ -155,7 +155,6 @@
   display: none;
   position: absolute;
   top: 0;
-  /* left: 0;  To była domyślna pozycja, która jest potem nadpisywana */
   border-radius: 10px;
   box-shadow: 1px 1px 1px 1px rgba(44, 123, 168, 0.6);
   background-color: #bfe2ff;
@@ -167,7 +166,7 @@
 /* Styl dla aktywnego side-menu (pojawia się z lewej) */
 .nav_menu-item-dropmenu:hover .nav_menu-dropdown__menu--side_left {
   display: block;
-  left: -95%; /* Kluczowa zmiana: przesuwamy na lewo */
+  left: -100%; /* Kluczowa zmiana: przesuwamy na lewo */
 }
 
 .nav_menu-item-dropmenu {
