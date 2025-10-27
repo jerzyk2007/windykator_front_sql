@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
 import OrgStrItemComponent from "./OrgStrItemComponent";
-import ItemAging from "./ItemAging";
+import ChangeAging from "./ChangeAging";
 import PercentageTarget from "./PercentageTarget";
 import "./OrganizationStructure.css";
 
@@ -145,7 +145,7 @@ const OrganizationStructure = () => {
                     </section>
 
                     <section className="organization_structure__section-content-data">
-                      <ItemAging
+                      <ChangeAging
                         data={dataItems.aging}
                         info="AGING"
                         title="Wiekowanie"

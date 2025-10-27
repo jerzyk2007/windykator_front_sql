@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 
-import "./ItemAging.css";
+import "./ChangeAging.css";
 
 const FKItemAging = ({ data, info, title }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
@@ -64,19 +64,20 @@ const FKItemAging = ({ data, info, title }) => {
   const handleDelete = async (id) => {
     try {
       setPleaseWait(true);
-      const result = await axiosPrivateIntercept.delete(`/items/delete-item/${id}/${info}`);
+      const result = await axiosPrivateIntercept.delete(
+        `/structure/delete-item/${id}/${info}`
+      );
       if (result) {
-        setDataItem(prevItems => prevItems.filter(item => item.id_aging_items !== id));
+        setDataItem((prevItems) =>
+          prevItems.filter((item) => item.id_aging_items !== id)
+        );
       }
       setDeleteActive(false);
       setEditIndex(false);
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
-    }
-    finally {
+    } finally {
       setPleaseWait(false);
-
     }
   };
 
@@ -122,19 +123,20 @@ const FKItemAging = ({ data, info, title }) => {
   const handleSomeEdit = (e, id, info) => {
     const newValue = Number(e.target.value);
 
-    const filteredData = dataItem.filter(item => item.id_aging_items === id);
+    const filteredData = dataItem.filter((item) => item.id_aging_items === id);
 
     const update = {
       id_aging_items: filteredData[0].id_aging_items,
-      FROM_TIME: info === 'first' ? newValue : filteredData[0].FROM_TIME,  // Zachowaj starą wartość
-      TO_TIME: info === 'second' ? newValue : filteredData[0].TO_TIME, // Zachowaj starą wartość
-      TITLE: info === 'first'
-        ? `${newValue} - ${filteredData[0].TO_TIME}`
-        : `${filteredData[0].FROM_TIME} - ${newValue}`,
-      TYPE: 'some'
+      FROM_TIME: info === "first" ? newValue : filteredData[0].FROM_TIME, // Zachowaj starą wartość
+      TO_TIME: info === "second" ? newValue : filteredData[0].TO_TIME, // Zachowaj starą wartość
+      TITLE:
+        info === "first"
+          ? `${newValue} - ${filteredData[0].TO_TIME}`
+          : `${filteredData[0].FROM_TIME} - ${newValue}`,
+      TYPE: "some",
     };
 
-    const newData = dataItem.map(item => {
+    const newData = dataItem.map((item) => {
       if (item.id_aging_items === id) {
         return update;
       }
@@ -142,7 +144,6 @@ const FKItemAging = ({ data, info, title }) => {
     });
 
     setDataItem(newData);
-
   };
 
   // funkcja wywoływana podczas pisania w input - edycja tekstu dla pierwszej i ostatniej wartości
@@ -151,12 +152,12 @@ const FKItemAging = ({ data, info, title }) => {
 
     const update = {
       id_aging_items: updateItem.id,
-      FROM_TIME: info === 'first' ? newValue : updateItem.firstValue,
-      TO_TIME: info === 'last' ? newValue : updateItem.secondValue,
-      TITLE: info === 'first' ? `< ${newValue}` : `> ${newValue}`,
-      TYPE: info === 'first' ? 'first' : 'last'
+      FROM_TIME: info === "first" ? newValue : updateItem.firstValue,
+      TO_TIME: info === "last" ? newValue : updateItem.secondValue,
+      TITLE: info === "first" ? `< ${newValue}` : `> ${newValue}`,
+      TYPE: info === "first" ? "first" : "last",
     };
-    const newData = dataItem.map(item => {
+    const newData = dataItem.map((item) => {
       if (item.id_aging_items === id) {
         return update;
       }
@@ -170,19 +171,21 @@ const FKItemAging = ({ data, info, title }) => {
   const handleUpdateItem = async (id) => {
     setPleaseWait(true);
     try {
-      const filteredItem = dataItem.filter(item => item.id_aging_items === id);
+      const filteredItem = dataItem.filter(
+        (item) => item.id_aging_items === id
+      );
 
-
-      await axiosPrivateIntercept.patch(`/items/change-item/${id}/${info}`, {
-        updateData: filteredItem[0]
-      });
+      await axiosPrivateIntercept.patch(
+        `/structure/change-item/${id}/${info}`,
+        {
+          updateData: filteredItem[0],
+        }
+      );
 
       setEditIndex(null);
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
-    }
-    finally {
+    } finally {
       setPleaseWait(false);
     }
   };
@@ -204,44 +207,40 @@ const FKItemAging = ({ data, info, title }) => {
               onClick={() => handleActiveItem(index)}
             ></i>
             <section className="item_component-items__columns--panel">
-
               {item.TYPE === "some" && (
                 <i
                   className="fa-regular fa-trash-can item_component--fa-trash-can"
                   onDoubleClick={() => {
                     setEditIndex(index);
                     setDeleteActive(true);
-                  }
-
-                  }
+                  }}
                 ></i>
               )}
               {item.TYPE !== "some" && (
-
                 <i className="item_aging--fa-trash-can"></i>
-
               )}
             </section>
-
           </>
-        )
-        }
+        )}
 
         {editIndex === index && !deleteActive && item.TYPE === "some" && (
           <section className="item_component-title__container-add">
-
             <section className="item_aging-title__container-number">
               <input
                 className="item_aging-title__container-add--edit"
                 type="number"
                 value={item.FROM_TIME}
-                onChange={(e) => handleSomeEdit(e, item.id_aging_items, "first")}
+                onChange={(e) =>
+                  handleSomeEdit(e, item.id_aging_items, "first")
+                }
               />
               <input
                 className="item_aging-title__container-add--edit"
                 type="number"
                 value={item.TO_TIME}
-                onChange={(e) => handleSomeEdit(e, item.id_aging_items, "second")}
+                onChange={(e) =>
+                  handleSomeEdit(e, item.id_aging_items, "second")
+                }
               />
             </section>
             {/* <i
@@ -253,7 +252,7 @@ const FKItemAging = ({ data, info, title }) => {
               onClick={handleUpdateItem}
             ></i> */}
             <section className="item_component-title__container-add--panel">
-              < Button
+              <Button
                 variant="contained"
                 color="error"
                 size="small"
@@ -261,7 +260,7 @@ const FKItemAging = ({ data, info, title }) => {
               >
                 Anuluj
               </Button>
-              < Button
+              <Button
                 variant="contained"
                 color="success"
                 size="small"
@@ -271,68 +270,69 @@ const FKItemAging = ({ data, info, title }) => {
               </Button>
             </section>
           </section>
-
         )}
 
-        {
-          editIndex === index && !deleteActive && item.TYPE !== "some" && (
-            <section className="item_component-title__container-add">
+        {editIndex === index && !deleteActive && item.TYPE !== "some" && (
+          <section className="item_component-title__container-add">
+            <section className="item_aging-title__container-number">
+              {item.TYPE === "first" && (
+                <>
+                  <span>{"<"}</span>
+                  <input
+                    className="item_aging-title__container-add--edit"
+                    type="number"
+                    value={item.FROM_TIME}
+                    onChange={(e) =>
+                      handleFLEdit(e, item.id_aging_items, "first")
+                    }
+                  />
+                </>
+              )}
+              {item.TYPE === "last" && (
+                <>
+                  <span>{">"}</span>
 
-              <section className="item_aging-title__container-number">
-                {item.TYPE === "first" && (
-                  <>
-                    <span>{"<"}</span>
-                    <input
-                      className="item_aging-title__container-add--edit"
-                      type="number"
-                      value={item.FROM_TIME}
-                      onChange={(e) => handleFLEdit(e, item.id_aging_items, "first")}
-                    />
-                  </>
-                )}
-                {item.TYPE === "last" && (
-                  <>
-                    <span>{">"}</span>
-
-                    <input
-                      className="item_aging-title__container-add--edit"
-                      type="number"
-                      value={item.TO_TIME}
-                      onChange={(e) => handleFLEdit(e, item.id_aging_items, "last")}
-                    />
-                  </>
-                )}
-              </section>
-              <section className="item_component-title__container-add--panel">
-                < Button
-                  variant="contained"
-                  color="error"
-                  size="small"
-                  onClick={handleEditCancel}
-                >
-                  Anuluj
-                </Button>
-                < Button
-                  variant="contained"
-                  color="success"
-                  size="small"
-                  onClick={() => handleUpdateItem(item.id_aging_items)}
-                >
-                  Zatwierdź
-                </Button>
-              </section>
+                  <input
+                    className="item_aging-title__container-add--edit"
+                    type="number"
+                    value={item.TO_TIME}
+                    onChange={(e) =>
+                      handleFLEdit(e, item.id_aging_items, "last")
+                    }
+                  />
+                </>
+              )}
             </section>
-          )
-        }
-        {
-          editIndex === index && deleteActive &&
+            <section className="item_component-title__container-add--panel">
+              <Button
+                variant="contained"
+                color="error"
+                size="small"
+                onClick={handleEditCancel}
+              >
+                Anuluj
+              </Button>
+              <Button
+                variant="contained"
+                color="success"
+                size="small"
+                onClick={() => handleUpdateItem(item.id_aging_items)}
+              >
+                Zatwierdź
+              </Button>
+            </section>
+          </section>
+        )}
+        {editIndex === index && deleteActive && (
           <section className="item_component-title__container-add">
             <section className="item_component-title__container-data">
-              <span className="item_component-message">Potwierdź usunięcie</span>
+              <span className="item_component-message">
+                Potwierdź usunięcie
+              </span>
               <span className="item_component-message">{item.TITLE}</span>
             </section>
             <section className="item_component-title__container-add--panel">
-              < Button
+              <Button
                 variant="contained"
                 color="error"
                 size="small"
@@ -340,7 +340,7 @@ const FKItemAging = ({ data, info, title }) => {
               >
                 Anuluj
               </Button>
-              < Button
+              <Button
                 variant="contained"
                 color="success"
                 size="small"
@@ -351,8 +351,8 @@ const FKItemAging = ({ data, info, title }) => {
               </Button>
             </section>
           </section>
-        }
-      </section >
+        )}
+      </section>
     );
   });
 
@@ -369,8 +369,9 @@ const FKItemAging = ({ data, info, title }) => {
           TITLE: title,
           TYPE: "some",
         };
-        const result = await axiosPrivateIntercept.post(`/items/new-item/${info}`
-          , {
+        const result = await axiosPrivateIntercept.post(
+          `/structure/new-item/${info}`,
+          {
             data: newItem,
           }
         );
@@ -378,7 +379,6 @@ const FKItemAging = ({ data, info, title }) => {
           const sortedItems = sorted(result.data);
           setDataItem(sortedItems);
         }
-
       }
 
       setAddItem((prev) => {
@@ -389,15 +389,12 @@ const FKItemAging = ({ data, info, title }) => {
         };
       });
       setAddActive(false);
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
-    }
-    finally {
+    } finally {
       setPleaseWait(false);
     }
   };
-
 
   useEffect(() => {
     const sortedData = sorted(data);
@@ -406,74 +403,72 @@ const FKItemAging = ({ data, info, title }) => {
 
   return (
     <section className="item_component">
-
-      {!pleaseWait ? <>
-        <section className="item_component-title__container">
-          <section className="item_component--counter">
-            <span className="item_component--counter-info">
-              {dataItem ? dataItem.length : ""}
-            </span>
-          </section>
-          <section className="item_component--title">
-            <span >{title}</span>
-          </section>
-
-
-          <section className="item_component--choice">
-
-            {!addActive && (
-              <i
-                className="fa-solid fa-plus item_component--title--fa-plus"
-                onClick={() => setAddActive(true)}
-              ></i>
-            )}
-          </section>
-        </section>
-        {addActive && (
-          <section className="item_component-title__container-add">
-            <section className="item_aging-title__container-number">
-              <input
-                className="item_aging-title__container-add--edit"
-                type="number"
-                value={addItem.firstValue}
-                onChange={(e) => handleAddItem(e, "first")}
-              />
-              <input
-                className="item_aging-title__container-add--edit"
-                type="number"
-                value={addItem.secondValue}
-                onChange={(e) => handleAddItem(e, "second")}
-              />
+      {!pleaseWait ? (
+        <>
+          <section className="item_component-title__container">
+            <section className="item_component--counter">
+              <span className="item_component--counter-info">
+                {dataItem ? dataItem.length : ""}
+              </span>
+            </section>
+            <section className="item_component--title">
+              <span>{title}</span>
             </section>
 
-            <section className="item_component-title__container-add--panel">
-              < Button
-                variant="contained"
-                color="error"
-                size="small"
-                onClick={cancelAddItem}
-              >
-                Anuluj
-              </Button>
-
-              < Button
-                variant="contained"
-                color="success"
-                size="small"
-                onClick={handleAcceptNewItem}
-              >
-                Zatwierdź
-              </Button>
+            <section className="item_component--choice">
+              {!addActive && (
+                <i
+                  className="fa-solid fa-plus item_component--title--fa-plus"
+                  onClick={() => setAddActive(true)}
+                ></i>
+              )}
             </section>
           </section>
-        )}
+          {addActive && (
+            <section className="item_component-title__container-add">
+              <section className="item_aging-title__container-number">
+                <input
+                  className="item_aging-title__container-add--edit"
+                  type="number"
+                  value={addItem.firstValue}
+                  onChange={(e) => handleAddItem(e, "first")}
+                />
+                <input
+                  className="item_aging-title__container-add--edit"
+                  type="number"
+                  value={addItem.secondValue}
+                  onChange={(e) => handleAddItem(e, "second")}
+                />
+              </section>
 
-        <section className="item_component-items__container">{arrayItems}</section>
-      </> : null}
+              <section className="item_component-title__container-add--panel">
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  onClick={cancelAddItem}
+                >
+                  Anuluj
+                </Button>
 
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  onClick={handleAcceptNewItem}
+                >
+                  Zatwierdź
+                </Button>
+              </section>
+            </section>
+          )}
+
+          <section className="item_component-items__container">
+            {arrayItems}
+          </section>
+        </>
+      ) : null}
     </section>
-
-
   );
 };
 
