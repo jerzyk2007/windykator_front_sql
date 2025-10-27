@@ -268,10 +268,12 @@ const EditRowTable = ({
     <section className="edit-row-table">
       <section className="edit-row-table-wrapper">
         <section className="edit-row-table__container">
-          <section className="content-tabs">
+          <section className="edit-row-table__content-section">
             <section
               className={
-                toggleState === 1 ? "content  active-content" : "content"
+                toggleState === 1
+                  ? "edit-row-table__content  edit-row-table__active-content"
+                  : "edit-row-table__content"
               }
             >
               <section className="edit-row-table_section-content">
@@ -356,7 +358,9 @@ const EditRowTable = ({
             </section>
             <section
               className={
-                toggleState === 2 ? "content  active-content" : "content"
+                toggleState === 2
+                  ? "edit-row-table__content  edit-row-table__active-content"
+                  : "edit-row-table__content"
               }
             >
               <section className="edit-row-table_section-content">
@@ -392,7 +396,9 @@ const EditRowTable = ({
             </section>
             <section
               className={
-                toggleState === 3 ? "content  active-content" : "content"
+                toggleState === 3
+                  ? "edit-row-table__content  edit-row-table__active-content"
+                  : "edit-row-table__content"
               }
             >
               <section className="edit-row-table_section-content">

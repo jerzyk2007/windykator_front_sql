@@ -26,6 +26,20 @@
   display: flex;
   flex-direction: column;
 }
+.edit-row-table__content-section {
+  flex-grow: 1;
+  display: flex;
+}
+
+.edit-row-table__content {
+  margin: 0 auto;
+  width: 100%;
+  display: none;
+}
+
+.edit-row-table__active-content {
+  display: block;
+}
 
 .edit-row-table__panel {
   height: 50px;

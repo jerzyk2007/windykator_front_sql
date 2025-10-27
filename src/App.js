@@ -18,7 +18,7 @@ import RaportDepartments from "./components/raports/RaportDepartments";
 import RaportAdvisers from "./components/raports/RaportAdvisers";
 import FKAddData from "./components/FKRaport/FKAddData";
 import DeptMapper from "./components/system_settings/DeptMapper";
-import Items from "./components/system_settings/Items";
+import OrganizationStructure from "./components/system_settings/OrganizationStructure";
 import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
 // import TradeCredit from "./components/trade_credit/TradeCredit";
@@ -184,7 +184,7 @@ function App() {
                 <RequireAuth allowedRoles={[200, 201, 202, 1000, 2000]} />
               }
             >
-              <Route path="/change-items" element={<Items />} />
+              <Route path="/change-items" element={<OrganizationStructure />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[300, 1000, 2000]} />}>

@@ -259,7 +259,7 @@ const TableColumns = () => {
       const settingsColumn = await axiosPrivateIntercept.get(
         "/settings/get-columns"
       );
-
+      console.log(settingsColumn.data);
       const addColumns = settingsColumn.data.columns
         .sort((a, b) => a.accessorKey.localeCompare(b.accessorKey)) // Sortowanie według accessorKey
         .map((item) => {

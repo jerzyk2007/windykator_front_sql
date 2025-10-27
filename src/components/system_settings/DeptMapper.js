@@ -77,7 +77,7 @@ const DeptMapper = () => {
   const checkDocPay = async (checkDeps) => {
     try {
       return checkDeps?.length
-        ? await axiosPrivateIntercept.post("/items/check-doc-payment", {
+        ? await axiosPrivateIntercept.post("/structure/check-doc-payment", {
             departments: checkDeps,
           })
         : null;
