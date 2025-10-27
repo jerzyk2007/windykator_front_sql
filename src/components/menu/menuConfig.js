@@ -143,12 +143,12 @@ export const menuItems = [
           { label: "Tabela - kolumny", path: "/table-settings", roles: [2000] },
           {
             label: "Dane struktury organizacji",
-            path: "/change-items",
+            path: "/change-org-str",
             roles: [1000, 200, 201, 202, 2000],
           },
           {
             label: "Zmiana struktury organizacji",
-            path: "/dept-mapper",
+            path: "/create-org-str",
             roles: [1000, 200, 201, 202, 2000],
           },
         ],

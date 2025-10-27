@@ -17,7 +17,7 @@ import TableColumns from "./components/system_settings/TableColumns";
 import RaportDepartments from "./components/raports/RaportDepartments";
 import RaportAdvisers from "./components/raports/RaportAdvisers";
 import FKAddData from "./components/FKRaport/FKAddData";
-import DeptMapper from "./components/system_settings/DeptMapper";
+import ChangeOrgStr from "./components/system_settings/ChangeOrgStr";
 import OrganizationStructure from "./components/system_settings/OrganizationStructure";
 import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
@@ -176,7 +176,7 @@ function App() {
                 <RequireAuth allowedRoles={[200, 201, 202, 1000, 2000]} />
               }
             >
-              <Route path="/dept-mapper" element={<DeptMapper />} />
+              <Route path="/create-org-str" element={<ChangeOrgStr />} />
             </Route>
 
             <Route
@@ -184,7 +184,10 @@ function App() {
                 <RequireAuth allowedRoles={[200, 201, 202, 1000, 2000]} />
               }
             >
-              <Route path="/change-items" element={<OrganizationStructure />} />
+              <Route
+                path="/change-org-str"
+                element={<OrganizationStructure />}
+              />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[300, 1000, 2000]} />}>

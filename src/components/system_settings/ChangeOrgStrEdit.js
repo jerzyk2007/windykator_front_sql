@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 
-const DeptMapperEdit = ({
+const ChangeOrgStrEdit = ({
   id,
   data,
   localization,
@@ -297,4 +297,4 @@ const DeptMapperEdit = ({
   );
 };
 
-export default DeptMapperEdit;
+export default ChangeOrgStrEdit;

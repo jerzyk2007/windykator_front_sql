@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
-import DeptMapperEdit from "./DeptMapperEdit";
+import ChangeOrgStrEdit from "./ChangeOrgStrEdit";
 import MissingDepartments from "./MissingDepartments";
 import PleaseWait from "../PleaseWait";
-import "./DeptMapper.css";
+import "./ChangeOrgStr.css";
 
-const DeptMapper = () => {
+const ChangeOrgStr = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [pleaseWait, setPleaseWait] = useState(false);
@@ -29,21 +29,10 @@ const DeptMapper = () => {
     companyNames: [],
   });
 
-  //   const [company, setCompany] = useState({
-  //   selectCompany: "KRT",
-  //   companyNames: ["KRT", "RAC"],
-  // });
-
   const [editDep, setEditDep] = useState({
     department: "",
     company: "",
   });
-
-  // const checkMissingDepartments = (saveDeps, docDeps) => {
-  //   return docDeps.filter(
-  //     dep => !saveDeps.some(item => item.DEPARTMENT === dep.DZIAL && item.COMPANY === dep.FIRMA)
-  //   );
-  // };
 
   const checkMissingDepartments = (saveDeps, docDeps, manualDeps = []) => {
     // Filtrowanie brakujących działów z docDeps względem saveDeps
@@ -90,9 +79,8 @@ const DeptMapper = () => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get(
-        "/items/get-fksettings-data"
+        "/structure/get-fksettings-data"
       );
-
       // sprawdzam czy sa jakies nieopisane działy
       const checkMissingDeps = checkMissingDepartments(
         result.data.uniqueDepFromCompanyJI,
@@ -243,7 +231,7 @@ const DeptMapper = () => {
         uniqueDepFromCompanyJI: updateDep, // ← tu podstawiasz swoją nową wartość
       }));
 
-      await axiosPrivateIntercept.patch("/items/save-prepared-items", {
+      await axiosPrivateIntercept.patch("/structure/save-prepared-items", {
         itemData,
       });
     } catch (error) {
@@ -259,7 +247,7 @@ const DeptMapper = () => {
 
     try {
       await axiosPrivateIntercept.delete(
-        `/items/delete-prepared-item/${encodeURIComponent(
+        `/structure/delete-prepared-item/${encodeURIComponent(
           dep
         )}/${encodeURIComponent(comp)}`
       );
@@ -320,7 +308,7 @@ const DeptMapper = () => {
         })
         .filter(Boolean);
       return (
-        <DeptMapperEdit
+        <ChangeOrgStrEdit
           key={index}
           id={index}
           localization={localization}
@@ -558,4 +546,4 @@ const DeptMapper = () => {
   );
 };
 
-export default DeptMapper;
+export default ChangeOrgStr;

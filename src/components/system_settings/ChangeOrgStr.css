@@ -67,18 +67,15 @@
 
 .dept_mapper__container-item__array {
   border: 1px solid rgba(44, 123, 168, 0.6);
-
 }
 
 .dept_mapper__container-item__array:hover {
   background-color: rgb(247, 247, 247);
-
 }
 
 .dept_mapper__highlight-yellow {
-  background-color: rgba(255, 255, 0, .3);
+  background-color: rgba(255, 255, 0, 0.3);
 }
-
 
 .dept_mapper__container-array::-webkit-scrollbar {
   width: 15px;
@@ -102,7 +99,6 @@
   align-items: center;
   flex-direction: column;
 }
-
 
 .dept_mapper-department {
   flex-basis: 10%;
@@ -188,8 +184,6 @@
   display: flex;
   align-items: center;
 }
-
-
 
 .dept_mapper__container__edit_accept {
   display: flex;
