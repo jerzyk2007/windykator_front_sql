@@ -325,8 +325,8 @@ const ChangeOrgStr = () => {
       return (
         <section
           key={index}
-          className={`dept_mapper__container-item dept_mapper__container-item__array ${
-            !item.exist ? "dept_mapper__highlight-yellow" : ""
+          className={`change_org_str__container-item change_org_str__container-item__array ${
+            !item.exist ? "change_org_str__highlight-yellow" : ""
           }`}
           onDoubleClick={() => {
             if (!editDep.department && !editDep.company) {
@@ -337,36 +337,36 @@ const ChangeOrgStr = () => {
             }
           }}
         >
-          <section className="dept_mapper-counter">
+          <section className="change_org_str-counter">
             <span>{index + 1}</span>
           </section>
 
-          <section className="dept_mapper-department">
-            <section className="dept_mapper-department__container">
+          <section className="change_org_str-department">
+            <section className="change_org_str-department__container">
               <span>{item.department}</span>
               <span>{item.company}</span>
             </section>
           </section>
-          <section className="dept_mapper-localization">
-            <span className="dept_mapper-span">{item.localization}</span>
+          <section className="change_org_str-localization">
+            <span className="change_org_str-span">{item.localization}</span>
           </section>
-          <section className="dept_mapper-area">
-            <span className="dept_mapper-span">{item.area}</span>
+          <section className="change_org_str-area">
+            <span className="change_org_str-span">{item.area}</span>
           </section>
-          <section className="dept_mapper-owner_guard__container">
+          <section className="change_org_str-owner_guard__container">
             {item.owner.map((own, index) => {
               return (
-                <section key={index} className="dept_mapper-owner">
-                  <span className="dept_mapper-span">{own}</span>
+                <section key={index} className="change_org_str-owner">
+                  <span className="change_org_str-span">{own}</span>
                 </section>
               );
             })}
           </section>
-          <section className="dept_mapper-owner_guard__container">
+          <section className="change_org_str-owner_guard__container">
             {item.guardian.map((guard, index) => {
               return (
-                <section key={index} className="dept_mapper-owner">
-                  <span className="dept_mapper-span">{guard}</span>
+                <section key={index} className="change_org_str-owner">
+                  <span className="change_org_str-span">{guard}</span>
                 </section>
               );
             })}
@@ -470,7 +470,7 @@ const ChangeOrgStr = () => {
       {pleaseWait ? (
         <PleaseWait />
       ) : (
-        <section className="dept_mapper">
+        <section className="change_org_str">
           {filteredData?.missingDeps ? (
             <MissingDepartments
               departments={filteredData.missingDeps}
@@ -479,8 +479,8 @@ const ChangeOrgStr = () => {
           ) : (
             <PleaseWait />
           )}
-          <section className="dept_mapper__title">
-            <section className="dept_mapper__title--company">
+          <section className="change_org_str__title">
+            <section className="change_org_str__title--company">
               <select
                 className="item_component-title__container-data--text"
                 value={company?.selectCompany}
@@ -503,41 +503,41 @@ const ChangeOrgStr = () => {
                 })}
               </select>
             </section>
-            <span className="dept_mapper__title--info">
+            <span className="change_org_str__title--info">
               Dopasuj wyświetlanie danych
             </span>
-            <section className="dept_mapper__title--company"></section>
+            <section className="change_org_str__title--company"></section>
           </section>
-          <section className="dept_mapper__container">
-            <section className="dept_mapper__container-item--title dept_mapper__container-item">
-              <section className="dept_mapper-counter">
+          <section className="change_org_str__container">
+            <section className="change_org_str__container-item--title change_org_str__container-item">
+              <section className="change_org_str-counter">
                 <span>Lp</span>
               </section>
-              <section className="dept_mapper-department">
+              <section className="change_org_str-department">
                 <span>Dział</span>
               </section>
-              <section className="dept_mapper-localization">
+              <section className="change_org_str-localization">
                 <span>Lokalizacja</span>
               </section>
-              <section className="dept_mapper-area">
+              <section className="change_org_str-area">
                 <span>Obszar</span>
               </section>
-              <section className="dept_mapper-owner_guard__container">
-                <section className="dept_mapper-owner">
+              <section className="change_org_str-owner_guard__container">
+                <section className="change_org_str-owner">
                   <span>Owner</span>
                 </section>
               </section>
-              <section className="dept_mapper-owner_guard__container">
-                <section className="dept_mapper-guardian">
+              <section className="change_org_str-owner_guard__container">
+                <section className="change_org_str-guardian">
                   <span>Opiekun</span>
                 </section>
               </section>
-              {/* <section className="dept_mapper-scroll">
+              {/* <section className="change_org_str-scroll">
 
               </section> */}
             </section>
           </section>
-          <section className="dept_mapper__container-array">
+          <section className="change_org_str__container-array">
             {itemsArray}
           </section>
         </section>

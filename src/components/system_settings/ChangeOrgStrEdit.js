@@ -39,22 +39,22 @@ const ChangeOrgStrEdit = ({
   }, [editData]);
 
   return (
-    <section className="dept_mapper__edit">
-      <section className="dept_mapper__edit_panel">
-        <section className="dept_mapper-counter">
+    <section className="change_org_str__edit">
+      <section className="change_org_str__edit_panel">
+        <section className="change_org_str-counter">
           <span>{id + 1}</span>
         </section>
 
-        <section className="dept_mapper-department">
-          <section className="dept_mapper-department__container">
+        <section className="change_org_str-department">
+          <section className="change_org_str-department__container">
             <span>{editData.department}</span>
             <span>{editData.company}</span>
           </section>
         </section>
 
-        <section className="dept_mapper-localization">
+        <section className="change_org_str-localization">
           <select
-            className="dept_mapper_settings-select"
+            className="change_org_str_settings-select"
             value={editData.localization}
             label="Lokalizacja"
             onChange={(e) =>
@@ -77,9 +77,9 @@ const ChangeOrgStrEdit = ({
             ))}
           </select>
         </section>
-        <section className="dept_mapper-area">
+        <section className="change_org_str-area">
           <select
-            className="dept_mapper_settings-select"
+            className="change_org_str_settings-select"
             value={editData.area}
             label="Lokalizacja"
             onChange={(e) =>
@@ -102,16 +102,16 @@ const ChangeOrgStrEdit = ({
             ))}
           </select>
         </section>
-        <section className="dept_mapper-owner_guard__container">
+        <section className="change_org_str-owner_guard__container">
           {editData.owner.map((own, index) => {
             const availableOptions = owner.filter(
               (item) => !editData.owner.includes(item) || item === own
             );
 
             return (
-              <section className="dept_mapper--many" key={index}>
+              <section className="change_org_str--many" key={index}>
                 <select
-                  className="dept_mapper_settings-select"
+                  className="change_org_str_settings-select"
                   value={own}
                   onChange={(e) =>
                     setEditData((prev) => {
@@ -137,21 +137,21 @@ const ChangeOrgStrEdit = ({
                 </select>
                 {/* {index === 0 ? (
                                     <i
-                                        className="fa-solid fa-plus dept_mapper--fa-plus"
+                                        className="fa-solid fa-plus change_org_str--fa-plus"
                                     // onClick={handleAddOwner}
                                     ></i>
                                 ) : (
                                     <i
-                                        className="fa-solid fa-minus dept_mapper--fa-minus"
+                                        className="fa-solid fa-minus change_org_str--fa-minus"
                                     // onClick={() => handleDeleteOwner(index)}
                                     ></i>
                                 )} */}
-                <section className="dept_mapper--icon">
+                <section className="change_org_str--icon">
                   {index === 0 ? (
                     <>
                       {!editData.owner.includes("") ? (
                         <i
-                          className="fa-solid fa-plus dept_mapper--fa-plus"
+                          className="fa-solid fa-plus change_org_str--fa-plus"
                           onClick={() =>
                             setEditData((prev) => {
                               return {
@@ -167,7 +167,7 @@ const ChangeOrgStrEdit = ({
                     </>
                   ) : (
                     <i
-                      className="fa-solid fa-minus dept_mapper--fa-minus dept_mapper--icon"
+                      className="fa-solid fa-minus change_org_str--fa-minus change_org_str--icon"
                       onClick={() =>
                         setEditData((prev) => {
                           const updatedOwners = [...prev.owner];
@@ -186,16 +186,16 @@ const ChangeOrgStrEdit = ({
             );
           })}
         </section>
-        <section className="dept_mapper-owner_guard__container">
+        <section className="change_org_str-owner_guard__container">
           {editData.guardian.map((guard, index) => {
             const availableOptions = guardian.filter(
               (item) => !editData.guardian.includes(item) || item === guard
             );
 
             return (
-              <section className="dept_mapper--many" key={index}>
+              <section className="change_org_str--many" key={index}>
                 <select
-                  className="dept_mapper_settings-select"
+                  className="change_org_str_settings-select"
                   value={guard}
                   onChange={(e) =>
                     setEditData((prev) => {
@@ -219,12 +219,12 @@ const ChangeOrgStrEdit = ({
                     </option>
                   ))}
                 </select>
-                <section className="dept_mapper--icon">
+                <section className="change_org_str--icon">
                   {index === 0 ? (
                     <>
                       {!editData.guardian.includes("") ? (
                         <i
-                          className="fa-solid fa-plus dept_mapper--fa-plus"
+                          className="fa-solid fa-plus change_org_str--fa-plus"
                           onClick={() =>
                             setEditData((prev) => {
                               return {
@@ -240,7 +240,7 @@ const ChangeOrgStrEdit = ({
                     </>
                   ) : (
                     <i
-                      className="fa-solid fa-minus dept_mapper--fa-minus dept_mapper--icon"
+                      className="fa-solid fa-minus change_org_str--fa-minus change_org_str--icon"
                       onClick={() =>
                         setEditData((prev) => {
                           const updatedGuards = [...prev.guardian];
@@ -260,7 +260,7 @@ const ChangeOrgStrEdit = ({
         </section>
       </section>
 
-      <section className="dept_mapper__container__edit_accept">
+      <section className="change_org_str__container__edit_accept">
         <Button
           variant="contained"
           color="secondary"

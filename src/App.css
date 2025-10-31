@@ -24,6 +24,10 @@
   border: none;
   border-radius: 10px;
   background-color: rgb(213, 232, 248);
+  box-shadow: 4px 4px 2px 0 rgba(224, 224, 224, 0.548),
+    2px 2px 2px 0 rgba(173, 180, 189, 0.5),
+    inset -4px -4px 6px 0 rgba(173, 180, 189, 0.5),
+    inset 4px 4px 6px 0 rgba(197, 197, 197, 0.4);
 }
 
 .active-tabs {

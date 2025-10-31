@@ -1,4 +1,4 @@
-.dept_mapper {
+.change_org_str {
   user-select: none;
   background-color: rgba(224, 224, 224, 0.4);
   font-family: "Source Sans 3", Calibri, sans-serif;
@@ -10,7 +10,7 @@
   justify-content: flex-start;
 }
 
-.dept_mapper__title {
+.change_org_str__title {
   width: 100%;
   font-size: 1.35rem;
   font-weight: 500;
@@ -19,26 +19,26 @@
   display: flex;
 }
 
-.dept_mapper__title--company {
+.change_org_str__title--company {
   flex-basis: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.dept_mapper__title--info {
+.change_org_str__title--info {
   flex-grow: 1;
   text-align: center;
 }
 
-.dept_mapper__container {
+.change_org_str__container {
   flex-grow: 1;
   width: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.dept_mapper__container-item {
+.change_org_str__container-item {
   min-width: 1200px;
   padding: 5px 5px;
   margin: 2px 0;
@@ -50,11 +50,11 @@
   align-items: center;
 }
 
-.dept_mapper__container-item--title {
+.change_org_str__container-item--title {
   font-weight: bold;
 }
 
-.dept_mapper__container-array {
+.change_org_str__container-array {
   /* flex-grow: 1; */
   /* max-width: 100%; */
   width: 100%;
@@ -65,33 +65,33 @@
   display: flex;
 }
 
-.dept_mapper__container-item__array {
+.change_org_str__container-item__array {
   border: 1px solid rgba(44, 123, 168, 0.6);
 }
 
-.dept_mapper__container-item__array:hover {
+.change_org_str__container-item__array:hover {
   background-color: rgb(247, 247, 247);
 }
 
-.dept_mapper__highlight-yellow {
+.change_org_str__highlight-yellow {
   background-color: rgba(255, 255, 0, 0.3);
 }
 
-.dept_mapper__container-array::-webkit-scrollbar {
+.change_org_str__container-array::-webkit-scrollbar {
   width: 15px;
   /* <- tutaj ustawiasz szerokość suwaka */
 }
 
-.dept_mapper__container-array::-webkit-scrollbar-thumb {
+.change_org_str__container-array::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
 }
 
-.dept_mapper__container-array::-webkit-scrollbar-track {
+.change_org_str__container-array::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.dept_mapper-counter {
+.change_org_str-counter {
   flex-basis: 3%;
   min-width: 50px;
   display: flex;
@@ -100,7 +100,7 @@
   flex-direction: column;
 }
 
-.dept_mapper-department {
+.change_org_str-department {
   flex-basis: 10%;
   min-width: 180px;
   display: flex;
@@ -109,7 +109,7 @@
   flex-direction: column;
 }
 
-.dept_mapper-department__container {
+.change_org_str-department__container {
   /* width: 100%; */
   flex-basis: 20%;
 
@@ -124,7 +124,7 @@
   flex-direction: column;
 }
 
-.dept_mapper-span {
+.change_org_str-span {
   display: block;
   width: 100%;
   padding: 5px 10px;
@@ -134,8 +134,8 @@
   border-radius: 5px;
 }
 
-.dept_mapper-localization,
-.dept_mapper-area {
+.change_org_str-localization,
+.change_org_str-area {
   flex-basis: 20%;
   min-width: 150px;
   margin: 0 10px;
@@ -144,7 +144,7 @@
   align-items: center;
 }
 
-.dept_mapper-owner_guard__container {
+.change_org_str-owner_guard__container {
   flex-grow: 1;
   flex-basis: 20%;
   padding: 5px 10px 5px 0;
@@ -154,19 +154,19 @@
   flex-direction: column;
 }
 
-.dept_mapper-owner,
-.dept_mapper-guardian {
+.change_org_str-owner,
+.change_org_str-guardian {
   width: 100%;
   margin: 0 10px;
   display: flex;
   flex-direction: column;
 }
 
-.dept_mapper-scroll {
+.change_org_str-scroll {
   width: 15px;
 }
 
-.dept_mapper__edit {
+.change_org_str__edit {
   flex-grow: 1;
   /* background-color: rgb(243, 242, 242); */
   background-color: rgb(247, 247, 247);
@@ -179,31 +179,31 @@
   align-items: center;
 }
 
-.dept_mapper__edit_panel {
+.change_org_str__edit_panel {
   width: 100%;
   display: flex;
   align-items: center;
 }
 
-.dept_mapper__container__edit_accept {
+.change_org_str__container__edit_accept {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.dept_mapper__container__edit_accept Button {
+.change_org_str__container__edit_accept Button {
   margin: 0 50px;
   width: 150px;
 }
 
-.dept_mapper--many {
+.change_org_str--many {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.dept_mapper_settings-select {
+.change_org_str_settings-select {
   width: 90%;
   margin: 5px;
   padding: 7px 2px;
@@ -214,7 +214,7 @@
   border: 1px solid rgb(23, 67, 150);
 }
 
-.dept_mapper--icon {
+.change_org_str--icon {
   width: 25px;
   display: flex;
   justify-content: center;
