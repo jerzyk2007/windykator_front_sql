@@ -1,0 +1,51 @@
+.user-change-law-partner {
+  width: 100%;
+  margin: 2px 0;
+  padding: 5px 10px;
+  border: 1px solid rgba(0, 92, 145, 0.6);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.user-change-law-partner__title {
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-change-law-partner__container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+}
+
+.user-change-law-partner__container--info {
+  width: 48%;
+  padding: 5px;
+  margin: 5px 0;
+  user-select: none;
+  border: 1px solid rgba(0, 92, 145, 0.6);
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-change-law-partner__container--text {
+  user-select: none;
+}
+
+.user-change-law-partner--check {
+  width: 1rem;
+  height: 1rem;
+}
+
+.user-change-law-partner Button {
+  width: 30%;
+  margin: 5px auto;
+}

@@ -5,7 +5,6 @@ import "./UserChangeDepartments.css";
 
 const UserChangeDepartments = ({ id, departments, multiCompany }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-
   const [startData, setStartData] = useState(departments);
   const [userDepartments, setUserDepartments] = useState([]);
   const [company, setCompany] = useState(
