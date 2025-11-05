@@ -4,7 +4,7 @@ import useData from "../hooks/useData";
 import { Button } from "@mui/material";
 import "./UserChangeRoles.css";
 
-const UserChangeRoles = ({ id, roles, setRoles }) => {
+const UserChangeRoles = ({ id, roles, setRoles, permission }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const [userRoles, setUserRoles] = useState({});
@@ -138,7 +138,7 @@ const UserChangeRoles = ({ id, roles, setRoles }) => {
 
   useEffect(() => {
     const superAdmin = auth.roles.filter((item) => item === 2000);
-    const newRoles = superAdmin.length
+    const newRolesUser = superAdmin.length
       ? {
           User: roles?.User ? roles.User : false,
           Editor: roles?.Editor ? roles.Editor : false,
@@ -159,7 +159,11 @@ const UserChangeRoles = ({ id, roles, setRoles }) => {
           Admin: roles?.Admin ? roles.Admin : false,
         };
 
-    setUserRoles(newRoles);
+    const newRolesLaw = {
+      LawPartner: roles?.LawPartner ? roles.LawPartner : false,
+    };
+
+    setUserRoles(permission === "Pracownik" ? newRolesUser : newRolesLaw);
   }, [roles]);
 
   return (

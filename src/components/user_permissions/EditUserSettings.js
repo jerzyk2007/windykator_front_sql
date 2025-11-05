@@ -147,17 +147,26 @@ const EditUserSettings = ({ user, setEdit }) => {
                 />
               )} */}
 
-              {permissions === "Pracownik" &&
-                roles &&
-                Object.keys(roles).length > 0 && (
+              {
+                // permissions === "Pracownik" &&
+                roles && Object.keys(roles).length > 0 && (
                   <UserChangeRoles
                     id={user.id_user}
                     roles={roles}
                     setRoles={setRoles}
+                    permission={permissions}
                     // user={user.roles}
                   />
-                )}
-              {roles?.LawPartner === true && (
+                )
+              }
+              {roles?.LawPartner === true && permissions === "Pracownik" && (
+                <UserChangeLawPartner
+                  id={user.id_user}
+                  lawPartner={lawPartner}
+                  setLawPartner={setLawPartner}
+                />
+              )}
+              {permissions === "Kancelaria" && (
                 <UserChangeLawPartner
                   id={user.id_user}
                   lawPartner={lawPartner}

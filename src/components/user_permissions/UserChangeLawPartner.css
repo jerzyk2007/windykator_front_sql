@@ -1,4 +1,5 @@
 .user-change-law-partner {
+  flex-grow: 1;
   width: 100%;
   margin: 2px 0;
   padding: 5px 10px;
@@ -6,7 +7,7 @@
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  /* justify-content: space-evenly; */
 }
 
 .user-change-law-partner__title {
@@ -17,14 +18,19 @@
 }
 
 .user-change-law-partner__container {
-  flex-grow: 1;
   display: flex;
   justify-content: space-between;
   /* flex-direction: column; */
   flex-wrap: wrap;
 }
-
+.user-change-law-partner__wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .user-change-law-partner__container--info {
+  flex-shrink: 1;
   width: 48%;
   padding: 5px;
   margin: 5px 0;

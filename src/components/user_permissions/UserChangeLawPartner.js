@@ -62,7 +62,9 @@ const UserChangeLawPartner = ({ id, lawPartner, setLawPartner }) => {
           {!errMsg ? "Dostęp do zawnętrznych kancelarii" : errMsg}
         </h3>
       </section>
-      {lawPartnerItem}
+      <section className="user-change-law-partner__wrapper">
+        {lawPartnerItem}
+      </section>
       <Button variant="contained" onClick={handleChangePermission} size="small">
         Zmień
       </Button>

@@ -105,7 +105,6 @@ const Register = () => {
         const result = await axiosPrivateIntercept.get(
           "/settings/get-permissions"
         );
-
         setUserPermission((prev) => {
           return {
             ...prev,
