@@ -64,14 +64,11 @@ const TableColumns = () => {
         setEmployeeData(sorted.employees);
         setEditData({});
       } else if (type === "new") {
-        const result = await axiosPrivateIntercept.patch(
-          "/settings/change-table-columns",
-          {
-            type,
-            permission: permissions.select,
-            data: editData,
-          }
-        );
+        await axiosPrivateIntercept.patch("/settings/change-table-columns", {
+          type,
+          permission: permissions.select,
+          data: editData,
+        });
 
         setNewData(false);
         setEditData({});

@@ -50,6 +50,7 @@ const Register = () => {
         setErrMsg("Invalid entry");
         return;
       }
+      setPleaseWait(true);
       const result = await axiosPrivateIntercept.post(
         "/user/register",
 
@@ -78,6 +79,8 @@ const Register = () => {
       } else {
         setErrMsg("Rejestracja nie powiodła się.");
       }
+    } finally {
+      setPleaseWait(false);
     }
   };
 
