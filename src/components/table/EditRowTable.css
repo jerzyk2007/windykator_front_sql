@@ -82,7 +82,8 @@
   flex-basis: 33%;
   min-width: 500px;
   min-height: 500px;
-  padding: 2px;
+  /* max-height: 80vh; */
+  padding: 2px 0;
   overflow: auto;
   display: flex;
   flex-direction: column;

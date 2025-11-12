@@ -31,7 +31,7 @@ const PrepareTable = ({ info, raportDocuments }) => {
     try {
       await axiosPrivateIntercept.patch(
         `/user/save-table-settings/${auth.id_user}`,
-        { tableSettings }
+        { newTableSettings: tableSettings }
       );
     } catch (err) {
       console.error(err);

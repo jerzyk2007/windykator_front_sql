@@ -40,7 +40,7 @@ const TableColumns = () => {
   const changeSingleColumn = async (type) => {
     try {
       if (type === "edit") {
-        await axiosPrivateIntercept.patch("/settings/change-table-columns", {
+        await axiosPrivateIntercept.patch("/table/change-table-columns", {
           type,
           permission: permissions.select,
           data: editData,
@@ -64,7 +64,7 @@ const TableColumns = () => {
         setEmployeeData(sorted.employees);
         setEditData({});
       } else if (type === "new") {
-        await axiosPrivateIntercept.patch("/settings/change-table-columns", {
+        await axiosPrivateIntercept.patch("/table/change-table-columns", {
           type,
           permission: permissions.select,
           data: editData,
@@ -108,9 +108,7 @@ const TableColumns = () => {
   };
 
   const handleDelete = async (index) => {
-    await axiosPrivateIntercept.delete(
-      `/settings/delete-table-columns/${index}`
-    );
+    await axiosPrivateIntercept.delete(`/table/delete-table-columns/${index}`);
     const deleteCol = employeeData[permissions.select].columns
       .map((item) => {
         if (item.id_table_columns !== index) {
@@ -461,7 +459,7 @@ const TableColumns = () => {
     try {
       setPleaseWait(true);
       const settingsColumn = await axiosPrivateIntercept.get(
-        "/settings/get-table-columns"
+        "/table/get-table-columns"
       );
 
       const matchData = {

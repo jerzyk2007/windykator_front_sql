@@ -13,6 +13,7 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
             {rowData?.JAKA_KANCELARIA ? rowData.JAKA_KANCELARIA : "BRAK"}
           </span>
         </section>
+
         <section className="edit_doc__container">
           <span className="edit_doc--title edit_doc--title__read-only">
             Status kancelaria:
@@ -167,9 +168,13 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
 
         {rowData.AREA === "BLACHARNIA" && (
           <section className="edit_doc__container">
-            <span className="edit_doc--title">Wybierz kancelarię TU:</span>
-
-            {roles.includes(110) || roles.includes(120) ? (
+            <span className="edit_doc--title">Jaka kancelarię TU:</span>
+            <span className="edit_doc--content">
+              {rowData?.JAKA_KANCELARIA_TU
+                ? rowData.JAKA_KANCELARIA_TU
+                : "BRAK"}
+            </span>
+            {/* {roles.includes(110) || roles.includes(120) ? (
               <select
                 className="edit_doc--select"
                 value={
@@ -207,7 +212,7 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
                   ? rowData.JAKA_KANCELARIA_TU
                   : "BRAK"}
               </span>
-            )}
+            )} */}
           </section>
         )}
 
