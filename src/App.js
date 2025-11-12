@@ -30,7 +30,12 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
-      <Router>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true, // 👈 dodaj to
+        }}
+      >
         <Header />
         <Routes>
           <Route path="/login" element={<Login />} />

@@ -81,7 +81,7 @@ const PrepareTable = ({ info, raportDocuments }) => {
           `/documents/get-settings-colums-table/${auth.id_user}`,
           { signal: controller.signal }
         );
-
+        console.log(tableSettingsColumns.data);
         setTableSettings(tableSettingsColumns.data.tableSettings);
 
         const update = prepareColumns(
