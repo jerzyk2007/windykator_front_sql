@@ -39,6 +39,10 @@ const PrepareTable = ({ info, raportDocuments }) => {
   };
 
   useEffect(() => {
+    console.log(documents);
+  }, [documents]);
+
+  useEffect(() => {
     const controller = new AbortController();
 
     const getData = async () => {
@@ -81,7 +85,8 @@ const PrepareTable = ({ info, raportDocuments }) => {
           `/documents/get-settings-colums-table/${auth.id_user}`,
           { signal: controller.signal }
         );
-        console.log(tableSettingsColumns.data);
+        // console.log(tableSettingsColumns.data);
+        // console.log(info);
         setTableSettings(tableSettingsColumns.data.tableSettings);
 
         const update = prepareColumns(
