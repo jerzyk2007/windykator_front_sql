@@ -20,6 +20,7 @@ import QuickTableNote from "./QuickTableNote";
 import EditRowTable from "./EditRowTable";
 import { Box, Button } from "@mui/material";
 import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
+import TableButtonInfo from "./TableButtonInfo";
 import PleaseWait from "../PleaseWait";
 
 import "./Table.css";
@@ -312,29 +313,22 @@ const Table = ({
         >
           <i className="fas fa-save table-save-settings"></i>
         </Button>
-        <Button
+        <TableButtonInfo
+          className="table_excel"
           disabled={!dataTableCounter}
-          // disabled={dataTableCounter === 0 || dataTableCounter > 30000}
-          // style={
-          //   dataTableCounter === 0 || dataTableCounter > 30000
-          //     ? { color: "black" }
-          //     : null
-          // }
-          //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
           onClick={() =>
             handleExportExel(
               table.getPrePaginationRowModel().rows,
               "Zestawienie"
             )
           }
+          tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
         >
           <i
             className="fa-regular fa-file-excel table-export-excel"
-            style={
-              !dataTableCounter ? { color: "rgba(129, 129, 129, 0.3)" } : null
-            }
+            style={!dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}}
           ></i>
-        </Button>
+        </TableButtonInfo>
       </Box>
     ),
   });
@@ -395,17 +389,6 @@ const Table = ({
           />
         )}
 
-        {/* {auth?.roles?.includes(110 || 120 || 1100) && dataRowTable.edit && (
-          <EditRowTable
-            dataRowTable={dataRowTable}
-            setDataRowTable={setDataRowTable}
-            updateDocuments={updateDocuments}
-            roles={roles}
-            nextDoc={nextDoc}
-            getSingleRow={getSingleRow}
-          />
-        )} */}
-
         {pleaseWait ? (
           <PleaseWait />
         ) : (
@@ -423,10 +406,6 @@ const Table = ({
         )}
 
         <LocalizationProvider
-          // dateAdapter={AdapterDayjs}
-          // adapterLocale="pl"
-          // localeText={plLocale}
-
           dateAdapter={AdapterDateFns}
           adapterLocale={pl}
           localeText={plLocale}
