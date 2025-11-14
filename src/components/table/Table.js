@@ -34,7 +34,7 @@ const Table = ({
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const theme = useTheme();
-  const { auth } = useData();
+  const { auth, setExcelFile } = useData();
   const { height } = useWindowSize();
   const [pleaseWait, setPleaseWait] = useState(false);
 
@@ -43,7 +43,7 @@ const Table = ({
   const [columnOrder, setColumnOrder] = useState(settings.order);
   const [columnPinning, setColumnPinning] = useState(settings.pinning);
   const [pagination, setPagination] = useState(
-    settings.pagination ? settings.pagination : { pageIndex: 0, pageSize: 10 }
+    settings?.pagination ? settings.pagination : { pageIndex: 0, pageSize: 10 }
   );
   const [tableSize, setTableSize] = useState(500);
   const [data, setData] = useState([]);
@@ -57,63 +57,67 @@ const Table = ({
     { id: "ILE_DNI_PO_TERMINIE", desc: false },
   ]);
   const [nextDoc, setNextDoc] = useState([]);
+  const [dataTableCounter, setDataTableCounter] = useState(false);
 
   const plLocale =
     plPL.components.MuiLocalizationProvider.defaultProps.localeText;
 
-  const handleExportExel = (data, type) => {
-    let rowData = [];
-    let arrayOrder = [];
+  const handleExportExel = async (data, type) => {
+    setExcelFile(true);
 
-    if (type === "Całość" && data.length > 0) {
-      arrayOrder = [...columnOrder];
-      rowData = [...data];
-    } else if (type === "Filtr") {
-      arrayOrder = columnOrder.filter(
-        (item) => columnVisibility[item] !== false
-      );
-      rowData = data.map((item) => {
+    try {
+      const rowData = data.map((item) => {
         return item.original;
       });
+
+      const arrayOrder = columnOrder.filter(
+        (item) => columnVisibility[item] !== false
+      );
+
+      // let newColumns = [];
+      const newColumns = columns
+        .map((item) => {
+          const matching = arrayOrder.find(
+            (match) => match === item.accessorKey
+          );
+          if (matching) {
+            return {
+              accessorKey: item.accessorKey,
+              header: item.header,
+            };
+          }
+        })
+        .filter(Boolean);
+
+      const newOrder = arrayOrder.map((key) => {
+        const matchedColumn = newColumns.find(
+          (column) => column.accessorKey === key
+        );
+        return matchedColumn ? matchedColumn.header : key;
+      });
+      const updateData = rowData.map((item) => {
+        // Filtracja kluczy obiektu na podstawie arrayOrder
+        const filteredKeys = Object.keys(item).filter((key) =>
+          arrayOrder.includes(key)
+        );
+        // Tworzenie nowego obiektu z wybranymi kluczami
+        const updatedItem = filteredKeys.reduce((obj, key) => {
+          obj[key] = item[key];
+          return obj;
+        }, {});
+        return updatedItem;
+      });
+
+      const orderColumns = {
+        columns: newColumns,
+        order: newOrder,
+      };
+      getAllDataRaport(updateData, orderColumns, type);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setExcelFile(false);
     }
-    let newColumns = [];
-    newColumns = columns
-      .map((item) => {
-        const matching = arrayOrder.find((match) => match === item.accessorKey);
-        if (matching) {
-          return {
-            accessorKey: item.accessorKey,
-            header: item.header,
-          };
-        }
-      })
-      .filter(Boolean);
-
-    const newOrder = arrayOrder.map((key) => {
-      const matchedColumn = newColumns.find(
-        (column) => column.accessorKey === key
-      );
-      return matchedColumn ? matchedColumn.header : key;
-    });
-    const updateData = rowData.map((item) => {
-      // Filtracja kluczy obiektu na podstawie arrayOrder
-      const filteredKeys = Object.keys(item).filter((key) =>
-        arrayOrder.includes(key)
-      );
-      // Tworzenie nowego obiektu z wybranymi kluczami
-      const updatedItem = filteredKeys.reduce((obj, key) => {
-        obj[key] = item[key];
-        return obj;
-      }, {});
-      return updatedItem;
-    });
-
-    const orderColumns = {
-      columns: newColumns,
-      order: newOrder,
-    };
-
-    getAllDataRaport(updateData, orderColumns, type);
   };
 
   const getSingleRow = async (id, type) => {
@@ -268,11 +272,12 @@ const Table = ({
     muiTableBodyCellProps: ({ column, row, cell }) => ({
       // align: "center",
       onDoubleClick: () => {
-        if (column.id === "UWAGI_ASYSTENT") {
-          getSingleRow(row.original.id_document, "quick");
-        } else {
-          getSingleRow(row.original.id_document, "full");
-        }
+        getSingleRow(row.original.id_document, "full");
+        // if (column.id === "UWAGI_ASYSTENT") {
+        //   getSingleRow(row.original.id_document, "quick");
+        // } else {
+        //   getSingleRow(row.original.id_document, "full");
+        // }
       },
     }),
 
@@ -288,12 +293,12 @@ const Table = ({
           flexWrap: "wrap",
         }}
       >
-        <Button
+        {/* <Button
           disabled={table.getRowModel().rows.length === 0}
           onClick={() => handleExportExel(documents, "Całość")}
         >
           <i className="fa-regular fa-file-excel table-export-excel"></i>
-        </Button>
+        </Button> */}
         <Button
           onClick={() =>
             handleSaveSettings(
@@ -308,20 +313,60 @@ const Table = ({
           <i className="fas fa-save table-save-settings"></i>
         </Button>
         <Button
-          disabled={table.getRowModel().rows.length === 0}
-          style={
-            table.getRowModel().rows.length === 0 ? { display: "none" } : null
-          }
+          disabled={!dataTableCounter}
+          // disabled={dataTableCounter === 0 || dataTableCounter > 30000}
+          // style={
+          //   dataTableCounter === 0 || dataTableCounter > 30000
+          //     ? { color: "black" }
+          //     : null
+          // }
           //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
           onClick={() =>
-            handleExportExel(table.getPrePaginationRowModel().rows, "Filtr")
+            handleExportExel(
+              table.getPrePaginationRowModel().rows,
+              "Zestawienie"
+            )
           }
         >
-          <i className="fa-solid fa-filter table_fa-filter"></i>
+          <i
+            className="fa-regular fa-file-excel table-export-excel"
+            style={
+              !dataTableCounter ? { color: "rgba(129, 129, 129, 0.3)" } : null
+            }
+          ></i>
         </Button>
       </Box>
     ),
   });
+
+  // obliczenie ilości danych przekazanych do tabeli żeby określić czy nie jest za dużo do wygenerowania pliku excel
+  const tableDataSize = (dataSize) => {
+    const rowData = dataSize.map((item) => {
+      return item.original;
+    });
+
+    const arrayOrder = columnOrder.filter(
+      (item) => columnVisibility[item] !== false
+    );
+
+    const updateData = rowData.map((item) => {
+      // Filtracja kluczy obiektu na podstawie arrayOrder
+      const filteredKeys = Object.keys(item).filter((key) =>
+        arrayOrder.includes(key)
+      );
+      // Tworzenie nowego obiektu z wybranymi kluczami
+      const updatedItem = filteredKeys.reduce((obj, key) => {
+        obj[key] = item[key];
+        return obj;
+      }, {});
+      return updatedItem;
+    });
+
+    const json = JSON.stringify(updateData);
+    const size = new TextEncoder().encode(json).length; // bajty
+
+    setDataTableCounter(size >= 1 && size <= 30000000);
+  };
 
   useEffect(() => {
     setTableSize(height - 151);
@@ -336,7 +381,8 @@ const Table = ({
       .getPrePaginationRowModel()
       .rows.map((row) => row.original.id_document);
     setNextDoc(visibleData);
-  }, [table.getPrePaginationRowModel().rows]);
+    tableDataSize(table.getPrePaginationRowModel().rows);
+  }, [table.getPrePaginationRowModel().rows, columnVisibility]);
 
   return (
     <section className="table">

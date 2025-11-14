@@ -31,26 +31,30 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
   };
 
   const cleanData = allData.map((item) => {
-    let dzialania = "";
+    const dzialania =
+      Array.isArray(item.UWAGI_ASYSTENT) && item.UWAGI_ASYSTENT.length > 0
+        ? item.UWAGI_ASYSTENT.length === 1
+          ? sanitize(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1])
+          : `Liczba wcześniejszych wpisów: ${
+              item.UWAGI_ASYSTENT.length - 1
+            }\n${sanitize(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1])}`
+        : "";
 
-    if (Array.isArray(item.UWAGI_ASYSTENT)) {
-      const len = item.UWAGI_ASYSTENT.length;
-      if (len === 0) {
-        dzialania = "";
-      } else if (len === 1) {
-        dzialania = sanitize(item.UWAGI_ASYSTENT[0]);
-      } else {
-        dzialania = `Liczba wcześniejszych wpisów: ${len - 1}\n${sanitize(
-          item.UWAGI_ASYSTENT[len - 1]
-        )}`;
-      }
-    } else {
-      dzialania = "";
-    }
+    const informacja_zarzd =
+      Array.isArray(item.INFORMACJA_ZARZAD) && item.INFORMACJA_ZARZAD.length > 0
+        ? item.INFORMACJA_ZARZAD.length === 1
+          ? sanitize(item.INFORMACJA_ZARZAD[item.INFORMACJA_ZARZAD.length - 1])
+          : `Liczba wcześniejszych wpisów: ${
+              item.INFORMACJA_ZARZAD.length - 1
+            }\n${sanitize(
+              item.INFORMACJA_ZARZAD[item.INFORMACJA_ZARZAD.length - 1]
+            )}`
+        : "BRAK";
 
     return {
       ...item,
       UWAGI_ASYSTENT: dzialania,
+      INFORMACJA_ZARZAD: informacja_zarzd,
     };
   });
 
@@ -78,7 +82,8 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
 
     const groupedSheets = [
       {
-        name: getUniqueSheetName(info),
+        // name: getUniqueSheetName(info),
+        name: getUniqueSheetName("Całość"),
         data: changeNameColumns,
       },
     ];

@@ -6,7 +6,8 @@ import Table from "./Table";
 import { prepareColumns } from "./utilsForTable/PrepareColumns";
 import "./PrepareTable.css";
 
-const PrepareTable = ({ info, raportDocuments }) => {
+// const PrepareTable = ({ info, raportDocuments }) => {
+const PrepareTable = ({ info }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const [columns, setColumns] = useState([]);
@@ -39,60 +40,41 @@ const PrepareTable = ({ info, raportDocuments }) => {
   };
 
   useEffect(() => {
-    console.log(documents);
-  }, [documents]);
-
-  useEffect(() => {
     const controller = new AbortController();
 
     const getData = async () => {
       try {
         setPleaseWait(true);
-        if (info === "raport") {
-          setDocuments(raportDocuments);
-        } else {
-          const dataTable = await axiosPrivateIntercept.get(
-            `/documents/get-data-table/${auth.id_user}/${info}`,
-            { signal: controller.signal }
-          );
+        // if (info === "raport") {
+        //   // setDocuments(raportDocuments);
+        // } else {
+        const dataTable = await axiosPrivateIntercept.get(
+          `/documents/get-data-table/${auth.id_user}/${info}`,
+          { signal: controller.signal }
+        );
+        // for (const doc of dataTable.data) {
+        //   if (doc.NUMER_FV === "FV/UBL/632/25/A/D38") {
+        //     console.log(doc);
+        //   }
+        // }
 
-          // wyciągnięcie ostatniego elementu tabeli INFORMACJA_ZARZAD
-          const filteredData = dataTable?.data?.map((item) => {
-            if (!item.INFORMACJA_ZARZAD) {
-              return item; // Zostawiamy oryginalny obiekt bez zmian
-            }
+        setDocuments(dataTable.data);
+        // }
 
-            const newInfo =
-              item.INFORMACJA_ZARZAD && item.INFORMACJA_ZARZAD !== "BRAK"
-                ? Array.isArray(JSON.parse(item.INFORMACJA_ZARZAD)) // Parsujemy tylko jeśli nie jest 'BRAK'
-                  ? JSON.parse(item.INFORMACJA_ZARZAD).length > 0
-                    ? JSON.parse(item.INFORMACJA_ZARZAD)[
-                        JSON.parse(item.INFORMACJA_ZARZAD).length - 1
-                      ] // Ostatni element, pierwsze 50 znaków
-                    : "BRAK"
-                  : "BRAK"
-                : "BRAK";
-
-            return {
-              ...item,
-              INFORMACJA_ZARZAD: newInfo,
-            };
-          });
-          setDocuments(filteredData);
-        }
-
+        const userType = "Pracownik";
         const tableSettingsColumns = await axiosPrivateIntercept.get(
-          `/documents/get-settings-colums-table/${auth.id_user}`,
+          `/table/get-settings-colums-table/${auth.id_user}/${userType}`,
           { signal: controller.signal }
         );
         // console.log(tableSettingsColumns.data);
-        // console.log(info);
         setTableSettings(tableSettingsColumns.data.tableSettings);
 
         const update = prepareColumns(
-          tableSettingsColumns.data.columns,
-          info !== "raport" ? documents : raportDocuments
+          tableSettingsColumns.data.columns
+          // info !== "raport" ? documents : raportDocuments
+          // dataTable.data
         );
+        console.log(update);
         setColumns(update);
         setPleaseWait(false);
       } catch (err) {

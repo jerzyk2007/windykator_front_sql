@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 
-export const muiTableBodyCellProps = {
+// export const muiTableBodyCellProps = {
+const muiTableBodyCellProps = {
   align: "center",
 
   sx: {
@@ -12,10 +13,12 @@ export const muiTableBodyCellProps = {
     minHeight: "65px",
     textWrap: "balance",
     whiteSpace: "pre-wrap",
+    backgroundColor: null,
   },
 };
 
-export const prepareColumns = (columnsData, data) => {
+// export const prepareColumns = (columnsData, data) => {
+export const prepareColumns = (columnsData) => {
   const update = columnsData.map((item) => {
     const modifiedItem = { ...item };
 
@@ -40,43 +43,6 @@ export const prepareColumns = (columnsData, data) => {
           return "brak danych";
         }
       };
-    }
-
-    if (item.accessorKey === "UWAGI_ASYSTENT") {
-      modifiedItem.Cell = ({ cell }) => {
-        const cellValue = cell.getValue();
-        if (Array.isArray(cellValue) && cellValue.length > 0) {
-          let numberOfObjects = cellValue.length;
-          return (
-            <div style={{ whiteSpace: "pre-wrap" }}>
-              {numberOfObjects > 1 && (
-                <p>{`Liczba wpisów wcześniejszych: ${numberOfObjects - 1}`}</p>
-              )}
-              {cellValue.map((item, index) => (
-                <p key={index}>
-                  {
-                    index === cellValue.length - 1 // Sprawdzanie czy to ostatni element w tablicy
-                      ? item.length > 200 // Sprawdzenie długości tekstu
-                        ? item.slice(0, 200) + "..." // Jeśli tekst jest dłuższy niż 150 znaków, obetnij i dodaj trzy kropki na końcu
-                        : item // W przeciwnym razie, wyświetl pełny tekst
-                      : null // W przeciwnym razie, nie wyświetlaj nic
-                  }
-                </p>
-              ))}
-            </div>
-          );
-        } else {
-          <p>Brak</p>;
-        }
-      };
-
-      const changeMuiTableBodyCellProps = { ...muiTableBodyCellProps };
-      changeMuiTableBodyCellProps.align = "left";
-      const updatedSx = { ...changeMuiTableBodyCellProps.sx };
-      updatedSx.backgroundColor = "rgba(248, 255, 152, .2)";
-      changeMuiTableBodyCellProps.sx = updatedSx;
-      modifiedItem.muiTableBodyCellProps = changeMuiTableBodyCellProps;
-      modifiedItem.enableClickToCopy = false;
     }
 
     if (
@@ -112,14 +78,6 @@ export const prepareColumns = (columnsData, data) => {
       modifiedItem.filterFn = "contains";
     }
 
-    // if (item.accessorKey === "ZAZNACZ_KONTRAHENTA") {
-    //   modifiedItem.Cell = ({ cell, row }) => {
-    //     const cellValue = cell.getValue();
-
-    //     return <span>{cellValue}</span>;
-    //   };
-    // }
-
     if (item.accessorKey === "ZAZNACZ_KONTRAHENTA") {
       modifiedItem.Cell = ({ cell, row }) => {
         const cellValue = cell.getValue();
@@ -127,7 +85,7 @@ export const prepareColumns = (columnsData, data) => {
         // Jeśli wartość komórki jest null, wyświetl "NIE", w przeciwnym razie wyświetl wartość
         const displayValue = cellValue === null ? "NIE" : cellValue;
 
-        return <span>{displayValue}</span>;
+        return displayValue;
       };
     }
 
@@ -230,30 +188,75 @@ export const prepareColumns = (columnsData, data) => {
       };
     }
 
+    if (item.accessorKey === "INFORMACJA_ZARZAD") {
+      modifiedItem.accessorFn = (originalRow) => {
+        const arrayData = originalRow.INFORMACJA_ZARZAD;
+
+        if (!Array.isArray(arrayData) || arrayData.length === 0) return "BRAK";
+
+        const last = arrayData[arrayData.length - 1];
+        return typeof last === "string"
+          ? last.length > 90
+            ? last.slice(0, 90) + " …"
+            : last
+          : "BRAK";
+      };
+    }
+
+    if (item.accessorKey === "UWAGI_ASYSTENT") {
+      modifiedItem.accessorFn = (originalRow) => {
+        const arrayData = originalRow.UWAGI_ASYSTENT;
+        if (!arrayData) return "";
+        try {
+          const dzialania =
+            Array.isArray(arrayData) && arrayData.length > 0
+              ? arrayData.length === 1
+                ? arrayData[0]
+                : `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
+                    arrayData[arrayData.length - 1]
+                  }`
+              : "";
+          return dzialania.length > 120
+            ? dzialania.slice(0, 120) + " …"
+            : dzialania;
+          // return "BRAK";
+        } catch {
+          return "BRAK";
+        }
+      };
+      modifiedItem.muiTableBodyCellProps = {
+        ...muiTableBodyCellProps,
+        sx: {
+          ...muiTableBodyCellProps.sx,
+          backgroundColor: "rgba(248, 255, 152, .2)", // nadpisanie koloru tła
+        },
+      };
+    }
+
     if (item.filterVariant === "none") {
       modifiedItem.enableColumnFilter = false;
       delete modifiedItem.filterVariant;
     }
 
-    if (item.filterVariant === "range-slider") {
-      modifiedItem.muiFilterSliderProps = {
-        marks: true,
-        max: data.reduce(
-          (max, key) => Math.max(max, key[item.accessorKey]),
-          Number.NEGATIVE_INFINITY
-        ),
-        min: data.reduce(
-          (min, key) => Math.min(min, key[item.accessorKey]),
-          Number.POSITIVE_INFINITY
-        ),
-        step: 100,
-        valueLabelFormat: (value) =>
-          value.toLocaleString("pl-PL", {
-            style: "currency",
-            currency: "PLN",
-          }),
-      };
-    }
+    // if (item.filterVariant === "range-slider") {
+    //   modifiedItem.muiFilterSliderProps = {
+    //     marks: true,
+    //     max: data.reduce(
+    //       (max, key) => Math.max(max, key[item.accessorKey]),
+    //       Number.NEGATIVE_INFINITY
+    //     ),
+    //     min: data.reduce(
+    //       (min, key) => Math.min(min, key[item.accessorKey]),
+    //       Number.POSITIVE_INFINITY
+    //     ),
+    //     step: 100,
+    //     valueLabelFormat: (value) =>
+    //       value.toLocaleString("pl-PL", {
+    //         style: "currency",
+    //         currency: "PLN",
+    //       }),
+    //   };
+    // }
 
     if (item.type === "money") {
       modifiedItem.Cell = ({ cell }) => {
@@ -313,7 +316,8 @@ export const prepareColumns = (columnsData, data) => {
               })
             : value; // Wartość pozostaje bez zmian, jeśli to nie liczba (np. 'BRAK')
 
-        return <span>{formattedValue}</span>; // Zwracamy sformatowaną wartość
+        // return <span>{formattedValue}</span>; // Zwracamy sformatowaną wartość
+        return formattedValue; // Zwracamy sformatowaną wartość
       };
     }
     modifiedItem.columnFilterModeOptions = [];
