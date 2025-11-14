@@ -6,7 +6,6 @@ import {
 } from "material-react-table";
 import { MRT_Localization_PL } from "material-react-table/locales/pl";
 import { ThemeProvider, useTheme } from "@mui/material";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "dayjs/locale/pl";
 import { plPL } from "@mui/x-date-pickers/locales";
@@ -64,7 +63,11 @@ const Table = ({
     plPL.components.MuiLocalizationProvider.defaultProps.localeText;
 
   const handleExportExel = async (data, type) => {
+    // włącz loader
     setExcelFile(true);
+
+    // pozwól Reactowi przetworzyć render
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     try {
       const rowData = data.map((item) => {
