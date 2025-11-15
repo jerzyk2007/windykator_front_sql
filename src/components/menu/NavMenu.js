@@ -8,8 +8,9 @@ import { useControlRaportBL } from "../raports/raportConrolDocumentsBL";
 import { useOrganizationStructure } from "../raports/raportOrganizationStructure";
 import { useDifferenceAs_Fk } from "../raports/raportDifferenceAs_Fk";
 import { useLawStatement } from "../raports/raportLawStatement";
-import "./NavMenu.css";
+
 import { menuItems } from "./menuConfig"; // Import konfiguracji menu
+import "./NavMenu.css";
 
 const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
   const logout = useLogout();

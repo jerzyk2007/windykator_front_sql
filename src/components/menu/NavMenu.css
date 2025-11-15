@@ -166,11 +166,11 @@
 /* Styl dla aktywnego side-menu (pojawia się z lewej) */
 .nav_menu-item-dropmenu:hover .nav_menu-dropdown__menu--side_left {
   display: block;
-  left: -100%; /* Kluczowa zmiana: przesuwamy na lewo */
+  left: -100%;
 }
 
 .nav_menu-item-dropmenu {
-  position: relative; /* Ważne! */
+  position: relative;
 }
 
 /* Klasa do ukrywania, jeśli nie jest aktywne  */

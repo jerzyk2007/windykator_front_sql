@@ -28,8 +28,8 @@ const TableButtonInfo = ({
 
   return (
     <>
-      <div
-        className="tooltip-btn-wrapper"
+      <section
+        className="table_button_info"
         onMouseEnter={showTooltip}
         onMouseLeave={hideTooltip}
       >
@@ -40,14 +40,14 @@ const TableButtonInfo = ({
         >
           {children}
         </Button>
-      </div>
+      </section>
 
       {/* Tooltip Portal */}
       {disabled &&
         tooltipPos &&
         createPortal(
           <div
-            className="tooltip-floating"
+            className="table_button_info-floating"
             style={{
               top: tooltipPos.top,
               left: tooltipPos.left,
