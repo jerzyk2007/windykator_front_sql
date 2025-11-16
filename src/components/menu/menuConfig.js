@@ -1,14 +1,13 @@
 export const menuItems = [
   {
     title: "Tabelka",
-    roles: [100, 2000], // Role, które mogą widzieć ten element menu
+    roles: [100, 2000],
     submenu: [
       { label: "Aktualne", path: "/actual-table", roles: [100, 2000] },
       { label: "Pilne", path: "/critical-table", roles: [100, 2000] },
       { label: "Zobowiązania", path: "/obligations-table", roles: [100, 2000] },
       { label: "Archiwum", path: "/archive-table", roles: [100, 2000] },
       { label: "Kpl dane", path: "/all-data-table", roles: [100, 2000] },
-      // { label: "Różnice AS - Symfonia", path: "/different-AS-FK", roles: [1000] }, // Zakomentowane jak w oryginale
       { label: "KRD", path: "/krd", roles: [150, 2000] },
       {
         label: "Dokumenty Raportu FK",
@@ -23,6 +22,15 @@ export const menuItems = [
     ],
   },
   {
+    title: "Kancelaria",
+    roles: [500],
+    submenu: [
+      { label: "W realizacji", path: "/ongoing-law-table", roles: [500] },
+      { label: "Zakończone", path: "/closed-law-table", roles: [500] },
+      { label: "Wszystkie", path: "/all-cases-law-table", roles: [500] },
+    ],
+  },
+  {
     title: "Raporty",
     roles: [100, 200, 201, 202, 300, 400, 1000, 2000],
     submenu: [
@@ -33,14 +41,12 @@ export const menuItems = [
           {
             label: " Dział",
             path: "/raport-departments",
-            // permission: "Standard",
           },
           {
             label: "Doradca",
             path: "/raport-advisers",
             roles: [100, 2000],
           },
-          // { label: "Raport wg obszarów", path: "/raport-areas", roles: [2000] }, // Zakomentowane jak w oryginale
         ],
       },
       {
@@ -82,7 +88,6 @@ export const menuItems = [
       },
       {
         label: "Raport - Nora",
-        // path: "/raport-nora",
         roles: [300, 2000],
         sideMenu: [
           {
@@ -94,7 +99,6 @@ export const menuItems = [
       },
       {
         label: "Systemowe",
-        // path: "/raport-nora",
         roles: [200, 201, 202, 150, 2000],
         sideMenu: [
           {
@@ -164,13 +168,13 @@ export const menuItems = [
         label: "Instrukcja obsługi",
         path: "/instruction",
         roles: [1, 2000],
-      }, // Dodałem 1000 dla spójności
+      },
       { label: "Dodaj użytkownika", path: "/register", roles: [1000, 2000] },
       {
         label: "Zmień hasło",
         path: "/change-password",
         roles: [1, 2000],
-      }, // Dodałem 1000 dla spójności
+      },
       { label: "Wyloguj", action: "logout" },
     ],
   },

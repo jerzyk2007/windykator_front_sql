@@ -7,7 +7,7 @@ import { prepareColumns } from "./utilsForTable/PrepareColumns";
 import "./PrepareTable.css";
 
 // const PrepareTable = ({ info, raportDocuments }) => {
-const PrepareTable = ({ info }) => {
+const PrepareTable = ({ info, profile }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const [columns, setColumns] = useState([]);
@@ -45,36 +45,19 @@ const PrepareTable = ({ info }) => {
     const getData = async () => {
       try {
         setPleaseWait(true);
-        // if (info === "raport") {
-        //   // setDocuments(raportDocuments);
-        // } else {
         const dataTable = await axiosPrivateIntercept.get(
-          `/documents/get-data-table/${auth.id_user}/${info}`,
+          `/documents/get-data-table/${auth.id_user}/${info}/${profile}`,
           { signal: controller.signal }
         );
-        // for (const doc of dataTable.data) {
-        //   if (doc.NUMER_FV === "FV/UBL/632/25/A/D38") {
-        //     console.log(doc);
-        //   }
-        // }
-
         setDocuments(dataTable.data);
-        // }
-
-        const userType = "Pracownik";
         const tableSettingsColumns = await axiosPrivateIntercept.get(
-          `/table/get-settings-colums-table/${auth.id_user}/${userType}`,
+          `/table/get-settings-colums-table/${auth.id_user}/${profile}`,
           { signal: controller.signal }
         );
-        // console.log(tableSettingsColumns.data);
         setTableSettings(tableSettingsColumns.data.tableSettings);
 
-        const update = prepareColumns(
-          tableSettingsColumns.data.columns
-          // info !== "raport" ? documents : raportDocuments
-          // dataTable.data
-        );
-        console.log(update);
+        const update = prepareColumns(tableSettingsColumns.data.columns);
+
         setColumns(update);
         setPleaseWait(false);
       } catch (err) {

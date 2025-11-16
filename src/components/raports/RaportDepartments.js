@@ -17,7 +17,7 @@ import { dataRaport } from "../table/utilsForTable/excelFilteredTable";
 
 import "./RaportDepartments.css";
 
-const RaportDepartments = () => {
+const RaportDepartments = ({ profile }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const { height } = useWindowSize();
@@ -389,7 +389,6 @@ const RaportDepartments = () => {
 
   useEffect(() => {
     const createDataRaport = () => {
-      // if (permission === "Standard") {
       let uniqueDepartments = [];
       raportData.forEach((item) => {
         if (item.DZIAL && typeof item.DZIAL === "string") {
@@ -400,9 +399,7 @@ const RaportDepartments = () => {
       });
       setDepartments(uniqueDepartments);
     };
-    // };
     createDataRaport();
-    // }, [raportData, permission, raportDate]);
   }, [raportData, raportDate]);
 
   useEffect(() => {
@@ -434,7 +431,7 @@ const RaportDepartments = () => {
       try {
         setPleaseWait(true);
         const resultData = await axiosPrivateIntercept.get(
-          `/raport/get-data/${auth.id_user}`
+          `/raport/get-data/${auth.id_user}/${profile}`
         );
         if (resultData.data.data.length === 0) {
           setPleaseWait(false);

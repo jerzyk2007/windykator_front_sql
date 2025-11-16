@@ -17,7 +17,7 @@ import { dataRaport } from "../table/utilsForTable/excelFilteredTable";
 
 // import "./RaportAdvisers.css";
 
-const RaportAdvisers = () => {
+const RaportAdvisers = ({ profile }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const { height } = useWindowSize();
@@ -442,14 +442,14 @@ const RaportAdvisers = () => {
       try {
         setPleaseWait(true);
         const resultData = await axiosPrivateIntercept.get(
-          `/raport/get-data/${auth.id_user}`
+          `/raport/get-data/${auth.id_user}/${profile}`
         );
-        if (resultData.data.data.length === 0) {
+        if (resultData.data.length === 0) {
           setPleaseWait(false);
           return;
         }
+        console.log(resultData.data);
         setRaportData(resultData.data.data);
-        // setPermission(resultData.data.permission);
         checkMinMaxDateGlobal(resultData.data.data);
 
         const [settingsRaportUserAdvisers] = await Promise.all([

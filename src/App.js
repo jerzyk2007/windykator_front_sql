@@ -61,50 +61,52 @@ function App() {
             <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/actual-table"
-                element={<PrepareTable info={"actual"} />}
+                element={<PrepareTable info={"actual"} profile={"insider"} />}
+                // element={<PrepareTable info={"actual"} profile={"partner"} />}
               />
             </Route>
             <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/critical-table"
-                element={<PrepareTable info={"critical"} />}
+                element={<PrepareTable info={"critical"} profile={"insider"} />}
               />
             </Route>
             <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/obligations-table"
-                element={<PrepareTable info={"obligations"} />}
+                element={
+                  <PrepareTable info={"obligations"} profile={"insider"} />
+                }
               />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/archive-table"
-                element={<PrepareTable info={"archive"} />}
+                element={<PrepareTable info={"archive"} profile={"insider"} />}
               />
             </Route>
 
-            {/* <Route element={<RequireAuth allowedRoles={[100]} />}>
-              <Route
-                path="/different-AS-FK"
-                element={<PrepareTable info={"different"} />}
-              />
-            </Route> */}
             <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/all-data-table"
-                element={<PrepareTable info={"all"} />}
+                element={<PrepareTable info={"all"} profile={"insider"} />}
               />
             </Route>
             <Route element={<RequireAuth allowedRoles={[150, 1000, 2000]} />}>
-              <Route path="/krd" element={<PrepareTable info={"krd"} />} />
+              <Route
+                path="/krd"
+                element={<PrepareTable info={"krd"} profile={"insider"} />}
+              />
             </Route>
             <Route
               element={<RequireAuth allowedRoles={[110, 120, 1000, 2000]} />}
             >
               <Route
                 path="/fk-documents-table"
-                element={<PrepareTable info={"raport_fk"} />}
+                element={
+                  <PrepareTable info={"raport_fk"} profile={"insider"} />
+                }
               />
             </Route>
             <Route
@@ -114,13 +116,17 @@ function App() {
             >
               <Route
                 path="/fk-disabled-documents-table"
-                element={<PrepareTable info={"disabled_fk"} />}
+                element={
+                  <PrepareTable info={"disabled_fk"} profile={"insider"} />
+                }
               />
             </Route>
             <Route element={<RequireAuth allowedRoles={[120, 1000, 2000]} />}>
               <Route
                 path="/control-bl-documents-table"
-                element={<PrepareTable info={"control-bl"} />}
+                element={
+                  <PrepareTable info={"control-bl"} profile={"insider"} />
+                }
               />
             </Route>
 
@@ -131,7 +137,7 @@ function App() {
             >
               <Route
                 path="/raport-departments"
-                element={<RaportDepartments />}
+                element={<RaportDepartments profile={"insider"} />}
               />
             </Route>
 
@@ -140,7 +146,10 @@ function App() {
                 <RequireAuth allowedRoles={[100, 110, 120, 1000, 2000]} />
               }
             >
-              <Route path="/raport-advisers" element={<RaportAdvisers />} />
+              <Route
+                path="/raport-advisers"
+                element={<RaportAdvisers profile={"insider"} />}
+              />
             </Route>
             {/* <Route element={<RequireAuth allowedRoles={[1000]} />}>
               <Route path="/raport-areas" element={<RaportAreas />} />

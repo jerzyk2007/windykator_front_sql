@@ -2,15 +2,14 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import useData from "../hooks/useData";
 import { saveAs } from "file-saver";
 
-export const useDifferenceAs_Fk = () => {
+export const useDifferenceAs_Fk = (profile) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth, setExcelFile } = useData();
   const raportDifferenceAs_Fk = async () => {
     try {
       setExcelFile(true);
-
       const response = await axiosPrivateIntercept.get(
-        `/raport/get-fifferences-as-fk/${auth.id_user}`,
+        `/raport/get-fifferences-as-fk/${auth.id_user}/${profile}`,
         {
           responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
         }

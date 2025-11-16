@@ -19,7 +19,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
   const { width } = useWindowSize();
   const controlRaportBL = useControlRaportBL();
   const organizationStructure = useOrganizationStructure();
-  const differenceAs_Fk = useDifferenceAs_Fk();
+  const differenceAs_Fk = useDifferenceAs_Fk("insider");
   const lawStatement = useLawStatement();
 
   const [activeMenu, setActiveMenu] = useState(null); // Zmieniamy nazwę na activeMenu dla głównego dropdownu
