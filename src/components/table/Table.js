@@ -136,7 +136,6 @@ const Table = ({
   };
 
   const getSingleRow = async (id, type) => {
-    console.log(profile);
     const getRow = documents.filter((row) => row.id_document === id);
 
     if (getRow.length > 0) {
@@ -400,7 +399,10 @@ const Table = ({
   }, [table.getPrePaginationRowModel().rows, columnVisibility]);
 
   return (
-    <section className="table">
+    <section
+      className="table"
+      style={dataRowTable.edit ? { display: "flex" } : null}
+    >
       <ThemeProvider theme={theme}>
         {quickNote && (
           <QuickTableNote
@@ -432,7 +434,9 @@ const Table = ({
           adapterLocale={pl}
           localeText={plLocale}
         >
-          <MaterialReactTable table={table} />
+          <div style={dataRowTable.edit ? { display: "none" } : null}>
+            <MaterialReactTable table={table} />
+          </div>
         </LocalizationProvider>
       </ThemeProvider>
     </section>

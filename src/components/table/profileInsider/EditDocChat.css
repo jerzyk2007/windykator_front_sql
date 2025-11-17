@@ -37,6 +37,10 @@
   margin: 3px 0 5px 0;
 }
 
+.edit-doc-chat--content:focus {
+  outline: none;
+}
+
 .edit-doc-chat__panel {
   display: flex;
   justify-content: space-evenly;

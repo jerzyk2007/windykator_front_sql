@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import useData from "../../hooks/useData";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import EditDocBasicData from "./EditDocBasicData";
 import EditDocChat from "./EditDocChat";
 import EditDocActions from "./EditDocActions";
@@ -180,6 +182,18 @@ const EditRowTable = ({
     }
   };
 
+  const handleChange = (event) => {
+    setChangePanel(event.target.value);
+  };
+
+  useEffect(() => {
+    if (changePanel === "control-bl") {
+      setToggleState(2);
+    } else {
+      setToggleState(1);
+    }
+  }, [changePanel]);
+
   useEffect(() => {
     const index = nextDoc.indexOf(rowData.id_document);
     SetNextPrevDoc({
@@ -299,40 +313,6 @@ const EditRowTable = ({
                 </section>
                 <section className="edit-row-table_section-content-data">
                   {changePanel === "doc-actions" && (
-                    <section className="edit-row-table__change-panel">
-                      {(auth.roles.includes(110) || auth.roles.includes(120)) &&
-                      rowData.MARK_FK ? (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => setChangePanel("management")}
-                        >
-                          Raport FK
-                        </Button>
-                      ) : null}
-                      {rowData.AREA === "BLACHARNIA" && (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => setChangePanel("becared")}
-                        >
-                          Becared
-                        </Button>
-                      )}
-                    </section>
-                  )}
-                  {changePanel !== "doc-actions" && (
-                    <section className="edit-row-table__change-panel">
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => setChangePanel("doc-actions")}
-                      >
-                        Powrót
-                      </Button>
-                    </section>
-                  )}
-                  {changePanel === "doc-actions" && (
                     <EditDocActions
                       rowData={rowData}
                       setRowData={setRowData}
@@ -384,13 +364,10 @@ const EditRowTable = ({
                   )}
                 </section>
                 <section className="edit-row-table_section-content-data">
-                  {auth.roles.includes(120) &&
-                    dataRowTable.singleDoc.AREA === "BLACHARNIA" && (
-                      <DocumentsControlBL
-                        documentControlBL={documentControlBL}
-                        setDocumentControlBL={setDocumentControlBL}
-                      />
-                    )}
+                  <DocumentsControlBL
+                    documentControlBL={documentControlBL}
+                    setDocumentControlBL={setDocumentControlBL}
+                  />
                 </section>
               </section>
             </section>
@@ -408,83 +385,173 @@ const EditRowTable = ({
               </section>
             </section>
           </section>
-          <section className="edit-row-table__panel">
-            <section className="edit_row_table-buttons">
-              <RxDoubleArrowLeft
-                className={
-                  nextPrevDoc.prev
-                    ? `edit_row_table-icon_buttons`
-                    : `edit_row_table-icon_buttons--disable`
-                }
-                onClick={() => nextPrevDoc.prev && checkNextDoc("prev")}
-                // onClick={() => nextPrevDoc.prev && getSingleRow(nextPrevDoc.prev, 'full')                }
-              />
-              <RxDoubleArrowRight
-                className={
-                  nextPrevDoc.next
-                    ? `edit_row_table-icon_buttons`
-                    : `edit_row_table-icon_buttons--disable`
-                }
-                onClick={() => nextPrevDoc.next && checkNextDoc("next")}
-                // onClick={() => nextPrevDoc.next && getSingleRow(nextPrevDoc.next, 'full')}
-              />
-            </section>
-            <section className="edit_row_table-buttons">
-              <Button
-                className="mui-button"
-                variant="contained"
-                size="large"
-                color="error"
-                onClick={() =>
-                  setDataRowTable({
-                    edit: false,
-                    singleDoc: {},
-                    controlDoc: {},
-                  })
-                }
-              >
-                Anuluj
-              </Button>
-              <Button
-                className="mui-button"
-                variant="contained"
-                size="large"
-                color="success"
-                onClick={() => handleSaveData()}
-              >
-                Zatwierdź
-              </Button>
-            </section>
-            <section className="edit_row_table-buttons">
-              {auth.roles.includes(200) && rowData.MARK_FV && (
-                <Button
-                  variant="contained"
-                  color={rowData.MARK_FK ? "secondary" : "error"}
-                  onClick={() =>
-                    changeMarkDoc(
-                      rowData.NUMER_FV,
-                      rowData.MARK_FK === 1 ? 0 : 1,
-                      rowData.FIRMA
-                    )
-                  }
+        </section>
+      </section>
+      <section className="edit-row-table__panel">
+        <section className="edit_row_table-buttons">
+          <RxDoubleArrowLeft
+            className={
+              nextPrevDoc.prev
+                ? `edit_row_table-icon_buttons`
+                : `edit_row_table-icon_buttons--disable`
+            }
+            onClick={() => nextPrevDoc.prev && checkNextDoc("prev")}
+          />
+          <RxDoubleArrowRight
+            className={
+              nextPrevDoc.next
+                ? `edit_row_table-icon_buttons`
+                : `edit_row_table-icon_buttons--disable`
+            }
+            onClick={() => nextPrevDoc.next && checkNextDoc("next")}
+          />
+        </section>
+        <section className="edit_row_table-buttons">
+          <Button
+            className="mui-button"
+            variant="contained"
+            size="large"
+            color="error"
+            onClick={() =>
+              setDataRowTable({
+                edit: false,
+                singleDoc: {},
+                controlDoc: {},
+              })
+            }
+          >
+            Anuluj
+          </Button>
+          <Button
+            className="mui-button"
+            variant="contained"
+            size="large"
+            color="success"
+            onClick={() => handleSaveData()}
+          >
+            Zatwierdź
+          </Button>
+        </section>
+        <section className="edit_row_table-buttons">
+          {auth.roles.includes(200) && rowData.MARK_FV && (
+            <Button
+              variant="contained"
+              color={rowData.MARK_FK ? "secondary" : "error"}
+              onClick={() =>
+                changeMarkDoc(
+                  rowData.NUMER_FV,
+                  rowData.MARK_FK === 1 ? 0 : 1,
+                  rowData.FIRMA
+                )
+              }
+            >
+              {rowData.MARK_FK ? "FK ON" : "FK OFF"}
+            </Button>
+          )}
+
+          {/* --- Nowa logika dla Select --- */}
+          {(() => {
+            const menuItems = [
+              <MenuItem key="doc-actions" value="doc-actions">
+                PANEL AKCJI
+              </MenuItem>,
+            ];
+
+            if (rowData.AREA === "BLACHARNIA") {
+              menuItems.push(
+                <MenuItem key="becared" value="becared">
+                  KANCELARIA TU / BL
+                </MenuItem>
+              );
+            }
+
+            if (
+              (auth.roles.includes(110) || auth.roles.includes(120)) &&
+              rowData.MARK_FK
+            ) {
+              menuItems.push(
+                <MenuItem key="management" value="management">
+                  RAPORT FK
+                </MenuItem>
+              );
+            }
+
+            if (
+              auth.roles.includes(120) &&
+              dataRowTable.singleDoc.AREA === "BLACHARNIA"
+            ) {
+              menuItems.push(
+                <MenuItem key="control-bl" value="control-bl">
+                  KONTROLA BL
+                </MenuItem>
+              );
+            }
+
+            if (auth.roles.includes(150)) {
+              menuItems.push(
+                <MenuItem key="law-partner" value="law-partner">
+                  PRZEKAŻ SPRAWĘ DO KANCELARII
+                </MenuItem>
+              );
+            }
+
+            // Jeśli mamy więcej niż 1 opcję, pokazujemy SELECT
+            if (menuItems.length > 1) {
+              return (
+                <Select
+                  value={changePanel}
+                  onChange={handleChange}
+                  displayEmpty
+                  inputProps={{ "aria-label": "Without label" }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        backgroundColor: "rgb(255, 255, 255)",
+                        color: "#000",
+                        borderRadius: "5px",
+                        border: "1px solid rgba(189, 67, 211, 1)",
+                        "& .MuiMenuItem-root": {
+                          justifyContent: "center",
+                          textAlign: "center",
+                          "&:hover": {
+                            backgroundColor: "rgba(189, 67, 211, 0.15)",
+                          },
+                          "&.Mui-selected": {
+                            backgroundColor: "rgba(189, 67, 211, 1) !important",
+                            color: "#fff",
+                          },
+                          "&.Mui-selected:hover": {
+                            backgroundColor:
+                              "rgba(189, 67, 211, 0.35) !important",
+                          },
+                        },
+                      },
+                    },
+                  }}
+                  sx={{
+                    width: "70%",
+                    padding: "2px 0",
+                    fontFamily: "Roboto",
+                    backgroundColor: "rgb(156, 39, 176)",
+                    color: "#fff",
+                    borderRadius: "5px",
+                    fontSize: "0.9rem",
+                    fontWeight: 500,
+                    textAlign: "center",
+                    "& .MuiSelect-select": {
+                      color: "#fff",
+                      padding: "8px 12px",
+                    },
+                    "& fieldset": { border: "none" },
+                  }}
                 >
-                  {rowData.MARK_FK ? "FK ON" : "FK OFF"}
-                </Button>
-              )}
-              {auth.roles.includes(120) &&
-                dataRowTable.singleDoc.AREA === "BLACHARNIA" && (
-                  <Button
-                    variant="contained"
-                    // color="secondary"
-                    onClick={() =>
-                      setToggleState((prev) => (prev === 1 ? 2 : 1))
-                    }
-                  >
-                    Kontrola
-                  </Button>
-                )}
-            </section>
-          </section>
+                  {menuItems}
+                </Select>
+              );
+            }
+
+            return null; // jeśli jest tylko jedna opcja, nic nie renderujemy
+          })()}
         </section>
       </section>
     </section>

@@ -1,15 +1,26 @@
+.edit_data_management {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .edit_data_management-chat {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .edit_data_management--title {
-    background-color: rgba(88, 228, 253, 0.2);
+  background-color: rgba(88, 228, 253, 0.2);
 }
 
 .edit_data_management--content {
-    height: 150px;
+  height: 150px;
+}
+
+.edit_data_management--content:focus {
+  /* border: none; */
+  outline: none;
 }
 
 .edit_data_management--edit {
-    height: 100px;
+  height: 100px;
 }

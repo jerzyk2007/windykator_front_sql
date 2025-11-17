@@ -2,6 +2,7 @@
   flex-grow: 1;
   width: 100vw;
   overflow-x: auto;
+  /* display: flex; */
 }
 
 .table td {

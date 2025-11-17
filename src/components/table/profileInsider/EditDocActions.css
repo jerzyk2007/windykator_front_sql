@@ -1,6 +1,6 @@
 .edit_doc_actions {
   flex-grow: 1;
-  max-height: 75vh;
+  /* max-height: 75vh; */
   font-size: 1.1rem;
   overflow: auto;
   display: flex;
