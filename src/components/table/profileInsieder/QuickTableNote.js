@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import useData from "../hooks/useData";
-import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useData from "../../hooks/useData";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
-import { changeSingleDoc } from './utilsForTable/changeSingleDocument';
+import { changeSingleDoc } from "../utilsForTable/changeSingleDocument";
 import "./QuickTableNote.css";
 
 const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
@@ -33,14 +33,10 @@ const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
     const newRow = { ...quickNote, UWAGI_ASYSTENT: newNote };
 
     try {
-      await axiosPrivateIntercept.patch(
-        `/documents/change-single-document`,
-        {
-          id_document: id_document,
-          documentItem: newRow,
-        }
-      );
-
+      await axiosPrivateIntercept.patch(`/documents/change-single-document`, {
+        id_document: id_document,
+        documentItem: newRow,
+      });
 
       updateDocuments(changeSingleDoc(newRow));
       setQuickNote("");
@@ -60,12 +56,9 @@ const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
     scrollToBottom(); // Przewiń na dół po pierwszym renderze lub zmianie `rowData.UWAGI_ASYSTENT`
   }, [quickNote.UWAGI_ASYSTENT]); // Wywołaj useEffect przy zmianie `rowData.UWAGI_ASYSTENT`
 
-
   useEffect(() => {
     noteRef.current.focus();
   }, []);
-
-
 
   return (
     <section className="quick_table_note">
@@ -117,7 +110,9 @@ const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {
           <Button
             variant="contained"
             disabled={note ? false : true}
-            onClick={handleAddNote} size="small">
+            onClick={handleAddNote}
+            size="small"
+          >
             Zapisz
           </Button>
         </section>

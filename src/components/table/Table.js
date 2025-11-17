@@ -15,8 +15,8 @@ import { pl } from "date-fns/locale";
 
 import useData from "../hooks/useData";
 import useWindowSize from "../hooks/useWindow";
-import QuickTableNote from "./QuickTableNote";
-import EditRowTable from "./EditRowTable";
+import QuickTableNote from "./profileInsider/QuickTableNote";
+import EditRowTable from "./profileInsider/EditRowTable";
 import { Box, Button } from "@mui/material";
 import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
 import TableButtonInfo from "./TableButtonInfo";

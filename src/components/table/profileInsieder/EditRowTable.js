@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import useData from "../hooks/useData";
-import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useData from "../../hooks/useData";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import EditDocBasicData from "./EditDocBasicData";
 import EditDocChat from "./EditDocChat";
@@ -9,7 +9,7 @@ import EditDocBeCared from "./EditDocBeCared";
 import EditDataManagement from "./EditDataManagement";
 import DocumentsControlBL from "./DocumentsControlBL";
 import DocumentsControlChat from "./DocumentsControlChat";
-import { changeSingleDoc } from "./utilsForTable/changeSingleDocument";
+import { changeSingleDoc } from "../utilsForTable/changeSingleDocument";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 
 import "./EditRowTable.css";
