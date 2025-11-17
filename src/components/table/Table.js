@@ -54,13 +54,19 @@ const Table = ({
     singleDoc: {},
     controlDoc: {},
   });
-  const [sorting, setSorting] = useState(
-    profile === "insider"
-      ? [{ id: "ILE_DNI_PO_TERMINIE", desc: false }]
-      : profile === "partner"
-      ? [{ id: "DATA_PRZEKAZANIA", desc: false }]
-      : []
-  );
+
+  // sortowanie defaultowe tabeli, jeśli istnieje dana kolumna
+  const [sorting, setSorting] = useState(() => {
+    const has = (key) => columns.some((c) => c.accessorKey === key);
+    if (profile === "insider" && has("ILE_DNI_PO_TERMINIE")) {
+      return [{ id: "ILE_DNI_PO_TERMINIE", desc: false }];
+    }
+    if (profile === "partner" && has("DATA_PRZEKAZANIA")) {
+      return [{ id: "DATA_PRZEKAZANIA", desc: false }];
+    }
+    return [];
+  });
+
   const [nextDoc, setNextDoc] = useState([]);
   const [dataTableCounter, setDataTableCounter] = useState(false);
 
@@ -130,18 +136,20 @@ const Table = ({
   };
 
   const getSingleRow = async (id, type) => {
+    console.log(profile);
     const getRow = documents.filter((row) => row.id_document === id);
 
     if (getRow.length > 0) {
       try {
         setPleaseWait(true);
-        const response = await axiosPrivateIntercept.get(
-          `/documents/get-single-document/${id}`
-        );
-        if (type === "quick") {
-          setQuickNote(response.data.singleDoc);
-        }
-        if (type === "full") {
+        if (profile === "insider") {
+          const response = await axiosPrivateIntercept.get(
+            `/documents/get-single-document/${id}`
+          );
+          // if (type === "quick") {
+          //   setQuickNote(response.data.singleDoc);
+          // }
+          // if (type === "full") {
           setDataRowTable({
             edit: true,
             singleDoc: response?.data?.singleDoc ? response.data.singleDoc : {},
@@ -150,6 +158,7 @@ const Table = ({
               : {},
           });
         }
+        // }
       } catch (error) {
         console.error("Error fetching data from the server:", error);
       } finally {
@@ -405,6 +414,7 @@ const Table = ({
           <PleaseWait />
         ) : (
           [110, 120, 2000].some((role) => auth?.roles?.includes(role)) &&
+          profile === "insider" &&
           dataRowTable.edit && (
             <EditRowTable
               dataRowTable={dataRowTable}
