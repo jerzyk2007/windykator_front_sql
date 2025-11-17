@@ -26,8 +26,8 @@ export const menuItems = [
     roles: [500],
     submenu: [
       { label: "W realizacji", path: "/ongoing-law-table", roles: [500] },
-      { label: "Zakończone", path: "/closed-law-table", roles: [500] },
-      { label: "Wszystkie", path: "/all-cases-law-table", roles: [500] },
+      // { label: "Zakończone", path: "/closed-law-table", roles: [500] },
+      // { label: "Wszystkie", path: "/all-cases-law-table", roles: [500] },
     ],
   },
   {

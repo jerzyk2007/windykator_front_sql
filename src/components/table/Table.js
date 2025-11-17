@@ -31,6 +31,7 @@ const Table = ({
   settings,
   handleSaveSettings,
   roles,
+  profile,
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const theme = useTheme();
@@ -53,9 +54,13 @@ const Table = ({
     singleDoc: {},
     controlDoc: {},
   });
-  const [sorting, setSorting] = useState([
-    { id: "ILE_DNI_PO_TERMINIE", desc: false },
-  ]);
+  const [sorting, setSorting] = useState(
+    profile === "insider"
+      ? [{ id: "ILE_DNI_PO_TERMINIE", desc: false }]
+      : profile === "partner"
+      ? [{ id: "DATA_PRZEKAZANIA", desc: false }]
+      : []
+  );
   const [nextDoc, setNextDoc] = useState([]);
   const [dataTableCounter, setDataTableCounter] = useState(false);
 
@@ -316,22 +321,26 @@ const Table = ({
         >
           <i className="fas fa-save table-save-settings"></i>
         </Button>
-        <TableButtonInfo
-          className="table_excel"
-          disabled={!dataTableCounter}
-          onClick={() =>
-            handleExportExel(
-              table.getPrePaginationRowModel().rows,
-              "Zestawienie"
-            )
-          }
-          tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
-        >
-          <i
-            className="fa-regular fa-file-excel table-export-excel"
-            style={!dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}}
-          ></i>
-        </TableButtonInfo>
+        {profile === "insider" && (
+          <TableButtonInfo
+            className="table_excel"
+            disabled={!dataTableCounter}
+            onClick={() =>
+              handleExportExel(
+                table.getPrePaginationRowModel().rows,
+                "Zestawienie"
+              )
+            }
+            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
+          >
+            <i
+              className="fa-regular fa-file-excel table-export-excel"
+              style={
+                !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
+              }
+            ></i>
+          </TableButtonInfo>
+        )}
       </Box>
     ),
   });

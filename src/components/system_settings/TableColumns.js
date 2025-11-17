@@ -108,7 +108,9 @@ const TableColumns = () => {
   };
 
   const handleDelete = async (index) => {
-    await axiosPrivateIntercept.delete(`/table/delete-table-columns/${index}`);
+    await axiosPrivateIntercept.delete(
+      `/table/delete-table-columns/${index}/${permissions.select}`
+    );
     const deleteCol = employeeData[permissions.select].columns
       .map((item) => {
         if (item.id_table_columns !== index) {

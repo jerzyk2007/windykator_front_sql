@@ -31,7 +31,7 @@ const PrepareTable = ({ info, profile }) => {
     };
     try {
       await axiosPrivateIntercept.patch(
-        `/user/save-table-settings/${auth.id_user}`,
+        `/user/save-table-settings/${auth.id_user}/${profile}`,
         { newTableSettings: tableSettings }
       );
     } catch (err) {
@@ -49,11 +49,14 @@ const PrepareTable = ({ info, profile }) => {
           `/documents/get-data-table/${auth.id_user}/${info}/${profile}`,
           { signal: controller.signal }
         );
+        console.log(dataTable.data);
         setDocuments(dataTable.data);
         const tableSettingsColumns = await axiosPrivateIntercept.get(
           `/table/get-settings-colums-table/${auth.id_user}/${profile}`,
           { signal: controller.signal }
         );
+        console.log(tableSettingsColumns.data.tableSettings);
+
         setTableSettings(tableSettingsColumns.data.tableSettings);
 
         const update = prepareColumns(tableSettingsColumns.data.columns);
@@ -87,6 +90,7 @@ const PrepareTable = ({ info, profile }) => {
             settings={tableSettings}
             handleSaveSettings={handleSaveSettings}
             roles={auth.roles}
+            profile={profile}
           />
         )
       )}

@@ -129,6 +129,12 @@ function App() {
                 }
               />
             </Route>
+            <Route element={<RequireAuth allowedRoles={[500]} />}>
+              <Route
+                path="/ongoing-law-table"
+                element={<PrepareTable info={"ongoing"} profile={"partner"} />}
+              />
+            </Route>
 
             <Route
               element={
