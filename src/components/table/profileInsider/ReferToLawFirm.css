@@ -1,0 +1,25 @@
+.refer_to_law_firm--title {
+  /* flex-grow: 1; */
+  background-color: rgba(229, 202, 255, 0.7);
+}
+
+.edit_doc--content {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+}
+
+.edit_doc--content:focus {
+  outline: none;
+  border: 1px solid #aaa;
+  background-color: rgb(161, 240, 161);
+}
+
+.refer_to_law_firm--panel {
+  padding: 5px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

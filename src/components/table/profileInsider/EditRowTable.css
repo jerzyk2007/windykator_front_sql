@@ -97,6 +97,7 @@
 }
 
 .edit_doc {
+  flex-grow: 1;
   font-family: "Source Sans 3", Calibri, sans-serif;
   font-size: 1.15rem;
   font-optical-sizing: auto;
@@ -169,6 +170,7 @@
 
 .edit_doc--select:focus {
   outline: 1px solid rgb(0, 0, 0);
+  outline: none;
 }
 
 .edit_doc--button {

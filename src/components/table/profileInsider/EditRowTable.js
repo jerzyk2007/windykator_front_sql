@@ -11,6 +11,7 @@ import EditDocBeCared from "./EditDocBeCared";
 import EditDataManagement from "./EditDataManagement";
 import DocumentsControlBL from "./DocumentsControlBL";
 import DocumentsControlChat from "./DocumentsControlChat";
+import ReferToLawFirm from "./ReferToLawFirm";
 import { changeSingleDoc } from "../utilsForTable/changeSingleDocument";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 
@@ -69,6 +70,15 @@ const EditRowTable = ({
     optionsDep: [],
   });
 
+  // dane dla przekzania do kancelarii
+  const [lawFirmData, setLawFirmData] = useState({
+    numerFv: rowData.NUMER_FV,
+    kontrahent: rowData.KONTRAHENT,
+    kwotaRoszczenia: "", // Zmieniamy na string, aby łatwiej obsługiwać formatowanie
+    kancelaria: "",
+    zapisz: false,
+  });
+
   //dodawane są notatki z czatu i logi przy zmianie np błąd doradcy, pobrany VAT
   const handleAddNote = (info, text) => {
     const oldNote = rowData.UWAGI_ASYSTENT;
@@ -105,6 +115,7 @@ const EditRowTable = ({
         id_document,
         documentItem: rowData,
         changeDeps: changeDepartment?.newDep ? changeDepartment.newDep : null,
+        lawFirmData,
       });
 
       if (roles.includes(120)) {
@@ -148,6 +159,7 @@ const EditRowTable = ({
           edit: false,
           singleDoc: {},
           controlDoc: {},
+          lawPartner: [],
         });
       }
     } catch (err) {
@@ -276,6 +288,14 @@ const EditRowTable = ({
           : false,
       });
     }
+
+    setLawFirmData((prev) => {
+      return {
+        ...prev,
+        numerFv: dataRowTable?.singleDoc.NUMER_FV,
+        kontrahent: dataRowTable?.singleDoc.KONTRAHENT,
+      };
+    });
   }, [dataRowTable]);
 
   return (
@@ -331,6 +351,15 @@ const EditRowTable = ({
                       usersurname={auth.usersurname}
                       managementDescription={managementDescription}
                       setManagementDescription={setManagementDescription}
+                    />
+                  )}
+                  {changePanel === "law-partner" && (
+                    <ReferToLawFirm
+                      rowData={rowData}
+                      lawPartner={dataRowTable.lawPartner}
+                      handleAddNote={handleAddNote}
+                      lawFirmData={lawFirmData}
+                      setLawFirmData={setLawFirmData}
                     />
                   )}
                 </section>
@@ -417,6 +446,7 @@ const EditRowTable = ({
                 edit: false,
                 singleDoc: {},
                 controlDoc: {},
+                lawPartner: [],
               })
             }
           >

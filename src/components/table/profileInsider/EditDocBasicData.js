@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import "./EditDocBasicData.css";
 
 const EditDocBasicData = ({
@@ -17,7 +16,7 @@ const EditDocBasicData = ({
   ];
 
   return (
-    <section className=" edit_doc edit_doc_basic-data">
+    <section className="edit_doc edit_doc_basic-data">
       <section className="edit_doc__container">
         <span className="edit_doc--title">Faktura:</span>
         <span className="edit_doc--content">{rowData.NUMER_FV}</span>

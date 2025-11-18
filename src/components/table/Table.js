@@ -53,6 +53,7 @@ const Table = ({
     edit: false,
     singleDoc: {},
     controlDoc: {},
+    lawPartner: [],
   });
 
   // sortowanie defaultowe tabeli, jeśli istnieje dana kolumna
@@ -155,6 +156,9 @@ const Table = ({
             controlDoc: response?.data?.controlDoc
               ? response.data.controlDoc
               : {},
+            lawPartner: response?.data?.lawPartner
+              ? response.data.lawPartner
+              : [],
           });
         }
         // }
