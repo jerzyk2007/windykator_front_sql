@@ -201,6 +201,8 @@ const EditRowTable = ({
   useEffect(() => {
     if (changePanel === "control-bl") {
       setToggleState(2);
+    } else if (changePanel === "law-partner") {
+      setToggleState(3);
     } else {
       setToggleState(1);
     }
@@ -408,9 +410,19 @@ const EditRowTable = ({
               }
             >
               <section className="edit-row-table_section-content">
-                <section className="section-data"></section>
-                <section className="section-data"></section>
-                <section className="section-data"></section>
+                <section className="edit-row-table_section-content-data">
+                  {changePanel === "law-partner" && (
+                    <ReferToLawFirm
+                      rowData={rowData}
+                      lawPartner={dataRowTable.lawPartner}
+                      handleAddNote={handleAddNote}
+                      lawFirmData={lawFirmData}
+                      setLawFirmData={setLawFirmData}
+                    />
+                  )}
+                </section>
+                <section className="edit-row-table_section-content-data"></section>
+                <section className="edit-row-table_section-content-data"></section>
               </section>
             </section>
           </section>

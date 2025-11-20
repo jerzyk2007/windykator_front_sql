@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./ReferToLawFirm.css";
 
@@ -34,13 +35,7 @@ const ReferToLawFirm = ({
   lawFirmData,
   setLawFirmData,
 }) => {
-  //   const [lawFirmData, setLawFirmData] = useState({
-  //     numerFv: "",
-  //     kontrahent: "",
-  //     kwotaRoszczenia: "", // Zmieniamy na string, aby łatwiej obsługiwać formatowanie
-  //     kancelaria: "",
-  //     zapisz: false,
-  //   });
+  const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   // Używamy dodatkowego stanu do przechowywania sformatowanej wartości do wyświetlenia w input
   const [displayKwotaRoszczenia, setDisplayKwotaRoszczenia] = useState("");
@@ -73,15 +68,29 @@ const ReferToLawFirm = ({
     });
   };
 
+  const getData = async () => {
+    try {
+      console.log("kontrahent");
+      // const contractorData = await axiosPrivateIntercept.get(
+      //   `/law-partner/get-contractor-data/${encodeURIComponent(
+      //     rowData.NUMER_FV
+      //   )}`
+      // );
+      // console.log(contractorData.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     const initialKwota = rowData.DO_ROZLICZENIA || 0;
     setLawFirmData((prev) => ({
       ...prev,
       kwotaRoszczenia: initialKwota,
     }));
-
     setDisplayKwotaRoszczenia(formatAmount(initialKwota));
-  }, [rowData]);
+    getData();
+  }, []);
 
   return (
     <section className="edit_doc">
@@ -96,18 +105,22 @@ const ReferToLawFirm = ({
         <span className="edit_doc--title">Kontrahent:</span>
         <span
           className={
-            lawFirmData?.kontrahent?.length > 140
-              ? "edit_doc--content-scroll"
-              : "edit_doc--content"
+            lawFirmData?.kontrahent?.length > 240
+              ? "refer_to_law_firm--content-scroll"
+              : "refer_to_law_firm--content"
           }
           style={
-            lawFirmData?.kontrahent?.length > 140
-              ? { overflowY: "auto", maxHeight: "80px" }
+            lawFirmData?.kontrahent?.length > 240
+              ? { overflowY: "auto", maxHeight: "160px" }
               : null
           }
         >
           {lawFirmData.kontrahent}
         </span>
+      </section>
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">NIP:</span>
+        <span className="edit_doc--content">{rowData.NIP}</span>
       </section>
       <section className="edit_doc__container">
         <span className="edit_doc--title">Kwota roszczenia:</span>
@@ -127,15 +140,9 @@ const ReferToLawFirm = ({
           value={lawFirmData?.kancelaria ? lawFirmData.kancelaria : ""}
           label="Wybierz kancelarię"
           onChange={(e) => {
-            // handleAddNote(
-            //   "Przekazano do kancelarii:",
-            //   e.target.options[e.target.selectedIndex].text
-            // );
             setLawFirmData((prev) => {
               return {
                 ...prev,
-                //     info: `Przekazano do kancelarii:,
-                //   ${e.target.options[e.target.selectedIndex].text} `,
                 kancelaria: e.target.value,
               };
             });
