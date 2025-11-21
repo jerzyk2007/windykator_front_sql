@@ -24,6 +24,7 @@ const EditRowTable = ({
   roles,
   nextDoc,
   getSingleRow,
+  clearRowTable,
 }) => {
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
@@ -155,12 +156,7 @@ const EditRowTable = ({
       await updateDocuments(changeSingleDoc(rowData));
 
       if (type !== "no_exit") {
-        setDataRowTable({
-          edit: false,
-          singleDoc: {},
-          controlDoc: {},
-          lawPartner: [],
-        });
+        setDataRowTable(clearRowTable);
       }
     } catch (err) {
       console.error(err);
@@ -453,14 +449,7 @@ const EditRowTable = ({
             variant="contained"
             size="large"
             color="error"
-            onClick={() =>
-              setDataRowTable({
-                edit: false,
-                singleDoc: {},
-                controlDoc: {},
-                lawPartner: [],
-              })
-            }
+            onClick={() => setDataRowTable(clearRowTable)}
           >
             Anuluj
           </Button>

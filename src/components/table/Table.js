@@ -15,14 +15,22 @@ import { pl } from "date-fns/locale";
 
 import useData from "../hooks/useData";
 import useWindowSize from "../hooks/useWindow";
-import QuickTableNote from "./profileInsider/QuickTableNote";
+// import QuickTableNote from "./profileInsider/QuickTableNote";
 import EditRowTable from "./profileInsider/EditRowTable";
 import { Box, Button } from "@mui/material";
 import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
 import TableButtonInfo from "./TableButtonInfo";
+import EditRowTableLawPartner from "./profilePartner/EditRowTableLawPartner";
 import PleaseWait from "../PleaseWait";
 
 import "./Table.css";
+
+const clearRowTable = {
+  edit: false,
+  singleDoc: {},
+  controlDoc: {},
+  lawPartner: [],
+};
 
 const Table = ({
   documents,
@@ -48,7 +56,7 @@ const Table = ({
   );
   const [tableSize, setTableSize] = useState(500);
   const [data, setData] = useState([]);
-  const [quickNote, setQuickNote] = useState("");
+  // const [quickNote, setQuickNote] = useState("");
   const [dataRowTable, setDataRowTable] = useState({
     edit: false,
     singleDoc: {},
@@ -137,6 +145,7 @@ const Table = ({
   };
 
   const getSingleRow = async (id, type) => {
+    console.log(id);
     const getRow = documents.filter((row) => row.id_document === id);
 
     if (getRow.length > 0) {
@@ -159,6 +168,16 @@ const Table = ({
             lawPartner: response?.data?.lawPartner
               ? response.data.lawPartner
               : [],
+          });
+        } else if (profile === "partner") {
+          const response = await axiosPrivateIntercept.get(
+            `/law-partner/get-single-document/${id}`
+          );
+          setDataRowTable({
+            edit: true,
+            singleDoc: response?.data ? response.data : {},
+            controlDoc: {},
+            lawPartner: [],
           });
         }
         // }
@@ -401,26 +420,24 @@ const Table = ({
     setNextDoc(visibleData);
     tableDataSize(table.getPrePaginationRowModel().rows);
   }, [table.getPrePaginationRowModel().rows, columnVisibility]);
-
   return (
     <section
       className="table"
       style={dataRowTable.edit ? { display: "flex" } : null}
     >
       <ThemeProvider theme={theme}>
-        {quickNote && (
+        {/* {quickNote && (
           <QuickTableNote
             quickNote={quickNote}
             setQuickNote={setQuickNote}
             updateDocuments={updateDocuments}
           />
-        )}
+        )} */}
 
         {pleaseWait ? (
           <PleaseWait />
-        ) : (
-          [110, 120, 2000].some((role) => auth?.roles?.includes(role)) &&
-          profile === "insider" &&
+        ) : [110, 120, 2000].some((role) => auth?.roles?.includes(role)) &&
+          profile === "insider" ? (
           dataRowTable.edit && (
             <EditRowTable
               dataRowTable={dataRowTable}
@@ -429,9 +446,22 @@ const Table = ({
               roles={roles}
               nextDoc={nextDoc}
               getSingleRow={getSingleRow}
+              clearRowTable={clearRowTable}
             />
           )
-        )}
+        ) : [500].some((role) => auth?.roles?.includes(role)) ? (
+          profile === "partner" &&
+          dataRowTable.edit && (
+            <EditRowTableLawPartner
+              dataRowTable={dataRowTable}
+              setDataRowTable={setDataRowTable}
+              updateDocuments={updateDocuments}
+              nextDoc={nextDoc}
+              getSingleRow={getSingleRow}
+              clearRowTable={clearRowTable}
+            />
+          )
+        ) : null}
 
         <LocalizationProvider
           dateAdapter={AdapterDateFns}

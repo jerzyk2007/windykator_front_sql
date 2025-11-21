@@ -91,6 +91,7 @@
   min-width: 500px;
   min-height: 500px;
   padding: 1px;
+  margin: 1px;
   overflow: auto;
   display: flex;
   flex-direction: column;
