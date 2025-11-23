@@ -17,8 +17,7 @@ const muiTableBodyCellProps = {
   },
 };
 
-// export const prepareColumns = (columnsData, data) => {
-export const prepareColumns = (columnsData) => {
+export const prepareColumnsInsider = (columnsData) => {
   const update = columnsData.map((item) => {
     const modifiedItem = { ...item };
 
@@ -117,14 +116,6 @@ export const prepareColumns = (columnsData) => {
         return originalRow[item.accessorKey]
           ? originalRow[item.accessorKey]
           : "BRAK";
-      };
-    }
-
-    if (item.accessorKey === "NR_SZKODY") {
-      modifiedItem.accessorFn = (originalRow) => {
-        return originalRow[item.accessorKey]
-          ? originalRow[item.accessorKey]
-          : "";
       };
     }
 
@@ -274,27 +265,6 @@ export const prepareColumns = (columnsData) => {
         return formattedSalary;
       };
     }
-
-    // if (item.accessorKey === "KWOTA_WINDYKOWANA_BECARED") {
-    //   modifiedItem.accessorFn = (originalRow) => {
-    //     return originalRow[item.accessorKey]
-    //       ? originalRow[item.accessorKey]
-    //       : " ";
-    //   };
-    //   modifiedItem.Cell = ({ cell }) => {
-    //     const value = cell.getValue();
-    //     const formattedSalary =
-    //       value !== undefined && value !== null && value !== 0
-    //         ? value.toLocaleString("pl-PL", {
-    //           minimumFractionDigits: 2,
-    //           maximumFractionDigits: 2,
-    //           useGrouping: true,
-    //         })
-    //         : "0,00"; // Zastąp puste pola zerem
-
-    //     return `${formattedSalary}`;
-    //   };
-    // }
     if (item.accessorKey === "KWOTA_WINDYKOWANA_BECARED") {
       modifiedItem.accessorFn = (originalRow) => {
         return originalRow[item.accessorKey] !== null &&
@@ -316,10 +286,175 @@ export const prepareColumns = (columnsData) => {
               })
             : value; // Wartość pozostaje bez zmian, jeśli to nie liczba (np. 'BRAK')
 
-        // return <span>{formattedValue}</span>; // Zwracamy sformatowaną wartość
         return formattedValue; // Zwracamy sformatowaną wartość
       };
     }
+    modifiedItem.columnFilterModeOptions = [];
+    delete modifiedItem.type;
+    return modifiedItem;
+  });
+  return update;
+};
+
+// kolumny dla kancelarii
+export const prepareColumnsPartner = (columnsData) => {
+  const update = columnsData.map((item) => {
+    const modifiedItem = { ...item };
+
+    modifiedItem.muiTableBodyCellProps = muiTableBodyCellProps;
+
+    if (item.filterVariant === "date-range") {
+      modifiedItem.accessorFn = (originalRow) => {
+        if (originalRow[item.accessorKey]) {
+          const date = new Date(originalRow[item.accessorKey]);
+          // ustaw godzinę na początek dnia, by uniknąć problemów z filtrowaniem
+          date.setHours(0, 0, 0, 0);
+          return date;
+        }
+        return null;
+      };
+
+      modifiedItem.Cell = ({ cell }) => {
+        // Parsowanie wartości komórki jako data
+        if (cell.getValue()) {
+          const date = new Date(cell.getValue());
+          // Sprawdzenie, czy data jest prawidłowa
+          if (!isNaN(date)) {
+            return format(date, "yyyy-MM-dd");
+          }
+        }
+        return null;
+      };
+    }
+
+    if (item.accessorKey === "KONTRAHENT") {
+      modifiedItem.muiTableBodyCellProps = ({ cell }) => {
+        // const checkClient = cell.row.original.ZAZNACZ_KONTRAHENTA;
+
+        return {
+          align: "left",
+          sx: {
+            ...muiTableBodyCellProps.sx,
+            // backgroundColor:
+            //   cell.column.id === "KONTRAHENT" && checkClient === "TAK"
+            //     ? "#7fffd4"
+            //     : "white",
+          },
+        };
+      };
+      modifiedItem.filterFn = "contains";
+    }
+
+    if (item.accessorKey === "KWOTA_ROSZCZENIA_DO_KANCELARII") {
+      modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
+        ...muiTableBodyCellProps,
+        sx: {
+          ...muiTableBodyCellProps.sx,
+          backgroundColor: "rgba(248, 255, 152, .2)",
+        },
+      });
+    }
+
+    if (item.accessorKey === "OPIS_DOKUMENTU") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return originalRow[item.accessorKey]
+          ? originalRow[item.accessorKey]
+          : "BRAK";
+      };
+    }
+
+    if (item.accessorKey === "CZAT_KANCELARIA") {
+      modifiedItem.accessorFn = (originalRow) => {
+        const arrayData = originalRow.CZAT_KANCELARIA;
+        if (!arrayData) return "";
+        try {
+          const dzialania =
+            Array.isArray(arrayData) && arrayData.length > 0
+              ? arrayData.length === 1
+                ? arrayData[0]
+                : `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${`${
+                    arrayData[arrayData.length - 1].date
+                  } - ${arrayData[arrayData.length - 1].username} - ${
+                    arrayData[arrayData.length - 1].note
+                  }`}`
+              : "";
+          return dzialania.length > 120
+            ? dzialania.slice(0, 120) + " …"
+            : dzialania;
+          // return "BRAK";
+        } catch {
+          return "BRAK";
+        }
+      };
+      modifiedItem.muiTableBodyCellProps = {
+        align: "left",
+        sx: {
+          ...muiTableBodyCellProps.sx,
+          // backgroundColor: "rgba(248, 255, 152, .2)", // nadpisanie koloru tła
+        },
+      };
+    }
+
+    // if (item.accessorKey === "CZAT_KANCELARIA") {
+    //   modifiedItem.accessorFn = (originalRow) => {
+    //     const arrayData = originalRow.CZAT_KANCELARIA;
+    //     if (!arrayData) return "";
+
+    //     try {
+    //       if (Array.isArray(arrayData) && arrayData.length > 0) {
+    //         if (arrayData.length === 1) {
+    //           return arrayData[0];
+    //         } else {
+    //           const last = arrayData[arrayData.length - 1];
+    //           return (
+    //             <div>
+    //               <div>
+    //                 <strong>
+    //                   Liczba wcześniejszych wpisów: {arrayData.length - 1}
+    //                 </strong>
+    //               </div>
+    //               <div>{`${last.date} - ${last.username} - ${last.note}`}</div>
+    //             </div>
+    //           );
+    //         }
+    //       }
+    //       return "";
+    //     } catch {
+    //       return "BRAK";
+    //     }
+    //   };
+
+    //   modifiedItem.muiTableBodyCellProps = {
+    //     align: "left",
+    //     sx: {
+    //       ...muiTableBodyCellProps.sx,
+    //       backgroundColor: "rgba(248, 255, 152, .2)",
+    //     },
+    //   };
+    // }
+
+    if (item.filterVariant === "none") {
+      modifiedItem.enableColumnFilter = false;
+      delete modifiedItem.filterVariant;
+    }
+
+    if (item.type === "money") {
+      modifiedItem.Cell = ({ cell }) => {
+        const value = cell.getValue();
+
+        const formattedSalary =
+          value !== undefined && value !== null && value !== 0
+            ? value.toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+              })
+            : "0,00";
+
+        return formattedSalary;
+      };
+    }
+
     modifiedItem.columnFilterModeOptions = [];
     delete modifiedItem.type;
     return modifiedItem;

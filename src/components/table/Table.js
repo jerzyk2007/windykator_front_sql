@@ -70,8 +70,8 @@ const Table = ({
     if (profile === "insider" && has("ILE_DNI_PO_TERMINIE")) {
       return [{ id: "ILE_DNI_PO_TERMINIE", desc: false }];
     }
-    if (profile === "partner" && has("DATA_PRZEKAZANIA")) {
-      return [{ id: "DATA_PRZEKAZANIA", desc: false }];
+    if (profile === "partner" && has("DATA_PRZEKAZANIA_SPRAWY")) {
+      return [{ id: "DATA_PRZEKAZANIA_SPRAWY", desc: true }];
     }
     return [];
   });
@@ -145,7 +145,6 @@ const Table = ({
   };
 
   const getSingleRow = async (id, type) => {
-    console.log(id);
     const getRow = documents.filter((row) => row.id_document === id);
 
     if (getRow.length > 0) {
@@ -417,6 +416,8 @@ const Table = ({
     const visibleData = table
       .getPrePaginationRowModel()
       .rows.map((row) => row.original.id_document);
+
+    // console.log(table.getPrePaginationRowModel().rows);
     setNextDoc(visibleData);
     tableDataSize(table.getPrePaginationRowModel().rows);
   }, [table.getPrePaginationRowModel().rows, columnVisibility]);

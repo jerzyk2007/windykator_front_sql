@@ -58,6 +58,8 @@
 
 .edit_row_table-buttons {
   flex-basis: 33%;
+  height: 50px;
+  max-height: 50px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;

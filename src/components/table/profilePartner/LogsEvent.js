@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@mui/material";
-import "./ChatLawPartner.css";
+import "./LogsEvent.css";
 
-const ChatLawPartner = ({ chatData = [], note, setNote, handleAddNote }) => {
+const LogsEvent = ({ logsData = [] }) => {
   const [clickedIndex, setClickedIndex] = useState(null);
   const notesRef = useRef(null); //  Referencja do kontenera z notatkami
 
@@ -47,7 +47,7 @@ const ChatLawPartner = ({ chatData = [], note, setNote, handleAddNote }) => {
     setTooltip((prev) => ({ ...prev, visible: false }));
   };
 
-  const notesItem = chatData?.map((item, index) => {
+  const notesItem = logsData?.map((item, index) => {
     return (
       <section className="chat_law_partner__container" key={index}>
         <span>{item.date}</span>
@@ -79,39 +79,15 @@ const ChatLawPartner = ({ chatData = [], note, setNote, handleAddNote }) => {
     if (notesRef.current) {
       notesRef.current.scrollTop = notesRef.current.scrollHeight;
     }
-  }, [chatData]);
+  }, [logsData]);
 
   return (
     <>
-      <section className="chat_law_partner">
-        {/* <span className="chat_law_partner--title">Panel Komunikacji</span> */}
+      <section className="chat_log_event">
         {/*  Przypięcie refa do elementu */}
-        <div className="chat_law_partner--notes" ref={notesRef}>
+        <div className="chat_log_event--notes" ref={notesRef}>
           {notesItem}
         </div>
-        <textarea
-          className="chat_law_partner--edit"
-          placeholder="dodaj informacje"
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-        />
-        <section className="chat_law_partner__panel">
-          <Button
-            disabled={!note ? true : false}
-            variant="contained"
-            color="error"
-            onClick={() => setNote("")}
-          >
-            Usuń
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => handleAddNote(note, "chat")}
-            disabled={!note ? true : false}
-          >
-            Dodaj
-          </Button>
-        </section>
       </section>
 
       {tooltip.visible &&
@@ -131,4 +107,4 @@ const ChatLawPartner = ({ chatData = [], note, setNote, handleAddNote }) => {
   );
 };
 
-export default ChatLawPartner;
+export default LogsEvent;

@@ -3,7 +3,10 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import useData from "../hooks/useData";
 import PleaseWait from "../PleaseWait";
 import Table from "./Table";
-import { prepareColumns } from "./utilsForTable/PrepareColumns";
+import {
+  prepareColumnsInsider,
+  prepareColumnsPartner,
+} from "./utilsForTable/PrepareColumns";
 import "./PrepareTable.css";
 
 // const PrepareTable = ({ info, raportDocuments }) => {
@@ -49,7 +52,6 @@ const PrepareTable = ({ info, profile }) => {
           `/documents/get-data-table/${auth.id_user}/${info}/${profile}`,
           { signal: controller.signal }
         );
-        console.log(dataTable.data);
         setDocuments(dataTable.data);
         const tableSettingsColumns = await axiosPrivateIntercept.get(
           `/table/get-settings-colums-table/${auth.id_user}/${profile}`,
@@ -58,8 +60,12 @@ const PrepareTable = ({ info, profile }) => {
 
         setTableSettings(tableSettingsColumns.data.tableSettings);
 
-        const update = prepareColumns(tableSettingsColumns.data.columns);
-
+        const update =
+          profile === "insider"
+            ? prepareColumnsInsider(tableSettingsColumns.data.columns)
+            : profile === "partner"
+            ? prepareColumnsPartner(tableSettingsColumns.data.columns)
+            : [];
         setColumns(update);
         setPleaseWait(false);
       } catch (err) {

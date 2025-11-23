@@ -3,6 +3,7 @@ import useData from "../../hooks/useData";
 import { Button } from "@mui/material";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 import ChatLawPartner from "./ChatLawPartner";
+import LogsEvent from "./LogsEvent";
 import EditDocBasicDataLawPartner from "./EditDocBasicDataLawPartner";
 import "./EditRowTableLawPartner.css";
 
@@ -20,6 +21,13 @@ const EditRowTableLawPartner = ({
   const [nextPrevDoc, SetNextPrevDoc] = useState({
     prev: null,
     next: null,
+  });
+  // stan zmiany z czat na logi
+  const [panel, setPanel] = useState("chat");
+  // stan nowych wpisów dla chat i logów
+  const [chatLog, setChatLog] = useState({
+    CZAT_KANCELARIA: [],
+    CZAT_LOGI: [],
   });
   const [toggleState, setToggleState] = useState(1);
 
@@ -47,8 +55,15 @@ const EditRowTableLawPartner = ({
   };
 
   //dodawane są notatki z czatu i logi przy zmianie np błąd doradcy, pobrany VAT
-  const handleAddNote = (info) => {
-    const oldChat = rowData.CHAT_LAW_PARTNER;
+  const handleAddNote = (info, type) => {
+    console.log(info);
+    console.log(type);
+    const oldChat =
+      type === "chat"
+        ? [...(rowData.CZAT_KANCELARIA ?? [])]
+        : type === "logi"
+        ? [...(rowData.CZAT_LOGI ?? [])]
+        : [];
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -69,27 +84,46 @@ const EditRowTableLawPartner = ({
     } else {
       newChat = [note];
     }
+    const saveInfo = {
+      chat: "CZAT_KANCELARIA",
+      logi: "CZAT_LOGI",
+    };
+
+    setChatLog((prev) => {
+      return {
+        ...prev,
+        [saveInfo[type]]: [...(prev[saveInfo[type]] ?? []), note],
+      };
+    });
+
     setRowData((prev) => {
       return {
         ...prev,
-        CHAT_LAW_PARTNER: newChat,
+        [saveInfo[type]]: newChat,
       };
     });
     setNote("");
   };
 
   useEffect(() => {
+    // console.log(nextDoc);
+    // console.log(rowData);
+
     const index = nextDoc.indexOf(rowData.id_document);
     SetNextPrevDoc({
       prev: nextDoc[index - 1] ? nextDoc[index - 1] : null,
       next: nextDoc[index + 1] ? nextDoc[index + 1] : null,
     });
-  }, [rowData.NUMER_FV]);
+    // }, [rowData?.NUMER_DOKUMENTU]);
+  }, [rowData]);
 
   useEffect(() => {
-    console.log(dataRowTable.singleDoc);
     setRowData(dataRowTable?.singleDoc ? dataRowTable.singleDoc : {});
   }, [dataRowTable]);
+
+  useEffect(() => {
+    // console.log(rowData);
+  }, [rowData]);
 
   return (
     <section className="edit-row-table-law-partner">
@@ -105,13 +139,40 @@ const EditRowTableLawPartner = ({
             <section className="edit-row-table_section-content-data">
               <EditDocBasicDataLawPartner rowData={rowData} />
             </section>
-            <section className="edit-row-table_section-content-data">
-              <ChatLawPartner
-                chatData={rowData.CHAT_LAW_PARTNER}
-                note={note}
-                setNote={setNote}
-                handleAddNote={handleAddNote}
-              />
+            <section className="edit-row-table_section-content-data edit-row-table-law-partner_section-content-data">
+              <select
+                className="edit-row-table-law-partner--select"
+                style={
+                  panel === "chat"
+                    ? { backgroundColor: "rgb(166, 255, 131)" }
+                    : panel === "logi"
+                    ? { backgroundColor: "rgba(253, 255, 126, 1)" }
+                    : null
+                }
+                value={panel}
+                onChange={(e) => {
+                  setPanel(e.target.value);
+                }}
+              >
+                <option value="chat">Panel Komunikacji</option>
+                <option value="logi">Dziennik zmian</option>
+              </select>
+              {panel === "chat" && (
+                <ChatLawPartner
+                  chatData={rowData.CZAT_KANCELARIA}
+                  note={note}
+                  setNote={setNote}
+                  handleAddNote={handleAddNote}
+                />
+              )}
+              {panel === "logi" && (
+                <LogsEvent
+                  logsData={[]}
+                  note={note}
+                  setNote={setNote}
+                  handleAddNote={handleAddNote}
+                />
+              )}
             </section>
             <section
               className="edit-row-table_section-content-data"

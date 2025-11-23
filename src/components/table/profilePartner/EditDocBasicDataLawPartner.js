@@ -1,36 +1,69 @@
 import "./EditDocBasicDataLawPartner.css";
 
 const EditDocBasicDataLawPartner = ({ rowData }) => {
+  // console.log(rowData);
+  const itemsSettlements = (rowData?.WYKAZ_SPLACONEJ_KWOTY_FK ?? [])
+    .map((item, index) => {
+      return (
+        <section
+          key={index}
+          className="law_partner_basic_data_settlements_container"
+        >
+          <span>{item.data}</span>
+          <span>{item.symbol}</span>
+          <span>
+            {item?.kwota
+              ? item.kwota.toLocaleString("pl-PL", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                  useGrouping: true,
+                })
+              : "brak"}
+          </span>
+        </section>
+      );
+    })
+    .filter(Boolean);
+
   return (
-    <section className="edit_doc edit_doc_basic-data">
+    <section className="edit_doc edit_doc_basic-data law_partner_basic-data">
       <section className="edit_doc__container">
         <span className="edit_doc--title">Data przekazania:</span>
-        <span className="edit_doc--content">{rowData.DATA_PRZEKAZANIA}</span>
+        <span className="edit_doc--content">
+          {rowData.DATA_PRZEKAZANIA_SPRAWY}
+        </span>
+      </section>
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">Data przyjęcia sprawy:</span>
+        <span className="edit_doc--content">
+          {rowData.DATA_PRZYJECIA_SPRAWY}
+        </span>
       </section>
       <section className="edit_doc__container">
         <span className="edit_doc--title">Faktura:</span>
-        <span className="edit_doc--content">{rowData.NUMER_FV}</span>
+        <span className="edit_doc--content">{rowData.NUMER_DOKUMENTU}</span>
       </section>
+      {rowData?.OPIS_DOKUMENTU && (
+        <section className="edit_doc__container">
+          <span className="edit_doc--title">Opis dokumentu:</span>
+          <span className="edit_doc--content_law_partner">
+            {rowData.OPIS_DOKUMENTU}
+          </span>
+        </section>
+      )}
 
       <section className="edit_doc__container">
-        <span className="edit_doc--title">Po terminie:</span>
-        <span
-          className="edit_doc--content"
-          style={
-            rowData.ILE_DNI_PO_TERMINIE > 0
-              ? { backgroundColor: "rgba(240, 69, 69, .7)" }
-              : null
-          }
-        >
-          {rowData.ILE_DNI_PO_TERMINIE}
+        <span className="edit_doc--title">Data wystawienia dok.</span>
+        <span className="edit_doc--content">
+          {rowData.DATA_WYSTAWIENIA_DOKUMENTU}
         </span>
       </section>
 
       <section className="edit_doc__container">
-        <span className="edit_doc--title">Brutto:</span>
+        <span className="edit_doc--title">Kwota brutto dok.</span>
         <span className="edit_doc--content">
-          {rowData?.BRUTTO
-            ? rowData.BRUTTO.toLocaleString("pl-PL", {
+          {rowData?.KWOTA_BRUTTO_DOKUMENTU
+            ? rowData.KWOTA_BRUTTO_DOKUMENTU.toLocaleString("pl-PL", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
                 useGrouping: true,
@@ -39,37 +72,14 @@ const EditDocBasicDataLawPartner = ({ rowData }) => {
         </span>
       </section>
 
-      {rowData.AREA === "BLACHARNIA" && (
-        <section className="edit_doc__container">
-          <span className="edit_doc--title">50% VAT:</span>
-          <span
-            className="edit_doc--content"
-            style={{
-              backgroundColor:
-                Math.abs(
-                  (rowData.BRUTTO - rowData.NETTO) / 2 - rowData.DO_ROZLICZENIA
-                ) <= 1
-                  ? "rgba(240, 69, 69, .7)"
-                  : null,
-            }}
-          >
-            {((rowData.BRUTTO - rowData.NETTO) / 2).toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })}
-          </span>
-        </section>
-      )}
-
       <section className="edit_doc__container">
         <span className="edit_doc--title">Kwota roszczenia:</span>
         <span
           className="edit_doc--content"
           style={{ backgroundColor: "rgba(252, 255, 206, 1)" }}
         >
-          {rowData.KWOTA_ROSZCZENIA
-            ? rowData.KWOTA_ROSZCZENIA.toLocaleString("pl-PL", {
+          {rowData.KWOTA_ROSZCZENIA_DO_KANCELARII
+            ? rowData.KWOTA_ROSZCZENIA_DO_KANCELARII.toLocaleString("pl-PL", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
                 useGrouping: true,
@@ -78,76 +88,6 @@ const EditDocBasicDataLawPartner = ({ rowData }) => {
         </span>
       </section>
 
-      {rowData.AREA === "SERWIS" ||
-        (rowData.FIRMA === "RAC" && (
-          <section className="edit_doc__container">
-            <span className="edit_doc--title">Typ płatności:</span>
-            <span
-              className="edit_doc--content"
-              style={
-                rowData.TYP_PLATNOSCI === "Gotówka"
-                  ? { backgroundColor: "rgba(240, 69, 69, .7)" }
-                  : null
-              }
-            >
-              {rowData.TYP_PLATNOSCI}
-            </span>
-          </section>
-        ))}
-
-      {rowData.AREA === "BLACHARNIA" && (
-        <section className="edit_doc__container">
-          <span className="edit_doc--title">Nr szkody:</span>
-          <span className="edit_doc--content">{rowData.NR_SZKODY}</span>
-        </section>
-      )}
-      {rowData.AREA !== "BLACHARNIA" && rowData.FIRMA !== "RAC" && (
-        <section className="edit_doc__container">
-          <span className="edit_doc--title">Nr autoryzacji:</span>
-          <span className="edit_doc--content">{rowData.NR_AUTORYZACJI}</span>
-        </section>
-      )}
-
-      {rowData.AREA !== "CZĘŚCI" &&
-        rowData.AREA !== "SAMOCHODY NOWE" &&
-        rowData.FIRMA !== "RAC" && (
-          <section className="edit_doc__container">
-            <span className="edit_doc--title">Nr rejestracyjny:</span>
-            <span className="edit_doc--content">
-              {rowData.NR_REJESTRACYJNY}
-            </span>
-          </section>
-        )}
-      {rowData.AREA !== "CZĘŚCI" &&
-        rowData.AREA !== "BLACHARNIA" &&
-        rowData.FIRMA !== "RAC" && (
-          <section className="edit_doc__container">
-            <span className="edit_doc--title">Nr VIN:</span>
-            <span className="edit_doc--content">{rowData.VIN}</span>
-          </section>
-        )}
-
-      <section className="edit_doc__container">
-        <span className="edit_doc--title">Doradca:</span>
-        <span className="edit_doc--content">{rowData.DORADCA}</span>
-      </section>
-      <section className="edit_doc__container">
-        <span className="edit_doc--title">Kontrahent:</span>
-        <span
-          className={
-            rowData?.KONTRAHENT?.length > 140
-              ? "edit_doc--content-scroll"
-              : "edit_doc--content"
-          }
-          style={
-            rowData?.KONTRAHENT?.length > 140 && rowData.AREA === "BLACHARNIA"
-              ? { overflowY: "auto", maxHeight: "80px" }
-              : null
-          }
-        >
-          {rowData.KONTRAHENT}
-        </span>
-      </section>
       <section className="edit_doc__container">
         <span className="edit_doc--title">Kontrahent:</span>
         <span
@@ -161,31 +101,59 @@ const EditDocBasicDataLawPartner = ({ rowData }) => {
           {rowData?.KONTRAHENT}
         </span>
       </section>
-
-      {rowData.AREA !== "BLACHARNIA" && (
-        <section className="edit_doc__container">
-          <span className="edit_doc--title">NIP:</span>
-          <span className="edit_doc--content">{rowData.NIP}</span>
-        </section>
-      )}
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">NIP:</span>
+        <span className="edit_doc--content">{rowData?.NIP}</span>
+      </section>
 
       <section className="edit_doc__container">
-        <span className="edit_doc--title">Uwagi z faktury:</span>
-        <span
-          className={
-            rowData?.UWAGI_Z_FAKTURY?.length > 70
-              ? "edit_doc--content-scroll"
-              : "edit_doc--content"
-          }
-          style={
-            rowData?.UWAGI_Z_FAKTURY?.length > 70 &&
-            rowData.AREA === "BLACHARNIA"
-              ? { overflowY: "auto", maxHeight: "70px" }
-              : null
-          }
-        >
-          {rowData.UWAGI_Z_FAKTURY}
+        <span className="edit_doc--title">Oddział:</span>
+        <span className="edit_doc--content content_law_partner--content">
+          <span className="edit_doc--content">
+            {rowData?.ODDZIAL?.LOKALIZACJA}
+          </span>
+          <span className="edit_doc--content">
+            {`${rowData?.ODDZIAL?.DZIAL} ${rowData?.ODDZIAL?.OBSZAR}`}
+          </span>
         </span>
+      </section>
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">Pozostała należność FK:</span>
+        <span className="edit_doc--content">
+          {rowData?.POZOSTALA_NALEZNOSC_FK
+            ? rowData.POZOSTALA_NALEZNOSC_FK.toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+              })
+            : "Brak danych"}
+        </span>
+      </section>
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">Suma spłaconej kwoty FK:</span>
+        <span className="edit_doc--content">
+          {rowData?.SUMA_SPLACONEJ_KWOTY_FK
+            ? rowData.SUMA_SPLACONEJ_KWOTY_FK.toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+              })
+            : "Brak danych"}
+        </span>
+      </section>
+      <section className="edit_doc__container">
+        <section className="law_partner_basic_data_settlements">
+          <span className="law_partner_basic_data_settlements--title">
+            Wykaz spłaconych kwot
+          </span>
+          {itemsSettlements.length ? (
+            itemsSettlements
+          ) : (
+            <span style={{ textAlign: "center", color: "red" }}>
+              Brak wpłat
+            </span>
+          )}
+        </section>
       </section>
     </section>
   );

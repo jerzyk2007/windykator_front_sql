@@ -1,0 +1,13 @@
+.chat_log_event {
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+}
+.chat_log_event--notes {
+  flex-grow: 1;
+  margin: 4px 2px;
+  padding: 2px;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  overflow: auto;
+}

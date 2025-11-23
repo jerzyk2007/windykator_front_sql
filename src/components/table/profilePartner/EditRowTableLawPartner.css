@@ -14,3 +14,23 @@
   flex-grow: 1;
   display: flex;
 }
+
+.edit-row-table-law-partner--select {
+  width: 95%;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2px;
+  /* margin: 2px; */
+}
+.edit-row-table-law-partner_section-content-data {
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.edit-row-table-law-partner--select:focus {
+  outline: 1px solid rgb(0, 0, 0);
+  outline: none;
+}
