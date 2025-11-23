@@ -70,7 +70,7 @@ const ChatLawPartner = ({ chatData = [], note, setNote, handleAddNote }) => {
           {item.username}
         </span>
         <span>{" - "}</span>
-        <span>{item.note}</span>
+        <span style={{ whiteSpace: "pre-wrap" }}>{item.note}</span>
       </section>
     );
   });

@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import useData from "../../hooks/useData";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 import ChatLawPartner from "./ChatLawPartner";
 import LogsEvent from "./LogsEvent";
 import EditDocBasicDataLawPartner from "./EditDocBasicDataLawPartner";
+import EditDocActionsDataLawPartner from "./EditDocActionsDataLawPartner";
+import AcceptCasePanel from "./AcceptCasePanel";
+import { changeSingleDocLawPartner } from "../utilsForTable/changeSingleDocument";
 import "./EditRowTableLawPartner.css";
 
 const EditRowTableLawPartner = ({
@@ -15,6 +19,7 @@ const EditRowTableLawPartner = ({
   getSingleRow,
   clearRowTable,
 }) => {
+  const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const [rowData, setRowData] = useState([]);
   const [note, setNote] = useState("");
@@ -32,10 +37,15 @@ const EditRowTableLawPartner = ({
   const [toggleState, setToggleState] = useState(1);
 
   const handleSaveData = async (type = "exit") => {
-    const { id_document, NUMER_FV, FIRMA } = rowData;
-
+    const { id_document } = rowData;
     try {
-      // await updateDocuments(changeSingleDoc(rowData));
+      await axiosPrivateIntercept.patch(`/law-partner/change-single-document`, {
+        id_document,
+        document: rowData,
+        chatLog,
+      });
+
+      await updateDocuments(changeSingleDocLawPartner(rowData));
 
       if (type !== "no_exit") {
         setDataRowTable(clearRowTable);
@@ -56,8 +66,6 @@ const EditRowTableLawPartner = ({
 
   //dodawane są notatki z czatu i logi przy zmianie np błąd doradcy, pobrany VAT
   const handleAddNote = (info, type) => {
-    console.log(info);
-    console.log(type);
     const oldChat =
       type === "chat"
         ? [...(rowData.CZAT_KANCELARIA ?? [])]
@@ -95,7 +103,6 @@ const EditRowTableLawPartner = ({
         [saveInfo[type]]: [...(prev[saveInfo[type]] ?? []), note],
       };
     });
-
     setRowData((prev) => {
       return {
         ...prev,
@@ -139,45 +146,60 @@ const EditRowTableLawPartner = ({
             <section className="edit-row-table_section-content-data">
               <EditDocBasicDataLawPartner rowData={rowData} />
             </section>
-            <section className="edit-row-table_section-content-data edit-row-table-law-partner_section-content-data">
-              <select
-                className="edit-row-table-law-partner--select"
-                style={
-                  panel === "chat"
-                    ? { backgroundColor: "rgb(166, 255, 131)" }
-                    : panel === "logi"
-                    ? { backgroundColor: "rgba(253, 255, 126, 1)" }
-                    : null
-                }
-                value={panel}
-                onChange={(e) => {
-                  setPanel(e.target.value);
-                }}
+            {rowData?.DATA_PRZYJECIA_SPRAWY ? (
+              <section className="edit-row-table_section-content-data edit-row-table-law-partner_section-content-data">
+                <select
+                  className="edit-row-table-law-partner--select"
+                  style={
+                    panel === "chat"
+                      ? { backgroundColor: "rgb(166, 255, 131)" }
+                      : panel === "logi"
+                      ? { backgroundColor: "rgba(253, 255, 126, 1)" }
+                      : null
+                  }
+                  value={panel}
+                  onChange={(e) => {
+                    setPanel(e.target.value);
+                  }}
+                >
+                  <option value="chat">Panel Komunikacji</option>
+                  <option value="logi">Dziennik zmian</option>
+                </select>
+                {panel === "chat" && (
+                  <ChatLawPartner
+                    chatData={rowData.CZAT_KANCELARIA}
+                    note={note}
+                    setNote={setNote}
+                    handleAddNote={handleAddNote}
+                  />
+                )}
+                {panel === "logi" && (
+                  <LogsEvent
+                    logsData={[]}
+                    note={note}
+                    setNote={setNote}
+                    handleAddNote={handleAddNote}
+                  />
+                )}
+              </section>
+            ) : (
+              <section className="edit-row-table_section-content-data">
+                <AcceptCasePanel
+                  rowData={rowData}
+                  updateDocuments={updateDocuments}
+                />
+              </section>
+            )}
+            {rowData?.DATA_PRZYJECIA_SPRAWY ? (
+              <section
+                className="edit-row-table_section-content-data"
+                // style={{ backgroundColor: "yellow" }}
               >
-                <option value="chat">Panel Komunikacji</option>
-                <option value="logi">Dziennik zmian</option>
-              </select>
-              {panel === "chat" && (
-                <ChatLawPartner
-                  chatData={rowData.CZAT_KANCELARIA}
-                  note={note}
-                  setNote={setNote}
-                  handleAddNote={handleAddNote}
-                />
-              )}
-              {panel === "logi" && (
-                <LogsEvent
-                  logsData={[]}
-                  note={note}
-                  setNote={setNote}
-                  handleAddNote={handleAddNote}
-                />
-              )}
-            </section>
-            <section
-              className="edit-row-table_section-content-data"
-              // style={{ backgroundColor: "yellow" }}
-            ></section>
+                <EditDocActionsDataLawPartner rowData={rowData} />
+              </section>
+            ) : (
+              <section className="edit-row-table_section-content-data"></section>
+            )}
           </section>
         </section>
         <section
@@ -241,8 +263,8 @@ const EditRowTableLawPartner = ({
             variant="contained"
             size="large"
             color="success"
-            onClick={() => setDataRowTable(clearRowTable)}
-            // onClick={() => handleSaveData()}
+            // onClick={() => setDataRowTable(clearRowTable)}
+            onClick={() => handleSaveData()}
           >
             Zatwierdź
           </Button>

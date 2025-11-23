@@ -1,37 +1,42 @@
-import "./EditDocBasicDataLawPartner.css";
-
-const EditDocBasicDataLawPartner = ({ rowData }) => {
-  const itemsSettlements = (rowData?.WYKAZ_SPLACONEJ_KWOTY_FK ?? [])
-    .map((item, index) => {
-      return (
-        <section
-          key={index}
-          className="law_partner_basic_data_settlements_container"
-        >
-          <span>{item.data}</span>
-          <span>{item.symbol}</span>
-          <span>
-            {item?.kwota ? (
-              item.kwota.toLocaleString("pl-PL", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-                useGrouping: true,
-              })
-            ) : (
-              <span style={{ color: "red" }}>Brak</span>
-            )}
-          </span>
-        </section>
-      );
-    })
-    .filter(Boolean);
+const EditDocActionsDataLawPartner = ({ rowData }) => {
+  console.log(rowData);
+  // const itemsSettlements = (rowData?.WYKAZ_SPLACONEJ_KWOTY_FK ?? [])
+  //   .map((item, index) => {
+  //     return (
+  //       <section
+  //         key={index}
+  //         className="law_partner_basic_data_settlements_container"
+  //       >
+  //         <span>{item.data}</span>
+  //         <span>{item.symbol}</span>
+  //         <span>
+  //           {item?.kwota ? (
+  //             item.kwota.toLocaleString("pl-PL", {
+  //               minimumFractionDigits: 2,
+  //               maximumFractionDigits: 2,
+  //               useGrouping: true,
+  //             })
+  //           ) : (
+  //             <span style={{ color: "red" }}>Brak</span>
+  //           )}
+  //         </span>
+  //       </section>
+  //     );
+  //   })
+  //   .filter(Boolean);
 
   return (
     <section className="edit_doc edit_doc_basic-data law_partner_basic-data">
       <section className="edit_doc__container">
-        <span className="edit_doc--title">Data przekazania:</span>
+        <span className="edit_doc--title">Data akceptacji:</span>
         <span className="edit_doc--content">
-          {rowData.DATA_PRZEKAZANIA_SPRAWY}
+          {rowData.DATA_PRZYJECIA_SPRAWY}
+        </span>
+      </section>
+      {/* <section className="edit_doc__container">
+        <span className="edit_doc--title">Data przyjęcia sprawy:</span>
+        <span className="edit_doc--content">
+          {rowData.DATA_PRZYJECIA_SPRAWY}
         </span>
       </section>
       <section className="edit_doc__container">
@@ -152,10 +157,10 @@ const EditDocBasicDataLawPartner = ({ rowData }) => {
               Brak wpłat
             </span>
           )}
-        </section>
-      </section>
+        </section> */}
+      {/* </section> */}
     </section>
   );
 };
 
-export default EditDocBasicDataLawPartner;
+export default EditDocActionsDataLawPartner;

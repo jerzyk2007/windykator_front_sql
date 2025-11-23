@@ -135,6 +135,14 @@ function App() {
                 element={<PrepareTable info={"ongoing"} profile={"partner"} />}
               />
             </Route>
+            <Route element={<RequireAuth allowedRoles={[500]} />}>
+              <Route
+                path="/no-accept-table"
+                element={
+                  <PrepareTable info={"no-accept"} profile={"partner"} />
+                }
+              />
+            </Route>
 
             <Route
               element={

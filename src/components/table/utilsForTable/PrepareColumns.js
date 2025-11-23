@@ -327,6 +327,14 @@ export const prepareColumnsPartner = (columnsData) => {
       };
     }
 
+    if (item.accessorKey === "DATA_PRZYJECIA_SPRAWY") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return originalRow[item.accessorKey]
+          ? originalRow[item.accessorKey]
+          : "BRAK";
+      };
+    }
+
     if (item.accessorKey === "KONTRAHENT") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         // const checkClient = cell.row.original.ZAZNACZ_KONTRAHENTA;
@@ -363,6 +371,37 @@ export const prepareColumnsPartner = (columnsData) => {
       };
     }
 
+    // if (item.accessorKey === "CZAT_KANCELARIA") {
+    //   modifiedItem.accessorFn = (originalRow) => {
+    //     const arrayData = originalRow.CZAT_KANCELARIA;
+    //     if (!arrayData) return "";
+    //     try {
+    //       const dzialania =
+    //         Array.isArray(arrayData) && arrayData.length > 0
+    //           ? arrayData.length === 1
+    //             ? arrayData[0]
+    //             : `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${`${
+    //                 arrayData[arrayData.length - 1].date
+    //               } - ${arrayData[arrayData.length - 1].username} - ${
+    //                 arrayData[arrayData.length - 1].note
+    //               }`}`
+    //           : "";
+    //       return dzialania.length > 120
+    //         ? dzialania.slice(0, 120) + " …"
+    //         : dzialania;
+    //       // return "BRAK";
+    //     } catch {
+    //       return "BRAK";
+    //     }
+    //   };
+    //   modifiedItem.muiTableBodyCellProps = {
+    //     align: "left",
+    //     sx: {
+    //       ...muiTableBodyCellProps.sx,
+    //       // backgroundColor: "rgba(248, 255, 152, .2)", // nadpisanie koloru tła
+    //     },
+    //   };
+    // }
     if (item.accessorKey === "CZAT_KANCELARIA") {
       modifiedItem.accessorFn = (originalRow) => {
         const arrayData = originalRow.CZAT_KANCELARIA;
@@ -372,16 +411,31 @@ export const prepareColumnsPartner = (columnsData) => {
             Array.isArray(arrayData) && arrayData.length > 0
               ? arrayData.length === 1
                 ? arrayData[0]
-                : `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${`${
+                : `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
                     arrayData[arrayData.length - 1].date
                   } - ${arrayData[arrayData.length - 1].username} - ${
                     arrayData[arrayData.length - 1].note
-                  }`}`
+                  }`
               : "";
-          return dzialania.length > 120
-            ? dzialania.slice(0, 120) + " …"
-            : dzialania;
-          // return "BRAK";
+
+          // Ograniczenie do max 2 enterów
+          let maxEnters = 2;
+          let countEnters = 0;
+          let truncated = "";
+
+          for (let char of dzialania) {
+            if (char === "\n") {
+              countEnters++;
+              if (countEnters > maxEnters) break;
+            }
+            if (truncated.length >= 120) break;
+            truncated += char;
+          }
+
+          // Jeśli tekst został skrócony, dodaj …
+          const finalText =
+            truncated.length < dzialania.length ? truncated + " …" : truncated;
+          return finalText;
         } catch {
           return "BRAK";
         }
@@ -394,44 +448,6 @@ export const prepareColumnsPartner = (columnsData) => {
         },
       };
     }
-
-    // if (item.accessorKey === "CZAT_KANCELARIA") {
-    //   modifiedItem.accessorFn = (originalRow) => {
-    //     const arrayData = originalRow.CZAT_KANCELARIA;
-    //     if (!arrayData) return "";
-
-    //     try {
-    //       if (Array.isArray(arrayData) && arrayData.length > 0) {
-    //         if (arrayData.length === 1) {
-    //           return arrayData[0];
-    //         } else {
-    //           const last = arrayData[arrayData.length - 1];
-    //           return (
-    //             <div>
-    //               <div>
-    //                 <strong>
-    //                   Liczba wcześniejszych wpisów: {arrayData.length - 1}
-    //                 </strong>
-    //               </div>
-    //               <div>{`${last.date} - ${last.username} - ${last.note}`}</div>
-    //             </div>
-    //           );
-    //         }
-    //       }
-    //       return "";
-    //     } catch {
-    //       return "BRAK";
-    //     }
-    //   };
-
-    //   modifiedItem.muiTableBodyCellProps = {
-    //     align: "left",
-    //     sx: {
-    //       ...muiTableBodyCellProps.sx,
-    //       backgroundColor: "rgba(248, 255, 152, .2)",
-    //     },
-    //   };
-    // }
 
     if (item.filterVariant === "none") {
       modifiedItem.enableColumnFilter = false;

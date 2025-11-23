@@ -48,10 +48,17 @@ const PrepareTable = ({ info, profile }) => {
     const getData = async () => {
       try {
         setPleaseWait(true);
+        if (profile !== "insider" && profile !== "partner") {
+          return; // przerwij działanie funkcji
+        }
+
+        const basePath = profile === "insider" ? "/documents" : "/law-partner";
+
         const dataTable = await axiosPrivateIntercept.get(
-          `/documents/get-data-table/${auth.id_user}/${info}/${profile}`,
+          `${basePath}/get-data-table/${auth.id_user}/${info}/${profile}`,
           { signal: controller.signal }
         );
+        console.log(dataTable);
         setDocuments(dataTable.data);
         const tableSettingsColumns = await axiosPrivateIntercept.get(
           `/table/get-settings-colums-table/${auth.id_user}/${profile}`,
