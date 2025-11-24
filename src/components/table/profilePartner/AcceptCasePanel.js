@@ -28,7 +28,12 @@ const AcceptCasePanel = ({ rowData, updateDocuments, removeDocuments }) => {
         Akceptacja sprawy i przyjęcie jej do obsługi
       </span>
       <span className="accept_case_panel--info">
-        Po kliknięciu przycisku Akceptuj sprawa zostanie przydzielona. <br />
+        {"Po kliknięciu przycisku"}
+        <span style={{ fontWeight: "bold", color: "rgb(25, 118, 210)" }}>
+          <br /> AKCEPTUJ
+          <br />
+        </span>
+        sprawa zostanie przydzielona. <br />
         Część informacji zostanie pobrana i zaktualizowana przez system dopiero
         następnego dnia.
       </span>
