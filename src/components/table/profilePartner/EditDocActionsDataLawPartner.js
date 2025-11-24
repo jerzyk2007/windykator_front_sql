@@ -1,29 +1,26 @@
-const EditDocActionsDataLawPartner = ({ rowData }) => {
-  console.log(rowData);
-  // const itemsSettlements = (rowData?.WYKAZ_SPLACONEJ_KWOTY_FK ?? [])
-  //   .map((item, index) => {
-  //     return (
-  //       <section
-  //         key={index}
-  //         className="law_partner_basic_data_settlements_container"
-  //       >
-  //         <span>{item.data}</span>
-  //         <span>{item.symbol}</span>
-  //         <span>
-  //           {item?.kwota ? (
-  //             item.kwota.toLocaleString("pl-PL", {
-  //               minimumFractionDigits: 2,
-  //               maximumFractionDigits: 2,
-  //               useGrouping: true,
-  //             })
-  //           ) : (
-  //             <span style={{ color: "red" }}>Brak</span>
-  //           )}
-  //         </span>
-  //       </section>
-  //     );
-  //   })
-  //   .filter(Boolean);
+import "./EditDocActionsDataLawPartner.css";
+
+const EditDocActionsDataLawPartner = ({
+  rowData,
+  handleAddNote,
+  updateDocuments,
+  setRowData,
+}) => {
+  const status_sprawy = [
+    "BRAK",
+    "EGZEKUCYJNA",
+    "PRZEDSĄDOWA",
+    "RESTRUKTURYZACYJNA",
+    "SĄDOWA",
+    "SĄDOWA / EGZEKUCYJNA",
+  ];
+
+  const handleAddLog = (title, oldStatus, newStatus) => {
+    const note = `Zmieniono ${title}: z ${
+      oldStatus ? oldStatus : "BRAK"
+    } na ${newStatus}`;
+    handleAddNote(note, "log");
+  };
 
   return (
     <section className="edit_doc edit_doc_basic-data law_partner_basic-data">
@@ -33,132 +30,236 @@ const EditDocActionsDataLawPartner = ({ rowData }) => {
           {rowData.DATA_PRZYJECIA_SPRAWY}
         </span>
       </section>
-      {/* <section className="edit_doc__container">
-        <span className="edit_doc--title">Data przyjęcia sprawy:</span>
-        <span className="edit_doc--content">
-          {rowData.DATA_PRZYJECIA_SPRAWY}
-        </span>
-      </section>
       <section className="edit_doc__container">
-        <span className="edit_doc--title">Faktura:</span>
-        <span className="edit_doc--content">{rowData.NUMER_DOKUMENTU}</span>
-      </section>
-      {rowData?.OPIS_DOKUMENTU && (
-        <section className="edit_doc__container">
-          <span className="edit_doc--title">Opis dokumentu:</span>
-          <span className="edit_doc--content_law_partner">
-            {rowData.OPIS_DOKUMENTU}
-          </span>
-        </section>
-      )}
-
-      <section className="edit_doc__container">
-        <span className="edit_doc--title">Data wystawienia dok.</span>
-        <span className="edit_doc--content">
-          {rowData.DATA_WYSTAWIENIA_DOKUMENTU}
-        </span>
-      </section>
-
-      <section className="edit_doc__container">
-        <span className="edit_doc--title">Kwota brutto dok.</span>
-        <span className="edit_doc--content">
-          {rowData?.KWOTA_BRUTTO_DOKUMENTU
-            ? rowData.KWOTA_BRUTTO_DOKUMENTU.toLocaleString("pl-PL", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-                useGrouping: true,
-              })
-            : ""}
-        </span>
-      </section>
-
-      <section className="edit_doc__container">
-        <span className="edit_doc--title">Kwota roszczenia:</span>
-        <span
-          className="edit_doc--content"
-          style={{ backgroundColor: "rgba(252, 255, 206, 1)" }}
+        <span className="edit_doc--title">Status sprawy:</span>
+        <select
+          className="item_component-title__container-data--text law_partner_basic-data--select"
+          value={rowData?.STATUS_SPRAWY ? rowData.STATUS_SPRAWY : ""}
+          onChange={(e) => {
+            handleAddLog(
+              "Status sprawy",
+              rowData.STATUS_SPRAWY,
+              e.target.value
+            );
+            setRowData((prev) => {
+              return {
+                ...prev,
+                STATUS_SPRAWY: e.target.value,
+              };
+            });
+          }}
         >
-          {rowData.KWOTA_ROSZCZENIA_DO_KANCELARII
-            ? rowData.KWOTA_ROSZCZENIA_DO_KANCELARII.toLocaleString("pl-PL", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-                useGrouping: true,
-              })
-            : "0,00"}
-        </span>
+          <option value="BRAK" disabled hidden>
+            BRAK
+          </option>
+          {status_sprawy.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
       </section>
 
       <section className="edit_doc__container">
-        <span className="edit_doc--title">Kontrahent:</span>
-        <span
-          className="edit_doc--content_law_partner"
-          style={
-            rowData?.KONTRAHENT?.length > 160
-              ? { overflowY: "auto", maxHeight: "100px" }
-              : null
-          }
-        >
-          {rowData?.KONTRAHENT}
-        </span>
-      </section>
-      <section className="edit_doc__container">
-        <span className="edit_doc--title">NIP:</span>
-        <span className="edit_doc--content">{rowData?.NIP}</span>
+        <span className="edit_doc--title">Sygnatura sprawy:</span>
+        <div className="textarea-wrapper">
+          <textarea
+            className="law_partner_basic-data--textarea"
+            defaultValue={rowData.SYGNATURA_SPRAWY || ""}
+            rows={1}
+            maxLength={250}
+            placeholder="wpisz dane - max 250 znaków"
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }}
+            onBlur={(e) => {
+              const newValue = e.target.value;
+              const oldValue = rowData.SYGNATURA_SPRAWY || "";
+
+              if (newValue !== oldValue) {
+                handleAddLog(
+                  "Sygnaturę sprawy",
+                  oldValue,
+                  newValue ? newValue : "BRAK"
+                );
+
+                setRowData((prev) => ({
+                  ...prev,
+                  SYGNATURA_SPRAWY: newValue,
+                }));
+              }
+            }}
+          ></textarea>
+        </div>
       </section>
 
       <section className="edit_doc__container">
-        <span className="edit_doc--title">Oddział:</span>
-        <span className="edit_doc--content content_law_partner--content">
-          <span className="edit_doc--content">
-            {rowData?.ODDZIAL?.LOKALIZACJA}
-          </span>
-          <span className="edit_doc--content">
-            {`${rowData?.ODDZIAL?.DZIAL} ${rowData?.ODDZIAL?.OBSZAR}`}
-          </span>
+        <span className="edit_doc--title">Wydział Sądu:</span>
+        <div className="textarea-wrapper">
+          <textarea
+            className="law_partner_basic-data--textarea"
+            defaultValue={rowData.WYDZIAL_SADU || ""}
+            rows={1}
+            maxLength={250}
+            placeholder="wpisz dane - max 250 znaków"
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }}
+            onBlur={(e) => {
+              const newValue = e.target.value;
+              const oldValue = rowData.WYDZIAL_SADU || "";
+
+              if (newValue !== oldValue) {
+                handleAddLog(
+                  "Wydział Sądu",
+                  oldValue,
+                  newValue ? newValue : "BRAK"
+                );
+
+                setRowData((prev) => ({
+                  ...prev,
+                  WYDZIAL_SADU: newValue,
+                }));
+              }
+            }}
+          ></textarea>
+        </div>
+      </section>
+
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">Organ egzekucyjny:</span>
+        <div className="textarea-wrapper">
+          <textarea
+            className="law_partner_basic-data--textarea"
+            defaultValue={rowData.ORGAN_EGZEKUCYJNY || ""}
+            rows={1}
+            maxLength={250}
+            placeholder="wpisz dane - max 250 znaków"
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }}
+            onBlur={(e) => {
+              const newValue = e.target.value;
+              const oldValue = rowData.ORGAN_EGZEKUCYJNY || "";
+
+              if (newValue !== oldValue) {
+                handleAddLog(
+                  "Organ egzekucyjny",
+                  oldValue,
+                  newValue ? newValue : "BRAK"
+                );
+
+                setRowData((prev) => ({
+                  ...prev,
+                  ORGAN_EGZEKUCYJNY: newValue,
+                }));
+              }
+            }}
+          ></textarea>
+        </div>
+      </section>
+
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">Sygnatura sprawy egzekucyjnej:</span>
+        <div className="textarea-wrapper">
+          <textarea
+            className="law_partner_basic-data--textarea"
+            defaultValue={rowData.SYGN_SPRAWY_EGZEKUCYJNEJ || ""}
+            rows={1}
+            maxLength={250}
+            placeholder="wpisz dane - max 250 znaków"
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }}
+            onBlur={(e) => {
+              const newValue = e.target.value;
+              const oldValue = rowData.SYGN_SPRAWY_EGZEKUCYJNEJ || "";
+
+              if (newValue !== oldValue) {
+                handleAddLog(
+                  "Sygn. sprawy egzekucyjnej",
+                  oldValue,
+                  newValue ? newValue : "BRAK"
+                );
+
+                setRowData((prev) => ({
+                  ...prev,
+                  SYGN_SPRAWY_EGZEKUCYJNEJ: newValue,
+                }));
+              }
+            }}
+          ></textarea>
+        </div>
+      </section>
+
+      <section className="edit_doc__container">
+        <span className="edit_doc--title">
+          Termin przedawnienia roszczenia:
         </span>
+        <div className="textarea-wrapper">
+          <input
+            className="item_component-title__container-data--text law_partner_basic-data--date"
+            type="date"
+            defaultValue={
+              rowData.TERMIN_PRZEDAWNIENIA_ROSZCZENIA
+                ? rowData.TERMIN_PRZEDAWNIENIA_ROSZCZENIA.slice(0, 10)
+                : ""
+            }
+            onBlur={(e) => {
+              const newValue = e.target.value || null;
+              const oldValue = rowData.TERMIN_PRZEDAWNIENIA_ROSZCZENIA || null;
+
+              if (newValue !== oldValue) {
+                handleAddLog(
+                  "Termin przedawnienia roszczenia",
+                  oldValue ? oldValue.slice(0, 10) : "BRAK",
+                  newValue || "BRAK"
+                );
+
+                setRowData((prev) => ({
+                  ...prev,
+                  TERMIN_PRZEDAWNIENIA_ROSZCZENIA: newValue,
+                }));
+              }
+            }}
+          />
+        </div>
       </section>
       <section className="edit_doc__container">
-        <span className="edit_doc--title">Pozostała należność FK:</span>
-        <span className="edit_doc--content">
-          {rowData?.POZOSTALA_NALEZNOSC_FK ? (
-            rowData.POZOSTALA_NALEZNOSC_FK.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
-          ) : (
-            <span style={{ color: "red" }}>Brak danych</span>
-          )}
-        </span>
+        <span className="edit_doc--title">Data wymagalności płatności:</span>
+        <div className="textarea-wrapper">
+          <input
+            className="item_component-title__container-data--text law_partner_basic-data--date"
+            type="date"
+            defaultValue={
+              rowData.DATA_WYMAGALNOSCI_PLATNOSCI
+                ? rowData.DATA_WYMAGALNOSCI_PLATNOSCI.slice(0, 10)
+                : ""
+            }
+            onBlur={(e) => {
+              const newValue = e.target.value || null;
+              const oldValue = rowData.DATA_WYMAGALNOSCI_PLATNOSCI || null;
+
+              if (newValue !== oldValue) {
+                handleAddLog(
+                  "Termin przedawnienia roszczenia",
+                  oldValue ? oldValue.slice(0, 10) : "BRAK",
+                  newValue || "BRAK"
+                );
+
+                setRowData((prev) => ({
+                  ...prev,
+                  DATA_WYMAGALNOSCI_PLATNOSCI: newValue,
+                }));
+              }
+            }}
+          />
+        </div>
       </section>
-      <section className="edit_doc__container">
-        <span className="edit_doc--title">Suma spłaconych kwot FK:</span>
-        <span className="edit_doc--content">
-          {rowData?.SUMA_SPLACONEJ_KWOTY_FK ? (
-            rowData.SUMA_SPLACONEJ_KWOTY_FK.toLocaleString("pl-PL", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-              useGrouping: true,
-            })
-          ) : (
-            <span style={{ color: "red" }}>Brak danych</span>
-          )}
-        </span>
-      </section>
-      <section className="edit_doc__container">
-        <section className="law_partner_basic_data_settlements">
-          <span className="law_partner_basic_data_settlements--title">
-            Wykaz spłaconych kwot
-          </span>
-          {itemsSettlements.length ? (
-            itemsSettlements
-          ) : (
-            <span style={{ textAlign: "center", color: "red" }}>
-              Brak wpłat
-            </span>
-          )}
-        </section> */}
-      {/* </section> */}
     </section>
   );
 };

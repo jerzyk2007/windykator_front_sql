@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Button } from "@mui/material";
 import "./LogsEvent.css";
 
 const LogsEvent = ({ logsData = [] }) => {
@@ -75,9 +74,18 @@ const LogsEvent = ({ logsData = [] }) => {
     );
   });
 
+  // useEffect(() => {
+  //   if (notesRef.current) {
+  //     notesRef.current.scrollTop = notesRef.current.scrollHeight;
+  //   }
+  // }, [logsData]);
+
   useEffect(() => {
     if (notesRef.current) {
-      notesRef.current.scrollTop = notesRef.current.scrollHeight;
+      // Poczekaj aż elementy zostaną wyrenderowane
+      setTimeout(() => {
+        notesRef.current.scrollTop = notesRef.current.scrollHeight;
+      }, 0);
     }
   }, [logsData]);
 

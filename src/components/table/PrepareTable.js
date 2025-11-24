@@ -58,7 +58,6 @@ const PrepareTable = ({ info, profile }) => {
           `${basePath}/get-data-table/${auth.id_user}/${info}/${profile}`,
           { signal: controller.signal }
         );
-        console.log(dataTable);
         setDocuments(dataTable.data);
         const tableSettingsColumns = await axiosPrivateIntercept.get(
           `/table/get-settings-colums-table/${auth.id_user}/${profile}`,

@@ -70,7 +70,7 @@ const EditRowTableLawPartner = ({
     const oldChat =
       type === "chat"
         ? [...(rowData.CZAT_KANCELARIA ?? [])]
-        : type === "logi"
+        : type === "log"
         ? [...(rowData.CZAT_LOGI ?? [])]
         : [];
     const date = new Date();
@@ -95,9 +95,8 @@ const EditRowTableLawPartner = ({
     }
     const saveInfo = {
       chat: "CZAT_KANCELARIA",
-      logi: "CZAT_LOGI",
+      log: "CZAT_LOGI",
     };
-
     setChatLog((prev) => {
       return {
         ...prev,
@@ -129,9 +128,9 @@ const EditRowTableLawPartner = ({
     setRowData(dataRowTable?.singleDoc ? dataRowTable.singleDoc : {});
   }, [dataRowTable]);
 
-  useEffect(() => {
-    // console.log(rowData);
-  }, [rowData]);
+  // useEffect(() => {
+  //   console.log(rowData);
+  // }, [rowData]);
 
   return (
     <section className="edit-row-table-law-partner">
@@ -176,10 +175,10 @@ const EditRowTableLawPartner = ({
                 )}
                 {panel === "logi" && (
                   <LogsEvent
-                    logsData={[]}
-                    note={note}
-                    setNote={setNote}
-                    handleAddNote={handleAddNote}
+                    logsData={rowData.CZAT_LOGI}
+                    // note={note}
+                    // setNote={setNote}
+                    // handleAddNote={handleAddNote}
                   />
                 )}
               </section>
@@ -197,7 +196,11 @@ const EditRowTableLawPartner = ({
                 className="edit-row-table_section-content-data"
                 // style={{ backgroundColor: "yellow" }}
               >
-                <EditDocActionsDataLawPartner rowData={rowData} />
+                <EditDocActionsDataLawPartner
+                  rowData={rowData}
+                  setRowData={setRowData}
+                  handleAddNote={handleAddNote}
+                />
               </section>
             ) : (
               <section className="edit-row-table_section-content-data"></section>
