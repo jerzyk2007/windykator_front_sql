@@ -77,7 +77,7 @@
 
 .table_column__columns {
   flex-shrink: 0;
-  min-width: 350px;
+  min-width: 370px;
   flex-basis: 25%;
   margin: 2px 0;
   padding: 2px 4px;

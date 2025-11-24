@@ -18,7 +18,10 @@ import useWindowSize from "../hooks/useWindow";
 // import QuickTableNote from "./profileInsider/QuickTableNote";
 import EditRowTable from "./profileInsider/EditRowTable";
 import { Box, Button } from "@mui/material";
-import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
+import {
+  getAllDataRaport,
+  lawPartnerRaport,
+} from "./utilsForTable/excelFilteredTable";
 import TableButtonInfo from "./TableButtonInfo";
 import EditRowTableLawPartner from "./profilePartner/EditRowTableLawPartner";
 import PleaseWait from "../PleaseWait";
@@ -40,6 +43,7 @@ const Table = ({
   handleSaveSettings,
   roles,
   profile,
+  info,
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const theme = useTheme();
@@ -63,7 +67,6 @@ const Table = ({
     controlDoc: {},
     lawPartner: [],
   });
-
   // sortowanie defaultowe tabeli, jeśli istnieje dana kolumna
   const [sorting, setSorting] = useState(() => {
     const has = (key) => columns.some((c) => c.accessorKey === key);
@@ -98,7 +101,6 @@ const Table = ({
         (item) => columnVisibility[item] !== false
       );
 
-      // let newColumns = [];
       const newColumns = columns
         .map((item) => {
           const matching = arrayOrder.find(
@@ -137,6 +139,68 @@ const Table = ({
         order: newOrder,
       };
       getAllDataRaport(updateData, orderColumns, type);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setExcelFile(false);
+    }
+  };
+
+  const handleExportExcelLawPartner = async (data, type) => {
+    // włącz loader
+    setExcelFile(true);
+
+    // pozwól Reactowi przetworzyć render
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    try {
+      const rowData = data.map((item) => {
+        return item.original;
+      });
+
+      const arrayOrder = columnOrder.filter(
+        (item) => columnVisibility[item] !== false
+      );
+
+      const newColumns = columns
+        .map((item) => {
+          const matching = arrayOrder.find(
+            (match) => match === item.accessorKey
+          );
+          if (matching) {
+            return {
+              accessorKey: item.accessorKey,
+              header: item.header,
+            };
+          }
+        })
+        .filter(Boolean);
+
+      const newOrder = arrayOrder.map((key) => {
+        const matchedColumn = newColumns.find(
+          (column) => column.accessorKey === key
+        );
+        return matchedColumn ? matchedColumn.header : key;
+      });
+
+      const updateData = rowData.map((item) => {
+        // Filtracja kluczy obiektu na podstawie arrayOrder
+        const filteredKeys = Object.keys(item).filter((key) =>
+          arrayOrder.includes(key)
+        );
+        // Tworzenie nowego obiektu z wybranymi kluczami
+        const updatedItem = filteredKeys.reduce((obj, key) => {
+          obj[key] = item[key];
+          return obj;
+        }, {});
+        return updatedItem;
+      });
+
+      const orderColumns = {
+        columns: newColumns,
+        order: newOrder,
+      };
+      lawPartnerRaport(updateData, orderColumns, type);
     } catch (error) {
       console.error(error);
     } finally {
@@ -362,6 +426,26 @@ const Table = ({
             disabled={!dataTableCounter}
             onClick={() =>
               handleExportExel(
+                table.getPrePaginationRowModel().rows,
+                "Zestawienie"
+              )
+            }
+            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
+          >
+            <i
+              className="fa-regular fa-file-excel table-export-excel"
+              style={
+                !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
+              }
+            ></i>
+          </TableButtonInfo>
+        )}
+        {profile === "partner" && info !== "no-accept" && (
+          <TableButtonInfo
+            className="table_excel"
+            disabled={!dataTableCounter}
+            onClick={() =>
+              handleExportExcelLawPartner(
                 table.getPrePaginationRowModel().rows,
                 "Zestawienie"
               )

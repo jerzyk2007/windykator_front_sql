@@ -300,7 +300,6 @@ export const prepareColumnsInsider = (columnsData) => {
 export const prepareColumnsPartner = (columnsData) => {
   const update = columnsData.map((item) => {
     const modifiedItem = { ...item };
-
     modifiedItem.muiTableBodyCellProps = muiTableBodyCellProps;
 
     if (item.filterVariant === "date-range") {
@@ -368,6 +367,14 @@ export const prepareColumnsPartner = (columnsData) => {
         return originalRow[item.accessorKey]
           ? originalRow[item.accessorKey]
           : "BRAK";
+      };
+    }
+
+    if (item.accessorKey === "ODDZIAL") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return `${originalRow?.ODDZIAL?.LOKALIZACJA || ""} ${
+          originalRow?.ODDZIAL?.DZIAL || ""
+        } ${originalRow?.ODDZIAL?.OBSZAR || ""}`.trim();
       };
     }
 

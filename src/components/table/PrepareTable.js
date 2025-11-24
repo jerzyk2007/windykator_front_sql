@@ -87,7 +87,6 @@ const PrepareTable = ({ info, profile }) => {
       controller.abort(); // Anulowanie żądania przy odmontowaniu komponentu
     };
   }, [info, auth.id_user, setPleaseWait, axiosPrivateIntercept]);
-
   return (
     <section className="prepare_table">
       {pleaseWait ? (
@@ -102,6 +101,7 @@ const PrepareTable = ({ info, profile }) => {
             handleSaveSettings={handleSaveSettings}
             roles={auth.roles}
             profile={profile}
+            info={info}
           />
         )
       )}
