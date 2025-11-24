@@ -201,6 +201,11 @@ const Table = ({
     setDocuments(newDocuments);
   };
 
+  const removeDocuments = (id) => {
+    const newDocuments = documents.filter((item) => item.id_document !== id);
+    setDocuments(newDocuments);
+  };
+
   const columnsItem = useMemo(
     () =>
       columns.map((column) => ({
@@ -457,6 +462,7 @@ const Table = ({
               dataRowTable={dataRowTable}
               setDataRowTable={setDataRowTable}
               updateDocuments={updateDocuments}
+              removeDocuments={removeDocuments}
               nextDoc={nextDoc}
               getSingleRow={getSingleRow}
               clearRowTable={clearRowTable}

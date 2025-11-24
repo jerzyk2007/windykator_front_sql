@@ -371,54 +371,28 @@ export const prepareColumnsPartner = (columnsData) => {
       };
     }
 
-    // if (item.accessorKey === "CZAT_KANCELARIA") {
-    //   modifiedItem.accessorFn = (originalRow) => {
-    //     const arrayData = originalRow.CZAT_KANCELARIA;
-    //     if (!arrayData) return "";
-    //     try {
-    //       const dzialania =
-    //         Array.isArray(arrayData) && arrayData.length > 0
-    //           ? arrayData.length === 1
-    //             ? arrayData[0]
-    //             : `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${`${
-    //                 arrayData[arrayData.length - 1].date
-    //               } - ${arrayData[arrayData.length - 1].username} - ${
-    //                 arrayData[arrayData.length - 1].note
-    //               }`}`
-    //           : "";
-    //       return dzialania.length > 120
-    //         ? dzialania.slice(0, 120) + " …"
-    //         : dzialania;
-    //       // return "BRAK";
-    //     } catch {
-    //       return "BRAK";
-    //     }
-    //   };
-    //   modifiedItem.muiTableBodyCellProps = {
-    //     align: "left",
-    //     sx: {
-    //       ...muiTableBodyCellProps.sx,
-    //       // backgroundColor: "rgba(248, 255, 152, .2)", // nadpisanie koloru tła
-    //     },
-    //   };
-    // }
     if (item.accessorKey === "CZAT_KANCELARIA") {
       modifiedItem.accessorFn = (originalRow) => {
         const arrayData = originalRow.CZAT_KANCELARIA;
-        if (!arrayData) return "";
-        try {
-          const dzialania =
-            Array.isArray(arrayData) && arrayData.length > 0
-              ? arrayData.length === 1
-                ? arrayData[0]
-                : `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
-                    arrayData[arrayData.length - 1].date
-                  } - ${arrayData[arrayData.length - 1].username} - ${
-                    arrayData[arrayData.length - 1].note
-                  }`
-              : "";
+        if (!arrayData) return "Brak wpisów";
 
-          // Ograniczenie do max 2 enterów
+        try {
+          let dzialania;
+
+          if (!Array.isArray(arrayData) || arrayData.length === 0) {
+            dzialania = "Brak wpisów";
+          } else if (arrayData.length === 1) {
+            // ⭐ ZWRACAMY STRING A NIE OBIEKT!
+            const e = arrayData[0];
+            dzialania = `${e.date} - ${e.username} - ${e.note}`;
+          } else {
+            const last = arrayData[arrayData.length - 1];
+            dzialania = `Liczba wcześniejszych wpisów: ${
+              arrayData.length - 1
+            }\n${last.date} - ${last.username} - ${last.note}`;
+          }
+
+          // Ograniczenie do max 2 enterów i max 120 znaków
           let maxEnters = 2;
           let countEnters = 0;
           let truncated = "";
@@ -432,19 +406,18 @@ export const prepareColumnsPartner = (columnsData) => {
             truncated += char;
           }
 
-          // Jeśli tekst został skrócony, dodaj …
-          const finalText =
-            truncated.length < dzialania.length ? truncated + " …" : truncated;
-          return finalText;
+          return truncated.length < dzialania.length
+            ? truncated + " …"
+            : truncated;
         } catch {
-          return "BRAK";
+          return "Brak wpisów";
         }
       };
+
       modifiedItem.muiTableBodyCellProps = {
         align: "left",
         sx: {
           ...muiTableBodyCellProps.sx,
-          // backgroundColor: "rgba(248, 255, 152, .2)", // nadpisanie koloru tła
         },
       };
     }

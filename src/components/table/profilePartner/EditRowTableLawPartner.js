@@ -15,6 +15,7 @@ const EditRowTableLawPartner = ({
   dataRowTable,
   setDataRowTable,
   updateDocuments,
+  removeDocuments,
   nextDoc,
   getSingleRow,
   clearRowTable,
@@ -187,6 +188,7 @@ const EditRowTableLawPartner = ({
                 <AcceptCasePanel
                   rowData={rowData}
                   updateDocuments={updateDocuments}
+                  removeDocuments={removeDocuments}
                 />
               </section>
             )}

@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import "./AcceptCasePanel.css";
-const AcceptCasePanel = ({ rowData, updateDocuments }) => {
+const AcceptCasePanel = ({ rowData, updateDocuments, removeDocuments }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const handleAccept = async () => {
@@ -17,6 +17,7 @@ const AcceptCasePanel = ({ rowData, updateDocuments }) => {
       });
       rowData.DATA_PRZYJECIA_SPRAWY = formattedDate;
       updateDocuments(rowData);
+      removeDocuments(rowData.id_document);
     } catch (error) {
       console.error(error);
     }
