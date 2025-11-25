@@ -1,8 +1,18 @@
 import { Button } from "@mui/material";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
+import useData from "../../hooks/useData";
+
 import "./AcceptCasePanel.css";
-const AcceptCasePanel = ({ rowData, updateDocuments, removeDocuments }) => {
+
+const AcceptCasePanel = ({
+  rowData,
+  updateDocuments,
+  removeDocuments,
+  setDataRowTable,
+  clearRowTable,
+}) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
+  const { auth } = useData();
 
   const handleAccept = async () => {
     try {
@@ -11,13 +21,23 @@ const AcceptCasePanel = ({ rowData, updateDocuments, removeDocuments }) => {
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const year = date.getFullYear();
       const formattedDate = `${year}-${month}-${day}`;
+
+      const note = {
+        date: formattedDate,
+        note: "Przyjęto sprawę do obsługi.",
+        profile: auth.permissions,
+        userlogin: auth.userlogin,
+        username: auth.usersurname,
+      };
       await axiosPrivateIntercept.patch(`/law-partner/accept-document`, {
         id_document: rowData.id_document,
         acceptDate: formattedDate,
+        note,
       });
-      rowData.DATA_PRZYJECIA_SPRAWY = formattedDate;
-      updateDocuments(rowData);
+      // rowData.DATA_PRZYJECIA_SPRAWY = formattedDate;
+      // updateDocuments(rowData);
       removeDocuments(rowData.id_document);
+      setDataRowTable(clearRowTable);
     } catch (error) {
       console.error(error);
     }
@@ -34,6 +54,9 @@ const AcceptCasePanel = ({ rowData, updateDocuments, removeDocuments }) => {
           <br />
         </span>
         sprawa zostanie przydzielona. <br />
+        Panel zostanie zamknięty, a sprawa usunięta z tej tabeli.
+        <br />
+        <br />
         Część informacji zostanie pobrana i zaktualizowana przez system dopiero
         następnego dnia.
       </span>

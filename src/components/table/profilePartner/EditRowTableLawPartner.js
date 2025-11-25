@@ -113,9 +113,6 @@ const EditRowTableLawPartner = ({
   };
 
   useEffect(() => {
-    // console.log(nextDoc);
-    // console.log(rowData);
-
     const index = nextDoc.indexOf(rowData.id_document);
     SetNextPrevDoc({
       prev: nextDoc[index - 1] ? nextDoc[index - 1] : null,
@@ -127,10 +124,6 @@ const EditRowTableLawPartner = ({
   useEffect(() => {
     setRowData(dataRowTable?.singleDoc ? dataRowTable.singleDoc : {});
   }, [dataRowTable]);
-
-  // useEffect(() => {
-  //   console.log(rowData);
-  // }, [rowData]);
 
   return (
     <section className="edit-row-table-law-partner">
@@ -173,14 +166,7 @@ const EditRowTableLawPartner = ({
                     handleAddNote={handleAddNote}
                   />
                 )}
-                {panel === "logi" && (
-                  <LogsEvent
-                    logsData={rowData.CZAT_LOGI}
-                    // note={note}
-                    // setNote={setNote}
-                    // handleAddNote={handleAddNote}
-                  />
-                )}
+                {panel === "logi" && <LogsEvent logsData={rowData.CZAT_LOGI} />}
               </section>
             ) : (
               <section className="edit-row-table_section-content-data">
@@ -188,14 +174,13 @@ const EditRowTableLawPartner = ({
                   rowData={rowData}
                   updateDocuments={updateDocuments}
                   removeDocuments={removeDocuments}
+                  setDataRowTable={setDataRowTable}
+                  clearRowTable={clearRowTable}
                 />
               </section>
             )}
             {rowData?.DATA_PRZYJECIA_SPRAWY ? (
-              <section
-                className="edit-row-table_section-content-data"
-                // style={{ backgroundColor: "yellow" }}
-              >
+              <section className="edit-row-table_section-content-data">
                 <EditDocActionsDataLawPartner
                   rowData={rowData}
                   setRowData={setRowData}
@@ -268,7 +253,7 @@ const EditRowTableLawPartner = ({
             variant="contained"
             size="large"
             color="success"
-            // onClick={() => setDataRowTable(clearRowTable)}
+            disabled={rowData?.DATA_PRZYJECIA_SPRAWY ? false : true}
             onClick={() => handleSaveData()}
           >
             Zatwierdź
