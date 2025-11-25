@@ -13,6 +13,7 @@ const EditDocBasicData = ({
     "jolanta.maslowska@krotoski.com",
     "anna.wylupek@krotoski.com",
     "jerzy.komorowski@krotoski.com",
+    "marcin.furmanek@krotoski.com",
   ];
 
   return (

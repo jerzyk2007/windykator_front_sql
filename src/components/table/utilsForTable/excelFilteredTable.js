@@ -277,6 +277,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
     console.error(err);
   }
 };
+
 export const lawPartnerRaport = async (allData, orderColumns, info) => {
   const sanitize = (text) => {
     if (!text) return " ";
@@ -293,7 +294,6 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
       .trim()
       .substring(0, 31);
   };
-
   const usedNames = new Set();
 
   const getUniqueSheetName = (base) => {
@@ -354,10 +354,26 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
     // Wywołujemy nową funkcję dla pola CZAT_KANCELARIA
     const chatPanel = formatChatField(item.CZAT_KANCELARIA);
 
+    // wykaz spłaconej kwoty
+    const wsk = item?.WYKAZ_SPLACONEJ_KWOTY_FK || [];
+
+    const WYKAZ_SPLACONEJ_KWOTY_FK = wsk.map((wskItem) => {
+      const formatKwota = (kwota) =>
+        kwota !== undefined && kwota !== null && kwota !== 0
+          ? kwota.toLocaleString("pl-PL", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              useGrouping: true,
+            })
+          : "0,00";
+      return `${wskItem.data} - ${formatKwota(wskItem.kwota)} - ${
+        wskItem.symbol
+      }`;
+    });
     const parseDateOrDefault = (value) => {
-      if (!value) return "BRAK"; // null, undefined, pusty string
+      if (!value) return ""; // null, undefined, pusty string
       const d = new Date(value);
-      return isNaN(d.getTime()) ? "BRAK" : d; // jeśli niepoprawna data -> "BRAK"
+      return isNaN(d.getTime()) ? "" : d; // jeśli niepoprawna data -> "BRAK"
     };
     const DATA_PRZEKAZANIA_SPRAWY = parseDateOrDefault(
       item.DATA_PRZEKAZANIA_SPRAWY
@@ -386,6 +402,9 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
       DATA_WYSTAWIENIA_DOKUMENTU,
       TERMIN_PRZEDAWNIENIA_ROSZCZENIA,
       ODDZIAL,
+      WYKAZ_SPLACONEJ_KWOTY_FK: wsk.length
+        ? WYKAZ_SPLACONEJ_KWOTY_FK.join("\n")
+        : "BRAK",
     };
   });
 
@@ -461,7 +480,7 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
         const startDataRow = startRow + 1;
         const endDataRow = worksheet.rowCount;
 
-        column.width = 20;
+        column.width = 30;
         column.alignment = {
           horizontal: "center",
           vertical: "middle",
@@ -484,12 +503,13 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
           sumCell.numFmt = "0";
         } else if (
           header === "Kwota brutto dokumentu" ||
-          header === "Kwota roszczenia"
-          //  ||
-          // header === "Do rozl." ||
-          // header === "Do rozl Symfonia"
+          header === "Kwota roszczenia" ||
+          header === "Pozostała należność FK" ||
+          header === "Suma spłaconej kwoty"
         ) {
           column.numFmt = "#,##0.00";
+          column.width = 22;
+
           for (
             let rowIndex = startDataRow;
             rowIndex <= endDataRow;
@@ -512,6 +532,13 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
           column.width = 19;
         } else if (header === "Kontrahent" || header === "Panel komunikacji") {
           column.width = 40;
+        } else if (header === "Wykaz spłaconej kwoty") {
+          column.width = 40;
+          column.alignment = {
+            horizontal: "left", // wyrównanie poziome do lewej
+            vertical: "middle", // pionowo wyśrodkowane
+            wrapText: true, // zawijanie tekstu
+          };
         } else if (header === "Opis dokumentu") {
           column.width = 40;
         }

@@ -6,7 +6,7 @@ import Table from "./Table";
 import {
   prepareColumnsInsider,
   prepareColumnsPartner,
-} from "./utilsForTable/PrepareColumns";
+} from "./utilsForTable/prepareColumns";
 import "./PrepareTable.css";
 
 // const PrepareTable = ({ info, raportDocuments }) => {

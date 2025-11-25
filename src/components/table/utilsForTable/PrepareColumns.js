@@ -17,6 +17,7 @@ const muiTableBodyCellProps = {
   },
 };
 
+// przygotowanie kolumn tabeli dla permissions=Pracownik
 export const prepareColumnsInsider = (columnsData) => {
   const update = columnsData.map((item) => {
     const modifiedItem = { ...item };
@@ -296,7 +297,7 @@ export const prepareColumnsInsider = (columnsData) => {
   return update;
 };
 
-// kolumny dla kancelarii
+// przygotowanie kolumn tabeli dla permissions=Kancelaria
 export const prepareColumnsPartner = (columnsData) => {
   const update = columnsData.map((item) => {
     const modifiedItem = { ...item };
@@ -325,64 +326,10 @@ export const prepareColumnsPartner = (columnsData) => {
         return null;
       };
     }
-
-    if (item.accessorKey === "DATA_PRZYJECIA_SPRAWY") {
-      modifiedItem.accessorFn = (originalRow) => {
-        return originalRow[item.accessorKey]
-          ? originalRow[item.accessorKey]
-          : "BRAK";
-      };
-    }
-
-    if (item.accessorKey === "KONTRAHENT") {
-      modifiedItem.muiTableBodyCellProps = ({ cell }) => {
-        // const checkClient = cell.row.original.ZAZNACZ_KONTRAHENTA;
-
-        return {
-          align: "left",
-          sx: {
-            ...muiTableBodyCellProps.sx,
-            // backgroundColor:
-            //   cell.column.id === "KONTRAHENT" && checkClient === "TAK"
-            //     ? "#7fffd4"
-            //     : "white",
-          },
-        };
-      };
-      modifiedItem.filterFn = "contains";
-    }
-
-    if (item.accessorKey === "KWOTA_ROSZCZENIA_DO_KANCELARII") {
-      modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
-        ...muiTableBodyCellProps,
-        sx: {
-          ...muiTableBodyCellProps.sx,
-          backgroundColor: "rgba(248, 255, 152, .2)",
-        },
-      });
-    }
-
-    if (item.accessorKey === "OPIS_DOKUMENTU") {
-      modifiedItem.accessorFn = (originalRow) => {
-        return originalRow[item.accessorKey]
-          ? originalRow[item.accessorKey]
-          : "BRAK";
-      };
-    }
-
-    if (item.accessorKey === "ODDZIAL") {
-      modifiedItem.accessorFn = (originalRow) => {
-        return `${originalRow?.ODDZIAL?.LOKALIZACJA || ""} ${
-          originalRow?.ODDZIAL?.DZIAL || ""
-        } ${originalRow?.ODDZIAL?.OBSZAR || ""}`.trim();
-      };
-    }
-
     if (item.accessorKey === "CZAT_KANCELARIA") {
       modifiedItem.accessorFn = (originalRow) => {
         const arrayData = originalRow.CZAT_KANCELARIA;
         if (!arrayData) return "Brak wpisów";
-
         try {
           let dzialania;
 
@@ -426,6 +373,148 @@ export const prepareColumnsPartner = (columnsData) => {
         sx: {
           ...muiTableBodyCellProps.sx,
         },
+      };
+    }
+    // if (item.accessorKey === "DATA_PRZEKAZANIA_SPRAWY") {
+    //   modifiedItem.accessorFn = (originalRow) => {
+    //     return originalRow[item.accessorKey]
+    //       ? originalRow[item.accessorKey]
+    //       : "BRAK";
+    //   };
+    // }
+    // if (item.accessorKey === "DATA_PRZYJECIA_SPRAWY") {
+    //   modifiedItem.accessorFn = (originalRow) => {
+    //     return originalRow[item.accessorKey]
+    //       ? originalRow[item.accessorKey]
+    //       : "BRAK";
+    //   };
+    // }
+    // if (item.accessorKey === "DATA_WYMAGALNOSCI_PLATNOSCI") {
+    //   modifiedItem.accessorFn = (originalRow) => {
+    //     return originalRow[item.accessorKey]
+    //       ? originalRow[item.accessorKey]
+    //       : "BRAK";
+    //   };
+    // }
+    // if (item.accessorKey === "DATA_WYSTAWIENIA_DOKUMENTU") {
+    //   modifiedItem.accessorFn = (originalRow) => {
+    //     return originalRow[item.accessorKey]
+    //       ? originalRow[item.accessorKey]
+    //       : "BRAK";
+    //   };
+    // }
+
+    if (item.accessorKey === "KONTRAHENT") {
+      modifiedItem.muiTableBodyCellProps = ({ cell }) => {
+        return {
+          align: "left",
+          sx: {
+            ...muiTableBodyCellProps.sx,
+          },
+        };
+      };
+      modifiedItem.filterFn = "contains";
+    }
+
+    if (item.accessorKey === "KWOTA_ROSZCZENIA_DO_KANCELARII") {
+      modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
+        ...muiTableBodyCellProps,
+        sx: {
+          ...muiTableBodyCellProps.sx,
+          backgroundColor: "rgba(248, 255, 152, .2)",
+        },
+      });
+    }
+
+    if (item.accessorKey === "ODDZIAL") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return `${originalRow?.ODDZIAL?.LOKALIZACJA || ""} ${
+          originalRow?.ODDZIAL?.DZIAL || ""
+        } ${originalRow?.ODDZIAL?.OBSZAR || ""}`.trim();
+      };
+    }
+    if (item.accessorKey === "OPIS_DOKUMENTU") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return originalRow[item.accessorKey]
+          ? originalRow[item.accessorKey]
+          : "BRAK";
+      };
+    }
+
+    // if (item.accessorKey === "WYKAZ_SPLACONEJ_KWOTY_FK") {
+    //   modifiedItem.accessorFn = (originalRow) => {
+    //     const wykaz = originalRow?.WYKAZ_SPLACONEJ_KWOTY_FK
+    //       ? originalRow.WYKAZ_SPLACONEJ_KWOTY_FK
+    //       : [];
+    //     if (wykaz && wykaz.length) {
+    //       console.log(wykaz);
+    //       const mergedData = wykaz.map((itemRow) => {
+    //         return `${itemRow.data} - ${itemRow.kwota} - ${itemRow.symbol}`;
+    //       });
+    //       return mergedData;
+    //     }
+    //     return "BRAK";
+    //   };
+    // }
+
+    if (item.accessorKey === "WYKAZ_SPLACONEJ_KWOTY_FK") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return originalRow?.WYKAZ_SPLACONEJ_KWOTY_FK || [];
+      };
+      modifiedItem.muiTableBodyCellProps = {
+        align: "left",
+        sx: {
+          ...muiTableBodyCellProps.sx,
+        },
+      };
+      modifiedItem.enableClickToCopy = false;
+      modifiedItem.Cell = ({ cell }) => {
+        const wykaz = cell.getValue() || [];
+
+        if (!wykaz.length) {
+          return "BRAK";
+        }
+
+        // funkcja do formatowania kwoty
+        const formatKwota = (kwota) =>
+          kwota !== undefined && kwota !== null && kwota !== 0
+            ? kwota.toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+              })
+            : "0,00";
+
+        // bierzemy pierwszy wpis
+        const first = wykaz[0];
+
+        const firstFormatted = (
+          <>
+            <span style={{ color: "blue", fontWeight: 600 }}>{first.data}</span>
+            {" - "}
+            <span style={{ color: "rgb(162, 0, 255)", fontWeight: 600 }}>
+              {formatKwota(first.kwota)}
+            </span>
+            {" - "}
+            <span>{first.symbol}</span>
+          </>
+        );
+
+        // jeśli więcej niż 1 wpłata → wyświetlamy licznik + pierwszy wpis
+        if (wykaz.length > 1) {
+          return (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{ fontWeight: 700 }}>
+                Łączna liczba wpłat: {wykaz.length}
+              </span>
+              <div>Ostatnia wpłata:</div>
+              <div>{firstFormatted}</div>
+            </div>
+          );
+        }
+
+        // jeśli tylko 1 wpis → wyświetlamy normalnie
+        return <div>{firstFormatted}</div>;
       };
     }
 
