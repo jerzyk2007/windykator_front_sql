@@ -506,7 +506,6 @@ const Table = ({
       .getPrePaginationRowModel()
       .rows.map((row) => row.original.id_document);
 
-    // console.log(table.getPrePaginationRowModel().rows);
     setNextDoc(visibleData);
     tableDataSize(table.getPrePaginationRowModel().rows);
   }, [table.getPrePaginationRowModel().rows, columnVisibility]);

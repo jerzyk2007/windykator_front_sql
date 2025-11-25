@@ -75,6 +75,9 @@ const EditRowTable = ({
   const [lawFirmData, setLawFirmData] = useState({
     numerFv: rowData.NUMER_FV,
     kontrahent: rowData.KONTRAHENT,
+    nip: rowData.NIP,
+    kwota_brutto: rowData.BRUTTO,
+    firma: rowData.FIRMA,
     kwotaRoszczenia: "", // Zmieniamy na string, aby łatwiej obsługiwać formatowanie
     kancelaria: "",
     zapisz: false,
@@ -292,6 +295,9 @@ const EditRowTable = ({
         ...prev,
         numerFv: dataRowTable?.singleDoc.NUMER_FV,
         kontrahent: dataRowTable?.singleDoc.KONTRAHENT,
+        nip: dataRowTable?.singleDoc.NIP,
+        kwota_brutto: dataRowTable?.singleDoc.BRUTTO,
+        firma: dataRowTable?.singleDoc.FIRMA,
       };
     });
   }, [dataRowTable]);
@@ -351,15 +357,6 @@ const EditRowTable = ({
                       setManagementDescription={setManagementDescription}
                     />
                   )}
-                  {changePanel === "law-partner" && (
-                    <ReferToLawFirm
-                      rowData={rowData}
-                      lawPartner={dataRowTable.lawPartner}
-                      handleAddNote={handleAddNote}
-                      lawFirmData={lawFirmData}
-                      setLawFirmData={setLawFirmData}
-                    />
-                  )}
                 </section>
               </section>
             </section>
@@ -406,6 +403,7 @@ const EditRowTable = ({
               }
             >
               <section className="edit-row-table_section-content">
+                <section className="edit-row-table_section-content-data"></section>
                 <section className="edit-row-table_section-content-data">
                   {changePanel === "law-partner" && (
                     <ReferToLawFirm
@@ -417,7 +415,6 @@ const EditRowTable = ({
                     />
                   )}
                 </section>
-                <section className="edit-row-table_section-content-data"></section>
                 <section className="edit-row-table_section-content-data"></section>
               </section>
             </section>
@@ -518,7 +515,10 @@ const EditRowTable = ({
               );
             }
 
-            if (auth.roles.includes(150)) {
+            if (
+              auth.roles.includes(150) &&
+              !dataRowTable.singleDoc.DATA_PRZEKAZANIA_SPRAWY_DO_KANCELARII
+            ) {
               menuItems.push(
                 <MenuItem key="law-partner" value="law-partner">
                   PRZEKAŻ SPRAWĘ DO KANCELARII

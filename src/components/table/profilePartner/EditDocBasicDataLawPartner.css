@@ -35,7 +35,13 @@
 }
 .law_partner_basic_data_settlements_container {
   flex-grow: 1;
-  padding: 0 2px;
+  padding: 2px;
   display: flex;
   justify-content: space-between;
+}
+
+.law_partner_basic_data_settlements_container:hover {
+  cursor: pointer;
+  background-color: rgba(202, 202, 202, 0.7);
+  border-radius: 5px;
 }

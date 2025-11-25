@@ -68,19 +68,19 @@ const ReferToLawFirm = ({
     });
   };
 
-  const getData = async () => {
-    try {
-      console.log("kontrahent");
-      // const contractorData = await axiosPrivateIntercept.get(
-      //   `/law-partner/get-contractor-data/${encodeURIComponent(
-      //     rowData.NUMER_FV
-      //   )}`
-      // );
-      // console.log(contractorData.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     console.log("kontrahent");
+  //     // const contractorData = await axiosPrivateIntercept.get(
+  //     //   `/law-partner/get-contractor-data/${encodeURIComponent(
+  //     //     rowData.NUMER_FV
+  //     //   )}`
+  //     // );
+  //     // console.log(contractorData.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   useEffect(() => {
     const initialKwota = rowData.DO_ROZLICZENIA || 0;
@@ -89,7 +89,7 @@ const ReferToLawFirm = ({
       kwotaRoszczenia: initialKwota,
     }));
     setDisplayKwotaRoszczenia(formatAmount(initialKwota));
-    getData();
+    // getData();
   }, []);
 
   return (

@@ -14,7 +14,7 @@
 .edit_doc--content:focus {
   outline: none;
   border: 1px solid #aaa;
-  background-color: rgb(161, 240, 161);
+  border: 1px solid red;
 }
 
 .refer_to_law_firm--panel {
