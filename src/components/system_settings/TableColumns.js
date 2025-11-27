@@ -55,8 +55,6 @@ const TableColumns = () => {
         );
         employeeData[permissions.select].columns = changeData;
 
-        console.log(employeeData);
-
         const sorted = sortColumns({
           permissions: permissions.type,
           employees: employeeData,

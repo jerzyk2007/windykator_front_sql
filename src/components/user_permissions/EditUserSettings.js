@@ -79,7 +79,6 @@ const EditUserSettings = ({ user, setEdit }) => {
     const getSettings = async () => {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get("/settings/get-settings");
-      console.log(result.data);
       const filteredRoles = result.data
         .map((item) => item.roles)
         .filter(Boolean)[0];

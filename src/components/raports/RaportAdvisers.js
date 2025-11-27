@@ -448,7 +448,6 @@ const RaportAdvisers = ({ profile }) => {
           setPleaseWait(false);
           return;
         }
-        console.log(resultData.data);
         setRaportData(resultData.data.data);
         checkMinMaxDateGlobal(resultData.data.data);
 

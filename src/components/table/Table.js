@@ -536,6 +536,7 @@ const Table = ({
               nextDoc={nextDoc}
               getSingleRow={getSingleRow}
               clearRowTable={clearRowTable}
+              info={info}
             />
           )
         ) : [500].some((role) => auth?.roles?.includes(role)) ? (

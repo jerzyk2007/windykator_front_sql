@@ -25,14 +25,17 @@ const EditRowTable = ({
   nextDoc,
   getSingleRow,
   clearRowTable,
+  info,
 }) => {
   const { auth } = useData();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-  const [rowData, setRowData] = useState([]);
-  const [changePanel, setChangePanel] = useState("doc-actions");
+  // const [rowData, setRowData] = useState([]);
+  const [rowData, setRowData] = useState(dataRowTable?.singleDoc || {});
+  const [changePanel, setChangePanel] = useState(
+    info === "raport_fk" ? "management" : "doc-actions"
+  );
   const [toggleState, setToggleState] = useState(1);
   const [note, setNote] = useState("");
-
   //zmienna do tworzenia histori decyzji dla zarządu wykorzystywane później w raporcie
   const [managementDescription, setManagementDescription] = useState({
     INFORMACJA_ZARZAD: [],
@@ -302,6 +305,17 @@ const EditRowTable = ({
     });
   }, [dataRowTable]);
 
+  useEffect(() => {
+    const canUseManagement =
+      info === "raport_fk" &&
+      rowData?.MARK_FK &&
+      (auth.roles.includes(110) || auth.roles.includes(120));
+
+    if (canUseManagement) {
+      setChangePanel("management");
+    }
+  }, [info, rowData?.MARK_FK, auth.roles]);
+
   return (
     <section className="edit-row-table">
       <section className="edit-row-table-wrapper">
@@ -461,21 +475,24 @@ const EditRowTable = ({
           </Button>
         </section>
         <section className="edit_row_table-buttons">
-          {auth.roles.includes(200) && rowData.MARK_FV && (
-            <Button
-              variant="contained"
-              color={rowData.MARK_FK ? "secondary" : "error"}
-              onClick={() =>
-                changeMarkDoc(
-                  rowData.NUMER_FV,
-                  rowData.MARK_FK === 1 ? 0 : 1,
-                  rowData.FIRMA
-                )
-              }
-            >
-              {rowData.MARK_FK ? "FK ON" : "FK OFF"}
-            </Button>
-          )}
+          {(auth.roles.includes(200) ||
+            auth.roles.includes(201) ||
+            auth.roles.includes(202)) &&
+            rowData.MARK_FV && (
+              <Button
+                variant="contained"
+                color={rowData.MARK_FK ? "secondary" : "error"}
+                onClick={() =>
+                  changeMarkDoc(
+                    rowData.NUMER_FV,
+                    rowData.MARK_FK === 1 ? 0 : 1,
+                    rowData.FIRMA
+                  )
+                }
+              >
+                {rowData.MARK_FK ? "FK ON" : "FK OFF"}
+              </Button>
+            )}
 
           {/* --- Nowa logika dla Select --- */}
           {(() => {

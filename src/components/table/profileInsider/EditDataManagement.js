@@ -138,7 +138,7 @@ const EditDataManagement = ({
           }
           type="date"
           max={maxDate}
-          value={tempDate || " "}
+          value={tempDate || ""}
           onChange={handleDateChange} // Obsługa zmiany daty
         />
         <Button
