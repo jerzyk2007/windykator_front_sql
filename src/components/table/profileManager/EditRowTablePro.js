@@ -181,9 +181,10 @@ const EditRowTablePro = ({
                 />
               </section>
             )} */}
-            {rowData?.id_document && (
-              <section className="edit-row-table_section-content-data">
-                {!rowData?.DATA_PRZYJECIA_SPRAWY && profile === "partner" && (
+            {rowData?.id_document &&
+              !rowData?.DATA_PRZYJECIA_SPRAWY &&
+              profile === "partner" && (
+                <section className="edit-row-table_section-content-data">
                   <AcceptCasePanel
                     rowData={rowData}
                     updateDocuments={updateDocuments}
@@ -191,9 +192,8 @@ const EditRowTablePro = ({
                     setDataRowTable={setDataRowTable}
                     clearRowTable={clearRowTable}
                   />
-                )}
-              </section>
-            )}
+                </section>
+              )}
 
             {rowData?.DATA_PRZYJECIA_SPRAWY ? (
               <section className="edit-row-table_section-content-data">
