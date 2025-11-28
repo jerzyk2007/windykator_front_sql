@@ -1,117 +1,113 @@
 .instruction {
-    flex-grow: 1;
-    max-height: 94vh;
-    font-family: "Source Sans 3", Calibri, sans-serif;
-    font-size: 1.4rem;
-    display: flex;
+  flex-grow: 1;
+  max-height: 94vh;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.4rem;
+  display: flex;
 }
 
 .instruction__menu {
-    overflow: auto;
+  overflow: auto;
 
-    flex-basis: 25%;
-    min-width: 350px;
-    margin: 5px;
-    border: 1px solid rgba(44, 123, 168, 0.6);
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
+  flex-basis: 25%;
+  min-width: 350px;
+  margin: 5px;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
 }
 
 .instruction__container {
-    overflow: auto;
+  overflow: auto;
 
-    flex-grow: 1;
-    padding: 15px;
-    min-width: 750px;
-    margin: 5px;
-    border: 1px solid rgba(44, 123, 168, 0.6);
-    border-radius: 5px;
-    display: flex;
+  flex-grow: 1;
+  padding: 15px;
+  min-width: 750px;
+  margin: 5px;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  display: flex;
 }
 
 .instruction__menu-item {
-    padding: 5px;
-    display: flex;
-    cursor: pointer;
+  padding: 5px;
+  display: flex;
+  cursor: pointer;
 }
 
 .instruction__menu-submenu {
-    margin-left: 20px;
-    color: rgb(4, 150, 48);
+  margin-left: 20px;
+  color: rgb(4, 150, 48);
 }
 
 .instruction__menu-submenu2 {
-    margin-left: 40px;
-    color: rgb(233, 10, 10);
-
+  margin-left: 40px;
+  color: rgb(233, 10, 10);
 }
 
 .instruction__menu-item:hover .instruction__menu-item--title {
-    color: rgb(33, 83, 250);
-    font-weight: 600;
+  color: rgb(33, 83, 250);
+  font-weight: 600;
 }
 
 .instruction__menu-item--logo {
-    transition: .3s;
-    flex-basis: 15%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  transition: 0.3s;
+  flex-basis: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .instruction__menu-item:hover .instruction__menu-item--logo {
-    transform: translateX(20%) translateY(0%) scale(1);
-    filter: invert(100%) brightness(1.5) contrast(.2);
+  transform: translateX(20%) translateY(0%) scale(1);
+  filter: invert(100%) brightness(1.5) contrast(0.2);
 }
 
 .instruction__menu--hide {
-    margin-left: 20px;
-    color: rgb(204, 27, 189);
+  margin-left: 20px;
+  color: rgb(204, 27, 189);
 }
 
-
-
-
 .instruction_component {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .instruction_component-title {
-    font-size: 2rem;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  font-size: 2rem;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .instruction_component-content {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .instruction_component-content--text {
-    padding: 5px 0;
-    text-align: justify;
+  padding: 5px 0;
+  text-align: justify;
 }
 
 .instruction_component-content--element {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .instruction_component-content--title {
-    font-weight: 600;
-    text-align: center;
+  font-weight: 600;
+  text-align: center;
 }
 
 .instruction_component__wrapper {
-    margin: 50px 10px 0 10px;
-    display: flex;
-    align-items: center;
+  margin: 50px 10px 0 10px;
+  display: flex;
+  align-items: center;
 }
 
 .instruction_component__image {
-    max-width: 40vw;
+  max-width: 40vw;
 }

@@ -62,6 +62,24 @@ const Login = () => {
 
   return (
     <section className="login__fixed">
+      <section className="login__high_information">
+        <h1>UWAGA !!!</h1>
+        <span>
+          Chciałem poinformować, że w programie nastąpiła bardzo duża
+          aktualizacja.
+        </span>
+        <span>
+          Starałem się aby pod kątem wizualnym i funkcjonalnym zmiany były jak
+          najmniej widoczne.
+        </span>
+        <span>Jest również zaktualizowana instrukcja obsługi.</span>
+        <span>
+          W przypadku nieprawidłowego działania programu, prosze o kontakt.
+        </span>
+        <span style={{ fontWeight: "bold", color: "red" }}>
+          jerzy.komorowski@krotoski.com, 782 991 608
+        </span>
+      </section>
       {!forgotPass ? (
         <section className="login">
           {errMsg && (

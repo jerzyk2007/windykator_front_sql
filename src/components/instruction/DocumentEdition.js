@@ -8,7 +8,7 @@ const DocumentEdition = () => {
         <label>Edycja wybranego dokumentu</label>
       </section>
       <section className="instruction_custom-content">
-        <span className="instruction_custom-content--text">
+        {/* <span className="instruction_custom-content--text">
           Otwarcie okna do edycji i pełnego podglądu dokumentu wymaga
           dwukrotnego kliknięcia w wybrany dokument w tabeli. Ale jest jeden
           wyjątek.
@@ -31,11 +31,11 @@ const DocumentEdition = () => {
             className="w-32 h-auto"
             style={{ maxWidth: "50vw" }}
           />
-        </div>
+        </div> */}
         <br />
         <span className="instruction_custom-content--text">
-          <span style={{ fontWeight: 700 }}>Dwukrotne kliknięcie</span> w w
-          wybranym dokumencie otworzy okno edycji.
+          <span style={{ fontWeight: 700 }}>Dwukrotne kliknięcie</span> w
+          wybrany wiersz w tabeli otworzy okno edycji.
         </span>
         <div className="instruction_custom-image">
           <img
@@ -120,6 +120,20 @@ const DocumentEdition = () => {
             className="instruction_component-content--element"
             style={{ margin: "0 20px" }}
           >
+            LISTA WYBORU
+          </span>
+          <img
+            src="/instruction_image/raport_fk_select.png"
+            alt="Logo"
+            className="w-32 h-auto"
+          />
+        </section>
+        {/* <section className="instruction_component__wrapper">
+          <FcInfo />
+          <span
+            className="instruction_component-content--element"
+            style={{ margin: "0 20px" }}
+          >
             RAPORT FK
           </span>
           <img
@@ -127,7 +141,7 @@ const DocumentEdition = () => {
             alt="Logo"
             className="w-32 h-auto"
           />
-        </section>
+        </section> */}
         <span className="instruction_custom-content--text">
           przycisk pojawi się tylko wtedy jeśli wybierzemy wczytanie danych z
           menu: Tabelka / Dokumenty Raportu FK
