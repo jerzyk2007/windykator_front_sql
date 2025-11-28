@@ -25,9 +25,21 @@ export const menuItems = [
     title: "Kancelaria",
     roles: [500],
     submenu: [
-      { label: "W realizacji", path: "/ongoing-law-table", roles: [500] },
+      { label: "W realizacji", path: "/actual-law-table", roles: [500] },
       { label: "Sprawy do przyjęcia", path: "/no-accept-table", roles: [500] },
       // { label: "Wszystkie", path: "/all-cases-law-table", roles: [500] },
+    ],
+  },
+  {
+    title: "Polisy",
+    roles: [150, 350],
+    submenu: [
+      {
+        label: "W windykacji",
+        path: "/actual-insurance-table",
+        roles: [150, 350],
+      },
+      // { label: "Sprawy do przyjęcia", path: "/no-accept-table", roles: [150, 350] },
     ],
   },
   {

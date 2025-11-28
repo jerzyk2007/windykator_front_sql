@@ -461,7 +461,6 @@ const TableColumns = () => {
       const settingsColumn = await axiosPrivateIntercept.get(
         "/table/get-table-columns"
       );
-
       const matchData = {
         permissions: settingsColumn?.data?.permissions || [],
         employees: {},

@@ -23,7 +23,7 @@ import {
   lawPartnerRaport,
 } from "./utilsForTable/excelFilteredTable";
 import TableButtonInfo from "./TableButtonInfo";
-import EditRowTableLawPartner from "./profilePartner/EditRowTableLawPartner";
+import EditRowTablePro from "./profileManager/EditRowTablePro";
 import PleaseWait from "../PleaseWait";
 
 import "./Table.css";
@@ -218,10 +218,6 @@ const Table = ({
           const response = await axiosPrivateIntercept.get(
             `/documents/get-single-document/${id}`
           );
-          // if (type === "quick") {
-          //   setQuickNote(response.data.singleDoc);
-          // }
-          // if (type === "full") {
           setDataRowTable({
             edit: true,
             singleDoc: response?.data?.singleDoc ? response.data.singleDoc : {},
@@ -242,8 +238,17 @@ const Table = ({
             controlDoc: {},
             lawPartner: [],
           });
+        } else if (profile === "insurance") {
+          const response = await axiosPrivateIntercept.get(
+            `/insurance/get-single-document/${id}`
+          );
+          setDataRowTable({
+            edit: true,
+            singleDoc: response?.data ? response.data : {},
+            controlDoc: {},
+            lawPartner: [],
+          });
         }
-        // }
       } catch (error) {
         console.error("Error fetching data from the server:", error);
       } finally {
@@ -509,6 +514,7 @@ const Table = ({
     setNextDoc(visibleData);
     tableDataSize(table.getPrePaginationRowModel().rows);
   }, [table.getPrePaginationRowModel().rows, columnVisibility]);
+
   return (
     <section
       className="table"
@@ -539,10 +545,10 @@ const Table = ({
               info={info}
             />
           )
-        ) : [500].some((role) => auth?.roles?.includes(role)) ? (
-          profile === "partner" &&
+        ) : [500, 350].some((role) => auth?.roles?.includes(role)) ? (
+          (profile === "partner" || profile === "insurance") &&
           dataRowTable.edit && (
-            <EditRowTableLawPartner
+            <EditRowTablePro
               dataRowTable={dataRowTable}
               setDataRowTable={setDataRowTable}
               updateDocuments={updateDocuments}
@@ -550,6 +556,7 @@ const Table = ({
               nextDoc={nextDoc}
               getSingleRow={getSingleRow}
               clearRowTable={clearRowTable}
+              profile={profile}
             />
           )
         ) : null}

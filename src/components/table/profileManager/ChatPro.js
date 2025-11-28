@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@mui/material";
-import "./ChatLawPartner.css";
+import "./ChatPro.css";
 
 const ChatLawPartner = ({ chatData = [], note, setNote, handleAddNote }) => {
   const [clickedIndex, setClickedIndex] = useState(null);

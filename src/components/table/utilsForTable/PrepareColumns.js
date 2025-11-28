@@ -375,34 +375,226 @@ export const prepareColumnsPartner = (columnsData) => {
         },
       };
     }
-    // if (item.accessorKey === "DATA_PRZEKAZANIA_SPRAWY") {
+
+    if (item.accessorKey === "KONTRAHENT") {
+      modifiedItem.muiTableBodyCellProps = ({ cell }) => {
+        return {
+          align: "left",
+          sx: {
+            ...muiTableBodyCellProps.sx,
+          },
+        };
+      };
+      modifiedItem.filterFn = "contains";
+    }
+
+    if (item.accessorKey === "KWOTA_ROSZCZENIA_DO_KANCELARII") {
+      modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
+        ...muiTableBodyCellProps,
+        sx: {
+          ...muiTableBodyCellProps.sx,
+          backgroundColor: "rgba(248, 255, 152, .2)",
+        },
+      });
+    }
+
+    if (item.accessorKey === "ODDZIAL") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return `${originalRow?.ODDZIAL?.LOKALIZACJA || ""} ${
+          originalRow?.ODDZIAL?.DZIAL || ""
+        } ${originalRow?.ODDZIAL?.OBSZAR || ""}`.trim();
+      };
+    }
+    if (item.accessorKey === "OPIS_DOKUMENTU") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return originalRow[item.accessorKey]
+          ? originalRow[item.accessorKey]
+          : "BRAK";
+      };
+    }
+
+    // if (item.accessorKey === "WYKAZ_SPLACONEJ_KWOTY_FK") {
     //   modifiedItem.accessorFn = (originalRow) => {
-    //     return originalRow[item.accessorKey]
-    //       ? originalRow[item.accessorKey]
-    //       : "BRAK";
+    //     const wykaz = originalRow?.WYKAZ_SPLACONEJ_KWOTY_FK
+    //       ? originalRow.WYKAZ_SPLACONEJ_KWOTY_FK
+    //       : [];
+    //     if (wykaz && wykaz.length) {
+    //       console.log(wykaz);
+    //       const mergedData = wykaz.map((itemRow) => {
+    //         return `${itemRow.data} - ${itemRow.kwota} - ${itemRow.symbol}`;
+    //       });
+    //       return mergedData;
+    //     }
+    //     return "BRAK";
     //   };
     // }
-    // if (item.accessorKey === "DATA_PRZYJECIA_SPRAWY") {
-    //   modifiedItem.accessorFn = (originalRow) => {
-    //     return originalRow[item.accessorKey]
-    //       ? originalRow[item.accessorKey]
-    //       : "BRAK";
-    //   };
-    // }
-    // if (item.accessorKey === "DATA_WYMAGALNOSCI_PLATNOSCI") {
-    //   modifiedItem.accessorFn = (originalRow) => {
-    //     return originalRow[item.accessorKey]
-    //       ? originalRow[item.accessorKey]
-    //       : "BRAK";
-    //   };
-    // }
-    // if (item.accessorKey === "DATA_WYSTAWIENIA_DOKUMENTU") {
-    //   modifiedItem.accessorFn = (originalRow) => {
-    //     return originalRow[item.accessorKey]
-    //       ? originalRow[item.accessorKey]
-    //       : "BRAK";
-    //   };
-    // }
+
+    if (item.accessorKey === "WYKAZ_SPLACONEJ_KWOTY_FK") {
+      modifiedItem.accessorFn = (originalRow) => {
+        return originalRow?.WYKAZ_SPLACONEJ_KWOTY_FK || [];
+      };
+      modifiedItem.muiTableBodyCellProps = {
+        align: "left",
+        sx: {
+          ...muiTableBodyCellProps.sx,
+        },
+      };
+      modifiedItem.enableClickToCopy = false;
+      modifiedItem.Cell = ({ cell }) => {
+        const wykaz = cell.getValue() || [];
+
+        if (!wykaz.length) {
+          return "BRAK";
+        }
+
+        // funkcja do formatowania kwoty
+        const formatKwota = (kwota) =>
+          kwota !== undefined && kwota !== null && kwota !== 0
+            ? kwota.toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+              })
+            : "0,00";
+
+        // bierzemy pierwszy wpis
+        const first = wykaz[0];
+
+        const firstFormatted = (
+          <>
+            <span style={{ color: "blue", fontWeight: 600 }}>{first.data}</span>
+            {" - "}
+            <span style={{ color: "rgb(162, 0, 255)", fontWeight: 600 }}>
+              {formatKwota(first.kwota)}
+            </span>
+            {" - "}
+            <span>{first.symbol}</span>
+          </>
+        );
+
+        // jeśli więcej niż 1 wpłata → wyświetlamy licznik + pierwszy wpis
+        if (wykaz.length > 1) {
+          return (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{ fontWeight: 700 }}>
+                Łączna liczba wpłat: {wykaz.length}
+              </span>
+              <div>Ostatnia wpłata:</div>
+              <div>{firstFormatted}</div>
+            </div>
+          );
+        }
+
+        // jeśli tylko 1 wpis → wyświetlamy normalnie
+        return <div>{firstFormatted}</div>;
+      };
+    }
+
+    if (item.filterVariant === "none") {
+      modifiedItem.enableColumnFilter = false;
+      delete modifiedItem.filterVariant;
+    }
+
+    if (item.type === "money") {
+      modifiedItem.Cell = ({ cell }) => {
+        const value = cell.getValue();
+
+        const formattedSalary =
+          value !== undefined && value !== null && value !== 0
+            ? value.toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+              })
+            : "0,00";
+
+        return formattedSalary;
+      };
+    }
+
+    modifiedItem.columnFilterModeOptions = [];
+    delete modifiedItem.type;
+    return modifiedItem;
+  });
+  return update;
+};
+export const prepareColumnsInsurance = (columnsData) => {
+  const update = columnsData.map((item) => {
+    const modifiedItem = { ...item };
+    modifiedItem.muiTableBodyCellProps = muiTableBodyCellProps;
+
+    if (item.filterVariant === "date-range") {
+      modifiedItem.accessorFn = (originalRow) => {
+        if (originalRow[item.accessorKey]) {
+          const date = new Date(originalRow[item.accessorKey]);
+          // ustaw godzinę na początek dnia, by uniknąć problemów z filtrowaniem
+          date.setHours(0, 0, 0, 0);
+          return date;
+        }
+        return null;
+      };
+
+      modifiedItem.Cell = ({ cell }) => {
+        // Parsowanie wartości komórki jako data
+        if (cell.getValue()) {
+          const date = new Date(cell.getValue());
+          // Sprawdzenie, czy data jest prawidłowa
+          if (!isNaN(date)) {
+            return format(date, "yyyy-MM-dd");
+          }
+        }
+        return null;
+      };
+    }
+    if (item.accessorKey === "CZAT_KANCELARIA") {
+      modifiedItem.accessorFn = (originalRow) => {
+        const arrayData = originalRow.CZAT_KANCELARIA;
+        if (!arrayData) return "Brak wpisów";
+        try {
+          let dzialania;
+
+          if (!Array.isArray(arrayData) || arrayData.length === 0) {
+            dzialania = "Brak wpisów";
+          } else if (arrayData.length === 1) {
+            // ⭐ ZWRACAMY STRING A NIE OBIEKT!
+            const e = arrayData[0];
+            dzialania = `${e.date} - ${e.username} - ${e.note}`;
+          } else {
+            const last = arrayData[arrayData.length - 1];
+            dzialania = `Liczba wcześniejszych wpisów: ${
+              arrayData.length - 1
+            }\n${last.date} - ${last.username} - ${last.note}`;
+          }
+
+          // Ograniczenie do max 2 enterów i max 120 znaków
+          let maxEnters = 2;
+          let countEnters = 0;
+          let truncated = "";
+
+          for (let char of dzialania) {
+            if (char === "\n") {
+              countEnters++;
+              if (countEnters > maxEnters) break;
+            }
+            if (truncated.length >= 120) break;
+            truncated += char;
+          }
+
+          return truncated.length < dzialania.length
+            ? truncated + " …"
+            : truncated;
+        } catch {
+          return "Brak wpisów";
+        }
+      };
+
+      modifiedItem.muiTableBodyCellProps = {
+        align: "left",
+        sx: {
+          ...muiTableBodyCellProps.sx,
+        },
+      };
+    }
 
     if (item.accessorKey === "KONTRAHENT") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {

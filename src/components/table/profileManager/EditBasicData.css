@@ -7,6 +7,8 @@
 
 .edit_doc--content_law_partner {
   width: 100%;
+  padding: 0 2px;
+  margin: 0 2px;
   text-align: center;
   border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;

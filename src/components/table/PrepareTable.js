@@ -6,6 +6,7 @@ import Table from "./Table";
 import {
   prepareColumnsInsider,
   prepareColumnsPartner,
+  prepareColumnsInsurance,
 } from "./utilsForTable/prepareColumns";
 import "./PrepareTable.css";
 
@@ -48,17 +49,24 @@ const PrepareTable = ({ info, profile }) => {
     const getData = async () => {
       try {
         setPleaseWait(true);
-        if (profile !== "insider" && profile !== "partner") {
-          return; // przerwij działanie funkcji
+
+        if (!["insider", "partner", "insurance"].includes(profile)) {
+          return;
         }
 
-        const basePath = profile === "insider" ? "/documents" : "/law-partner";
+        // const basePath = profile === "insider" ? "/documents" : "/law-partner";
+        const basePath = {
+          insider: "/documents",
+          partner: "/law-partner",
+          insurance: "/insurance",
+        };
 
         const dataTable = await axiosPrivateIntercept.get(
-          `${basePath}/get-data-table/${auth.id_user}/${info}/${profile}`,
+          `${basePath[profile]}/get-data-table/${auth.id_user}/${info}/${profile}`,
           { signal: controller.signal }
         );
         setDocuments(dataTable.data);
+
         const tableSettingsColumns = await axiosPrivateIntercept.get(
           `/table/get-settings-colums-table/${auth.id_user}/${profile}`,
           { signal: controller.signal }
@@ -71,7 +79,10 @@ const PrepareTable = ({ info, profile }) => {
             ? prepareColumnsInsider(tableSettingsColumns.data.columns)
             : profile === "partner"
             ? prepareColumnsPartner(tableSettingsColumns.data.columns)
+            : profile === "insurance"
+            ? prepareColumnsInsurance(tableSettingsColumns.data.columns)
             : [];
+
         setColumns(update);
         setPleaseWait(false);
       } catch (err) {

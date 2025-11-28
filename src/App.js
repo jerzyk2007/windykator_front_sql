@@ -33,7 +33,7 @@ function App() {
       <Router
         future={{
           v7_startTransition: true,
-          v7_relativeSplatPath: true, // 👈 dodaj to
+          v7_relativeSplatPath: true,
         }}
       >
         <Header />
@@ -131,7 +131,7 @@ function App() {
             </Route>
             <Route element={<RequireAuth allowedRoles={[500]} />}>
               <Route
-                path="/ongoing-law-table"
+                path="/actual-law-table"
                 element={<PrepareTable info={"ongoing"} profile={"partner"} />}
               />
             </Route>
@@ -140,6 +140,15 @@ function App() {
                 path="/no-accept-table"
                 element={
                   <PrepareTable info={"no-accept"} profile={"partner"} />
+                }
+              />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={[150, 350]} />}>
+              <Route
+                path="/actual-insurance-table"
+                element={
+                  <PrepareTable info={"vindication"} profile={"insurance"} />
                 }
               />
             </Route>

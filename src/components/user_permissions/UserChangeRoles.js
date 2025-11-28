@@ -48,6 +48,11 @@ const UserChangeRoles = ({ id, roles, setRoles, permission }) => {
                 {" - raporty dla Nory"}
               </span>
             )}
+            {role === "Insurance" && (
+              <span className="user-change-roles--information">
+                {" - obsługa polis"}
+              </span>
+            )}
             {role === "Editor" && (
               <span className="user-change-roles--information">
                 {" - edytowanie dokumentów"}
@@ -150,6 +155,7 @@ const UserChangeRoles = ({ id, roles, setRoles, permission }) => {
           FK_KEM: roles?.FK_KEM ? roles.FK_KEM : false,
           FK_RAC: roles?.FK_RAC ? roles.FK_RAC : false,
           Nora: roles?.Nora ? roles.Nora : false,
+          Insurance: roles?.Insurance ? roles.Insurance : false,
           LawPartner: roles?.LawPartner ? roles.LawPartner : false,
           SuperAdmin: roles?.SuperAdmin ? roles.SuperAdmin : false,
         }

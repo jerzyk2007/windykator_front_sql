@@ -3,15 +3,15 @@ import useData from "../../hooks/useData";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
-import ChatLawPartner from "./ChatLawPartner";
+import ChatPro from "./ChatPro";
 import LogsEvent from "./LogsEvent";
-import EditDocBasicDataLawPartner from "./EditDocBasicDataLawPartner";
-import EditDocActionsDataLawPartner from "./EditDocActionsDataLawPartner";
+import EditBasicData from "./EditBasicData";
+import EditActionsData from "./EditActionsData";
 import AcceptCasePanel from "./AcceptCasePanel";
 import { changeSingleDocLawPartner } from "../utilsForTable/changeSingleDocument";
-import "./EditRowTableLawPartner.css";
+import "./EditRowTablePro.css";
 
-const EditRowTableLawPartner = ({
+const EditRowTablePro = ({
   dataRowTable,
   setDataRowTable,
   updateDocuments,
@@ -19,6 +19,7 @@ const EditRowTableLawPartner = ({
   nextDoc,
   getSingleRow,
   clearRowTable,
+  profile,
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
@@ -137,9 +138,9 @@ const EditRowTableLawPartner = ({
         >
           <section className="edit-row-table_section-content">
             <section className="edit-row-table_section-content-data">
-              <EditDocBasicDataLawPartner rowData={rowData} />
+              <EditBasicData rowData={rowData} profile={profile} />
             </section>
-            {rowData?.DATA_PRZYJECIA_SPRAWY ? (
+            {rowData?.DATA_PRZYJECIA_SPRAWY && (
               <section className="edit-row-table_section-content-data edit-row-table-law-partner_section-content-data">
                 <select
                   className="edit-row-table-law-partner--select"
@@ -159,7 +160,7 @@ const EditRowTableLawPartner = ({
                   <option value="logi">Dziennik zmian</option>
                 </select>
                 {panel === "chat" && (
-                  <ChatLawPartner
+                  <ChatPro
                     chatData={rowData.CZAT_KANCELARIA}
                     note={note}
                     setNote={setNote}
@@ -168,7 +169,8 @@ const EditRowTableLawPartner = ({
                 )}
                 {panel === "logi" && <LogsEvent logsData={rowData.CZAT_LOGI} />}
               </section>
-            ) : (
+            )}
+            {/* {!rowData?.DATA_PRZYJECIA_SPRAWY && profile === "partner" && (
               <section className="edit-row-table_section-content-data">
                 <AcceptCasePanel
                   rowData={rowData}
@@ -178,10 +180,24 @@ const EditRowTableLawPartner = ({
                   clearRowTable={clearRowTable}
                 />
               </section>
+            )} */}
+            {rowData?.id_document && (
+              <section className="edit-row-table_section-content-data">
+                {!rowData?.DATA_PRZYJECIA_SPRAWY && profile === "partner" && (
+                  <AcceptCasePanel
+                    rowData={rowData}
+                    updateDocuments={updateDocuments}
+                    removeDocuments={removeDocuments}
+                    setDataRowTable={setDataRowTable}
+                    clearRowTable={clearRowTable}
+                  />
+                )}
+              </section>
             )}
+
             {rowData?.DATA_PRZYJECIA_SPRAWY ? (
               <section className="edit-row-table_section-content-data">
-                <EditDocActionsDataLawPartner
+                <EditActionsData
                   rowData={rowData}
                   setRowData={setRowData}
                   handleAddNote={handleAddNote}
@@ -264,4 +280,4 @@ const EditRowTableLawPartner = ({
     </section>
   );
 };
-export default EditRowTableLawPartner;
+export default EditRowTablePro;
