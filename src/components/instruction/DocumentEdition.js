@@ -143,12 +143,12 @@ const DocumentEdition = () => {
           />
         </section> */}
         <span className="instruction_custom-content--text">
-          przycisk pojawi się tylko wtedy jeśli wybierzemy wczytanie danych z
-          menu: Tabelka / Dokumenty Raportu FK
+          aby zmienić Panel na którym wyświetlane są dane należy dokonać wyboru
+          na <strong>Liście wyboru</strong>
         </span>
         <div className="instruction_custom-image">
           <img
-            src="/instruction_image/raport_fk_edit.png"
+            src="/instruction_image/report_draft_addInfo.png"
             alt="Logo"
             className="w-32 h-auto"
             style={{ maxWidth: "50%" }}
@@ -167,16 +167,16 @@ const DocumentEdition = () => {
             className="instruction_component-content--element"
             style={{ margin: "0 20px" }}
           >
-            BECARED
+            KANCELARIA TU / BL
           </span>
-          <img
+          {/* <img
             src="/instruction_image/becared.png"
             alt="Logo"
             className="w-32 h-auto"
-          />
+          /> */}
         </section>
         <span className="instruction_custom-content--text">
-          przycisk pojawi się tylko w przypadku sparw "Blacharskich" w
+          opcja na liście pojawi się tylko w przypadku sparw "Blacharskich" w
           kancelariach dot. "PZU"
         </span>
         <span className="instruction_custom-content--text">
@@ -216,13 +216,13 @@ const DocumentEdition = () => {
             className="instruction_component-content--element"
             style={{ margin: "0 20px" }}
           >
-            KONTROLA
+            KONTROLA BL
           </span>
-          <img
+          {/* <img
             src="/instruction_image/control.png"
             alt="Logo"
             className="w-32 h-auto"
-          />
+          /> */}
         </section>
         <span className="instruction_custom-content--text">
           dotyczy kontroli dokumentacji poszczególnych działów

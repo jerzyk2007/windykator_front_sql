@@ -32,7 +32,7 @@ export const menuItems = [
   },
   {
     title: "Polisy",
-    roles: [150, 350],
+    roles: [350],
     submenu: [
       {
         label: "W windykacji",
