@@ -1,0 +1,43 @@
+.organization_structure {
+  flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.organization_structure-wrapper {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.organization_structure__container {
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.organization_structure--bloc-area {
+  padding: 5px;
+  text-align: center;
+  width: 100px;
+  cursor: pointer;
+  box-sizing: content-box;
+  position: relative;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+}
+
+.organization_structure__section-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-around;
+}
+
+.organization_structure__section-content-data {
+  flex-basis: 35%;
+  display: flex;
+  justify-content: center;
+}

@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FiX } from "react-icons/fi";
 import { Button } from "@mui/material";
+import PleaseWait from "../PleaseWait";
 import "./Register.css";
 
 const Register = () => {
@@ -17,6 +18,7 @@ const Register = () => {
   const navigate = useNavigate();
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
+  const [pleaseWait, setPleaseWait] = useState(false);
   const [username, setUsername] = useState("");
   const [usersurname, setUsersurname] = useState("");
 
@@ -26,6 +28,16 @@ const Register = () => {
 
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState("");
+
+  const [userPermission, setUserPermission] = useState({
+    available: [],
+    userChoice: "",
+  });
+
+  const descriptions = {
+    Pracownik: "Pracownik – dotyczy osób zatrudnionych w strukturach Krotoski",
+    Kancelaria: "Kancelaria – dotyczy osób z kancelarii zewnętrznych",
+  };
 
   const USER_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -38,10 +50,16 @@ const Register = () => {
         setErrMsg("Invalid entry");
         return;
       }
+      setPleaseWait(true);
       const result = await axiosPrivateIntercept.post(
         "/user/register",
 
-        JSON.stringify({ userlogin, username, usersurname }),
+        JSON.stringify({
+          userlogin,
+          username,
+          usersurname,
+          permission: userPermission.userChoice,
+        }),
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -61,6 +79,8 @@ const Register = () => {
       } else {
         setErrMsg("Rejestracja nie powiodła się.");
       }
+    } finally {
+      setPleaseWait(false);
     }
   };
 
@@ -69,18 +89,46 @@ const Register = () => {
   };
 
   useEffect(() => {
+    if (!pleaseWait && userRef.current) {
+      userRef.current.focus();
+    }
+  }, [pleaseWait]);
+
+  useEffect(() => {
     const result = USER_REGEX.test(userlogin);
     setValidUserlogin(result);
     setErrMsg("");
   }, [userlogin]);
 
   useEffect(() => {
-    userRef.current.focus();
+    const getPermissions = async () => {
+      setPleaseWait(true);
+
+      try {
+        const result = await axiosPrivateIntercept.get(
+          "/settings/get-permissions"
+        );
+        setUserPermission((prev) => {
+          return {
+            ...prev,
+            available: result?.data?.permissions ? result.data.permissions : [],
+          };
+        });
+
+        setPleaseWait(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getPermissions();
   }, []);
 
   return (
     <>
-      {success ? (
+      {pleaseWait ? (
+        <PleaseWait />
+      ) : success ? (
         <section className="register">
           <h3 style={{ fontSize: "1.3rem" }} className="register-title">
             {success}
@@ -131,7 +179,7 @@ const Register = () => {
               type="text"
               id="username"
               autoComplete="new-userlogin"
-              name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie
+              name="uniqueNameForThisField"
               ref={userRef}
               value={userlogin}
               onChange={(e) => setUserlogin(e.target.value.toLowerCase())}
@@ -144,8 +192,7 @@ const Register = () => {
                 <FontAwesomeIcon icon={faInfoCircle} />
                 Od 4 do 24 znaków
                 <br />
-                Musi to byc format adresu email.
-                <br />
+                Musi to być format adresu email.
               </p>
             )}
 
@@ -157,14 +204,13 @@ const Register = () => {
               type="text"
               id="user"
               autoComplete="new-username"
-              name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie
-              // ref={userRef}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
             />
+
             <label htmlFor="usersurname" className="register__container-title">
               Nazwisko:
             </label>
@@ -173,22 +219,56 @@ const Register = () => {
               type="text"
               id="usersurname"
               autoComplete="new-usersurname"
-              name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie
               value={usersurname}
               onChange={(e) => setUsersurname(e.target.value)}
               required
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
             />
+
+            <label htmlFor="permission" className="register__container-title">
+              Wybierz dostęp dla użytkownika:
+            </label>
+
+            <select
+              className="register__container-text"
+              style={{ fontSize: "1.1rem" }}
+              value={userPermission.userChoice || ""}
+              onChange={(e) => {
+                setUserPermission((prev) => {
+                  return {
+                    ...prev,
+                    userChoice: e.target.value,
+                  };
+                });
+              }}
+            >
+              <option value="" hidden>
+                Wybierz typ użytkownika
+              </option>
+
+              {userPermission?.available.map((key) => (
+                <option key={key} value={key}>
+                  {descriptions[key] || key}
+                </option>
+              ))}
+            </select>
+
             <span className="register-info">
-              Jeśli rejestracja zakońćzy się sukcesem do użytkownika zostanie
-              wysłany email z hasłem dostępu. Pamiętaj, aby nadać mu odpowiednie
-              uprawnienia i zapewnić dostęp do wymaganych danych.
+              Jeśli rejestracja zakończy się sukcesem, do użytkownika zostanie
+              wysłany e-mail z hasłem dostępu. Pamiętaj, aby nadać mu
+              odpowiednie uprawnienia i zapewnić dostęp do wymaganych danych.
             </span>
+
             <Button
               variant="contained"
               type="submit"
-              disabled={!validUserlogin || !username || !usersurname}
+              disabled={
+                !validUserlogin ||
+                !username ||
+                !usersurname ||
+                !userPermission.userChoice
+              }
               size="large"
             >
               Zarejestruj

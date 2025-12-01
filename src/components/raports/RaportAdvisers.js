@@ -17,7 +17,7 @@ import { dataRaport } from "../table/utilsForTable/excelFilteredTable";
 
 // import "./RaportAdvisers.css";
 
-const RaportAdvisers = () => {
+const RaportAdvisers = ({ profile }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const { height } = useWindowSize();
@@ -35,7 +35,7 @@ const RaportAdvisers = () => {
     // { id: "DO_ROZLICZENIA", desc: true },
   ]);
   const [raportData, setRaportData] = useState([]);
-  const [permission, setPermission] = useState("");
+  // const [permission, setPermission] = useState("");
   const [departments, setDepartments] = useState([]);
   const [raport, setRaport] = useState([]);
   const [minMaxDateGlobal, setMinMaxDateGlobal] = useState({
@@ -365,72 +365,72 @@ const RaportAdvisers = () => {
 
   useEffect(() => {
     const createDataRaport = () => {
-      if (permission === "Standard") {
-        let uniqueAdvisersAndDepartments = [];
-        raportData.forEach((item) => {
-          if (
-            item.DORADCA &&
-            typeof item.DORADCA === "string" &&
-            item.DZIAL &&
-            typeof item.DZIAL === "string"
-          ) {
-            const addUniqueAdvisersAndDepartments = {
-              merge: `${item.DORADCA}-${item.DZIAL}`,
-              adviser: item.DORADCA,
-              department: item.DZIAL,
-            };
-            const isObjectExists = uniqueAdvisersAndDepartments.some(
-              (item) =>
-                JSON.stringify(item) ===
-                JSON.stringify(addUniqueAdvisersAndDepartments)
-            );
-            if (!isObjectExists) {
-              uniqueAdvisersAndDepartments.push(
-                addUniqueAdvisersAndDepartments
-              );
-            }
+      // if (permission === "Standard") {
+      let uniqueAdvisersAndDepartments = [];
+      raportData.forEach((item) => {
+        if (
+          item.DORADCA &&
+          typeof item.DORADCA === "string" &&
+          item.DZIAL &&
+          typeof item.DZIAL === "string"
+        ) {
+          const addUniqueAdvisersAndDepartments = {
+            merge: `${item.DORADCA}-${item.DZIAL}`,
+            adviser: item.DORADCA,
+            department: item.DZIAL,
+          };
+          const isObjectExists = uniqueAdvisersAndDepartments.some(
+            (item) =>
+              JSON.stringify(item) ===
+              JSON.stringify(addUniqueAdvisersAndDepartments)
+          );
+          if (!isObjectExists) {
+            uniqueAdvisersAndDepartments.push(addUniqueAdvisersAndDepartments);
           }
-        });
-        const sortedData = [...uniqueAdvisersAndDepartments].sort((a, b) => {
-          const adviserA = a.adviser.toLowerCase();
-          const adviserB = b.adviser.toLowerCase();
-          if (adviserA < adviserB) return -1;
-          if (adviserA > adviserB) return 1;
-          return 0;
-        });
-        setDepartments(sortedData);
-      } else if (permission === "Basic") {
-        let uniqueAdvisersAndDepartments = [];
-        raportData.forEach((item) => {
-          if (
-            item.DORADCA &&
-            typeof item.DORADCA === "string" &&
-            item.DZIAL &&
-            typeof item.DZIAL === "string"
-          ) {
-            const addUniqueAdvisersAndDepartments = {
-              merge: `${item.DORADCA}-${item.DZIAL}`,
-              adviser: item.DORADCA,
-              department: item.DZIAL,
-            };
-            const isObjectExists = uniqueAdvisersAndDepartments.some(
-              (item) =>
-                JSON.stringify(item) ===
-                JSON.stringify(addUniqueAdvisersAndDepartments)
-            );
-            if (!isObjectExists) {
-              uniqueAdvisersAndDepartments.push(
-                addUniqueAdvisersAndDepartments
-              );
-            }
-          }
-        });
+        }
+      });
+      const sortedData = [...uniqueAdvisersAndDepartments].sort((a, b) => {
+        const adviserA = a.adviser.toLowerCase();
+        const adviserB = b.adviser.toLowerCase();
+        if (adviserA < adviserB) return -1;
+        if (adviserA > adviserB) return 1;
+        return 0;
+      });
+      setDepartments(sortedData);
+      // }
+      // else if (permission === "Basic") {
+      //   let uniqueAdvisersAndDepartments = [];
+      //   raportData.forEach((item) => {
+      //     if (
+      //       item.DORADCA &&
+      //       typeof item.DORADCA === "string" &&
+      //       item.DZIAL &&
+      //       typeof item.DZIAL === "string"
+      //     ) {
+      //       const addUniqueAdvisersAndDepartments = {
+      //         merge: `${item.DORADCA}-${item.DZIAL}`,
+      //         adviser: item.DORADCA,
+      //         department: item.DZIAL,
+      //       };
+      //       const isObjectExists = uniqueAdvisersAndDepartments.some(
+      //         (item) =>
+      //           JSON.stringify(item) ===
+      //           JSON.stringify(addUniqueAdvisersAndDepartments)
+      //       );
+      //       if (!isObjectExists) {
+      //         uniqueAdvisersAndDepartments.push(
+      //           addUniqueAdvisersAndDepartments
+      //         );
+      //       }
+      //     }
+      //   });
 
-        setDepartments(uniqueAdvisersAndDepartments);
-      }
+      //   setDepartments(uniqueAdvisersAndDepartments);
+      // }
     };
     createDataRaport();
-  }, [raportData, permission, raportDate]);
+    // }, [raportData, permission, raportDate]);
+  }, [raportData, raportDate]);
 
   useEffect(() => {
     const update = grossTotalAdv(departments, raportData, raportDate);
@@ -442,14 +442,13 @@ const RaportAdvisers = () => {
       try {
         setPleaseWait(true);
         const resultData = await axiosPrivateIntercept.get(
-          `/raport/get-data/${auth.id_user}`
+          `/raport/get-data/${auth.id_user}/${profile}`
         );
-        if (resultData.data.data.length === 0) {
+        if (resultData.data.length === 0) {
           setPleaseWait(false);
           return;
         }
         setRaportData(resultData.data.data);
-        setPermission(resultData.data.permission);
         checkMinMaxDateGlobal(resultData.data.data);
 
         const [settingsRaportUserAdvisers] = await Promise.all([
@@ -500,7 +499,10 @@ const RaportAdvisers = () => {
       {pleaseWait ? (
         <PleaseWait />
       ) : (
-        <MaterialReactTable className="raport_departments-table" table={table} />
+        <MaterialReactTable
+          className="raport_departments-table"
+          table={table}
+        />
       )}
     </section>
   );

@@ -6,7 +6,6 @@ import {
 } from "material-react-table";
 import { MRT_Localization_PL } from "material-react-table/locales/pl";
 import { ThemeProvider, useTheme } from "@mui/material";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "dayjs/locale/pl";
 import { plPL } from "@mui/x-date-pickers/locales";
@@ -16,13 +15,25 @@ import { pl } from "date-fns/locale";
 
 import useData from "../hooks/useData";
 import useWindowSize from "../hooks/useWindow";
-import QuickTableNote from "./QuickTableNote";
-import EditRowTable from "./EditRowTable";
+// import QuickTableNote from "./profileInsider/QuickTableNote";
+import EditRowTable from "./profileInsider/EditRowTable";
 import { Box, Button } from "@mui/material";
-import { getAllDataRaport } from "./utilsForTable/excelFilteredTable";
+import {
+  getAllDataRaport,
+  lawPartnerRaport,
+} from "./utilsForTable/excelFilteredTable";
+import TableButtonInfo from "./TableButtonInfo";
+import EditRowTablePro from "./profileManager/EditRowTablePro";
 import PleaseWait from "../PleaseWait";
 
 import "./Table.css";
+
+const clearRowTable = {
+  edit: false,
+  singleDoc: {},
+  controlDoc: {},
+  lawPartner: [],
+};
 
 const Table = ({
   documents,
@@ -31,10 +42,12 @@ const Table = ({
   settings,
   handleSaveSettings,
   roles,
+  profile,
+  info,
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const theme = useTheme();
-  const { auth } = useData();
+  const { auth, setExcelFile } = useData();
   const { height } = useWindowSize();
   const [pleaseWait, setPleaseWait] = useState(false);
 
@@ -43,77 +56,156 @@ const Table = ({
   const [columnOrder, setColumnOrder] = useState(settings.order);
   const [columnPinning, setColumnPinning] = useState(settings.pinning);
   const [pagination, setPagination] = useState(
-    settings.pagination ? settings.pagination : { pageIndex: 0, pageSize: 10 }
+    settings?.pagination ? settings.pagination : { pageIndex: 0, pageSize: 10 }
   );
   const [tableSize, setTableSize] = useState(500);
   const [data, setData] = useState([]);
-  const [quickNote, setQuickNote] = useState("");
+  // const [quickNote, setQuickNote] = useState("");
   const [dataRowTable, setDataRowTable] = useState({
     edit: false,
     singleDoc: {},
     controlDoc: {},
+    lawPartner: [],
   });
-  const [sorting, setSorting] = useState([
-    { id: "ILE_DNI_PO_TERMINIE", desc: false },
-  ]);
+  // sortowanie defaultowe tabeli, jeśli istnieje dana kolumna
+  const [sorting, setSorting] = useState(() => {
+    const has = (key) => columns.some((c) => c.accessorKey === key);
+    if (profile === "insider" && has("ILE_DNI_PO_TERMINIE")) {
+      return [{ id: "ILE_DNI_PO_TERMINIE", desc: false }];
+    }
+    if (profile === "partner" && has("DATA_PRZEKAZANIA_SPRAWY")) {
+      return [{ id: "DATA_PRZEKAZANIA_SPRAWY", desc: true }];
+    }
+    return [];
+  });
+
   const [nextDoc, setNextDoc] = useState([]);
+  const [dataTableCounter, setDataTableCounter] = useState(false);
 
   const plLocale =
     plPL.components.MuiLocalizationProvider.defaultProps.localeText;
 
-  const handleExportExel = (data, type) => {
-    let rowData = [];
-    let arrayOrder = [];
+  const handleExportExel = async (data, type) => {
+    // włącz loader
+    setExcelFile(true);
 
-    if (type === "Całość" && data.length > 0) {
-      arrayOrder = [...columnOrder];
-      rowData = [...data];
-    } else if (type === "Filtr") {
-      arrayOrder = columnOrder.filter(
-        (item) => columnVisibility[item] !== false
-      );
-      rowData = data.map((item) => {
+    // pozwól Reactowi przetworzyć render
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    try {
+      const rowData = data.map((item) => {
         return item.original;
       });
+
+      const arrayOrder = columnOrder.filter(
+        (item) => columnVisibility[item] !== false
+      );
+
+      const newColumns = columns
+        .map((item) => {
+          const matching = arrayOrder.find(
+            (match) => match === item.accessorKey
+          );
+          if (matching) {
+            return {
+              accessorKey: item.accessorKey,
+              header: item.header,
+            };
+          }
+        })
+        .filter(Boolean);
+
+      const newOrder = arrayOrder.map((key) => {
+        const matchedColumn = newColumns.find(
+          (column) => column.accessorKey === key
+        );
+        return matchedColumn ? matchedColumn.header : key;
+      });
+      const updateData = rowData.map((item) => {
+        // Filtracja kluczy obiektu na podstawie arrayOrder
+        const filteredKeys = Object.keys(item).filter((key) =>
+          arrayOrder.includes(key)
+        );
+        // Tworzenie nowego obiektu z wybranymi kluczami
+        const updatedItem = filteredKeys.reduce((obj, key) => {
+          obj[key] = item[key];
+          return obj;
+        }, {});
+        return updatedItem;
+      });
+
+      const orderColumns = {
+        columns: newColumns,
+        order: newOrder,
+      };
+      getAllDataRaport(updateData, orderColumns, type);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setExcelFile(false);
     }
-    let newColumns = [];
-    newColumns = columns
-      .map((item) => {
-        const matching = arrayOrder.find((match) => match === item.accessorKey);
-        if (matching) {
-          return {
-            accessorKey: item.accessorKey,
-            header: item.header,
-          };
-        }
-      })
-      .filter(Boolean);
+  };
 
-    const newOrder = arrayOrder.map((key) => {
-      const matchedColumn = newColumns.find(
-        (column) => column.accessorKey === key
+  const handleExportExcelLawPartner = async (data, type) => {
+    // włącz loader
+    setExcelFile(true);
+
+    // pozwól Reactowi przetworzyć render
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    try {
+      const rowData = data.map((item) => {
+        return item.original;
+      });
+
+      const arrayOrder = columnOrder.filter(
+        (item) => columnVisibility[item] !== false
       );
-      return matchedColumn ? matchedColumn.header : key;
-    });
-    const updateData = rowData.map((item) => {
-      // Filtracja kluczy obiektu na podstawie arrayOrder
-      const filteredKeys = Object.keys(item).filter((key) =>
-        arrayOrder.includes(key)
-      );
-      // Tworzenie nowego obiektu z wybranymi kluczami
-      const updatedItem = filteredKeys.reduce((obj, key) => {
-        obj[key] = item[key];
-        return obj;
-      }, {});
-      return updatedItem;
-    });
 
-    const orderColumns = {
-      columns: newColumns,
-      order: newOrder,
-    };
+      const newColumns = columns
+        .map((item) => {
+          const matching = arrayOrder.find(
+            (match) => match === item.accessorKey
+          );
+          if (matching) {
+            return {
+              accessorKey: item.accessorKey,
+              header: item.header,
+            };
+          }
+        })
+        .filter(Boolean);
 
-    getAllDataRaport(updateData, orderColumns, type);
+      const newOrder = arrayOrder.map((key) => {
+        const matchedColumn = newColumns.find(
+          (column) => column.accessorKey === key
+        );
+        return matchedColumn ? matchedColumn.header : key;
+      });
+
+      const updateData = rowData.map((item) => {
+        // Filtracja kluczy obiektu na podstawie arrayOrder
+        const filteredKeys = Object.keys(item).filter((key) =>
+          arrayOrder.includes(key)
+        );
+        // Tworzenie nowego obiektu z wybranymi kluczami
+        const updatedItem = filteredKeys.reduce((obj, key) => {
+          obj[key] = item[key];
+          return obj;
+        }, {});
+        return updatedItem;
+      });
+
+      const orderColumns = {
+        columns: newColumns,
+        order: newOrder,
+      };
+      lawPartnerRaport(updateData, orderColumns, type);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setExcelFile(false);
+    }
   };
 
   const getSingleRow = async (id, type) => {
@@ -122,19 +214,39 @@ const Table = ({
     if (getRow.length > 0) {
       try {
         setPleaseWait(true);
-        const response = await axiosPrivateIntercept.get(
-          `/documents/get-single-document/${id}`
-        );
-        if (type === "quick") {
-          setQuickNote(response.data.singleDoc);
-        }
-        if (type === "full") {
+        if (profile === "insider") {
+          const response = await axiosPrivateIntercept.get(
+            `/documents/get-single-document/${id}`
+          );
           setDataRowTable({
             edit: true,
             singleDoc: response?.data?.singleDoc ? response.data.singleDoc : {},
             controlDoc: response?.data?.controlDoc
               ? response.data.controlDoc
               : {},
+            lawPartner: response?.data?.lawPartner
+              ? response.data.lawPartner
+              : [],
+          });
+        } else if (profile === "partner") {
+          const response = await axiosPrivateIntercept.get(
+            `/law-partner/get-single-document/${id}`
+          );
+          setDataRowTable({
+            edit: true,
+            singleDoc: response?.data ? response.data : {},
+            controlDoc: {},
+            lawPartner: [],
+          });
+        } else if (profile === "insurance") {
+          const response = await axiosPrivateIntercept.get(
+            `/insurance/get-single-document/${id}`
+          );
+          setDataRowTable({
+            edit: true,
+            singleDoc: response?.data ? response.data : {},
+            controlDoc: {},
+            lawPartner: [],
           });
         }
       } catch (error) {
@@ -155,6 +267,11 @@ const Table = ({
         return item;
       }
     });
+    setDocuments(newDocuments);
+  };
+
+  const removeDocuments = (id) => {
+    const newDocuments = documents.filter((item) => item.id_document !== id);
     setDocuments(newDocuments);
   };
 
@@ -268,11 +385,12 @@ const Table = ({
     muiTableBodyCellProps: ({ column, row, cell }) => ({
       // align: "center",
       onDoubleClick: () => {
-        if (column.id === "UWAGI_ASYSTENT") {
-          getSingleRow(row.original.id_document, "quick");
-        } else {
-          getSingleRow(row.original.id_document, "full");
-        }
+        getSingleRow(row.original.id_document, "full");
+        // if (column.id === "UWAGI_ASYSTENT") {
+        //   getSingleRow(row.original.id_document, "quick");
+        // } else {
+        //   getSingleRow(row.original.id_document, "full");
+        // }
       },
     }),
 
@@ -288,12 +406,12 @@ const Table = ({
           flexWrap: "wrap",
         }}
       >
-        <Button
+        {/* <Button
           disabled={table.getRowModel().rows.length === 0}
           onClick={() => handleExportExel(documents, "Całość")}
         >
           <i className="fa-regular fa-file-excel table-export-excel"></i>
-        </Button>
+        </Button> */}
         <Button
           onClick={() =>
             handleSaveSettings(
@@ -307,21 +425,78 @@ const Table = ({
         >
           <i className="fas fa-save table-save-settings"></i>
         </Button>
-        <Button
-          disabled={table.getRowModel().rows.length === 0}
-          style={
-            table.getRowModel().rows.length === 0 ? { display: "none" } : null
-          }
-          //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
-          onClick={() =>
-            handleExportExel(table.getPrePaginationRowModel().rows, "Filtr")
-          }
-        >
-          <i className="fa-solid fa-filter table_fa-filter"></i>
-        </Button>
+        {profile === "insider" && (
+          <TableButtonInfo
+            className="table_excel"
+            disabled={!dataTableCounter}
+            onClick={() =>
+              handleExportExel(
+                table.getPrePaginationRowModel().rows,
+                "Zestawienie"
+              )
+            }
+            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
+          >
+            <i
+              className="fa-regular fa-file-excel table-export-excel"
+              style={
+                !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
+              }
+            ></i>
+          </TableButtonInfo>
+        )}
+        {profile === "partner" && info !== "no-accept" && (
+          <TableButtonInfo
+            className="table_excel"
+            disabled={!dataTableCounter}
+            onClick={() =>
+              handleExportExcelLawPartner(
+                table.getPrePaginationRowModel().rows,
+                "Zestawienie"
+              )
+            }
+            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
+          >
+            <i
+              className="fa-regular fa-file-excel table-export-excel"
+              style={
+                !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
+              }
+            ></i>
+          </TableButtonInfo>
+        )}
       </Box>
     ),
   });
+
+  // obliczenie ilości danych przekazanych do tabeli żeby określić czy nie jest za dużo do wygenerowania pliku excel
+  const tableDataSize = (dataSize) => {
+    const rowData = dataSize.map((item) => {
+      return item.original;
+    });
+
+    const arrayOrder = columnOrder.filter(
+      (item) => columnVisibility[item] !== false
+    );
+
+    const updateData = rowData.map((item) => {
+      // Filtracja kluczy obiektu na podstawie arrayOrder
+      const filteredKeys = Object.keys(item).filter((key) =>
+        arrayOrder.includes(key)
+      );
+      // Tworzenie nowego obiektu z wybranymi kluczami
+      const updatedItem = filteredKeys.reduce((obj, key) => {
+        obj[key] = item[key];
+        return obj;
+      }, {});
+      return updatedItem;
+    });
+
+    const json = JSON.stringify(updateData);
+    const size = new TextEncoder().encode(json).length; // bajty
+
+    setDataTableCounter(size >= 1 && size <= 30000000);
+  };
 
   useEffect(() => {
     setTableSize(height - 151);
@@ -335,35 +510,29 @@ const Table = ({
     const visibleData = table
       .getPrePaginationRowModel()
       .rows.map((row) => row.original.id_document);
+
     setNextDoc(visibleData);
-  }, [table.getPrePaginationRowModel().rows]);
+    tableDataSize(table.getPrePaginationRowModel().rows);
+  }, [table.getPrePaginationRowModel().rows, columnVisibility]);
 
   return (
-    <section className="table">
+    <section
+      className="table"
+      style={dataRowTable.edit ? { display: "flex" } : null}
+    >
       <ThemeProvider theme={theme}>
-        {quickNote && (
+        {/* {quickNote && (
           <QuickTableNote
             quickNote={quickNote}
             setQuickNote={setQuickNote}
             updateDocuments={updateDocuments}
           />
-        )}
-
-        {/* {auth?.roles?.includes(110 || 120 || 1100) && dataRowTable.edit && (
-          <EditRowTable
-            dataRowTable={dataRowTable}
-            setDataRowTable={setDataRowTable}
-            updateDocuments={updateDocuments}
-            roles={roles}
-            nextDoc={nextDoc}
-            getSingleRow={getSingleRow}
-          />
         )} */}
 
         {pleaseWait ? (
           <PleaseWait />
-        ) : (
-          [110, 120, 2000].some((role) => auth?.roles?.includes(role)) &&
+        ) : [110, 120, 2000].some((role) => auth?.roles?.includes(role)) &&
+          profile === "insider" ? (
           dataRowTable.edit && (
             <EditRowTable
               dataRowTable={dataRowTable}
@@ -372,20 +541,34 @@ const Table = ({
               roles={roles}
               nextDoc={nextDoc}
               getSingleRow={getSingleRow}
+              clearRowTable={clearRowTable}
+              info={info}
             />
           )
-        )}
+        ) : [500, 350].some((role) => auth?.roles?.includes(role)) ? (
+          (profile === "partner" || profile === "insurance") &&
+          dataRowTable.edit && (
+            <EditRowTablePro
+              dataRowTable={dataRowTable}
+              setDataRowTable={setDataRowTable}
+              updateDocuments={updateDocuments}
+              removeDocuments={removeDocuments}
+              nextDoc={nextDoc}
+              getSingleRow={getSingleRow}
+              clearRowTable={clearRowTable}
+              profile={profile}
+            />
+          )
+        ) : null}
 
         <LocalizationProvider
-          // dateAdapter={AdapterDayjs}
-          // adapterLocale="pl"
-          // localeText={plLocale}
-
           dateAdapter={AdapterDateFns}
           adapterLocale={pl}
           localeText={plLocale}
         >
-          <MaterialReactTable table={table} />
+          <div style={dataRowTable.edit ? { display: "none" } : null}>
+            <MaterialReactTable table={table} />
+          </div>
         </LocalizationProvider>
       </ThemeProvider>
     </section>

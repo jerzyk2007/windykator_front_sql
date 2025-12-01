@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import HeaderNotification from "./HeaderNotification";
-import NavMenu from "./NavMenu";
+import NavMenu from "./menu/NavMenu";
 // import MobileMenu from './MobileMenu';
 import "./Header.css";
 

@@ -1,39 +1,39 @@
 .instruction_custom {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .instruction_custom-title {
-    font-size: 2rem;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  font-size: 2rem;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .instruction_custom-content {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .instruction_custom-content--text {
-    padding: 5px 0;
-    text-align: justify;
+  padding: 5px 0;
+  text-align: justify;
 }
 
 .author {
-    text-align: center;
-    font-weight: 500;
-    color: red;
+  text-align: center;
+  font-weight: 500;
+  color: red;
 }
 
 .instruction_custom-image {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
 }
 
 .instruction_custom-image img {
-    width: 100%;
+  width: 100%;
 }

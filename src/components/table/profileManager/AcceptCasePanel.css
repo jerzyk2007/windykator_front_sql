@@ -1,0 +1,23 @@
+.accept_case_panel {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  user-select: none;
+}
+
+.accept_case_panel--title {
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  padding: 5px 15px;
+  background-color: rgb(245, 227, 255);
+  font-weight: bold;
+}
+.accept_case_panel--info {
+  margin: 10px 5px;
+  text-align: center;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  padding: 2px 10px;
+}

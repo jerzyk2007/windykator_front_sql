@@ -4,12 +4,11 @@ import useData from "../hooks/useData";
 import { Button } from "@mui/material";
 import "./UserChangeRoles.css";
 
-const UserChangeRoles = ({ id, roles }) => {
+const UserChangeRoles = ({ id, roles, setRoles, permission }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const [userRoles, setUserRoles] = useState({});
   const [errMsg, setErrMsg] = useState("");
-
   const rolesItem = Object.entries(userRoles).map(
     ([role, isChecked], index) => (
       <section key={index} className="user-change-roles__container">
@@ -41,37 +40,42 @@ const UserChangeRoles = ({ id, roles }) => {
             )}
             {role === "User" && (
               <span className="user-change-roles--information">
-                {" "}
-                - przeglądanie dokumentów
+                {" - przeglądanie dokumentów"}
               </span>
             )}
             {role === "Nora" && (
               <span className="user-change-roles--information">
-                {" "}
-                - raporty dla Nory
+                {" - raporty dla Nory"}
+              </span>
+            )}
+            {role === "Insurance" && (
+              <span className="user-change-roles--information">
+                {" - obsługa polis"}
               </span>
             )}
             {role === "Editor" && (
               <span className="user-change-roles--information">
-                {" "}
-                - edytowanie dokumentów
+                {" - edytowanie dokumentów"}
               </span>
             )}
             {role === "Raports" && (
               <span className="user-change-roles--information">
-                {" "}
-                - tylko pobieranie raportów excel
+                {" - tylko pobieranie raportów excel"}
               </span>
             )}
             {role === "Controller" && (
               <span className="user-change-roles--information">
-                {" "}
-                - kontroler dokumentów
+                {" - kontroler dokumentów"}
               </span>
             )}
             {role === "DNiKN" && (
               <span className="user-change-roles--information">
-                - wszytskie uprawnienia windykacyjne
+                {" - wszytskie uprawnienia windykacyjne"}
+              </span>
+            )}
+            {role === "LawPartner" && (
+              <span className="user-change-roles--information">
+                {" - dostęp do danych zewn Kancelarii"}
               </span>
             )}
             {role === "Admin" && (
@@ -126,12 +130,10 @@ const UserChangeRoles = ({ id, roles }) => {
           }
         })
         .filter(Boolean);
-
-      // dodaje role Start - podstwawowa rola startowa
-      arrayRoles.push("Start");
       await axiosPrivateIntercept.patch(`/user/change-roles/${id}`, {
         roles: arrayRoles,
       });
+      setRoles(userRoles);
       setErrMsg("Sukces.");
     } catch (err) {
       setErrMsg("Dostęp nie został zmieniony.");
@@ -141,8 +143,7 @@ const UserChangeRoles = ({ id, roles }) => {
 
   useEffect(() => {
     const superAdmin = auth.roles.filter((item) => item === 2000);
-
-    const newRoles = superAdmin.length
+    const newRolesUser = superAdmin.length
       ? {
           User: roles?.User ? roles.User : false,
           Editor: roles?.Editor ? roles.Editor : false,
@@ -154,6 +155,8 @@ const UserChangeRoles = ({ id, roles }) => {
           FK_KEM: roles?.FK_KEM ? roles.FK_KEM : false,
           FK_RAC: roles?.FK_RAC ? roles.FK_RAC : false,
           Nora: roles?.Nora ? roles.Nora : false,
+          Insurance: roles?.Insurance ? roles.Insurance : false,
+          LawPartner: roles?.LawPartner ? roles.LawPartner : false,
           SuperAdmin: roles?.SuperAdmin ? roles.SuperAdmin : false,
         }
       : {
@@ -162,7 +165,11 @@ const UserChangeRoles = ({ id, roles }) => {
           Admin: roles?.Admin ? roles.Admin : false,
         };
 
-    setUserRoles(newRoles);
+    const newRolesLaw = {
+      LawPartner: roles?.LawPartner ? roles.LawPartner : false,
+    };
+
+    setUserRoles(permission === "Pracownik" ? newRolesUser : newRolesLaw);
   }, [roles]);
 
   return (

@@ -1,0 +1,27 @@
+.table_button_info {
+  display: inline-block;
+  position: relative;
+}
+
+.table_button_info-floating {
+  position: absolute;
+  top: 110%; /* ⬅️ POD przyciskiem */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 999999999999;
+  opacity: 0;
+  animation: fadeIn 0.15s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

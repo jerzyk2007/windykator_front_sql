@@ -4,29 +4,39 @@ import { Button } from "@mui/material";
 import "./UserChangeDepartments.css";
 
 const UserChangeDepartments = ({ id, departments, multiCompany }) => {
-
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-
   const [startData, setStartData] = useState(departments);
   const [userDepartments, setUserDepartments] = useState([]);
-  const [company, setCompany] = useState(multiCompany.length > 1 ? ['ALL', ...multiCompany] : multiCompany.length === 1 ? multiCompany : []);
-  const [changeCompany, setChangeCompany] = useState(multiCompany?.length > 1 ? "ALL" : multiCompany?.length === 1 ? multiCompany[0] : '');
+  const [company, setCompany] = useState(
+    multiCompany.length > 1
+      ? ["ALL", ...multiCompany]
+      : multiCompany.length === 1
+      ? multiCompany
+      : []
+  );
+  const [changeCompany, setChangeCompany] = useState(
+    multiCompany?.length > 1
+      ? "ALL"
+      : multiCompany?.length === 1
+      ? multiCompany[0]
+      : ""
+  );
   const [errMsg, setErrMsg] = useState("");
 
   // zmienia zaznaczenia dla wszytskich działów z uwględnieniem firmy
   const handleChangeAllChecked = (info) => {
-    const updatedUserDepartments = startData.map(item => {
-      if (changeCompany === 'ALL') {
+    const updatedUserDepartments = startData.map((item) => {
+      if (changeCompany === "ALL") {
         return {
           ...item,
-          user: item.available ? (info === "all" ? true : false) : false
+          user: item.available ? (info === "all" ? true : false) : false,
         };
       } else {
         // tylko zmień user, jeśli company się zgadza
         if (item.department.COMPANY === changeCompany) {
           return {
             ...item,
-            user: item.available ? (info === "all" ? true : false) : false
+            user: item.available ? (info === "all" ? true : false) : false,
           };
         }
         return item;
@@ -36,13 +46,16 @@ const UserChangeDepartments = ({ id, departments, multiCompany }) => {
     setStartData(updatedUserDepartments);
   };
 
-  // zmienia zaznaczenia dla pojedyńczych działów 
+  // zmienia zaznaczenia dla pojedyńczych działów
   const handleChangeCheckedDep = (dep) => {
-    const updateDeps = startData.map(item => {
-      if (item.department.DEPARTMENT === dep.department.DEPARTMENT && item.department.COMPANY === dep.department.COMPANY) {
+    const updateDeps = startData.map((item) => {
+      if (
+        item.department.DEPARTMENT === dep.department.DEPARTMENT &&
+        item.department.COMPANY === dep.department.COMPANY
+      ) {
         return {
           ...item,
-          user: !item.user
+          user: !item.user,
         };
       } else {
         return item;
@@ -52,22 +65,18 @@ const UserChangeDepartments = ({ id, departments, multiCompany }) => {
   };
 
   const handleSaveUserDepartments = async () => {
-
     const activeDepartments = startData
-      .filter(item => item.user) // Zatrzymaj tylko obiekty, gdzie user === true
-      .map(item => {
+      .filter((item) => item.user) // Zatrzymaj tylko obiekty, gdzie user === true
+      .map((item) => {
         return {
           department: item.department.DEPARTMENT,
           company: item.department.COMPANY,
         };
-      });    // Zwróć tylko wartości dep jako stringi
+      }); // Zwróć tylko wartości dep jako stringi
     try {
-      await axiosPrivateIntercept.patch(
-        `/user/change-departments/${id}`,
-        {
-          departments: activeDepartments,
-        }
-      );
+      await axiosPrivateIntercept.patch(`/user/change-departments/${id}`, {
+        activeDepartments,
+      });
       setErrMsg(`Sukces.`);
     } catch (err) {
       setErrMsg(`Zmiana się nie powiodła.`);
@@ -75,9 +84,7 @@ const UserChangeDepartments = ({ id, departments, multiCompany }) => {
     }
   };
 
-
   const departmentsItem = userDepartments.map((item, index) => {
-
     return (
       <label
         key={index}
@@ -86,30 +93,36 @@ const UserChangeDepartments = ({ id, departments, multiCompany }) => {
       >
         <section className="user_change_departments__text">
           <span
-            style={!item.available ? { color: "red", fontWeight: "bold" } : null}
-          >{item.department.DEPARTMENT}
+            style={
+              !item.available ? { color: "red", fontWeight: "bold" } : null
+            }
+          >
+            {item.department.DEPARTMENT}
           </span>
           <span
-            style={!item.available ? { color: "red", fontWeight: "bold" } : null}
-          >{item.department.COMPANY}
+            style={
+              !item.available ? { color: "red", fontWeight: "bold" } : null
+            }
+          >
+            {item.department.COMPANY}
           </span>
         </section>
-        {item.available && <input
-          className="user_change_departments__container--check"
-          type="checkbox"
-          // onChange={() =>
-          //   setUserDepartments((prev) => {
-          //     return prev.map((obj) =>
-          //       obj.dep === item.dep ? { ...obj, user: !obj.user } : obj
-          //     );
-          //   })
-          // }
-          onChange={() => handleChangeCheckedDep(item)
-          }
-          checked={item.user}
-        />}
+        {item.available && (
+          <input
+            className="user_change_departments__container--check"
+            type="checkbox"
+            // onChange={() =>
+            //   setUserDepartments((prev) => {
+            //     return prev.map((obj) =>
+            //       obj.dep === item.dep ? { ...obj, user: !obj.user } : obj
+            //     );
+            //   })
+            // }
+            onChange={() => handleChangeCheckedDep(item)}
+            checked={item.user}
+          />
+        )}
       </label>
-
     );
   });
 
@@ -118,9 +131,12 @@ const UserChangeDepartments = ({ id, departments, multiCompany }) => {
     setUserDepartments(startData);
   }, [startData]);
 
-
   useEffect(() => {
-    setUserDepartments(changeCompany === 'ALL' ? startData : startData.filter(item => item.department.COMPANY === changeCompany));
+    setUserDepartments(
+      changeCompany === "ALL"
+        ? startData
+        : startData.filter((item) => item.department.COMPANY === changeCompany)
+    );
   }, [changeCompany, startData]);
 
   return (
@@ -178,7 +194,6 @@ const UserChangeDepartments = ({ id, departments, multiCompany }) => {
           Zmień
         </Button>
       </section>
-
     </section>
   );
 };

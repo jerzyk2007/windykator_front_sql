@@ -1,0 +1,49 @@
+.refer_to_law_firm--title {
+  /* flex-grow: 1; */
+  background-color: rgba(229, 202, 255, 0.7);
+}
+
+.edit_doc--content {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+}
+
+.edit_doc--content:focus {
+  outline: none;
+  border: 1px solid #aaa;
+  border: 1px solid red;
+}
+
+.refer_to_law_firm--panel {
+  padding: 5px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.refer_to_law_firm--content,
+.refer_to_law_firm--content-scroll {
+  width: 100%;
+  /* word-break: break-all; */
+  line-height: 1;
+  flex-basis: 59%;
+  text-align: center;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  padding: 2px;
+  margin: 1px 2px;
+  text-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.refer_to_law_firm--content-scroll {
+  display: block;
+  padding: 5px;
+  overflow-y: auto;
+  max-height: 90px;
+}

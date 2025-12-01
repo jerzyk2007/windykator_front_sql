@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useData from "./hooks/useData";
 import { axiosPrivate } from "../api/axios";
 import { Button } from "@mui/material";
-import ForgotPassword from './user/ForgotPassword';
+import ForgotPassword from "./user/ForgotPassword";
 import "./Login.css";
 
 const Login = () => {
@@ -28,7 +28,6 @@ const Login = () => {
           withCredentials: true,
         }
       );
-
       const { username, usersurname, roles, id_user, permissions } =
         response?.data;
       setAuth({
@@ -63,51 +62,74 @@ const Login = () => {
 
   return (
     <section className="login__fixed">
-      {!forgotPass ? <section className="login">
-        {errMsg && (
-          <p className="user-error-message" ref={errRef}>
-            {errMsg}
-          </p>
-        )}
-        {!errMsg && <h1 className="login-title">Logowanie</h1>}
-        <form className="login__container" onSubmit={handleSubmit}>
-          <label htmlFor="userlogin" className="login__container-title">
-            Użytkownik:
-          </label>
-          <input
-            className="login__container-text"
-            id="userlogin"
-            type="text"
-            placeholder="userlogin"
-            ref={userRef}
-            value={userlogin}
-            onChange={(e) => setUserlogin(e.target.value.toLocaleLowerCase())}
-            required
-            autoComplete="username"
-          />
-          <label htmlFor="password" className="login__container-title">
-            Hasło:
-          </label>
-          <input
-            className="login__container-text"
-            id="password"
-            type="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="password"
-          />
-          <Button variant="contained" type="submit" size="large">
-            Zaloguj
-          </Button>
-        </form>
-        <section className="login__password" onClick={() => setForgotPass(true)}>
-          <span>Zresetuj hasło</span>
+      <section className="login__high_information">
+        <h1>UWAGA !!!</h1>
+        <span>
+          Chciałem poinformować, że w programie nastąpiła bardzo duża
+          aktualizacja.
+        </span>
+        <span>
+          Starałem się aby pod kątem wizualnym i funkcjonalnym zmiany były jak
+          najmniej widoczne.
+        </span>
+        <span>Jest również zaktualizowana instrukcja obsługi.</span>
+        <span>
+          W przypadku nieprawidłowego działania programu, prosze o kontakt.
+        </span>
+        <span style={{ fontWeight: "bold", color: "red" }}>
+          jerzy.komorowski@krotoski.com, 782 991 608
+        </span>
+      </section>
+      {!forgotPass ? (
+        <section className="login">
+          {errMsg && (
+            <p className="user-error-message" ref={errRef}>
+              {errMsg}
+            </p>
+          )}
+          {!errMsg && <h1 className="login-title">Logowanie</h1>}
+          <form className="login__container" onSubmit={handleSubmit}>
+            <label htmlFor="userlogin" className="login__container-title">
+              Użytkownik:
+            </label>
+            <input
+              className="login__container-text"
+              id="userlogin"
+              type="text"
+              placeholder="userlogin"
+              ref={userRef}
+              value={userlogin}
+              onChange={(e) => setUserlogin(e.target.value.toLocaleLowerCase())}
+              required
+              autoComplete="username"
+            />
+            <label htmlFor="password" className="login__container-title">
+              Hasło:
+            </label>
+            <input
+              className="login__container-text"
+              id="password"
+              type="password"
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="password"
+            />
+            <Button variant="contained" type="submit" size="large">
+              Zaloguj
+            </Button>
+          </form>
+          <section
+            className="login__password"
+            onClick={() => setForgotPass(true)}
+          >
+            <span>Zresetuj hasło</span>
+          </section>
         </section>
-
-      </section> : <ForgotPassword setForgotPass={setForgotPass} />}
-
+      ) : (
+        <ForgotPassword setForgotPass={setForgotPass} />
+      )}
     </section>
   );
 };

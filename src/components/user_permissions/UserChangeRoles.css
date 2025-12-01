@@ -1,5 +1,6 @@
 .user-change-roles {
-  flex-grow: 1;
+  /* flex-grow: 1; */
+  min-height: 50%;
   width: 100%;
   margin: 2px 0;
   padding: 5px 10px;
@@ -64,7 +65,7 @@
 }
 
 .user-change-roles Button {
-  width: 50%; /* lepsze dopasowanie do małych ekranów */
+  width: 30%;
   margin: 8px auto;
   flex-shrink: 0;
 }

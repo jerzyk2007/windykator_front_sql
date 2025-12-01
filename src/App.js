@@ -17,8 +17,8 @@ import TableColumns from "./components/system_settings/TableColumns";
 import RaportDepartments from "./components/raports/RaportDepartments";
 import RaportAdvisers from "./components/raports/RaportAdvisers";
 import FKAddData from "./components/FKRaport/FKAddData";
-import DeptMapper from "./components/system_settings/DeptMapper";
-import Items from "./components/system_settings/Items";
+import ChangeOrgStr from "./components/system_settings/ChangeOrgStr";
+import OrganizationStructure from "./components/system_settings/OrganizationStructure";
 import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
 // import TradeCredit from "./components/trade_credit/TradeCredit";
@@ -30,7 +30,12 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
-      <Router>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <Header />
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -56,50 +61,52 @@ function App() {
             <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/actual-table"
-                element={<PrepareTable info={"actual"} />}
+                element={<PrepareTable info={"actual"} profile={"insider"} />}
+                // element={<PrepareTable info={"actual"} profile={"partner"} />}
               />
             </Route>
             <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/critical-table"
-                element={<PrepareTable info={"critical"} />}
+                element={<PrepareTable info={"critical"} profile={"insider"} />}
               />
             </Route>
             <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/obligations-table"
-                element={<PrepareTable info={"obligations"} />}
+                element={
+                  <PrepareTable info={"obligations"} profile={"insider"} />
+                }
               />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/archive-table"
-                element={<PrepareTable info={"archive"} />}
+                element={<PrepareTable info={"archive"} profile={"insider"} />}
               />
             </Route>
 
-            {/* <Route element={<RequireAuth allowedRoles={[100]} />}>
-              <Route
-                path="/different-AS-FK"
-                element={<PrepareTable info={"different"} />}
-              />
-            </Route> */}
             <Route element={<RequireAuth allowedRoles={[100, 2000]} />}>
               <Route
                 path="/all-data-table"
-                element={<PrepareTable info={"all"} />}
+                element={<PrepareTable info={"all"} profile={"insider"} />}
               />
             </Route>
             <Route element={<RequireAuth allowedRoles={[150, 1000, 2000]} />}>
-              <Route path="/krd" element={<PrepareTable info={"krd"} />} />
+              <Route
+                path="/krd"
+                element={<PrepareTable info={"krd"} profile={"insider"} />}
+              />
             </Route>
             <Route
               element={<RequireAuth allowedRoles={[110, 120, 1000, 2000]} />}
             >
               <Route
                 path="/fk-documents-table"
-                element={<PrepareTable info={"raport_fk"} />}
+                element={
+                  <PrepareTable info={"raport_fk"} profile={"insider"} />
+                }
               />
             </Route>
             <Route
@@ -109,13 +116,40 @@ function App() {
             >
               <Route
                 path="/fk-disabled-documents-table"
-                element={<PrepareTable info={"disabled_fk"} />}
+                element={
+                  <PrepareTable info={"disabled_fk"} profile={"insider"} />
+                }
               />
             </Route>
             <Route element={<RequireAuth allowedRoles={[120, 1000, 2000]} />}>
               <Route
                 path="/control-bl-documents-table"
-                element={<PrepareTable info={"control-bl"} />}
+                element={
+                  <PrepareTable info={"control-bl"} profile={"insider"} />
+                }
+              />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[500]} />}>
+              <Route
+                path="/actual-law-table"
+                element={<PrepareTable info={"ongoing"} profile={"partner"} />}
+              />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[500]} />}>
+              <Route
+                path="/no-accept-table"
+                element={
+                  <PrepareTable info={"no-accept"} profile={"partner"} />
+                }
+              />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={[150, 350]} />}>
+              <Route
+                path="/actual-insurance-table"
+                element={
+                  <PrepareTable info={"vindication"} profile={"insurance"} />
+                }
               />
             </Route>
 
@@ -126,7 +160,7 @@ function App() {
             >
               <Route
                 path="/raport-departments"
-                element={<RaportDepartments />}
+                element={<RaportDepartments profile={"insider"} />}
               />
             </Route>
 
@@ -135,7 +169,10 @@ function App() {
                 <RequireAuth allowedRoles={[100, 110, 120, 1000, 2000]} />
               }
             >
-              <Route path="/raport-advisers" element={<RaportAdvisers />} />
+              <Route
+                path="/raport-advisers"
+                element={<RaportAdvisers profile={"insider"} />}
+              />
             </Route>
             {/* <Route element={<RequireAuth allowedRoles={[1000]} />}>
               <Route path="/raport-areas" element={<RaportAreas />} />
@@ -176,7 +213,7 @@ function App() {
                 <RequireAuth allowedRoles={[200, 201, 202, 1000, 2000]} />
               }
             >
-              <Route path="/dept-mapper" element={<DeptMapper />} />
+              <Route path="/create-org-str" element={<ChangeOrgStr />} />
             </Route>
 
             <Route
@@ -184,7 +221,10 @@ function App() {
                 <RequireAuth allowedRoles={[200, 201, 202, 1000, 2000]} />
               }
             >
-              <Route path="/change-items" element={<Items />} />
+              <Route
+                path="/change-org-str"
+                element={<OrganizationStructure />}
+              />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[300, 1000, 2000]} />}>

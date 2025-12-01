@@ -3,10 +3,15 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import useData from "../hooks/useData";
 import PleaseWait from "../PleaseWait";
 import Table from "./Table";
-import { prepareColumns } from "./utilsForTable/PrepareColumns";
+import {
+  prepareColumnsInsider,
+  prepareColumnsPartner,
+  prepareColumnsInsurance,
+} from "./utilsForTable/prepareColumns";
 import "./PrepareTable.css";
 
-const PrepareTable = ({ info, raportDocuments }) => {
+// const PrepareTable = ({ info, raportDocuments }) => {
+const PrepareTable = ({ info, profile }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const [columns, setColumns] = useState([]);
@@ -30,8 +35,8 @@ const PrepareTable = ({ info, raportDocuments }) => {
     };
     try {
       await axiosPrivateIntercept.patch(
-        `/user/save-table-settings/${auth.id_user}`,
-        { tableSettings }
+        `/user/save-table-settings/${auth.id_user}/${profile}`,
+        { newTableSettings: tableSettings }
       );
     } catch (err) {
       console.error(err);
@@ -44,50 +49,40 @@ const PrepareTable = ({ info, raportDocuments }) => {
     const getData = async () => {
       try {
         setPleaseWait(true);
-        if (info === "raport") {
-          setDocuments(raportDocuments);
-        } else {
-          const dataTable = await axiosPrivateIntercept.get(
-            `/documents/get-data-table/${auth.id_user}/${info}`,
-            { signal: controller.signal }
-          );
-          // wyciągnięcie ostatniego elementu tabeli INFORMACJA_ZARZAD
-          const filteredData = dataTable?.data?.map((item) => {
-            if (!item.INFORMACJA_ZARZAD) {
-              return item; // Zostawiamy oryginalny obiekt bez zmian
-            }
 
-            const newInfo =
-              item.INFORMACJA_ZARZAD && item.INFORMACJA_ZARZAD !== "BRAK"
-                ? Array.isArray(JSON.parse(item.INFORMACJA_ZARZAD)) // Parsujemy tylko jeśli nie jest 'BRAK'
-                  ? JSON.parse(item.INFORMACJA_ZARZAD).length > 0
-                    ? JSON.parse(item.INFORMACJA_ZARZAD)[
-                        JSON.parse(item.INFORMACJA_ZARZAD).length - 1
-                      ] // Ostatni element, pierwsze 50 znaków
-                    : "BRAK"
-                  : "BRAK"
-                : "BRAK";
-
-            return {
-              ...item,
-              INFORMACJA_ZARZAD: newInfo,
-            };
-          });
-
-          setDocuments(filteredData);
+        if (!["insider", "partner", "insurance"].includes(profile)) {
+          return;
         }
 
+        // const basePath = profile === "insider" ? "/documents" : "/law-partner";
+        const basePath = {
+          insider: "/documents",
+          partner: "/law-partner",
+          insurance: "/insurance",
+        };
+
+        const dataTable = await axiosPrivateIntercept.get(
+          `${basePath[profile]}/get-data-table/${auth.id_user}/${info}/${profile}`,
+          { signal: controller.signal }
+        );
+        setDocuments(dataTable.data);
+
         const tableSettingsColumns = await axiosPrivateIntercept.get(
-          `/documents/get-settings-colums-table/${auth.id_user}`,
+          `/table/get-settings-colums-table/${auth.id_user}/${profile}`,
           { signal: controller.signal }
         );
 
         setTableSettings(tableSettingsColumns.data.tableSettings);
 
-        const update = prepareColumns(
-          tableSettingsColumns.data.columns,
-          info !== "raport" ? documents : raportDocuments
-        );
+        const update =
+          profile === "insider"
+            ? prepareColumnsInsider(tableSettingsColumns.data.columns)
+            : profile === "partner"
+            ? prepareColumnsPartner(tableSettingsColumns.data.columns)
+            : profile === "insurance"
+            ? prepareColumnsInsurance(tableSettingsColumns.data.columns)
+            : [];
+
         setColumns(update);
         setPleaseWait(false);
       } catch (err) {
@@ -103,7 +98,6 @@ const PrepareTable = ({ info, raportDocuments }) => {
       controller.abort(); // Anulowanie żądania przy odmontowaniu komponentu
     };
   }, [info, auth.id_user, setPleaseWait, axiosPrivateIntercept]);
-
   return (
     <section className="prepare_table">
       {pleaseWait ? (
@@ -117,6 +111,8 @@ const PrepareTable = ({ info, raportDocuments }) => {
             settings={tableSettings}
             handleSaveSettings={handleSaveSettings}
             roles={auth.roles}
+            profile={profile}
+            info={info}
           />
         )
       )}

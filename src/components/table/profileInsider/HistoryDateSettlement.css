@@ -1,0 +1,11 @@
+.history_date_settlement {
+  margin-bottom: 0;
+}
+
+.history_date_settlement--content {
+  max-height: 100px;
+}
+
+.history_date_settlement--content:focus {
+  outline: none;
+}

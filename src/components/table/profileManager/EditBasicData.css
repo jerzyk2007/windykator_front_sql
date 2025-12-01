@@ -1,0 +1,49 @@
+.law_partner_basic-data {
+  flex-grow: 1;
+  height: calc(100vh - 120px);
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.1rem;
+}
+
+.edit_doc--content_law_partner {
+  width: 100%;
+  padding: 0 2px;
+  margin: 0 2px;
+  text-align: center;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+}
+.content_law_partner--content {
+  display: flex;
+  flex-direction: column;
+}
+.content_law_partner--content span {
+  border: none;
+}
+
+.law_partner_basic_data_settlements {
+  flex-grow: 1;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+}
+.law_partner_basic_data_settlements--title {
+  text-align: center;
+  padding: 2px 0;
+}
+.law_partner_basic_data_settlements_container {
+  flex-grow: 1;
+  padding: 2px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.law_partner_basic_data_settlements_container:hover {
+  cursor: pointer;
+  background-color: rgba(202, 202, 202, 0.7);
+  border-radius: 5px;
+}
