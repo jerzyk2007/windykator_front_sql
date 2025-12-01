@@ -324,7 +324,7 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
     return name;
   };
 
-  // obrabiam dane z CZAT_KANCELARIA i tworzę skrócone zapisy
+  // obrabiam dane z KANAL_KOMUNIKACJI i tworzę skrócone zapisy
   const formatChatField = (arrayData) => {
     if (!arrayData) return "Brak wpisów";
 
@@ -369,8 +369,8 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
   };
 
   const cleanData = allData.map((item) => {
-    // Wywołujemy nową funkcję dla pola CZAT_KANCELARIA
-    const chatPanel = formatChatField(item.CZAT_KANCELARIA);
+    // Wywołujemy nową funkcję dla pola KANAL_KOMUNIKACJI
+    const chatPanel = formatChatField(item.KANAL_KOMUNIKACJI);
 
     // wykaz spłaconej kwoty
     const wsk = item?.WYKAZ_SPLACONEJ_KWOTY_FK || [];
@@ -413,7 +413,7 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
     } ${item?.ODDZIAL?.OBSZAR || ""}`.trim();
     return {
       ...item,
-      CZAT_KANCELARIA: chatPanel,
+      KANAL_KOMUNIKACJI: chatPanel,
       DATA_PRZEKAZANIA_SPRAWY,
       DATA_PRZYJECIA_SPRAWY,
       DATA_WYMAGALNOSCI_PLATNOSCI,

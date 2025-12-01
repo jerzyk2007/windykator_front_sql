@@ -326,9 +326,9 @@ export const prepareColumnsPartner = (columnsData) => {
         return null;
       };
     }
-    if (item.accessorKey === "CZAT_KANCELARIA") {
+    if (item.accessorKey === "KANAL_KOMUNIKACJI") {
       modifiedItem.accessorFn = (originalRow) => {
-        const arrayData = originalRow.CZAT_KANCELARIA;
+        const arrayData = originalRow.KANAL_KOMUNIKACJI;
         if (!arrayData) return "Brak wpisów";
         try {
           let dzialania;
@@ -546,9 +546,9 @@ export const prepareColumnsInsurance = (columnsData) => {
         return null;
       };
     }
-    if (item.accessorKey === "CZAT_KANCELARIA") {
+    if (item.accessorKey === "KANAL_KOMUNIKACJI") {
       modifiedItem.accessorFn = (originalRow) => {
-        const arrayData = originalRow.CZAT_KANCELARIA;
+        const arrayData = originalRow.KANAL_KOMUNIKACJI;
         if (!arrayData) return "Brak wpisów";
         try {
           let dzialania;

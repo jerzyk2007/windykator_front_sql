@@ -33,8 +33,8 @@ const EditRowTablePro = ({
   const [panel, setPanel] = useState("chat");
   // stan nowych wpisów dla chat i logów
   const [chatLog, setChatLog] = useState({
-    CZAT_KANCELARIA: [],
-    CZAT_LOGI: [],
+    KANAL_KOMUNIKACJI: [],
+    DZIENNIK_ZMIAN: [],
   });
   const [toggleState, setToggleState] = useState(1);
 
@@ -70,9 +70,9 @@ const EditRowTablePro = ({
   const handleAddNote = (info, type) => {
     const oldChat =
       type === "chat"
-        ? [...(rowData.CZAT_KANCELARIA ?? [])]
+        ? [...(rowData.KANAL_KOMUNIKACJI ?? [])]
         : type === "log"
-        ? [...(rowData.CZAT_LOGI ?? [])]
+        ? [...(rowData.DZIENNIK_ZMIAN ?? [])]
         : [];
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
@@ -95,8 +95,8 @@ const EditRowTablePro = ({
       newChat = [note];
     }
     const saveInfo = {
-      chat: "CZAT_KANCELARIA",
-      log: "CZAT_LOGI",
+      chat: "KANAL_KOMUNIKACJI",
+      log: "DZIENNIK_ZMIAN",
     };
     setChatLog((prev) => {
       return {
@@ -160,13 +160,15 @@ const EditRowTablePro = ({
                 </select>
                 {panel === "chat" && (
                   <ChatPro
-                    chatData={rowData.CZAT_KANCELARIA}
+                    chatData={rowData.KANAL_KOMUNIKACJI}
                     note={note}
                     setNote={setNote}
                     handleAddNote={handleAddNote}
                   />
                 )}
-                {panel === "logi" && <LogsEvent logsData={rowData.CZAT_LOGI} />}
+                {panel === "logi" && (
+                  <LogsEvent logsData={rowData.DZIENNIK_ZMIAN} />
+                )}
               </section>
             )}
             {/* {!rowData?.DATA_PRZYJECIA_SPRAWY && profile === "partner" && (
