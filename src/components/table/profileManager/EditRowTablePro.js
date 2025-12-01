@@ -119,7 +119,6 @@ const EditRowTablePro = ({
       prev: nextDoc[index - 1] ? nextDoc[index - 1] : null,
       next: nextDoc[index + 1] ? nextDoc[index + 1] : null,
     });
-    // }, [rowData?.NUMER_DOKUMENTU]);
   }, [rowData]);
 
   useEffect(() => {
