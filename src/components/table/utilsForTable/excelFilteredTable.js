@@ -61,14 +61,32 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
   const startRow = 2;
 
   try {
-    const groupedByDzial = {};
+    // const groupedByDzial = {};
+    // cleanData.forEach((item) => {
+    //   const dzial = item.DZIAL || "Brak działu";
+    //   if (!groupedByDzial[dzial]) {
+    //     groupedByDzial[dzial] = [];
+    //   }
+    //   groupedByDzial[dzial].push(item);
+    // });
+
+    // Używamy 'let', aby móc wyzerować obiekt, jeśli warunek unikalności nie zostanie spełniony
+    let groupedByDzial = {};
+
     cleanData.forEach((item) => {
-      const dzial = item.DZIAL || "Brak działu";
-      if (!groupedByDzial[dzial]) {
-        groupedByDzial[dzial] = [];
+      // 1. Sprawdzamy czy DZIAL istnieje (nie jest null, undefined ani pustym stringiem)
+      if (item.DZIAL) {
+        if (!groupedByDzial[item.DZIAL]) {
+          groupedByDzial[item.DZIAL] = [];
+        }
+        groupedByDzial[item.DZIAL].push(item);
       }
-      groupedByDzial[dzial].push(item);
     });
+
+    // 2. Jeśli po pętli mamy tylko 1 unikalny dział (lub 0), nie chcemy generować dla niego osobnej zakładki
+    if (Object.keys(groupedByDzial).length <= 1) {
+      groupedByDzial = {};
+    }
 
     const changeNameColumns = cleanData.map((doc) => {
       const newItem = {};
