@@ -39,7 +39,26 @@ export const menuItems = [
         path: "/actual-insurance-table",
         roles: [150, 350],
       },
-      // { label: "Sprawy do przyjęcia", path: "/no-accept-table", roles: [150, 350] },
+      {
+        label: "Zakończone",
+        path: "/completed-insurance-table",
+        roles: [150, 350],
+      },
+      {
+        label: "Wszystkie",
+        path: "/all-insurance-table",
+        roles: [150, 350],
+      },
+      {
+        label: "OW - rozliczone",
+        path: "/settled-collection-charges",
+        roles: [150],
+      },
+      {
+        label: "OW - nierozliczone",
+        path: "/pending-collection-charges",
+        roles: [150],
+      },
     ],
   },
   {

@@ -1,4 +1,4 @@
-.chat_law_partner {
+.info_desk {
   flex-grow: 1;
   width: 100%;
   display: flex;
@@ -6,17 +6,7 @@
   align-items: center;
 }
 
-/* .chat_law_partner--title {
-  position: relative;
-  width: 100%;
-  text-align: center;
-  padding: 2px 0;
-  border: 1px solid rgba(44, 123, 168, 0.6);
-  border-radius: 5px;
-  background-color: rgb(166, 255, 131);
-} */
-
-.chat_law_partner--notes {
+.info_desk--notes {
   flex-grow: 1;
   max-height: 40vh;
   width: 100%;
@@ -28,13 +18,12 @@
   overflow: auto;
 }
 
-.chat_law_partner__container {
+.info_desk__container {
   margin: 4px 0;
   overflow-wrap: break-word;
 }
 
-.chat_law_partner--username {
-  /* font-weight: bold; */
+.info_desk--username {
   cursor: pointer;
   display: inline-block;
   font-weight: bold;
@@ -92,7 +81,7 @@
 }
 
 /* Efekt kliknięcia */
-.chat_law_partner--username.clicked {
+.info_desk--username.clicked {
   animation: clickEffect 0.3s ease;
 }
 
@@ -109,7 +98,7 @@
   }
 }
 
-.chat_law_partner--edit {
+.info_desk--edit {
   width: 100%;
   height: 120px;
   margin: 3px 0 5px 0;
@@ -122,11 +111,11 @@
   overflow-wrap: break-word;
   white-space: pre-wrap;
 }
-.chat_law_partner--edit:focus {
+.info_desk--edit:focus {
   outline: 1px solid red;
 }
 
-.chat_law_partner__panel {
+.info_desk__panel {
   width: 100%;
   display: flex;
   justify-content: space-evenly;

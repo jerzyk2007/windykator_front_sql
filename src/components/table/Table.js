@@ -21,6 +21,7 @@ import { Box, Button } from "@mui/material";
 import {
   getAllDataRaport,
   lawPartnerRaport,
+  insuranceRaport,
 } from "./utilsForTable/excelFilteredTable";
 import TableButtonInfo from "./TableButtonInfo";
 import EditRowTablePro from "./profileManager/EditRowTablePro";
@@ -75,6 +76,9 @@ const Table = ({
     }
     if (profile === "partner" && has("DATA_PRZEKAZANIA_SPRAWY")) {
       return [{ id: "DATA_PRZEKAZANIA_SPRAWY", desc: true }];
+    }
+    if (profile === "insurance" && has("DATA_PRZEKAZANIA")) {
+      return [{ id: "DATA_PRZEKAZANIA", desc: false }];
     }
     return [];
   });
@@ -146,7 +150,7 @@ const Table = ({
     }
   };
 
-  const handleExportExcelLawPartner = async (data, type) => {
+  const handleExportExcelPartner = async (data, type) => {
     // włącz loader
     setExcelFile(true);
 
@@ -200,7 +204,10 @@ const Table = ({
         columns: newColumns,
         order: newOrder,
       };
-      lawPartnerRaport(updateData, orderColumns, type);
+
+      profile === "partner"
+        ? lawPartnerRaport(updateData, orderColumns, type)
+        : insuranceRaport(updateData, orderColumns, type);
     } catch (error) {
       console.error(error);
     } finally {
@@ -450,9 +457,29 @@ const Table = ({
             className="table_excel"
             disabled={!dataTableCounter}
             onClick={() =>
-              handleExportExcelLawPartner(
+              handleExportExcelPartner(
                 table.getPrePaginationRowModel().rows,
                 "Zestawienie"
+              )
+            }
+            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
+          >
+            <i
+              className="fa-regular fa-file-excel table-export-excel"
+              style={
+                !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
+              }
+            ></i>
+          </TableButtonInfo>
+        )}
+        {profile === "insurance" && (
+          <TableButtonInfo
+            className="table_excel"
+            disabled={!dataTableCounter}
+            onClick={() =>
+              handleExportExcelPartner(
+                table.getPrePaginationRowModel().rows,
+                "Polisy"
               )
             }
             tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."

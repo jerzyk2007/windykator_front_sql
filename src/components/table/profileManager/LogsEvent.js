@@ -48,11 +48,11 @@ const LogsEvent = ({ logsData = [] }) => {
 
   const notesItem = logsData?.map((item, index) => {
     return (
-      <section className="chat_law_partner__container" key={index}>
+      <section className="info_desk__container" key={index}>
         <span>{item.date}</span>
         <span>{" - "}</span>
         <span
-          className={`chat_law_partner--username ${
+          className={`info_desk--username ${
             clickedIndex === index ? "clicked" : ""
           }`}
           style={
@@ -73,12 +73,6 @@ const LogsEvent = ({ logsData = [] }) => {
       </section>
     );
   });
-
-  // useEffect(() => {
-  //   if (notesRef.current) {
-  //     notesRef.current.scrollTop = notesRef.current.scrollHeight;
-  //   }
-  // }, [logsData]);
 
   useEffect(() => {
     if (notesRef.current) {

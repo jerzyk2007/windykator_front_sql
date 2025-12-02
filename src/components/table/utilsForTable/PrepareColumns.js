@@ -518,6 +518,8 @@ export const prepareColumnsPartner = (columnsData) => {
   });
   return update;
 };
+
+// przygotowanie kolumn tabeli dla polis
 export const prepareColumnsInsurance = (columnsData) => {
   const update = columnsData.map((item) => {
     const modifiedItem = { ...item };
@@ -596,7 +598,7 @@ export const prepareColumnsInsurance = (columnsData) => {
       };
     }
 
-    if (item.accessorKey === "KONTRAHENT") {
+    if (item.accessorKey === "KONTRAHENT_NAZWA") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         return {
           align: "left",
@@ -608,7 +610,7 @@ export const prepareColumnsInsurance = (columnsData) => {
       modifiedItem.filterFn = "contains";
     }
 
-    if (item.accessorKey === "KWOTA_ROSZCZENIA_DO_KANCELARII") {
+    if (item.accessorKey === "NALEZNOSC") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => ({
         ...muiTableBodyCellProps,
         sx: {
@@ -648,67 +650,6 @@ export const prepareColumnsInsurance = (columnsData) => {
     //     return "BRAK";
     //   };
     // }
-
-    if (item.accessorKey === "WYKAZ_SPLACONEJ_KWOTY_FK") {
-      modifiedItem.accessorFn = (originalRow) => {
-        return originalRow?.WYKAZ_SPLACONEJ_KWOTY_FK || [];
-      };
-      modifiedItem.muiTableBodyCellProps = {
-        align: "left",
-        sx: {
-          ...muiTableBodyCellProps.sx,
-        },
-      };
-      modifiedItem.enableClickToCopy = false;
-      modifiedItem.Cell = ({ cell }) => {
-        const wykaz = cell.getValue() || [];
-
-        if (!wykaz.length) {
-          return "BRAK";
-        }
-
-        // funkcja do formatowania kwoty
-        const formatKwota = (kwota) =>
-          kwota !== undefined && kwota !== null && kwota !== 0
-            ? kwota.toLocaleString("pl-PL", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-                useGrouping: true,
-              })
-            : "0,00";
-
-        // bierzemy pierwszy wpis
-        const first = wykaz[0];
-
-        const firstFormatted = (
-          <>
-            <span style={{ color: "blue", fontWeight: 600 }}>{first.data}</span>
-            {" - "}
-            <span style={{ color: "rgb(162, 0, 255)", fontWeight: 600 }}>
-              {formatKwota(first.kwota)}
-            </span>
-            {" - "}
-            <span>{first.symbol}</span>
-          </>
-        );
-
-        // jeśli więcej niż 1 wpłata → wyświetlamy licznik + pierwszy wpis
-        if (wykaz.length > 1) {
-          return (
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ fontWeight: 700 }}>
-                Łączna liczba wpłat: {wykaz.length}
-              </span>
-              <div>Ostatnia wpłata:</div>
-              <div>{firstFormatted}</div>
-            </div>
-          );
-        }
-
-        // jeśli tylko 1 wpis → wyświetlamy normalnie
-        return <div>{firstFormatted}</div>;
-      };
-    }
 
     if (item.filterVariant === "none") {
       modifiedItem.enableColumnFilter = false;
