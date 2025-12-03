@@ -1,0 +1,68 @@
+.xmas-wrapper {
+  position: relative;
+  width: 100%;
+  min-width: 800px;
+  height: 100%;
+  min-height: 400px;
+}
+
+.xmas-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: linear-gradient(to bottom, #02111b, #1f2f3d, #3e5f76);
+}
+
+.xmas-message-top,
+.xmas-message-bottom {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+}
+
+/* ANIMACJA KOLORÓW */
+@keyframes colorShift {
+  0% {
+    color: #ff0000;
+    text-shadow: 0 0 20px #ff0000;
+  }
+  25% {
+    color: #00ffea;
+    text-shadow: 0 0 20px #00ffea;
+  }
+  50% {
+    color: #00ff00;
+    text-shadow: 0 0 20px #00ff00;
+  }
+  75% {
+    color: #ff00ff;
+    text-shadow: 0 0 20px #ff00ff;
+  }
+  100% {
+    color: #ff0000;
+    text-shadow: 0 0 20px #ff0000;
+  }
+}
+
+.xmas-message-top {
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  text-align: center;
+
+  /* TU DODAJEMY MIENIENIE */
+  animation: colorShift 3s infinite linear;
+}
+
+.xmas-message-bottom {
+  position: absolute;
+  bottom: 20px;
+  color: #02111b;
+}
