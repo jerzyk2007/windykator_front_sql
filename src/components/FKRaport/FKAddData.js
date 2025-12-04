@@ -144,7 +144,7 @@ const FKAddData = ({ company }) => {
   return (
     <>
       {pleaseWait ? (
-        <PleaseWait />
+        <PleaseWait info="xmas" />
       ) : (
         <section className="fk_add_data">
           <section className="fk_add_data__title">
