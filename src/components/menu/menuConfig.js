@@ -54,9 +54,15 @@ export const menuItems = [
         path: "/settled-collection-charges",
         roles: [150],
       },
+
       {
         label: "OW - nierozliczone",
         path: "/pending-collection-charges",
+        roles: [150],
+      },
+      {
+        label: "Dodaj kolejny dokument",
+        path: "/add-insurance-document",
         roles: [150],
       },
     ],

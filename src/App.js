@@ -21,7 +21,7 @@ import ChangeOrgStr from "./components/system_settings/ChangeOrgStr";
 import OrganizationStructure from "./components/system_settings/OrganizationStructure";
 import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
-// import TradeCredit from "./components/trade_credit/TradeCredit";
+import AddDoc from "./components/table/profileManager/AddDoc";
 import Instruction from "./components/instruction/Instruction";
 import ConfirmResetPassword from "./components/user/ConfirmResetPassword";
 // import RaportAreas from "./components/raports/RaportAreas";
@@ -180,6 +180,12 @@ function App() {
                 element={
                   <PrepareTable info={"pending"} profile={"insurance"} />
                 }
+              />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[150, 350]} />}>
+              <Route
+                path="/add-insurance-document"
+                element={<AddDoc profile={"insurance"} />}
               />
             </Route>
 

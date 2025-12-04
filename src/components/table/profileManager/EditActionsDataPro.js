@@ -1,4 +1,30 @@
+import { useState, useEffect } from "react";
 import "./EditActionsDataPro.css";
+
+// Funkcja pomocnicza do formatowania liczby do wyświetlenia
+const formatAmount = (value) => {
+  if (value === null || value === undefined || value === "") {
+    return ""; // Pusty string, jeśli wartość jest pusta
+  }
+  // Próbujemy parsować wartość jako liczbę, potem formatujemy
+  const num = parseFloat(String(value).replace(",", ".")); // Upewnij się, że kropka jest używana do parsowania
+  if (isNaN(num)) {
+    return String(value); // Jeśli nie jest liczbą, zwróć oryginalny string
+  }
+  return num.toLocaleString("pl-PL", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+    useGrouping: true,
+  });
+};
+
+// Funkcja pomocnicza do parsowania sformatowanego stringu na liczbę
+const parseFormattedAmount = (formattedString) => {
+  // Usuń spacje (separator tysięcy) i zamień przecinek na kropkę
+  const cleanString = formattedString.replace(/\s/g, "").replace(",", ".");
+  const num = parseFloat(cleanString);
+  return isNaN(num) ? 0 : num; // Zwróć 0, jeśli nie jest prawidłową liczbą
+};
 
 const EditDocActionsPro = ({
   rowData,
@@ -7,6 +33,8 @@ const EditDocActionsPro = ({
   profile,
   roles,
 }) => {
+  const [displayKwotaSplaty, setDisplayKwotaSplaty] = useState("");
+
   const status_sprawy =
     profile === "partner"
       ? [
@@ -27,6 +55,40 @@ const EditDocActionsPro = ({
     } na ${newStatus}`;
     handleAddNote(note, "log");
   };
+
+  const handleKwotaChange = (e) => {
+    let inputValue = e.target.value;
+    inputValue = inputValue.replace(/[^0-9,\s]/g, "");
+    // Aktualizujemy wyświetlaną wartość (może być niepoprawnie sformatowana, gdy użytkownik wpisuje)
+    setDisplayKwotaSplaty(inputValue);
+  };
+
+  const handleKwotaBlur = (e) => {
+    const inputValue = e.target.value;
+    const parsedValue = parseFormattedAmount(inputValue);
+    if (parsedValue !== 0) {
+      // Po blurze, formatujemy wartość i ustawiamy ją z powrotem w input
+      setDisplayKwotaSplaty(formatAmount(parsedValue));
+      handleAddNote(
+        `Wprowadzono wpłatę od klienta w wysokości : ${formatAmount(
+          parsedValue
+        )}`,
+        "log"
+      );
+
+      setRowData((prev) => {
+        return {
+          ...prev,
+          NALEZNOSC: rowData.NALEZNOSC - parsedValue,
+        };
+      });
+    }
+  };
+
+  // useEffect(() => {
+  //   const initialKwota = rowData.NALEZNOSC || 0;
+  //   setDisplayKwotaSplaty(formatAmount(initialKwota));
+  // }, [rowData]);
 
   if (profile === "partner") {
     return (
@@ -275,6 +337,17 @@ const EditDocActionsPro = ({
   } else if (profile === "insurance") {
     return (
       <section className="edit_doc edit_doc_basic-data edit_basic_data_pro">
+        <section className="edit_doc__container">
+          <span className="edit_doc--title">Wysokość wpłaty:</span>
+          <input
+            className="edit_doc--content edit_basic_data_pro--date"
+            type="text"
+            value={displayKwotaSplaty}
+            placeholder={formatAmount(rowData.NALEZNOSC)}
+            onChange={handleKwotaChange}
+            onBlur={handleKwotaBlur}
+          />
+        </section>
         <section className="edit_doc__container">
           <span className="edit_doc--title">Status sprawy:</span>
           <select
