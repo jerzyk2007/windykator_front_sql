@@ -62,7 +62,7 @@ const Login = () => {
 
   return (
     <section className="login__fixed">
-      <section className="login__high_information">
+      {/* <section className="login__high_information">
         <h1>UWAGA !!!</h1>
         <span>
           Chciałem poinformować, że w programie nastąpiła bardzo duża
@@ -79,7 +79,7 @@ const Login = () => {
         <span style={{ fontWeight: "bold", color: "red" }}>
           jerzy.komorowski@krotoski.com, 782 991 608
         </span>
-      </section>
+      </section> */}
       {!forgotPass ? (
         <section className="login">
           {errMsg && (
