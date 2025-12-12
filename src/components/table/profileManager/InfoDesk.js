@@ -3,7 +3,13 @@ import { createPortal } from "react-dom";
 import { Button } from "@mui/material";
 import "./InfoDesk.css";
 
-const InfoDesk = ({ chatData = [], note, setNote, handleAddNote }) => {
+const InfoDesk = ({
+  chatData = [],
+  note,
+  setNote,
+  handleAddNote,
+  spanInfoStyle,
+}) => {
   const [clickedIndex, setClickedIndex] = useState(null);
   const notesRef = useRef(null); //  Referencja do kontenera z notatkami
 
@@ -50,26 +56,20 @@ const InfoDesk = ({ chatData = [], note, setNote, handleAddNote }) => {
   const notesItem = chatData?.map((item, index) => {
     return (
       <section className="info_desk__container" key={index}>
-        <span>{item.date}</span>
-        <span>{" - "}</span>
+        <span style={spanInfoStyle(item.profile, "date")}>{item.date}</span>
+        {item?.date ? <span>{" - "}</span> : null}
         <span
           className={`info_desk--username ${
             clickedIndex === index ? "clicked" : ""
           }`}
-          style={
-            item.profile === "Pracownik"
-              ? { color: "rgba(42, 4, 207, 1)" }
-              : item.profile === "Kancelaria"
-              ? { color: "rgba(255, 14, 203, 1)" }
-              : null
-          }
+          style={spanInfoStyle(item.profile, "name")}
           onClick={() => handleCopyClick(item.userlogin, index)}
           onMouseEnter={(e) => handleMouseEnter(e, item.userlogin)}
           onMouseLeave={handleMouseLeave}
         >
           {item.username}
         </span>
-        <span>{" - "}</span>
+        {item?.username ? <span>{" - "}</span> : null}
         <span style={{ whiteSpace: "pre-wrap" }}>{item.note}</span>
       </section>
     );

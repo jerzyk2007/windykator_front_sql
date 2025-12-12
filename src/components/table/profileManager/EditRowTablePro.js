@@ -3,11 +3,10 @@ import useData from "../../hooks/useData";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
-import InfoDesk from "./InfoDesk";
-import LogsEvent from "./LogsEvent";
 import EditBasicDataPro from "./EditBasicDataPro";
 import EditActionsDataPro from "./EditActionsDataPro";
 import AcceptCasePanel from "./AcceptCasePanel";
+import LogAndChat from "../profileInsider/LogAndChat";
 import { changeSingleDocLawPartner } from "../utilsForTable/changeSingleDocument";
 import "./EditRowTablePro.css";
 
@@ -29,8 +28,7 @@ const EditRowTablePro = ({
     prev: null,
     next: null,
   });
-  // stan zmiany z czat na logi
-  const [panel, setPanel] = useState("chat");
+
   // stan nowych wpisów dla chat i logów
   const [chatLog, setChatLog] = useState({
     KANAL_KOMUNIKACJI: [],
@@ -118,41 +116,17 @@ const EditRowTablePro = ({
     setNote("");
   };
 
-  const logPanelSelect = (
-    <section className="edit-row-table_section-content-data edit-row-table-law-partner_section-content-data">
-      <select
-        className="edit-row-table-law-partner--select"
-        style={
-          panel === "chat"
-            ? { backgroundColor: "rgb(166, 255, 131)" }
-            : panel === "logi"
-            ? { backgroundColor: "rgba(253, 255, 126, 1)" }
-            : null
-        }
-        value={panel}
-        onChange={(e) => {
-          setPanel(e.target.value);
-        }}
-      >
-        <option value="chat">Panel Komunikacji</option>
-        <option value="logi">Dziennik zmian</option>
-      </select>
-      {panel === "chat" && (
-        <InfoDesk
-          chatData={rowData.KANAL_KOMUNIKACJI}
-          note={note}
-          setNote={setNote}
-          handleAddNote={handleAddNote}
-        />
-      )}
-      {panel === "logi" && <LogsEvent logsData={rowData.DZIENNIK_ZMIAN} />}
-    </section>
-  );
-
   const profileComponentSecond = () => {
     if (profile === "partner") {
       if (rowData?.DATA_PRZYJECIA_SPRAWY) {
-        return logPanelSelect;
+        return (
+          <LogAndChat
+            rowData={rowData}
+            note={note}
+            setNote={setNote}
+            handleAddNote={handleAddNote}
+          />
+        );
       } else if (rowData?.id_document && !rowData?.DATA_PRZYJECIA_SPRAWY) {
         return (
           <section className="edit-row-table_section-content-data">
@@ -167,7 +141,14 @@ const EditRowTablePro = ({
         );
       }
     } else if (profile === "insurance") {
-      return logPanelSelect;
+      return (
+        <LogAndChat
+          rowData={rowData}
+          note={note}
+          setNote={setNote}
+          handleAddNote={handleAddNote}
+        />
+      );
     } else {
       return (
         <section className="edit-row-table_section-content-data"></section>
@@ -244,19 +225,7 @@ const EditRowTablePro = ({
             <section className="edit-row-table_section-content-data">
               <EditBasicDataPro rowData={rowData} profile={profile} />
             </section>
-
             {profileComponentSecond()}
-            {/* {rowData?.DATA_PRZYJECIA_SPRAWY ? (
-              <section className="edit-row-table_section-content-data">
-                <EditActionsData
-                  rowData={rowData}
-                  setRowData={setRowData}
-                  handleAddNote={handleAddNote}
-                />
-              </section>
-            ) : (
-              <section className="edit-row-table_section-content-data"></section>
-            )} */}
             {profileCompnentThird()}
           </section>
         </section>

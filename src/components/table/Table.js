@@ -307,6 +307,7 @@ const Table = ({
     enableColumnResizing: true,
     enableColumnOrdering: true,
     enableColumnPinning: true,
+    // enableRowVirtualization: true,
     onColumnSizingChange: setColumnSizing,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnOrderChange: setColumnOrder,

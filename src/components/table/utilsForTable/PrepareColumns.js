@@ -194,6 +194,56 @@ export const prepareColumnsInsider = (columnsData) => {
           : "BRAK";
       };
     }
+    // if (item.accessorKey === "UWAGI_ASYSTENT") {
+    //   modifiedItem.accessorFn = (originalRow) => {
+    //     const arrayData = originalRow.UWAGI_ASYSTENT;
+    //     if (!arrayData) return "Brak wpisów";
+    //     try {
+    //       let dzialania;
+
+    //       if (!Array.isArray(arrayData) || arrayData.length === 0) {
+    //         dzialania = "Brak wpisów";
+    //       } else if (arrayData.length === 1) {
+    //         // ⭐ ZWRACAMY STRING A NIE OBIEKT!
+    //         const e = arrayData[0];
+    //         dzialania = `${e}`;
+    //       } else {
+    //         const last = arrayData[arrayData.length - 1];
+    //         dzialania = `Liczba wcześniejszych wpisów: ${
+    //           arrayData.length - 1
+    //         }\n${last}`;
+    //       }
+
+    //       // Ograniczenie do max 2 enterów i max 120 znaków
+    //       let maxEnters = 3;
+    //       let countEnters = 0;
+    //       let truncated = "";
+
+    //       for (let char of dzialania) {
+    //         if (char === "\n") {
+    //           countEnters++;
+    //           if (countEnters > maxEnters) break;
+    //         }
+    //         if (truncated.length >= 150) break;
+    //         truncated += char;
+    //       }
+
+    //       return truncated.length < dzialania.length
+    //         ? truncated + " …"
+    //         : truncated;
+    //     } catch {
+    //       return "Brak wpisów";
+    //     }
+    //   };
+
+    //   modifiedItem.muiTableBodyCellProps = {
+    //     align: "left",
+    //     sx: {
+    //       ...muiTableBodyCellProps.sx,
+    //       // backgroundColor: "rgba(234, 255, 230, 0.61)",
+    //     },
+    //   };
+    // }
 
     if (item.accessorKey === "UWAGI_ASYSTENT") {
       modifiedItem.accessorFn = (originalRow) => {
@@ -569,7 +619,7 @@ export const prepareColumnsInsurance = (columnsData) => {
           }
 
           // Ograniczenie do max 2 enterów i max 120 znaków
-          let maxEnters = 2;
+          let maxEnters = 3;
           let countEnters = 0;
           let truncated = "";
 
@@ -578,7 +628,7 @@ export const prepareColumnsInsurance = (columnsData) => {
               countEnters++;
               if (countEnters > maxEnters) break;
             }
-            if (truncated.length >= 120) break;
+            if (truncated.length >= 150) break;
             truncated += char;
           }
 
@@ -635,21 +685,15 @@ export const prepareColumnsInsurance = (columnsData) => {
       };
     }
 
-    // if (item.accessorKey === "WYKAZ_SPLACONEJ_KWOTY_FK") {
-    //   modifiedItem.accessorFn = (originalRow) => {
-    //     const wykaz = originalRow?.WYKAZ_SPLACONEJ_KWOTY_FK
-    //       ? originalRow.WYKAZ_SPLACONEJ_KWOTY_FK
-    //       : [];
-    //     if (wykaz && wykaz.length) {
-    //       console.log(wykaz);
-    //       const mergedData = wykaz.map((itemRow) => {
-    //         return `${itemRow.data} - ${itemRow.kwota} - ${itemRow.symbol}`;
-    //       });
-    //       return mergedData;
-    //     }
-    //     return "BRAK";
-    //   };
-    // }
+    if (item.accessorKey === "OSOBA_ZLECAJACA_WINDYKACJE") {
+      modifiedItem.muiTableBodyCellProps = () => ({
+        ...muiTableBodyCellProps,
+        sx: {
+          ...muiTableBodyCellProps.sx,
+          wordBreak: " break-all",
+        },
+      });
+    }
 
     if (item.filterVariant === "none") {
       modifiedItem.enableColumnFilter = false;

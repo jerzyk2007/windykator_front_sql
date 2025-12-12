@@ -674,7 +674,7 @@ export const insuranceRaport = async (allData, orderColumns, info) => {
       }
 
       // --- Twoja logika przycinania (max 2 entery lub 120 znaków) ---
-      let maxEnters = 2;
+      let maxEnters = 5;
       let countEnters = 0;
       let truncated = "";
 
@@ -685,7 +685,7 @@ export const insuranceRaport = async (allData, orderColumns, info) => {
           if (countEnters > maxEnters) break;
         }
         // Jeśli to jest 121 znak, przerywamy
-        if (truncated.length >= 120) break;
+        if (truncated.length >= 350) break;
 
         truncated += char;
       }
