@@ -324,7 +324,7 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
     return name;
   };
 
-  // obrabiam dane z CZAT_KANCELARIA i tworzę skrócone zapisy
+  // obrabiam dane z KANAL_KOMUNIKACJI i tworzę skrócone zapisy
   const formatChatField = (arrayData) => {
     if (!arrayData) return "Brak wpisów";
 
@@ -369,8 +369,8 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
   };
 
   const cleanData = allData.map((item) => {
-    // Wywołujemy nową funkcję dla pola CZAT_KANCELARIA
-    const chatPanel = formatChatField(item.CZAT_KANCELARIA);
+    // Wywołujemy nową funkcję dla pola KANAL_KOMUNIKACJI
+    const chatPanel = formatChatField(item.KANAL_KOMUNIKACJI);
 
     // wykaz spłaconej kwoty
     const wsk = item?.WYKAZ_SPLACONEJ_KWOTY_FK || [];
@@ -413,7 +413,7 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
     } ${item?.ODDZIAL?.OBSZAR || ""}`.trim();
     return {
       ...item,
-      CZAT_KANCELARIA: chatPanel,
+      KANAL_KOMUNIKACJI: chatPanel,
       DATA_PRZEKAZANIA_SPRAWY,
       DATA_PRZYJECIA_SPRAWY,
       DATA_WYMAGALNOSCI_PLATNOSCI,
@@ -558,6 +558,303 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
             wrapText: true, // zawijanie tekstu
           };
         } else if (header === "Opis dokumentu") {
+          column.width = 40;
+        }
+
+        if (sumCell.value) {
+          sumCell.font = { bold: true };
+          sumCell.alignment = { horizontal: "center", vertical: "middle" };
+          sumCell.border = border;
+          sumCell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "FFFF00" },
+          };
+        }
+      });
+
+      headers.forEach((header, columnIndex) => {
+        const colIndex = columnIndex + 2;
+        const column = worksheet.getColumn(colIndex);
+        let maxLength = header.length;
+        worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
+          if (rowIndex >= startRow) {
+            const cellValue = row.getCell(colIndex).value;
+            if (cellValue) {
+              const len = cellValue.toString().length;
+              if (len > maxLength) maxLength = len;
+            }
+          }
+        });
+        // column.width = Math.max(15, Math.min(maxLength, 40));
+      });
+
+      worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
+        if (rowIndex >= startRow) {
+          row.eachCell({ includeEmpty: true }, (cell) => {
+            cell.font = { size: 10 };
+            cell.border = {
+              top: { style: "thin" },
+              left: { style: "thin" },
+              bottom: { style: "thin" },
+              right: { style: "thin" },
+            };
+          });
+        }
+      });
+
+      worksheet.autoFilter = {
+        from: `A${startRow}`,
+        to: worksheet.getColumn(headers.length + 1).letter + `${startRow}`,
+      };
+
+      worksheet.views = [
+        {
+          state: "frozen",
+          xSplit: 2,
+          ySplit: startRow,
+          topLeftCell: `C${startRow + 1}`,
+          activeCell: `C${startRow + 1}`,
+        },
+      ];
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    saveAs(new Blob([buffer]), `${sanitizeSheetName(info)}.xlsx`);
+  } catch (err) {
+    console.error(err);
+  }
+};
+export const insuranceRaport = async (allData, orderColumns, info) => {
+  const sanitize = (text) => {
+    if (!text) return " ";
+    return text.replace(
+      /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
+      " "
+    );
+  };
+
+  const sanitizeSheetName = (name) => {
+    if (!name || typeof name !== "string") return "Arkusz";
+    return name
+      .replace(/[:\\\/\?\*\[\]]/g, " ")
+      .trim()
+      .substring(0, 31);
+  };
+  const usedNames = new Set();
+
+  const getUniqueSheetName = (base) => {
+    let name = sanitizeSheetName(base);
+    let counter = 1;
+    while (usedNames.has(name)) {
+      name = sanitizeSheetName(base).substring(0, 28) + `_${counter++}`;
+    }
+    usedNames.add(name);
+    return name;
+  };
+
+  // obrabiam dane z KANAL_KOMUNIKACJI i tworzę skrócone zapisy
+  const formatChatField = (arrayData) => {
+    if (!arrayData) return "Brak wpisów";
+
+    try {
+      let dzialania;
+
+      if (!Array.isArray(arrayData) || arrayData.length === 0) {
+        dzialania = "Brak wpisów";
+      } else if (arrayData.length === 1) {
+        const e = arrayData[0];
+        // Używamy sanitize, aby uniknąć błędów w Excelu przy dziwnych znakach
+        dzialania = `${e.date} - ${sanitize(e.username)} - ${sanitize(e.note)}`;
+      } else {
+        const last = arrayData[arrayData.length - 1];
+        dzialania = `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
+          last.date
+        } - ${sanitize(last.username)} - ${sanitize(last.note)}`;
+      }
+
+      // --- Twoja logika przycinania (max 2 entery lub 120 znaków) ---
+      let maxEnters = 5;
+      let countEnters = 0;
+      let truncated = "";
+
+      for (let char of dzialania) {
+        if (char === "\n") {
+          countEnters++;
+          // Jeśli to jest 3 enter, przerywamy zanim go dodamy
+          if (countEnters > maxEnters) break;
+        }
+        // Jeśli to jest 121 znak, przerywamy
+        if (truncated.length >= 350) break;
+
+        truncated += char;
+      }
+
+      return truncated.length < dzialania.length ? truncated + " …" : truncated;
+    } catch (err) {
+      console.error("Błąd formatowania czatu:", err);
+      return "Brak wpisów";
+    }
+  };
+
+  const cleanData = allData.map((item) => {
+    // Wywołujemy nową funkcję dla pola KANAL_KOMUNIKACJI
+    const chatPanel = formatChatField(item.KANAL_KOMUNIKACJI);
+
+    // wykaz spłaconej kwoty
+
+    const parseDateOrDefault = (value) => {
+      if (!value) return ""; // null, undefined, pusty string
+      const d = new Date(value);
+      return isNaN(d.getTime()) ? "" : d; // jeśli niepoprawna data -> "BRAK"
+    };
+    const TERMIN_PLATNOSCI = parseDateOrDefault(item.TERMIN_PLATNOSCI);
+    const DATA_PRZEKAZANIA = parseDateOrDefault(item.DATA_PRZEKAZANIA);
+
+    return {
+      ...item,
+      KANAL_KOMUNIKACJI: chatPanel,
+      TERMIN_PLATNOSCI,
+      DATA_PRZEKAZANIA,
+    };
+  });
+
+  const startRow = 2;
+  try {
+    const changeNameColumns = cleanData.map((doc) => {
+      const newItem = {};
+      for (const column of orderColumns.columns) {
+        const value = doc[column.accessorKey];
+        newItem[column.header] =
+          value !== undefined ? value : doc[column.accessorKey];
+      }
+      return newItem;
+    });
+
+    const groupedSheets = [
+      {
+        name: getUniqueSheetName(info),
+        data: changeNameColumns,
+      },
+    ];
+
+    const workbook = new ExcelJS.Workbook();
+
+    groupedSheets.forEach((sheet) => {
+      const worksheet = workbook.addWorksheet(sheet.name);
+
+      if (!sheet.data?.length) return;
+
+      for (let i = 0; i < startRow - 1; i++) worksheet.addRow([]);
+
+      const headers = orderColumns.order.filter((column) =>
+        sheet.data[0].hasOwnProperty(column)
+      );
+
+      worksheet.addRow(["Lp", ...headers]);
+
+      sheet.data.forEach((row, index) => {
+        const rowData = [
+          index + 1,
+          ...headers.map((header) => row[header] || ""),
+        ];
+        worksheet.addRow(rowData);
+      });
+
+      const headerRow = worksheet.getRow(startRow);
+      headerRow.font = { bold: true, size: 10 };
+      headerRow.alignment = {
+        horizontal: "center",
+        vertical: "middle",
+        wrapText: true,
+      };
+      headerRow.eachCell((cell) => {
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          // fgColor: { argb: "cacaca" },
+          fgColor: { argb: "e0f8ff" },
+        };
+      });
+      headerRow.height = 30;
+
+      worksheet.getColumn(1).width = 10;
+      worksheet.getColumn(1).alignment = {
+        horizontal: "center",
+        vertical: "middle",
+      };
+
+      headers.forEach((header, columnIndex) => {
+        const colIndex = columnIndex + 2;
+        const column = worksheet.getColumn(colIndex);
+        const columnLetter = String.fromCharCode(64 + colIndex);
+        const startDataRow = startRow + 1;
+        const endDataRow = worksheet.rowCount;
+
+        column.width = 30;
+        column.alignment = {
+          horizontal: "center",
+          vertical: "middle",
+          wrapText: true,
+        };
+
+        const sumCell = worksheet.getCell(startRow - 1, colIndex);
+        const border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+
+        if (header === "Numer polisy") {
+          column.width = 22;
+          // formatuj na tekst
+          // column.numFmt = "@";
+
+          column.numFmt = "0";
+          for (
+            let rowIndex = startDataRow;
+            rowIndex <= endDataRow;
+            rowIndex++
+          ) {
+            const cell = worksheet.getCell(`${columnLetter}${rowIndex}`);
+            if (cell.value !== null && cell.value !== undefined) {
+              const num = Number(cell.value);
+              if (!isNaN(num)) {
+                cell.value = num; // liczba
+                column.numFmt = "0"; // format liczby całkowitej, można "0.00" dla decimal
+              } else {
+                cell.value = String(cell.value); // pozostaw jako tekst
+              }
+            }
+          }
+
+          sumCell.value = {
+            formula: `SUBTOTAL(103,${columnLetter}${startDataRow}:${columnLetter}${endDataRow})`,
+          };
+          sumCell.numFmt = "0";
+        } else if (header === "Należność") {
+          column.numFmt = "#,##0.00";
+          column.width = 22;
+
+          for (
+            let rowIndex = startDataRow;
+            rowIndex <= endDataRow;
+            rowIndex++
+          ) {
+            const cell = worksheet.getCell(`${columnLetter}${rowIndex}`);
+            if (!cell.value || isNaN(parseFloat(cell.value))) cell.value = 0;
+          }
+          sumCell.value = {
+            formula: `SUBTOTAL(109,${columnLetter}${startDataRow}:${columnLetter}${endDataRow})`,
+          };
+          sumCell.numFmt = "#,##0.00 zł";
+        } else if (
+          header === "Data przekazania" ||
+          header === "Termin płatności"
+        ) {
+          column.width = 19;
+        } else if (header === "Kontrahent" || header === "Panel komunikacji") {
           column.width = 40;
         }
 

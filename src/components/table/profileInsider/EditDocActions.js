@@ -169,12 +169,12 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
         {rowData.AREA === "BLACHARNIA" && (
           <section className="edit_doc__container">
             <span className="edit_doc--title">Jaka kancelarię TU:</span>
-            <span className="edit_doc--content">
+            {/* <span className="edit_doc--content">
               {rowData?.JAKA_KANCELARIA_TU
                 ? rowData.JAKA_KANCELARIA_TU
                 : "BRAK"}
-            </span>
-            {/* {roles.includes(110) || roles.includes(120) ? (
+            </span> */}
+            {roles.includes(150) ? (
               <select
                 className="edit_doc--select"
                 value={
@@ -212,7 +212,7 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
                   ? rowData.JAKA_KANCELARIA_TU
                   : "BRAK"}
               </span>
-            )} */}
+            )}
           </section>
         )}
 

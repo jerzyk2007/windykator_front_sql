@@ -774,24 +774,17 @@ const InstructionTable = () => {
         </span>
         <span
           className="instruction_component-content--text"
-          style={{ marginLeft: "20px" }}
+          style={{
+            marginLeft: "20px",
+            whiteSpace: "pre-line", // To sprawia, że entery w kodzie działają
+          }}
         >
           {`- `}
           <span className="instruction_component-content--element">excel</span>
-          {` - pobiera wszystkie dane do pliku excel, które wyświetla dana tabela (bez względu na to czy jakieś kolumny są ukryte, włączone filtry itd).
-          Program pozwala pobrac około 30 tysięcy wierszy uzwględniając wszytskie kolumny lub więcej wierszy wyłączając część kolumn. 
-          Program automatycznie liczy ilosć danych, w przypadku ich przekroczenia zostanie wyświetlony powiadomienie po najechaniu na ikonę.`}
+          {` - Funkcja eksportu przenosi do pliku Excel wyłącznie dane widoczne aktualnie w tabeli. Aby uwzględnić dodatkowe informacje, należy przed pobraniem pliku włączyć odpowiednie kolumny w widoku programu.
+          W przypadku dostępu do wielu działów, włączenie kolumny „Dział” spowoduje automatyczne utworzenie w pliku Excel osobnych arkuszy dla każdego z nich.
+          Limit eksportu wynosi około 30 tysięcy wierszy przy pełnym zestawie kolumn. Ograniczenie liczby kolumn pozwala na pobranie znacznie większej liczby rekordów. System na bieżąco monitoruje ilość danych – w przypadku przekroczenia limitu, po najechaniu na ikonę eksportu wyświetli się stosowne powiadomienie.`}
         </span>
-        {/* <span
-          className="instruction_component-content--text"
-          style={{ marginLeft: "20px" }}
-        >
-          {`- `}
-          <span className="instruction_component-content--element">
-            lejek - ikona niebieska
-          </span>
-          {` - pobierane dane do pliku excel, z uwzględnieniem tego co wyświetla się w tabeli, jak tabela jest wyfiltrowana, które kolumny są ukryte.`}
-        </span> */}
       </section>
     </section>
   );

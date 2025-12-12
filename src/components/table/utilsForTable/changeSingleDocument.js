@@ -47,6 +47,8 @@ export const changeSingleDoc = (data) => {
 
 export const changeSingleDocLawPartner = (data) => {
   data.OPIS_DOKUMENTU = data?.OPIS_DOKUMENTU ? data.OPIS_DOKUMENTU : "BRAK";
-  data.CZAT_KANCELARIA = data?.CZAT_KANCELARIA ? data.CZAT_KANCELARIA : "BRAK";
+  data.KANAL_KOMUNIKACJI = data?.KANAL_KOMUNIKACJI
+    ? data.KANAL_KOMUNIKACJI
+    : "BRAK";
   return data;
 };

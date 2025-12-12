@@ -21,7 +21,7 @@ import ChangeOrgStr from "./components/system_settings/ChangeOrgStr";
 import OrganizationStructure from "./components/system_settings/OrganizationStructure";
 import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
-// import TradeCredit from "./components/trade_credit/TradeCredit";
+import AddDoc from "./components/table/profileManager/AddDoc";
 import Instruction from "./components/instruction/Instruction";
 import ConfirmResetPassword from "./components/user/ConfirmResetPassword";
 // import RaportAreas from "./components/raports/RaportAreas";
@@ -150,6 +150,42 @@ function App() {
                 element={
                   <PrepareTable info={"vindication"} profile={"insurance"} />
                 }
+              />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[150, 350]} />}>
+              <Route
+                path="/completed-insurance-table"
+                element={
+                  <PrepareTable info={"completed"} profile={"insurance"} />
+                }
+              />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[150, 350]} />}>
+              <Route
+                path="/all-insurance-table"
+                element={<PrepareTable info={"all"} profile={"insurance"} />}
+              />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[150]} />}>
+              <Route
+                path="/settled-collection-charges"
+                element={
+                  <PrepareTable info={"settled"} profile={"insurance"} />
+                }
+              />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[150, 350]} />}>
+              <Route
+                path="/pending-collection-charges"
+                element={
+                  <PrepareTable info={"pending"} profile={"insurance"} />
+                }
+              />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[150, 350]} />}>
+              <Route
+                path="/add-insurance-document"
+                element={<AddDoc profile={"insurance"} />}
               />
             </Route>
 

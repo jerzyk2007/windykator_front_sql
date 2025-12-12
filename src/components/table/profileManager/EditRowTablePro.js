@@ -3,11 +3,10 @@ import useData from "../../hooks/useData";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
-import ChatPro from "./ChatPro";
-import LogsEvent from "./LogsEvent";
-import EditBasicData from "./EditBasicData";
-import EditActionsData from "./EditActionsData";
+import EditBasicDataPro from "./EditBasicDataPro";
+import EditActionsDataPro from "./EditActionsDataPro";
 import AcceptCasePanel from "./AcceptCasePanel";
+import LogAndChat from "../profileInsider/LogAndChat";
 import { changeSingleDocLawPartner } from "../utilsForTable/changeSingleDocument";
 import "./EditRowTablePro.css";
 
@@ -29,23 +28,27 @@ const EditRowTablePro = ({
     prev: null,
     next: null,
   });
-  // stan zmiany z czat na logi
-  const [panel, setPanel] = useState("chat");
+
   // stan nowych wpisów dla chat i logów
   const [chatLog, setChatLog] = useState({
-    CZAT_KANCELARIA: [],
-    CZAT_LOGI: [],
+    KANAL_KOMUNIKACJI: [],
+    DZIENNIK_ZMIAN: [],
   });
   const [toggleState, setToggleState] = useState(1);
 
   const handleSaveData = async (type = "exit") => {
     const { id_document } = rowData;
     try {
-      await axiosPrivateIntercept.patch(`/law-partner/change-single-document`, {
-        id_document,
-        document: rowData,
-        chatLog,
-      });
+      const basePath = {
+        insider: "/documents",
+        partner: "/law-partner",
+        insurance: "/insurance",
+      };
+
+      await axiosPrivateIntercept.patch(
+        `${basePath[profile]}/change-single-document`,
+        { id_document, document: rowData, chatLog }
+      );
 
       await updateDocuments(changeSingleDocLawPartner(rowData));
 
@@ -70,9 +73,9 @@ const EditRowTablePro = ({
   const handleAddNote = (info, type) => {
     const oldChat =
       type === "chat"
-        ? [...(rowData.CZAT_KANCELARIA ?? [])]
+        ? [...(rowData.KANAL_KOMUNIKACJI ?? [])]
         : type === "log"
-        ? [...(rowData.CZAT_LOGI ?? [])]
+        ? [...(rowData.DZIENNIK_ZMIAN ?? [])]
         : [];
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
@@ -95,8 +98,8 @@ const EditRowTablePro = ({
       newChat = [note];
     }
     const saveInfo = {
-      chat: "CZAT_KANCELARIA",
-      log: "CZAT_LOGI",
+      chat: "KANAL_KOMUNIKACJI",
+      log: "DZIENNIK_ZMIAN",
     };
     setChatLog((prev) => {
       return {
@@ -112,6 +115,89 @@ const EditRowTablePro = ({
     });
     setNote("");
   };
+
+  const profileComponentSecond = () => {
+    if (profile === "partner") {
+      if (rowData?.DATA_PRZYJECIA_SPRAWY) {
+        return (
+          <LogAndChat
+            rowData={rowData}
+            note={note}
+            setNote={setNote}
+            handleAddNote={handleAddNote}
+          />
+        );
+      } else if (rowData?.id_document && !rowData?.DATA_PRZYJECIA_SPRAWY) {
+        return (
+          <section className="edit-row-table_section-content-data">
+            <AcceptCasePanel
+              rowData={rowData}
+              updateDocuments={updateDocuments}
+              removeDocuments={removeDocuments}
+              setDataRowTable={setDataRowTable}
+              clearRowTable={clearRowTable}
+            />
+          </section>
+        );
+      }
+    } else if (profile === "insurance") {
+      return (
+        <LogAndChat
+          rowData={rowData}
+          note={note}
+          setNote={setNote}
+          handleAddNote={handleAddNote}
+        />
+      );
+    } else {
+      return (
+        <section className="edit-row-table_section-content-data"></section>
+      );
+    }
+  };
+  const profileCompnentThird = () => {
+    if (profile === "partner" && rowData?.DATA_PRZYJECIA_SPRAWY) {
+      return (
+        <section className="edit-row-table_section-content-data">
+          <EditActionsDataPro
+            rowData={rowData}
+            setRowData={setRowData}
+            handleAddNote={handleAddNote}
+            profile={profile}
+            roles={auth.roles || []}
+          />
+        </section>
+      );
+    } else if (profile === "insurance") {
+      return (
+        <section className="edit-row-table_section-content-data">
+          <EditActionsDataPro
+            rowData={rowData}
+            setRowData={setRowData}
+            handleAddNote={handleAddNote}
+            profile={profile}
+            roles={auth.roles || []}
+          />
+        </section>
+      );
+    } else
+      return (
+        <section className="edit-row-table_section-content-data"></section>
+      );
+  };
+
+  const isButtonDisabled = (() => {
+    if (profile === "partner") {
+      return !rowData?.DATA_PRZYJECIA_SPRAWY;
+    }
+
+    if (profile === "insurance") {
+      return false;
+    }
+
+    // domyślnie
+    return true;
+  })();
 
   useEffect(() => {
     const index = nextDoc.indexOf(rowData.id_document);
@@ -137,74 +223,10 @@ const EditRowTablePro = ({
         >
           <section className="edit-row-table_section-content">
             <section className="edit-row-table_section-content-data">
-              <EditBasicData rowData={rowData} profile={profile} />
+              <EditBasicDataPro rowData={rowData} profile={profile} />
             </section>
-            {rowData?.DATA_PRZYJECIA_SPRAWY && (
-              <section className="edit-row-table_section-content-data edit-row-table-law-partner_section-content-data">
-                <select
-                  className="edit-row-table-law-partner--select"
-                  style={
-                    panel === "chat"
-                      ? { backgroundColor: "rgb(166, 255, 131)" }
-                      : panel === "logi"
-                      ? { backgroundColor: "rgba(253, 255, 126, 1)" }
-                      : null
-                  }
-                  value={panel}
-                  onChange={(e) => {
-                    setPanel(e.target.value);
-                  }}
-                >
-                  <option value="chat">Panel Komunikacji</option>
-                  <option value="logi">Dziennik zmian</option>
-                </select>
-                {panel === "chat" && (
-                  <ChatPro
-                    chatData={rowData.CZAT_KANCELARIA}
-                    note={note}
-                    setNote={setNote}
-                    handleAddNote={handleAddNote}
-                  />
-                )}
-                {panel === "logi" && <LogsEvent logsData={rowData.CZAT_LOGI} />}
-              </section>
-            )}
-            {/* {!rowData?.DATA_PRZYJECIA_SPRAWY && profile === "partner" && (
-              <section className="edit-row-table_section-content-data">
-                <AcceptCasePanel
-                  rowData={rowData}
-                  updateDocuments={updateDocuments}
-                  removeDocuments={removeDocuments}
-                  setDataRowTable={setDataRowTable}
-                  clearRowTable={clearRowTable}
-                />
-              </section>
-            )} */}
-            {rowData?.id_document &&
-              !rowData?.DATA_PRZYJECIA_SPRAWY &&
-              profile === "partner" && (
-                <section className="edit-row-table_section-content-data">
-                  <AcceptCasePanel
-                    rowData={rowData}
-                    updateDocuments={updateDocuments}
-                    removeDocuments={removeDocuments}
-                    setDataRowTable={setDataRowTable}
-                    clearRowTable={clearRowTable}
-                  />
-                </section>
-              )}
-
-            {rowData?.DATA_PRZYJECIA_SPRAWY ? (
-              <section className="edit-row-table_section-content-data">
-                <EditActionsData
-                  rowData={rowData}
-                  setRowData={setRowData}
-                  handleAddNote={handleAddNote}
-                />
-              </section>
-            ) : (
-              <section className="edit-row-table_section-content-data"></section>
-            )}
+            {profileComponentSecond()}
+            {profileCompnentThird()}
           </section>
         </section>
         <section
@@ -268,7 +290,7 @@ const EditRowTablePro = ({
             variant="contained"
             size="large"
             color="success"
-            disabled={rowData?.DATA_PRZYJECIA_SPRAWY ? false : true}
+            disabled={isButtonDisabled}
             onClick={() => handleSaveData()}
           >
             Zatwierdź

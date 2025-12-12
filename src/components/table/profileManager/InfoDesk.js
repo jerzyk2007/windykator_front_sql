@@ -1,9 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@mui/material";
-import "./ChatPro.css";
+import "./InfoDesk.css";
 
-const ChatLawPartner = ({ chatData = [], note, setNote, handleAddNote }) => {
+const InfoDesk = ({
+  chatData = [],
+  note,
+  setNote,
+  handleAddNote,
+  spanInfoStyle,
+}) => {
   const [clickedIndex, setClickedIndex] = useState(null);
   const notesRef = useRef(null); //  Referencja do kontenera z notatkami
 
@@ -49,27 +55,21 @@ const ChatLawPartner = ({ chatData = [], note, setNote, handleAddNote }) => {
 
   const notesItem = chatData?.map((item, index) => {
     return (
-      <section className="chat_law_partner__container" key={index}>
-        <span>{item.date}</span>
-        <span>{" - "}</span>
+      <section className="info_desk__container" key={index}>
+        <span style={spanInfoStyle(item.profile, "date")}>{item.date}</span>
+        {item?.date ? <span>{" - "}</span> : null}
         <span
-          className={`chat_law_partner--username ${
+          className={`info_desk--username ${
             clickedIndex === index ? "clicked" : ""
           }`}
-          style={
-            item.profile === "Pracownik"
-              ? { color: "rgba(42, 4, 207, 1)" }
-              : item.profile === "Kancelaria"
-              ? { color: "rgba(255, 14, 203, 1)" }
-              : null
-          }
+          style={spanInfoStyle(item.profile, "name")}
           onClick={() => handleCopyClick(item.userlogin, index)}
           onMouseEnter={(e) => handleMouseEnter(e, item.userlogin)}
           onMouseLeave={handleMouseLeave}
         >
           {item.username}
         </span>
-        <span>{" - "}</span>
+        {item?.username ? <span>{" - "}</span> : null}
         <span style={{ whiteSpace: "pre-wrap" }}>{item.note}</span>
       </section>
     );
@@ -83,19 +83,19 @@ const ChatLawPartner = ({ chatData = [], note, setNote, handleAddNote }) => {
 
   return (
     <>
-      <section className="chat_law_partner">
-        {/* <span className="chat_law_partner--title">Panel Komunikacji</span> */}
+      <section className="info_desk">
+        {/* <span className="info_desk--title">Panel Komunikacji</span> */}
         {/*  Przypięcie refa do elementu */}
-        <div className="chat_law_partner--notes" ref={notesRef}>
+        <div className="info_desk--notes" ref={notesRef}>
           {notesItem}
         </div>
         <textarea
-          className="chat_law_partner--edit"
+          className="info_desk--edit"
           placeholder="dodaj informacje"
           value={note}
           onChange={(e) => setNote(e.target.value)}
         />
-        <section className="chat_law_partner__panel">
+        <section className="info_desk__panel">
           <Button
             disabled={!note ? true : false}
             variant="contained"
@@ -131,4 +131,4 @@ const ChatLawPartner = ({ chatData = [], note, setNote, handleAddNote }) => {
   );
 };
 
-export default ChatLawPartner;
+export default InfoDesk;
