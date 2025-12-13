@@ -49,7 +49,6 @@ const PrepareTable = ({ info, profile }) => {
     const getData = async () => {
       try {
         setPleaseWait(true);
-
         if (!["insider", "partner", "insurance"].includes(profile)) {
           return;
         }
@@ -65,6 +64,7 @@ const PrepareTable = ({ info, profile }) => {
           `${basePath[profile]}/get-data-table/${auth.id_user}/${info}/${profile}`,
           { signal: controller.signal }
         );
+
         setDocuments(dataTable.data);
 
         const tableSettingsColumns = await axiosPrivateIntercept.get(
@@ -84,6 +84,7 @@ const PrepareTable = ({ info, profile }) => {
             : [];
 
         setColumns(update);
+
         setPleaseWait(false);
       } catch (err) {
         if (err.name !== "CanceledError") {

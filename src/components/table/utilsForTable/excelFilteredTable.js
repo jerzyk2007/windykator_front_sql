@@ -1,15 +1,76 @@
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
-export const getAllDataRaport = async (allData, orderColumns, info) => {
-  const sanitize = (text) => {
-    if (!text) return " ";
-    return text.replace(
-      /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
-      " "
-    );
-  };
+// obrabiam dane z KANAL_KOMUNIKACJI i tworzę skrócone zapisy
+const formatChatField = (arrayData) => {
+  if (!arrayData) return "Brak wpisów";
 
+  try {
+    let dzialania;
+
+    if (!Array.isArray(arrayData) || arrayData.length === 0) {
+      dzialania = "Brak wpisów";
+    } else if (arrayData.length === 1) {
+      const e = arrayData[0];
+      // Używamy sanitize, aby uniknąć błędów w Excelu przy dziwnych znakach
+      // dzialania = `${e.date} - ${sanitize(e.username)} - ${sanitize(e.note)}`;
+      dzialania = [e.date, e.username, sanitize(e.note)]
+        .filter(Boolean) // pomija null, undefined, "", 0
+        .join(" - "); // łączy poprawnie bez zbędnych spacji
+    } else {
+      // const last = arrayData[arrayData.length - 1];
+      // dzialania = `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
+      //   last.date
+      // } - ${sanitize(last.username)} - ${sanitize(last.note)}`;
+
+      const last = arrayData[arrayData.length - 1];
+
+      // Składamy linię z ostatniego wpisu
+      const lastLine = [
+        last.date ? `${last.date} -` : "",
+        last.username ? `${sanitize(last.username)} -` : "",
+        sanitize(last.note) || "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      dzialania =
+        `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n` + lastLine;
+    }
+
+    // --- Twoja logika przycinania (max 2 entery lub 120 znaków) ---
+    let maxEnters = 2;
+    let countEnters = 0;
+    let truncated = "";
+
+    for (let char of dzialania) {
+      if (char === "\n") {
+        countEnters++;
+        // Jeśli to jest 3 enter, przerywamy zanim go dodamy
+        if (countEnters > maxEnters) break;
+      }
+      // Jeśli to jest 121 znak, przerywamy
+      if (truncated.length >= 120) break;
+
+      truncated += char;
+    }
+
+    return truncated.length < dzialania.length ? truncated + " …" : truncated;
+  } catch (err) {
+    console.error("Błąd formatowania czatu:", err);
+    return "Brak wpisów";
+  }
+};
+
+const sanitize = (text) => {
+  if (!text) return " ";
+  return text.replace(
+    /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
+    " "
+  );
+};
+
+export const getAllDataRaport = async (allData, orderColumns, info) => {
   const sanitizeSheetName = (name) => {
     if (!name || typeof name !== "string") return "Arkusz";
     return name
@@ -50,11 +111,12 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
               item.INFORMACJA_ZARZAD[item.INFORMACJA_ZARZAD.length - 1]
             )}`
         : "BRAK";
-
+    const chatPanel = formatChatField(item.KANAL_KOMUNIKACJI);
     return {
       ...item,
       UWAGI_ASYSTENT: dzialania,
       INFORMACJA_ZARZAD: informacja_zarzd,
+      KANAL_KOMUNIKACJI: chatPanel,
     };
   });
 
@@ -297,13 +359,13 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
 };
 
 export const lawPartnerRaport = async (allData, orderColumns, info) => {
-  const sanitize = (text) => {
-    if (!text) return " ";
-    return text.replace(
-      /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
-      " "
-    );
-  };
+  // const sanitize = (text) => {
+  //   if (!text) return " ";
+  //   return text.replace(
+  //     /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
+  //     " "
+  //   );
+  // };
 
   const sanitizeSheetName = (name) => {
     if (!name || typeof name !== "string") return "Arkusz";
@@ -322,50 +384,6 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
     }
     usedNames.add(name);
     return name;
-  };
-
-  // obrabiam dane z KANAL_KOMUNIKACJI i tworzę skrócone zapisy
-  const formatChatField = (arrayData) => {
-    if (!arrayData) return "Brak wpisów";
-
-    try {
-      let dzialania;
-
-      if (!Array.isArray(arrayData) || arrayData.length === 0) {
-        dzialania = "Brak wpisów";
-      } else if (arrayData.length === 1) {
-        const e = arrayData[0];
-        // Używamy sanitize, aby uniknąć błędów w Excelu przy dziwnych znakach
-        dzialania = `${e.date} - ${sanitize(e.username)} - ${sanitize(e.note)}`;
-      } else {
-        const last = arrayData[arrayData.length - 1];
-        dzialania = `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
-          last.date
-        } - ${sanitize(last.username)} - ${sanitize(last.note)}`;
-      }
-
-      // --- Twoja logika przycinania (max 2 entery lub 120 znaków) ---
-      let maxEnters = 2;
-      let countEnters = 0;
-      let truncated = "";
-
-      for (let char of dzialania) {
-        if (char === "\n") {
-          countEnters++;
-          // Jeśli to jest 3 enter, przerywamy zanim go dodamy
-          if (countEnters > maxEnters) break;
-        }
-        // Jeśli to jest 121 znak, przerywamy
-        if (truncated.length >= 120) break;
-
-        truncated += char;
-      }
-
-      return truncated.length < dzialania.length ? truncated + " …" : truncated;
-    } catch (err) {
-      console.error("Błąd formatowania czatu:", err);
-      return "Brak wpisów";
-    }
   };
 
   const cleanData = allData.map((item) => {
@@ -626,13 +644,13 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
   }
 };
 export const insuranceRaport = async (allData, orderColumns, info) => {
-  const sanitize = (text) => {
-    if (!text) return " ";
-    return text.replace(
-      /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
-      " "
-    );
-  };
+  // const sanitize = (text) => {
+  //   if (!text) return " ";
+  //   return text.replace(
+  //     /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
+  //     " "
+  //   );
+  // };
 
   const sanitizeSheetName = (name) => {
     if (!name || typeof name !== "string") return "Arkusz";

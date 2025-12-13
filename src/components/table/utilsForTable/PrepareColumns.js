@@ -17,6 +17,63 @@ const muiTableBodyCellProps = {
   },
 };
 
+// funkcja dla przekształcenia danychj z kolumn KANAL_KOMUNIKACJI
+const kanalKomunikacjiColumnConfig = (muiTableBodyCellProps = {}) => ({
+  accessorFn: (originalRow) => {
+    const arrayData = originalRow?.KANAL_KOMUNIKACJI;
+    if (!arrayData) return "";
+
+    try {
+      let dzialania;
+
+      if (!Array.isArray(arrayData) || arrayData.length === 0) {
+        dzialania = "";
+      } else if (arrayData.length === 1) {
+        const e = arrayData[0];
+        dzialania = [e.date, e.username, e.note].filter(Boolean).join(" - ");
+      } else {
+        const last = arrayData[arrayData.length - 1];
+
+        const lastLine = [
+          last.date ? `${last.date} -` : "",
+          last.username ? `${last.username} -` : "",
+          last.note || "",
+        ]
+          .filter(Boolean)
+          .join(" ");
+
+        dzialania =
+          `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n` + lastLine;
+      }
+
+      let maxEnters = 2;
+      let countEnters = 0;
+      let truncated = "";
+
+      for (let char of dzialania) {
+        if (char === "\n") {
+          countEnters++;
+          if (countEnters > maxEnters) break;
+        }
+        if (truncated.length >= 150) break;
+        truncated += char;
+      }
+
+      return truncated.length < dzialania.length ? truncated + " …" : truncated;
+    } catch {
+      return "Brak wpisów";
+    }
+  },
+
+  muiTableBodyCellProps: {
+    align: "left",
+    sx: {
+      ...muiTableBodyCellProps.sx,
+      textWrap: "none",
+    },
+  },
+});
+
 // przygotowanie kolumn tabeli dla permissions=Pracownik
 export const prepareColumnsInsider = (columnsData) => {
   const update = columnsData.map((item) => {
@@ -194,111 +251,18 @@ export const prepareColumnsInsider = (columnsData) => {
           : "BRAK";
       };
     }
-    // if (item.accessorKey === "UWAGI_ASYSTENT") {
-    //   modifiedItem.accessorFn = (originalRow) => {
-    //     const arrayData = originalRow.UWAGI_ASYSTENT;
-    //     if (!arrayData) return "Brak wpisów";
-    //     try {
-    //       let dzialania;
 
-    //       if (!Array.isArray(arrayData) || arrayData.length === 0) {
-    //         dzialania = "Brak wpisów";
-    //       } else if (arrayData.length === 1) {
-    //         // ⭐ ZWRACAMY STRING A NIE OBIEKT!
-    //         const e = arrayData[0];
-    //         dzialania = `${e}`;
-    //       } else {
-    //         const last = arrayData[arrayData.length - 1];
-    //         dzialania = `Liczba wcześniejszych wpisów: ${
-    //           arrayData.length - 1
-    //         }\n${last}`;
-    //       }
+    if (item.accessorKey === "KANAL_KOMUNIKACJI") {
+      const kanalConfig = kanalKomunikacjiColumnConfig(muiTableBodyCellProps);
 
-    //       // Ograniczenie do max 2 enterów i max 120 znaków
-    //       let maxEnters = 3;
-    //       let countEnters = 0;
-    //       let truncated = "";
-
-    //       for (let char of dzialania) {
-    //         if (char === "\n") {
-    //           countEnters++;
-    //           if (countEnters > maxEnters) break;
-    //         }
-    //         if (truncated.length >= 150) break;
-    //         truncated += char;
-    //       }
-
-    //       return truncated.length < dzialania.length
-    //         ? truncated + " …"
-    //         : truncated;
-    //     } catch {
-    //       return "Brak wpisów";
-    //     }
-    //   };
-
-    //   modifiedItem.muiTableBodyCellProps = {
-    //     align: "left",
-    //     sx: {
-    //       ...muiTableBodyCellProps.sx,
-    //       // backgroundColor: "rgba(234, 255, 230, 0.61)",
-    //     },
-    //   };
-    // }
-
-    if (item.accessorKey === "UWAGI_ASYSTENT") {
-      modifiedItem.accessorFn = (originalRow) => {
-        const arrayData = originalRow.UWAGI_ASYSTENT;
-        if (!arrayData) return "";
-        try {
-          const dzialania =
-            Array.isArray(arrayData) && arrayData.length > 0
-              ? arrayData.length === 1
-                ? arrayData[0]
-                : `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
-                    arrayData[arrayData.length - 1]
-                  }`
-              : "";
-          return dzialania.length > 120
-            ? dzialania.slice(0, 120) + " …"
-            : dzialania;
-          // return "BRAK";
-        } catch {
-          return "BRAK";
-        }
-      };
-      modifiedItem.muiTableBodyCellProps = {
-        ...muiTableBodyCellProps,
-        sx: {
-          ...muiTableBodyCellProps.sx,
-          backgroundColor: "rgba(248, 255, 152, .2)", // nadpisanie koloru tła
-        },
-      };
+      modifiedItem.accessorFn = kanalConfig.accessorFn;
+      modifiedItem.muiTableBodyCellProps = kanalConfig.muiTableBodyCellProps;
     }
 
     if (item.filterVariant === "none") {
       modifiedItem.enableColumnFilter = false;
       delete modifiedItem.filterVariant;
     }
-
-    // if (item.filterVariant === "range-slider") {
-    //   modifiedItem.muiFilterSliderProps = {
-    //     marks: true,
-    //     max: data.reduce(
-    //       (max, key) => Math.max(max, key[item.accessorKey]),
-    //       Number.NEGATIVE_INFINITY
-    //     ),
-    //     min: data.reduce(
-    //       (min, key) => Math.min(min, key[item.accessorKey]),
-    //       Number.POSITIVE_INFINITY
-    //     ),
-    //     step: 100,
-    //     valueLabelFormat: (value) =>
-    //       value.toLocaleString("pl-PL", {
-    //         style: "currency",
-    //         currency: "PLN",
-    //       }),
-    //   };
-    // }
 
     if (item.type === "money") {
       modifiedItem.Cell = ({ cell }) => {
@@ -376,54 +340,12 @@ export const prepareColumnsPartner = (columnsData) => {
         return null;
       };
     }
+
     if (item.accessorKey === "KANAL_KOMUNIKACJI") {
-      modifiedItem.accessorFn = (originalRow) => {
-        const arrayData = originalRow.KANAL_KOMUNIKACJI;
-        if (!arrayData) return "Brak wpisów";
-        try {
-          let dzialania;
+      const kanalConfig = kanalKomunikacjiColumnConfig(muiTableBodyCellProps);
 
-          if (!Array.isArray(arrayData) || arrayData.length === 0) {
-            dzialania = "Brak wpisów";
-          } else if (arrayData.length === 1) {
-            // ⭐ ZWRACAMY STRING A NIE OBIEKT!
-            const e = arrayData[0];
-            dzialania = `${e.date} - ${e.username} - ${e.note}`;
-          } else {
-            const last = arrayData[arrayData.length - 1];
-            dzialania = `Liczba wcześniejszych wpisów: ${
-              arrayData.length - 1
-            }\n${last.date} - ${last.username} - ${last.note}`;
-          }
-
-          // Ograniczenie do max 2 enterów i max 120 znaków
-          let maxEnters = 2;
-          let countEnters = 0;
-          let truncated = "";
-
-          for (let char of dzialania) {
-            if (char === "\n") {
-              countEnters++;
-              if (countEnters > maxEnters) break;
-            }
-            if (truncated.length >= 120) break;
-            truncated += char;
-          }
-
-          return truncated.length < dzialania.length
-            ? truncated + " …"
-            : truncated;
-        } catch {
-          return "Brak wpisów";
-        }
-      };
-
-      modifiedItem.muiTableBodyCellProps = {
-        align: "left",
-        sx: {
-          ...muiTableBodyCellProps.sx,
-        },
-      };
+      modifiedItem.accessorFn = kanalConfig.accessorFn;
+      modifiedItem.muiTableBodyCellProps = kanalConfig.muiTableBodyCellProps;
     }
 
     if (item.accessorKey === "KONTRAHENT") {
@@ -462,22 +384,6 @@ export const prepareColumnsPartner = (columnsData) => {
           : "BRAK";
       };
     }
-
-    // if (item.accessorKey === "WYKAZ_SPLACONEJ_KWOTY_FK") {
-    //   modifiedItem.accessorFn = (originalRow) => {
-    //     const wykaz = originalRow?.WYKAZ_SPLACONEJ_KWOTY_FK
-    //       ? originalRow.WYKAZ_SPLACONEJ_KWOTY_FK
-    //       : [];
-    //     if (wykaz && wykaz.length) {
-    //       console.log(wykaz);
-    //       const mergedData = wykaz.map((itemRow) => {
-    //         return `${itemRow.data} - ${itemRow.kwota} - ${itemRow.symbol}`;
-    //       });
-    //       return mergedData;
-    //     }
-    //     return "BRAK";
-    //   };
-    // }
 
     if (item.accessorKey === "WYKAZ_SPLACONEJ_KWOTY_FK") {
       modifiedItem.accessorFn = (originalRow) => {
@@ -598,54 +504,12 @@ export const prepareColumnsInsurance = (columnsData) => {
         return null;
       };
     }
+
     if (item.accessorKey === "KANAL_KOMUNIKACJI") {
-      modifiedItem.accessorFn = (originalRow) => {
-        const arrayData = originalRow.KANAL_KOMUNIKACJI;
-        if (!arrayData) return "Brak wpisów";
-        try {
-          let dzialania;
+      const kanalConfig = kanalKomunikacjiColumnConfig(muiTableBodyCellProps);
 
-          if (!Array.isArray(arrayData) || arrayData.length === 0) {
-            dzialania = "Brak wpisów";
-          } else if (arrayData.length === 1) {
-            // ⭐ ZWRACAMY STRING A NIE OBIEKT!
-            const e = arrayData[0];
-            dzialania = `${e.date} - ${e.username} - ${e.note}`;
-          } else {
-            const last = arrayData[arrayData.length - 1];
-            dzialania = `Liczba wcześniejszych wpisów: ${
-              arrayData.length - 1
-            }\n${last.date} - ${last.username} - ${last.note}`;
-          }
-
-          // Ograniczenie do max 2 enterów i max 120 znaków
-          let maxEnters = 3;
-          let countEnters = 0;
-          let truncated = "";
-
-          for (let char of dzialania) {
-            if (char === "\n") {
-              countEnters++;
-              if (countEnters > maxEnters) break;
-            }
-            if (truncated.length >= 150) break;
-            truncated += char;
-          }
-
-          return truncated.length < dzialania.length
-            ? truncated + " …"
-            : truncated;
-        } catch {
-          return "Brak wpisów";
-        }
-      };
-
-      modifiedItem.muiTableBodyCellProps = {
-        align: "left",
-        sx: {
-          ...muiTableBodyCellProps.sx,
-        },
-      };
+      modifiedItem.accessorFn = kanalConfig.accessorFn;
+      modifiedItem.muiTableBodyCellProps = kanalConfig.muiTableBodyCellProps;
     }
 
     if (item.accessorKey === "KONTRAHENT_NAZWA") {

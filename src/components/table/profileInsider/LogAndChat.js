@@ -4,7 +4,6 @@ import LogsEvent from "../profileManager/LogsEvent";
 
 const LogAndChat = ({ rowData, note, setNote, handleAddNote }) => {
   const [panel, setPanel] = useState("chat");
-
   //styl dla panelu informacji i logów do zmiany koloru daty i użytkownika
   const spanInfoStyle = (profile, info = "name") => {
     const dateColor = "rgba(47, 173, 74, 1)";
