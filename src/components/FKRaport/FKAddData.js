@@ -18,7 +18,7 @@ const FKAddData = ({ company }) => {
 
   const getRaport = async () => {
     setPleaseWait(true);
-
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     try {
       await axiosPrivateIntercept.get(`/fk/generate-data/${company}`);
 
@@ -54,7 +54,7 @@ const FKAddData = ({ company }) => {
       });
 
       saveAs(blobBusiness, `Raport należności_biznes_stan _${titleDate}.xlsx`);
-
+      await sleep(10_000);
       await getDateAndCounter();
     } catch (err) {
       console.error(err);
