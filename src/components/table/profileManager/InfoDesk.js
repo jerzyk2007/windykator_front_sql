@@ -7,7 +7,7 @@ const InfoDesk = ({
   chatData = [],
   note,
   setNote,
-  handleAddNote,
+  handleAcceptNote,
   spanInfoStyle,
 }) => {
   const [clickedIndex, setClickedIndex] = useState(null);
@@ -106,7 +106,7 @@ const InfoDesk = ({
           </Button>
           <Button
             variant="contained"
-            onClick={() => handleAddNote(note, "chat")}
+            onClick={() => handleAcceptNote(note, "chat")}
             disabled={!note ? true : false}
           >
             Dodaj

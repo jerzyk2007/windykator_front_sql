@@ -104,6 +104,7 @@ const PrepareTable = ({ info, profile }) => {
       {pleaseWait ? (
         <PleaseWait />
       ) : (
+        // <PleaseWait info="xmas" />
         columns.length > 0 && (
           <Table
             documents={documents}

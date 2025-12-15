@@ -1,9 +1,18 @@
 import { useState } from "react";
-import InfoDesk from "../profileManager/InfoDesk";
-import LogsEvent from "../profileManager/LogsEvent";
+import InfoDesk from "./InfoDesk";
+import LogsEvent from "./LogsEvent";
+import "./LogAndChat.css";
 
-const LogAndChat = ({ rowData, note, setNote, handleAddNote }) => {
+// const LogAndChat = ({ rowData, note, setNote, handleAddNote, type }) => {
+const LogAndChat = ({ rowData, handleAddNote, type }) => {
   const [panel, setPanel] = useState("chat");
+  const [note, setNote] = useState("");
+
+  const handleAcceptNote = (info, text) => {
+    handleAddNote(info, text);
+    setNote("");
+  };
+
   //styl dla panelu informacji i logów do zmiany koloru daty i użytkownika
   const spanInfoStyle = (profile, info = "name") => {
     const dateColor = "rgba(47, 173, 74, 1)";
@@ -23,9 +32,9 @@ const LogAndChat = ({ rowData, note, setNote, handleAddNote }) => {
         };
   };
   return (
-    <section className="edit-row-table_section-content-data edit-row-table-law-partner_section-content-data">
+    <section className="edit_row_table_pro">
       <select
-        className="edit-row-table-law-partner--select"
+        className="log_and_chat--select"
         style={
           panel === "chat"
             ? { backgroundColor: "rgb(166, 255, 131)" }
@@ -46,7 +55,7 @@ const LogAndChat = ({ rowData, note, setNote, handleAddNote }) => {
           chatData={rowData.KANAL_KOMUNIKACJI}
           note={note}
           setNote={setNote}
-          handleAddNote={handleAddNote}
+          handleAcceptNote={handleAcceptNote}
           spanInfoStyle={spanInfoStyle}
         />
       )}

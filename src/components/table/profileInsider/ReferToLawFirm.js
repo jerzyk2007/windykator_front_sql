@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import "./ReferToLawFirm.css";
 
@@ -35,8 +34,6 @@ const ReferToLawFirm = ({
   lawFirmData,
   setLawFirmData,
 }) => {
-  const axiosPrivateIntercept = useAxiosPrivateIntercept();
-
   // Używamy dodatkowego stanu do przechowywania sformatowanej wartości do wyświetlenia w input
   const [displayKwotaRoszczenia, setDisplayKwotaRoszczenia] = useState("");
 

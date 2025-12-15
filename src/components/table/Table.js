@@ -26,6 +26,7 @@ import {
 import TableButtonInfo from "./TableButtonInfo";
 import EditRowTablePro from "./profileManager/EditRowTablePro";
 import PleaseWait from "../PleaseWait";
+import { basePath } from "./utilsForTable/basePathProfile";
 
 import "./Table.css";
 
@@ -36,7 +37,7 @@ const clearRowTable = {
   lawPartner: [],
 };
 
-const MAX_EXPORT_ROWS = 50000;
+const MAX_EXPORT_ROWS = 30000;
 
 const Table = ({
   documents,
@@ -199,15 +200,10 @@ const Table = ({
     if (getRow.length > 0) {
       try {
         setPleaseWait(true);
-        let url = "";
-        if (profile === "insider") url = `/documents/get-single-document/${id}`;
-        else if (profile === "partner")
-          url = `/law-partner/get-single-document/${id}`;
-        else if (profile === "insurance")
-          url = `/insurance/get-single-document/${id}`;
 
-        const response = await axiosPrivateIntercept.get(url);
-
+        const response = await axiosPrivateIntercept.get(
+          `${basePath[profile]}/get-single-document/${id}`
+        );
         if (profile === "insider") {
           setDataRowTable({
             edit: true,

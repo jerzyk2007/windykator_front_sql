@@ -1,4 +1,4 @@
-.edit-row-table {
+.xxxedit-row-table {
   flex-grow: 1;
   padding: 2px;
   font-family: "Source Sans 3", Calibri, sans-serif;
@@ -10,34 +10,34 @@
   flex-direction: column;
 }
 
-.edit-row-table-wrapper {
+.xxxedit-row-table-wrapper {
   flex-grow: 1;
   display: flex;
   justify-content: space-evenly;
 }
 
-.edit-row-table__container {
+.xxxedit-row-table__container {
   flex-grow: 1;
   position: relative;
   display: flex;
   flex-direction: column;
 }
-.edit-row-table__content-section {
+.xxxedit-row-table__content-section {
   flex-grow: 1;
   display: flex;
 }
 
-.edit-row-table__content {
+.xxxedit-row-table__content {
   margin: 0 auto;
   width: 100%;
   display: none;
 }
 
-.edit-row-table__active-content {
+.xxxedit-row-table__active-content {
   display: block;
 }
 
-.edit-row-table__panel {
+.xxxedit-row-table__panel {
   min-width: 1500px;
   padding: 2px;
   display: flex;
@@ -56,7 +56,7 @@
   margin: 2px;
 } */
 
-.edit_row_table-buttons {
+.xxxedit_row_table-buttons {
   flex-basis: 33%;
   height: 50px;
   max-height: 50px;
@@ -65,29 +65,29 @@
   align-items: center;
 }
 
-.edit_row_table-icon_buttons {
+.xxxedit_row_table-icon_buttons {
   color: rgb(32, 90, 175);
   transform: scale(1.8);
   cursor: pointer;
 }
 
-.edit_row_table-icon_buttons:hover {
+.xxxedit_row_table-icon_buttons:hover {
   color: red;
   transform: scale(2.1);
 }
 
-.edit_row_table-icon_buttons--disable {
+.xxxedit_row_table-icon_buttons--disable {
   color: rgba(0, 0, 0, 0.2);
 }
 
-.edit-row-table_section-content {
+.xxxedit-row-table_section-content {
   height: 100%;
   flex-grow: 1;
   display: flex;
   justify-content: space-around;
 }
 
-.edit-row-table_section-content-data {
+.xxxedit-row-table_section-content-data {
   flex-grow: 1;
   flex-basis: 33%;
   min-width: 500px;
@@ -99,7 +99,7 @@
   flex-direction: column;
 }
 
-.edit_doc {
+.xxxedit_doc {
   flex-grow: 1;
   font-family: "Source Sans 3", Calibri, sans-serif;
   font-size: 1.15rem;
@@ -110,13 +110,13 @@
   overflow: auto;
 }
 
-.edit_doc__container {
+.xxxedit_doc__container {
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
-.edit_doc--title {
+.xxxedit_doc--title {
   flex-shrink: 0;
   width: 100%;
   flex-basis: 40%;
@@ -132,12 +132,12 @@
   cursor: help;
 }
 
-.edit_doc--title__read-only {
+.xxxedit_doc--title__read-only {
   background-color: rgba(252, 220, 253, 0.8);
 }
 
-.edit_doc--content,
-.edit_doc--content-scroll {
+.xxxedit_doc--content,
+.xxxedit_doc--content-scroll {
   width: 100%;
   word-break: break-all;
   line-height: 1;
@@ -153,14 +153,14 @@
   align-items: center;
 }
 
-.edit_doc--content-scroll {
+.xxxedit_doc--content-scroll {
   display: block;
   padding: 5px;
   overflow-y: auto;
   max-height: 90px;
 }
 
-.edit_doc--select {
+.xxxedit_doc--select {
   width: 100%;
   border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;
@@ -171,17 +171,17 @@
   margin: 2px;
 }
 
-.edit_doc--select:focus {
+.xxxedit_doc--select:focus {
   outline: 1px solid rgb(0, 0, 0);
   outline: none;
 }
 
-.edit_doc--button {
+.xxxedit_doc--button {
   margin-top: 5px;
   display: flex;
 }
 
-.edit_doc--button Button {
+.xxxedit_doc--button Button {
   width: 100%;
   margin: 0 5px;
   background-color: rgba(58, 247, 58, 0.5);
