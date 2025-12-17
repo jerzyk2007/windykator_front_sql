@@ -144,7 +144,7 @@ export const prepareColumnsInsider = (columnsData) => {
       };
     }
     //
-    if (item.accessorKey === "VAT_50") {
+    if (item.accessorKey === "50_VAT") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         const cellValue = cell.getValue();
         const dorozliczValue = cell.row.original.DO_ROZLICZENIA;
@@ -154,7 +154,7 @@ export const prepareColumnsInsider = (columnsData) => {
           sx: {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
-              cell.column.id === "VAT_50" &&
+              cell.column.id === "50_VAT" &&
               Math.abs(cellValue - dorozliczValue) <= 1
                 ? "rgb(250, 136, 136)"
                 : "white",
@@ -163,7 +163,7 @@ export const prepareColumnsInsider = (columnsData) => {
       };
     }
 
-    if (item.accessorKey === "VAT_100") {
+    if (item.accessorKey === "100_VAT") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         const cellValue = cell.getValue();
         const dorozliczValue = cell.row.original.DO_ROZLICZENIA;
@@ -172,7 +172,7 @@ export const prepareColumnsInsider = (columnsData) => {
           sx: {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
-              cell.column.id === "VAT_100" &&
+              cell.column.id === "100_VAT" &&
               Math.abs(cellValue - dorozliczValue) <= 1
                 ? "rgb(250, 136, 136)"
                 : "white",
