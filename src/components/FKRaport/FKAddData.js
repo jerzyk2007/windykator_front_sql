@@ -16,9 +16,56 @@ const FKAddData = ({ company }) => {
     data: [],
   });
 
+  // const getRaport = async () => {
+  //   setPleaseWait(true);
+
+  //   try {
+  //     await axiosPrivateIntercept.get(`/fk/generate-data/${company}`);
+
+  //     const today = new Date();
+  //     const yyyy = today.getFullYear();
+  //     const mm = String(today.getMonth() + 1).padStart(2, "0"); // miesiące od 0-11
+  //     const dd = String(today.getDate()).padStart(2, "0");
+
+  //     const titleDate = `${yyyy}-${mm}-${dd}`;
+  //     // const titleDate = "2025-09-02";
+  //     const getMainRaport = await axiosPrivateIntercept.post(
+  //       `/fk/get-main-report/${company}`,
+  //       {},
+  //       {
+  //         responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
+  //       }
+  //     );
+  //     const blobMain = new Blob([getMainRaport.data], {
+  //       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  //     });
+
+  //     saveAs(blobMain, `Raport_Draft 201 203_należności_${titleDate}.xlsx`);
+
+  //     const getBusinessRaport = await axiosPrivateIntercept.post(
+  //       `/fk/get-business-report/${company}`,
+  //       {},
+  //       {
+  //         responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
+  //       }
+  //     );
+  //     const blobBusiness = new Blob([getBusinessRaport.data], {
+  //       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  //     });
+
+  //     saveAs(blobBusiness, `Raport należności_biznes_stan _${titleDate}.xlsx`);
+
+  //     await getDateAndCounter();
+  //   } catch (err) {
+  //     console.error(err);
+  //   } finally {
+  //     setPleaseWait(false);
+  //   }
+  // };
+
   const getRaport = async () => {
     setPleaseWait(true);
-
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     try {
       await axiosPrivateIntercept.get(`/fk/generate-data/${company}`);
 
@@ -54,7 +101,7 @@ const FKAddData = ({ company }) => {
       });
 
       saveAs(blobBusiness, `Raport należności_biznes_stan _${titleDate}.xlsx`);
-
+      await sleep(10_000);
       await getDateAndCounter();
     } catch (err) {
       console.error(err);
