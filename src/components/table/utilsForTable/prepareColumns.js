@@ -201,6 +201,7 @@ export const prepareColumnsInsider = (columnsData) => {
       };
     }
     if (item.accessorKey === "VAT_50") {
+      console.log(item);
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         const cellValue = cell.getValue();
         const dorozliczValue = cell.row.original.DO_ROZLICZENIA;
@@ -218,6 +219,7 @@ export const prepareColumnsInsider = (columnsData) => {
         };
       };
     }
+    console.log(item);
 
     if (item.accessorKey === "VAT_100") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
