@@ -143,7 +143,8 @@ export const prepareColumnsInsider = (columnsData) => {
           : "BRAK";
       };
     }
-    if (item.accessorKey === "50_VAT") {
+    //
+    if (item.accessorKey === "VAT_50") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         const cellValue = cell.getValue();
         const dorozliczValue = cell.row.original.DO_ROZLICZENIA;
@@ -153,7 +154,7 @@ export const prepareColumnsInsider = (columnsData) => {
           sx: {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
-              cell.column.id === "50_VAT" &&
+              cell.column.id === "VAT_50" &&
               Math.abs(cellValue - dorozliczValue) <= 1
                 ? "rgb(250, 136, 136)"
                 : "white",
@@ -162,7 +163,7 @@ export const prepareColumnsInsider = (columnsData) => {
       };
     }
 
-    if (item.accessorKey === "100_VAT") {
+    if (item.accessorKey === "VAT_100") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         const cellValue = cell.getValue();
         const dorozliczValue = cell.row.original.DO_ROZLICZENIA;
@@ -171,7 +172,7 @@ export const prepareColumnsInsider = (columnsData) => {
           sx: {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
-              cell.column.id === "100_VAT" &&
+              cell.column.id === "VAT_100" &&
               Math.abs(cellValue - dorozliczValue) <= 1
                 ? "rgb(250, 136, 136)"
                 : "white",
@@ -194,56 +195,6 @@ export const prepareColumnsInsider = (columnsData) => {
           : "BRAK";
       };
     }
-    // if (item.accessorKey === "UWAGI_ASYSTENT") {
-    //   modifiedItem.accessorFn = (originalRow) => {
-    //     const arrayData = originalRow.UWAGI_ASYSTENT;
-    //     if (!arrayData) return "Brak wpisów";
-    //     try {
-    //       let dzialania;
-
-    //       if (!Array.isArray(arrayData) || arrayData.length === 0) {
-    //         dzialania = "Brak wpisów";
-    //       } else if (arrayData.length === 1) {
-    //         // ⭐ ZWRACAMY STRING A NIE OBIEKT!
-    //         const e = arrayData[0];
-    //         dzialania = `${e}`;
-    //       } else {
-    //         const last = arrayData[arrayData.length - 1];
-    //         dzialania = `Liczba wcześniejszych wpisów: ${
-    //           arrayData.length - 1
-    //         }\n${last}`;
-    //       }
-
-    //       // Ograniczenie do max 2 enterów i max 120 znaków
-    //       let maxEnters = 3;
-    //       let countEnters = 0;
-    //       let truncated = "";
-
-    //       for (let char of dzialania) {
-    //         if (char === "\n") {
-    //           countEnters++;
-    //           if (countEnters > maxEnters) break;
-    //         }
-    //         if (truncated.length >= 150) break;
-    //         truncated += char;
-    //       }
-
-    //       return truncated.length < dzialania.length
-    //         ? truncated + " …"
-    //         : truncated;
-    //     } catch {
-    //       return "Brak wpisów";
-    //     }
-    //   };
-
-    //   modifiedItem.muiTableBodyCellProps = {
-    //     align: "left",
-    //     sx: {
-    //       ...muiTableBodyCellProps.sx,
-    //       // backgroundColor: "rgba(234, 255, 230, 0.61)",
-    //     },
-    //   };
-    // }
 
     if (item.accessorKey === "UWAGI_ASYSTENT") {
       modifiedItem.accessorFn = (originalRow) => {
@@ -279,26 +230,6 @@ export const prepareColumnsInsider = (columnsData) => {
       modifiedItem.enableColumnFilter = false;
       delete modifiedItem.filterVariant;
     }
-
-    // if (item.filterVariant === "range-slider") {
-    //   modifiedItem.muiFilterSliderProps = {
-    //     marks: true,
-    //     max: data.reduce(
-    //       (max, key) => Math.max(max, key[item.accessorKey]),
-    //       Number.NEGATIVE_INFINITY
-    //     ),
-    //     min: data.reduce(
-    //       (min, key) => Math.min(min, key[item.accessorKey]),
-    //       Number.POSITIVE_INFINITY
-    //     ),
-    //     step: 100,
-    //     valueLabelFormat: (value) =>
-    //       value.toLocaleString("pl-PL", {
-    //         style: "currency",
-    //         currency: "PLN",
-    //       }),
-    //   };
-    // }
 
     if (item.type === "money") {
       modifiedItem.Cell = ({ cell }) => {
