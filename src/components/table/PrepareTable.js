@@ -65,7 +65,6 @@ const PrepareTable = ({ info, profile }) => {
           { signal: controller.signal }
         );
 
-        console.log(dataTable.data);
         setDocuments(dataTable.data);
 
         const tableSettingsColumns = await axiosPrivateIntercept.get(

@@ -9,6 +9,7 @@ import AcceptCasePanel from "./AcceptCasePanel";
 import LogAndChat from "./LogAndChat";
 import BasicDataInsider from "./BasicDataInsider";
 import SelectPanel from "./SelectPanel";
+import EditDocActions from "./EditDocActions";
 import { changeSingleDocLawPartner } from "../utilsForTable/changeSingleDocument";
 import { basePath } from "../utilsForTable/basePathProfile";
 import "./EditRowTablePro.css";
@@ -101,7 +102,9 @@ const EditRowTablePro = ({
   };
 
   //dodawane są notatki z czatu i logi przy zmianie np błąd doradcy, pobrany VAT
-  const handleAddNote = (info, type) => {
+  const handleAddNote = (info, type, context) => {
+    console.log(info);
+    console.log(type);
     const oldChat =
       type === "chat"
         ? [...(rowData.KANAL_KOMUNIKACJI ?? [])]
@@ -144,7 +147,6 @@ const EditRowTablePro = ({
         [saveInfo[type]]: newChat,
       };
     });
-    // setNote("");
   };
 
   const changeMarkDoc = async (NUMER_FV, MARK_FK, FIRMA) => {
@@ -260,9 +262,17 @@ const EditRowTablePro = ({
           roles={auth.roles || []}
         />
       );
+    } else if (profile === "insider") {
+      return (
+        <EditDocActions
+          rowData={rowData}
+          setRowData={setRowData}
+          handleAddNote={handleAddNote}
+          roles={auth.roles || []}
+        />
+      );
     } else return null;
   };
-
   const isButtonDisabled = (() => {
     if (profile === "insider") {
       return false;
