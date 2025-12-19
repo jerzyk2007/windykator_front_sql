@@ -1,25 +1,19 @@
 .login__fixed {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #fff;
-  z-index: 999;
-  font-family: "Source Sans 3", Calibri, sans-serif;
-  font-size: 1.15rem;
-  font-optical-sizing: auto;
+  flex-grow: 1;
+  position: relative;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
+  justify-content: space-between;
   align-items: center;
+  flex-direction: column;
 }
 
 .login {
   width: 40%;
-  min-width: 300px;
-  margin: auto;
-  /* margin-top: 150px; */
+  min-width: 500px;
+  min-height: 40vh;
+  margin: 10px;
+
   padding: 1.2rem;
   color: #000000;
   border: 1px solid rgba(44, 123, 168, 0.6);
@@ -63,7 +57,6 @@
 
 .login__container-text {
   background-color: #fff !important;
-  /* color: #a01313 !important; */
 }
 
 .login__container-text:-webkit-autofill {
@@ -96,17 +89,20 @@
 }
 
 .login__high_information {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  min-height: 100px;
+  min-width: 1200px;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: auto;
 }
 
 .login__high_information h1 {
+  color: red;
+}
+.login__high_information h2 {
   color: red;
 }
 
