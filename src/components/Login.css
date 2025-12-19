@@ -2,7 +2,8 @@
   flex-grow: 1;
   position: relative;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
+  justify-content: space-between;
   align-items: center;
   flex-direction: column;
 }
@@ -89,12 +90,13 @@
 
 .login__high_information {
   min-height: 100px;
-  min-width: 800px;
+  min-width: 1200px;
   width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: auto;
 }
 
 .login__high_information h1 {

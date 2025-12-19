@@ -81,7 +81,7 @@ const Login = () => {
         </span>
       </section> */}
       <section className="login__high_information">
-        <h2>Uwaga !!!</h2>
+        <h1>Uwaga !!!</h1>
         <span>
           W godzinach <strong>6:30–7:00</strong> system przeprowadza
           aktualizację danych, dlatego logowanie może być w tym czasie
