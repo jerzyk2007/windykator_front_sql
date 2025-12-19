@@ -52,7 +52,6 @@ const InfoDesk = ({
   const handleMouseLeave = () => {
     setTooltip((prev) => ({ ...prev, visible: false }));
   };
-
   const notesItem = chatData?.map((item, index) => {
     return (
       <section className="info_desk__container" key={index}>

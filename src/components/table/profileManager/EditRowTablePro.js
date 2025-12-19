@@ -10,6 +10,8 @@ import LogAndChat from "./LogAndChat";
 import BasicDataInsider from "./BasicDataInsider";
 import SelectPanel from "./SelectPanel";
 import EditDocActions from "./EditDocActions";
+import EditDocBeCared from "./EditDocBeCared";
+import DocumentsControlBL from "./DocumentsControlBL";
 import { changeSingleDocLawPartner } from "../utilsForTable/changeSingleDocument";
 import { basePath } from "../utilsForTable/basePathProfile";
 import "./EditRowTablePro.css";
@@ -36,8 +38,18 @@ const EditRowTablePro = ({
 
   // stan nowych wpisów dla chat i logów
   const [chatLog, setChatLog] = useState({
-    KANAL_KOMUNIKACJI: [],
-    DZIENNIK_ZMIAN: [],
+    documents: {
+      KANAL_KOMUNIKACJI: [],
+      DZIENNIK_ZMIAN: [],
+    },
+    controlBL: {
+      KANAL_KOMUNIKACJI: [],
+      DZIENNIK_ZMIAN: [],
+    },
+    raportFK: {
+      KANAL_KOMUNIKACJI: [],
+      DZIENNIK_ZMIAN: [],
+    },
   });
 
   //zmiana panlu po wyborze Select
@@ -57,20 +69,20 @@ const EditRowTablePro = ({
 
   // dane dla kontroli dokumentacji obszaru Blacharnia
   const [documentControlBL, setDocumentControlBL] = useState({
-    COMPANY: null,
-    CONTROL_BRAK_DZIALAN_OD_OST: null,
-    CONTROL_DECYZJA: null,
-    CONTROL_DOW_REJ: null,
-    CONTROL_FV: null,
-    CONTROL_LOGI: null,
-    CONTROL_ODPOWIEDZIALNOSC: null,
-    CONTROL_OSW_VAT: null,
-    CONTROL_PLATNOSC_VAT: null,
-    CONTROL_POLISA: null,
-    CONTROL_PR_JAZ: null,
-    CONTROL_UPOW: null,
-    CONTROL_UWAGI: null,
-    NUMER_FV: null,
+    company: null,
+    control_brak_dzialan_od_ost: null,
+    control_decyzja: null,
+    control_dow_rej: null,
+    control_fv: null,
+    control_odpowiedzialnosc: null,
+    control_osw_vat: null,
+    control_platnosc_vat: null,
+    control_polisa: null,
+    control_pr_jaz: null,
+    control_upow: null,
+    dziennik_zmian: null,
+    kanal_komunikacji: null,
+    numer_fv: null,
     id_control_documents: null,
   });
 
@@ -103,8 +115,9 @@ const EditRowTablePro = ({
 
   //dodawane są notatki z czatu i logi przy zmianie np błąd doradcy, pobrany VAT
   const handleAddNote = (info, type, context) => {
-    console.log(info);
-    console.log(type);
+    // console.log(info);
+    // console.log(type);
+    // console.log(context);
     const oldChat =
       type === "chat"
         ? [...(rowData.KANAL_KOMUNIKACJI ?? [])]
@@ -135,18 +148,23 @@ const EditRowTablePro = ({
       chat: "KANAL_KOMUNIKACJI",
       log: "DZIENNIK_ZMIAN",
     };
-    setChatLog((prev) => {
-      return {
-        ...prev,
-        [saveInfo[type]]: [...(prev[saveInfo[type]] ?? []), note],
-      };
-    });
-    setRowData((prev) => {
-      return {
-        ...prev,
-        [saveInfo[type]]: newChat,
-      };
-    });
+
+    setChatLog((prev) => ({
+      ...prev,
+      [context]: {
+        ...prev[context],
+        [saveInfo[type]]: [...(prev[context]?.[saveInfo[type]] ?? []), note],
+      },
+    }));
+
+    if (context === "documents") {
+      setRowData((prev) => {
+        return {
+          ...prev,
+          [saveInfo[type]]: newChat,
+        };
+      });
+    }
   };
 
   const changeMarkDoc = async (NUMER_FV, MARK_FK, FIRMA) => {
@@ -161,7 +179,8 @@ const EditRowTablePro = ({
         MARK_FK === 0
           ? "Wyłączono dokument z Raportu FK"
           : "Przywrócono dokument do Raportu FK",
-        "log"
+        "log",
+        "documents"
       );
       setRowData((prev) => {
         return {
@@ -182,6 +201,7 @@ const EditRowTablePro = ({
           setRowData={setRowData}
           login={auth.userlogin || null}
           handleAddNote={handleAddNote}
+          context="documents"
         />
       );
     } else if (profile === "partner" || profile === "insurance") {
@@ -193,22 +213,20 @@ const EditRowTablePro = ({
     if (profile === "insider") {
       return (
         <LogAndChat
-          rowData={rowData}
-          // note={note}
-          // setNote={setNote}
+          kanalKomunikacji={rowData.KANAL_KOMUNIKACJI}
+          dziennikZmian={rowData.DZIENNIK_ZMIAN}
           handleAddNote={handleAddNote}
-          type={"document"}
+          context="documents"
         />
       );
     } else if (profile === "partner") {
       if (rowData?.DATA_PRZYJECIA_SPRAWY) {
         return (
           <LogAndChat
-            rowData={rowData}
-            // note={note}
-            // setNote={setNote}
+            kanalKomunikacji={rowData.KANAL_KOMUNIKACJI}
+            dziennikZmian={rowData.DZIENNIK_ZMIAN}
             handleAddNote={handleAddNote}
-            type={"document"}
+            context="documents"
           />
         );
       } else if (rowData?.id_document && !rowData?.DATA_PRZYJECIA_SPRAWY) {
@@ -227,11 +245,10 @@ const EditRowTablePro = ({
     } else if (profile === "insurance") {
       return (
         <LogAndChat
-          rowData={rowData}
-          // note={note}
-          // setNote={setNote}
+          kanalKomunikacji={rowData.KANAL_KOMUNIKACJI}
+          dziennikZmian={rowData.DZIENNIK_ZMIAN}
           handleAddNote={handleAddNote}
-          type={"document"}
+          context="documents"
         />
       );
     } else {
@@ -250,6 +267,7 @@ const EditRowTablePro = ({
           handleAddNote={handleAddNote}
           profile={profile}
           roles={auth.roles || []}
+          context="documents"
         />
       );
     } else if (profile === "insurance") {
@@ -260,17 +278,30 @@ const EditRowTablePro = ({
           handleAddNote={handleAddNote}
           profile={profile}
           roles={auth.roles || []}
+          context="documents"
         />
       );
     } else if (profile === "insider") {
-      return (
-        <EditDocActions
-          rowData={rowData}
-          setRowData={setRowData}
-          handleAddNote={handleAddNote}
-          roles={auth.roles || []}
-        />
-      );
+      if (changePanel === "doc-actions") {
+        return (
+          <EditDocActions
+            rowData={rowData}
+            setRowData={setRowData}
+            handleAddNote={handleAddNote}
+            roles={auth.roles || []}
+            context="documents"
+          />
+        );
+      } else if (changePanel === "becared") {
+        return <EditDocBeCared rowData={rowData} />;
+      } else if (changePanel === "control-bl") {
+        return (
+          <DocumentsControlBL
+            documentControlBL={documentControlBL}
+            setDocumentControlBL={setDocumentControlBL}
+          />
+        );
+      }
     } else return null;
   };
   const isButtonDisabled = (() => {
@@ -299,37 +330,37 @@ const EditRowTablePro = ({
   useEffect(() => {
     setRowData(dataRowTable?.singleDoc ? dataRowTable.singleDoc : {});
     setDocumentControlBL({
-      COMPANY: dataRowTable?.controlDoc?.COMPANY || null,
-      CONTROL_BRAK_DZIALAN_OD_OST:
+      company: dataRowTable?.controlDoc?.COMPANY || null,
+      control_brak_dzialan_od_ost:
         dataRowTable?.controlDoc?.CONTROL_BRAK_DZIALAN_OD_OST || null,
-      CONTROL_DECYZJA: dataRowTable?.controlDoc?.CONTROL_DECYZJA || null,
-      CONTROL_DOW_REJ: dataRowTable?.controlDoc?.CONTROL_DOW_REJ || null,
-      CONTROL_FV: dataRowTable?.controlDoc?.CONTROL_FV || null,
-      CONTROL_LOGI: dataRowTable?.controlDoc?.CONTROL_LOGI || null,
-      CONTROL_ODPOWIEDZIALNOSC:
+      control_decyzja: dataRowTable?.controlDoc?.CONTROL_DECYZJA || null,
+      control_dow_rej: dataRowTable?.controlDoc?.CONTROL_DOW_REJ || null,
+      control_fv: dataRowTable?.controlDoc?.CONTROL_FV || null,
+      control_odpowiedzialnosc:
         dataRowTable?.controlDoc?.CONTROL_ODPOWIEDZIALNOSC || null,
-      CONTROL_OSW_VAT: dataRowTable?.controlDoc?.CONTROL_OSW_VAT || null,
-      CONTROL_PLATNOSC_VAT:
+      control_osw_vat: dataRowTable?.controlDoc?.CONTROL_OSW_VAT || null,
+      control_platnosc_vat:
         dataRowTable?.controlDoc?.CONTROL_PLATNOSC_VAT || null,
-      CONTROL_POLISA: dataRowTable?.controlDoc?.CONTROL_POLISA || null,
-      CONTROL_PR_JAZ: dataRowTable?.controlDoc?.CONTROL_PR_JAZ || null,
-      CONTROL_UPOW: dataRowTable?.controlDoc?.CONTROL_UPOW || null,
-      CONTROL_UWAGI: dataRowTable?.controlDoc?.CONTROL_UWAGI || null,
-      NUMER_FV: dataRowTable?.controlDoc?.NUMER_FV || null,
+      control_polisa: dataRowTable?.controlDoc?.CONTROL_POLISA || null,
+      control_pr_jaz: dataRowTable?.controlDoc?.CONTROL_PR_JAZ || null,
+      control_upow: dataRowTable?.controlDoc?.CONTROL_UPOW || null,
+      dziennik_zmian: dataRowTable?.controlDoc?.DZIENNIK_ZMIAN || null,
+      kanal_komunikacji: dataRowTable?.controlDoc?.KANAL_KOMUNIKACJI || null,
+      numer_fv: dataRowTable?.controlDoc?.NUMER_FV || null,
       id_control_documents:
         dataRowTable?.controlDoc?.id_control_documents || null,
     });
   }, [dataRowTable]);
 
-  useEffect(() => {
-    if (changePanel === "control-bl") {
-      setToggleState(2);
-    } else if (changePanel === "law-partner") {
-      setToggleState(3);
-    } else {
-      setToggleState(1);
-    }
-  }, [changePanel]);
+  // useEffect(() => {
+  //   if (changePanel === "control-bl") {
+  //     setToggleState(2);
+  //   } else if (changePanel === "law-partner") {
+  //     setToggleState(3);
+  //   } else {
+  //     setToggleState(1);
+  //   }
+  // }, [changePanel]);
 
   return (
     <section className="edit_row_table_pro">
@@ -366,12 +397,15 @@ const EditRowTablePro = ({
             </section>
             <section className="edit_row_table_pro_section-content-data">
               <LogAndChat
-                rowData={rowData}
+                kanalKomunikacji={rowData.KANAL_KOMUNIKACJI}
+                dziennikZmian={rowData.DZIENNIK_ZMIAN}
                 handleAddNote={handleAddNote}
-                type={"control_bl"}
+                context="controlBL"
               />
             </section>
-            <section className="edit_row_table_pro_section-content-data"></section>
+            <section className="edit_row_table_pro_section-content-data">
+              <EditDocBeCared rowData={rowData} />
+            </section>
           </section>
         </section>
         <section

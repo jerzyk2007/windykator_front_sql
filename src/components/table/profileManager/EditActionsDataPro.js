@@ -32,6 +32,7 @@ const EditDocActionsPro = ({
   setRowData,
   profile,
   roles,
+  context,
 }) => {
   const [displayKwotaSplaty, setDisplayKwotaSplaty] = useState("");
 
@@ -53,7 +54,7 @@ const EditDocActionsPro = ({
     const note = `Zmieniono ${title}: z ${
       oldStatus ? oldStatus : "BRAK"
     } na ${newStatus}`;
-    handleAddNote(note, "log");
+    handleAddNote(note, "log", context);
   };
 
   const handleKwotaChange = (e) => {
@@ -73,7 +74,8 @@ const EditDocActionsPro = ({
         `Wprowadzono wpłatę od klienta w wysokości : ${formatAmount(
           parsedValue
         )}`,
-        "log"
+        "log",
+        context
       );
 
       setRowData((prev) => {

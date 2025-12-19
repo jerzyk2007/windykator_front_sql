@@ -4,12 +4,17 @@ import LogsEvent from "./LogsEvent";
 import "./LogAndChat.css";
 
 // const LogAndChat = ({ rowData, note, setNote, handleAddNote, type }) => {
-const LogAndChat = ({ rowData, handleAddNote, type }) => {
+const LogAndChat = ({
+  kanalKomunikacji,
+  dziennikZmian,
+  handleAddNote,
+  context,
+}) => {
   const [panel, setPanel] = useState("chat");
   const [note, setNote] = useState("");
 
   const handleAcceptNote = (info, text) => {
-    handleAddNote(info, text);
+    handleAddNote(info, text, context);
     setNote("");
   };
 
@@ -52,17 +57,19 @@ const LogAndChat = ({ rowData, handleAddNote, type }) => {
       </select>
       {panel === "chat" && (
         <InfoDesk
-          chatData={rowData.KANAL_KOMUNIKACJI}
+          chatData={kanalKomunikacji}
           note={note}
           setNote={setNote}
           handleAcceptNote={handleAcceptNote}
           spanInfoStyle={spanInfoStyle}
+          context={context}
         />
       )}
       {panel === "logi" && (
         <LogsEvent
-          logsData={rowData.DZIENNIK_ZMIAN}
+          logsData={dziennikZmian}
           spanInfoStyle={spanInfoStyle}
+          context={context}
         />
       )}
     </section>

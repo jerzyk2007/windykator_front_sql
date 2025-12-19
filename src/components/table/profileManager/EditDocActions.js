@@ -1,7 +1,13 @@
 import EditDocSettlements from "../profileInsider/EditDocSettlements";
 import "./EditDocActions.css";
 
-const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
+const EditDocActions = ({
+  rowData,
+  setRowData,
+  handleAddNote,
+  roles,
+  context,
+}) => {
   return (
     <section className="edit_doc_actions">
       <section className="edit_doc edit_doc_actions__container">
@@ -32,8 +38,11 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
               value={rowData.KRD ? rowData.KRD : "BRAK"}
               onChange={(e) => {
                 handleAddNote(
-                  "Wpis do KRD:",
-                  e.target.options[e.target.selectedIndex].text
+                  `Wpis do KRD: ${
+                    e.target.options[e.target.selectedIndex].text
+                  }`,
+                  "log",
+                  context
                 );
                 setRowData((prev) => {
                   return {
@@ -61,8 +70,11 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
               value={rowData.DZIALANIA ? rowData.DZIALANIA : ""}
               onChange={(e) => {
                 handleAddNote(
-                  "Rodzaj działania:",
-                  e.target.options[e.target.selectedIndex].text
+                  `Rodzaj działania: ${
+                    e.target.options[e.target.selectedIndex].text
+                  }`,
+                  "log",
+                  context
                 );
                 setRowData((prev) => {
                   return {
@@ -102,8 +114,11 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
               value={rowData.BLAD_DORADCY ? rowData.BLAD_DORADCY : "NIE"}
               onChange={(e) => {
                 handleAddNote(
-                  "Błąd doradcy:",
-                  e.target.options[e.target.selectedIndex].text
+                  `Błąd doradcy: ${
+                    e.target.options[e.target.selectedIndex].text
+                  }`,
+                  "log",
+                  context
                 );
                 setRowData((prev) => {
                   return {
@@ -132,8 +147,11 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
                 value={rowData.POBRANO_VAT ? rowData.POBRANO_VAT : ""}
                 onChange={(e) => {
                   handleAddNote(
-                    "Pobrany VAT:",
-                    e.target.options[e.target.selectedIndex].text
+                    `Pobrany VAT: ${
+                      e.target.options[e.target.selectedIndex].text
+                    }`,
+                    "log",
+                    context
                   );
                   setRowData((prev) => {
                     return {
@@ -184,8 +202,11 @@ const EditDocActions = ({ rowData, setRowData, handleAddNote, roles }) => {
                 }
                 onChange={(e) => {
                   handleAddNote(
-                    "Wybierz kancelarię:",
-                    e.target.options[e.target.selectedIndex].text
+                    `Wybór kancelarii: ${
+                      e.target.options[e.target.selectedIndex].text
+                    }`,
+                    "log",
+                    context
                   );
                   setRowData((prev) => {
                     return {

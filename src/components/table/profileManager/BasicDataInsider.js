@@ -11,7 +11,13 @@ const authLogin = [
   "marcin.furmanek@krotoski.com",
 ];
 
-const BasicDataInsider = ({ rowData, setRowData, login, handleAddNote }) => {
+const BasicDataInsider = ({
+  rowData,
+  setRowData,
+  login,
+  handleAddNote,
+  context,
+}) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   // zmienna dla zmiany DZIALu przez Blacharnie
@@ -93,7 +99,8 @@ const BasicDataInsider = ({ rowData, setRowData, login, handleAddNote }) => {
 
               handleAddNote(
                 `Zmiana działu: ${changeDepartment.oldDep} na ${newDep}`,
-                "log"
+                "log",
+                context
               );
             }}
           >
