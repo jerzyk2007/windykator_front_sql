@@ -80,6 +80,21 @@ const Login = () => {
           jerzy.komorowski@krotoski.com, 782 991 608
         </span>
       </section> */}
+      <section className="login__high_information">
+        <h2>Uwaga !!!</h2>
+        <span>
+          W godzinach <strong>6:30–7:00</strong> system przeprowadza
+          aktualizację danych, dlatego logowanie może być w tym czasie
+          utrudnione.
+        </span>
+        <span>
+          W przypadku jakichkolwiek problemów z działaniem aplikacji proszę o
+          kontakt:
+        </span>
+        <span style={{ fontWeight: "bold", color: "red" }}>
+          jerzy.komorowski@krotoski.com - 782&nbsp;991&nbsp;608
+        </span>
+      </section>
       {!forgotPass ? (
         <section className="login">
           {errMsg && (
@@ -130,6 +145,8 @@ const Login = () => {
       ) : (
         <ForgotPassword setForgotPass={setForgotPass} />
       )}
+
+      <section className="login__high_information"></section>
     </section>
   );
 };
