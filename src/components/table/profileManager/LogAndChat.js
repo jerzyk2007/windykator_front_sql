@@ -12,12 +12,10 @@ const LogAndChat = ({
 }) => {
   const [panel, setPanel] = useState("chat");
   const [note, setNote] = useState("");
-
   const handleAcceptNote = (info, text) => {
     handleAddNote(info, text, context);
     setNote("");
   };
-
   //styl dla panelu informacji i logów do zmiany koloru daty i użytkownika
   const spanInfoStyle = (profile, info = "name") => {
     const dateColor = "rgba(47, 173, 74, 1)";
@@ -42,18 +40,26 @@ const LogAndChat = ({
         className="log_and_chat--select"
         style={
           panel === "chat"
-            ? { backgroundColor: "rgb(166, 255, 131)" }
+            ? context === "controlBL"
+              ? { backgroundColor: "rgba(255, 140, 94, 1)" }
+              : { backgroundColor: "rgb(166, 255, 131)" }
             : panel === "logi"
-            ? { backgroundColor: "rgba(253, 255, 126, 1)" }
+            ? context === "controlBL"
+              ? { backgroundColor: "rgba(126, 236, 255, 1)" }
+              : { backgroundColor: "rgba(253, 255, 126, 1)" }
             : null
         }
-        value={panel}
+        value={panel ?? ""}
         onChange={(e) => {
           setPanel(e.target.value);
         }}
       >
-        <option value="chat">Panel Komunikacji</option>
-        <option value="logi">Dziennik zmian</option>
+        <option value="chat">{`Panel Komunikacji ${
+          context === "controlBL" ? "- kontrola dokumentacji" : ""
+        }`}</option>
+        <option value="logi">{`Dziennik zmian ${
+          context === "controlBL" ? "- kontrola dokumentacji" : ""
+        }`}</option>
       </select>
       {panel === "chat" && (
         <InfoDesk

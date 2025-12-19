@@ -42,6 +42,7 @@ export const changeSingleDoc = (data) => {
   data.STATUS_SPRAWY_WINDYKACJA = data.STATUS_SPRAWY_WINDYKACJA
     ? data.STATUS_SPRAWY_WINDYKACJA
     : "BRAK";
+  data.STATUS_AKTUALNY = data.STATUS_AKTUALNY ? data.STATUS_AKTUALNY : "BRAK";
   return data;
 };
 
