@@ -12,6 +12,7 @@ import SelectPanel from "./SelectPanel";
 import EditDocActions from "./EditDocActions";
 import EditDocBeCared from "./EditDocBeCared";
 import DocumentsControlBL from "./DocumentsControlBL";
+import EditDataManagement from "./EditDataManagement";
 import {
   changeSingleDoc,
   changeSingleDocLawPartner,
@@ -56,6 +57,7 @@ const EditRowTablePro = ({
     return panelMap[info] ?? "doc-actions";
   });
 
+  // zmienna dla obsługi panelu KOntrola BL
   const [documentControlBL, setDocumentControlBL] = useState({
     COMPANY: null,
     CONTROL_ODPOWIEDZIALNOSC: null,
@@ -74,6 +76,12 @@ const EditRowTablePro = ({
     id_control_documents: null,
   });
 
+  //zmienna do tworzenia histori decyzji dla zarządu wykorzystywane później w raporcie
+  const [managementDescription, setManagementDescription] = useState({
+    INFORMACJA_ZARZAD: [],
+    HISTORIA_ZMIANY_DATY_ROZLICZENIA: [],
+  });
+
   const handleSaveData = async (type = "exit") => {
     const { id_document, NUMER_FV, FIRMA } = rowData;
     try {
@@ -82,7 +90,11 @@ const EditRowTablePro = ({
         { id_document, document: rowData, chatLog }
       );
 
-      if (rowData.AREA === "BLACHARNIA") {
+      // zapis danych z kontroli BL
+      if (
+        rowData.AREA === "BLACHARNIA" &&
+        (auth.roles.includes(120) || auth.roles.includes(2000))
+      ) {
         await axiosPrivateIntercept.patch(
           `/documents/change-document-control`,
           {
@@ -271,14 +283,44 @@ const EditRowTablePro = ({
             context="controlBL"
           />
         );
+      } else if (changePanel === "management") {
+        return (
+          <EditDataManagement
+            rowData={rowData}
+            setRowData={setRowData}
+            usersurname={auth.usersurname}
+            managementDescription={managementDescription}
+            setManagementDescription={setManagementDescription}
+          />
+        );
       }
     }
     return null;
   };
+
   const checkNextDoc = async (type) => {
     try {
       await handleSaveData("no_exit");
       await getSingleRow(nextPrevDoc[type], "full");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // możliwosć wyłączenia dokumnetu z Raportu FK
+  const changeMarkDoc = async (NUMER_FV, MARK_FK, FIRMA) => {
+    try {
+      await axiosPrivateIntercept.patch(`/fk/change-mark-document`, {
+        NUMER_FV,
+        MARK_FK,
+        FIRMA,
+      });
+      setRowData((prev) => {
+        return {
+          ...prev,
+          MARK_FK: prev.MARK_FK === 1 ? 0 : 1,
+        };
+      });
     } catch (error) {
       console.error(error);
     }
@@ -324,9 +366,9 @@ const EditRowTablePro = ({
     });
   }, [dataRowTable]);
 
-  useEffect(() => {
-    console.log(changePanel);
-  }, [changePanel]);
+  // useEffect(() => {
+  //   console.log(changePanel);
+  // }, [changePanel]);
   return (
     <section className="edit_row_table_pro">
       <section className="edit_row_table_pro__container">
@@ -415,6 +457,24 @@ const EditRowTablePro = ({
         </section>
 
         <section className="edit_row_table_pro-buttons">
+          {(auth.roles.includes(200) ||
+            auth.roles.includes(201) ||
+            auth.roles.includes(202)) &&
+            rowData.MARK_FV && (
+              <Button
+                variant="contained"
+                color={rowData.MARK_FK ? "secondary" : "error"}
+                onClick={() =>
+                  changeMarkDoc(
+                    rowData.NUMER_FV,
+                    rowData.MARK_FK === 1 ? 0 : 1,
+                    rowData.FIRMA
+                  )
+                }
+              >
+                {rowData.MARK_FK ? "FK ON" : "FK OFF"}
+              </Button>
+            )}
           {profile === "insider" && (
             <SelectPanel
               changePanel={changePanel}

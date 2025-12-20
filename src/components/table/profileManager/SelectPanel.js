@@ -14,7 +14,10 @@ const SelectPanel = ({ rowData, roles, changePanel, setChangePanel }) => {
     options.push({ value: "management", label: "RAPORT FK" });
   }
 
-  if (roles.includes(120) && rowData.AREA === "BLACHARNIA") {
+  if (
+    (roles.includes(120) || roles.includes(2000)) &&
+    rowData.AREA === "BLACHARNIA"
+  ) {
     options.push({ value: "control-bl", label: "KONTROLA BL" });
   }
 
