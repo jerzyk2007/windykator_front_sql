@@ -289,7 +289,7 @@ const EditRowTablePro = ({
             rowData={rowData}
             setRowData={setRowData}
             usersurname={auth.usersurname}
-            managementDescription={managementDescription}
+            // managementDescription={managementDescription}
             setManagementDescription={setManagementDescription}
           />
         );

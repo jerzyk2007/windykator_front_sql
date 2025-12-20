@@ -115,7 +115,7 @@
 .edit_doc--content,
 .edit_doc--content-scroll {
   width: 100%;
-  word-break: break-all;
+  /* word-break: break-all; */
   line-height: 1;
   flex-basis: 59%;
   text-align: center;

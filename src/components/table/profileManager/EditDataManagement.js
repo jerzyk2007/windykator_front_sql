@@ -7,10 +7,9 @@ const EditDataManagement = ({
   rowData,
   setRowData,
   usersurname,
-  managementDescription,
+  // managementDescription,
   setManagementDescription,
 }) => {
-  console.log(rowData);
   const textareaRef = useRef(null);
   const [managementNote, setManagementNote] = useState("");
   // Tymczasowa data
