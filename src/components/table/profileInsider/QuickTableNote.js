@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import useData from "../../hooks/useData";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
-import { changeSingleDoc } from "../utilsForTable/changeSingleDocument";
+import { changeSingleDoc } from "../utilsForTable/tableFunctions";
 import "./QuickTableNote.css";
 
 const QuickTableNote = ({ quickNote, setQuickNote, updateDocuments }) => {

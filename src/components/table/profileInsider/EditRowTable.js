@@ -12,7 +12,7 @@ import EditDataManagement from "./EditDataManagement";
 import DocumentsControlBL from "./DocumentsControlBL";
 import DocumentsControlChat from "./DocumentsControlChat";
 import ReferToLawFirm from "./ReferToLawFirm";
-import { changeSingleDoc } from "../utilsForTable/changeSingleDocument";
+import { changeSingleDoc } from "../utilsForTable/tableFunctions";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 
 import "./EditRowTable.css";

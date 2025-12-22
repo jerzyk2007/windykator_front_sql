@@ -12,12 +12,12 @@ import SelectPanel from "./SelectPanel";
 import EditDocActions from "./EditDocActions";
 import EditDocBeCared from "./EditDocBeCared";
 import DocumentsControlBL from "./DocumentsControlBL";
-import EditDataManagement from "./EditDataManagement";
+import EditManagement from "./EditManagement";
 import {
   changeSingleDoc,
   changeSingleDocLawPartner,
-} from "../utilsForTable/changeSingleDocument";
-import { basePath } from "../utilsForTable/basePathProfile";
+} from "../utilsForTable/tableFunctions";
+import { basePath, createNoteObject } from "../utilsForTable/tableFunctions";
 import "./EditRowTablePro.css";
 
 // Stała stanu początkowego notatek, aby uniknąć duplikowania przy przełączaniu
@@ -76,12 +76,6 @@ const EditRowTablePro = ({
     id_control_documents: null,
   });
 
-  //zmienna do tworzenia histori decyzji dla zarządu wykorzystywane później w raporcie
-  const [managementDescription, setManagementDescription] = useState({
-    INFORMACJA_ZARZAD: [],
-    HISTORIA_ZMIANY_DATY_ROZLICZENIA: [],
-  });
-
   const handleSaveData = async (type = "exit") => {
     const { id_document, NUMER_FV, FIRMA } = rowData;
     try {
@@ -105,6 +99,19 @@ const EditRowTablePro = ({
           }
         );
       }
+      if (
+        chatLog?.raportFK?.KANAL_KOMUNIKACJI.length ||
+        chatLog?.raportFK?.DZIENNIK_ZMIAN.length
+      ) {
+        await axiosPrivateIntercept.post(`/fk/add-decision-date-fk`, {
+          NUMER_FV,
+          data: {
+            decision: chatLog.raportFK.KANAL_KOMUNIKACJI ?? [],
+            date: chatLog.raportFK.DZIENNIK_ZMIAN ?? [],
+          },
+          FIRMA,
+        });
+      }
 
       // Po udanym zapisie czyścimy bufor chatLog
       setChatLog(initialChatLogState);
@@ -123,23 +130,52 @@ const EditRowTablePro = ({
     }
   };
 
+  // const handleAddNote = (info, type, context) => {
+  //   const saveInfo = { chat: "KANAL_KOMUNIKACJI", log: "DZIENNIK_ZMIAN" };
+  //   const fieldName = saveInfo[type];
+
+  //   const date = new Date();
+  //   const formattedDate = `${String(date.getDate()).padStart(2, "0")}-${String(
+  //     date.getMonth() + 1
+  //   ).padStart(2, "0")}-${date.getFullYear()}`;
+
+  //   const note = {
+  //     date: formattedDate,
+  //     note: info,
+  //     profile: auth.permissions,
+  //     userlogin: auth.userlogin,
+  //     username: auth.usersurname,
+  //   };
+
+  //   // 1. Aktualizacja bufora wysyłkowego (chatLog)
+  //   setChatLog((prev) => ({
+  //     ...prev,
+  //     [context]: {
+  //       ...prev[context],
+  //       [fieldName]: [...(prev[context]?.[fieldName] ?? []), note],
+  //     },
+  //   }));
+
+  //   // 2. Aktualizacja widoku lokalnego (rowData lub controlBL)
+  //   if (context === "documents") {
+  //     setRowData((prev) => ({
+  //       ...prev,
+  //       [fieldName]: [...(prev[fieldName] ?? []), note],
+  //     }));
+  //   } else if (context === "controlBL") {
+  //     setDocumentControlBL((prev) => ({
+  //       ...prev,
+  //       [fieldName]: [...(prev[fieldName] ?? []), note],
+  //     }));
+  //   }
+  // };
+
   const handleAddNote = (info, type, context) => {
     const saveInfo = { chat: "KANAL_KOMUNIKACJI", log: "DZIENNIK_ZMIAN" };
     const fieldName = saveInfo[type];
 
-    const date = new Date();
-    const formattedDate = `${String(date.getDate()).padStart(2, "0")}-${String(
-      date.getMonth() + 1
-    ).padStart(2, "0")}-${date.getFullYear()}`;
-
-    const note = {
-      date: formattedDate,
-      note: info,
-      profile: auth.permissions,
-      userlogin: auth.userlogin,
-      username: auth.usersurname,
-    };
-
+    // Wywołanie  funkcji przygotowania notatki
+    const note = createNoteObject(info, auth);
     // 1. Aktualizacja bufora wysyłkowego (chatLog)
     setChatLog((prev) => ({
       ...prev,
@@ -160,6 +196,21 @@ const EditRowTablePro = ({
         ...prev,
         [fieldName]: [...(prev[fieldName] ?? []), note],
       }));
+    } else if (context === "raportFK") {
+      if (type === "chat") {
+        setRowData((prev) => ({
+          ...prev,
+          INFORMACJA_ZARZAD: [...(prev.INFORMACJA_ZARZAD ?? []), note],
+        }));
+      } else if (type === "log") {
+        setRowData((prev) => ({
+          ...prev,
+          HISTORIA_ZMIANY_DATY_ROZLICZENIA: [
+            ...(prev.HISTORIA_ZMIANY_DATY_ROZLICZENIA ?? []),
+            note,
+          ],
+        }));
+      }
     }
   };
 
@@ -285,12 +336,15 @@ const EditRowTablePro = ({
         );
       } else if (changePanel === "management") {
         return (
-          <EditDataManagement
-            rowData={rowData}
+          <EditManagement
             setRowData={setRowData}
-            usersurname={auth.usersurname}
-            // managementDescription={managementDescription}
-            setManagementDescription={setManagementDescription}
+            ostatecznaDataRozliczenia={rowData.OSTATECZNA_DATA_ROZLICZENIA}
+            historiaZmianyDatyRozliczenia={
+              rowData.HISTORIA_ZMIANY_DATY_ROZLICZENIA
+            }
+            informacjaZarzad={rowData.INFORMACJA_ZARZAD}
+            handleAddNote={handleAddNote}
+            context="raportFK"
           />
         );
       }
@@ -366,9 +420,6 @@ const EditRowTablePro = ({
     });
   }, [dataRowTable]);
 
-  // useEffect(() => {
-  //   console.log(changePanel);
-  // }, [changePanel]);
   return (
     <section className="edit_row_table_pro">
       <section className="edit_row_table_pro__container">

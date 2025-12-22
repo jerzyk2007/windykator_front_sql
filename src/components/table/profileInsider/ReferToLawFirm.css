@@ -3,7 +3,7 @@
   background-color: rgba(229, 202, 255, 0.7);
 }
 
-.edit_doc--content {
+/* .edit_doc--content {
   width: 100%;
   border: none;
   outline: none;
@@ -15,7 +15,7 @@
   outline: none;
   border: 1px solid #aaa;
   border: 1px solid red;
-}
+} */
 
 .refer_to_law_firm--panel {
   padding: 5px 0;

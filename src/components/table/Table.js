@@ -26,7 +26,7 @@ import {
 import TableButtonInfo from "./TableButtonInfo";
 import EditRowTablePro from "./profileManager/EditRowTablePro";
 import PleaseWait from "../PleaseWait";
-import { basePath } from "./utilsForTable/basePathProfile";
+import { basePath } from "./utilsForTable/tableFunctions";
 
 import "./Table.css";
 

@@ -1,4 +1,28 @@
-export const filteredArrayManagement = (data) => {
+// wybór ściezki do zapisu w zależności od profilu użytkownika
+export const basePath = {
+  insider: "/documents",
+  partner: "/law-partner",
+  insurance: "/insurance",
+};
+
+// tworzy notaktę dla LogAndChat
+export const createNoteObject = (info, auth) => {
+  const date = new Date();
+  const formattedDate = `${String(date.getDate()).padStart(2, "0")}-${String(
+    date.getMonth() + 1
+  ).padStart(2, "0")}-${date.getFullYear()}`;
+
+  return {
+    date: formattedDate,
+    note: info,
+    profile: auth.permissions,
+    userlogin: auth.userlogin,
+    username: auth.usersurname,
+  };
+};
+
+// funckje dla przygotowania danych dla tabeli po wyjściu z EditRowTablePro
+const filteredArrayManagement = (data) => {
   const filteredData =
     data !== "BRAK"
       ? (() => {
@@ -13,6 +37,7 @@ export const filteredArrayManagement = (data) => {
   return filteredData;
 };
 
+// dla zmiany  danych w tabeli Insider
 export const changeSingleDoc = (data) => {
   data.JAKA_KANCELARIA = data.JAKA_KANCELARIA ? data.JAKA_KANCELARIA : "BRAK";
   data.JAKA_KANCELARIA_TU = data.JAKA_KANCELARIA_TU
@@ -21,9 +46,9 @@ export const changeSingleDoc = (data) => {
   data.BLAD_DORADCY = data.BLAD_DORADCY ? data.BLAD_DORADCY : "NIE";
   data.DZIALANIA = data.DZIALANIA ? data.DZIALANIA : "BRAK";
   data.POBRANO_VAT = data.POBRANO_VAT ? data.POBRANO_VAT : "Nie dotyczy";
-  data.INFORMACJA_ZARZAD = Array.isArray(data.INFORMACJA_ZARZAD)
-    ? filteredArrayManagement(data.INFORMACJA_ZARZAD)
-    : "BRAK";
+  // data.INFORMACJA_ZARZAD = Array.isArray(data.INFORMACJA_ZARZAD)
+  //   ? filteredArrayManagement(data.INFORMACJA_ZARZAD)
+  //   : "BRAK";
   data.OSTATECZNA_DATA_ROZLICZENIA = data.OSTATECZNA_DATA_ROZLICZENIA
     ? data.OSTATECZNA_DATA_ROZLICZENIA
     : "BRAK";
@@ -46,10 +71,30 @@ export const changeSingleDoc = (data) => {
   return data;
 };
 
+// dla zmiany  danych w tabeli Partner
 export const changeSingleDocLawPartner = (data) => {
   data.OPIS_DOKUMENTU = data?.OPIS_DOKUMENTU ? data.OPIS_DOKUMENTU : "BRAK";
   data.KANAL_KOMUNIKACJI = data?.KANAL_KOMUNIKACJI
     ? data.KANAL_KOMUNIKACJI
     : "BRAK";
   return data;
+};
+
+//styl dla panelu informacji i logów do zmiany koloru daty i użytkownika
+export const spanInfoStyle = (profile, info = "name") => {
+  const dateColor = "rgba(47, 173, 74, 1)";
+  return profile === "Pracownik"
+    ? {
+        color: info === "name" ? "rgba(42, 4, 207, 1)" : dateColor,
+        fontWeight: "bold",
+      }
+    : profile === "Kancelaria"
+    ? {
+        color: info === "name" ? "rgba(192, 112, 8, 1)" : dateColor,
+        fontWeight: "bold",
+      }
+    : {
+        color: info === "name" ? "rgba(255, 14, 203, 1)" : dateColor,
+        fontWeight: "bold",
+      };
 };

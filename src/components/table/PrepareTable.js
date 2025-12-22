@@ -8,6 +8,7 @@ import {
   prepareColumnsPartner,
   prepareColumnsInsurance,
 } from "./utilsForTable/prepareColumns";
+import { basePath } from "./utilsForTable/tableFunctions";
 import "./PrepareTable.css";
 
 // const PrepareTable = ({ info, raportDocuments }) => {
@@ -54,11 +55,11 @@ const PrepareTable = ({ info, profile }) => {
         }
 
         // const basePath = profile === "insider" ? "/documents" : "/law-partner";
-        const basePath = {
-          insider: "/documents",
-          partner: "/law-partner",
-          insurance: "/insurance",
-        };
+        // const basePath = {
+        //   insider: "/documents",
+        //   partner: "/law-partner",
+        //   insurance: "/insurance",
+        // };
 
         const dataTable = await axiosPrivateIntercept.get(
           `${basePath[profile]}/get-data-table/${auth.id_user}/${info}/${profile}`,

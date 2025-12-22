@@ -240,15 +240,9 @@ export const prepareColumnsInsider = (columnsData) => {
     if (item.accessorKey === "INFORMACJA_ZARZAD") {
       modifiedItem.accessorFn = (originalRow) => {
         const arrayData = originalRow.INFORMACJA_ZARZAD;
-
         if (!Array.isArray(arrayData) || arrayData.length === 0) return "BRAK";
-
-        const last = arrayData[arrayData.length - 1];
-        return typeof last === "string"
-          ? last.length > 90
-            ? last.slice(0, 90) + " …"
-            : last
-          : "BRAK";
+        const e = arrayData[arrayData.length - 1];
+        return [e.date, e.username, e.note].filter(Boolean).join(" - ");
       };
     }
 

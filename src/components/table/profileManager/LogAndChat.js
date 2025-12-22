@@ -12,28 +12,12 @@ const LogAndChat = ({
 }) => {
   const [panel, setPanel] = useState("chat");
   const [note, setNote] = useState("");
+
   const handleAcceptNote = (info, text) => {
     handleAddNote(info, text, context);
     setNote("");
   };
-  //styl dla panelu informacji i logów do zmiany koloru daty i użytkownika
-  const spanInfoStyle = (profile, info = "name") => {
-    const dateColor = "rgba(47, 173, 74, 1)";
-    return profile === "Pracownik"
-      ? {
-          color: info === "name" ? "rgba(42, 4, 207, 1)" : dateColor,
-          fontWeight: "bold",
-        }
-      : profile === "Kancelaria"
-      ? {
-          color: info === "name" ? "rgba(192, 112, 8, 1)" : dateColor,
-          fontWeight: "bold",
-        }
-      : {
-          color: info === "name" ? "rgba(255, 14, 203, 1)" : dateColor,
-          fontWeight: "bold",
-        };
-  };
+
   return (
     <section className="edit_row_table_pro">
       <select
@@ -67,16 +51,11 @@ const LogAndChat = ({
           note={note}
           setNote={setNote}
           handleAcceptNote={handleAcceptNote}
-          spanInfoStyle={spanInfoStyle}
           context={context}
         />
       )}
       {panel === "logi" && (
-        <LogsEvent
-          logsData={dziennikZmian}
-          spanInfoStyle={spanInfoStyle}
-          context={context}
-        />
+        <LogsEvent logsData={dziennikZmian} context={context} />
       )}
     </section>
   );
