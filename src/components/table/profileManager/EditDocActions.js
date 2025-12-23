@@ -1,4 +1,4 @@
-import EditDocSettlements from "../profileInsider/EditDocSettlements";
+import EditDocSettlements from "./EditDocSettlements";
 import "./EditDocActions.css";
 
 const EditDocActions = ({

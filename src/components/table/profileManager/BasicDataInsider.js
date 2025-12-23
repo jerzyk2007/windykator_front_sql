@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
+import { formatNip } from "../utilsForTable/tableFunctions";
 
 const authLogin = [
   "marta.bednarek@krotoski.com",
@@ -299,7 +300,7 @@ const BasicDataInsider = ({
       {rowData.AREA !== "BLACHARNIA" && (
         <section className="edit_doc__container">
           <span className="edit_doc--title">NIP:</span>
-          <span className="edit_doc--content">{rowData.NIP}</span>
+          <span className="edit_doc--content">{formatNip(rowData.NIP)}</span>
         </section>
       )}
 

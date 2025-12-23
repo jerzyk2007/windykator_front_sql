@@ -13,16 +13,10 @@ const formatChatField = (arrayData) => {
     } else if (arrayData.length === 1) {
       const e = arrayData[0];
       // Używamy sanitize, aby uniknąć błędów w Excelu przy dziwnych znakach
-      // dzialania = `${e.date} - ${sanitize(e.username)} - ${sanitize(e.note)}`;
       dzialania = [e.date, e.username, sanitize(e.note)]
         .filter(Boolean) // pomija null, undefined, "", 0
         .join(" - "); // łączy poprawnie bez zbędnych spacji
     } else {
-      // const last = arrayData[arrayData.length - 1];
-      // dzialania = `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
-      //   last.date
-      // } - ${sanitize(last.username)} - ${sanitize(last.note)}`;
-
       const last = arrayData[arrayData.length - 1];
 
       // Składamy linię z ostatniego wpisu
@@ -63,8 +57,20 @@ const formatChatField = (arrayData) => {
 };
 
 const sanitize = (text) => {
-  if (!text) return " ";
-  return text.replace(
+  // Jeśli text to null, undefined lub pusty string, zwróć spację
+  if (text === null || text === undefined || text === "") return " ";
+
+  // Jeśli text to obiekt (np. element tablicy UWAGI_ASYSTENT),
+  // spróbuj wyciągnąć z niego treść lub zamień na string
+  let str = "";
+  if (typeof text === "object") {
+    // Jeśli to Twój obiekt notatki, weź pole 'note' lub 'text'
+    str = text.note || text.text || JSON.stringify(text);
+  } else {
+    str = String(text);
+  }
+
+  return str.replace(
     /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
     " "
   );
@@ -92,15 +98,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
   };
 
   const cleanData = allData.map((item) => {
-    const dzialania =
-      Array.isArray(item.UWAGI_ASYSTENT) && item.UWAGI_ASYSTENT.length > 0
-        ? item.UWAGI_ASYSTENT.length === 1
-          ? sanitize(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1])
-          : `Liczba wcześniejszych wpisów: ${
-              item.UWAGI_ASYSTENT.length - 1
-            }\n${sanitize(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1])}`
-        : "";
-
     const informacja_zarzd =
       Array.isArray(item.INFORMACJA_ZARZAD) && item.INFORMACJA_ZARZAD.length > 0
         ? item.INFORMACJA_ZARZAD.length === 1
@@ -114,7 +111,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
     const chatPanel = formatChatField(item.KANAL_KOMUNIKACJI);
     return {
       ...item,
-      UWAGI_ASYSTENT: dzialania,
       INFORMACJA_ZARZAD: informacja_zarzd,
       KANAL_KOMUNIKACJI: chatPanel,
     };
@@ -123,15 +119,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
   const startRow = 2;
 
   try {
-    // const groupedByDzial = {};
-    // cleanData.forEach((item) => {
-    //   const dzial = item.DZIAL || "Brak działu";
-    //   if (!groupedByDzial[dzial]) {
-    //     groupedByDzial[dzial] = [];
-    //   }
-    //   groupedByDzial[dzial].push(item);
-    // });
-
     // Używamy 'let', aby móc wyzerować obiekt, jeśli warunek unikalności nie zostanie spełniony
     let groupedByDzial = {};
 
@@ -162,7 +149,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
 
     const groupedSheets = [
       {
-        // name: getUniqueSheetName(info),
         name: getUniqueSheetName("Całość"),
         data: changeNameColumns,
       },
@@ -359,14 +345,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
 };
 
 export const lawPartnerRaport = async (allData, orderColumns, info) => {
-  // const sanitize = (text) => {
-  //   if (!text) return " ";
-  //   return text.replace(
-  //     /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
-  //     " "
-  //   );
-  // };
-
   const sanitizeSheetName = (name) => {
     if (!name || typeof name !== "string") return "Arkusz";
     return name
@@ -644,14 +622,6 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
   }
 };
 export const insuranceRaport = async (allData, orderColumns, info) => {
-  // const sanitize = (text) => {
-  //   if (!text) return " ";
-  //   return text.replace(
-  //     /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
-  //     " "
-  //   );
-  // };
-
   const sanitizeSheetName = (name) => {
     if (!name || typeof name !== "string") return "Arkusz";
     return name

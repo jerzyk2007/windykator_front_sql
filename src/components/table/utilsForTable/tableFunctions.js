@@ -98,3 +98,9 @@ export const spanInfoStyle = (profile, info = "name") => {
         fontWeight: "bold",
       };
 };
+
+//formatowanie nip
+export const formatNip = (nip) => {
+  if (!nip) return "";
+  return nip.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, "$1-$2-$3-$4");
+};

@@ -1,3 +1,4 @@
+import { formatNip } from "../utilsForTable/tableFunctions";
 import "./EditBasicDataPro.css";
 
 const formatCurrency = (amount) => {
@@ -18,11 +19,6 @@ const formatAccountNumber = (nr) => {
       .match(/.{1,4}/g)
       ?.join(" ") || "";
   return `${first} ${rest}`;
-};
-
-const formatNip = (nip) => {
-  if (!nip) return "";
-  return nip.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, "$1-$2-$3-$4");
 };
 
 // --- UNIWERSALNY WIERSZ DANYCH ---

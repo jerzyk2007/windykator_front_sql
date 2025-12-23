@@ -13,6 +13,7 @@ import EditDocActions from "./EditDocActions";
 import EditDocBeCared from "./EditDocBeCared";
 import DocumentsControlBL from "./DocumentsControlBL";
 import EditManagement from "./EditManagement";
+import ReferToLawFirm from "./ReferToLawFirm";
 import {
   changeSingleDoc,
   changeSingleDocLawPartner,
@@ -46,7 +47,6 @@ const EditRowTablePro = ({
 
   // Stan nowych wpisów (bufor przed wysłaniem na serwer)
   const [chatLog, setChatLog] = useState(initialChatLogState);
-
   // Zmiana panelu po wyborze Select
   const [changePanel, setChangePanel] = useState(() => {
     const panelMap = {
@@ -76,12 +76,15 @@ const EditRowTablePro = ({
     id_control_documents: null,
   });
 
+  // dane dla przekzania do kancelarii
+  const [lawFirmData, setLawFirmData] = useState({});
+
   const handleSaveData = async (type = "exit") => {
     const { id_document, NUMER_FV, FIRMA } = rowData;
     try {
       await axiosPrivateIntercept.patch(
         `${basePath[profile]}/change-single-document`,
-        { id_document, document: rowData, chatLog }
+        { id_document, document: rowData, chatLog, lawFirmData }
       );
 
       // zapis danych z kontroli BL
@@ -418,7 +421,26 @@ const EditRowTablePro = ({
       id_control_documents:
         dataRowTable?.controlDoc?.id_control_documents || null,
     });
+    setLawFirmData({
+      numerFv: dataRowTable?.singleDoc.NUMER_FV ?? "",
+      kontrahent: dataRowTable?.singleDoc.KONTRAHENT ?? "",
+      nip: dataRowTable?.singleDoc.NIP ?? "",
+      kwota_brutto: dataRowTable?.singleDoc.BRUTTO ?? 0,
+      firma: dataRowTable?.singleDoc.FIRMA ?? "",
+      kwotaRoszczenia: dataRowTable?.singleDoc?.DO_ROZLICZENIA ?? 0, // Zmieniamy na string, aby łatwiej obsługiwać formatowanie
+      kancelaria: "",
+      kancelariaWybor: dataRowTable.lawPartner ?? [],
+      zapisz: false,
+    });
   }, [dataRowTable]);
+
+  useEffect(() => {
+    if (changePanel === "law-partner") {
+      setToggleState(2);
+    } else {
+      setToggleState(1);
+    }
+  }, [changePanel]);
 
   return (
     <section className="edit_row_table_pro">
@@ -453,17 +475,13 @@ const EditRowTablePro = ({
               {profileComponentFirst()}
             </section>
             <section className="edit_row_table_pro_section-content-data">
-              <LogAndChat
-                key={`tab2-${rowData.id_document}`} // Osobny klucz dla zakładki 2
-                kanalKomunikacji={rowData.KANAL_KOMUNIKACJI}
-                dziennikZmian={rowData.DZIENNIK_ZMIAN}
+              <ReferToLawFirm
                 handleAddNote={handleAddNote}
-                context="controlBL"
+                lawFirmData={lawFirmData}
+                setLawFirmData={setLawFirmData}
               />
             </section>
-            <section className="edit_row_table_pro_section-content-data">
-              <EditDocBeCared rowData={rowData} />
-            </section>
+            <section className="edit_row_table_pro_section-content-data"></section>
           </section>
         </section>
       </section>
