@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
-import "./UserChangeLawPartner.css";
+// import "./UserChangeLawPartner.css";
 
 const UserChangeLawPartner = ({ id, lawPartner, setLawPartner }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const [errMsg, setErrMsg] = useState("");
+
   const changeItemSelect = (name) => {
     const updated = lawPartner.map((item) => {
-      // jeśli obiekt zawiera klucz 'name', odwracamy jego wartość
       if (item.hasOwnProperty(name)) {
         return { ...item, [name]: !item[name] };
       }
@@ -20,7 +20,7 @@ const UserChangeLawPartner = ({ id, lawPartner, setLawPartner }) => {
   const lawPartnerItem = (
     <section className="user-change-law-partner__container">
       {lawPartner?.map((item, index) => {
-        const [name, value] = Object.entries(item)[0]; // np. ["Kancelaria Krotoski", false]
+        const [name, value] = Object.entries(item)[0];
         return (
           <label
             key={index}
@@ -28,7 +28,7 @@ const UserChangeLawPartner = ({ id, lawPartner, setLawPartner }) => {
           >
             <span className="user-change-law-partner__name">{name}</span>
             <input
-              className="user-change-law-partner--check "
+              className="user-change-law-partner--check"
               type="checkbox"
               checked={value}
               onChange={() => changeItemSelect(name)}
@@ -55,19 +55,65 @@ const UserChangeLawPartner = ({ id, lawPartner, setLawPartner }) => {
     setErrMsg("");
   }, [lawPartner]);
 
+  // return (
+  //   <section className="user-change-law-partner">
+  //     <section className="user-change-law-partner__title">
+  //       <h3 className="user-change-law-partner__title--name">
+  //         {!errMsg ? "Dostęp do zewnętrznych kancelarii" : errMsg}
+  //       </h3>
+  //     </section>
+
+  //     <section className="user-change-law-partner__wrapper">
+  //       {lawPartnerItem}
+  //     </section>
+
+  //     <Button
+  //       className="edit_user__Buttons"
+  //       variant="contained"
+  //       onClick={handleChangePermission}
+  //       size="small"
+  //       sx={{ textTransform: "none" }}
+  //     >
+  //       Zapisz zmiany
+  //     </Button>
+  //   </section>
+  // );
   return (
-    <section className="user-change-law-partner">
-      <section className="user-change-law-partner__title">
-        <h3 className="user-change-law-partner__title--name">
-          {!errMsg ? "Dostęp do zawnętrznych kancelarii" : errMsg}
+    <section className="user-edit-card user-edit-card--limited">
+      <header className="user-edit-card__header">
+        <h3 className="user-edit-card__title">
+          {!errMsg ? "Dostęp do zewnętrznych kancelarii" : errMsg}
         </h3>
-      </section>
-      <section className="user-change-law-partner__wrapper">
-        {lawPartnerItem}
-      </section>
-      <Button variant="contained" onClick={handleChangePermission} size="small">
-        Zmień
-      </Button>
+      </header>
+
+      <div className="user-edit-card__content">
+        <div className="user-edit-card__grid">
+          {lawPartner?.map((item, index) => {
+            const [name, value] = Object.entries(item)[0];
+            return (
+              <label key={index} className="user-edit-card__item">
+                <span className="user-edit-card__item-label">{name}</span>
+                <input
+                  type="checkbox"
+                  className="user-edit-card__checkbox"
+                  checked={value}
+                  onChange={() => changeItemSelect(name)}
+                />
+              </label>
+            );
+          })}
+        </div>
+      </div>
+
+      <footer className="user-edit-card__footer">
+        <Button
+          variant="contained"
+          className="user-edit-card__button"
+          onClick={handleChangePermission}
+        >
+          Zapisz zmiany
+        </Button>
+      </footer>
     </section>
   );
 };

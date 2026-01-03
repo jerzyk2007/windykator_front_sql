@@ -1,42 +1,126 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
-
+import Select from "react-select";
 import "./AddDoc.css";
 
-const AddDoc = ({ profile }) => {
-  const [form, setForm] = useState({
-    numerDokumentu: "",
-    terminPlatnosci: "",
-    kwota: "",
-    konto: "",
-    mail: "",
-    kontrahentNazwa: "",
-    kontrahentUlica: "",
-    kontrahentNrDomu: "",
-    kontrahentKod: "",
-    kontrahentMiasto: "",
-    kontrahentNip: "",
-    telefony: [""],
-    maile: [""],
-  });
+const clearForm = {
+  numerDokumentu: "",
+  ubezpieczyciel: "",
+  terminPlatnosci: "",
+  kwotaNaleznosci: 0,
+  kwotaDisplay: "",
+  konto: "",
+  kontoDisplay: "",
+  mail: "",
+  dzial: "",
+  kontrahentNazwa: "",
+  kontrahentUlica: "",
+  kontrahentNrDomu: "",
+  kontrahentNrLokalu: "",
+  kontrahentKod: "",
+  kontrahentMiasto: "",
+  kontrahentNip: "",
+  kontrahentRegon: "",
+  telefony: [""],
+  maile: [""],
+};
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+const AddDoc = ({ profile }) => {
+  const axiosPrivateIntercept = useAxiosPrivateIntercept();
+  const [form, setForm] = useState(clearForm);
+  const [message, setMessage] = useState({ type: "", info: "" });
+  const [departments, setDepartments] = useState([]);
+
+  // --- WALIDATORY ---
+  const v = {
+    required: (val) => val && String(val).trim().length > 0,
+    email: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+    nip: (val) => val.replace(/\D/g, "").length === 10,
+    regon: (val) => [9, 14].includes(val.replace(/\D/g, "").length),
+    zip: (val) => /^\d{2}-\d{3}$/.test(val),
+    konto: (val) => val.replace(/\D/g, "").length === 26,
+    phone: (val) => val.replace(/\D/g, "").length === 9,
+    isPositive: (val) => !isNaN(val) && parseFloat(val) > 0,
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Dodawany dokument:", form);
-    // tu zrobisz wysyłkę do backendu
+  // Sprawdzanie duplikatów w tablicach (ignoruje puste)
+  const hasDuplicates = (array) => {
+    const filtered = array
+      .map((i) => i.replace(/\s/g, ""))
+      .filter((i) => i !== "");
+    return new Set(filtered).size !== filtered.length;
+  };
+
+  const getInvalidStyle = (isValid, value, isRequired = false) => {
+    if (isRequired && (!value || value === "" || value === 0)) {
+      return { borderColor: "#ffa7a7" };
+    }
+    if (!value || value === "" || value === 0) return {};
+    return isValid ? {} : { color: "red", borderColor: "red" };
+  };
+
+  // Styl dla pól kontaktowych (obsługa duplikatów)
+  const getContactStyle = (isValid, value, array) => {
+    const cleanVal = value.replace(/\s/g, "");
+    const isDuplicate =
+      cleanVal !== "" &&
+      array.filter((i) => i.replace(/\s/g, "") === cleanVal).length > 1;
+    if (isDuplicate)
+      return { borderColor: "orange", backgroundColor: "#fffcf0" };
+    return getInvalidStyle(isValid, value);
+  };
+
+  // --- FUNKCJE FORMATUJĄCE ---
+  const formatPhone = (value) => {
+    const d = value.replace(/\D/g, "").substring(0, 9);
+    const p = [];
+    if (d.length > 0) p.push(d.substring(0, 3));
+    if (d.length > 3) p.push(d.substring(3, 6));
+    if (d.length > 6) p.push(d.substring(6, 9));
+    return p.join(" ");
+  };
+
+  const formatNIP = (value) => {
+    const d = value.replace(/\D/g, "").substring(0, 10);
+    const p = [];
+    if (d.length > 0) p.push(d.substring(0, 3));
+    if (d.length > 3) p.push(d.substring(3, 6));
+    if (d.length > 6) p.push(d.substring(6, 8));
+    if (d.length > 8) p.push(d.substring(8, 10));
+    return p.join("-");
+  };
+
+  const formatZipCode = (value) => {
+    const d = value.replace(/\D/g, "").substring(0, 5);
+    return d.length > 2 ? `${d.substring(0, 2)}-${d.substring(2)}` : d;
+  };
+
+  const formatBankAccount = (value) => {
+    const d = value.replace(/\D/g, "").substring(0, 26);
+    const p = [];
+    if (d.length > 0) p.push(d.substring(0, 2));
+    for (let i = 2; i < d.length; i += 4) p.push(d.substring(i, i + 4));
+    return p.join(" ");
+  };
+
+  const formatToPLN = (value) => {
+    if (!value && value !== 0) return "";
+    return new Intl.NumberFormat("pl-PL", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
+
+  // --- HANDLERY ---
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleArrayChange = (e, index, field) => {
-    const value = e.target.value;
-
+    let value = e.target.value;
+    if (field === "telefony") value = formatPhone(value);
     setForm((prev) => {
       const updated = [...prev[field]];
       updated[index] = value;
@@ -44,224 +128,461 @@ const AddDoc = ({ profile }) => {
     });
   };
 
-  const addNewField = (field) => {
-    setForm((prev) => ({
-      ...prev,
-      [field]: [...prev[field], ""],
-    }));
+  const handleAcceptNewDoc = () => {
+    setMessage({ type: "", info: "" });
+    setForm(clearForm);
   };
 
-  return (
+  // Warunki dodawania kolejnych pól
+  const canAddPhone =
+    form.telefony.every((t) => v.phone(t)) &&
+    !hasDuplicates(form.telefony) &&
+    form.telefony.every((t) => t !== "");
+  const canAddMail =
+    form.maile.every((m) => v.email(m)) &&
+    !hasDuplicates(form.maile) &&
+    form.maile.every((m) => m !== "");
+
+  const handleSaveData = async (e) => {
+    e.preventDefault();
+    const errors = [];
+    if (!v.required(form.numerDokumentu)) errors.push("Numer dokumentu");
+    if (!v.required(form.ubezpieczyciel)) errors.push("Ubezpieczyciel");
+    if (!v.required(form.terminPlatnosci)) errors.push("Termin płatności");
+    if (!v.isPositive(form.kwotaNaleznosci)) errors.push("Kwota należności");
+    if (!v.email(form.mail)) errors.push("E-mail zlecającego");
+    if (!v.required(form.dzial)) errors.push("Dział");
+    if (!v.required(form.kontrahentNazwa)) errors.push("Nazwa kontrahenta");
+    if (!v.required(form.kontrahentUlica)) errors.push("Ulica kontrahenta");
+    if (!v.required(form.kontrahentNrDomu)) errors.push("Numer domu");
+    if (!v.zip(form.kontrahentKod)) errors.push("Kod pocztowy (00-000)");
+    if (!v.required(form.kontrahentMiasto)) errors.push("Miasto");
+
+    if (hasDuplicates(form.telefony) || hasDuplicates(form.maile))
+      errors.push("Duplikaty w danych kontaktowych");
+
+    if (errors.length > 0) {
+      alert("Proszę poprawić błędy:\n\n- " + errors.join("\n- "));
+      return;
+    }
+
+    try {
+      const result = await axiosPrivateIntercept.post(
+        `insurance/insert-new-document`,
+        { data: form }
+      );
+      if (result.status === 201)
+        setMessage({ type: "new", info: result.data.message });
+    } catch (error) {
+      if (error.response?.status === 409) {
+        setMessage({ type: "edit", info: error.response.data?.message ?? "" });
+        return;
+      }
+      console.error(error);
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const result = await axiosPrivateIntercept.get(
+        "insurance/get-available-departments"
+      );
+      setDepartments(result.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const options = departments.map((dep) => ({ value: dep, label: dep }));
+  const currentValue = options.find((o) => o.value === form.dzial) || null;
+
+  const documentPanel = () => (
     <section className="add_doc">
-      <h2>Dodaj polisę</h2>
-      <form className="add_doc__form" onSubmit={handleSubmit}>
+      {message.type === "edit" ? (
+        <h2 style={{ color: "red" }}>{message.info}</h2>
+      ) : (
+        <h2>{profile === "new" ? "Dodaj polisę" : "Edytuj polisę"}</h2>
+      )}
+      <form className="add_doc__form">
+        {/* KOLUMNA 1: DANE POLISY */}
         <section className="add_doc-data">
           <h3>Dane Polisy</h3>
           <section className="add_doc__container">
             <section className="add_doc-code-city">
               <label>
-                Numer dokumentu:
+                Numer dokumentu *
                 <input
                   type="text"
                   name="numerDokumentu"
                   value={form.numerDokumentu}
                   onChange={handleChange}
+                  style={getInvalidStyle(true, form.numerDokumentu, true)}
                 />
               </label>
-
               <label>
-                Termin płatności:
+                Termin płatności *
                 <input
                   type="date"
                   name="terminPlatnosci"
                   value={form.terminPlatnosci}
                   onChange={handleChange}
+                  style={getInvalidStyle(true, form.terminPlatnosci, true)}
+                />
+              </label>
+            </section>
+
+            <section className="add_doc-code-city">
+              <label>
+                Ubezpieczyciel *
+                <input
+                  type="text"
+                  name="ubezpieczyciel"
+                  placeholder="Nazwa"
+                  value={form.ubezpieczyciel}
+                  onChange={handleChange}
+                  style={getInvalidStyle(true, form.ubezpieczyciel, true)}
+                />
+              </label>
+              <label>
+                Kwota (PLN) *
+                <input
+                  type="text"
+                  value={form.kwotaDisplay}
+                  placeholder="0,00"
+                  style={getInvalidStyle(
+                    v.isPositive(form.kwotaNaleznosci),
+                    form.kwotaDisplay,
+                    true
+                  )}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^[0-9.,]*$/.test(val) || val === "") {
+                      setForm((p) => ({
+                        ...p,
+                        kwotaDisplay: val,
+                        kwotaNaleznosci:
+                          parseFloat(
+                            val.replace(",", ".").replace(/\s/g, "")
+                          ) || 0,
+                      }));
+                    }
+                  }}
+                  onBlur={() =>
+                    setForm((p) => ({
+                      ...p,
+                      kwotaDisplay: formatToPLN(p.kwotaNaleznosci),
+                    }))
+                  }
+                  onFocus={() =>
+                    setForm((p) => ({
+                      ...p,
+                      kwotaDisplay:
+                        p.kwotaNaleznosci === 0
+                          ? ""
+                          : String(p.kwotaNaleznosci).replace(".", ","),
+                    }))
+                  }
                 />
               </label>
             </section>
 
             <label>
-              Kwota należności:
+              Nr konta do wpłaty
               <input
-                type="number"
-                step="0.01"
-                name="kwota"
-                value={form.kwota}
-                onChange={handleChange}
+                type="text"
+                value={form.kontoDisplay}
+                style={getInvalidStyle(v.konto(form.konto), form.kontoDisplay)}
+                onChange={(e) => {
+                  const clean = e.target.value
+                    .replace(/\D/g, "")
+                    .substring(0, 26);
+                  setForm((p) => ({
+                    ...p,
+                    kontoDisplay: formatBankAccount(clean),
+                    konto: clean,
+                  }));
+                }}
+                placeholder="26 cyfr"
               />
             </label>
-            <label>
-              Nr konta do wpłaty:
-              <input
-                type="number"
-                // step="0.01"
-                name="konto"
-                value={form.konto}
-                onChange={handleChange}
-              />
-            </label>
-            <label>
-              Zlecający windykację:
-              <input
-                type="mail"
-                name="mail"
-                value={form.mail}
-                onChange={handleChange}
-              />
-            </label>
+
+            <section className="add_doc-code-city">
+              <label>
+                E-mail zlecającego *
+                <input
+                  type="email"
+                  name="mail"
+                  value={form.mail}
+                  style={getInvalidStyle(v.email(form.mail), form.mail, true)}
+                  onChange={handleChange}
+                  placeholder="przyklad@firma.pl"
+                />
+              </label>
+              <label>
+                Dział *
+                <Select
+                  name="dzial"
+                  className={`react-select-container ${
+                    !form.dzial ? "is-invalid" : ""
+                  }`}
+                  classNamePrefix="rs"
+                  value={currentValue}
+                  options={options}
+                  onChange={(sel) =>
+                    handleChange({
+                      target: { name: "dzial", value: sel ? sel.value : "" },
+                    })
+                  }
+                  placeholder="Wybierz..."
+                  menuPlacement="top"
+                />
+              </label>
+            </section>
           </section>
         </section>
+
+        {/* KOLUMNA 2: DANE KONTRAHENTA */}
         <section className="add_doc-data">
           <h3>Dane kontrahenta</h3>
           <section className="add_doc__container">
             <label>
-              Nazwa:
+              Nazwa kontrahenta *
               <input
                 type="text"
                 name="kontrahentNazwa"
                 value={form.kontrahentNazwa}
                 onChange={handleChange}
+                style={getInvalidStyle(true, form.kontrahentNazwa, true)}
               />
             </label>
-
             <label>
-              Ulica:
+              Ulica *
               <input
                 type="text"
                 name="kontrahentUlica"
                 value={form.kontrahentUlica}
                 onChange={handleChange}
+                style={getInvalidStyle(true, form.kontrahentUlica, true)}
               />
             </label>
             <section className="add_doc-code-city">
               <label>
-                Nr domu:
+                Nr domu *
                 <input
                   type="text"
                   name="kontrahentNrDomu"
                   value={form.kontrahentNrDomu}
                   onChange={handleChange}
+                  style={getInvalidStyle(true, form.kontrahentNrDomu, true)}
                 />
               </label>
               <label>
-                Nr lokalu:
+                Nr lokalu
                 <input
                   type="text"
-                  name="kontrahentNrDomu"
-                  value={form.kontrahentNrDomu}
+                  name="kontrahentNrLokalu"
+                  value={form.kontrahentNrLokalu}
                   onChange={handleChange}
                 />
               </label>
             </section>
-
             <section className="add_doc-code-city">
               <label>
-                Kod pocztowy:
+                Kod pocztowy *
                 <input
                   type="text"
-                  name="kontrahentKod"
                   value={form.kontrahentKod}
-                  onChange={handleChange}
+                  style={getInvalidStyle(
+                    v.zip(form.kontrahentKod),
+                    form.kontrahentKod,
+                    true
+                  )}
+                  onChange={(e) =>
+                    setForm((p) => ({
+                      ...p,
+                      kontrahentKod: formatZipCode(e.target.value),
+                    }))
+                  }
+                  maxLength={6}
                   placeholder="00-000"
                 />
               </label>
-
               <label>
-                Miasto:
+                Miasto *
                 <input
                   type="text"
                   name="kontrahentMiasto"
                   value={form.kontrahentMiasto}
                   onChange={handleChange}
+                  style={getInvalidStyle(true, form.kontrahentMiasto, true)}
                 />
               </label>
             </section>
-
             <section className="add_doc-code-city">
               <label>
-                NIP:
+                NIP
                 <input
                   type="text"
-                  name="kontrahentNip"
                   value={form.kontrahentNip}
-                  onChange={handleChange}
-                  placeholder="123-456-32-18"
+                  style={getInvalidStyle(
+                    v.nip(form.kontrahentNip),
+                    form.kontrahentNip
+                  )}
+                  onChange={(e) =>
+                    setForm((p) => ({
+                      ...p,
+                      kontrahentNip: formatNIP(e.target.value),
+                    }))
+                  }
+                  maxLength={13}
                 />
               </label>
               <label>
-                Regon:
+                Regon
                 <input
                   type="text"
-                  name="kontrahentNip"
-                  value={form.kontrahentNip}
-                  onChange={handleChange}
-                  placeholder="123-456-32-18"
+                  value={form.kontrahentRegon}
+                  style={getInvalidStyle(
+                    v.regon(form.kontrahentRegon),
+                    form.kontrahentRegon
+                  )}
+                  onChange={(e) =>
+                    setForm((p) => ({
+                      ...p,
+                      kontrahentRegon: e.target.value
+                        .replace(/\D/g, "")
+                        .substring(0, 14),
+                    }))
+                  }
+                  maxLength={14}
                 />
               </label>
             </section>
           </section>
         </section>
+
+        {/* KOLUMNA 3: KONTAKT DO KLIENTA (PODZIELONA 50/50) */}
         <section className="add_doc-data">
           <h3>Kontakt do klienta</h3>
-          {/* <section className="add_doc__container2"> */}
-          <section className="add_doc__container-contact">
-            {form.telefony.map((tel, index) => (
-              <input
-                className="add_doc-contact"
-                key={index}
-                type="text"
-                value={tel}
-                onChange={(e) => handleArrayChange(e, index, "telefony")}
-                placeholder="Telefon"
-              />
-            ))}
-          </section>
-          <Button
-            style={{ fontSize: "1rem", width: "30%" }}
-            size="small"
-            variant="contained"
-            onClick={() => addNewField("telefony")}
-          >
-            + telefon
-          </Button>
-          {/* </section> */}
-          <div
-            style={{
-              width: "100%",
-              borderBottom: "2px solid rgba(44, 123, 168, 0.6)",
-              padding: "5px",
-            }}
-          ></div>
+          <div className="add_doc-contact-wrapper">
+            <section className="add_doc-contact-section">
+              <h4 className="contact-title">Telefony</h4>
+              {form.telefony.map((tel, idx) => (
+                <div key={`tel-${idx}`} className="add_doc-contact-row">
+                  <input
+                    className="add_doc-contact"
+                    type="text"
+                    value={tel}
+                    style={getContactStyle(v.phone(tel), tel, form.telefony)}
+                    onChange={(e) => handleArrayChange(e, idx, "telefony")}
+                    placeholder="9 cyfr"
+                  />
+                  {form.telefony.length > 1 && (
+                    <Button
+                      color="error"
+                      onClick={() =>
+                        setForm((p) => ({
+                          ...p,
+                          telefony: p.telefony.filter((_, i) => i !== idx),
+                        }))
+                      }
+                    >
+                      x
+                    </Button>
+                  )}
+                </div>
+              ))}
+              <Button
+                size="small"
+                variant="outlined"
+                disabled={!canAddPhone}
+                onClick={() =>
+                  setForm((p) => ({ ...p, telefony: [...p.telefony, ""] }))
+                }
+              >
+                + telefon
+              </Button>
+            </section>
 
-          <section className="add_doc__container-contact">
-            {form.maile.map((mail, index) => (
-              <input
-                className="add_doc-contact"
-                key={index}
-                type="text"
-                value={mail}
-                onChange={(e) => handleArrayChange(e, index, "telefony")}
-                placeholder="Mail"
-              />
-            ))}
-          </section>
-          <Button
-            style={{ fontSize: "1rem", width: "30%" }}
-            size="small"
-            variant="contained"
-            onClick={() => addNewField("maile")}
-          >
-            + mail
-          </Button>
+            <div className="contact-divider"></div>
+
+            <section className="add_doc-contact-section">
+              <h4 className="contact-title">Adresy E-mail</h4>
+              {form.maile.map((m, idx) => (
+                <div key={`mail-${idx}`} className="add_doc-contact-row">
+                  <input
+                    className="add_doc-contact"
+                    type="text"
+                    value={m}
+                    style={getContactStyle(v.email(m), m, form.maile)}
+                    onChange={(e) => handleArrayChange(e, idx, "maile")}
+                    placeholder="E-mail"
+                  />
+                  {form.maile.length > 1 && (
+                    <Button
+                      color="error"
+                      onClick={() =>
+                        setForm((p) => ({
+                          ...p,
+                          maile: p.maile.filter((_, i) => i !== idx),
+                        }))
+                      }
+                    >
+                      x
+                    </Button>
+                  )}
+                </div>
+              ))}
+              <Button
+                size="small"
+                variant="outlined"
+                disabled={!canAddMail}
+                onClick={() =>
+                  setForm((p) => ({ ...p, maile: [...p.maile, ""] }))
+                }
+              >
+                + mail
+              </Button>
+            </section>
+          </div>
         </section>
       </form>
+
       <section className="add_doc__accept-panel">
-        <Button variant="contained" size="large" color="success">
+        <Button
+          variant="contained"
+          size="large"
+          color="success"
+          onClick={handleSaveData}
+        >
           Zapisz dokument
         </Button>
       </section>
     </section>
   );
+
+  const messagePanel = () => (
+    <section className="add_doc">
+      <section className="add_doc__message">
+        <section className="add_doc__message__container">
+          <span>{message.info}</span>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleAcceptNewDoc}
+          >
+            OK
+          </Button>
+        </section>
+      </section>
+    </section>
+  );
+
+  return message?.type === "new" ? messagePanel() : documentPanel();
 };
 
 export default AddDoc;

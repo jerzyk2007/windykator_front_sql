@@ -44,7 +44,6 @@ const EditRowTablePro = ({
   const [rowData, setRowData] = useState({});
   const [nextPrevDoc, SetNextPrevDoc] = useState({ prev: null, next: null });
   const [toggleState, setToggleState] = useState(1);
-
   // Stan nowych wpisów (bufor przed wysłaniem na serwer)
   const [chatLog, setChatLog] = useState(initialChatLogState);
   // Zmiana panelu po wyborze Select
@@ -479,6 +478,10 @@ const EditRowTablePro = ({
                 handleAddNote={handleAddNote}
                 lawFirmData={lawFirmData}
                 setLawFirmData={setLawFirmData}
+                lawFirmTransferDate={
+                  dataRowTable?.singleDoc
+                    ?.DATA_PRZEKAZANIA_SPRAWY_DO_KANCELARII ?? null
+                }
               />
             </section>
             <section className="edit_row_table_pro_section-content-data"></section>

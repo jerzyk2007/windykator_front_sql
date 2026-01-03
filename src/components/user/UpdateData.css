@@ -1,47 +1,102 @@
-.update-data {
-    flex-grow: 1;
-    max-width: 80%;
-    min-width: 800px;
-    font-family: "Source Sans 3", Calibri, sans-serif;
-    font-size: 1.15rem;
-    display: flex;
-    flex-direction: column;
+.update-data-card {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 95%; /* Zwiększyłem szerokość dla lepszej czytelności */
+  margin: 15px auto;
+  border: 1px solid rgba(44, 123, 168, 0.2);
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  overflow: hidden;
 }
 
-.update-data__container {
-    flex-grow: 1;
-    margin: 2px 0;
-    border: 1px solid rgba(191, 196, 199, 0.6);
-    background-color: rgba(202, 219, 230, 0.1);
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-evenly;
+/* NAGŁÓWEK KARTY */
+.update-data-card__header {
+  padding: 12px 20px;
+  background-color: rgba(44, 123, 168, 0.05);
+  border-bottom: 1px solid rgba(44, 123, 168, 0.1);
 }
 
-.update-data__container:first-child {
-    background-color: rgba(193, 230, 255, 0.3);
-    font-weight: bold;
+.update-data-card__title {
+  text-align: center;
+  margin: 0;
+  font-size: 1.1rem;
+  color: #2c7ba8;
+  font-weight: 600;
 }
 
-.update-data--name,
-.update-data--update {
-    flex-basis: 35%;
-    padding: 0 10px;
+/* WIERSZ Z ETYKIETAMI (NAGŁÓWEK TABELI) */
+.update-data-card__table-labels {
+  display: flex;
+  padding: 10px 20px;
+  background-color: #fafcfe;
+  border-bottom: 2px solid rgba(44, 123, 168, 0.1);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #555;
 }
 
-.update-data--update {
-    flex-basis: 30%;
+/* TREŚĆ - LISTA WIERSZY */
+.update-data-card__content {
+  overflow-y: auto;
+  max-height: calc(100vh - 250px); /* Opcjonalnie: scroll wewnątrz karty */
 }
 
-.update-data--date,
-.update-data--hour {
-    flex-basis: 20%;
+/* POJEDYNCZY WIERSZ DANYCH */
+.update-data-card__row {
+  display: flex;
+  /* padding: 12px 20px; */
+  padding: 5px 20px;
+  border-bottom: 1px solid rgba(44, 123, 168, 0.05);
+  transition: background-color 0.2s;
+  align-items: center;
+  font-size: 1rem;
 }
 
-.update-data__container:hover {
-    background-color: rgba(193, 230, 255, 0.5);
+.update-data-card__row:last-child {
+  border-bottom: none;
 }
 
-.update-data__container:first-child:hover {
-    background-color: rgba(193, 230, 255, 0.3);
+.update-data-card__row:hover {
+  background-color: rgba(44, 123, 168, 0.05);
+}
+
+/* KOLUMNY - DEFINICJA SZEROKOŚCI */
+.col-name {
+  flex: 2; /* Nazwa zajmuje najwięcej miejsca */
+  color: #333;
+  font-weight: 500;
+}
+
+.col-date {
+  flex: 1;
+  color: #666;
+}
+
+.col-hour {
+  flex: 1;
+  color: #666;
+}
+
+.col-status {
+  flex: 1;
+  text-align: right;
+  font-weight: 600;
+}
+
+/* KOLORY STATUSÓW */
+.status-ok {
+  color: #2e7d32; /* Profesjonalna zieleń */
+}
+
+/* SCROLLBAR (spójny z resztą systemu) */
+.update-data-card__content::-webkit-scrollbar {
+  width: 6px;
+}
+.update-data-card__content::-webkit-scrollbar-thumb {
+  background-color: rgba(44, 123, 168, 0.3);
+  border-radius: 10px;
 }

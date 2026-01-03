@@ -21,7 +21,8 @@ const SelectPanel = ({ rowData, roles, changePanel, setChangePanel }) => {
     options.push({ value: "control-bl", label: "KONTROLA BL" });
   }
 
-  if (roles.includes(150) && !rowData.DATA_PRZEKAZANIA_SPRAWY_DO_KANCELARII) {
+  // if (roles.includes(150) && !rowData.DATA_PRZEKAZANIA_SPRAWY_DO_KANCELARII) {
+  if (roles.includes(150)) {
     options.push({
       value: "law-partner",
       label: "PRZEKAŻ SPRAWĘ DO KANCELARII",

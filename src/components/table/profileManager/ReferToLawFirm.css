@@ -1,7 +1,8 @@
 .refer_to_law_firm {
+  margin-top: 50px;
   flex-grow: 1;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   flex-direction: column;
 }
@@ -9,7 +10,10 @@
   width: 95%;
   padding: 2px 0;
   margin: 2px 0;
-  background-color: rgba(229, 202, 255, 0.7);
+  /* background-color: rgba(229, 202, 255, 0.7); */
+  background-color: rgb(106, 59, 150);
+  border: none;
+  color: rgb(228, 247, 146);
 }
 
 .refer_to_law_firm--panel {
@@ -54,4 +58,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.refer_to_law_firm__info_panel {
+  width: 90%;
+  margin: 10px 20px;
+  padding: 10px;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.refer_to_law_firm__info_panel--date {
+  font-weight: bold;
+  color: rgb(255, 0, 0);
 }

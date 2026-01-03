@@ -32,3 +32,67 @@
   color: red;
   padding-top: 5px;
 }
+.table-toolbar-actions {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 16px;
+  padding: 0px;
+  flex-wrap: wrap;
+}
+
+.table-action-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 16px !important;
+  border-radius: 6px !important;
+  text-transform: none !important; /* Wyłącza WIELKIE LITERY */
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  font-family: "Source Sans 3", Calibri, sans-serif !important;
+  transition: all 0.2s ease-in-out !important;
+  background-color: white !important;
+  min-width: 130px;
+}
+
+.table-action-btn i {
+  font-size: 1.1rem;
+}
+/* Styl dla "Zapisz widok" (Niebieski) */
+.table-action-btn.save {
+  border: 1px solid rgba(44, 123, 168, 0.4) !important;
+  color: #2c7ba8 !important;
+}
+
+.table-action-btn.save:hover {
+  background-color: rgba(44, 123, 168, 0.08) !important;
+  border-color: #2c7ba8 !important;
+}
+
+/* Styl dla "Excel" (Zielony) */
+.table-action-btn.excel {
+  border: 1px solid rgba(46, 125, 50, 0.4) !important;
+  color: #2e7d32 !important;
+}
+
+.table-action-btn.excel:hover {
+  background-color: rgba(46, 125, 50, 0.08) !important;
+  border-color: #2e7d32 !important;
+}
+
+/* Stan wyłączony (Gdy za dużo danych) */
+.table-action-btn.disabled {
+  opacity: 0.5;
+  border-color: #ccc !important;
+  color: #888 !important;
+  background-color: #f5f5f5 !important;
+  cursor: not-allowed !important;
+}
+
+/* Efekt kliknięcia (Potwierdzenie dla użytkownika) */
+.table-action-btn:active {
+  transform: translateY(1px);
+  background-color: #eee !important;
+}

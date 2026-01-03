@@ -1,15 +1,16 @@
+/* GŁÓWNY KONTENER NAWIGACJI */
 .nav_menu {
-  height: 100%;
-  flex-basis: 50%;
-  font-family: Arial, sans-serif;
-  font-size: 1rem;
-  font-optical-sizing: auto;
-  font-weight: 700;
-  padding-right: 20px;
+  /* --- TU ZMIENIASZ WYSOKOŚĆ PASKA --- */
+  height: 40px;
+  /* ---------------------------------- */
+  flex-basis: 60%;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
   user-select: none;
-  z-index: 6;
+  z-index: 1000;
 }
 
 .nav_menu__menu {
@@ -17,163 +18,120 @@
   list-style: none;
   display: flex;
   justify-content: flex-end;
-}
-
-.nav_menu__menu--side {
-  list-style: none;
-}
-
-.nav_menu__menu-dropmenu {
-  position: relative;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
+  gap: 5px;
+  height: 100%;
 }
 
 .nav_menu__menu-item {
-  padding: 5px;
   position: relative;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  height: 100%;
+  border-radius: 6px;
+  transition: background-color 0.2s;
 }
 
-.nav_menu__menu-item .nav_menu-link {
-  min-width: 100px;
-  text-align: center;
-  color: rgb(0, 0, 0);
-  padding: 5px;
-  text-decoration: none;
+.nav_menu__menu-item:hover {
+  background-color: rgba(44, 123, 168, 0.1);
 }
 
-.nav_menu__menu-item:hover > .nav_menu-link,
-.nav_menu__menu-item-dropmenu:hover > .nav_menu-link,
-.nav_menu-item-dropmenu:hover > .nav_menu-link,
-.nav_menu-item-dropmenu--side:hover > .nav_menu-link {
-  color: rgb(192, 42, 230);
-}
-
-.nav_menu__menu-item:hover,
-.nav_menu-item-dropmenu:hover,
-.nav_menu-item-dropmenu--side:hover {
-  position: relative;
-  background-color: #bfe2ff;
-  border-radius: 10px;
-  box-shadow: 1px 1px 1px 1px rgba(44, 123, 168, 0.6);
-}
-
-.nav_menu-dropdown__menu,
-.nav_menu-dropdown__menu-disabled {
-  display: none;
-}
-
-.nav_menu__menu-item:hover .nav_menu-dropdown__menu {
-  display: block;
+.nav_menu-dropdown__menu {
   position: absolute;
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #bfe2ff;
-  border-radius: 10px;
-  box-shadow: 1px 1px 1px 1px rgba(44, 123, 168, 0.6);
-  z-index: 6;
+  background-color: white;
+  min-width: 280px;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid rgba(44, 123, 168, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 5px 0;
+  z-index: 1001;
 }
 
-.nav_menu__menu-item:last-child:hover .nav_menu-dropdown__menu {
-  left: 0;
-}
-
-.nav_menu__menu-item:hover .nav_menu__menu {
-  display: block;
-  margin: 10px;
-  text-align: center;
-}
-
-.nav_menu__menu-item:hover .nav_menu__menu-dropmenu {
-  display: block;
-  margin: 10px;
-  text-align: center;
-}
-
-.nav_menu__menu-item:hover .nav_menu__menu-item {
-  width: 200px;
-  padding: 10px;
-}
-
-.nav_menu__menu-item:hover .nav_menu-item-dropmenu {
-  width: 220px;
-  padding: 10px;
-}
-
-.nav_menu__menu-item:hover .nav_menu-item-dropmenu--side {
-  width: 220px;
-  padding: 10px;
-}
-
-.nav_menu-dropdown__menu .fa-caret-right {
-  float: right;
-  margin-left: 10px;
-  padding-top: 3px;
-}
-
-.nav_menu-dropdown__menu .fa-caret-left {
-  float: left;
-  margin-left: 10px;
-  padding-top: 3px;
-}
-
-.nav_menu-dropdown__menu--side_right,
-.nav_menu-dropdown__menu--side_left {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 10px;
-  box-shadow: 1px 1px 1px 1px rgba(44, 123, 168, 0.6);
-}
-
-.nav_menu-item-dropmenu:hover .nav_menu-dropdown__menu--side_right,
-.nav_menu-item-dropmenu:hover .nav_menu-dropdown__menu--side_left {
-  display: block;
-  position: absolute;
-  top: 0%;
-  left: 95%;
-  background-color: #bfe2ff;
-  padding: 10px;
-}
-
-.nav_menu-item-dropmenu:hover .nav_menu-dropdown__menu--side_left {
-  left: -105%;
-}
-
-.nav_menu-link {
-  display: block;
-}
-
-/* Ogólne style dla side-menu (domyślnie ukryte) */
-.nav_menu-dropdown__menu--side_left {
-  display: none;
-  position: absolute;
-  top: 0;
-  border-radius: 10px;
-  box-shadow: 1px 1px 1px 1px rgba(44, 123, 168, 0.6);
-  background-color: #bfe2ff;
-  padding: 10px;
-  min-width: 200px;
-  z-index: 7; /* Upewnij się, że jest nad innymi elementami */
-}
-
-/* Styl dla aktywnego side-menu (pojawia się z lewej) */
-.nav_menu-item-dropmenu:hover .nav_menu-dropdown__menu--side_left {
-  display: block;
-  left: -100%;
-}
-
-.nav_menu-item-dropmenu {
+/* POJEDYNCZY WIERSZ (W menu pionowym i w bocznym) */
+.nav_menu-item-dropmenu,
+.nav_menu-item-dropmenu--side {
   position: relative;
+  list-style: none;
+  width: 100%;
 }
 
-/* Klasa do ukrywania, jeśli nie jest aktywne  */
+/* LINKI WE WSZYSTKICH SUBMENU */
+.nav_menu-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  padding: 10px 20px;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+/* NAPRAWA PODŚWIETLANIA: Podświetlamy linki po najechaniu na ich rodzica (li) */
+/* Dotyczy to zarówno menu głównego, jak i bocznego (sideMenu) */
+.nav_menu-item-dropmenu:hover > .nav_menu-link,
+.nav_menu-item-dropmenu--side:hover > .nav_menu-link {
+  background-color: #2c7ba8 !important;
+  color: white !important;
+}
+
+/* STRZAŁKI DLA SUBMENU */
+.nav_menu-link i {
+  font-size: 1.3rem; /* Większa strzałka */
+  margin-right: 25px; /* Duży odstęp od tekstu */
+  color: #2c7ba8;
+}
+
+/* Zmiana koloru strzałki przy najechaniu */
+.nav_menu-item-dropmenu:hover > .nav_menu-link i,
+.nav_menu-item-dropmenu--side:hover > .nav_menu-link i {
+  color: white !important;
+}
+
+/* SIDE MENU (POZIOM 2 - wysuwane z boku) */
+.nav_menu-dropdown__menu--side_left {
+  position: absolute;
+  top: -5px; /* Wyrównanie do wiersza */
+  left: -100%;
+  background-color: white;
+  min-width: 280px;
+  border-radius: 10px;
+  border: 1px solid rgba(44, 123, 168, 0.15);
+  box-shadow: -10px 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 5px 0;
+  z-index: 1002;
+}
+
+/* KLASY DO UKRYWANIA */
+.nav_menu-dropdown__menu-disabled,
 .nav_menu-dropdown__menu--side_left-disabled {
-  display: none;
+  display: none !important;
+}
+
+/* MOSTKI (Bridges) */
+.nav_menu-dropdown__menu::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+}
+.nav_menu-dropdown__menu--side_left::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -25px;
+  width: 25px;
+  height: 100%;
+}
+
+/* Ostatni element menu (Użytkownik) */
+.nav_menu__menu-item:last-child .nav_menu-dropdown__menu {
+  left: auto;
+  right: 0;
+  transform: none;
 }

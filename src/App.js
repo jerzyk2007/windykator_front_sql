@@ -185,7 +185,7 @@ function App() {
             <Route element={<RequireAuth allowedRoles={[150, 350]} />}>
               <Route
                 path="/add-insurance-document"
-                element={<AddDoc profile={"insurance"} />}
+                element={<AddDoc profile={"new"} />}
               />
             </Route>
 

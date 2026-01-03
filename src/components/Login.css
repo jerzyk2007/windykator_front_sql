@@ -1,111 +1,213 @@
-.login__fixed {
-  flex-grow: 1;
-  position: relative;
+/* GŁÓWNY WRAPPER - NIEPRZENIKNIONA BARIERA */
+.login-page {
+  position: fixed; /* Blokuje komponent w jednym miejscu względem ekranu */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Pełna szerokość okna */
+  height: 100vh; /* Pełna wysokość okna */
+  background-color: #f8fafc; /* Solidny kolor, aby nic nie prześwitywało */
   display: flex;
+  flex-direction: column;
   /* justify-content: center; */
-  justify-content: space-between;
   align-items: center;
-  flex-direction: column;
+  z-index: 9999; /* Musi być najwyższy w całej aplikacji */
+  overflow-y: auto; /* Pozwala na scroll tylko wewnątrz logowania, jeśli ekran jest mały */
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.login {
-  width: 40%;
-  min-width: 500px;
-  min-height: 40vh;
-  margin: 10px;
+/* NOTICE / ALERT BOX */
+.login-notice {
+  width: 100%;
+  max-width: 550px;
+  background-color: #fff1f0;
+  border: 1px solid #ffa39e;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 12px 20px;
+  flex-shrink: 0; /* Zapobiega zgniataniu komunikatu */
+}
 
-  padding: 1.2rem;
-  color: #000000;
-  border: 1px solid rgba(44, 123, 168, 0.6);
-  border-radius: 5px;
+.login-notice__title {
+  color: #cf1322;
+  font-size: 1.1rem;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+  text-align: center;
+}
+
+.login-notice__content p {
+  margin: 2px 0;
+  font-size: 0.9rem;
+  color: #444;
+  text-align: center;
+}
+
+/* KARTA LOGOWANIA */
+.login-card {
+  width: 100%;
+  max-width: 620px;
+  background-color: white;
+  border: 1px solid rgba(44, 123, 168, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-shrink: 0;
 }
 
-.login-title {
-  font-size: 1.7rem;
+.login-card__header {
+  padding: 15px 20px;
+  background-color: rgba(44, 123, 168, 0.05);
+  border-bottom: 1px solid rgba(44, 123, 168, 0.1);
+  text-align: center;
+}
+
+.login-card__title {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #2c7ba8;
+  font-weight: 600;
+}
+
+/* FORMULARZ */
+.login-card__content {
+  padding: 25px 35px;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-card__field {
+  margin-bottom: 15px;
+}
+
+.login-card__label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.login-card__input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(44, 123, 168, 0.4);
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box; /* Ważne przy width: 100% */
+  transition: all 0.2s;
+}
+
+.login-card__input:focus {
+  border-color: #2c7ba8;
+  box-shadow: 0 0 0 3px rgba(44, 123, 168, 0.1);
+}
+
+.login-card__button {
+  background-color: #2c7ba8 !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  padding: 10px !important;
+  margin-top: 10px !important;
+}
+
+.login-card__footer {
+  padding: 12px;
+  text-align: center;
+  background-color: #fafafa;
+  border-top: 1px solid #eee;
+}
+
+.login-card__link {
+  font-size: 0.85rem;
+  color: #cf1322;
+  cursor: pointer;
   font-weight: 500;
 }
 
-.login__container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-.login__container-title {
-  font-size: 0.9rem;
-  margin-top: 20px;
-}
-
-.login__container-text {
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid rgba(44, 123, 168, 0.6);
-  border-radius: 5px;
-  font-size: 1.2rem;
-  outline: none;
-}
-
-.login Button {
-  margin: 10px auto;
-}
-
-.login__container-text {
-  background-color: #fff !important;
-}
-
-.login__container-text:-webkit-autofill {
-  appearance: none;
-  -webkit-text-fill-color: #000 !important;
-  background-color: #fff !important;
-  transition: background-color 5000s ease-in-out 0s;
-}
-
-.login__password {
-  width: 100%;
-  text-align: right;
-  font-size: 1rem;
-  cursor: pointer;
-  color: #a01313;
-  user-select: none;
-}
-
-.login__password:hover {
-  color: rgb(3, 46, 46);
+.login-card__link:hover {
   text-decoration: underline;
+  color: #2c7ba8;
 }
 
-.login__information {
-  text-align: justify;
+/* ERROR MESSAGE */
+.msg-error {
+  color: #cf1322;
+  font-size: 1rem;
 }
 
-.forgot_password-accept {
+.login-card__button-group {
   display: flex;
+  gap: 10px;
+  margin-top: 15px;
 }
 
-.login__high_information {
-  min-height: 100px;
-  min-width: 1200px;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: auto;
+.login-card__button-group Button {
+  flex: 1;
 }
 
-.login__high_information h1 {
-  color: red;
-}
-.login__high_information h2 {
-  color: red;
+/* Info Box (Szary opis) */
+.login-card__info-box {
+  font-size: 0.85rem;
+  color: #666;
+  background-color: #f8fafc;
+  padding: 12px;
+  border-radius: 6px;
+  border-left: 3px solid #2c7ba8;
+  margin-bottom: 20px;
+  line-height: 1.4;
 }
 
-.login__high_information span {
-  font-size: 1.4rem;
+/* Instrukcje walidacji (niebieska ramka) */
+.login-card__instruction {
+  font-size: 0.8rem;
+  color: #2c7ba8;
+  background-color: #f0f7ff;
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+/* Ikony walidacji */
+.icon-valid {
+  color: #2e7d32;
+  margin-left: 8px;
+  font-size: 1rem;
+}
+.icon-invalid {
+  color: #d32f2f;
+  margin-left: 8px;
+  font-size: 1rem;
+}
+.icon-hide {
+  display: none;
+}
+
+/* Przycisk zamknięcia (krzyżyk) */
+.login-card__close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.5rem;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+  z-index: 10;
+}
+.login-card__close:hover {
+  color: #d32f2f;
+}
+
+/* Box błędu */
+.register-card__error-box {
+  background-color: #fff1f0;
+  color: #d32f2f;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ffa39e;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
 }

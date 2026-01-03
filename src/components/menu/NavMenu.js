@@ -94,8 +94,11 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
         className={
           isSideMenu ? "nav_menu-item-dropmenu--side" : "nav_menu-item-dropmenu"
         }
+        // onMouseEnter={
+        //   item.sideMenu ? () => setActiveSideMenu(item.title) : undefined
+        // }
         onMouseEnter={
-          item.sideMenu ? () => setActiveSideMenu(item.title) : undefined
+          item.sideMenu ? () => setActiveSideMenu(item.label) : undefined
         }
         onMouseLeave={item.sideMenu ? () => setActiveSideMenu(null) : undefined}
       >
@@ -106,10 +109,15 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
 
         {item.sideMenu && (
           <div
+            // className={
+            //   activeSideMenu === item.title
+            //     ? "nav_menu-dropdown__menu--side_left"
+            //     : "nav_menu-dropdown__menu--side_left-disabled" // Dodana klasa dla ukrycia
+            // }
             className={
-              activeSideMenu === item.title
+              activeSideMenu === item.label // tutaj też label
                 ? "nav_menu-dropdown__menu--side_left"
-                : "nav_menu-dropdown__menu--side_left-disabled" // Dodana klasa dla ukrycia
+                : "nav_menu-dropdown__menu--side_left-disabled"
             }
           >
             <ul className="nav_menu__menu--side">

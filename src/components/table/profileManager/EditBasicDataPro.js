@@ -54,6 +54,30 @@ const getScrollStyle = (text) => {
 const EditBasicDataPro = ({ rowData, profile }) => {
   if (!rowData) return null;
 
+  // formatowanie adresu kontrahenta
+  const formatAddress = ({
+    KONTRAHENT_ULICA,
+    KONTRAHENT_NR_BUDYNKU,
+    KONTRAHENT_NR_LOKALU,
+    KONTRAHENT_KOD_POCZTOWY,
+    KONTRAHENT_MIASTO,
+  }) => {
+    if (!KONTRAHENT_ULICA && !KONTRAHENT_MIASTO) return ""; // brak danych
+
+    const streetLine = KONTRAHENT_ULICA
+      ? KONTRAHENT_ULICA +
+        (KONTRAHENT_NR_BUDYNKU ? ` ${KONTRAHENT_NR_BUDYNKU}` : "") +
+        (KONTRAHENT_NR_LOKALU ? ` / ${KONTRAHENT_NR_LOKALU}` : "")
+      : "";
+
+    const cityLine =
+      KONTRAHENT_KOD_POCZTOWY || KONTRAHENT_MIASTO
+        ? `${KONTRAHENT_KOD_POCZTOWY ?? ""} ${KONTRAHENT_MIASTO ?? ""}`.trim()
+        : "";
+
+    return [streetLine, cityLine].filter(Boolean).join("\n");
+  };
+
   // --- WIDOK: PARTNER ---
   if (profile === "partner") {
     const itemsSettlements = (rowData?.WYKAZ_SPLACONEJ_KWOTY_FK ?? []).map(
@@ -195,12 +219,20 @@ const EditBasicDataPro = ({ rowData, profile }) => {
           children={rowData.KONTRAHENT_NAZWA}
         />
 
-        <DataRow
+        {/* <DataRow
           title="Adres kontrahenta:"
           contentClass="edit_basic_data_pro--content"
           style={getScrollStyle(rowData.KONTRAHENT_ADRES)}
           children={rowData.KONTRAHENT_ADRES}
-        />
+        /> */}
+
+        <DataRow
+          title="Adres kontrahenta:"
+          contentClass="edit_basic_data_pro--content"
+          style={getScrollStyle(rowData.KONTRAHENT_ADRES)}
+        >
+          {formatAddress(rowData)}
+        </DataRow>
 
         <DataRow title="NIP" children={formatNip(rowData.KONTRAHENT_NIP)} />
         <DataRow

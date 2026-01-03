@@ -366,19 +366,98 @@ const Table = ({
       },
     }),
 
+    // renderTopToolbarCustomActions: ({ table }) => (
+    //   <Box
+    //     sx={{
+    //       width: "100%",
+    //       display: "flex",
+    //       justifyContent: "space-evenly",
+    //       alignItems: "center",
+    //       gap: "16px",
+    //       padding: "0px",
+    //       flexWrap: "wrap",
+    //     }}
+    //   >
+    //     <Button
+    //       onClick={() =>
+    //         handleSaveSettings(
+    //           columnSizing,
+    //           columnVisibility,
+    //           columnOrder,
+    //           columnPinning,
+    //           pagination
+    //         )
+    //       }
+    //     >
+    //       <i className="fas fa-save table-save-settings"></i>
+    //     </Button>
+    //     {profile === "insider" && (
+    //       <TableButtonInfo
+    //         className="table_excel"
+    //         disabled={!dataTableCounter}
+    //         onClick={() =>
+    //           handleExportExel(
+    //             table.getPrePaginationRowModel().rows,
+    //             "Zestawienie"
+    //           )
+    //         }
+    //         tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
+    //       >
+    //         <i
+    //           className="fa-regular fa-file-excel table-export-excel"
+    //           style={
+    //             !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
+    //           }
+    //         ></i>
+    //       </TableButtonInfo>
+    //     )}
+    //     {profile === "partner" && info !== "no-accept" && (
+    //       <TableButtonInfo
+    //         className="table_excel"
+    //         disabled={!dataTableCounter}
+    //         onClick={() =>
+    //           handleExportExcelPartner(
+    //             table.getPrePaginationRowModel().rows,
+    //             "Zestawienie"
+    //           )
+    //         }
+    //         tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
+    //       >
+    //         <i
+    //           className="fa-regular fa-file-excel table-export-excel"
+    //           style={
+    //             !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
+    //           }
+    //         ></i>
+    //       </TableButtonInfo>
+    //     )}
+    //     {profile === "insurance" && (
+    //       <TableButtonInfo
+    //         className="table_excel"
+    //         disabled={!dataTableCounter}
+    //         onClick={() =>
+    //           handleExportExcelPartner(
+    //             table.getPrePaginationRowModel().rows,
+    //             "Polisy"
+    //           )
+    //         }
+    //         tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
+    //       >
+    //         <i
+    //           className="fa-regular fa-file-excel table-export-excel"
+    //           style={
+    //             !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
+    //           }
+    //         ></i>
+    //       </TableButtonInfo>
+    //     )}
+    //   </Box>
+    // ),
     renderTopToolbarCustomActions: ({ table }) => (
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          gap: "16px",
-          padding: "0px",
-          flexWrap: "wrap",
-        }}
-      >
+      <Box className="table-toolbar-actions">
+        {/* PRZYCISK ZAPISZ WIDOK */}
         <Button
+          className="table-action-btn save"
           onClick={() =>
             handleSaveSettings(
               columnSizing,
@@ -389,66 +468,30 @@ const Table = ({
             )
           }
         >
-          <i className="fas fa-save table-save-settings"></i>
+          <i className="fas fa-save"></i>
+          <span>Zapisz widok</span>
         </Button>
-        {profile === "insider" && (
+
+        {/* PRZYCISK EXCEL */}
+        {["insider", "partner", "insurance"].includes(profile) && (
           <TableButtonInfo
-            className="table_excel"
+            className={`table-action-btn excel ${
+              !dataTableCounter ? "disabled" : ""
+            }`}
             disabled={!dataTableCounter}
-            onClick={() =>
-              handleExportExel(
-                table.getPrePaginationRowModel().rows,
-                "Zestawienie"
-              )
-            }
-            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
+            onClick={() => {
+              const type = profile === "insurance" ? "Polisy" : "Zestawienie";
+              profile === "insider"
+                ? handleExportExel(table.getPrePaginationRowModel().rows, type)
+                : handleExportExcelPartner(
+                    table.getPrePaginationRowModel().rows,
+                    type
+                  );
+            }}
+            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry."
           >
-            <i
-              className="fa-regular fa-file-excel table-export-excel"
-              style={
-                !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
-              }
-            ></i>
-          </TableButtonInfo>
-        )}
-        {profile === "partner" && info !== "no-accept" && (
-          <TableButtonInfo
-            className="table_excel"
-            disabled={!dataTableCounter}
-            onClick={() =>
-              handleExportExcelPartner(
-                table.getPrePaginationRowModel().rows,
-                "Zestawienie"
-              )
-            }
-            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
-          >
-            <i
-              className="fa-regular fa-file-excel table-export-excel"
-              style={
-                !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
-              }
-            ></i>
-          </TableButtonInfo>
-        )}
-        {profile === "insurance" && (
-          <TableButtonInfo
-            className="table_excel"
-            disabled={!dataTableCounter}
-            onClick={() =>
-              handleExportExcelPartner(
-                table.getPrePaginationRowModel().rows,
-                "Polisy"
-              )
-            }
-            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
-          >
-            <i
-              className="fa-regular fa-file-excel table-export-excel"
-              style={
-                !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
-              }
-            ></i>
+            <i className="fa-regular fa-file-excel"></i>
+            <span>Eksport Excel</span>
           </TableButtonInfo>
         )}
       </Box>
