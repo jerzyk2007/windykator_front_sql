@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import Select from "react-select";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./AddDoc.css";
 
 const clearForm = {
@@ -565,7 +567,7 @@ const AddDoc = ({ profile }) => {
     </section>
   );
 
-  const messagePanel = () => (
+  const messagePanel1 = () => (
     <section className="add_doc">
       <section className="add_doc__message">
         <section className="add_doc__message__container">
@@ -578,6 +580,29 @@ const AddDoc = ({ profile }) => {
             OK
           </Button>
         </section>
+      </section>
+    </section>
+  );
+  const messagePanel = () => (
+    <section className="add_doc__message">
+      <section className="add_doc__message__container">
+        {/* Dodana ikona dla lepszego efektu wizualnego */}
+        <div className="add_doc__message__icon">
+          <FontAwesomeIcon icon={faCheckCircle} />
+        </div>
+
+        <span>{message.info}</span>
+
+        <Button
+          variant="contained"
+          color="success"
+          size="large"
+          fullWidth
+          style={{ marginTop: "10px", textTransform: "none", fontWeight: 600 }}
+          onClick={handleAcceptNewDoc}
+        >
+          OK, kontynuuj
+        </Button>
       </section>
     </section>
   );

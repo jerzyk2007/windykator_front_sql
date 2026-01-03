@@ -1,7 +1,7 @@
 .update-data-card {
   flex-grow: 1;
   width: 100%;
-  max-width: 95%; /* Zwiększyłem szerokość dla lepszej czytelności */
+  max-width: 75%; /* Zwiększyłem szerokość dla lepszej czytelności */
   margin: 15px auto;
   border: 1px solid rgba(44, 123, 168, 0.2);
   border-radius: 10px;
@@ -23,7 +23,7 @@
 .update-data-card__title {
   text-align: center;
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: #2c7ba8;
   font-weight: 600;
 }
@@ -53,7 +53,7 @@
   border-bottom: 1px solid rgba(44, 123, 168, 0.05);
   transition: background-color 0.2s;
   align-items: center;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
 .update-data-card__row:last-child {
@@ -73,17 +73,19 @@
 
 .col-date {
   flex: 1;
+  text-align: center;
   color: #666;
 }
 
 .col-hour {
   flex: 1;
+  text-align: center;
   color: #666;
 }
 
 .col-status {
   flex: 1;
-  text-align: right;
+  text-align: center;
   font-weight: 600;
 }
 

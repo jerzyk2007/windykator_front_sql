@@ -38,7 +38,7 @@
 
 .login-notice__content p {
   margin: 2px 0;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #444;
   text-align: center;
 }
@@ -58,6 +58,7 @@
 }
 
 .login-card__header {
+  position: relative;
   padding: 15px 20px;
   background-color: rgba(44, 123, 168, 0.05);
   border-bottom: 1px solid rgba(44, 123, 168, 0.1);
@@ -151,7 +152,8 @@
 
 /* Info Box (Szary opis) */
 .login-card__info-box {
-  font-size: 0.85rem;
+  /* font-size: 0.85rem; */
+  font-size: 1rem;
   color: #666;
   background-color: #f8fafc;
   padding: 12px;

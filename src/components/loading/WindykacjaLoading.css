@@ -1,0 +1,138 @@
+.loading-page-clean {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  width: 100%;
+  background-color: #f8fafc;
+}
+
+.loading-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.loading-title {
+  color: #2c7ba8;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 70px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+.letter-container {
+  display: flex;
+  gap: 10px;
+  transform-style: preserve-3d;
+}
+
+.letter-cube {
+  --size: 46px;
+  width: var(--size);
+  height: var(--size);
+  transform-style: preserve-3d;
+}
+
+.cube-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  /* 
+     Klucz: cubic-bezier(0.65, 0, 0.35, 1) zapewnia miękki start, 
+     bardzo szybki i płynny środek oraz miękkie lądowanie.
+  */
+  animation: fluidSpiral 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  animation-delay: var(--delay);
+  will-change: transform;
+}
+
+.cube-face {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  backface-visibility: hidden;
+  /* Wyłączamy cienie wewnętrzne, jeśli powodowałyby spadek wydajności */
+  background: #2c7ba8;
+  color: white;
+}
+
+/* FRONT - LITERA */
+.cube-face.front {
+  font-size: 1.6rem;
+  font-weight: 900;
+  transform: rotateY(0deg) translate3d(0, 0, calc(var(--size) / 2));
+}
+
+/* ŚCIANKI ZE ŚNIEŻYNKAMI */
+.cube-face.top,
+.cube-face.bottom,
+.cube-face.back {
+  background: #e0f2fe;
+  color: #38bdf8;
+  font-size: 1.2rem;
+}
+
+.cube-face.top {
+  transform: rotateX(90deg) translate3d(0, 0, calc(var(--size) / 2));
+}
+.cube-face.back {
+  transform: rotateX(180deg) translate3d(0, 0, calc(var(--size) / 2));
+}
+.cube-face.bottom {
+  transform: rotateX(-90deg) translate3d(0, 0, calc(var(--size) / 2));
+}
+
+/* BOKI */
+.cube-face.left,
+.cube-face.right {
+  background: #1a4a66;
+}
+.cube-face.left {
+  transform: rotateY(-90deg) translate3d(0, 0, calc(var(--size) / 2));
+}
+.cube-face.right {
+  transform: rotateY(90deg) translate3d(0, 0, calc(var(--size) / 2));
+}
+
+/* 
+   ANIMACJA: 
+   Tylko dwa punkty kontrolne dla obrotu (0 i 360). 
+   To gwarantuje, że silnik przeglądarki nie musi "hamować" w połowie.
+*/
+@keyframes fluidSpiral {
+  0% {
+    transform: translateY(0) rotateX(0deg);
+  }
+  /* 
+     Obrót i skok dzieją się jednocześnie w jednym płynnym cyklu.
+     W 50% czasu kostka jest w najwyższym punkcie i obrócona dokładnie o 180st,
+     ale bez żadnej instrukcji "pauzy", więc przelatuje przez ten punkt z max prędkością.
+  */
+  /* 50% {
+    transform: translateY(-35px) rotateX(180deg);
+  } */
+  100% {
+    transform: translateY(0) rotateX(360deg);
+  }
+}
+
+/* Responsywność */
+@media (max-width: 700px) {
+  .letter-cube {
+    --size: 30px;
+  }
+  .cube-face.front {
+    font-size: 1rem;
+  }
+  .letter-container {
+    gap: 5px;
+  }
+}
