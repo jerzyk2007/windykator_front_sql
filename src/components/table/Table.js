@@ -362,97 +362,18 @@ const Table = ({
     }),
     muiTableBodyCellProps: ({ row }) => ({
       onDoubleClick: () => {
-        getSingleRow(row.original.id_document, "full");
+        // 1. Sprawdzamy, czy którakolwiek z wymaganych ról znajduje się w tablicy auth.roles
+        const hasAccess = [110, 120, 350, 500, 2000].some((role) =>
+          auth?.roles?.includes(role)
+        );
+
+        // 2. Jeśli ma dostęp, wywołujemy funkcję
+        if (hasAccess) {
+          getSingleRow(row.original.id_document, "full");
+        }
       },
     }),
 
-    // renderTopToolbarCustomActions: ({ table }) => (
-    //   <Box
-    //     sx={{
-    //       width: "100%",
-    //       display: "flex",
-    //       justifyContent: "space-evenly",
-    //       alignItems: "center",
-    //       gap: "16px",
-    //       padding: "0px",
-    //       flexWrap: "wrap",
-    //     }}
-    //   >
-    //     <Button
-    //       onClick={() =>
-    //         handleSaveSettings(
-    //           columnSizing,
-    //           columnVisibility,
-    //           columnOrder,
-    //           columnPinning,
-    //           pagination
-    //         )
-    //       }
-    //     >
-    //       <i className="fas fa-save table-save-settings"></i>
-    //     </Button>
-    //     {profile === "insider" && (
-    //       <TableButtonInfo
-    //         className="table_excel"
-    //         disabled={!dataTableCounter}
-    //         onClick={() =>
-    //           handleExportExel(
-    //             table.getPrePaginationRowModel().rows,
-    //             "Zestawienie"
-    //           )
-    //         }
-    //         tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
-    //       >
-    //         <i
-    //           className="fa-regular fa-file-excel table-export-excel"
-    //           style={
-    //             !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
-    //           }
-    //         ></i>
-    //       </TableButtonInfo>
-    //     )}
-    //     {profile === "partner" && info !== "no-accept" && (
-    //       <TableButtonInfo
-    //         className="table_excel"
-    //         disabled={!dataTableCounter}
-    //         onClick={() =>
-    //           handleExportExcelPartner(
-    //             table.getPrePaginationRowModel().rows,
-    //             "Zestawienie"
-    //           )
-    //         }
-    //         tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
-    //       >
-    //         <i
-    //           className="fa-regular fa-file-excel table-export-excel"
-    //           style={
-    //             !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
-    //           }
-    //         ></i>
-    //       </TableButtonInfo>
-    //     )}
-    //     {profile === "insurance" && (
-    //       <TableButtonInfo
-    //         className="table_excel"
-    //         disabled={!dataTableCounter}
-    //         onClick={() =>
-    //           handleExportExcelPartner(
-    //             table.getPrePaginationRowModel().rows,
-    //             "Polisy"
-    //           )
-    //         }
-    //         tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
-    //       >
-    //         <i
-    //           className="fa-regular fa-file-excel table-export-excel"
-    //           style={
-    //             !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
-    //           }
-    //         ></i>
-    //       </TableButtonInfo>
-    //     )}
-    //   </Box>
-    // ),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box className="table-toolbar-actions">
         {/* PRZYCISK ZAPISZ WIDOK */}
@@ -559,9 +480,7 @@ const Table = ({
         {dataRowTable.edit &&
           (pleaseWait ? (
             <PleaseWait />
-          ) : [110, 120, 350, 500, 2000].some((role) =>
-              auth?.roles?.includes(role)
-            ) ? (
+          ) : (
             <EditRowTablePro
               dataRowTable={dataRowTable}
               setDataRowTable={setDataRowTable}
@@ -574,7 +493,7 @@ const Table = ({
               info={info}
               profile={profile}
             />
-          ) : null)}
+          ))}
 
         <div style={dataRowTable.edit ? { display: "none" } : null}>
           <LocalizationProvider

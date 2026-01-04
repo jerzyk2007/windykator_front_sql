@@ -81,7 +81,8 @@ const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
               </span>
 
               {/* OPIS - KOLOR SZARY/CZARNY */}
-              <span style={{ color: "#555" }}>{item.descriptionPart}</span>
+              {/* <span style={{ color: "#555" }}>{item.descriptionPart}</span> */}
+              <span style={{ color: "#000000ff" }}>{item.descriptionPart}</span>
 
               {/* KWOTA - KOLOR ZIELONY */}
               <span style={{ color: "#0f962fff", fontWeight: "600" }}>

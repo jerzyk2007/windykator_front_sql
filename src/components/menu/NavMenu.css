@@ -34,7 +34,7 @@
 }
 
 .nav_menu__menu-item:hover {
-  background-color: rgba(44, 123, 168, 0.1);
+  background-color: rgba(44, 123, 168, 0.2);
 }
 
 .nav_menu-dropdown__menu {
@@ -63,11 +63,14 @@
 .nav_menu-link {
   display: flex;
   align-items: center;
+  justify-content: center; /* WYŚRODKOWANIE TEKSTU */
   text-decoration: none;
   color: #333;
-  padding: 10px 20px;
+  padding: 10px 30px; /* Zwiększony padding boczny, by tekst nie najechał na strzałkę */
   transition: all 0.2s ease;
   width: 100%;
+  position: relative; /* Baza dla absolutnej ikony */
+  text-align: center;
 }
 
 /* NAPRAWA PODŚWIETLANIA: Podświetlamy linki po najechaniu na ich rodzica (li) */
@@ -80,8 +83,9 @@
 
 /* STRZAŁKI DLA SUBMENU */
 .nav_menu-link i {
-  font-size: 1.3rem; /* Większa strzałka */
-  margin-right: 25px; /* Duży odstęp od tekstu */
+  position: absolute; /* PRZYPIĘCIE DO KRAWĘDZI */
+  left: 15px; /* Odstęp od lewej krawędzi */
+  font-size: 1.1rem;
   color: #2c7ba8;
 }
 

@@ -8,30 +8,6 @@ const DocumentEdition = () => {
         <label>Edycja wybranego dokumentu</label>
       </section>
       <section className="instruction_custom-content">
-        {/* <span className="instruction_custom-content--text">
-          Otwarcie okna do edycji i pełnego podglądu dokumentu wymaga
-          dwukrotnego kliknięcia w wybrany dokument w tabeli. Ale jest jeden
-          wyjątek.
-        </span>
-        <span className="instruction_custom-content--text">
-          Dwukrotne kliknięcie w dowolny dokument w polu „Podjęte działania”
-          pozwala dopisać komentarz dotyczący działań przy rozliczeniu dokumentu
-          bez otwarcia okna edycji dokumentu. Masz również podgląd na wszytskie
-          komentarze wpisane już wcześniej. Możesz w tym miejscu dopisać kolejny
-          komentarz jakie podjęte zostały działania przy rozliczeniu dokumentu.
-        </span>
-        <span className="instruction_custom-content--text">
-          Komentarz powinien składać się tylko z tekstu, data i nazwisko (osoby
-          zalogowanej) jest dodawane automatycznie.
-        </span>
-        <div className="instruction_custom-image">
-          <img
-            src="/instruction_image/mini_edition.png"
-            alt="Logo"
-            className="w-32 h-auto"
-            style={{ maxWidth: "50vw" }}
-          />
-        </div> */}
         <br />
         <span className="instruction_custom-content--text">
           <span style={{ fontWeight: 700 }}>Dwukrotne kliknięcie</span> w
@@ -128,20 +104,6 @@ const DocumentEdition = () => {
             className="w-32 h-auto"
           />
         </section>
-        {/* <section className="instruction_component__wrapper">
-          <FcInfo />
-          <span
-            className="instruction_component-content--element"
-            style={{ margin: "0 20px" }}
-          >
-            RAPORT FK
-          </span>
-          <img
-            src="/instruction_image/raport_fk.png"
-            alt="Logo"
-            className="w-32 h-auto"
-          />
-        </section> */}
         <span className="instruction_custom-content--text">
           aby zmienić Panel na którym wyświetlane są dane należy dokonać wyboru
           na <strong>Liście wyboru</strong>
@@ -169,11 +131,6 @@ const DocumentEdition = () => {
           >
             KANCELARIA TU / BL
           </span>
-          {/* <img
-            src="/instruction_image/becared.png"
-            alt="Logo"
-            className="w-32 h-auto"
-          /> */}
         </section>
         <span className="instruction_custom-content--text">
           opcja na liście pojawi się tylko w przypadku sparw "Blacharskich" w
@@ -218,11 +175,6 @@ const DocumentEdition = () => {
           >
             KONTROLA BL
           </span>
-          {/* <img
-            src="/instruction_image/control.png"
-            alt="Logo"
-            className="w-32 h-auto"
-          /> */}
         </section>
         <span className="instruction_custom-content--text">
           dotyczy kontroli dokumentacji poszczególnych działów

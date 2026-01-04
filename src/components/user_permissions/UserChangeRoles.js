@@ -200,29 +200,8 @@ const UserChangeRoles = ({ id, roles, setRoles, permission }) => {
             >
               <div className="user-edit-card__item-text">
                 <span className="user-edit-card__item-label">{role}</span>
-                {/* <span className="user-edit-card__item-sub">
-                  {role === "User" && "przeglądanie dokumentów"}
-                  {role === "Editor" && "edytowanie dokumentów"}
-                  {role === "Raports" && "dostęp tylko do wybranych raportów"}
-                  {role === "Admin" &&
-                    "możliwość dodawanie użytkowników i nadawanie niektórych uprawnień"}
-                  {role === "Controller" &&
-                    "dostęp do panelu kontroli dokumentów oraz raportu z tym związanego"}
-                  {role === "DNiKN" && "dostęp tylko dla pracowników DNiKN"}
-                  {role === "FK_KRT" && "generowanie Raportu Draft dla KRT"}
-                  {role === "FK_KEM" && "generowanie Raportu Draft dla KEM"}
-                  {role === "FK_RAC" && "generowanie Raportu Draft dla RAC"}
-                  {role === "Nora" &&
-                    "generowanie i pobieranie raportów przygotowanych dla Nora"}
-                  {role === "Insurance" &&
-                    "dostęp do windykacji polis ubezpieczeniowych"}
-                  {role === "LawPartner" &&
-                    "dostęp do windykacji przekierowanych do zewnętrznych kancelarii"}
-                  {role === "SuperAdmin" &&
-                    "możliwość nadawanie wszystkich możliwych dostępów dla użytkowników"}
-                </span> */}
                 <span className="user-edit-card__item-sub">
-                  {role === "User" && "dostęp do przeglądania dokumentów"}
+                  {role === "User" && "dostęp do przeglądania tabeli"}
                   {role === "Editor" && "możliwość edytowania dokumentów"}
                   {role === "Raports" &&
                     "dostęp wyłącznie do wybranych raportów"}
