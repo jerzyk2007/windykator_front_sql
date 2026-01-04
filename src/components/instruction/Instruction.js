@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   FiChevronRight,
   FiChevronDown,
@@ -14,6 +14,8 @@ const Instruction = () => {
   const [selectedKey, setSelectedKey] = useState("intro-help");
   const [openMenus, setOpenMenus] = useState({});
   const [zoomedImg, setZoomedImg] = useState(null);
+
+  const scrollRef = useRef(null);
 
   const toggleMenu = (key) => {
     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -197,6 +199,14 @@ const Instruction = () => {
     });
   };
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo(0, 0);
+      // Opcjonalnie dla płynnego efektu:
+      // scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [selectedKey]);
+
   return (
     <section className="instr-layout">
       <aside className="instr-sidebar">
@@ -265,7 +275,9 @@ const Instruction = () => {
       </aside>
 
       <main className="instr-main">
-        <div className="instr-main__scroll">{renderContent()}</div>
+        <div className="instr-main__scroll" ref={scrollRef}>
+          {renderContent()}
+        </div>
       </main>
 
       {/* MODAL POWIĘKSZENIA (ZOOM) */}
