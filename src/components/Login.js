@@ -130,7 +130,7 @@ const Login = () => {
               className="login-card__link"
               onClick={() => setForgotPass(true)}
             >
-              Zapomniałeś hasła?
+              Zresetuj hasło
             </span>
           </footer>
         </section>
