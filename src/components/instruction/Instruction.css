@@ -238,7 +238,7 @@
 }
 
 /* * Styl dla literki/numerka (np. a, b, c) */
-*/ .instr-list-prefix {
+.instr-list-prefix {
   color: var(--instr-primary); /* Możesz nadać mu inny kolor */
   font-weight: 500;
   min-width: 20px;
