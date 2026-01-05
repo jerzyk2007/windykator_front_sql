@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-import "./EditDocSettlements.css";
 
 const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
   const scrollRef = useRef(null);
@@ -27,7 +26,6 @@ const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
 
     let formattedSettlements = [];
 
-    // 1. Przetwarzanie settlement (lista rozrachunków)
     if (Array.isArray(settlement) && settlement.length > 0) {
       formattedSettlements = [...settlement]
         .sort((a, b) => {
@@ -42,10 +40,9 @@ const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
         }));
     }
 
-    // 2. Dodanie fv_zal na początek (jako osobny obiekt)
     if (fv_zal && typeof fv_zal_kwota === "number" && !isNaN(fv_zal_kwota)) {
       const zaliczkaObj = {
-        datePart: fv_zal, // Tytuł zaliczki
+        datePart: fv_zal,
         descriptionPart: " - ",
         amountPart: formatAmount(fv_zal_kwota),
       };
@@ -56,42 +53,36 @@ const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
   }, [settlement, fv_zal, fv_zal_kwota]);
 
   return (
-    <section className="edit-doc-settlements">
-      <span className="edit-doc-settlements--title">Opisy rozrachunków</span>
+    <section className="ertp-settlements-section">
+      <span className="ertp-settlements__header">Opisy rozrachunków</span>
 
-      <section className="edit_doc__container">
-        <span className="edit_doc--title">Data rozliczenia autostacja:</span>
-        <span className="edit_doc--content">{date || "brak danych"}</span>
+      {/* Wykorzystanie standardowych klas rzędu dla daty rozliczenia */}
+      <section className="ertp-data-row">
+        <span className="ertp-data-row__label">
+          Data rozliczenia autostacja:
+        </span>
+        <span className="ertp-data-row__value">{date || "brak danych"}</span>
       </section>
 
-      <div ref={scrollRef} className="edit-doc-settlements--content">
+      <div ref={scrollRef} className="ertp-settlements__scroll-box">
         {settlementData.length > 0 ? (
           settlementData.map((item, index) => (
-            <div
-              key={index}
-              style={{
-                borderBottom: "1px solid #c5c5c5ff",
-                paddingBottom: "2px",
-                marginBottom: "2px",
-              }}
-            >
-              {/* DATA - KOLOR NIEBIESKI */}
-              <span style={{ color: "#007bff", fontWeight: "600" }}>
+            <div key={index} className="ertp-settlement-item">
+              <span className="ertp-settlement-item__date">
                 {item.datePart}
               </span>
 
-              {/* OPIS - KOLOR SZARY/CZARNY */}
-              {/* <span style={{ color: "#555" }}>{item.descriptionPart}</span> */}
-              <span style={{ color: "#000000ff" }}>{item.descriptionPart}</span>
+              <span className="ertp-settlement-item__desc">
+                {item.descriptionPart}
+              </span>
 
-              {/* KWOTA - KOLOR ZIELONY */}
-              <span style={{ color: "#0f962fff", fontWeight: "600" }}>
+              <span className="ertp-settlement-item__amount">
                 {item.amountPart}
               </span>
             </div>
           ))
         ) : (
-          <span style={{ color: "#999", fontStyle: "italic" }}>
+          <span className="ertp-settlement-item--empty">
             Brak danych z rozrachunków
           </span>
         )}

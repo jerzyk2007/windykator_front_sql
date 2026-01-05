@@ -4,9 +4,6 @@ import NotesList from "../utilsForTable/NotesList";
 import TooltipPortal from "../utilsForTable/TooltipPortal";
 import { Button } from "@mui/material";
 
-import "./EditManagement.css";
-import { maxHeight } from "@mui/system";
-
 const EditManagement = ({
   setRowData,
   ostatecznaDataRozliczenia,
@@ -16,9 +13,9 @@ const EditManagement = ({
   context,
 }) => {
   const [note, setNote] = useState("");
-  const [tempDate, setTempDate] = useState(""); //
-  const [isFirstRender, setIsFirstRender] = useState(true); // Czy to pierwsze uruchomienie?
-  // osobne refy dla każdej listy
+  const [tempDate, setTempDate] = useState("");
+  const [isFirstRender, setIsFirstRender] = useState(true);
+
   const historiaRef = useRef(null);
   const zarzadRef = useRef(null);
 
@@ -35,14 +32,12 @@ const EditManagement = ({
     setNote("");
   };
 
-  // funkcja do przewijania refu na dół
   const scrollToBottom = (ref) => {
     if (ref?.current) {
       ref.current.scrollTop = ref.current.scrollHeight;
     }
   };
 
-  // max data jaką może wprowadzić user dzisiejsza + 45
   const maxDate = (() => {
     const date = new Date();
     date.setDate(date.getDate() + 45);
@@ -51,46 +46,39 @@ const EditManagement = ({
 
   const handleSaveDate = () => {
     handleAcceptNote(`Ostateczna data rozliczenia: ${tempDate}`, "log");
-    setRowData((prev) => {
-      return {
-        ...prev,
-        OSTATECZNA_DATA_ROZLICZENIA: tempDate,
-      };
-    });
-    setIsFirstRender(false); // Odblokuj przycisk po pierwszym zapisie
+    setRowData((prev) => ({
+      ...prev,
+      OSTATECZNA_DATA_ROZLICZENIA: tempDate,
+    }));
+    setIsFirstRender(false);
   };
 
   const handleDateChange = (e) => {
-    setTempDate(e.target.value); // Aktualizujemy tymczasową datę
-    if (isFirstRender) setIsFirstRender(false); // Wyłącz tryb "pierwszego uruchomienia" przy dowolnej zmianie
+    setTempDate(e.target.value);
+    if (isFirstRender) setIsFirstRender(false);
   };
 
-  // efekt dla historii zmiany daty
   useEffect(() => {
     scrollToBottom(historiaRef);
   }, [historiaZmianyDatyRozliczenia]);
-
-  // efekt dla informacji dla zarządu
   useEffect(() => {
     scrollToBottom(zarzadRef);
   }, [informacjaZarzad]);
-
   useEffect(() => {
     setTempDate(ostatecznaDataRozliczenia);
   }, [ostatecznaDataRozliczenia]);
-
-  // efekt dla przewijania po każdym wpisaniu notatki
   useEffect(() => {
     scrollToBottom(zarzadRef);
   }, [note]);
 
   return (
-    <section className="edit_management">
-      <section className="edit_management-date">
-        <span className="edit_management--title">
+    <section className="ertp-management-wrapper">
+      {/* SEKCJA DATY */}
+      <section className="ertp-management-sub ertp-management-sub--date">
+        <span className="ertp-management__header">
           Historia zmiany daty ostatecznego rozliczenia
         </span>
-        <div className="info_desk--notes" ref={historiaRef}>
+        <div className="ertp-notes-display" ref={historiaRef}>
           <NotesList
             data={historiaZmianyDatyRozliczenia}
             clickedIndex={clickedIndex}
@@ -100,36 +88,39 @@ const EditManagement = ({
             preWrap
           />
         </div>
-        <section className="edit_doc__container">
-          <span className="edit_doc--title">Ostateczna data rozl.:</span>
-          <input
-            className="edit_doc--select"
-            style={
-              !ostatecznaDataRozliczenia ? { backgroundColor: "yellow" } : null
-            }
-            type="date"
-            max={maxDate}
-            value={tempDate ?? ""}
-            onChange={handleDateChange} // Obsługa zmiany daty
-          />
-          <Button
-            variant="contained"
-            onClick={handleSaveDate} // Zapisujemy datę
-            disabled={
-              isFirstRender || // Zablokowane przy pierwszym uruchomieniu
-              tempDate === ostatecznaDataRozliczenia // Zablokowane, jeśli brak zmian
-            }
-          >
-            Zapisz
-          </Button>
+        <section className="ertp-data-row">
+          <span className="ertp-data-row__label">Ostateczna data rozl.:</span>
+          <div className="ertp-input-wrapper" style={{ gap: "10px" }}>
+            <input
+              className="ertp-input-date"
+              style={
+                !ostatecznaDataRozliczenia
+                  ? { backgroundColor: "yellow" }
+                  : null
+              }
+              type="date"
+              max={maxDate}
+              value={tempDate ?? ""}
+              onChange={handleDateChange}
+            />
+            <Button
+              variant="contained"
+              size="small"
+              onClick={handleSaveDate}
+              disabled={isFirstRender || tempDate === ostatecznaDataRozliczenia}
+            >
+              Zapisz
+            </Button>
+          </div>
         </section>
       </section>
 
-      <section className="edit_management-note">
-        <span className="edit_management--title">
+      {/* SEKCJA NOTATEK DLA ZARZĄDU */}
+      <section className="ertp-management-sub ertp-management-sub--note">
+        <span className="ertp-management__header">
           Informacja do przekazania dla Zarządu
         </span>
-        <div className="info_desk--notes" ref={zarzadRef}>
+        <div className="ertp-notes-display" ref={zarzadRef}>
           <NotesList
             data={informacjaZarzad}
             clickedIndex={clickedIndex}
@@ -140,22 +131,24 @@ const EditManagement = ({
           />
         </div>
         <textarea
-          className="info_desk--edit"
+          className="ertp-textarea ertp-management__textarea"
           placeholder="dodaj informacje"
           value={note}
           onChange={(e) => setNote(e.target.value)}
         />
-        <section className="info_desk__panel">
+        <section className="ertp-management__btn-panel">
           <Button
             disabled={!note}
             variant="contained"
             color="error"
+            size="small"
             onClick={() => setNote("")}
           >
             Usuń
           </Button>
           <Button
             variant="contained"
+            size="small"
             onClick={() => handleAcceptNote(note, "chat")}
             disabled={!note}
           >

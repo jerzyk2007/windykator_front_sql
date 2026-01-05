@@ -299,11 +299,68 @@ const EditRowTablePro = ({
     );
   };
 
-  const profileCompnentThird = () => {
+  const profileComponentThird1 = () => {
     if (
       (profile === "partner" || profile === "insurance") &&
       rowData?.DATA_PRZYJECIA_SPRAWY
     ) {
+      return (
+        <EditActionsDataPro
+          rowData={rowData}
+          setRowData={setRowData}
+          handleAddNote={handleAddNote}
+          profile={profile}
+          roles={auth.roles || []}
+          context="documents"
+        />
+      );
+    } else if (profile === "insider") {
+      if (changePanel === "doc-actions") {
+        return (
+          <EditDocActions
+            rowData={rowData}
+            setRowData={setRowData}
+            handleAddNote={handleAddNote}
+            roles={auth.roles || []}
+            context="documents"
+          />
+        );
+      } else if (changePanel === "becared") {
+        return <EditDocBeCared rowData={rowData} />;
+      } else if (changePanel === "control-bl") {
+        return (
+          <DocumentsControlBL
+            documentControlBL={documentControlBL}
+            setDocumentControlBL={setDocumentControlBL}
+            handleAddNote={handleAddNote}
+            context="controlBL"
+          />
+        );
+      } else if (changePanel === "management") {
+        return (
+          <EditManagement
+            setRowData={setRowData}
+            ostatecznaDataRozliczenia={rowData.OSTATECZNA_DATA_ROZLICZENIA}
+            historiaZmianyDatyRozliczenia={
+              rowData.HISTORIA_ZMIANY_DATY_ROZLICZENIA
+            }
+            informacjaZarzad={rowData.INFORMACJA_ZARZAD}
+            handleAddNote={handleAddNote}
+            context="raportFK"
+          />
+        );
+      }
+    }
+    return null;
+  };
+
+  const profileComponentThird = () => {
+    // Rozdzielona logika: insurance wchodzi zawsze, partner tylko z datą przyjęcia
+    const showActionsPro =
+      (profile === "partner" && rowData?.DATA_PRZYJECIA_SPRAWY) ||
+      profile === "insurance";
+
+    if (showActionsPro) {
       return (
         <EditActionsDataPro
           rowData={rowData}
@@ -382,8 +439,21 @@ const EditRowTablePro = ({
     }
   };
 
-  const isButtonDisabled =
-    profile === "partner" ? !rowData?.DATA_PRZYJECIA_SPRAWY : false;
+  // const isButtonDisabled =
+  //   profile === "partner" ? !rowData?.DATA_PRZYJECIA_SPRAWY : false;
+
+  const isButtonDisabled = (() => {
+    if (profile === "partner") {
+      return !rowData?.DATA_PRZYJECIA_SPRAWY;
+    }
+    if (profile === "insurance") {
+      return false;
+    }
+    if (profile === "insider") {
+      return false;
+    }
+    return true;
+  })();
 
   // Logika dla strzałek Nawigacji
   useEffect(() => {
@@ -441,39 +511,151 @@ const EditRowTablePro = ({
     }
   }, [changePanel]);
 
+  // return (
+  //   <section className="edit_row_table_pro">
+  //     <section className="edit_row_table_pro__container">
+  //       {/* Renderowanie głównego kontentu */}
+  //       <section
+  //         className={`edit_row_table_pro__content ${
+  //           toggleState === 1 ? "edit_row_table_pro__active-content" : ""
+  //         }`}
+  //       >
+  //         <section className="edit_row_table_pro_section-content">
+  //           <section className="edit_row_table_pro_section-content-data">
+  //             {profileComponentFirst()}
+  //           </section>
+  //           <section className="edit_row_table_pro_section-content-data">
+  //             {profileComponentSecond()}
+  //           </section>
+  //           <section className="edit_row_table_pro_section-content-data">
+  //             {profileCompnentThird()}
+  //           </section>
+  //         </section>
+  //       </section>
+
+  //       {/* Toggle 2 - Panel kontroli dokumentacji */}
+  //       <section
+  //         className={`edit_row_table_pro__content ${
+  //           toggleState === 2 ? "edit_row_table_pro__active-content" : ""
+  //         }`}
+  //       >
+  //         <section className="edit_row_table_pro_section-content">
+  //           <section className="edit_row_table_pro_section-content-data">
+  //             {profileComponentFirst()}
+  //           </section>
+  //           <section className="edit_row_table_pro_section-content-data">
+  //             <ReferToLawFirm
+  //               handleAddNote={handleAddNote}
+  //               lawFirmData={lawFirmData}
+  //               setLawFirmData={setLawFirmData}
+  //               lawFirmTransferDate={
+  //                 dataRowTable?.singleDoc
+  //                   ?.DATA_PRZEKAZANIA_SPRAWY_DO_KANCELARII ?? null
+  //               }
+  //             />
+  //           </section>
+  //           <section className="edit_row_table_pro_section-content-data"></section>
+  //         </section>
+  //       </section>
+  //     </section>
+
+  //     {/* Dolny panel przycisków */}
+  //     <section className="edit_row_table_pro__panel">
+  //       <section className="edit_row_table_pro-buttons">
+  //         <RxDoubleArrowLeft
+  //           className={
+  //             nextPrevDoc.prev
+  //               ? "edit_row_table_pro-icon_buttons"
+  //               : "edit_row_table_pro-icon_buttons--disable"
+  //           }
+  //           onClick={() => nextPrevDoc.prev && checkNextDoc("prev")}
+  //         />
+  //         <RxDoubleArrowRight
+  //           className={
+  //             nextPrevDoc.next
+  //               ? "edit_row_table_pro-icon_buttons"
+  //               : "edit_row_table_pro-icon_buttons--disable"
+  //           }
+  //           onClick={() => nextPrevDoc.next && checkNextDoc("next")}
+  //         />
+  //       </section>
+
+  //       <section className="edit_row_table_pro-buttons">
+  //         <Button
+  //           variant="contained"
+  //           color="error"
+  //           onClick={() => setDataRowTable(clearRowTable)}
+  //         >
+  //           Anuluj
+  //         </Button>
+  //         <Button
+  //           variant="contained"
+  //           color="success"
+  //           disabled={isButtonDisabled}
+  //           onClick={() => handleSaveData()}
+  //         >
+  //           Zatwierdź
+  //         </Button>
+  //       </section>
+
+  //       <section className="edit_row_table_pro-buttons">
+  //         {(auth.roles.includes(200) ||
+  //           auth.roles.includes(201) ||
+  //           auth.roles.includes(202)) &&
+  //           rowData.MARK_FV && (
+  //             <Button
+  //               variant="contained"
+  //               color={rowData.MARK_FK ? "secondary" : "error"}
+  //               onClick={() =>
+  //                 changeMarkDoc(
+  //                   rowData.NUMER_FV,
+  //                   rowData.MARK_FK === 1 ? 0 : 1,
+  //                   rowData.FIRMA
+  //                 )
+  //               }
+  //             >
+  //               {rowData.MARK_FK ? "FK ON" : "FK OFF"}
+  //             </Button>
+  //           )}
+  //         {profile === "insider" && (
+  //           <SelectPanel
+  //             changePanel={changePanel}
+  //             setChangePanel={setChangePanel}
+  //             roles={auth.roles || []}
+  //             rowData={rowData}
+  //           />
+  //         )}
+  //       </section>
+  //     </section>
+  //   </section>
+  // );
   return (
-    <section className="edit_row_table_pro">
-      <section className="edit_row_table_pro__container">
-        {/* Renderowanie głównego kontentu */}
+    <section className="ertp-wrapper">
+      <section className="ertp-main-container">
+        {/* Toggle 1 - Renderowanie głównego kontentu */}
         <section
-          className={`edit_row_table_pro__content ${
-            toggleState === 1 ? "edit_row_table_pro__active-content" : ""
+          className={`ertp-tab-content ${
+            toggleState === 1 ? "ertp-tab-content--active" : ""
           }`}
         >
-          <section className="edit_row_table_pro_section-content">
-            <section className="edit_row_table_pro_section-content-data">
-              {profileComponentFirst()}
-            </section>
-            <section className="edit_row_table_pro_section-content-data">
+          <section className="ertp-columns-layout">
+            <section className="ertp-column">{profileComponentFirst()}</section>
+            <section className="ertp-column">
               {profileComponentSecond()}
             </section>
-            <section className="edit_row_table_pro_section-content-data">
-              {profileCompnentThird()}
-            </section>
+            <section className="ertp-column">{profileComponentThird()}</section>
           </section>
         </section>
 
         {/* Toggle 2 - Panel kontroli dokumentacji */}
         <section
-          className={`edit_row_table_pro__content ${
-            toggleState === 2 ? "edit_row_table_pro__active-content" : ""
+          className={`ertp-tab-content ${
+            toggleState === 2 ? "ertp-tab-content--active" : ""
           }`}
         >
-          <section className="edit_row_table_pro_section-content">
-            <section className="edit_row_table_pro_section-content-data">
-              {profileComponentFirst()}
-            </section>
-            <section className="edit_row_table_pro_section-content-data">
+          <section className="ertp-columns-layout">
+            <section className="ertp-column">{profileComponentFirst()}</section>
+            <section className="ertp-column">
               <ReferToLawFirm
                 handleAddNote={handleAddNote}
                 lawFirmData={lawFirmData}
@@ -484,33 +666,29 @@ const EditRowTablePro = ({
                 }
               />
             </section>
-            <section className="edit_row_table_pro_section-content-data"></section>
+            <section className="ertp-column"></section>
           </section>
         </section>
       </section>
 
       {/* Dolny panel przycisków */}
-      <section className="edit_row_table_pro__panel">
-        <section className="edit_row_table_pro-buttons">
+      <section className="ertp-bottom-panel">
+        <section className="ertp-actions-group">
           <RxDoubleArrowLeft
             className={
-              nextPrevDoc.prev
-                ? "edit_row_table_pro-icon_buttons"
-                : "edit_row_table_pro-icon_buttons--disable"
+              nextPrevDoc.prev ? "ertp-nav-icon" : "ertp-nav-icon--disabled"
             }
             onClick={() => nextPrevDoc.prev && checkNextDoc("prev")}
           />
           <RxDoubleArrowRight
             className={
-              nextPrevDoc.next
-                ? "edit_row_table_pro-icon_buttons"
-                : "edit_row_table_pro-icon_buttons--disable"
+              nextPrevDoc.next ? "ertp-nav-icon" : "ertp-nav-icon--disabled"
             }
             onClick={() => nextPrevDoc.next && checkNextDoc("next")}
           />
         </section>
 
-        <section className="edit_row_table_pro-buttons">
+        <section className="ertp-actions-group">
           <Button
             variant="contained"
             color="error"
@@ -528,7 +706,7 @@ const EditRowTablePro = ({
           </Button>
         </section>
 
-        <section className="edit_row_table_pro-buttons">
+        <section className="ertp-actions-group">
           {(auth.roles.includes(200) ||
             auth.roles.includes(201) ||
             auth.roles.includes(202)) &&
