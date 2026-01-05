@@ -197,7 +197,7 @@ const EditUserSettings = ({ user, setEdit }) => {
         <Button
           className="mui-button"
           variant="contained"
-          size="large"
+          // size="large"
           color="secondary"
           onClick={() => setEdit(false)}
         >

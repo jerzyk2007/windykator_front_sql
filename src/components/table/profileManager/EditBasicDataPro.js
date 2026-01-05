@@ -276,6 +276,7 @@
 
 // export default EditBasicDataPro;
 
+import { color } from "@mui/system";
 import { formatNip } from "../utilsForTable/tableFunctions";
 
 const formatCurrency = (amount) => {
@@ -353,9 +354,9 @@ const EditBasicDataPro = ({ rowData, profile }) => {
     const itemsSettlements = (rowData?.WYKAZ_SPLACONEJ_KWOTY_FK ?? []).map(
       (item, index) => (
         <section key={index} className="ertp-settlements-list__item">
-          <span>{item.data}</span>
-          <span>{item.symbol}</span>
-          <span>
+          <span className="ertp-settlement-item__date">{item.data}</span>
+          <span className="ertp-settlement-item__desc">{item.symbol}</span>
+          <span className="ertp-settlement-item__amount">
             {item?.kwota ? (
               formatCurrency(item.kwota)
             ) : (
@@ -484,6 +485,7 @@ const EditBasicDataPro = ({ rowData, profile }) => {
         />
         <DataRow title="Dział" children={rowData.DZIAL} />
         <DataRow
+          style={{ wordBreak: "break-all" }}
           title="Osoba zlecająca"
           children={rowData.OSOBA_ZLECAJACA_WINDYKACJE}
         />

@@ -54,7 +54,7 @@ const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
 
   return (
     <section className="ertp-settlements-section">
-      <span className="ertp-settlements__header">Opisy rozrachunków</span>
+      <span className="ertp__header">Opisy rozrachunków</span>
 
       {/* Wykorzystanie standardowych klas rzędu dla daty rozliczenia */}
       <section className="ertp-data-row">

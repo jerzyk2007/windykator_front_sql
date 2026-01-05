@@ -9,8 +9,7 @@
   font-size: 1.1rem;
   z-index: 5;
   background-color: #fff;
-  max-height: 90vh;
-  /* overflow: auto; */
+  overflow: auto;
   display: flex;
   flex-direction: column;
 }
@@ -38,9 +37,7 @@
 }
 
 .ertp-columns-layout {
-  height: 85vh;
-  max-height: 85vh;
-
+  height: 100%;
   padding: 0 2px;
   flex-grow: 1;
   display: flex;
@@ -52,10 +49,9 @@
   flex-basis: 33%;
   min-width: 500px;
   min-height: 500px;
-  max-height: 90vh;
   padding: 1px;
   margin: 1px;
-  overflow: scroll;
+  overflow: auto;
   display: flex;
   flex-direction: column;
 }
@@ -92,58 +88,38 @@
   width: 100%;
   flex-basis: 40%;
   text-align: left;
-  /* Zmiękczona linia obramowania */
-  border: 1px solid #cfd4da;
+  border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;
-  /* Odrobina więcej miejsca dla tekstu (lepiej dla wzroku) */
-  padding: 4px 8px;
+  padding: 1px 1px 1px 5px;
   margin: 1px 2px;
-  /* Pastelowy, czysty błękitny popiel */
-  background-color: #f1f5f9;
-  /* Ciemny grafit zamiast czerni - czytelniejszy dla osób 50+ */
-  color: #334155;
-  font-weight: 500;
+  background-color: rgba(220, 241, 253, 0.2);
   display: flex;
   align-items: center;
   cursor: help;
-  box-sizing: border-box;
 }
 
 .ertp-data-row__label--read-only {
-  /* Nieco ciemniejszy pastel dla pól zablokowanych */
-  background-color: #e2e8f0;
-  background-color: #f2f4f7;
-  color: #64748b;
-  border-color: #94a3b8;
+  background-color: rgba(252, 220, 253, 0.8);
 }
 
 .ertp-data-row__value {
   width: 100%;
-  /* word-break: break-all; */
-  /* Zwiększony interlinia (1.4) poprawia czytelność długich nazw i numerów */
-  line-height: 1.4;
+  word-break: break-all;
+  line-height: 1.2;
   flex-basis: 59%;
   text-align: center;
-  /* Obramowanie identyczne jak w labelu dla spójności linii */
-  border: 1px solid #cbd5e1;
+  border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;
-  /* Większy padding (4px 6px) sprawia, że tekst nie dotyka ramek */
-  padding: 4px 6px;
+  padding: 2px;
   margin: 1px 2px;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Czysta biel sprawia, że dane są priorytetem dla oka */
-  background-color: #ffffff;
-  /* Bardzo ciemny grafit - maksymalna ostrość tekstu */
-  color: #000000;
-  box-sizing: border-box;
 }
 
 .ertp-data-row__value--scrollable {
   display: block;
-  /* Spójny padding z resztą pól */
-  padding: 6px;
+  padding: 5px;
   overflow-y: auto;
   max-height: 90px;
 }
@@ -151,8 +127,6 @@
 .ertp-data-row__value--column {
   flex-direction: column;
   align-items: center;
-  /* Zapewnienie, że dzieci w kolumnie mają wystarczająco miejsca */
-  gap: 2px;
 }
 
 .ertp-data-row__value--column span {
@@ -165,23 +139,14 @@
 .ertp-input-text,
 .ertp-input-date {
   width: 100%;
-  /* Linia spójna z rzędami */
-  border: 1px solid #cbd5e1;
-  /* border: none; */
+  border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;
   font-family: "Source Sans 3", Calibri, sans-serif;
   font-size: 1.1rem;
   text-align: center;
-  /* Nieco większy padding (4px), aby łatwiej było "trafić" myszką */
-  padding: 4px;
-  margin: 1px 2px;
+  padding: 2px;
+  margin: 2px;
   outline: none;
-  background-color: #ffffff;
-  color: #000000;
-  cursor: pointer;
-  /* Płynne przejście kolorów przy interakcji */
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-sizing: border-box;
 }
 
 .ertp-input-wrapper {
@@ -232,11 +197,20 @@
   /* Zmniejszamy min-height, aby na małych ekranach nie zajmowało pół strony */
   min-height: 30vh;
   /* Kluczowe: ograniczamy wysokość całej sekcji do ok. 40% widoku */
-  max-height: 33vh;
+  max-height: 35vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   margin-top: 10px; /* Odstęp od sekcji Actions nad nim */
+}
+
+.ertp-settlements__header {
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  text-align: center;
+  background-color: rgba(58, 178, 247, 0.2);
+  font-weight: 700;
+  flex-shrink: 0; /* Nagłówek nigdy się nie kurczy ani nie znika */
 }
 
 /* Data rozliczenia autostacja jako stały element rzędu */
@@ -351,17 +325,13 @@
   flex-direction: column;
 }
 
-.ertp__header {
-  width: 100%;
+.ertp-management__header {
   font-size: 1.08rem;
-  /* border: 1px solid rgba(0, 92, 145, 0.6); */
-  border: 1px solid rgba(142, 205, 241, 0.6);
-  /* border: none; */
+  border: 1px solid rgba(0, 92, 145, 0.6);
   border-radius: 5px;
-  padding: 5px;
+  padding: 3px;
   text-align: center;
   background-color: rgba(88, 228, 253, 0.4);
-  margin: 2px auto;
 }
 
 .ertp-notes-display {
@@ -369,7 +339,7 @@
   overflow-y: auto;
   border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;
-  /* margin: 5px 0; */
+  margin: 5px 0;
   padding: 5px;
   white-space: pre-wrap; /* Zachowuje entery/nowe linie, ale zawija tekst gdy dotknie krawędzi */
   overflow-wrap: break-word; /* Rozbija bardzo długie słowa (np. linki), aby nie wystawały poza ramkę */

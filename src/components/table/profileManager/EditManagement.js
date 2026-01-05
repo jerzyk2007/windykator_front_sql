@@ -75,7 +75,7 @@ const EditManagement = ({
     <section className="ertp-management-wrapper">
       {/* SEKCJA DATY */}
       <section className="ertp-management-sub ertp-management-sub--date">
-        <span className="ertp-management__header">
+        <span className="ertp__header">
           Historia zmiany daty ostatecznego rozliczenia
         </span>
         <div className="ertp-notes-display" ref={historiaRef}>
@@ -117,7 +117,7 @@ const EditManagement = ({
 
       {/* SEKCJA NOTATEK DLA ZARZĄDU */}
       <section className="ertp-management-sub ertp-management-sub--note">
-        <span className="ertp-management__header">
+        <span className="ertp__header">
           Informacja do przekazania dla Zarządu
         </span>
         <div className="ertp-notes-display" ref={zarzadRef}>

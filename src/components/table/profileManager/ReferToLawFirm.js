@@ -404,7 +404,7 @@ const ReferToLawFirm = ({
 
   const referPanel = () => (
     <section className="ertp-data-section ertp-law-firm-transfer">
-      <span className="ertp-section-header--highlight">
+      <span className="ertp__header">
         Przekaż sprawę do zewnętrznej kancelarii
       </span>
 
@@ -516,7 +516,7 @@ const ReferToLawFirm = ({
 
   const infoPanel = () => (
     <section className="ertp-data-section ertp-law-firm-transfer">
-      <span className="ertp-section-header--highlight">Informacja</span>
+      <span className="ertp__header">Informacja</span>
       <section className="ertp-info-box">
         <span>Sprawę przekazano do kancelarii:</span>
         <span className="ertp-info-box__date">{lawFirmTransferDate}</span>

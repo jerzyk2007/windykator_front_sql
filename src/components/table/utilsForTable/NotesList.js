@@ -13,16 +13,18 @@ const NotesList = ({
     return profile === "Pracownik"
       ? {
           color: info === "name" ? "rgba(42, 4, 207, 1)" : dateColor,
-          fontWeight: "bold",
+          // fontWeight: "bold",
+          fontWeight: "600",
         }
       : profile === "Kancelaria"
       ? {
           color: info === "name" ? "rgba(192, 112, 8, 1)" : dateColor,
-          fontWeight: "bold",
+          // fontWeight: "bold",
+          fontWeight: "600",
         }
       : {
           color: info === "name" ? "rgba(255, 14, 203, 1)" : dateColor,
-          fontWeight: "bold",
+          fontWeight: "600",
         };
   };
 

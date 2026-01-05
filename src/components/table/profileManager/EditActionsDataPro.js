@@ -650,6 +650,7 @@ const EditDocActionsPro = ({
           <span className="ertp-data-row__label">Wysokość wpłaty:</span>
           <input
             className="ertp-textarea ertp-input--alert"
+            style={{ textAlign: "center" }}
             type="text"
             value={displayKwotaSplaty}
             placeholder={formatAmount(rowData.NALEZNOSC)}

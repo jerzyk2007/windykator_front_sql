@@ -56,275 +56,6 @@ const BasicDataInsider = ({
     }
   }, [rowData.DZIAL]);
 
-  // return (
-  //   <section className="edit_doc edit_doc_basic-data">
-  //     <section className="edit_doc__container">
-  //       <span className="edit_doc--title">Faktura:</span>
-  //       <span className="edit_doc--content">{rowData.NUMER_FV}</span>
-  //     </section>
-  //     <section className="edit_doc__container">
-  //       <span className="edit_doc--title">Data wystawienia:</span>
-  //       <span className="edit_doc--content">{rowData.DATA_FV}</span>
-  //     </section>
-  //     <section className="edit_doc__container">
-  //       <span className="edit_doc--title">Termin płatności:</span>
-  //       <span className="edit_doc--content">{rowData.TERMIN}</span>
-  //     </section>
-  //     <section className="edit_doc__container">
-  //       <span className="edit_doc--title">Po terminie:</span>
-  //       <span
-  //         className="edit_doc--content"
-  //         style={
-  //           rowData.ILE_DNI_PO_TERMINIE > 0
-  //             ? { backgroundColor: "rgba(240, 69, 69, .7)" }
-  //             : null
-  //         }
-  //       >
-  //         {rowData.ILE_DNI_PO_TERMINIE}
-  //       </span>
-  //     </section>
-  //     {rowData?.AREA === "BLACHARNIA" && authLogin.includes(login) && (
-  //       <section className="edit_doc__container">
-  //         <span className="edit_doc--title">Przypisz inny dział:</span>
-  //         <select
-  //           className="edit_doc--select"
-  //           style={{ backgroundColor: "#f5ffe3" }}
-  //           value={changeDepartment.newDep || changeDepartment.oldDep} // pokażemy oldDep, jeśli newDep jest pusty
-  //           onChange={(e) => {
-  //             const newDep = e.target.value;
-
-  //             setRowData((prev) => ({
-  //               ...prev,
-  //               DZIAL: newDep,
-  //             }));
-
-  //             handleAddNote(
-  //               `Zmiana działu: ${changeDepartment.oldDep} na ${newDep}`,
-  //               "log",
-  //               context
-  //             );
-  //           }}
-  //         >
-  //           {/* Początkowa opcja, disabled */}
-  //           {changeDepartment.oldDep && (
-  //             <option value={changeDepartment.oldDep} disabled>
-  //               {changeDepartment.oldDep}
-  //             </option>
-  //           )}
-
-  //           {/* Pozostałe opcje */}
-  //           {changeDepartment.optionsDep
-  //             .filter((dep) => dep !== changeDepartment.oldDep)
-  //             .map((dep) => (
-  //               <option key={dep} value={dep}>
-  //                 {dep}
-  //               </option>
-  //             ))}
-  //         </select>
-  //       </section>
-  //     )}
-
-  //     <section className="edit_doc__container">
-  //       <span className="edit_doc--title">Brutto:</span>
-  //       <span className="edit_doc--content">
-  //         {rowData?.BRUTTO
-  //           ? rowData.BRUTTO.toLocaleString("pl-PL", {
-  //               minimumFractionDigits: 2,
-  //               maximumFractionDigits: 2,
-  //               useGrouping: true,
-  //             })
-  //           : ""}
-  //       </span>
-  //     </section>
-  //     <section className="edit_doc__container">
-  //       <span className="edit_doc--title">Netto:</span>
-  //       <span className="edit_doc--content">
-  //         {rowData?.NETTO
-  //           ? rowData.NETTO.toLocaleString("pl-PL", {
-  //               minimumFractionDigits: 2,
-  //               maximumFractionDigits: 2,
-  //               useGrouping: true,
-  //             })
-  //           : ""}
-  //       </span>
-  //     </section>
-  //     {rowData.AREA === "BLACHARNIA" && (
-  //       <section className="edit_doc__container">
-  //         <span className="edit_doc--title">Netto + 50% VAT:</span>
-  //         <span className="edit_doc--content">
-  //           {(
-  //             rowData.NETTO +
-  //             parseFloat(((rowData.BRUTTO - rowData.NETTO) / 2).toFixed(2))
-  //           ).toLocaleString("pl-PL", {
-  //             minimumFractionDigits: 2,
-  //             maximumFractionDigits: 2,
-  //             useGrouping: true,
-  //           })}
-  //         </span>
-  //       </section>
-  //     )}
-
-  //     {rowData.AREA === "BLACHARNIA" && (
-  //       <section className="edit_doc__container">
-  //         <span className="edit_doc--title">100% VAT:</span>
-  //         <span
-  //           className="edit_doc--content"
-  //           style={{
-  //             backgroundColor:
-  //               Math.abs(
-  //                 rowData.BRUTTO - rowData.NETTO - rowData.DO_ROZLICZENIA
-  //               ) <= 1
-  //                 ? "rgba(240, 69, 69, .7)"
-  //                 : null,
-  //           }}
-  //         >
-  //           {(rowData.BRUTTO - rowData.NETTO).toLocaleString("pl-PL", {
-  //             minimumFractionDigits: 2,
-  //             maximumFractionDigits: 2,
-  //             useGrouping: true,
-  //           })}
-  //         </span>
-  //       </section>
-  //     )}
-
-  //     {rowData.AREA === "BLACHARNIA" && (
-  //       <section className="edit_doc__container">
-  //         <span className="edit_doc--title">50% VAT:</span>
-  //         <span
-  //           className="edit_doc--content"
-  //           style={{
-  //             backgroundColor:
-  //               Math.abs(
-  //                 (rowData.BRUTTO - rowData.NETTO) / 2 - rowData.DO_ROZLICZENIA
-  //               ) <= 1
-  //                 ? "rgba(240, 69, 69, .7)"
-  //                 : null,
-  //           }}
-  //         >
-  //           {((rowData.BRUTTO - rowData.NETTO) / 2).toLocaleString("pl-PL", {
-  //             minimumFractionDigits: 2,
-  //             maximumFractionDigits: 2,
-  //             useGrouping: true,
-  //           })}
-  //         </span>
-  //       </section>
-  //     )}
-
-  //     <section className="edit_doc__container">
-  //       <span className="edit_doc--title">Do rozliczenia AS:</span>
-  //       <span
-  //         className="edit_doc--content"
-  //         style={{ backgroundColor: "rgba(248, 255, 152, .6)" }}
-  //       >
-  //         {rowData.DO_ROZLICZENIA
-  //           ? rowData.DO_ROZLICZENIA.toLocaleString("pl-PL", {
-  //               minimumFractionDigits: 2,
-  //               maximumFractionDigits: 2,
-  //               useGrouping: true,
-  //             })
-  //           : "0,00"}
-  //       </span>
-  //     </section>
-
-  //     {rowData.AREA === "SERWIS" ||
-  //       (rowData.FIRMA === "RAC" && (
-  //         <section className="edit_doc__container">
-  //           <span className="edit_doc--title">Typ płatności:</span>
-  //           <span
-  //             className="edit_doc--content"
-  //             style={
-  //               rowData.TYP_PLATNOSCI === "Gotówka"
-  //                 ? { backgroundColor: "rgba(240, 69, 69, .7)" }
-  //                 : null
-  //             }
-  //           >
-  //             {rowData.TYP_PLATNOSCI}
-  //           </span>
-  //         </section>
-  //       ))}
-
-  //     {rowData.AREA === "BLACHARNIA" && (
-  //       <section className="edit_doc__container">
-  //         <span className="edit_doc--title">Nr szkody:</span>
-  //         <span className="edit_doc--content">{rowData.NR_SZKODY}</span>
-  //       </section>
-  //     )}
-  //     {rowData.AREA !== "BLACHARNIA" && rowData.FIRMA !== "RAC" && (
-  //       <section className="edit_doc__container">
-  //         <span className="edit_doc--title">Nr autoryzacji:</span>
-  //         <span className="edit_doc--content">{rowData.NR_AUTORYZACJI}</span>
-  //       </section>
-  //     )}
-
-  //     {rowData.AREA !== "CZĘŚCI" &&
-  //       rowData.AREA !== "SAMOCHODY NOWE" &&
-  //       rowData.FIRMA !== "RAC" && (
-  //         <section className="edit_doc__container">
-  //           <span className="edit_doc--title">Nr rejestracyjny:</span>
-  //           <span className="edit_doc--content">
-  //             {rowData.NR_REJESTRACYJNY}
-  //           </span>
-  //         </section>
-  //       )}
-  //     {rowData.AREA !== "CZĘŚCI" &&
-  //       rowData.AREA !== "BLACHARNIA" &&
-  //       rowData.FIRMA !== "RAC" && (
-  //         <section className="edit_doc__container">
-  //           <span className="edit_doc--title">Nr VIN:</span>
-  //           <span className="edit_doc--content">{rowData.VIN}</span>
-  //         </section>
-  //       )}
-
-  //     <section className="edit_doc__container">
-  //       <span className="edit_doc--title">Doradca:</span>
-  //       <span className="edit_doc--content">{rowData.DORADCA}</span>
-  //     </section>
-  //     <section className="edit_doc__container">
-  //       <span className="edit_doc--title">Kontrahent:</span>
-  //       <span
-  //         className={
-  //           rowData?.KONTRAHENT?.length > 140
-  //             ? "edit_doc--content-scroll"
-  //             : "edit_doc--content"
-  //         }
-  //         style={
-  //           rowData?.KONTRAHENT?.length > 140 && rowData.AREA === "BLACHARNIA"
-  //             ? { overflowY: "auto", maxHeight: "80px" }
-  //             : null
-  //         }
-  //       >
-  //         {rowData.KONTRAHENT}
-  //       </span>
-  //     </section>
-
-  //     {rowData.AREA !== "BLACHARNIA" && (
-  //       <section className="edit_doc__container">
-  //         <span className="edit_doc--title">NIP:</span>
-  //         <span className="edit_doc--content">{formatNip(rowData.NIP)}</span>
-  //       </section>
-  //     )}
-
-  //     <section className="edit_doc__container">
-  //       <span className="edit_doc--title">Uwagi z faktury:</span>
-  //       <span
-  //         className={
-  //           rowData?.UWAGI_Z_FAKTURY?.length > 70
-  //             ? "edit_doc--content-scroll"
-  //             : "edit_doc--content"
-  //         }
-  //         style={
-  //           rowData?.UWAGI_Z_FAKTURY?.length > 70 &&
-  //           rowData.AREA === "BLACHARNIA"
-  //             ? { overflowY: "auto", maxHeight: "70px" }
-  //             : null
-  //         }
-  //       >
-  //         {rowData.UWAGI_Z_FAKTURY}
-  //       </span>
-  //     </section>
-  //   </section>
-  // );
-
   return (
     <section className="ertp-data-section">
       <section className="ertp-data-row">
@@ -345,7 +76,7 @@ const BasicDataInsider = ({
           className="ertp-data-row__value"
           style={
             rowData.ILE_DNI_PO_TERMINIE > 0
-              ? { backgroundColor: "rgba(240, 69, 69, .7)" }
+              ? { backgroundColor: "rgba(255, 130, 130, 1)" }
               : null
           }
         >
@@ -355,7 +86,9 @@ const BasicDataInsider = ({
 
       {rowData?.AREA === "BLACHARNIA" && authLogin.includes(login) && (
         <section className="ertp-data-row">
-          <span className="ertp-data-row__label">Przypisz inny dział:</span>
+          <span className="ertp-data-row__label" style={{ border: "none" }}>
+            Przypisz inny dział:
+          </span>
           <select
             className="ertp-input-select"
             style={{ backgroundColor: "#f5ffe3" }}
@@ -390,11 +123,12 @@ const BasicDataInsider = ({
         <span className="ertp-data-row__label">Brutto:</span>
         <span className="ertp-data-row__value">
           {rowData?.BRUTTO
-            ? rowData.BRUTTO.toLocaleString("pl-PL", {
+            ? Number(rowData.BRUTTO).toLocaleString("pl-PL", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
+                useGrouping: true, // Wymusza separatory tysięcy
               })
-            : ""}
+            : "0,00"}
         </span>
       </section>
 
@@ -402,11 +136,12 @@ const BasicDataInsider = ({
         <span className="ertp-data-row__label">Netto:</span>
         <span className="ertp-data-row__value">
           {rowData?.NETTO
-            ? rowData.NETTO.toLocaleString("pl-PL", {
+            ? Number(rowData.NETTO).toLocaleString("pl-PL", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
+                useGrouping: true, // Wymusza separatory tysięcy
               })
-            : ""}
+            : "0,00"}
         </span>
       </section>
 
@@ -415,16 +150,20 @@ const BasicDataInsider = ({
           <section className="ertp-data-row">
             <span className="ertp-data-row__label">Netto + 50% VAT:</span>
             <span className="ertp-data-row__value">
-              {(
-                rowData.NETTO +
-                parseFloat(((rowData.BRUTTO - rowData.NETTO) / 2).toFixed(2))
-              ).toLocaleString("pl-PL", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              {rowData?.NETTO && rowData?.BRUTTO
+                ? (
+                    (Number(rowData.NETTO) + Number(rowData.BRUTTO)) /
+                    2
+                  ).toLocaleString("pl-PL", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                    useGrouping: true, // Wymusza odstępy tysięcy (np. 1 250,00)
+                  })
+                : "0,00"}
             </span>
           </section>
-          <section className="ertp-data-row">
+
+          {/* <section className="ertp-data-row">
             <span className="ertp-data-row__label">100% VAT:</span>
             <span
               className="ertp-data-row__value"
@@ -442,8 +181,49 @@ const BasicDataInsider = ({
                 maximumFractionDigits: 2,
               })}
             </span>
-          </section>
+          </section> */}
           <section className="ertp-data-row">
+            <span className="ertp-data-row__label">100% VAT:</span>
+            <span
+              className="ertp-data-row__value"
+              style={{
+                backgroundColor:
+                  Math.abs(
+                    Number(rowData.BRUTTO) -
+                      Number(rowData.NETTO) -
+                      Number(rowData.DO_ROZLICZENIA)
+                  ) <= 1
+                    ? "#fee2e2" // Pastelowy jasny czerwony
+                    : "white",
+                color:
+                  Math.abs(
+                    Number(rowData.BRUTTO) -
+                      Number(rowData.NETTO) -
+                      Number(rowData.DO_ROZLICZENIA)
+                  ) <= 1
+                    ? "#991b1b" // Ciemniejszy czerwony tekst dla lepszego kontrastu
+                    : "#000000ff",
+                fontWeight:
+                  Math.abs(
+                    Number(rowData.BRUTTO) -
+                      Number(rowData.NETTO) -
+                      Number(rowData.DO_ROZLICZENIA)
+                  ) <= 1
+                    ? "600"
+                    : "normal",
+              }}
+            >
+              {(Number(rowData.BRUTTO) - Number(rowData.NETTO)).toLocaleString(
+                "pl-PL",
+                {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                  useGrouping: true, // Włącza odstępy tysięcy
+                }
+              )}
+            </span>
+          </section>
+          {/* <section className="ertp-data-row">
             <span className="ertp-data-row__label">50% VAT:</span>
             <span
               className="ertp-data-row__value"
@@ -462,11 +242,49 @@ const BasicDataInsider = ({
                 maximumFractionDigits: 2,
               })}
             </span>
+          </section> */}
+          <section className="ertp-data-row">
+            <span className="ertp-data-row__label">50% VAT:</span>
+            <span
+              className="ertp-data-row__value"
+              style={{
+                backgroundColor:
+                  Math.abs(
+                    (Number(rowData.BRUTTO) - Number(rowData.NETTO)) / 2 -
+                      Number(rowData.DO_ROZLICZENIA)
+                  ) <= 1
+                    ? "#fee2e2" // Pastelowy jasny czerwony
+                    : "white",
+                color:
+                  Math.abs(
+                    (Number(rowData.BRUTTO) - Number(rowData.NETTO)) / 2 -
+                      Number(rowData.DO_ROZLICZENIA)
+                  ) <= 1
+                    ? "#991b1b"
+                    : "#000000ff",
+                fontWeight:
+                  Math.abs(
+                    (Number(rowData.BRUTTO) - Number(rowData.NETTO)) / 2 -
+                      Number(rowData.DO_ROZLICZENIA)
+                  ) <= 1
+                    ? "600"
+                    : "normal",
+              }}
+            >
+              {(
+                (Number(rowData.BRUTTO) - Number(rowData.NETTO)) /
+                2
+              ).toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true, // Włącza odstępy tysięcy
+              })}
+            </span>
           </section>
         </>
       )}
 
-      <section className="ertp-data-row">
+      {/* <section className="ertp-data-row">
         <span className="ertp-data-row__label">Do rozliczenia AS:</span>
         <span
           className="ertp-data-row__value"
@@ -479,8 +297,28 @@ const BasicDataInsider = ({
               })
             : "0,00"}
         </span>
-      </section>
+      </section> */}
 
+      <section className="ertp-data-row">
+        <span className="ertp-data-row__label">Do rozliczenia AS:</span>
+        <span
+          className="ertp-data-row__value"
+          style={{
+            backgroundColor: "#fef9c3", // Pastelowy, "spokojny" żółty (bezpieczniejszy dla wzroku)
+            fontWeight: "500", // Lekkie pogrubienie dla ważnej kwoty
+            color: "#1e293b", // Ciemny grafitowy tekst dla wysokiego kontrastu
+            // border: "1px solid #eab308", // Delikatnie ciemniejsza linia, żeby podkreślić to pole
+          }}
+        >
+          {rowData?.DO_ROZLICZENIA
+            ? Number(rowData.DO_ROZLICZENIA).toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true, // Włącza odstępy tysięcy (np. 1 250,00)
+              })
+            : "0,00"}
+        </span>
+      </section>
       {/* ... dalsze sekcje (DORADCA, KONTRAHENT itd.) analogicznie ... */}
       {/* Poniżej przykład dla Kontrahenta ze scrollem */}
 
