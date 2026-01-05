@@ -16,7 +16,7 @@ import UserSettings from "./components/user_permissions/UserSettings";
 import TableColumns from "./components/system_settings/TableColumns";
 import RaportDepartments from "./components/raports/RaportDepartments";
 import RaportAdvisers from "./components/raports/RaportAdvisers";
-import FKAddData from "./components/FKRaport/FKAddData";
+import RaportDraft from "./components/FKRaport/RaportDraft";
 import ChangeOrgStr from "./components/system_settings/ChangeOrgStr";
 import OrganizationStructure from "./components/system_settings/OrganizationStructure";
 import PrepareTable from "./components/table/PrepareTable";
@@ -210,37 +210,26 @@ function App() {
                 element={<RaportAdvisers profile={"insider"} />}
               />
             </Route>
-            {/* <Route element={<RequireAuth allowedRoles={[1000]} />}>
-              <Route path="/raport-areas" element={<RaportAreas />} />
-            </Route> */}
-
-            {/* <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
-              <Route path="/generate-raport-fk-KRT" element={<FKAddData company={"KRT"} />} />
-            </Route>
-
-            <Route element={<RequireAuth allowedRoles={[200, 1000]} />}>
-              <Route path="/generate-raport-fk-KEM" element={<FKAddData company={"KEM"} />} />
-            </Route> */}
 
             {/* dodanie key powoduje, że kompnent się odświeża */}
             <Route element={<RequireAuth allowedRoles={[200, 1000, 2000]} />}>
               <Route
                 path="/generate-raport-fk-KRT"
-                element={<FKAddData key="KRT" company="KRT" />}
+                element={<RaportDraft key="KRT" company="KRT" />}
               />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[201, 1000, 2000]} />}>
               <Route
                 path="/generate-raport-fk-KEM"
-                element={<FKAddData key="KEM" company="KEM" />}
+                element={<RaportDraft key="KEM" company="KEM" />}
               />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[202, 1000, 2000]} />}>
               <Route
                 path="/generate-raport-fk-RAC"
-                element={<FKAddData key="RAC" company="RAC" />}
+                element={<RaportDraft key="RAC" company="RAC" />}
               />
             </Route>
 

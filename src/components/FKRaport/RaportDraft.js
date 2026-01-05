@@ -3,9 +3,9 @@ import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
 import Button from "@mui/material/Button";
 import { saveAs } from "file-saver";
-import "./FKAddData.css";
+import "./RaportDraft.css";
 
-const FKAddData = ({ company }) => {
+const RaportDraft = ({ company }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [pleaseWait, setPleaseWait] = useState(false);
@@ -259,4 +259,4 @@ const FKAddData = ({ company }) => {
   );
 };
 
-export default FKAddData;
+export default RaportDraft;
