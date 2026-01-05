@@ -58,9 +58,7 @@ const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
 
       {/* Wykorzystanie standardowych klas rzędu dla daty rozliczenia */}
       <section className="ertp-data-row">
-        <span className="ertp-data-row__label">
-          Data rozliczenia autostacja:
-        </span>
+        <span className="ertp-data-row__label">Data rozliczenia AS:</span>
         <span className="ertp-data-row__value">{date || "brak danych"}</span>
       </section>
 

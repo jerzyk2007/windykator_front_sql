@@ -190,15 +190,18 @@
 }
 
 /* ==========================================================================
-   SEKCJE SPECJALISTYCZNE (Settlements, Accept, Law Firm)
+   SEKCJE SPECJALISTYCZNE (Settlements)
    ========================================================================== */
 
-/* Opisy rozrachunków */
 .ertp-settlements-section {
-  min-height: 25vh;
-  flex-grow: 1;
+  /* Zmniejszamy min-height, aby na małych ekranach nie zajmowało pół strony */
+  min-height: 30vh;
+  /* Kluczowe: ograniczamy wysokość całej sekcji do ok. 40% widoku */
+  max-height: 35vh;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  margin-top: 10px; /* Odstęp od sekcji Actions nad nim */
 }
 
 .ertp-settlements__header {
@@ -206,28 +209,34 @@
   border-radius: 5px;
   text-align: center;
   background-color: rgba(58, 178, 247, 0.2);
+  font-weight: 700;
+  flex-shrink: 0; /* Nagłówek nigdy się nie kurczy ani nie znika */
+}
+
+/* Data rozliczenia autostacja jako stały element rzędu */
+.ertp-settlements-section .ertp-data-row {
+  flex-shrink: 0; /* Ten wiersz nie może zniknąć przy scrollowaniu */
+}
+
+.ertp-settlement-item__date {
+  color: #2a8a21;
+  font-weight: 600;
+}
+
+.ertp-settlement-item__amount {
+  color: red;
+  font-weight: 600;
 }
 
 .ertp-settlements__scroll-box {
-  flex-grow: 1;
+  flex-grow: 1; /* Zajmuje całą pozostałą przestrzeń wewnątrz 40vh */
   padding: 5px;
   border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;
-  overflow-y: auto;
+  overflow-y: auto; /* Pojawi się suwak, gdy danych będzie dużo */
   white-space: pre-wrap;
-}
-
-.ertp-settlement-item {
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 2px;
-}
-.ertp-settlement-item__date {
-  color: #007bff;
-  font-weight: 600;
-}
-.ertp-settlement-item__amount {
-  color: #0f962fff;
-  font-weight: 600;
+  background-color: #fff;
+  box-sizing: border-box;
 }
 
 /* Panel Akceptacji */
@@ -332,7 +341,10 @@
   border-radius: 5px;
   margin: 5px 0;
   padding: 5px;
-  /* background-color: #fafafa; */
+  white-space: pre-wrap; /* Zachowuje entery/nowe linie, ale zawija tekst gdy dotknie krawędzi */
+  overflow-wrap: break-word; /* Rozbija bardzo długie słowa (np. linki), aby nie wystawały poza ramkę */
+  word-break: break-word; /* Dodatkowe zabezpieczenie dla starszych przeglądarek */
+  overflow-x: hidden; /* Całkowicie blokuje suwak poziomy */
 }
 
 /* Zabezpieczenie listy notatek i textarea */

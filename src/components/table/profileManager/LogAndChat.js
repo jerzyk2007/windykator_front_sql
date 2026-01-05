@@ -87,11 +87,11 @@ const LogAndChat = ({
         style={
           panel === "chat"
             ? context === "controlBL"
-              ? { backgroundColor: "rgba(255, 140, 94, 1)" }
+              ? { backgroundColor: "rgba(255, 226, 129, 1)" }
               : { backgroundColor: "rgb(166, 255, 131)" }
             : panel === "logi"
             ? context === "controlBL"
-              ? { backgroundColor: "rgba(126, 236, 255, 1)" }
+              ? { backgroundColor: "rgba(158, 240, 255, 1)" }
               : { backgroundColor: "rgba(253, 255, 126, 1)" }
             : null
         }
