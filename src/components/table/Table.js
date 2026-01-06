@@ -23,7 +23,7 @@ import {
   insuranceRaport,
 } from "./utilsForTable/excelFilteredTable";
 import TableButtonInfo from "./TableButtonInfo";
-import EditRowTablePro from "./profileManager/EditRowTablePro";
+import EditRowTablePro from "./editDocument/EditRowTablePro";
 import PleaseWait from "../PleaseWait";
 
 import "./Table.css";
