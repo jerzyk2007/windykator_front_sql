@@ -21,7 +21,7 @@ import ChangeOrgStr from "./components/system_settings/ChangeOrgStr";
 import OrganizationStructure from "./components/system_settings/OrganizationStructure";
 import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
-import AddDoc from "./components/table/profileManager/AddDoc";
+import AddDoc from "./components/table/editDocument/AddDoc";
 import Instruction from "./components/instruction/Instruction";
 import ConfirmResetPassword from "./components/user/ConfirmResetPassword";
 // import RaportAreas from "./components/raports/RaportAreas";
