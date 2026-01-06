@@ -335,10 +335,10 @@ const Table = ({
       sx: {
         fontWeight: "600",
         fontFamily: "'Source Sans 3', Calibri, sans-serif",
-        fontSize: ".95rem",
+        fontSize: ".9rem",
         color: "black",
-        backgroundColor: "#bfe2ff",
-        borderRight: "1px solid #c9c7c7",
+        background: "rgba(233, 245, 255, 1)",
+        borderRight: "1px solid #eeededff",
         minHeight: "3rem",
         display: "flex",
         justifyContent: "center",
@@ -361,6 +361,7 @@ const Table = ({
       },
     }),
     muiTableBodyCellProps: ({ row }) => ({
+      className: "mrt-custom-body-cell",
       onDoubleClick: () => {
         // 1. Sprawdzamy, czy którakolwiek z wymaganych ról znajduje się w tablicy auth.roles
         const hasAccess = [110, 120, 350, 500, 2000].some((role) =>

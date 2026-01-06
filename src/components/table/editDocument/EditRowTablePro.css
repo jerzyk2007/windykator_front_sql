@@ -9,15 +9,18 @@
   font-size: 1.1rem;
   z-index: 5;
   background-color: #fff;
-  max-height: 90vh;
-  /* overflow: auto; */
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 40px);
+  max-height: calc(100vh - 40px);
+  overflow: hidden; /* Ważne: wrapper sam w sobie nie powinien się przewijać */
+  position: relative;
 }
 
 .ertp-main-container {
-  flex-grow: 1;
-  display: flex;
+  flex-grow: 1; /* Zajmuje całą wolną przestrzeń */
+  overflow-y: auto; /* Jeśli treści jest za dużo, przewija się tylko ten środek */
+  min-height: 0;
 }
 
 .ertp-actions-wrapper {
@@ -38,10 +41,6 @@
 }
 
 .ertp-columns-layout {
-  height: 85vh;
-  max-height: 85vh;
-
-  padding: 0 2px;
   flex-grow: 1;
   display: flex;
   justify-content: space-around;
@@ -111,10 +110,9 @@
 
 .ertp-data-row__label--read-only {
   /* Nieco ciemniejszy pastel dla pól zablokowanych */
-  background-color: #e2e8f0;
-  background-color: #f2f4f7;
-  color: #64748b;
-  border-color: #94a3b8;
+  background-color: #e4ebf7;
+  color: #3e4755;
+  /* border-color: #94a3b8; */
 }
 
 .ertp-data-row__value {
@@ -428,6 +426,18 @@
   animation: ertp-click-effect 0.3s ease;
 }
 
+.info_desk__container {
+  font-size: 1.1rem;
+}
+
+.info_desk--date,
+.info_desk--username,
+.info_desk--note {
+  font-family: "Source Sans 3", Calibri, sans-serif;
+
+  /* font-size: 1.2rem; */
+}
+
 @keyframes ertp-click-effect {
   0% {
     transform: scale(1);
@@ -493,13 +503,18 @@
 .ertp-bottom-panel {
   min-width: 1500px;
   padding: 2px;
+  flex-shrink: 0; /* Zapobiega zgniataniu panelu przez resztę treści */
+  background-color: #fff; /* Dodaj tło, żeby treść pod spodem nie prześwitywała */
+  border-top: 1px solid #cbd5e1; /* Opcjonalna linia oddzielająca dla czytelności */
+  width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .ertp-actions-group {
   flex-basis: 33%;
-  height: 50px;
+  margin: 0;
   display: flex;
   justify-content: space-evenly;
   align-items: center;

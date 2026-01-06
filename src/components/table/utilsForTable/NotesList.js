@@ -30,7 +30,12 @@ const NotesList = ({
 
   return data?.map((item, index) => (
     <section className="info_desk__container" key={index}>
-      <span style={spanInfoStyle(item.profile, "date")}>{item.date}</span>
+      <span
+        className="info_desk--date"
+        style={spanInfoStyle(item.profile, "date")}
+      >
+        {item.date}
+      </span>
 
       {item?.date && <span>{" - "}</span>}
 
@@ -48,7 +53,10 @@ const NotesList = ({
 
       {item?.username && <span>{" - "}</span>}
 
-      <span style={preWrap ? { whiteSpace: "pre-wrap" } : undefined}>
+      <span
+        className="info_desk--note"
+        style={preWrap ? { whiteSpace: "pre-wrap" } : undefined}
+      >
         {item.note}
       </span>
     </section>

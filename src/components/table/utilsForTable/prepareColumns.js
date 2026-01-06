@@ -153,7 +153,8 @@ export const prepareColumnsInsider = (columnsData) => {
           ...muiTableBodyCellProps.sx,
           backgroundColor:
             cell.column.id === "ILE_DNI_PO_TERMINIE" && cell.getValue() > 0
-              ? "rgb(250, 136, 136)"
+              ? // ? "rgb(250, 136, 136)"
+                "rgba(255, 233, 233, 1)"
               : "white",
         },
       });
@@ -164,7 +165,7 @@ export const prepareColumnsInsider = (columnsData) => {
         ...muiTableBodyCellProps,
         sx: {
           ...muiTableBodyCellProps.sx,
-          backgroundColor: "rgba(248, 255, 152, .2)",
+          backgroundColor: "rgba(255, 253, 240, 1)",
         },
       });
     }
