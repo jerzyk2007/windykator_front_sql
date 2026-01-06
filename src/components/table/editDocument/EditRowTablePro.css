@@ -359,7 +359,7 @@
   padding: 5px;
   text-align: center;
   background-color: rgba(88, 228, 253, 0.4);
-  margin: 2px auto;
+  /* margin: 2px auto; */
 }
 
 .ertp-notes-display {
@@ -462,8 +462,10 @@
   border-radius: 6px;
   max-width: 400px;
   font-size: 1rem;
+  font-weight: 400;
   pointer-events: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  /* border-radius: 5px; */
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); */
 }
 
 .portal-tooltip.top,
@@ -551,6 +553,9 @@
   justify-content: center;
   width: 100%;
   box-sizing: border-box;
+}
+.ertp-input-group-vertical span {
+  text-align: center;
 }
 
 /* --- UJEDNOLICENIE INPUTA TEKSTOWEGO --- */
