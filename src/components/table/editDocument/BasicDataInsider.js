@@ -20,7 +20,6 @@ const BasicDataInsider = ({
   context,
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-
   // zmienna dla zmiany DZIALu przez Blacharnie
   const [changeDepartment, setChangeDepartment] = useState({
     oldDep: "",
@@ -319,8 +318,61 @@ const BasicDataInsider = ({
             : "0,00"}
         </span>
       </section>
-      {/* ... dalsze sekcje (DORADCA, KONTRAHENT itd.) analogicznie ... */}
       {/* Poniżej przykład dla Kontrahenta ze scrollem */}
+
+      {rowData.AREA === "SERWIS" ||
+        (rowData.FIRMA === "RAC" && (
+          <section className="ertp-data-row">
+            <span className="ertp-data-row__label">Typ płatności:</span>
+            <span
+              className="ertp-data-row__value"
+              style={
+                rowData.TYP_PLATNOSCI === "Gotówka"
+                  ? { backgroundColor: "rgba(240, 69, 69, .7)" }
+                  : null
+              }
+            >
+              {rowData.TYP_PLATNOSCI}
+            </span>
+          </section>
+        ))}
+
+      {rowData.AREA === "BLACHARNIA" && (
+        <section className="ertp-data-row">
+          <span className="ertp-data-row__label">Nr szkody:</span>
+          <span className="ertp-data-row__value">{rowData.NR_SZKODY}</span>
+        </section>
+      )}
+      {rowData.AREA !== "BLACHARNIA" && rowData.FIRMA !== "RAC" && (
+        <section className="ertp-data-row">
+          <span className="ertp-data-row__label">Nr autoryzacji:</span>
+          <span className="ertp-data-row__value">{rowData.NR_AUTORYZACJI}</span>
+        </section>
+      )}
+
+      {rowData.AREA !== "CZĘŚCI" &&
+        rowData.AREA !== "SAMOCHODY NOWE" &&
+        rowData.FIRMA !== "RAC" && (
+          <section className="ertp-data-row">
+            <span className="ertp-data-row__label">Nr rejestracyjny:</span>
+            <span className="ertp-data-row__value">
+              {rowData.NR_REJESTRACYJNY}
+            </span>
+          </section>
+        )}
+      {rowData.AREA !== "CZĘŚCI" &&
+        rowData.AREA !== "BLACHARNIA" &&
+        rowData.FIRMA !== "RAC" && (
+          <section className="ertp-data-row">
+            <span className="ertp-data-row__label">Nr VIN:</span>
+            <span className="ertp-data-row__value">{rowData.VIN}</span>
+          </section>
+        )}
+
+      <section className="ertp-data-row">
+        <span className="ertp-data-row__label">Doradca:</span>
+        <span className="ertp-data-row__value">{rowData.DORADCA}</span>
+      </section>
 
       <section className="ertp-data-row">
         <span className="ertp-data-row__label">Kontrahent:</span>
@@ -339,6 +391,12 @@ const BasicDataInsider = ({
           {rowData.KONTRAHENT}
         </span>
       </section>
+      {rowData.AREA !== "BLACHARNIA" && (
+        <section className="ertp-data-row">
+          <span className="ertp-data-row__label">NIP:</span>
+          <span className="ertp-data-row__value">{rowData.NIP}</span>
+        </section>
+      )}
 
       <section className="ertp-data-row">
         <span className="ertp-data-row__label">Uwagi z faktury:</span>

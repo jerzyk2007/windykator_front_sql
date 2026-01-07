@@ -20,7 +20,7 @@
 .ertp-main-container {
   flex-grow: 1; /* Zajmuje całą wolną przestrzeń */
   overflow-y: auto; /* Jeśli treści jest za dużo, przewija się tylko ten środek */
-  min-height: 0;
+  display: flex;
 }
 
 .ertp-actions-wrapper {
@@ -37,7 +37,8 @@
 }
 
 .ertp-tab-content--active {
-  display: block;
+  flex-grow: 1;
+  display: flex;
 }
 
 .ertp-columns-layout {
@@ -50,13 +51,14 @@
   flex-grow: 1;
   flex-basis: 33%;
   min-width: 500px;
-  min-height: 500px;
-  max-height: 90vh;
-  padding: 1px;
-  margin: 1px;
-  overflow: scroll;
+  height: calc(100vh - 90px);
+  max-height: calc(100vh - 90px);
+  min-height: calc(100vh - 90px);
+  padding: 2px;
+  overflow-x: auto;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 /* Fix dla kolumn, które mają wypełniać 100% wysokości (np. Czat) */
@@ -95,11 +97,10 @@
   border: 1px solid #cfd4da;
   border-radius: 5px;
   /* Odrobina więcej miejsca dla tekstu (lepiej dla wzroku) */
-  padding: 4px 8px;
+  padding: 0 4px;
   margin: 1px 2px;
   /* Pastelowy, czysty błękitny popiel */
   background-color: #f1f5f9;
-  /* Ciemny grafit zamiast czerni - czytelniejszy dla osób 50+ */
   color: #334155;
   font-weight: 500;
   display: flex;
@@ -109,24 +110,18 @@
 }
 
 .ertp-data-row__label--read-only {
-  /* Nieco ciemniejszy pastel dla pól zablokowanych */
-  background-color: #e4ebf7;
-  color: #3e4755;
-  /* border-color: #94a3b8; */
+  padding: 3px;
+  margin: 1px 2px;
 }
 
 .ertp-data-row__value {
   width: 100%;
-  /* word-break: break-all; */
-  /* Zwiększony interlinia (1.4) poprawia czytelność długich nazw i numerów */
   line-height: 1.4;
   flex-basis: 59%;
   text-align: center;
-  /* Obramowanie identyczne jak w labelu dla spójności linii */
   border: 1px solid #cbd5e1;
   border-radius: 5px;
-  /* Większy padding (4px 6px) sprawia, że tekst nie dotyka ramek */
-  padding: 4px 6px;
+  padding: 0 4px;
   margin: 1px 2px;
   display: flex;
   justify-content: center;
@@ -170,8 +165,7 @@
   font-family: "Source Sans 3", Calibri, sans-serif;
   font-size: 1.1rem;
   text-align: center;
-  /* Nieco większy padding (4px), aby łatwiej było "trafić" myszką */
-  padding: 4px;
+  padding: 3px;
   margin: 1px 2px;
   outline: none;
   background-color: #ffffff;
@@ -196,7 +190,6 @@
   width: 98%;
   min-height: 32px;
   padding: 4px 6px;
-  /* margin: 1px 2px; */
   resize: none;
   overflow: hidden;
   text-align: center;
@@ -234,7 +227,6 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  margin-top: 10px; /* Odstęp od sekcji Actions nad nim */
 }
 
 /* Data rozliczenia autostacja jako stały element rzędu */
@@ -332,7 +324,6 @@
 
 .ertp-management-sub--date {
   width: 100%;
-  /* margin: 5px 0; */
   font-size: 1.05rem;
   flex-grow: 1;
 
@@ -341,7 +332,6 @@
   box-sizing: border-box;
 }
 .ertp-management-sub--note {
-  /* max-height: 60%; */
   margin-top: 5px;
   max-height: 60%;
   min-height: 60%;
@@ -352,14 +342,11 @@
 .ertp__header {
   width: 100%;
   font-size: 1.08rem;
-  /* border: 1px solid rgba(0, 92, 145, 0.6); */
   border: 1px solid rgba(142, 205, 241, 0.6);
-  /* border: none; */
   border-radius: 5px;
   padding: 5px;
   text-align: center;
   background-color: rgba(88, 228, 253, 0.4);
-  /* margin: 2px auto; */
 }
 
 .ertp-notes-display {
@@ -367,7 +354,6 @@
   overflow-y: auto;
   border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;
-  /* margin: 5px 0; */
   padding: 5px;
   white-space: pre-wrap; /* Zachowuje entery/nowe linie, ale zawija tekst gdy dotknie krawędzi */
   overflow-wrap: break-word; /* Rozbija bardzo długie słowa (np. linki), aby nie wystawały poza ramkę */
@@ -434,8 +420,6 @@
 .info_desk--username,
 .info_desk--note {
   font-family: "Source Sans 3", Calibri, sans-serif;
-
-  /* font-size: 1.2rem; */
 }
 
 @keyframes ertp-click-effect {
@@ -464,8 +448,6 @@
   font-size: 1rem;
   font-weight: 400;
   pointer-events: none;
-  /* border-radius: 5px; */
-  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); */
 }
 
 .portal-tooltip.top,

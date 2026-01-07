@@ -8,7 +8,6 @@ const ForgotPassword = ({ setForgotPass }) => {
   const [userlogin, setUserlogin] = useState("");
 
   const handleReset = async (e) => {
-    console.log("test");
     e.preventDefault();
     try {
       await axiosPrivate.post("/reset-password", JSON.stringify({ userlogin }));

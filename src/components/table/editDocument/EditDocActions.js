@@ -11,7 +11,7 @@ const EditDocActions = ({
     <section className="ertp-actions-wrapper">
       <section className="ertp-data-section ertp-actions-main-group">
         <section className="ertp-data-row">
-          <span className="ertp-data-row__label ertp-data-row__label--read-only">
+          <span className="ertp-data-row__label ertp-data-row__label--read-only ">
             Jaka kancelaria:
           </span>
           <span className="ertp-data-row__value ertp-data-row__value--read-only">
@@ -212,7 +212,9 @@ const EditDocActions = ({
         )}
 
         <section className="ertp-data-row">
-          <span className="ertp-data-row__label">Wyróżnij kontrahenta:</span>
+          <span className="ertp-data-row__label ertp-data-row__label--read-only">
+            Wyróżnij kontrahenta:
+          </span>
           {roles.includes(110) || roles.includes(120) ? (
             <input
               className="ertp-input-checkbox"

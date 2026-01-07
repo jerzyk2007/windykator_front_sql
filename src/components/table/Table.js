@@ -200,11 +200,20 @@ const Table = ({
   };
 
   const getSingleRow = async (id, type) => {
+    setPleaseWait(true);
+    // NATYCHMIAST CZYŚCIMY DANE, ALE ZOSTAWIAMY TRYB EDYCJI
+    setDataRowTable((prev) => ({
+      ...prev,
+      edit: true,
+      singleDoc: {}, // To usuwa "ducha" starego dokumentu
+      controlDoc: {},
+      lawPartner: [],
+    }));
     const getRow = documents.filter((row) => row.id_document === id);
 
     if (getRow.length > 0) {
       try {
-        setPleaseWait(true);
+        // setPleaseWait(true);
         if (profile === "insider") {
           const response = await axiosPrivateIntercept.get(
             `/documents/get-single-document/${id}`
@@ -243,7 +252,10 @@ const Table = ({
       } catch (error) {
         console.error("Error fetching data from the server:", error);
       } finally {
-        setPleaseWait(false);
+        // setPleaseWait(false);
+        setTimeout(() => {
+          setPleaseWait(false);
+        }, 100);
       }
     } else {
       console.error("No row found with the specified ID");
@@ -483,6 +495,7 @@ const Table = ({
             <PleaseWait />
           ) : (
             <EditRowTablePro
+              // key={dataRowTable.singleDoc?.id_document || "loading"}
               dataRowTable={dataRowTable}
               setDataRowTable={setDataRowTable}
               updateDocuments={updateDocuments}
