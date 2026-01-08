@@ -39,6 +39,25 @@ const UserSetting = () => {
     setIsEditing(true);
   };
 
+  //wyciągam inicjały
+  const getInitials = (login) => {
+    if (!login) return "??";
+
+    // 1. Pobieramy tylko część przed @ (np. "jan.kowalski")
+    const namePart = login.split("@")[0];
+
+    // 2. Dzielimy kropką na części
+    const parts = namePart.split(".");
+
+    if (parts.length >= 2) {
+      // Jeśli są co najmniej dwie części (imię i nazwisko)
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    } else {
+      // Jeśli jest tylko jedna część (np. sam login)
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+  };
+
   useEffect(() => {
     if (!isEditing) {
       setUsers([]);
@@ -91,7 +110,7 @@ const UserSetting = () => {
             {users.map((u, index) => (
               <div className="user-card" key={u.id_user || index}>
                 <div className="user-avatar-placeholder">
-                  {u.userlogin?.substring(0, 2).toUpperCase()}
+                  {getInitials(u.userlogin)}
                 </div>
 
                 <div className="user-info">
