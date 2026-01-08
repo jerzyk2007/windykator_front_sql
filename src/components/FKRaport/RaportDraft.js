@@ -12,12 +12,12 @@ import {
 } from "@mui/material";
 import {
   CloudDownload,
-  Refresh,
   Email,
   ContentCopy,
   EventNote,
   ErrorOutline,
 } from "@mui/icons-material";
+import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import { saveAs } from "file-saver";
 import "./RaportDraft.css";
 
@@ -176,7 +176,7 @@ const RaportDraft = ({ company }) => {
           <Card className="dashboard-card action-card">
             <CardContent>
               <Box display="flex" alignItems="center" gap={1} mb={2}>
-                <Refresh color="primary" />
+                <SummarizeOutlinedIcon color="primary" />
                 <Typography variant="h6">Zarządzanie Raportem</Typography>
               </Box>
 
@@ -194,7 +194,7 @@ const RaportDraft = ({ company }) => {
                     variant="contained"
                     color="error"
                     size="large"
-                    startIcon={<Refresh />}
+                    startIcon={<SummarizeOutlinedIcon />}
                     onClick={createNewRaport}
                   >
                     Przygotuj nowy raport

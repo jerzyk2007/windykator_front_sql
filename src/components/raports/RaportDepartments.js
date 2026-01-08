@@ -309,6 +309,7 @@ const RaportDepartments = ({ profile, reportType }) => {
     },
     muiTableBodyCellProps: () => ({
       className: "raport_departments-cell",
+      // className: "mrt-custom-body-cell",
       align: "center",
     }),
     muiTableContainerProps: { sx: { maxHeight: tableSize } },

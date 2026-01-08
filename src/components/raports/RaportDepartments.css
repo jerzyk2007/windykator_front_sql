@@ -79,11 +79,20 @@
 
 /* STYLE TABELI */
 .raport_departments-cell {
-  font-size: 0.95rem !important;
-  color: #000 !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  color: #000000 !important;
   padding: 4px 8px !important;
   border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
   border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.raport_departments-cell:hover {
+  background-color: rgba(211, 211, 211, 0.6) !important;
+  border: 3px solid rgba(211, 211, 211, 0.6) !important;
+  color: #e74c3c !important;
+  font-weight: 600 !important;
+  border-radius: 10px;
 }
 
 .raport_departments td {

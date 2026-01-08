@@ -67,8 +67,8 @@
 }
 
 .status-item .label {
-  color: #7f8c8d;
-  font-size: 0.95rem;
+  color: #505252;
+  font-size: 1rem;
 }
 
 .status-item .value {
@@ -86,6 +86,10 @@
   font-size: 1.1rem;
 }
 
+.action-container Button,
+.download-container Button {
+  border-radius: 10px !important;
+}
 /* Mail Section */
 .mail-card {
   grid-column: span 2;
