@@ -1,7 +1,23 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import PleaseWait from "../PleaseWait";
-import Button from "@mui/material/Button";
+import {
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Divider,
+  Box,
+  Chip,
+} from "@mui/material";
+import {
+  CloudDownload,
+  Refresh,
+  Email,
+  ContentCopy,
+  EventNote,
+  ErrorOutline,
+} from "@mui/icons-material";
 import { saveAs } from "file-saver";
 import "./RaportDraft.css";
 
@@ -18,41 +34,29 @@ const RaportDraft = ({ company }) => {
 
   const getRaport = async () => {
     setPleaseWait(true);
-
     try {
       await axiosPrivateIntercept.get(`/fk/generate-data/${company}`);
-
       const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, "0"); // miesiące od 0-11
-      const dd = String(today.getDate()).padStart(2, "0");
+      const titleDate = today.toISOString().split("T")[0];
 
-      const titleDate = `${yyyy}-${mm}-${dd}`;
-      // const titleDate = "2025-09-02";
       const getMainRaport = await axiosPrivateIntercept.post(
         `/fk/get-main-report/${company}`,
         {},
-        {
-          responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
-        }
+        { responseType: "blob" }
       );
       const blobMain = new Blob([getMainRaport.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
-
       saveAs(blobMain, `Raport_Draft 201 203_należności_${titleDate}.xlsx`);
 
       const getBusinessRaport = await axiosPrivateIntercept.post(
         `/fk/get-business-report/${company}`,
         {},
-        {
-          responseType: "blob", // 👈 najważniejsze: pobieramy jako blob
-        }
+        { responseType: "blob" }
       );
       const blobBusiness = new Blob([getBusinessRaport.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
-
       saveAs(blobBusiness, `Raport należności_biznes_stan _${titleDate}.xlsx`);
 
       await getDateAndCounter();
@@ -63,24 +67,15 @@ const RaportDraft = ({ company }) => {
     }
   };
 
-  // funkcja generująca raport z już pobranych danych z pliku excel, każde generowanie nadaje nowe wiekowanie, kwote faktur do rozliczenia oraz od nowa przypisuje Obszary, Ownerów, Lokalizacje itd
   const createNewRaport = async () => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get(
         `/fk/create-raport/${company}`
       );
-      if (result?.data?.message) {
-        return setMissingDeps(result.data.message);
-      }
-
-      if (result?.data?.info) {
-        return setMissingDeps(result?.data?.info);
-      }
-
-      // po pobraniu nowych danych wiekowania, generuję raport własciwy
+      if (result?.data?.message) return setMissingDeps(result.data.message);
+      if (result?.data?.info) return setMissingDeps(result?.data?.info);
       await getRaport();
-
       await getDateAndCounter();
     } catch (err) {
       console.error(err);
@@ -89,7 +84,6 @@ const RaportDraft = ({ company }) => {
     }
   };
 
-  // pobieram daty i licznik ustawień dla aktualizowanych plików excel
   const getDateAndCounter = async () => {
     try {
       setPleaseWait(true);
@@ -97,24 +91,21 @@ const RaportDraft = ({ company }) => {
         `/fk/get-date-counter/${company}`
       );
       setDateCounter(result.data.updateData);
-      setPleaseWait(false);
     } catch (err) {
       console.error(err);
+    } finally {
+      setPleaseWait(false);
     }
   };
 
   const getOwnersMail = async () => {
     try {
       setPleaseWait(true);
-
       const result = await axiosPrivateIntercept.get(
         `/fk/get-owners-mail/${company}`
       );
       const sortedMails = result.data.mail.sort((a, b) => a.localeCompare(b));
-      setMails({
-        generate: true,
-        data: sortedMails || [],
-      });
+      setMails({ generate: true, data: sortedMails || [] });
     } catch (err) {
       console.error(err);
     } finally {
@@ -124,138 +115,181 @@ const RaportDraft = ({ company }) => {
 
   const copyMails = () => {
     if (mails?.data) {
-      const textToCopy = mails.data.join("; "); // łączysz maile w jeden string
+      const textToCopy = mails.data.join("; ");
       navigator.clipboard.writeText(textToCopy);
     }
   };
-
-  const generateMails = mails.data.map((item, index) => {
-    return (
-      <section key={index} className="fk_add_data__mails-item">
-        {item}
-      </section>
-    );
-  });
 
   useEffect(() => {
     getDateAndCounter();
   }, []);
 
   return (
-    <>
-      {pleaseWait ? (
-        <PleaseWait info="xmas" />
-      ) : (
-        <section className="fk_add_data">
-          <section className="fk_add_data__title">
-            <span>
-              Dodaj dane do Raportu FK -{" "}
-              <span style={{ color: "red" }}>{company}</span>{" "}
-            </span>
-          </section>
+    <main className="raport-draft-page">
+      {pleaseWait && <PleaseWait info="xmas" />}
 
-          <section className="fk_add_data__container">
-            {dateCounter?.accountancy?.date && (
-              <section className="fk_add_data__container-item">
-                <span className="fk_add_data__container-item--title">
-                  Dane wiekowania z dnia:
-                </span>
-                <span>{dateCounter?.accountancy?.date}</span>
-              </section>
-            )}
-            {dateCounter?.raport?.date && (
-              <section className="fk_add_data__container-item">
-                <span className="fk_add_data__container-item--title">
-                  Dane pobrane dnia:
-                </span>
-                <span>{dateCounter?.raport?.date}</span>
-              </section>
-            )}
+      <div className="raport-draft-content">
+        <header className="raport-header">
+          <Typography variant="h4" className="raport-title">
+            Raport Draft
+          </Typography>
+          <Chip
+            label={company}
+            color="error"
+            variant="outlined"
+            className="company-badge"
+          />
+        </header>
 
-            {!missongDeps ? (
-              <section className="fk_add_data__container-item">
-                <section className="fk_add_data__container-file">
+        <div className="raport-dashboard-grid">
+          <Card className="dashboard-card status-card">
+            <CardContent>
+              <Box display="flex" alignItems="center" gap={1} mb={2}>
+                <EventNote color="primary" />
+                <Typography variant="h6">Status danych</Typography>
+              </Box>
+              <div className="status-info-list">
+                {dateCounter?.accountancy?.date && (
+                  <div className="status-item">
+                    <span className="label">Ostatnie wiekowanie:</span>
+                    <span className="value">
+                      {dateCounter.accountancy.date}
+                    </span>
+                  </div>
+                )}
+                {dateCounter?.raport?.date && (
+                  <div className="status-item">
+                    <span className="label">Pobranie danych:</span>
+                    <span className="value">{dateCounter.raport.date}</span>
+                  </div>
+                )}
+                {dateCounter?.generate?.date && (
+                  <div className="status-item highlight">
+                    <span className="label">Wygenerowano raport:</span>
+                    <span className="value">{dateCounter.generate.date}</span>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="dashboard-card action-card">
+            <CardContent>
+              <Box display="flex" alignItems="center" gap={1} mb={2}>
+                <Refresh color="primary" />
+                <Typography variant="h6">Zarządzanie Raportem</Typography>
+              </Box>
+
+              {!missongDeps ? (
+                <div className="action-container">
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Zakończ bieżący okres rozliczeniowy i przygotuj nowe dane.
+                  </Typography>
                   <Button
-                    style={{ width: "50%" }}
+                    fullWidth
                     variant="contained"
                     color="error"
-                    disableElevation
+                    size="large"
+                    startIcon={<Refresh />}
                     onClick={createNewRaport}
                   >
                     Przygotuj nowy raport
                   </Button>
-                </section>
-                <section className="fk_add_data__container-item--title">
-                  <span>Zakończ bieżący raport i wygeneruj kolejny.</span>
-                </section>
-              </section>
-            ) : (
-              <section className="fk_add_data__container-item">
-                <p className="fk_add_data__container-item--error">
-                  Anulowano generowanie raportu
-                </p>
-                <p className="fk_add_data__container-item--error">
-                  {missongDeps}
-                </p>
-              </section>
-            )}
+                </div>
+              ) : (
+                <div className="error-box">
+                  <ErrorOutline color="error" />
+                  <Typography variant="subtitle2" color="error">
+                    {missongDeps}
+                  </Typography>
+                </div>
+              )}
 
-            {dateCounter?.generate?.date && (
-              <section className="fk_add_data__container-item">
-                <span>Data wygenerowania raportu:</span>
-                <span style={{ color: "red" }}>
-                  {dateCounter?.generate?.date}
-                </span>
-                <section className="fk_add_data__container-file">
+              {dateCounter?.generate?.date && (
+                <div className="download-container">
+                  <Divider sx={{ my: 2 }} />
                   <Button
+                    fullWidth
                     variant="contained"
                     color="success"
-                    disableElevation
+                    size="large"
+                    startIcon={<CloudDownload />}
                     onClick={getRaport}
                   >
-                    Pobierz Raport FK
+                    Pobierz arkusze Excel
                   </Button>
-                </section>
-              </section>
-            )}
-            <section className="fk_add_data__container-item fk_add_data__mails">
-              <section className="fk_add_data__mails__wrapper">
-                {!mails.generate && (
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className="dashboard-card mail-card">
+            <CardContent
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                boxSizing: "border-box",
+              }}
+            >
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                mb={2}
+              >
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Email color="primary" />
+                  <Typography variant="h6">Komunikacja (Ownerzy)</Typography>
+                </Box>
+                {mails.generate && mails.data.length > 0 && (
                   <Button
-                    variant="contained"
-                    color="secondary"
-                    disableElevation
-                    onClick={getOwnersMail}
+                    size="small"
+                    variant="outlined"
+                    startIcon={<ContentCopy />}
+                    onClick={copyMails}
                   >
-                    Pobierz adresy mailowe Ownerów
+                    Kopiuj wszystkie
                   </Button>
                 )}
-                {mails.generate && !mails.data.length && (
-                  <p className="fk_add_data__mails-title">Brak danych</p>
-                )}
-                {mails.generate && mails.data.length ? (
-                  <>
-                    <section className="fk_add_data__mails__container">
-                      {generateMails}
-                    </section>
-                    <section className="fk_add_data__mails__copy">
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        disableElevation
-                        onClick={copyMails}
-                      >
-                        Skopiuj do schowka
-                      </Button>
-                    </section>
-                  </>
-                ) : null}
-              </section>
-            </section>
-          </section>
-        </section>
-      )}
-    </>
+              </Box>
+
+              {!mails.generate ? (
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="secondary"
+                  onClick={getOwnersMail}
+                  sx={{ py: 2 }}
+                >
+                  Pobierz listę mailingową
+                </Button>
+              ) : (
+                <div className="mails-display-area">
+                  {mails.data.length > 0 ? (
+                    <div className="mails-grid">
+                      {mails.data.map((m, i) => (
+                        <div className="mail-chip" key={i}>
+                          {m}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <Typography variant="body2" className="no-data">
+                      Brak przypisanych maili
+                    </Typography>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </main>
   );
 };
 

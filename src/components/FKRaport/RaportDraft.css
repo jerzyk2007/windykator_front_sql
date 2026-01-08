@@ -1,129 +1,139 @@
-.fk_add_data {
+.raport-draft-page {
   flex-grow: 1;
-  user-select: none;
-  font-family: "Source Sans 3", Calibri, sans-serif;
-  font-optical-sizing: auto;
-  font-style: 700;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.fk_add_data__title {
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin: 20px;
-}
-
-.fk_add_data__container {
-  width: 95%;
-  border: 1px solid black;
-  border: 1px solid rgba(44, 123, 168, 0.6);
-  border-radius: 5px;
-  /* padding: 10px; */
-  display: flex;
-  flex-direction: column;
-}
-
-.fk_add_data__container-item {
-  padding: 12px;
-  text-align: center;
-  border-bottom: 1px solid rgba(44, 123, 168, 0.6);
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-}
-
-.fk_add_data__mails {
-  justify-content: center;
-  flex-direction: column;
-}
-
-.fk_add_data__mails__wrapper {
-  /* max-height: 40vh; */
-  display: flex;
-  flex-direction: column;
-}
-
-.fk_add_data__mails-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  padding: 10px;
-}
-
-.fk_add_data__mails__container {
+  background-color: #f4f7f9;
   width: 100%;
-  max-height: 20vh;
-  overflow-x: auto;
+  min-height: 100vh;
+  padding: 20px;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.fk_add_data__mails-item {
-  flex-basis: 25%;
-  min-width: 300px;
-  padding: 5px;
+.raport-draft-content {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  /* gap: 30px; */
+}
+
+.raport-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.raport-title {
+  font-weight: 800 !important;
+  color: #2c3e50;
+  letter-spacing: -0.5px;
+}
+
+.company-badge {
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+}
+
+/* Dashboard Grid */
+.raport-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.dashboard-card {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(44, 123, 168, 0.1) !important;
+}
+
+/* Status Card Styles */
+.status-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed #e0e6ed;
+}
+
+.status-item:last-child {
+  border-bottom: none;
+}
+
+.status-item .label {
+  color: #7f8c8d;
+  font-size: 0.95rem;
+}
+
+.status-item .value {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.status-item.highlight .value {
+  color: #d32f2f;
+}
+
+.action-card,
+.status-card {
+  min-width: 500px;
+  font-size: 1.1rem;
+}
+
+/* Mail Section */
+.mail-card {
+  grid-column: span 2;
+  max-height: 40vh;
+}
+
+.mails-display-area {
+  max-height: 250px;
+  overflow-y: auto;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #e2e8f0;
+}
+
+.mails-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.mail-chip {
+  background: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   user-select: text;
 }
 
-.fk_add_data__mails__copy {
-  padding: 20px 0 10px 0;
-}
-
-.fk_add_data__container-item span {
-  flex-basis: 50%;
-  /* font-weight: bold; */
-  font-size: 1.2rem;
-}
-
-.fk_add_data__container-file {
-  flex-basis: 50%;
-}
-
-.fk_add_data__container-item .fk_add_data__container-file {
-  width: 20%;
-}
-
-/* .fk_add_data__container-item .fk_add_data__container-file Button {
-  width: 100%;
-} */
-
-.fk_add_data__container-data {
-  /* flex-grow: 1; */
-  flex-shrink: 0;
-  flex-basis: 50%;
+/* Error Box */
+.error-box {
+  background-color: #fff5f5;
+  border: 1px solid #feb2b2;
+  padding: 15px;
+  border-radius: 8px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.fk_add_data__container-data--title {
-  flex-grow: 1;
-  width: 100%;
+.no-data {
   text-align: center;
-}
-
-.fk_add_data-click-me {
-  border: none;
-  padding: 8px 10px;
-  margin: 5px;
-  border-radius: 5px;
-  background-color: rgb(25, 118, 210);
-  color: #fff;
-  letter-spacing: 1px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.fk_add_data-click-me:active {
-  background-color: #62aaf1;
-  color: aquamarine;
-}
-
-.fk_add_data__container-item--error {
-  width: 100%;
-  margin: 0 auto;
-  color: red;
-  font-size: 1.2rem;
+  color: #94a3b8;
+  padding: 20px;
 }
