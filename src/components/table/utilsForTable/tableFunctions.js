@@ -1,3 +1,5 @@
+import { maxHeight } from "@mui/system";
+
 // wybór ściezki do zapisu w zależności od profilu użytkownika
 export const basePath = {
   insider: "/documents",
@@ -103,4 +105,38 @@ export const spanInfoStyle = (profile, info = "name") => {
 export const formatNip = (nip) => {
   if (!nip) return "";
   return nip.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, "$1-$2-$3-$4");
+};
+
+export const commonTableHeadCellProps = {
+  align: "left",
+  sx: {
+    fontWeight: "500",
+    fontFamily: "'Source Sans 3', Calibri, sans-serif",
+    fontSize: ".9rem",
+    color: "black",
+    background: "rgba(233, 245, 255, 1)",
+    borderRight: "1px solid #eeededff",
+    minHeight: "3rem",
+    maxHeight: "4rem",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+
+    "& .Mui-TableHeadCell-Content": {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      textAlign: "center",
+      textWrap: "balance",
+    },
+    "& .Mui-TableHeadCell-Content-Labels": { padding: 0 },
+    "& .Mui-TableHeadCell-Content-Actions": { display: "none" },
+    "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
+      borderWidth: "1px",
+      background: "none",
+      marginRight: "-10px",
+      borderColor: "rgba(75, 75, 75, .1)",
+    },
+  },
 };

@@ -191,7 +191,6 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
         // setIsEditing(false);
       }
     } catch (error) {
-      console.log("error");
       if (error.response?.status === 409) {
         setMessage({ type: "edit", info: error.response.data?.message ?? "" });
         return;

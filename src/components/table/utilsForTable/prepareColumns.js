@@ -127,7 +127,7 @@ export const prepareColumnsInsider = (columnsData) => {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
               cell.column.id === "KONTRAHENT" && checkClient === "TAK"
-                ? "#7fffd4"
+                ? "#d4fff1ff"
                 : "white",
           },
         };

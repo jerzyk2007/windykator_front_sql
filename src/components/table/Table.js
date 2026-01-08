@@ -24,6 +24,7 @@ import {
 } from "./utilsForTable/excelFilteredTable";
 import TableButtonInfo from "./TableButtonInfo";
 import EditRowTablePro from "./editDocument/EditRowTablePro";
+import { commonTableHeadCellProps } from "./utilsForTable/tableFunctions";
 import PleaseWait from "../PleaseWait";
 
 import "./Table.css";
@@ -342,36 +343,37 @@ const Table = ({
       shape: "rounded",
       variant: "outlined",
     },
-    muiTableHeadCellProps: () => ({
-      align: "left",
-      sx: {
-        fontWeight: "600",
-        fontFamily: "'Source Sans 3', Calibri, sans-serif",
-        fontSize: ".9rem",
-        color: "black",
-        background: "rgba(233, 245, 255, 1)",
-        borderRight: "1px solid #eeededff",
-        minHeight: "3rem",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        "& .Mui-TableHeadCell-Content": {
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          textWrap: "balance",
-        },
-        "& .Mui-TableHeadCell-Content-Labels": { padding: 0 },
-        "& .Mui-TableHeadCell-Content-Actions": { display: "none" },
-        "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
-          borderWidth: "1px",
-          background: "none",
-          marginRight: "-9px",
-          borderColor: "rgba(75, 75, 75, .1)",
-        },
-      },
-    }),
+    // muiTableHeadCellProps: () => ({
+    //   align: "left",
+    //   sx: {
+    //     fontWeight: "600",
+    //     fontFamily: "'Source Sans 3', Calibri, sans-serif",
+    //     fontSize: ".9rem",
+    //     color: "black",
+    //     background: "rgba(233, 245, 255, 1)",
+    //     borderRight: "1px solid #eeededff",
+    //     minHeight: "3rem",
+    //     display: "flex",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //     "& .Mui-TableHeadCell-Content": {
+    //       display: "flex",
+    //       alignItems: "center",
+    //       justifyContent: "center",
+    //       textAlign: "center",
+    //       textWrap: "balance",
+    //     },
+    //     "& .Mui-TableHeadCell-Content-Labels": { padding: 0 },
+    //     "& .Mui-TableHeadCell-Content-Actions": { display: "none" },
+    //     "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
+    //       borderWidth: "1px",
+    //       background: "none",
+    //       marginRight: "-9px",
+    //       borderColor: "rgba(75, 75, 75, .1)",
+    //     },
+    //   },
+    // }),
+    muiTableHeadCellProps: commonTableHeadCellProps,
     muiTableBodyCellProps: ({ row }) => ({
       className: "mrt-custom-body-cell",
       onDoubleClick: () => {

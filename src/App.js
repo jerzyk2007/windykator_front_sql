@@ -15,7 +15,6 @@ import ChangePassword from "./components/user/ChangePassword";
 import UserSettings from "./components/user_permissions/UserSettings";
 import TableColumns from "./components/system_settings/TableColumns";
 import RaportDepartments from "./components/raports/RaportDepartments";
-import RaportAdvisers from "./components/raports/RaportAdvisers";
 import RaportDraft from "./components/FKRaport/RaportDraft";
 import ChangeOrgStr from "./components/system_settings/ChangeOrgStr";
 import OrganizationStructure from "./components/system_settings/OrganizationStructure";
@@ -25,7 +24,7 @@ import AddDoc from "./components/table/insuranceDocuments/AddDoc";
 import EditDoc from "./components/table/insuranceDocuments/EditDoc";
 import Instruction from "./components/instruction/Instruction";
 import ConfirmResetPassword from "./components/user/ConfirmResetPassword";
-import { getRolesForPath } from "./components/menu/menuConfig";
+// import { getRolesForPath } from "./components/menu/menuConfig";
 import "./App.css";
 
 function App() {
@@ -200,7 +199,12 @@ function App() {
             >
               <Route
                 path="/raport-departments"
-                element={<RaportDepartments profile={"insider"} />}
+                element={
+                  <RaportDepartments
+                    profile={"insider"}
+                    reportType={"departments"}
+                  />
+                }
               />
             </Route>
 
@@ -211,7 +215,12 @@ function App() {
             >
               <Route
                 path="/raport-advisers"
-                element={<RaportAdvisers profile={"insider"} />}
+                element={
+                  <RaportDepartments
+                    profile={"insider"}
+                    reportType={"advisers"}
+                  />
+                }
               />
             </Route>
 

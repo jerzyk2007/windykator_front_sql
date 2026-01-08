@@ -7,21 +7,25 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { MRT_Localization_PL } from "material-react-table/locales/pl";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import PleaseWait from "../PleaseWait";
 import {
   grossTotalDepartments,
   columnsDepartments,
+  columnsAdv,
+  grossTotalAdv,
 } from "./utilsForRaportTable/prepareDataToRaport";
 import { dataRaport } from "../table/utilsForTable/excelFilteredTable";
+import { commonTableHeadCellProps } from "../table/utilsForTable/tableFunctions";
 
 import "./RaportDepartments.css";
 
-const RaportDepartments = ({ profile }) => {
+const RaportDepartments = ({ profile, reportType }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const { height } = useWindowSize();
 
+  // --- STANY ---
   const [pleaseWait, setPleaseWait] = useState(false);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [columnSizing, setColumnSizing] = useState({});
@@ -30,12 +34,14 @@ const RaportDepartments = ({ profile }) => {
   const [columnPinning, setColumnPinning] = useState({});
   const [pagination, setPagination] = useState({});
   const [tableSize, setTableSize] = useState(500);
-  const [sorting, setSorting] = useState([
-    { id: "DZIALY", desc: false },
-    // { id: "DO_ROZLICZENIA", desc: true },
-  ]);
+  const [sorting, setSorting] = useState(
+    reportType === "departments"
+      ? [{ id: "DZIALY", desc: false }]
+      : reportType === "advisers"
+      ? [{ id: "DORADCA", desc: false }]
+      : []
+  );
   const [raportData, setRaportData] = useState([]);
-  // const [permission, setPermission] = useState("");
   const [departments, setDepartments] = useState([]);
   const [raport, setRaport] = useState([]);
   const [minMaxDateGlobal, setMinMaxDateGlobal] = useState({
@@ -50,32 +56,141 @@ const RaportDepartments = ({ profile }) => {
   const [percentTarget, setPercentTarget] = useState({});
   const [columnsDep, setColumnsDep] = useState(columnsDepartments);
 
+  // --- KONFIGURACJA ZALEŻNA OD TYPU ---
+  const isDep = reportType === "departments";
+  const currentColumns = isDep ? columnsDep : columnsAdv;
+  const excelTitle = isDep ? "Raport Działy" : "Raport Doradca";
+
+  // --- FUNKCJE POMOCNICZE ---
   const checkMinMaxDateGlobal = (documents) => {
+    if (!documents.length) return;
     let maxDate = documents[0].DATA_FV;
     let minDate = documents[0].DATA_FV;
 
-    // Iteracja przez wszystkie obiekty w tablicy;
     documents.forEach((obj) => {
-      // Porównanie daty z aktualnymi maksymalną i minimalną datą
-      if (obj.DATA_FV > maxDate) {
-        maxDate = obj.DATA_FV;
-      }
-      if (obj.DATA_FV < minDate) {
-        minDate = obj.DATA_FV;
-      }
+      if (obj.DATA_FV > maxDate) maxDate = obj.DATA_FV;
+      if (obj.DATA_FV < minDate) minDate = obj.DATA_FV;
     });
-    setMinMaxDateGlobal({
-      minGlobalDate: minDate,
-      maxGlobalDate: maxDate,
-    });
-    setRaportDate({
-      minRaportDate: minDate,
-      maxRaportDate: maxDate,
-    });
+
+    setMinMaxDateGlobal({ minGlobalDate: minDate, maxGlobalDate: maxDate });
+    setRaportDate({ minRaportDate: minDate, maxRaportDate: maxDate });
   };
 
+  const handleSaveSettings = async () => {
+    const settingsObj = {
+      size: { ...columnSizing },
+      visible: { ...columnVisibility },
+      density,
+      order: columnOrder,
+      pinning: columnPinning,
+      pagination,
+    };
+
+    const endpoint = isDep ? "departments" : "advisers";
+    const payload = isDep
+      ? { raportDepartments: settingsObj }
+      : { raportAdvisers: settingsObj };
+
+    try {
+      await axiosPrivateIntercept.patch(
+        `/user/save-raport-${endpoint}-settings/${auth.id_user}`,
+        payload
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleExportExcel = (data, type) => {
+    const rowData = data.map((item) => item.original);
+    let arrayOrder = [];
+
+    if (type === excelTitle && rowData.length > 0) {
+      arrayOrder = [...columnOrder];
+    } else if (type === "Filtr") {
+      arrayOrder = columnOrder.filter(
+        (item) => columnVisibility[item] !== false
+      );
+    }
+
+    let newColumns = [];
+    if (type === excelTitle) {
+      newColumns = currentColumns
+        .map((item) => {
+          const matching = arrayOrder.find(
+            (match) => match === item.accessorKey
+          );
+          return matching
+            ? { accessorKey: item.accessorKey, header: item.header }
+            : null;
+        })
+        .filter(Boolean);
+    }
+
+    const newOrder = arrayOrder.map((key) => {
+      const matchedColumn = newColumns.find(
+        (column) => column.accessorKey === key
+      );
+      return matchedColumn ? matchedColumn.header : key;
+    });
+
+    const updateData = rowData.map((item) => {
+      const filteredKeys = Object.keys(item).filter((key) =>
+        arrayOrder.includes(key)
+      );
+      return filteredKeys.reduce((obj, key) => {
+        obj[key] = item[key];
+        return obj;
+      }, {});
+    });
+
+    const update = updateData.map((item) => {
+      const formatNum = (val) =>
+        Number(val).toLocaleString("pl-PL", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+
+      const baseUpdates = {
+        ...item,
+        CEL_BEZ_PZU_LINK4: String(`${formatNum(item.CEL_BEZ_PZU_LINK4)} %`),
+        ILE_BLEDOW_DORADCY_I_DOKUMENTACJI: Number(
+          item.ILE_BLEDOW_DORADCY_I_DOKUMENTACJI
+        ).toFixed(0),
+        ILE_NIEPOBRANYCH_VAT: Number(item.ILE_NIEPOBRANYCH_VAT).toFixed(0),
+        ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4: Number(
+          item.ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4
+        ).toFixed(0),
+      };
+
+      if (isDep) {
+        return {
+          ...baseUpdates,
+          CEL:
+            item.DZIALY === "Całość"
+              ? ""
+              : item.CEL
+              ? `${item.CEL} %`
+              : "Brak %",
+          CEL_BEZ_KANCELARII: String(`${formatNum(item.CEL_BEZ_KANCELARII)} %`),
+          CEL_CALOSC: String(`${formatNum(item.CEL_CALOSC)} %`),
+          ILOSC_PRZETERMINOWANYCH_FV: Number(
+            item.ILOSC_PRZETERMINOWANYCH_FV
+          ).toFixed(0),
+          ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII: Number(
+            item.ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII
+          ).toFixed(0),
+        };
+      }
+      return baseUpdates;
+    });
+
+    dataRaport(update, { columns: newColumns, order: newOrder }, type);
+  };
+
+  // --- MATERIAL REACT TABLE CONFIG ---
   const table = useMaterialReactTable({
-    columns: columnsDep,
+    columns: currentColumns,
     data: raport,
     enableStickyHeader: true,
     enableGlobalFilter: false,
@@ -96,13 +211,9 @@ const RaportDepartments = ({ profile }) => {
     onColumnPinningChange: setColumnPinning,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
-    // opcja wyszukuje zbiory do select i multi-select
     enableFacetedValues: true,
-    // wyświetla filtry nad komórką -
     columnFilterDisplayMode: "popover",
-    initialState: {
-      density: "compact",
-    },
+    initialState: { density: "compact" },
     state: {
       columnVisibility,
       density,
@@ -112,318 +223,224 @@ const RaportDepartments = ({ profile }) => {
       pagination,
       sorting,
     },
+    defaultColumn: { maxSize: 400, minSize: 100 },
+    // muiTableHeadCellProps: () => ({
+    //   // align: "left",
+    //   // sx: {
+    //   //   fontWeight: "500",
+    //   //   fontFamily: "'Source Sans 3', Calibri, sans-serif",
+    //   //   fontSize: ".9rem",
+    //   //   color: "black",
+    //   //   background: "rgba(233, 245, 255, 1)",
+    //   //   borderRight: "1px solid #eeededff",
+    //   //   minHeight: "2rem",
+    //   //   display: "flex",
+    //   //   justifyContent: "center",
+    //   //   alignItems: "center",
+    //   //   "& .Mui-TableHeadCell-Content": {
+    //   //     display: "flex",
+    //   //     alignItems: "center",
+    //   //     justifyContent: "center",
+    //   //     textAlign: "center",
+    //   //     textWrap: "balance",
+    //   //   },
+    //   //   "& .Mui-TableHeadCell-Content-Labels": { padding: 0 },
+    //   //   "& .Mui-TableHeadCell-Content-Actions": { display: "none" },
+    //   //   "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
+    //   //     borderWidth: "1px",
+    //   //     background: "none",
+    //   //     marginRight: "-9px",
+    //   //     borderColor: "rgba(75, 75, 75, .1)",
+    //   //   },
+    //   // },
+    //   align: "left",
+    //   sx: {
+    //     fontWeight: "600",
+    //     fontFamily: "'Source Sans 3', Calibri, sans-serif",
+    //     fontSize: ".9rem",
+    //     color: "black",
+    //     background: "rgba(233, 245, 255, 1)",
+    //     borderRight: "1px solid #eeededff",
+    //     minHeight: "3rem",
+    //     display: "flex",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //     "& .Mui-TableHeadCell-Content": {
+    //       display: "flex",
+    //       alignItems: "center",
+    //       justifyContent: "center",
+    //       textAlign: "center",
+    //       textWrap: "balance",
+    //     },
+    //     "& .Mui-TableHeadCell-Content-Labels": { padding: 0 },
+    //     "& .Mui-TableHeadCell-Content-Actions": { display: "none" },
+    //     "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
+    //       borderWidth: "1px",
+    //       background: "none",
+    //       marginRight: "-9px",
+    //       borderColor: "rgba(75, 75, 75, .1)",
+    //     },
+    //   },
+    // }),
+    // muiTableHeadCellProps: () => ({
+    //   sx: {
+    //     "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
+    //       borderWidth: "1px",
+    //       background: "none",
+    //       marginRight: "-19px",
+    //       borderColor: "rgba(75, 75, 75, .1)",
+    //     },
+    //   },
+    // }),
+    // muiTableHeadCellProps: commonTableHeadCellProps,
 
-    defaultColumn: {
-      maxSize: 400,
-      minSize: 100,
-      // size: 160, //default size is usually 180
+    muiTableHeadCellProps: {
+      ...commonTableHeadCellProps, // 1. Kopiujemy align, fonty, tło itp.
+      sx: {
+        ...commonTableHeadCellProps.sx, // 2. Kopiujemy wszystkie istniejące style sx
+        "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
+          // 3. Nadpisujemy konkretny element
+          borderWidth: "2px",
+          // background: "none",
+          marginRight: "-18px", // Twoja nowa wartość
+          borderColor: "rgba(77, 76, 76, 0.1)",
+        },
+      },
     },
-    // wyłącza wszytskie ikonki nad tabelą
-    // enableToolbarInternalActions: false,
-
-    muiTableHeadCellProps: () => ({
-      align: "left",
-      sx: {
-        fontFamily: "Calibri, sans-serif",
-        fontWeight: "700",
-        fontSize: "16px",
-        color: "black",
-        backgroundColor: "#a7d3f7",
-        padding: "15px",
-        paddingTop: "0",
-        paddingBottom: "0",
-        minHeight: "2rem",
-        whiteSpace: "wrap",
-        textAlign: "center",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        border: "1px solid rgba(81, 81, 81, .2)",
-        "& .Mui-TableHeadCell-Content": {
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          textWrap: "balance",
-          // whiteSpace: "wrap",
-        },
-        "& .Mui-TableHeadCell-Content-Wrapper": {
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          whiteSpace: "wrap",
-        },
-        "& .Mui-TableHeadCell-Content-Actions": {
-          display: "none",
-        },
-      },
-    }),
-
-    muiTableBodyCellProps: ({ column, cell }) => ({
+    muiTableBodyCellProps: () => ({
+      className: "raport_departments-cell",
       align: "center",
-      sx: {
-        borderRight: "1px solid #000",
-        borderBottom: "1px solid #000",
-        fontSize: "14px",
-        fontWeight: "bold",
-        padding: "2px",
-        minHeight: "3rem",
-      },
     }),
-
     muiTableContainerProps: { sx: { maxHeight: tableSize } },
 
     renderTopToolbarCustomActions: ({ table }) => {
-      return (
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "0px",
-            margin: "auto 0",
-            flexWrap: "wrap",
-          }}
-        >
-          <section className="raport_departments__box-panel">
-            <section className="raport_departments-date">
-              <section className="raport_departments-date__title">
-                <h3>Wybierz przedział dat dla raportu</h3>
-              </section>
-              <section className="raport_departments-date__content">
-                <h3 className="raport_departments-date__content-name">od: </h3>
-                <input
-                  className="raport_departments-date-select"
-                  style={errRaportDate ? { backgroundColor: "red" } : null}
-                  name="minDate"
-                  type="date"
-                  min={minMaxDateGlobal.minGlobalDate}
-                  max={minMaxDateGlobal.maxGlobalDate}
-                  value={raportDate.minRaportDate}
-                  onChange={(e) =>
-                    setRaportDate((prev) => {
-                      return {
-                        ...prev,
-                        minRaportDate: e.target.value
-                          ? e.target.value
-                          : minMaxDateGlobal.minGlobalDate,
-                      };
-                    })
-                  }
-                />
-                <h3 className="raport_departments-date__content-name">do: </h3>
+      const hasData = table.getPrePaginationRowModel().rows.length > 0;
 
-                <input
-                  className="raport_departments-date-select"
-                  style={errRaportDate ? { backgroundColor: "red" } : null}
-                  name="maxDate"
-                  type="date"
-                  min={minMaxDateGlobal.minGlobalDate}
-                  max={minMaxDateGlobal.maxGlobalDate}
-                  value={raportDate?.maxRaportDate}
-                  onChange={(e) =>
-                    setRaportDate((prev) => {
-                      return {
-                        ...prev,
-                        maxRaportDate: e.target.value
-                          ? e.target.value
-                          : minMaxDateGlobal.maxGlobalDate,
-                      };
-                    })
-                  }
-                />
-              </section>
-            </section>
-            <section className="raport_departments-panel">
-              <i
-                className="fa-regular fa-file-excel raport_departments-export-excel"
-                onClick={() =>
-                  handleExportExcel(
-                    table.getPrePaginationRowModel().rows,
-                    "Dział"
-                  )
+      return (
+        <Box className="raport_departments-toolbar">
+          <section className="raport_departments-toolbar-date">
+            <div className="raport_departments-toolbar-date-title">
+              <h3>Wybierz przedział dat</h3>
+            </div>
+            <div className="raport_departments-toolbar-date-inputs">
+              <span className="raport_departments-toolbar-label">od:</span>
+              <input
+                className={`raport_departments-toolbar-input ${
+                  errRaportDate ? "raport_departments-toolbar-input--error" : ""
+                }`}
+                name="minDate"
+                type="date"
+                min={minMaxDateGlobal.minGlobalDate}
+                max={minMaxDateGlobal.maxGlobalDate}
+                value={raportDate.minRaportDate}
+                onChange={(e) =>
+                  setRaportDate((prev) => ({
+                    ...prev,
+                    minRaportDate:
+                      e.target.value || minMaxDateGlobal.minGlobalDate,
+                  }))
                 }
-              ></i>
-              <i
-                className="fas fa-save raport_departments-save-settings"
-                onClick={handleSaveSettings}
-              ></i>
-            </section>
+              />
+              <span className="raport_departments-toolbar-label">do:</span>
+              <input
+                className={`raport_departments-toolbar-input ${
+                  errRaportDate ? "raport_departments-toolbar-input--error" : ""
+                }`}
+                name="maxDate"
+                type="date"
+                min={minMaxDateGlobal.minGlobalDate}
+                max={minMaxDateGlobal.maxGlobalDate}
+                value={raportDate.maxRaportDate}
+                onChange={(e) =>
+                  setRaportDate((prev) => ({
+                    ...prev,
+                    maxRaportDate:
+                      e.target.value || minMaxDateGlobal.maxGlobalDate,
+                  }))
+                }
+              />
+            </div>
           </section>
+
+          <Box className="raport_departments-toolbar-actions">
+            <Button
+              className="table-action-btn save"
+              onClick={handleSaveSettings}
+            >
+              <i className="fas fa-save"></i>
+              <span>Zapisz widok</span>
+            </Button>
+
+            <Button
+              className={`table-action-btn excel ${!hasData ? "disabled" : ""}`}
+              disabled={!hasData}
+              onClick={() =>
+                handleExportExcel(
+                  table.getPrePaginationRowModel().rows,
+                  excelTitle
+                )
+              }
+            >
+              <i className="fa-regular fa-file-excel"></i>
+              <span>Eksport Excel</span>
+            </Button>
+          </Box>
         </Box>
       );
     },
   });
 
-  const handleSaveSettings = async () => {
-    const raportDepartments = {
-      size: { ...columnSizing },
-      visible: { ...columnVisibility },
-      density,
-      order: columnOrder,
-      pinning: columnPinning,
-      pagination,
-    };
-    try {
-      await axiosPrivateIntercept.patch(
-        `/user/save-raport-departments-settings/${auth.id_user}`,
-        { raportDepartments }
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleExportExcel = (data, type) => {
-    const rowData = data.map((item) => {
-      return item.original;
-    });
-
-    let arrayOrder = [];
-
-    if (type === "Dział" && rowData.length > 0) {
-      arrayOrder = [...columnOrder];
-      // rowData = [...data];
-    } else if (type === "Filtr") {
-      arrayOrder = columnOrder.filter(
-        (item) => columnVisibility[item] !== false
-      );
-    }
-    let newColumns = [];
-
-    if (type === "Dział") {
-      newColumns = columnsDep
-        .map((item) => {
-          const matching = arrayOrder.find(
-            (match) => match === item.accessorKey
-          );
-          if (matching) {
-            return {
-              accessorKey: item.accessorKey,
-              header: item.header,
-            };
-          }
-        })
-        .filter(Boolean);
-    }
-
-    const newOrder = arrayOrder.map((key) => {
-      const matchedColumn = newColumns.find(
-        (column) => column.accessorKey === key
-      );
-      return matchedColumn ? matchedColumn.header : key;
-    });
-
-    const updateData = rowData.map((item) => {
-      // Filtracja kluczy obiektu na podstawie arrayOrder
-      const filteredKeys = Object.keys(item).filter((key) =>
-        arrayOrder.includes(key)
-      );
-      // Tworzenie nowego obiektu z wybranymi kluczami
-      const updatedItem = filteredKeys.reduce((obj, key) => {
-        obj[key] = item[key];
-        return obj;
-      }, {});
-      return updatedItem;
-    });
-
-    // przerabiam dane aby w excelu wyświetlały sie zgodnie z oczekiwaniem, jeśli liczba jest Number to wyświetlana jest jako waluta, w przypadku String mogę sam ustalić sposób wyświetlania
-    const update = updateData.map((item) => {
-      const CEL_BEZ_PZU_LINK4 = Number(item.CEL_BEZ_PZU_LINK4).toLocaleString(
-        "pl-PL",
-        { minimumFractionDigits: 2, maximumFractionDigits: 2 }
-      );
-      const CEL_BEZ_KANCELARII = Number(item.CEL_BEZ_KANCELARII).toLocaleString(
-        "pl-PL",
-        { minimumFractionDigits: 2, maximumFractionDigits: 2 }
-      );
-      const CEL_CALOSC = Number(item.CEL_CALOSC).toLocaleString("pl-PL", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-
-      const ILE_BLEDOW_DORADCY_I_DOKUMENTACJI = Number(
-        item.ILE_BLEDOW_DORADCY_I_DOKUMENTACJI
-      ).toFixed(0);
-
-      const ILE_NIEPOBRANYCH_VAT = Number(item.ILE_NIEPOBRANYCH_VAT).toFixed(0);
-
-      const ILOSC_PRZETERMINOWANYCH_FV = Number(
-        item.ILOSC_PRZETERMINOWANYCH_FV
-      ).toFixed(0);
-
-      const ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII = Number(
-        item.ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII
-      ).toFixed(0);
-
-      const ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4 = Number(
-        item.ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4
-      ).toFixed(0);
-
-      return {
-        ...item,
-        CEL:
-          item.DZIALY === "Całość"
-            ? ""
-            : item.CEL
-            ? String(`${item.CEL} %`)
-            : "Brak %",
-        CEL_BEZ_PZU_LINK4: String(`${CEL_BEZ_PZU_LINK4} %`),
-        CEL_BEZ_KANCELARII: String(`${CEL_BEZ_KANCELARII} %`),
-        CEL_CALOSC: String(`${CEL_CALOSC} %`),
-        ILE_BLEDOW_DORADCY_I_DOKUMENTACJI,
-        ILE_NIEPOBRANYCH_VAT,
-        ILOSC_PRZETERMINOWANYCH_FV,
-        ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII,
-        ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4,
-      };
-    });
-    const orderColumns = {
-      columns: newColumns,
-      order: newOrder,
-    };
-    dataRaport(update, orderColumns, type);
-  };
-
+  // --- EFFECTS ---
   useEffect(() => {
     const createDataRaport = () => {
-      let uniqueDepartments = [];
-      raportData.forEach((item) => {
-        if (item.DZIAL && typeof item.DZIAL === "string") {
-          if (!uniqueDepartments.includes(item.DZIAL)) {
-            uniqueDepartments.push(item.DZIAL);
+      let uniqueItems = [];
+      if (isDep) {
+        raportData.forEach((item) => {
+          if (item.DZIAL && typeof item.DZIAL === "string") {
+            if (!uniqueItems.includes(item.DZIAL)) uniqueItems.push(item.DZIAL);
           }
-        }
-      });
-      setDepartments(uniqueDepartments);
+        });
+      } else {
+        raportData.forEach((item) => {
+          if (item.DORADCA && item.DZIAL) {
+            const entry = {
+              merge: `${item.DORADCA}-${item.DZIAL}`,
+              adviser: item.DORADCA,
+              department: item.DZIAL,
+            };
+            if (!uniqueItems.some((i) => i.merge === entry.merge))
+              uniqueItems.push(entry);
+          }
+        });
+        uniqueItems.sort((a, b) =>
+          a.adviser.toLowerCase().localeCompare(b.adviser.toLowerCase())
+        );
+      }
+      setDepartments(uniqueItems);
     };
     createDataRaport();
-  }, [raportData, raportDate]);
+  }, [raportData, reportType]);
 
   useEffect(() => {
-    const update = grossTotalDepartments(
-      departments,
-      raportData,
-      raportDate,
-      percentTarget
-    );
+    const update = isDep
+      ? grossTotalDepartments(
+          departments,
+          raportData,
+          raportDate,
+          percentTarget
+        )
+      : grossTotalAdv(departments, raportData, raportDate);
     setRaport(update);
-  }, [departments]);
+  }, [departments, raportData, raportDate, percentTarget, reportType]);
 
   useEffect(() => {
-    setTableSize(height - 1);
+    setTableSize(height - 172);
   }, [height]);
 
   useEffect(() => {
-    let minDate = new Date(raportDate.minRaportDate);
-    let maxDate = new Date(raportDate.maxRaportDate);
-    if (minDate > maxDate || maxDate < minDate) {
-      errSetRaportDate(true);
-    } else {
-      errSetRaportDate(false);
-    }
+    let minD = new Date(raportDate.minRaportDate);
+    let maxD = new Date(raportDate.maxRaportDate);
+    errSetRaportDate(minD > maxD || maxD < minD);
   }, [raportDate]);
 
   useEffect(() => {
@@ -433,75 +450,58 @@ const RaportDepartments = ({ profile }) => {
         const resultData = await axiosPrivateIntercept.get(
           `/raport/get-data/${auth.id_user}/${profile}`
         );
+
         if (resultData.data.data.length === 0) {
           setPleaseWait(false);
           return;
         }
-        const resultDepartments = await axiosPrivateIntercept.get(
-          "/settings/get-departments"
-        );
 
-        setPercentTarget(resultDepartments.data.target);
+        if (isDep) {
+          const resultDepartments = await axiosPrivateIntercept.get(
+            "/settings/get-departments"
+          );
+          setPercentTarget(resultDepartments.data.target);
+          setColumnsDep(
+            columnsDepartments.map((item) =>
+              item.header === "Cele na kwartał"
+                ? {
+                    ...item,
+                    header: `Cele na ${resultDepartments.data.target.time.Q} kwartał`,
+                  }
+                : item
+            )
+          );
+        }
 
-        const preprareColumnsDep = columnsDepartments.map((item) => {
-          if (item.header === "Cele na kwartał") {
-            return {
-              ...item,
-              header: `Cele na ${resultDepartments.data.target.time.Q} kwartał`,
-            };
-          } else return item;
-        });
-
-        setColumnsDep(preprareColumnsDep);
         setRaportData(resultData.data.data);
-        // setPermission(resultData.data.permission);
         checkMinMaxDateGlobal(resultData.data.data);
 
-        const [settingsRaportUserDepartments] = await Promise.all([
-          axiosPrivateIntercept.get(
-            `/user/get-raport-departments-settings/${auth.id_user}`
-          ),
-        ]);
-        setColumnVisibility(settingsRaportUserDepartments?.data?.visible || {});
-        setColumnSizing(settingsRaportUserDepartments?.data?.size || {});
-        setDensity(
-          settingsRaportUserDepartments?.data?.density || "comfortable"
+        const endpoint = isDep ? "departments" : "advisers";
+        const settings = await axiosPrivateIntercept.get(
+          `/user/get-raport-${endpoint}-settings/${auth.id_user}`
         );
-        setColumnOrder(
-          settingsRaportUserDepartments?.data?.order?.map((order) => order) ||
-            []
-        );
-        setColumnPinning(
-          settingsRaportUserDepartments?.data?.pinning || {
-            left: [],
-            right: [],
-          }
-        );
+
+        setColumnVisibility(settings?.data?.visible || {});
+        setColumnSizing(settings?.data?.size || {});
+        setDensity(settings?.data?.density || "comfortable");
+        setColumnOrder(settings?.data?.order || []);
+        setColumnPinning(settings?.data?.pinning || { left: [], right: [] });
         setPagination(
-          settingsRaportUserDepartments?.data?.pagination || {
-            pageIndex: 0,
-            pageSize: 20,
-          }
+          settings?.data?.pagination || { pageIndex: 0, pageSize: 20 }
         );
-        setPleaseWait(false);
       } catch (err) {
         console.error(err);
+      } finally {
+        setPleaseWait(false);
       }
     };
     getData();
-  }, [auth.id_user, axiosPrivateIntercept, setPleaseWait]);
+  }, [auth.id_user, profile, reportType]);
 
   return (
-    <section className="raport_departments">
-      {pleaseWait ? (
-        <PleaseWait />
-      ) : (
-        <MaterialReactTable
-          className="raport_departments-table"
-          table={table}
-        />
-      )}
-    </section>
+    <main className="raport_departments">
+      {pleaseWait ? <PleaseWait /> : <MaterialReactTable table={table} />}
+    </main>
   );
 };
 
