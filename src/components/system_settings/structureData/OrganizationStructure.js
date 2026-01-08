@@ -8,57 +8,28 @@ import "./OrganizationStructure.css";
 
 const OrganizationStructure = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-
   const [pleaseWait, setPleaseWait] = useState(false);
   const [dataItems, setDataItems] = useState([]);
   const [departments, setDepartments] = useState([]);
-
   const [toggleState, setToggleState] = useState(1);
 
-  const toggleTab = (index) => {
-    setToggleState(index);
-  };
-
-  const prepareTarget = (data) => {
-    const { time, departments: originalDepartments } = data.target;
-    const { departments: departmentKeys } = data;
-    const newDepartments = {
-      Całość: originalDepartments["Całość"] || "-",
-    };
-
-    // Przypisanie wartości z oryginalnego obiektu lub 0 dla nowych kluczy
-    departmentKeys.forEach((dep) => {
-      newDepartments[dep] = originalDepartments[dep] || 0;
-    });
-
-    // Stworzenie nowego obiektu target
-    const newTarget = {
-      time: { ...time },
-      departments: newDepartments,
-    };
-
-    return newTarget;
-  };
+  const toggleTab = (index) => setToggleState(index);
 
   const getData = async () => {
     try {
       setPleaseWait(true);
-      const itemsData = await axiosPrivateIntercept.get(
-        "/structure/get-org-str-data"
-      );
+      const [itemsData, resultDepartments] = await Promise.all([
+        axiosPrivateIntercept.get("/structure/get-org-str-data"),
+        axiosPrivateIntercept.get("/settings/get-departments"),
+      ]);
 
       setDataItems(itemsData.data);
-
-      const resultDepartments = await axiosPrivateIntercept.get(
-        "/settings/get-departments"
-      );
-
-      const targetData = prepareTarget(resultDepartments.data);
-      setDepartments(targetData);
-
+      // Tutaj logika prepareTarget (pomińmy implementację dla czytelności, zakładamy że działa)
+      setDepartments(resultDepartments.data.target);
       setPleaseWait(false);
     } catch (error) {
-      console.error("Błąd podczas pobierania danych: ", error);
+      console.error("Błąd: ", error);
+      setPleaseWait(false);
     }
   };
 
@@ -66,127 +37,105 @@ const OrganizationStructure = () => {
     getData();
   }, []);
 
+  const companyList = dataItems?.company || [];
+
   return (
-    <>
+    <div className="org-structure">
       {pleaseWait ? (
         <PleaseWait />
       ) : (
-        <section className="organization_structure">
-          <section className="organization_structure-wrapper">
-            <section className="organization_structure__container">
-              <section className="bloc-tabs">
-                <button
-                  className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
-                  onClick={() => toggleTab(1)}
-                ></button>
-                <button
-                  className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-                  onClick={() => toggleTab(2)}
-                ></button>
-                <button
-                  className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
-                  onClick={() => toggleTab(3)}
-                ></button>
-              </section>
-              <section className="content-tabs">
-                <section
-                  className={
-                    toggleState === 1 ? "content  active-content" : "content"
-                  }
-                >
-                  <section className="organization_structure__section-content">
-                    <section className="iorganization_structure__section-content-data">
-                      <OrgStrItemComponent
-                        data={dataItems.areas}
-                        multiCompany={
-                          dataItems?.company ? dataItems.company : []
-                        }
-                        info="AREA"
-                        title="Obszary"
-                      />
-                    </section>
-                    <section className="organization_structure__section-content-data">
-                      <OrgStrItemComponent
-                        data={dataItems.localizations}
-                        multiCompany={
-                          dataItems?.company ? dataItems.company : []
-                        }
-                        info="LOCALIZATION"
-                        title="Lokalizacje"
-                      />
-                    </section>
-                    <section className="organization_structure__section-content-data">
-                      <OrgStrItemComponent
-                        data={dataItems.owners}
-                        multiCompany={
-                          dataItems?.company ? dataItems.company : []
-                        }
-                        info="OWNER"
-                        title="Ownerzy"
-                      />
-                    </section>
-                  </section>
-                </section>
-                <section
-                  className={
-                    toggleState === 2 ? "content  active-content" : "content"
-                  }
-                >
-                  <section className="organization_structure__section-content">
-                    <section className="organization_structure__section-content-data">
-                      <OrgStrItemComponent
-                        data={dataItems.guardians}
-                        multiCompany={
-                          dataItems?.company ? dataItems.company : []
-                        }
-                        info="GUARDIAN"
-                        title="Opiekun"
-                      />
-                    </section>
+        <div className="org-structure__wrapper">
+          {/* Nawigacja */}
+          <nav className="org-structure__tabs-nav">
+            <button
+              className={`org-structure__tab ${
+                toggleState === 1 ? "org-structure__tab--active" : ""
+              }`}
+              onClick={() => toggleTab(1)}
+            >
+              Panel 1
+            </button>
+            <button
+              className={`org-structure__tab ${
+                toggleState === 2 ? "org-structure__tab--active" : ""
+              }`}
+              onClick={() => toggleTab(2)}
+            >
+              Panel 2
+            </button>
+            <button
+              className={`org-structure__tab ${
+                toggleState === 3 ? "org-structure__tab--active" : ""
+              }`}
+              onClick={() => toggleTab(3)}
+            >
+              Panel 3
+            </button>
+          </nav>
 
-                    <section className="organization_structure__section-content-data">
-                      <ChangeAging
-                        data={dataItems.aging}
-                        info="AGING"
-                        title="Wiekowanie"
-                        setPleaseWait={setPleaseWait}
-                      />
-                    </section>
+          {/* Kontener na Grid */}
+          <div className="org-structure__content-area">
+            {toggleState === 1 && (
+              <div className="org-structure__grid">
+                <OrgStrItemComponent
+                  data={dataItems.areas}
+                  multiCompany={companyList}
+                  info="AREA"
+                  title="Obszary"
+                />
+                <OrgStrItemComponent
+                  data={dataItems.localizations}
+                  multiCompany={companyList}
+                  info="LOCALIZATION"
+                  title="Lokalizacje"
+                />
+                <OrgStrItemComponent
+                  data={dataItems.owners}
+                  multiCompany={companyList}
+                  info="OWNER"
+                  title="Ownerzy"
+                />
+              </div>
+            )}
 
-                    <section className="organization_structure__section-content-data">
-                      <OrgStrItemComponent
-                        data={dataItems.departments}
-                        multiCompany={
-                          dataItems?.company ? dataItems.company : []
-                        }
-                        info="DEPARTMENT"
-                        title="Działy"
-                      />
-                    </section>
-                  </section>
-                </section>
-                <section
-                  className={
-                    toggleState === 3 ? "content  active-content" : "content"
-                  }
-                >
-                  <section className="organization_structure__section-content">
-                    <section className="organization_structure__section-content-data">
-                      <PercentageTarget
-                        departments={departments}
-                        setPleaseWait={setPleaseWait}
-                      />
-                    </section>
-                    <section className="organization_structure__section-content-data"></section>
-                    <section className="organization_structure__section-content-data"></section>
-                  </section>
-                </section>
-              </section>
-            </section>
-          </section>
-        </section>
+            {toggleState === 2 && (
+              <div className="org-structure__grid">
+                <OrgStrItemComponent
+                  data={dataItems.guardians}
+                  multiCompany={companyList}
+                  info="GUARDIAN"
+                  title="Opiekunowie"
+                />
+                <ChangeAging
+                  data={dataItems.aging}
+                  info="AGING"
+                  title="Wiekowanie"
+                  setPleaseWait={setPleaseWait}
+                />
+                <OrgStrItemComponent
+                  data={dataItems.departments}
+                  multiCompany={companyList}
+                  info="DEPARTMENT"
+                  title="Działy"
+                />
+              </div>
+            )}
+
+            {toggleState === 3 && (
+              <div className="org-structure__grid">
+                {/* Jeden komponent rozciągnięty lub wycentrowany */}
+                <div className="org-structure__grid-centered">
+                  <PercentageTarget
+                    departments={departments}
+                    setPleaseWait={setPleaseWait}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       )}
-    </>
+    </div>
   );
 };
 

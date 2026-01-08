@@ -2,8 +2,6 @@ import { useState } from "react";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 
-import "./PercentageTarget.css";
-
 const PercentageTarget = ({ departments, setPleaseWait }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
@@ -16,37 +14,29 @@ const PercentageTarget = ({ departments, setPleaseWait }) => {
   const handleChange = (e, dep) => {
     const { value, maxLength } = e.target;
     const sliceNumber = value.slice(0, maxLength);
-    setPercentDep((prev) => {
-      return {
-        ...prev,
-        departments: {
-          ...prev.departments,
-          [dep]: sliceNumber,
-        },
-      };
-    });
+    setPercentDep((prev) => ({
+      ...prev,
+      departments: {
+        ...prev.departments,
+        [dep]: sliceNumber,
+      },
+    }));
   };
 
-  // Sprawdzamy, czy departments.departments istnieje i jest obiektem
   if (!percentDep || !percentDep.departments) return null;
 
-  // Wydobycie wartości dla klucza "Całość"
-  // const allValue = percentDep.departments["Całość"];
-
-  // Tworzenie nowego obiektu bez klucza "Całość"
   const { Całość: _, ...otherDepartments } = percentDep.departments;
-
   const departmentEntries = Object.entries(otherDepartments);
 
   const departmentsItem = departmentEntries.map(([dep, value], index) => (
-    <section key={index} className="percentage-department__container--info">
-      <span className="percentage-department__container--text">{dep}</span>
+    <section key={index} className="org-str-target__row">
+      <span className="org-str-target__row-name">{dep}</span>
       <input
-        className="percentage-department__container--number"
+        className="org-str-target__input"
         type="number"
         maxLength="2"
-        value={value} // Ustawienie początkowej wartości
-        onChange={(e) => handleChange(e, dep)} // Funkcja obsługująca zmiany, jeśli jest potrzebna
+        value={value}
+        onChange={(e) => handleChange(e, dep)}
       />
     </section>
   ));
@@ -58,61 +48,51 @@ const PercentageTarget = ({ departments, setPleaseWait }) => {
         target: percentDep,
       });
       setPleaseWait(false);
-
       setErrMsg(`Sukces.`);
+      setTimeout(() => setErrMsg(""), 3000); // Czyścimy komunikat po 3 sek.
     } catch (err) {
-      setErrMsg(`Zmiana się nie powiodła.`);
+      setErrMsg(`Błąd zapisu.`);
       console.error(err);
+      setPleaseWait(false);
     }
   };
 
   return (
-    <section className="percentage-department">
-      <section className="percentage-department__title__container">
-        <h3 className="percentage-department--name">
-          <p
-            className="percentage-department__title__container-name"
-            style={{ color: "red" }}
-          >
-            {errMsg}
-          </p>
-          <label className="percentage-department__title__container-name">
-            Cel na kwartał
-          </label>
-          <select
-            className="percentage-department__title__container-actions--select"
-            value={percentDep.time.Q}
-            onChange={(e) =>
-              setPercentDep((prev) => {
-                return {
+    <section className="org-str-target">
+      <header className="org-str-target__header">
+        <div className="org-str-target__header-top">
+          <div className="org-str-target__title-group">
+            <label className="org-str-target__label">Cel Q</label>
+            <select
+              className="org-str-target__select"
+              value={percentDep.time.Q}
+              onChange={(e) =>
+                setPercentDep((prev) => ({
                   ...prev,
+                  time: { Q: Number(e.target.value) },
+                }))
+              }
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
 
-                  time: {
-                    Q: Number(e.target.value),
-                  },
-                };
-              })
-            }
+          <Button
+            variant="contained"
+            onClick={handleSavePercentageTarget}
+            size="small"
+            sx={{ minWidth: "80px", height: "32px", textTransform: "none" }}
           >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-          </select>
-        </h3>
-      </section>
-      <section className="percentage-department__container">
-        {departmentsItem}
-      </section>
-      <section className="percentage-department__container-check">
-        <Button
-          variant="contained"
-          onClick={handleSavePercentageTarget}
-          size="small"
-        >
-          Zapisz
-        </Button>
-      </section>
+            Zapisz
+          </Button>
+        </div>
+        {errMsg && <p className="org-str-target__message-status">{errMsg}</p>}
+      </header>
+
+      <section className="org-str-target__list">{departmentsItem}</section>
     </section>
   );
 };
