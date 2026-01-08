@@ -3,6 +3,7 @@
   font-family: "Source Sans 3", Calibri, sans-serif;
   display: flex;
   flex-direction: column;
+  padding-top: 50px;
 }
 
 .bloc-tabs {

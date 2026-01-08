@@ -11,8 +11,8 @@
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 40px);
-  max-height: calc(100vh - 40px);
+  height: calc(100vh - 50px);
+  max-height: calc(100vh - 50px);
   overflow: hidden; /* Ważne: wrapper sam w sobie nie powinien się przewijać */
   position: relative;
 }
@@ -51,9 +51,9 @@
   flex-grow: 1;
   flex-basis: 33%;
   min-width: 500px;
-  height: calc(100vh - 90px);
-  max-height: calc(100vh - 90px);
-  min-height: calc(100vh - 90px);
+  height: calc(100vh - 100px);
+  max-height: calc(100vh - 100px);
+  min-height: calc(100vh - 100px);
   padding: 2px;
   overflow-x: auto;
   display: flex;

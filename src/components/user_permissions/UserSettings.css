@@ -1,4 +1,4 @@
-.user_settings {
+/* .user_settings {
   flex-grow: 1;
   width: 100%;
   display: flex;
@@ -63,4 +63,208 @@
   display: flex;
   font-size: 1.2rem;
   align-items: center;
+} */
+:root {
+  --primary-color: #1976d2;
+  --secondary-color: #2e7d32;
+  --bg-color: #f4f7f9;
+  --card-bg: #ffffff;
+  --text-main: #2c3e50;
+  --text-muted: #7f8c8d;
+  --border-color: #e0e6ed;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --transition: all 0.2s ease-in-out;
+}
+
+/* Główny kontener strony */
+.user-settings-page {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 100vw; /* Zapobiega rozciąganiu poza ekran */
+  background-color: var(--bg-color);
+  /* padding: 20px; */
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box; /* Bardzo ważne dla zachowania wymiarów */
+  overflow-x: hidden; /* Gwarancja braku poziomego scrolla */
+}
+
+/* Wewnętrzny kontener ograniczający szerokość treści */
+.user-settings-content {
+  width: 100%;
+  max-width: 850px; /* Maksymalna szerokość robocza */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.user-settings-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.user-settings-header h1 {
+  margin: 0;
+  color: var(--text-main);
+  font-size: 1.8rem;
+}
+
+.user-settings-header p {
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
+/* Wyszukiwarka - przyklejona do góry */
+.search-section {
+  background-color: var(--bg-color);
+  padding-bottom: 10px;
+  display: flex;
+}
+
+.search-card {
+  flex-grow: 1;
+  background: var(--card-bg);
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.search-input-wrapper {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  background: #f1f4f8;
+  border-radius: 8px;
+  padding: 0 15px;
+  border: 2px solid transparent;
+  transition: var(--transition);
+}
+
+.search-input-wrapper:focus-within {
+  border-color: var(--primary-color);
+  background: #fff;
+}
+
+.search-icon {
+  font-size: 1.4rem;
+  color: var(--text-muted);
+}
+
+.search-input-wrapper input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 12px;
+  font-size: 1rem;
+  outline: none;
+  color: var(--text-main);
+}
+
+.user-avatar-placeholder {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #1976d2, #64b5f6);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* Lista wyników */
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.user-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transform: translateX(4px);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex-grow: 1;
+}
+
+.user-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
+/* Przycisk edycji */
+.edit-action-btn {
+  background: #f0f7f0;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  color: var(--secondary-color);
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.edit-action-btn:hover {
+  background: var(--secondary-color);
+  color: #fff;
+}
+
+.no-results {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-muted);
+  background: #fff;
+  border-radius: 10px;
+  border: 1px dashed var(--border-color);
+}
+
+/* Responsywność - obsługa małych ekranów */
+@media (max-width: 600px) {
+  .search-card {
+    flex-direction: column;
+    padding: 10px;
+  }
+  .search-button {
+    width: 100%;
+  }
+  .user-card {
+    padding: 10px 15px;
+  }
 }

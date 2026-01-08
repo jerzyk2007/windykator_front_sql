@@ -1,8 +1,6 @@
 /* GŁÓWNY KONTENER NAWIGACJI */
-.nav_menu {
-  /* --- TU ZMIENIASZ WYSOKOŚĆ PASKA --- */
+/* .nav_menu {
   height: 40px;
-  /* ---------------------------------- */
   flex-basis: 60%;
   font-family: "Source Sans 3", Calibri, sans-serif;
   font-size: 1.05rem;
@@ -11,6 +9,21 @@
   align-items: center;
   user-select: none;
   z-index: 1000;
+} */
+.nav_menu {
+  position: fixed; /* Przykleja menu do okna przeglądarki */
+  top: 0; /* Na samą górę */
+  left: 0; /* Od lewej */
+  width: 100%; /* Pełna szerokość */
+  height: 50px; /* Zwiększyłem nieco wysokość dla lepszej klikalności */
+  background-color: white; /* Musi mieć tło, żeby nie prześwitywało */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Delikatny cień pod menu */
+
+  display: flex;
+  align-items: center;
+  z-index: 9999; /* Bardzo wysoka wartość - menu nad wszystkim */
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .nav_menu__menu {
@@ -39,7 +52,8 @@
 
 .nav_menu-dropdown__menu {
   position: absolute;
-  top: 100%;
+  /* top: 100%; */
+  top: 50px;
   left: 50%;
   transform: translateX(-50%);
   background-color: white;
@@ -48,7 +62,7 @@
   border: 1px solid rgba(44, 123, 168, 0.15);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   padding: 5px 0;
-  z-index: 1001;
+  z-index: 100000;
 }
 
 /* POJEDYNCZY WIERSZ (W menu pionowym i w bocznym) */
@@ -106,7 +120,7 @@
   border: 1px solid rgba(44, 123, 168, 0.15);
   box-shadow: -10px 10px 30px rgba(0, 0, 0, 0.15);
   padding: 5px 0;
-  z-index: 1002;
+  z-index: 10001;
 }
 
 /* KLASY DO UKRYWANIA */

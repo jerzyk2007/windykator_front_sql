@@ -10,11 +10,12 @@ const clearForm = {
   numerDokumentu: "",
   ubezpieczyciel: "",
   terminPlatnosci: "",
+  dataPrzekazania: "", // <--- DODANO
   kwotaNaleznosci: 0,
   kwotaDisplay: "",
   konto: "",
   kontoDisplay: "",
-  mail: "",
+  osobaZlecajaca: "",
   dzial: "",
   kontrahentNazwa: "",
   kontrahentUlica: "",
@@ -28,7 +29,7 @@ const clearForm = {
   maile: [""],
 };
 
-const AddDoc = ({ profile }) => {
+const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const [form, setForm] = useState(clearForm);
   const [message, setMessage] = useState({ type: "", info: "" });
@@ -46,7 +47,6 @@ const AddDoc = ({ profile }) => {
     isPositive: (val) => !isNaN(val) && parseFloat(val) > 0,
   };
 
-  // Sprawdzanie duplikatów w tablicach (ignoruje puste)
   const hasDuplicates = (array) => {
     const filtered = array
       .map((i) => i.replace(/\s/g, ""))
@@ -62,7 +62,6 @@ const AddDoc = ({ profile }) => {
     return isValid ? {} : { color: "red", borderColor: "red" };
   };
 
-  // Styl dla pól kontaktowych (obsługa duplikatów)
   const getContactStyle = (isValid, value, array) => {
     const cleanVal = value.replace(/\s/g, "");
     const isDuplicate =
@@ -133,9 +132,11 @@ const AddDoc = ({ profile }) => {
   const handleAcceptNewDoc = () => {
     setMessage({ type: "", info: "" });
     setForm(clearForm);
+    if (profile === "edit") {
+      setIsEditing(false);
+    }
   };
 
-  // Warunki dodawania kolejnych pól
   const canAddPhone =
     form.telefony.every((t) => v.phone(t)) &&
     !hasDuplicates(form.telefony) &&
@@ -151,8 +152,9 @@ const AddDoc = ({ profile }) => {
     if (!v.required(form.numerDokumentu)) errors.push("Numer dokumentu");
     if (!v.required(form.ubezpieczyciel)) errors.push("Ubezpieczyciel");
     if (!v.required(form.terminPlatnosci)) errors.push("Termin płatności");
+    if (!v.required(form.dataPrzekazania)) errors.push("Data przekazania"); // <--- WALIDACJA
     if (!v.isPositive(form.kwotaNaleznosci)) errors.push("Kwota należności");
-    if (!v.email(form.mail)) errors.push("E-mail zlecającego");
+    if (!v.email(form.osobaZlecajaca)) errors.push("E-mail zlecającego");
     if (!v.required(form.dzial)) errors.push("Dział");
     if (!v.required(form.kontrahentNazwa)) errors.push("Nazwa kontrahenta");
     if (!v.required(form.kontrahentUlica)) errors.push("Ulica kontrahenta");
@@ -169,13 +171,27 @@ const AddDoc = ({ profile }) => {
     }
 
     try {
-      const result = await axiosPrivateIntercept.post(
-        `insurance/insert-new-document`,
-        { data: form }
-      );
-      if (result.status === 201)
-        setMessage({ type: "new", info: result.data.message });
+      if (profile === "new") {
+        const result = await axiosPrivateIntercept.post(
+          `insurance/insert-new-document`,
+          { data: form }
+        );
+        if (result.status === 201)
+          setMessage({ type: "new", info: result.data.message });
+      } else if (profile === "edit") {
+        const result = await axiosPrivateIntercept.post(
+          `insurance/edit-document`,
+          {
+            id: docData.id_document,
+            data: form,
+          }
+        );
+        if (result.status === 201)
+          setMessage({ type: "new", info: result.data.message });
+        // setIsEditing(false);
+      }
     } catch (error) {
+      console.log("error");
       if (error.response?.status === 409) {
         setMessage({ type: "edit", info: error.response.data?.message ?? "" });
         return;
@@ -194,6 +210,36 @@ const AddDoc = ({ profile }) => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (profile === "edit") {
+      setForm({
+        numerDokumentu: docData.NUMER_POLISY ?? "",
+        ubezpieczyciel: docData.UBEZPIECZYCIEL ?? "",
+        terminPlatnosci: docData.TERMIN_PLATNOSCI ?? "",
+        dataPrzekazania: docData.DATA_PRZEKAZANIA ?? "",
+        // kwotaNaleznosci: docData.NALEZNOSC ?? 0,
+        kwotaNaleznosci: docData.NALEZNOSC ?? 0,
+        kwotaDisplay: formatToPLN(docData.NALEZNOSC) ?? "",
+        konto: docData.NR_KONTA ?? "",
+        kontoDisplay: formatBankAccount(docData.NR_KONTA) ?? "",
+        osobaZlecajaca: docData.OSOBA_ZLECAJACA_WINDYKACJE ?? "",
+        dzial: docData.DZIAL ?? "",
+        kontrahentNazwa: docData.KONTRAHENT_NAZWA ?? "",
+        kontrahentUlica: docData.KONTRAHENT_ULICA ?? "",
+        kontrahentNrDomu: docData.KONTRAHENT_NR_BUDYNKU ?? "",
+        kontrahentNrLokalu: docData.KONTRAHENT_NR_LOKALU ?? "",
+        kontrahentKod: docData.KONTRAHENT_KOD_POCZTOWY ?? "",
+        kontrahentMiasto: docData.KONTRAHENT_MIASTO ?? "",
+        kontrahentNip: docData.KONTRAHENT_NIP ?? "",
+        kontrahentRegon: docData.KONTRAHENT_REGON ?? "",
+        telefony: docData.KONTAKT_DO_KLIENTA.TELEFON
+          ? docData.KONTAKT_DO_KLIENTA.TELEFON.map((tel) => formatPhone(tel))
+          : [""],
+        maile: [...docData.KONTAKT_DO_KLIENTA.MAIL] ?? [""],
+      });
+    }
+  }, [docData, profile]);
 
   useEffect(() => {
     getData();
@@ -317,9 +363,13 @@ const AddDoc = ({ profile }) => {
                 E-mail zlecającego *
                 <input
                   type="email"
-                  name="mail"
-                  value={form.mail}
-                  style={getInvalidStyle(v.email(form.mail), form.mail, true)}
+                  name="osobaZlecajaca"
+                  value={form.osobaZlecajaca}
+                  style={getInvalidStyle(
+                    v.email(form.osobaZlecajaca),
+                    form.osobaZlecajaca,
+                    true
+                  )}
                   onChange={handleChange}
                   placeholder="przyklad@firma.pl"
                 />
@@ -343,6 +393,22 @@ const AddDoc = ({ profile }) => {
                   menuPlacement="top"
                 />
               </label>
+            </section>
+
+            {/* DODANA SEKCJA DATA PRZEKAZANIA */}
+            <section className="add_doc-code-city">
+              <label style={{ width: "50%" }}>
+                Data przekazania *
+                <input
+                  type="date"
+                  name="dataPrzekazania"
+                  value={form.dataPrzekazania}
+                  onChange={handleChange}
+                  style={getInvalidStyle(true, form.dataPrzekazania, true)}
+                />
+              </label>
+              <div style={{ width: "50%" }}></div>{" "}
+              {/* Placeholder dla układu */}
             </section>
           </section>
         </section>
@@ -467,7 +533,7 @@ const AddDoc = ({ profile }) => {
           </section>
         </section>
 
-        {/* KOLUMNA 3: KONTAKT DO KLIENTA (PODZIELONA 50/50) */}
+        {/* KOLUMNA 3: KONTAKT DO KLIENTA */}
         <section className="add_doc-data">
           <h3>Kontakt do klienta</h3>
           <div className="add_doc-contact-wrapper">
@@ -515,7 +581,10 @@ const AddDoc = ({ profile }) => {
             <section className="add_doc-contact-section">
               <h4 className="contact-title">Adresy E-mail</h4>
               {form.maile.map((m, idx) => (
-                <div key={`mail-${idx}`} className="add_doc-contact-row">
+                <div
+                  key={`osobaZlecajaca-${idx}`}
+                  className="add_doc-contact-row"
+                >
                   <input
                     className="add_doc-contact"
                     type="text"
@@ -567,32 +636,13 @@ const AddDoc = ({ profile }) => {
     </section>
   );
 
-  const messagePanel1 = () => (
-    <section className="add_doc">
-      <section className="add_doc__message">
-        <section className="add_doc__message__container">
-          <span>{message.info}</span>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={handleAcceptNewDoc}
-          >
-            OK
-          </Button>
-        </section>
-      </section>
-    </section>
-  );
   const messagePanel = () => (
     <section className="add_doc__message">
       <section className="add_doc__message__container">
-        {/* Dodana ikona dla lepszego efektu wizualnego */}
         <div className="add_doc__message__icon">
           <FontAwesomeIcon icon={faCheckCircle} />
         </div>
-
         <span>{message.info}</span>
-
         <Button
           variant="contained"
           color="success"

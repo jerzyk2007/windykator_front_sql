@@ -425,7 +425,7 @@ export const grossTotalDepartments = (
         item.DO_ROZLICZENIA !== 0
       ) {
         VATCounter.set(dep, VATCounter.get(dep) + 1);
-        VATPayment.set(dep, VATPayment.get(dep) + item["100_VAT"]);
+        VATPayment.set(dep, VATPayment.get(dep) + item["VAT_100"]);
       }
       if (
         item.DZIAL === dep &&
@@ -435,7 +435,7 @@ export const grossTotalDepartments = (
         item.DO_ROZLICZENIA !== 0
       ) {
         VATCounter.set(dep, VATCounter.get(dep) + 1);
-        VATPayment.set(dep, VATPayment.get(dep) + item["50_VAT"]);
+        VATPayment.set(dep, VATPayment.get(dep) + item["VAT_50"]);
       }
 
       if (
@@ -1306,7 +1306,7 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
         item.DO_ROZLICZENIA !== 0
       ) {
         VATCounter.set(dep.merge, VATCounter.get(dep.merge) + 1);
-        VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item["100_VAT"]);
+        VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item["VAT_100"]);
       }
 
       if (
@@ -1318,7 +1318,7 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
         item.DO_ROZLICZENIA !== 0
       ) {
         VATCounter.set(dep.merge, VATCounter.get(dep.merge) + 1);
-        VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item["50_VAT"]);
+        VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item["VAT_50"]);
       }
 
       if (
@@ -1411,6 +1411,5 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
       generatingRaport.push(departmentObj);
     }
   });
-
   return generatingRaport;
 };

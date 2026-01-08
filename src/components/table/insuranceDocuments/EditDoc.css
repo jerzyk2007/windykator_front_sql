@@ -1,0 +1,139 @@
+:root {
+  --primary-color: #1976d2;
+  --secondary-color: #2e7d32;
+  --bg-color: #f8fafd;
+  --card-bg: #ffffff;
+  --text-main: #2c3e50;
+  --text-muted: #7f8c8d;
+  --border-color: #e0e6ed;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --transition: all 0.2s ease-in-out;
+}
+
+.edit-doc-page {
+  flex-grow: 1;
+  width: 100%;
+  min-height: calc(100vh - 50px);
+  max-height: calc(100vh - 50px);
+  background-color: var(--bg-color);
+  /* padding: 20px 20px; */
+  display: flex;
+  justify-content: center;
+}
+
+.edit-doc-content {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.edit-doc-header {
+  text-align: center;
+}
+
+.edit-doc-header h1 {
+  color: var(--text-main);
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.edit-doc-header p {
+  color: var(--text-muted);
+}
+
+/* Karty wyników */
+.results-list {
+  /* max-height: 50vh; */
+  padding: 5px 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.doc-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px 30px;
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.doc-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+  border-color: var(--primary-color);
+}
+
+.doc-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.doc-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.doc-value {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+/* Przycisk edycji */
+.edit-action-btn {
+  background: #e8f5e9;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  color: var(--secondary-color);
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.edit-action-btn:hover {
+  background: var(--secondary-color);
+  color: #fff;
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+  .search-card {
+    flex-direction: column;
+  }
+
+  .doc-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .edit-action-btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+}

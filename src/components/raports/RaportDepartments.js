@@ -413,7 +413,7 @@ const RaportDepartments = ({ profile }) => {
   }, [departments]);
 
   useEffect(() => {
-    setTableSize(height - 151);
+    setTableSize(height - 1);
   }, [height]);
 
   useEffect(() => {
