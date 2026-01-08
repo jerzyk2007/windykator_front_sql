@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import ChangeOrgStrEdit from "./ChangeOrgStrEdit";
 import MissingDepartments from "./MissingDepartments";
-import PleaseWait from "../PleaseWait";
+import PleaseWait from "../../PleaseWait";
 import "./ChangeOrgStr.css";
 
 const ChangeOrgStr = () => {

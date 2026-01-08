@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
-import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
-import PleaseWait from "../PleaseWait";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
+import PleaseWait from "../../PleaseWait";
 
 import "./TableColumns.css";
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
-import PleaseWait from "../PleaseWait";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
+import PleaseWait from "../../PleaseWait";
 import OrgStrItemComponent from "./OrgStrItemComponent";
 import ChangeAging from "./ChangeAging";
 import PercentageTarget from "./PercentageTarget";

@@ -688,7 +688,7 @@
 // export default OrgStrItemComponent;
 import React, { useState, useEffect } from "react";
 import { Button } from "@mui/material";
-import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 
 import "./OrgStrItemComponent.css";
 
