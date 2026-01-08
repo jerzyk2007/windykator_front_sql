@@ -1,127 +1,332 @@
-import { useState, useEffect } from "react";
-import "./MissingDepartments.css";
+// // import React from "react";
+// // import "./ChangeOrgStr.css";
+
+// // const MissingDepartments = ({ departments, companyData }) => {
+// //   // Debugowanie wewnątrz komponentu
+
+// //   // Obliczamy firmy, które mają jakiekolwiek braki
+// //   const getActiveCompanies = () => {
+// //     if (!departments || departments.length === 0) return [];
+// //     if (companyData?.selectCompany && companyData.selectCompany !== "ALL") {
+// //       return [companyData.selectCompany];
+// //     }
+// //     // Wyciągamy unikalne nazwy firm z dostępnych braków
+// //     return [...new Set(departments.map((d) => d.company))].sort();
+// //   };
+
+// //   const activeCompanies = getActiveCompanies();
+
+// //   // Pomocnik do listingu
+// //   const renderDeps = (list, modifier) => {
+// //     if (list.length === 0)
+// //       return <span className="missing-deps__empty">Brak</span>;
+// //     return list.map((item, i) => (
+// //       <span
+// //         key={i}
+// //         className={`missing-deps__item missing-deps__item--${modifier}`}
+// //       >
+// //         {item.dep}
+// //         {i < list.length - 1 && ", "}
+// //       </span>
+// //     ));
+// //   };
+
+// //   // Zamiast return null, renderujemy pusty ale istniejący kontener jeśli brak danych
+// //   // To zapobiega "skakaniu" layoutu i błędom znikających komponentów
+// //   return (
+// //     <section
+// //       className="missing-deps"
+// //       style={{ display: departments?.length > 0 ? "flex" : "none" }}
+// //     >
+// //       <aside className="missing-deps__legend">
+// //         <div className="missing-deps__cell missing-deps__cell--header">
+// //           Statusy
+// //         </div>
+// //         <div className="missing-deps__cell">
+// //           <span className="missing-deps__label missing-deps__label--success">
+// //             Nierozliczone FV:
+// //           </span>
+// //         </div>
+// //         <div className="missing-deps__cell">
+// //           <span className="missing-deps__label missing-deps__label--danger">
+// //             Rozliczone FV:
+// //           </span>
+// //         </div>
+// //         <div className="missing-deps__cell">
+// //           <span className="missing-deps__label missing-deps__label--manual">
+// //             Ręczne:
+// //           </span>
+// //         </div>
+// //       </aside>
+
+// //       <div className="missing-deps__content">
+// //         {activeCompanies.map((compName) => {
+// //           const compItems = departments.filter((d) => d.company === compName);
+
+// //           return (
+// //             <div key={compName} className="missing-deps__company-col">
+// //               <div className="missing-deps__cell missing-deps__cell--header">
+// //                 {compName}
+// //               </div>
+// //               <div className="missing-deps__cell">
+// //                 {renderDeps(
+// //                   compItems.filter((d) => d.exist && !d.manual),
+// //                   "success"
+// //                 )}
+// //               </div>
+// //               <div className="missing-deps__cell">
+// //                 {renderDeps(
+// //                   compItems.filter((d) => !d.exist && !d.manual),
+// //                   "danger"
+// //                 )}
+// //               </div>
+// //               <div className="missing-deps__cell">
+// //                 {renderDeps(
+// //                   compItems.filter((d) => d.manual),
+// //                   "manual"
+// //                 )}
+// //               </div>
+// //             </div>
+// //           );
+// //         })}
+// //       </div>
+// //     </section>
+// //   );
+// // };
+
+// // export default MissingDepartments;
+
+// import React from "react";
+// import "./ChangeOrgStr.css";
+
+// const MissingDepartments = ({ departments, companyData }) => {
+//   if (!departments || departments.length === 0 || !companyData) return null;
+
+//   // 1. Obliczamy, które firmy bierzemy pod uwagę
+//   const getActiveCompanies = () => {
+//     if (companyData?.selectCompany && companyData.selectCompany !== "ALL") {
+//       return [companyData.selectCompany];
+//     }
+//     return [...new Set(departments.map((d) => d.company))].sort();
+//   };
+
+//   const activeCompanies = getActiveCompanies();
+
+//   // 2. Filtrujemy działy tylko dla aktywnych firm, aby sprawdzić widoczność wierszy
+//   const relevantDeps = departments.filter((d) =>
+//     activeCompanies.includes(d.company)
+//   );
+
+//   // 3. Sprawdzamy, czy w ogóle istnieją dane w konkretnych kategoriach (dla widocznych firm)
+//   const hasSuccess = relevantDeps.some((d) => d.exist && !d.manual);
+//   const hasDanger = relevantDeps.some((d) => !d.exist && !d.manual);
+//   const hasManual = relevantDeps.some((d) => d.manual);
+
+//   // Pomocnik do listingu
+//   const renderDeps = (list, modifier) => {
+//     // Tutaj już nie musimy zwracać "Brak", bo wiersz wyświetli się tylko gdy są dane
+//     return list.map((item, i) => (
+//       <span
+//         key={i}
+//         className={`missing-deps__item missing-deps__item--${modifier}`}
+//       >
+//         {item.dep}
+//         {i < list.length - 1 && ", "}
+//       </span>
+//     ));
+//   };
+
+//   return (
+//     <section
+//       className="missing-deps"
+//       style={{
+//         display: hasSuccess || hasDanger || hasManual ? "flex" : "none",
+//       }}
+//     >
+//       <aside className="missing-deps__legend">
+//         <div className="missing-deps__cell missing-deps__cell--header">
+//           Statusy
+//         </div>
+//         {hasSuccess && (
+//           <div className="missing-deps__cell">
+//             <span className="missing-deps__label missing-deps__label--success">
+//               Nierozliczone FV:
+//             </span>
+//           </div>
+//         )}
+//         {hasDanger && (
+//           <div className="missing-deps__cell">
+//             <span className="missing-deps__label missing-deps__label--danger">
+//               Rozliczone FV:
+//             </span>
+//           </div>
+//         )}
+//         {hasManual && (
+//           <div className="missing-deps__cell">
+//             <span className="missing-deps__label missing-deps__label--manual">
+//               Ręczne:
+//             </span>
+//           </div>
+//         )}
+//       </aside>
+
+//       <div className="missing-deps__content">
+//         {activeCompanies.map((compName) => {
+//           const compItems = departments.filter((d) => d.company === compName);
+
+//           return (
+//             <div key={compName} className="missing-deps__company-col">
+//               <div className="missing-deps__cell missing-deps__cell--header">
+//                 {compName}
+//               </div>
+
+//               {hasSuccess && (
+//                 <div className="missing-deps__cell">
+//                   {renderDeps(
+//                     compItems.filter((d) => d.exist && !d.manual),
+//                     "success"
+//                   )}
+//                 </div>
+//               )}
+
+//               {hasDanger && (
+//                 <div className="missing-deps__cell">
+//                   {renderDeps(
+//                     compItems.filter((d) => !d.exist && !d.manual),
+//                     "danger"
+//                   )}
+//                 </div>
+//               )}
+
+//               {hasManual && (
+//                 <div className="missing-deps__cell">
+//                   {renderDeps(
+//                     compItems.filter((d) => d.manual),
+//                     "manual"
+//                   )}
+//                 </div>
+//               )}
+//             </div>
+//           );
+//         })}
+//       </div>
+//     </section>
+//   );
+// };
+
+// export default MissingDepartments;
+
+import React from "react";
+import "./ChangeOrgStr.css";
 
 const MissingDepartments = ({ departments, companyData }) => {
-  const [company, setCompany] = useState([]);
+  if (!departments || departments.length === 0 || !companyData) return null;
 
-  const companyFilter = company?.map((item, index) => {
-    const missingDeps = departments.filter((prev) => prev.company === item);
-
-    const existDep = missingDeps
-      .filter(
-        (missDeps) => missDeps.exist === true && missDeps.manual === false
-      )
-      .sort((a, b) => a.dep.localeCompare(b.dep));
-
-    const noExistDep = missingDeps
-      .filter(
-        (missDeps) => missDeps.exist === false && missDeps.manual === false
-      )
-      .sort((a, b) => a.dep.localeCompare(b.dep));
-
-    const manualDep = missingDeps
-      .filter((missDeps) => missDeps.manual === true)
-      .sort((a, b) => a.dep.localeCompare(b.dep));
-
-    const exist =
-      existDep.length > 0 ? (
-        existDep.map((prev, index) => (
-          <span
-            key={index}
-            style={{ whiteSpace: "pre", color: "#0fc718", fontWeight: "bold" }}
-          >
-            {prev.dep}
-            {index < existDep.length - 1 && ", "}
-          </span>
-        ))
-      ) : (
-        <span>Brak</span>
-      );
-
-    const noExist =
-      noExistDep.length > 0 ? (
-        noExistDep.map((prev, index) => (
-          <span
-            key={index}
-            style={{ whiteSpace: "pre", color: "#ff3f3f", fontWeight: "bold" }}
-          >
-            {prev.dep}
-            {index < noExistDep.length - 1 && ", "}
-          </span>
-        ))
-      ) : (
-        <span>Brak</span>
-      );
-
-    const manual =
-      manualDep.length > 0 ? (
-        manualDep.map((prev, index) => (
-          <span
-            key={index}
-            style={{ whiteSpace: "pre", color: "#003f3f", fontWeight: "bold" }}
-          >
-            {prev.dep}
-            {index < manualDep.length - 1 && ", "}
-          </span>
-        ))
-      ) : (
-        <span>Brak</span>
-      );
-
-    return (
-      <section key={index} className="missing_department__container">
-        <section
-          className="missing_department__company--title"
-          style={{ fontWeight: "bold" }}
-        >
-          {item}
-        </section>
-        <section className="missing_department__company--exist">
-          {exist}
-        </section>
-        <section className="missing_department__company--noexist">
-          {noExist}
-        </section>
-        <section className="missing_department__company--noexist">
-          {manual}
-        </section>
-      </section>
-    );
-  });
-
-  useEffect(() => {
-    if (companyData?.selectCompany === "ALL") {
-      setCompany(companyData?.companyNames.filter((name) => name !== "ALL"));
-    } else {
-      setCompany([companyData.selectCompany]);
+  const getActiveCompanies = () => {
+    if (companyData?.selectCompany && companyData.selectCompany !== "ALL") {
+      return [companyData.selectCompany];
     }
-  }, [departments]);
+    return [...new Set(departments.map((d) => d.company))].sort();
+  };
+
+  const activeCompanies = getActiveCompanies();
+
+  const relevantDeps = departments.filter((d) =>
+    activeCompanies.includes(d.company)
+  );
+
+  const hasSuccess = relevantDeps.some((d) => d.exist && !d.manual);
+  const hasDanger = relevantDeps.some((d) => !d.exist && !d.manual);
+  const hasManual = relevantDeps.some((d) => d.manual);
+
+  // POMOCNIK DO LISTINGU - Poprawiony separator
+  const renderDeps = (list, modifier) => {
+    return list.map((item, i) => (
+      <span
+        key={i}
+        className={`missing-deps__item missing-deps__item--${modifier}`}
+      >
+        {item.dep}
+        {/* Dodajemy przecinek i jawną spację (niełamliwą) */}
+        {i < list.length - 1 ? ",\u00A0" : ""}
+      </span>
+    ));
+  };
 
   return (
-    <section className="missing_department">
-      <section className="missing_department__wrapper">
-        <section className="missing_department__company--title">
-          <span style={{ fontWeight: "bold" }}>Uzupełnij dane</span>
-        </section>
+    <section
+      className="missing-deps"
+      style={{
+        display: hasSuccess || hasDanger || hasManual ? "flex" : "none",
+      }}
+    >
+      <aside className="missing-deps__legend">
+        <div className="missing-deps__cell missing-deps__cell--header">
+          Statusy
+        </div>
+        {hasSuccess && (
+          <div className="missing-deps__cell">
+            <span className="missing-deps__label missing-deps__label--success">
+              Nierozliczone FV:
+            </span>
+          </div>
+        )}
+        {hasDanger && (
+          <div className="missing-deps__cell">
+            <span className="missing-deps__label missing-deps__label--danger">
+              Rozliczone FV:
+            </span>
+          </div>
+        )}
+        {hasManual && (
+          <div className="missing-deps__cell">
+            <span className="missing-deps__label missing-deps__label--manual">
+              Ręczne:
+            </span>
+          </div>
+        )}
+      </aside>
 
-        <section className="missing_department__company--exist">
-          <span style={{ color: "#0fc718", fontWeight: "bold" }}>
-            Nierozliczone FV:
-          </span>
-        </section>
+      <div className="missing-deps__content">
+        {activeCompanies.map((compName) => {
+          const compItems = departments.filter((d) => d.company === compName);
 
-        <section className="missing_department__company--noexist">
-          <span style={{ color: "#ff3f3f", fontWeight: "bold" }}>
-            Rozliczone FV:
-          </span>
-        </section>
-        <section className="missing_department__company--noexist">
-          <span style={{ color: "#003f3f", fontWeight: "bold" }}>
-            Ręcznie dodane działy:
-          </span>
-        </section>
-      </section>
-      {companyFilter}
+          return (
+            <div key={compName} className="missing-deps__company-col">
+              <div className="missing-deps__cell missing-deps__cell--header">
+                {compName}
+              </div>
+
+              {hasSuccess && (
+                <div className="missing-deps__cell">
+                  {renderDeps(
+                    compItems.filter((d) => d.exist && !d.manual),
+                    "success"
+                  )}
+                </div>
+              )}
+
+              {hasDanger && (
+                <div className="missing-deps__cell">
+                  {renderDeps(
+                    compItems.filter((d) => !d.exist && !d.manual),
+                    "danger"
+                  )}
+                </div>
+              )}
+
+              {hasManual && (
+                <div className="missing-deps__cell">
+                  {renderDeps(
+                    compItems.filter((d) => d.manual),
+                    "manual"
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 };
