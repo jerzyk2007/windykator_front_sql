@@ -16,7 +16,7 @@
   text-align: center;
   overflow: hidden;
   background: transparent;
-  border-right: 1px solid #e2e8f0; /* Opcjonalna linia oddzielająca */
+  /* border-right: 1px solid #e2e8f0; */
 }
 
 .loader {

@@ -380,16 +380,20 @@ const ChangeOrgStr = () => {
           <div className="change-org-str__col-area">
             <span className="change-org-str__data-span">{item.area}</span>
           </div>
-          <div className="change-org-str__col-staff">
+          <div
+            className={`change-org-str__col-owner ${
+              item.owner.length === 1 ? "change-org-str__col-owner--single" : ""
+            }`}
+          >
             {item.owner.map((own, i) => (
-              <div key={i} className="change-org-str__staff-item">
+              <div key={i} className="change-org-str__owner-item">
                 <span className="change-org-str__data-span">{own}</span>
               </div>
             ))}
           </div>
-          <div className="change-org-str__col-staff">
+          <div className="change-org-str__col-guardian">
             {item.guardian.map((guard, i) => (
-              <div key={i} className="change-org-str__staff-item">
+              <div key={i} className="change-org-str__guardian-item">
                 <span className="change-org-str__data-span">{guard}</span>
               </div>
             ))}
@@ -440,6 +444,30 @@ const ChangeOrgStr = () => {
             <div className="change-org-str__header-spacer"></div>
           </header>
 
+          {/* <main className="change-org-str__main">
+            <section className="change-org-str__item change-org-str__item--header">
+              <div className="change-org-str__col-lp">
+                <span>Lp</span>
+              </div>
+              <div className="change-org-str__col-dept">
+                <span>Dział</span>
+              </div>
+              <div className="change-org-str__col-loc">
+                <span>Lokalizacja</span>
+              </div>
+              <div className="change-org-str__col-area">
+                <span>Obszar</span>
+              </div>
+              <div className="change-org-str__col-owner">
+                <span>Owner</span>
+              </div>
+              <div className="change-org-str__col-guardian">
+                <span>Opiekun</span>
+              </div>
+            </section>
+
+            <section className="change-org-str__list">{itemsArray}</section>
+          </main> */}
           <main className="change-org-str__main">
             <section className="change-org-str__item change-org-str__item--header">
               <div className="change-org-str__col-lp">
@@ -454,14 +482,13 @@ const ChangeOrgStr = () => {
               <div className="change-org-str__col-area">
                 <span>Obszar</span>
               </div>
-              <div className="change-org-str__col-staff">
+              <div className="change-org-str__col-owner">
                 <span>Owner</span>
               </div>
-              <div className="change-org-str__col-staff">
+              <div className="change-org-str__col-guardian">
                 <span>Opiekun</span>
               </div>
             </section>
-
             <section className="change-org-str__list">{itemsArray}</section>
           </main>
         </section>
