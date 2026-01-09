@@ -1,15 +1,82 @@
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
-export const getAllDataRaport = async (allData, orderColumns, info) => {
-  const sanitize = (text) => {
-    if (!text) return " ";
-    return text.replace(
-      /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
-      " "
-    );
-  };
+// obrabiam dane z KANAL_KOMUNIKACJI i tworzę skrócone zapisy
+const formatChatField = (arrayData) => {
+  if (!arrayData) return "Brak wpisów";
 
+  try {
+    let dzialania;
+
+    if (!Array.isArray(arrayData) || arrayData.length === 0) {
+      dzialania = "Brak wpisów";
+    } else if (arrayData.length === 1) {
+      const e = arrayData[0];
+      // Używamy sanitize, aby uniknąć błędów w Excelu przy dziwnych znakach
+      dzialania = [e.date, e.username, sanitize(e.note)]
+        .filter(Boolean) // pomija null, undefined, "", 0
+        .join(" - "); // łączy poprawnie bez zbędnych spacji
+    } else {
+      const last = arrayData[arrayData.length - 1];
+
+      // Składamy linię z ostatniego wpisu
+      const lastLine = [
+        last.date ? `${last.date} -` : "",
+        last.username ? `${sanitize(last.username)} -` : "",
+        sanitize(last.note) || "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      dzialania =
+        `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n` + lastLine;
+    }
+
+    // --- Twoja logika przycinania (max 2 entery lub 120 znaków) ---
+    let maxEnters = 2;
+    let countEnters = 0;
+    let truncated = "";
+
+    for (let char of dzialania) {
+      if (char === "\n") {
+        countEnters++;
+        // Jeśli to jest 3 enter, przerywamy zanim go dodamy
+        if (countEnters > maxEnters) break;
+      }
+      // Jeśli to jest 121 znak, przerywamy
+      if (truncated.length >= 120) break;
+
+      truncated += char;
+    }
+
+    return truncated.length < dzialania.length ? truncated + " …" : truncated;
+  } catch (err) {
+    console.error("Błąd formatowania czatu:", err);
+    return "Brak wpisów";
+  }
+};
+
+const sanitize = (text) => {
+  // Jeśli text to null, undefined lub pusty string, zwróć spację
+  if (text === null || text === undefined || text === "") return " ";
+
+  // Jeśli text to obiekt (np. element tablicy UWAGI_ASYSTENT),
+  // spróbuj wyciągnąć z niego treść lub zamień na string
+  let str = "";
+  if (typeof text === "object") {
+    // Jeśli to Twój obiekt notatki, weź pole 'note' lub 'text'
+    str = text.note || text.text || JSON.stringify(text);
+  } else {
+    str = String(text);
+  }
+
+  return str.replace(
+    /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
+    " "
+  );
+};
+
+export const getAllDataRaport = async (allData, orderColumns, info) => {
   const sanitizeSheetName = (name) => {
     if (!name || typeof name !== "string") return "Arkusz";
     return name
@@ -31,15 +98,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
   };
 
   const cleanData = allData.map((item) => {
-    const dzialania =
-      Array.isArray(item.UWAGI_ASYSTENT) && item.UWAGI_ASYSTENT.length > 0
-        ? item.UWAGI_ASYSTENT.length === 1
-          ? sanitize(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1])
-          : `Liczba wcześniejszych wpisów: ${
-              item.UWAGI_ASYSTENT.length - 1
-            }\n${sanitize(item.UWAGI_ASYSTENT[item.UWAGI_ASYSTENT.length - 1])}`
-        : "";
-
     const informacja_zarzd =
       Array.isArray(item.INFORMACJA_ZARZAD) && item.INFORMACJA_ZARZAD.length > 0
         ? item.INFORMACJA_ZARZAD.length === 1
@@ -50,26 +108,17 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
               item.INFORMACJA_ZARZAD[item.INFORMACJA_ZARZAD.length - 1]
             )}`
         : "BRAK";
-
+    const chatPanel = formatChatField(item.KANAL_KOMUNIKACJI);
     return {
       ...item,
-      UWAGI_ASYSTENT: dzialania,
       INFORMACJA_ZARZAD: informacja_zarzd,
+      KANAL_KOMUNIKACJI: chatPanel,
     };
   });
 
   const startRow = 2;
 
   try {
-    // const groupedByDzial = {};
-    // cleanData.forEach((item) => {
-    //   const dzial = item.DZIAL || "Brak działu";
-    //   if (!groupedByDzial[dzial]) {
-    //     groupedByDzial[dzial] = [];
-    //   }
-    //   groupedByDzial[dzial].push(item);
-    // });
-
     // Używamy 'let', aby móc wyzerować obiekt, jeśli warunek unikalności nie zostanie spełniony
     let groupedByDzial = {};
 
@@ -100,7 +149,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
 
     const groupedSheets = [
       {
-        // name: getUniqueSheetName(info),
         name: getUniqueSheetName("Całość"),
         data: changeNameColumns,
       },
@@ -297,14 +345,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
 };
 
 export const lawPartnerRaport = async (allData, orderColumns, info) => {
-  const sanitize = (text) => {
-    if (!text) return " ";
-    return text.replace(
-      /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
-      " "
-    );
-  };
-
   const sanitizeSheetName = (name) => {
     if (!name || typeof name !== "string") return "Arkusz";
     return name
@@ -322,50 +362,6 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
     }
     usedNames.add(name);
     return name;
-  };
-
-  // obrabiam dane z KANAL_KOMUNIKACJI i tworzę skrócone zapisy
-  const formatChatField = (arrayData) => {
-    if (!arrayData) return "Brak wpisów";
-
-    try {
-      let dzialania;
-
-      if (!Array.isArray(arrayData) || arrayData.length === 0) {
-        dzialania = "Brak wpisów";
-      } else if (arrayData.length === 1) {
-        const e = arrayData[0];
-        // Używamy sanitize, aby uniknąć błędów w Excelu przy dziwnych znakach
-        dzialania = `${e.date} - ${sanitize(e.username)} - ${sanitize(e.note)}`;
-      } else {
-        const last = arrayData[arrayData.length - 1];
-        dzialania = `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
-          last.date
-        } - ${sanitize(last.username)} - ${sanitize(last.note)}`;
-      }
-
-      // --- Twoja logika przycinania (max 2 entery lub 120 znaków) ---
-      let maxEnters = 2;
-      let countEnters = 0;
-      let truncated = "";
-
-      for (let char of dzialania) {
-        if (char === "\n") {
-          countEnters++;
-          // Jeśli to jest 3 enter, przerywamy zanim go dodamy
-          if (countEnters > maxEnters) break;
-        }
-        // Jeśli to jest 121 znak, przerywamy
-        if (truncated.length >= 120) break;
-
-        truncated += char;
-      }
-
-      return truncated.length < dzialania.length ? truncated + " …" : truncated;
-    } catch (err) {
-      console.error("Błąd formatowania czatu:", err);
-      return "Brak wpisów";
-    }
   };
 
   const cleanData = allData.map((item) => {
@@ -626,14 +622,6 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
   }
 };
 export const insuranceRaport = async (allData, orderColumns, info) => {
-  const sanitize = (text) => {
-    if (!text) return " ";
-    return text.replace(
-      /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
-      " "
-    );
-  };
-
   const sanitizeSheetName = (name) => {
     if (!name || typeof name !== "string") return "Arkusz";
     return name

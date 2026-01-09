@@ -1,0 +1,66 @@
+// import { spanInfoStyle } from "../utilsForTable/tableFunctions";
+
+const NotesList = ({
+  data = [],
+  clickedIndex,
+  handleCopyClick,
+  handleMouseEnter,
+  handleMouseLeave,
+  preWrap = false, // różnica między InfoDesk i LogsEvent
+}) => {
+  const spanInfoStyle = (profile, info = "name") => {
+    const dateColor = "rgba(47, 173, 74, 1)";
+    return profile === "Pracownik"
+      ? {
+          color: info === "name" ? "rgba(42, 4, 207, 1)" : dateColor,
+          // fontWeight: "bold",
+          fontWeight: "600",
+        }
+      : profile === "Kancelaria"
+      ? {
+          color: info === "name" ? "rgba(192, 112, 8, 1)" : dateColor,
+          // fontWeight: "bold",
+          fontWeight: "600",
+        }
+      : {
+          color: info === "name" ? "rgba(255, 14, 203, 1)" : dateColor,
+          fontWeight: "600",
+        };
+  };
+
+  return data?.map((item, index) => (
+    <section className="info_desk__container" key={index}>
+      <span
+        className="info_desk--date"
+        style={spanInfoStyle(item.profile, "date")}
+      >
+        {item.date}
+      </span>
+
+      {item?.date && <span>{" - "}</span>}
+
+      <span
+        className={`info_desk--username ${
+          clickedIndex === index ? "clicked" : ""
+        }`}
+        style={spanInfoStyle(item.profile, "name")}
+        onClick={() => handleCopyClick(item.userlogin, index)}
+        onMouseEnter={(e) => handleMouseEnter(e, item.userlogin)}
+        onMouseLeave={handleMouseLeave}
+      >
+        {item.username}
+      </span>
+
+      {item?.username && <span>{" - "}</span>}
+
+      <span
+        className="info_desk--note"
+        style={preWrap ? { whiteSpace: "pre-wrap" } : undefined}
+      >
+        {item.note}
+      </span>
+    </section>
+  ));
+};
+
+export default NotesList;

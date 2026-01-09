@@ -26,7 +26,6 @@
   pointer-events: none;
 }
 
-/* ANIMACJA KOLORÓW */
 @keyframes colorShift {
   0% {
     color: #ff0000;

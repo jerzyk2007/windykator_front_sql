@@ -16,7 +16,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
 .edit_user_settings_section-content {
@@ -31,4 +30,203 @@
   margin: 0 2px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+}
+
+/* ************************** */
+/* wspólny css dla changeDepartments, ChangeLawPartner i ChangeROles
+ */
+
+/* --- FUNDAMENTY I KARTA --- */
+.user-edit-card {
+  width: 100%;
+  margin: 4px 0;
+  border: 1px solid rgba(44, 123, 168, 0.2);
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  overflow: hidden;
+}
+
+/* Warianty wysokości z Twojej analizy */
+.user-edit-card--flexible {
+  flex: 1;
+  min-height: 0;
+} /* Roles */
+.user-edit-card--limited {
+  flex: 0 0 auto;
+  max-height: 30vh;
+} /* LawPartner */
+
+/* --- NAGŁÓWEK --- */
+.user-edit-card__header {
+  padding: 10px 15px;
+  background-color: rgba(44, 123, 168, 0.05);
+  border-bottom: 1px solid rgba(44, 123, 168, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.user-edit-card__title {
+  flex-grow: 1;
+  margin: 0;
+  font-size: 1.05rem;
+  color: #2c7ba8;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Licznik (Badge) i Select w nagłówku */
+.user-edit-card__badge {
+  width: 35px;
+  height: 35px;
+  background: #2c7ba8;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(44, 123, 168, 0.3);
+}
+
+.user-edit-card__header-select {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(44, 123, 168, 0.4);
+  outline: none;
+}
+
+/* --- KONTENER PRZYCISKÓW FILTRÓW (Departments) --- */
+.user-edit-card__filters {
+  padding: 8px;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 8px;
+  background-color: #fafcfe;
+  border-bottom: 1px solid rgba(44, 123, 168, 0.05);
+}
+
+/* --- TREŚĆ I SCROLLBAR --- */
+.user-edit-card__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.user-edit-card__content::-webkit-scrollbar {
+  width: 6px;
+}
+.user-edit-card__content::-webkit-scrollbar-thumb {
+  background-color: rgba(44, 123, 168, 0.3);
+  border-radius: 10px;
+}
+.user-edit-card__content::-webkit-scrollbar-thumb:hover {
+  background-color: #2c7ba8;
+}
+
+/* --- UKŁADY ELEMENTÓW (Grid dla kafelków / List dla wierszy) --- */
+.user-edit-card__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 5px;
+}
+
+.user-edit-card__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* --- POJEDYNCZY ELEMENT (Item) --- */
+.user-edit-card__item {
+  background-color: #f8fafc;
+  border: 1px solid rgba(44, 123, 168, 0.1);
+  border-radius: 8px;
+  /* padding: 8px 12px; */
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.user-edit-card__item:hover {
+  background-color: #eff6ff;
+  border-color: rgba(44, 123, 168, 0.3);
+}
+
+.user-edit-card__item--row {
+  background: transparent;
+  border: none;
+}
+
+/* Tekst i opisy */
+.user-edit-card__item-text--dep {
+  display: flex;
+  flex-direction: row; /* Zmienione z column na row */
+  justify-content: space-between; /* Sprawi, że dział będzie po lewej, a firma po prawej */
+  align-items: center; /* Wyśrodkowanie w pionie */
+  flex: 1;
+  margin-right: 15px; /* Odstęp od checkboxa */
+}
+
+.user-edit-card__item-label--dep {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.user-edit-card__item-sub--dep {
+  font-size: 0.9rem;
+  color: #505050;
+  /* Opcjonalnie: jeśli chcesz, aby firma była zawsze wyrównana do prawej, 
+     możesz dodać margin-left: auto lub polegać na space-between powyżej */
+}
+.user-edit-card__item-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.user-edit-card__item-label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+.user-edit-card__item-sub {
+  font-size: 0.9rem;
+  color: #888;
+  color: #505050;
+}
+
+/* Checkboxy */
+.user-edit-card__checkbox {
+  width: 17px;
+  height: 17px;
+  accent-color: #2c7ba8;
+  cursor: pointer;
+}
+
+/* --- STOPKA Z PRZYCISKIEM --- */
+.user-edit-card__footer {
+  padding: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: center;
+}
+
+.user-edit-card__button {
+  /* width: 50% !important; */
+  max-width: 250px;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  background-color: #2c7ba8 !important;
 }

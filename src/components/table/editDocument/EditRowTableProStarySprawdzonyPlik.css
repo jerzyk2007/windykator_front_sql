@@ -1,0 +1,574 @@
+/* ==========================================================================
+   GŁÓWNY UKŁAD I KONTENERY (EditRowTablePro)
+   ========================================================================== */
+
+.ertp-wrapper {
+  flex-grow: 1;
+  padding: 2px;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.1rem;
+  z-index: 5;
+  background-color: #fff;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.ertp-main-container {
+  flex-grow: 1;
+  display: flex;
+}
+
+.ertp-actions-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ertp-tab-content {
+  margin: 0 auto;
+  width: 100%;
+  display: none;
+}
+
+.ertp-tab-content--active {
+  display: block;
+}
+
+.ertp-columns-layout {
+  height: 100%;
+  padding: 0 2px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-around;
+}
+
+.ertp-column {
+  flex-grow: 1;
+  flex-basis: 33%;
+  min-width: 500px;
+  min-height: 500px;
+  padding: 1px;
+  margin: 1px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fix dla kolumn, które mają wypełniać 100% wysokości (np. Czat) */
+.ertp-column--fill {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ==========================================================================
+   KOMPONENTY DANYCH (Label / Value / Inputs)
+   ========================================================================== */
+
+.ertp-data-section {
+  flex-grow: 1;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.15rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.ertp-data-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+  box-sizing: border-box; /* Zapewnia, że padding nie zwiększa szerokości */
+}
+
+.ertp-data-row__label {
+  flex-shrink: 0;
+  width: 100%;
+  flex-basis: 40%;
+  text-align: left;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  padding: 1px 1px 1px 5px;
+  margin: 1px 2px;
+  background-color: rgba(220, 241, 253, 0.2);
+  display: flex;
+  align-items: center;
+  cursor: help;
+}
+
+.ertp-data-row__label--read-only {
+  background-color: rgba(252, 220, 253, 0.8);
+}
+
+.ertp-data-row__value {
+  width: 100%;
+  word-break: break-all;
+  line-height: 1.2;
+  flex-basis: 59%;
+  text-align: center;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  padding: 2px;
+  margin: 1px 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ertp-data-row__value--scrollable {
+  display: block;
+  padding: 5px;
+  overflow-y: auto;
+  max-height: 90px;
+}
+
+.ertp-data-row__value--column {
+  flex-direction: column;
+  align-items: center;
+}
+
+.ertp-data-row__value--column span {
+  border: none !important;
+  margin: 1px 0;
+}
+
+/* INPUTY */
+.ertp-input-select,
+.ertp-input-text,
+.ertp-input-date {
+  width: 100%;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2px;
+  margin: 2px;
+  outline: none;
+}
+
+.ertp-input-wrapper {
+  display: flex;
+  align-items: center;
+  flex-basis: 59%;
+  width: 0; /* Kluczowe: pozwala flex-grow wewnątrz działać poprawnie bez wypychania */
+  min-width: 0;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+.ertp-textarea {
+  width: 98%;
+  min-height: 32px;
+  padding: 4px 6px;
+  /* margin: 1px 2px; */
+  resize: none;
+  overflow: hidden;
+  text-align: center;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  box-sizing: border-box;
+  border-radius: 4px;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.1rem;
+  outline: none;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+}
+
+.ertp-input--alert {
+  border: 1px solid red !important;
+}
+
+.ertp-input-checkbox {
+  width: 100%;
+  margin: 2px;
+  transform: scale(0.8);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   SEKCJE SPECJALISTYCZNE (Settlements)
+   ========================================================================== */
+
+.ertp-settlements-section {
+  /* Zmniejszamy min-height, aby na małych ekranach nie zajmowało pół strony */
+  min-height: 30vh;
+  /* Kluczowe: ograniczamy wysokość całej sekcji do ok. 40% widoku */
+  max-height: 35vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  margin-top: 10px; /* Odstęp od sekcji Actions nad nim */
+}
+
+.ertp-settlements__header {
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  text-align: center;
+  background-color: rgba(58, 178, 247, 0.2);
+  font-weight: 700;
+  flex-shrink: 0; /* Nagłówek nigdy się nie kurczy ani nie znika */
+}
+
+/* Data rozliczenia autostacja jako stały element rzędu */
+.ertp-settlements-section .ertp-data-row {
+  flex-shrink: 0; /* Ten wiersz nie może zniknąć przy scrollowaniu */
+}
+
+.ertp-settlement-item__date {
+  color: #2a8a21;
+  font-weight: 600;
+}
+
+.ertp-settlement-item__amount {
+  color: red;
+  font-weight: 600;
+}
+
+.ertp-settlements__scroll-box {
+  flex-grow: 1; /* Zajmuje całą pozostałą przestrzeń wewnątrz 40vh */
+  padding: 5px;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  overflow-y: auto; /* Pojawi się suwak, gdy danych będzie dużo */
+  white-space: pre-wrap;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+/* Panel Akceptacji */
+.ertp-accept-panel {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.ertp-accept-panel__header {
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  padding: 5px 15px;
+  background-color: rgb(245, 227, 255);
+  font-weight: bold;
+}
+
+.ertp-accept-panel__info {
+  margin: 15px 5px;
+  text-align: center;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  padding: 10px;
+  max-width: 450px;
+  background-color: #fafafa;
+}
+
+/* Kancelaria zewnętrzna */
+.ertp-section-header--highlight {
+  background-color: rgb(213, 168, 255);
+  color: rgb(0, 0, 0);
+  width: 95%;
+  padding: 3px;
+  text-align: center;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+}
+
+.ertp-law-firm-transfer {
+  margin-top: 50px;
+  align-items: center;
+}
+.ertp-info-box {
+  width: 90%;
+  margin: 10px 0;
+  padding: 5px;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+/* ==========================================================================
+   ZARZĄDZANIE I NOTATKI (Management, InfoDesk, Logs)
+   ========================================================================== */
+
+.ertp-management-wrapper {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.ertp-management-sub--date {
+  width: 100%;
+  /* margin: 5px 0; */
+  font-size: 1.05rem;
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.ertp-management-sub--note {
+  /* max-height: 60%; */
+  margin-top: 5px;
+  max-height: 60%;
+  min-height: 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ertp-management__header {
+  font-size: 1.08rem;
+  border: 1px solid rgba(0, 92, 145, 0.6);
+  border-radius: 5px;
+  padding: 3px;
+  text-align: center;
+  background-color: rgba(88, 228, 253, 0.4);
+}
+
+.ertp-notes-display {
+  flex-grow: 1;
+  overflow-y: auto;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 5px;
+  white-space: pre-wrap; /* Zachowuje entery/nowe linie, ale zawija tekst gdy dotknie krawędzi */
+  overflow-wrap: break-word; /* Rozbija bardzo długie słowa (np. linki), aby nie wystawały poza ramkę */
+  word-break: break-word; /* Dodatkowe zabezpieczenie dla starszych przeglądarek */
+  overflow-x: hidden; /* Całkowicie blokuje suwak poziomy */
+}
+
+/* Zabezpieczenie listy notatek i textarea */
+.ertp-notes-display,
+.ertp-textarea {
+  font-size: 1.1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box; /* Bardzo ważne: border i padding do wewnątrz */
+}
+
+.ertp-notes-display--chat {
+  flex-basis: 50%;
+  max-height: 40vh;
+}
+.ertp-notes-display--logs {
+  flex-grow: 1;
+}
+
+.ertp-management__btn-panel {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 5px 0;
+}
+
+.ertp-management__textarea {
+  min-height: 100px;
+}
+
+.ertp-textarea--history {
+  background-color: #fdfdfd;
+  max-height: 100px;
+  overflow-y: auto;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+}
+
+/* ==========================================================================
+   INTERAKCJA I PORTAL (Tooltips, Animations, Aliases)
+   ========================================================================== */
+
+/* FIX: Aliasy dla NotesList - Przywracają podgląd i kopiowanie */
+.info_desk--username,
+.ertp-username-clickable {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: bold;
+}
+
+.info_desk--username.clicked,
+.ertp-username-clickable--clicked {
+  animation: ertp-click-effect 0.3s ease;
+}
+
+@keyframes ertp-click-effect {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+    color: red;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* FIX: Aliasy dla TooltipPortal */
+.portal-tooltip,
+.ertp-portal-tooltip {
+  position: fixed;
+  z-index: 99999;
+  background-color: #333;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  max-width: 400px;
+  font-size: 1rem;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.portal-tooltip.top,
+.ertp-portal-tooltip.top {
+  transform: translateY(calc(-100% - 5px));
+}
+.portal-tooltip.top::after,
+.ertp-portal-tooltip.top::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 20px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+.portal-tooltip.bottom,
+.ertp-portal-tooltip.bottom {
+  transform: translateY(5px);
+}
+.portal-tooltip.bottom::after,
+.ertp-portal-tooltip.bottom::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 20px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #333 transparent;
+}
+
+/* ==========================================================================
+   PANEL PRZYCISKÓW DOLNYCH
+   ========================================================================== */
+
+.ertp-bottom-panel {
+  min-width: 1500px;
+  padding: 2px;
+  display: flex;
+  justify-content: center;
+}
+
+.ertp-actions-group {
+  flex-basis: 33%;
+  height: 50px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.ertp-nav-icon {
+  color: rgb(32, 90, 175);
+  transform: scale(1.8);
+  cursor: pointer;
+}
+
+.ertp-nav-icon:hover {
+  color: red;
+  transform: scale(2.1);
+}
+.ertp-nav-icon--disabled {
+  color: rgba(0, 0, 0, 0.2);
+  cursor: default;
+}
+
+.ertp-log-chat-select {
+  width: 95%;
+  margin: 0 auto 5px auto;
+  /* font-weight: 700; */
+}
+
+/* --- POPRAWKA DLA KONTENERA PIONOWEGO (ReferToLawFirm) --- */
+.ertp-input-group-vertical {
+  flex-basis: 59%;
+  display: flex;
+  flex-direction: column;
+  /* Stretch sprawia, że dzieci (input) rozciągają się do pełnej szerokości kontenera */
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* --- UJEDNOLICENIE INPUTA TEKSTOWEGO --- */
+.ertp-input-text {
+  width: auto; /* Teraz wypełni całe 59% szerokości rzędu */
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2px;
+  margin: 1px 2px; /* Marginesy identyczne jak w ertp-input-select */
+  outline: none;
+  box-sizing: border-box; /* Ważne: padding nie powiększa elementu */
+}
+
+/* Zabezpieczenie dla całej sekcji Law Firm */
+.ertp-law-firm-transfer {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+/* Jeśli chcesz, żeby komunikat o błędzie był wycentrowany pod inputem */
+.ertp-input-group-vertical span {
+  width: 100%;
+  display: block;
+}
+
+/* ==========================================================================
+  WYKAZ
+  WPŁAT
+  (EditBasicDataPro - Partner)
+  ==========================================================================
+  */
+.ertp-settlements-list {
+  flex-grow: 1;
+  border: 1px solid rgba(44, 123, 168, 0.6);
+  border-radius: 5px;
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.ertp-settlements-list__header {
+  text-align: center;
+  padding: 2px 0;
+  font-weight: bold;
+}
+
+.ertp-settlements-list__item {
+  flex-grow: 1;
+  padding: 2px;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease;
+}
+
+.ertp-settlements-list__item:hover {
+  cursor: pointer;
+  background-color: rgba(202, 202, 202, 0.7);
+  border-radius: 5px;
+}

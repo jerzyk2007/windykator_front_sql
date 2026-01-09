@@ -1,0 +1,483 @@
+/* ==========================================================================
+   1. ZMIENNE I KONFIGURACJA BAZOWA
+   Definicja kolorów, odstępów i ustawień systemowych.
+   ========================================================================== */
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-bg: #eff6ff;
+  --bg-main: #f8fafc;
+  --card-bg: #ffffff;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --border_bottom: #d8d8d8;
+  --success: #10b981;
+  --danger: #ef4444;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --font-size-base: 1.1rem;
+  --shadow-overlay: rgba(15, 23, 42, 0.6);
+}
+
+/* Globalne ustawienie box-sizing dla stabilności wymiarów */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Stylizacja paska przewijania (Scrollbar) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Animacje UI */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes modalUp {
+  from {
+    transform: translateY(60px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   2. KOMPONENT GŁÓWNY: ChangeOrgStr (Układ ogólny)
+   ========================================================================== */
+
+.change-org-str {
+  height: 100vh;
+  background-color: var(--bg-main);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+}
+
+/* Nagłówek z filtrem firmy */
+.change-org-str__header {
+  padding: 10px 20px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+
+.change-org-str__header-info {
+  flex-grow: 1;
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--text-dark);
+}
+
+.change-org-str__select {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-main);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Główny kontener tabeli danych */
+.change-org-str__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* ==========================================================================
+   3. STRUKTURA TABELI (Grid & Rows)
+   ========================================================================== */
+
+/* Definicja kolumn grida (Suma 100% / 10fr) */
+.change-org-str__item--header,
+.change-org-str__item {
+  display: grid;
+  grid-template-columns:
+    minmax(5%, 0.5fr) /* LP: 5% */
+    minmax(15%, 1.5fr) /* Dział: 15% */
+    minmax(15%, 1.5fr) /* Lokalizacja: 15% */
+    minmax(15%, 1.5fr) /* Obszar: 15% */
+    minmax(35%, 3.5fr) /* Owner: 35% */
+    minmax(15%, 1.5fr); /* Opiekun: 15% */
+  align-items: stretch;
+  gap: 0;
+  text-align: center;
+  scrollbar-gutter: stable;
+  min-width: 1250px; /* Zabezpieczenie przed ściskaniem */
+}
+
+/* Styl nagłówka tabeli */
+.change-org-str__item--header {
+  background: #f1f5f9;
+  border: 1px solid var(--border);
+  border-radius: 12px 12px 0 0;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Kontener listy z przewijaniem pionowym */
+.change-org-str__list {
+  background: white;
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  overflow-y: auto;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+/* Styl pojedynczego wiersza i efekty hover */
+.change-org-str__item {
+  border-bottom: 1px solid var(--border_bottom);
+  transition: background 0.2s, transform 0.1s;
+}
+
+.change-org-str__item:hover {
+  background-color: var(--primary-bg);
+  border: 1px solid rgb(179, 179, 179);
+  border-radius: 10px;
+  transform: scale(0.99);
+  cursor: pointer;
+}
+
+/* Linie pionowe oddzielające kolumny */
+[class^="change-org-str__col-"] {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border);
+}
+
+/* Wiersz brakującego powiązania (żółte tło) */
+.change-org-str__item--missing {
+  background-color: #fffbeb;
+}
+
+/* ==========================================================================
+   4. SPECYFIKACJA KOLUMN I DANYCH
+   ========================================================================== */
+
+.change-org-str__col-lp {
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+/* Kolumna OWNER - układ elastyczny (flex-wrap) */
+.change-org-str__item:not(.change-org-str__item--header)
+  .change-org-str__col-owner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  gap: 8px 12px;
+  padding: 10px;
+  width: 100%;
+}
+
+/* Owner gdy występuje tylko jeden (brak zawijania) */
+.change-org-str__item:not(.change-org-str__item--header)
+  .change-org-str__col-owner--single {
+  flex-wrap: nowrap;
+  padding: 2px 5px;
+}
+
+/* Kolumna OPIEKUN (GUARDIAN) - układ pionowy */
+.change-org-str__item:not(.change-org-str__item--header)
+  .change-org-str__col-guardian {
+  border-right: none !important; /* Ostatnia kolumna bez linii prawej */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px 15px;
+  align-items: center;
+}
+
+/* Stabilizacja nagłówka dla kolumn elastycznych */
+.change-org-str__item--header .change-org-str__col-owner span,
+.change-org-str__item--header .change-org-str__col-guardian span {
+  grid-column: span 1;
+}
+
+/* Kafelki z danymi (Spany) */
+.change-org-str__data-span {
+  background: rgb(250, 254, 255);
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-size: 0.9rem;
+  display: block;
+  width: 100%;
+  min-height: 2.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+/* Hover na pojedynczy kafelek */
+.change-org-str__item .change-org-str__data-span:hover {
+  cursor: pointer;
+  background: white;
+}
+
+/* Kontenery elementów w kolumnach */
+.change-org-str__owner-item,
+.change-org-str__guardian-item,
+.change-org-str__dept-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.change-org-str__owner-item {
+  flex: 1 1 140px;
+  max-width: 200px;
+}
+
+/* ==========================================================================
+   5. KOMPONENT: MissingDepartments (Legenda statusów)
+   ========================================================================== */
+
+.missing-deps {
+  margin: 5px 20px;
+  background: #f0fdf4;
+  border: 1px solid #dcfce7;
+  border-radius: var(--radius);
+  display: flex;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.missing-deps__legend {
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #dcfce7;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.missing-deps__content {
+  display: flex;
+  flex: 1;
+  overflow-x: auto;
+}
+
+.missing-deps__company-col {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #dcfce7;
+}
+
+.missing-deps__cell {
+  flex: 1;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+.missing-deps__cell--header {
+  background: rgba(255, 255, 255, 0.4);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+/* Kolory statusów w legendzie */
+.missing-deps__item {
+  font-weight: 800;
+}
+.missing-deps__item--success {
+  color: var(--success);
+}
+.missing-deps__item--danger {
+  color: var(--danger);
+}
+.missing-deps__label--success {
+  color: var(--success);
+  font-weight: 700;
+}
+.missing-deps__label--danger {
+  color: var(--danger);
+  font-weight: 700;
+}
+.missing-deps__label--manual {
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   6. KOMPONENT: ChangeOrgStrEdit (Modal edycji)
+   ========================================================================== */
+
+/* Tło modala (Overlay) */
+.change-org-str__modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--shadow-overlay, rgba(15, 23, 42, 0.6));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Karta modala */
+.change-org-str__modal-card {
+  width: 50vw;
+  max-height: 85vh;
+  min-width: 700px;
+  max-width: 1000px;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: modalUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Nagłówek i stopka modala */
+.change-org-str__modal-header,
+.change-org-str__modal-footer {
+  padding: 12px 25px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+}
+
+.change-org-str__modal-header {
+  border-bottom: 1px solid var(--border);
+  justify-content: space-between;
+}
+
+.change-org-str__modal-footer {
+  border-top: 1px solid var(--border);
+  justify-content: space-between;
+}
+
+.change-org-str__modal-footer-right {
+  display: flex;
+  gap: 1rem;
+}
+
+.change-org-str__modal-badge {
+  background: var(--primary);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+}
+
+.change-org-str__modal-close-btn {
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.change-org-str__modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.2rem 1.8rem;
+}
+
+/* Siatka formularza wewnątrz modala */
+.change-org-str__modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+.change-org-str__modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.change-org-str__modal-field label {
+  font-weight: 800;
+  font-size: 0.75rem;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.change-org-str__select-modal {
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+  background: white;
+}
+
+/* Listy dynamiczne w modalu */
+.change-org-str__modal-dynamic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.change-org-str__modal-dynamic-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.change-org-str__modal-icons i {
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.success-icon {
+  color: var(--success);
+}
+.danger-icon {
+  color: var(--danger);
+}

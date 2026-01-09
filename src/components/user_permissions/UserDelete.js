@@ -1,11 +1,10 @@
 import { useState } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
-import "./UserDelete.css";
+import "./UserChangeName.css"; // Korzystamy z tego samego pliku co UserChangeName
 
 const UserDelete = ({ id, login, setEdit }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
@@ -22,54 +21,74 @@ const UserDelete = ({ id, login, setEdit }) => {
   };
 
   return (
-    <section className="user_delete">
-      <section className="user_delete__title">
-        {!confirmDelete && (
-          <h3 className="user_delete__title--name">
-            {!errMsg ? "Usuń użytkownika" : errMsg}
-          </h3>
-        )}
-        {confirmDelete && (
-          <h3 className="user_delete__title--name">
-            Potwierdź, tej operacji nie można cofnąć !
-          </h3>
-        )}
-      </section>
-      <section className="user_delete__container">
-        <p className="user_delete__container--edit">{login}</p>
-      </section>
-
-      {!confirmDelete ? (
-        <Button
-          className="user_delete--button"
-          variant="contained"
-          onClick={() => setConfirmDelete(true)}
-          size="small"
-          color="error"
+    <section className="user_change_name">
+      {" "}
+      {/* Ta sama klasa główna */}
+      <section className="user_change_name__title">
+        <h3
+          className={`user_change_name__title--name ${
+            confirmDelete ? "msg-error" : ""
+          }`}
         >
-          Usuń użytkownika
-        </Button>
-      ) : (
-        <section className="user_delete__confirm">
+          {!confirmDelete
+            ? !errMsg
+              ? "Usuń użytkownika"
+              : errMsg
+            : "Potwierdź, tej operacji nie można cofnąć!"}
+        </h3>
+      </section>
+      <section className="user_change_name__container">
+        {/* p udaje inputa, aby zachować marginesy i układ */}
+        <p
+          className="user_change_name__container--edit"
+          style={{
+            border: "none",
+            background: "transparent",
+            fontWeight: "bold",
+          }}
+        >
+          {login}
+        </p>
+      </section>
+      <section
+        className="user_change_name__container"
+        style={{
+          paddingTop: 0,
+          flexDirection: "row",
+          gap: "10px",
+          justifyContent: "center",
+        }}
+      >
+        {!confirmDelete ? (
           <Button
-            className="user_delete__confirm--cancel"
             variant="contained"
-            onClick={() => setConfirmDelete(false)}
-            size="small"
-          >
-            Anuluj
-          </Button>
-          <Button
-            className="user_delete__confirm--confirm"
-            variant="contained"
-            onClick={handleConfirmDeleteUser}
+            onClick={() => setConfirmDelete(true)}
             size="small"
             color="error"
           >
             Usuń użytkownika
           </Button>
-        </section>
-      )}
+        ) : (
+          <>
+            <Button
+              variant="contained"
+              onClick={() => setConfirmDelete(false)}
+              size="small"
+              color="secondary"
+            >
+              Anuluj
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleConfirmDeleteUser}
+              size="small"
+              color="error"
+            >
+              Potwierdź
+            </Button>
+          </>
+        )}
+      </section>
     </section>
   );
 };

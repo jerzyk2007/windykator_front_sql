@@ -17,6 +17,63 @@ const muiTableBodyCellProps = {
   },
 };
 
+// funkcja dla przekształcenia danychj z kolumn KANAL_KOMUNIKACJI
+const kanalKomunikacjiColumnConfig = (muiTableBodyCellProps = {}) => ({
+  accessorFn: (originalRow) => {
+    const arrayData = originalRow?.KANAL_KOMUNIKACJI;
+    if (!arrayData) return "";
+
+    try {
+      let dzialania;
+
+      if (!Array.isArray(arrayData) || arrayData.length === 0) {
+        dzialania = "";
+      } else if (arrayData.length === 1) {
+        const e = arrayData[0];
+        dzialania = [e.date, e.username, e.note].filter(Boolean).join(" - ");
+      } else {
+        const last = arrayData[arrayData.length - 1];
+
+        const lastLine = [
+          last.date ? `${last.date} -` : "",
+          last.username ? `${last.username} -` : "",
+          last.note || "",
+        ]
+          .filter(Boolean)
+          .join(" ");
+
+        dzialania =
+          `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n` + lastLine;
+      }
+
+      let maxEnters = 2;
+      let countEnters = 0;
+      let truncated = "";
+
+      for (let char of dzialania) {
+        if (char === "\n") {
+          countEnters++;
+          if (countEnters > maxEnters) break;
+        }
+        if (truncated.length >= 150) break;
+        truncated += char;
+      }
+
+      return truncated.length < dzialania.length ? truncated + " …" : truncated;
+    } catch {
+      return "Brak wpisów";
+    }
+  },
+
+  muiTableBodyCellProps: {
+    align: "left",
+    sx: {
+      ...muiTableBodyCellProps.sx,
+      textWrap: "none",
+    },
+  },
+});
+
 // przygotowanie kolumn tabeli dla permissions=Pracownik
 export const prepareColumnsInsider = (columnsData) => {
   const update = columnsData.map((item) => {
@@ -70,7 +127,7 @@ export const prepareColumnsInsider = (columnsData) => {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
               cell.column.id === "KONTRAHENT" && checkClient === "TAK"
-                ? "#7fffd4"
+                ? "#d4fff1ff"
                 : "white",
           },
         };
@@ -96,7 +153,8 @@ export const prepareColumnsInsider = (columnsData) => {
           ...muiTableBodyCellProps.sx,
           backgroundColor:
             cell.column.id === "ILE_DNI_PO_TERMINIE" && cell.getValue() > 0
-              ? "rgb(250, 136, 136)"
+              ? // ? "rgb(250, 136, 136)"
+                "rgba(255, 233, 233, 1)"
               : "white",
         },
       });
@@ -107,7 +165,7 @@ export const prepareColumnsInsider = (columnsData) => {
         ...muiTableBodyCellProps,
         sx: {
           ...muiTableBodyCellProps.sx,
-          backgroundColor: "rgba(248, 255, 152, .2)",
+          backgroundColor: "rgba(255, 253, 240, 1)",
         },
       });
     }
@@ -143,8 +201,7 @@ export const prepareColumnsInsider = (columnsData) => {
           : "BRAK";
       };
     }
-    //
-    if (item.accessorKey === "50_VAT") {
+    if (item.accessorKey === "VAT_50") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         const cellValue = cell.getValue();
         const dorozliczValue = cell.row.original.DO_ROZLICZENIA;
@@ -154,7 +211,7 @@ export const prepareColumnsInsider = (columnsData) => {
           sx: {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
-              cell.column.id === "50_VAT" &&
+              cell.column.id === "VAT_50" &&
               Math.abs(cellValue - dorozliczValue) <= 1
                 ? "rgb(250, 136, 136)"
                 : "white",
@@ -163,7 +220,7 @@ export const prepareColumnsInsider = (columnsData) => {
       };
     }
 
-    if (item.accessorKey === "100_VAT") {
+    if (item.accessorKey === "VAT_100") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
         const cellValue = cell.getValue();
         const dorozliczValue = cell.row.original.DO_ROZLICZENIA;
@@ -172,7 +229,7 @@ export const prepareColumnsInsider = (columnsData) => {
           sx: {
             ...muiTableBodyCellProps.sx,
             backgroundColor:
-              cell.column.id === "100_VAT" &&
+              cell.column.id === "VAT_100" &&
               Math.abs(cellValue - dorozliczValue) <= 1
                 ? "rgb(250, 136, 136)"
                 : "white",
@@ -184,46 +241,17 @@ export const prepareColumnsInsider = (columnsData) => {
     if (item.accessorKey === "INFORMACJA_ZARZAD") {
       modifiedItem.accessorFn = (originalRow) => {
         const arrayData = originalRow.INFORMACJA_ZARZAD;
-
         if (!Array.isArray(arrayData) || arrayData.length === 0) return "BRAK";
-
-        const last = arrayData[arrayData.length - 1];
-        return typeof last === "string"
-          ? last.length > 90
-            ? last.slice(0, 90) + " …"
-            : last
-          : "BRAK";
+        const e = arrayData[arrayData.length - 1];
+        return [e.date, e.username, e.note].filter(Boolean).join(" - ");
       };
     }
 
-    if (item.accessorKey === "UWAGI_ASYSTENT") {
-      modifiedItem.accessorFn = (originalRow) => {
-        const arrayData = originalRow.UWAGI_ASYSTENT;
-        if (!arrayData) return "";
-        try {
-          const dzialania =
-            Array.isArray(arrayData) && arrayData.length > 0
-              ? arrayData.length === 1
-                ? arrayData[0]
-                : `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
-                    arrayData[arrayData.length - 1]
-                  }`
-              : "";
-          return dzialania.length > 120
-            ? dzialania.slice(0, 120) + " …"
-            : dzialania;
-          // return "BRAK";
-        } catch {
-          return "BRAK";
-        }
-      };
-      modifiedItem.muiTableBodyCellProps = {
-        ...muiTableBodyCellProps,
-        sx: {
-          ...muiTableBodyCellProps.sx,
-          backgroundColor: "rgba(248, 255, 152, .2)", // nadpisanie koloru tła
-        },
-      };
+    if (item.accessorKey === "KANAL_KOMUNIKACJI") {
+      const kanalConfig = kanalKomunikacjiColumnConfig(muiTableBodyCellProps);
+
+      modifiedItem.accessorFn = kanalConfig.accessorFn;
+      modifiedItem.muiTableBodyCellProps = kanalConfig.muiTableBodyCellProps;
     }
 
     if (item.filterVariant === "none") {
@@ -307,54 +335,12 @@ export const prepareColumnsPartner = (columnsData) => {
         return null;
       };
     }
+
     if (item.accessorKey === "KANAL_KOMUNIKACJI") {
-      modifiedItem.accessorFn = (originalRow) => {
-        const arrayData = originalRow.KANAL_KOMUNIKACJI;
-        if (!arrayData) return "Brak wpisów";
-        try {
-          let dzialania;
+      const kanalConfig = kanalKomunikacjiColumnConfig(muiTableBodyCellProps);
 
-          if (!Array.isArray(arrayData) || arrayData.length === 0) {
-            dzialania = "Brak wpisów";
-          } else if (arrayData.length === 1) {
-            // ⭐ ZWRACAMY STRING A NIE OBIEKT!
-            const e = arrayData[0];
-            dzialania = `${e.date} - ${e.username} - ${e.note}`;
-          } else {
-            const last = arrayData[arrayData.length - 1];
-            dzialania = `Liczba wcześniejszych wpisów: ${
-              arrayData.length - 1
-            }\n${last.date} - ${last.username} - ${last.note}`;
-          }
-
-          // Ograniczenie do max 2 enterów i max 120 znaków
-          let maxEnters = 2;
-          let countEnters = 0;
-          let truncated = "";
-
-          for (let char of dzialania) {
-            if (char === "\n") {
-              countEnters++;
-              if (countEnters > maxEnters) break;
-            }
-            if (truncated.length >= 120) break;
-            truncated += char;
-          }
-
-          return truncated.length < dzialania.length
-            ? truncated + " …"
-            : truncated;
-        } catch {
-          return "Brak wpisów";
-        }
-      };
-
-      modifiedItem.muiTableBodyCellProps = {
-        align: "left",
-        sx: {
-          ...muiTableBodyCellProps.sx,
-        },
-      };
+      modifiedItem.accessorFn = kanalConfig.accessorFn;
+      modifiedItem.muiTableBodyCellProps = kanalConfig.muiTableBodyCellProps;
     }
 
     if (item.accessorKey === "KONTRAHENT") {
@@ -393,22 +379,6 @@ export const prepareColumnsPartner = (columnsData) => {
           : "BRAK";
       };
     }
-
-    // if (item.accessorKey === "WYKAZ_SPLACONEJ_KWOTY_FK") {
-    //   modifiedItem.accessorFn = (originalRow) => {
-    //     const wykaz = originalRow?.WYKAZ_SPLACONEJ_KWOTY_FK
-    //       ? originalRow.WYKAZ_SPLACONEJ_KWOTY_FK
-    //       : [];
-    //     if (wykaz && wykaz.length) {
-    //       console.log(wykaz);
-    //       const mergedData = wykaz.map((itemRow) => {
-    //         return `${itemRow.data} - ${itemRow.kwota} - ${itemRow.symbol}`;
-    //       });
-    //       return mergedData;
-    //     }
-    //     return "BRAK";
-    //   };
-    // }
 
     if (item.accessorKey === "WYKAZ_SPLACONEJ_KWOTY_FK") {
       modifiedItem.accessorFn = (originalRow) => {
@@ -529,54 +499,12 @@ export const prepareColumnsInsurance = (columnsData) => {
         return null;
       };
     }
+
     if (item.accessorKey === "KANAL_KOMUNIKACJI") {
-      modifiedItem.accessorFn = (originalRow) => {
-        const arrayData = originalRow.KANAL_KOMUNIKACJI;
-        if (!arrayData) return "Brak wpisów";
-        try {
-          let dzialania;
+      const kanalConfig = kanalKomunikacjiColumnConfig(muiTableBodyCellProps);
 
-          if (!Array.isArray(arrayData) || arrayData.length === 0) {
-            dzialania = "Brak wpisów";
-          } else if (arrayData.length === 1) {
-            // ⭐ ZWRACAMY STRING A NIE OBIEKT!
-            const e = arrayData[0];
-            dzialania = `${e.date} - ${e.username} - ${e.note}`;
-          } else {
-            const last = arrayData[arrayData.length - 1];
-            dzialania = `Liczba wcześniejszych wpisów: ${
-              arrayData.length - 1
-            }\n${last.date} - ${last.username} - ${last.note}`;
-          }
-
-          // Ograniczenie do max 2 enterów i max 120 znaków
-          let maxEnters = 3;
-          let countEnters = 0;
-          let truncated = "";
-
-          for (let char of dzialania) {
-            if (char === "\n") {
-              countEnters++;
-              if (countEnters > maxEnters) break;
-            }
-            if (truncated.length >= 150) break;
-            truncated += char;
-          }
-
-          return truncated.length < dzialania.length
-            ? truncated + " …"
-            : truncated;
-        } catch {
-          return "Brak wpisów";
-        }
-      };
-
-      modifiedItem.muiTableBodyCellProps = {
-        align: "left",
-        sx: {
-          ...muiTableBodyCellProps.sx,
-        },
-      };
+      modifiedItem.accessorFn = kanalConfig.accessorFn;
+      modifiedItem.muiTableBodyCellProps = kanalConfig.muiTableBodyCellProps;
     }
 
     if (item.accessorKey === "KONTRAHENT_NAZWA") {

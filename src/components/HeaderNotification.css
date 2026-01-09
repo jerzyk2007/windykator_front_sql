@@ -1,4 +1,4 @@
-.header_notification {
+/* .header_notification {
   flex-basis: 50%;
   display: flex;
   justify-content: center;
@@ -6,12 +6,23 @@
   text-align: center;
   overflow: hidden;
   background: transparent;
+} */
+.header_notification {
+  flex: 0 0 30%; /* Dokładnie 30%, nie rośnie, nie kurczy się */
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  background: transparent;
+  /* border-right: 1px solid #e2e8f0; */
 }
 
 .loader {
   font-weight: bold;
   font-family: monospace;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   white-space: nowrap;
   background: linear-gradient(
     90deg,
@@ -25,9 +36,18 @@
     red
   );
   background-size: 400%;
+
+  /* Najpierw wersja z prefiksem (dla starszych przeglądarek WebKit) */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: rainbow 10s linear infinite;
+
+  /* Następnie wersja standardowa (rozwiązuje problem podkreślenia) */
+  background-clip: text;
+
+  /* Fallback dla standardowego koloru (opcjonalnie) */
+  color: transparent;
+
+  animation: rainbow 6s linear infinite;
 }
 
 .loader::before {

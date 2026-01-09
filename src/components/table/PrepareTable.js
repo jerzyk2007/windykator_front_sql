@@ -8,9 +8,9 @@ import {
   prepareColumnsPartner,
   prepareColumnsInsurance,
 } from "./utilsForTable/prepareColumns";
+import { basePath } from "./utilsForTable/tableFunctions";
 import "./PrepareTable.css";
 
-// const PrepareTable = ({ info, raportDocuments }) => {
 const PrepareTable = ({ info, profile }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
@@ -49,22 +49,15 @@ const PrepareTable = ({ info, profile }) => {
     const getData = async () => {
       try {
         setPleaseWait(true);
-
         if (!["insider", "partner", "insurance"].includes(profile)) {
           return;
         }
-
-        // const basePath = profile === "insider" ? "/documents" : "/law-partner";
-        const basePath = {
-          insider: "/documents",
-          partner: "/law-partner",
-          insurance: "/insurance",
-        };
 
         const dataTable = await axiosPrivateIntercept.get(
           `${basePath[profile]}/get-data-table/${auth.id_user}/${info}/${profile}`,
           { signal: controller.signal }
         );
+
         setDocuments(dataTable.data);
 
         const tableSettingsColumns = await axiosPrivateIntercept.get(
@@ -84,11 +77,12 @@ const PrepareTable = ({ info, profile }) => {
             : [];
 
         setColumns(update);
-        setPleaseWait(false);
       } catch (err) {
         if (err.name !== "CanceledError") {
           console.error(err);
         }
+      } finally {
+        setPleaseWait(false);
       }
     };
 

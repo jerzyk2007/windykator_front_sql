@@ -1,19 +1,11 @@
-// const departmentsObjective = {
-//   time: {
-//     Q: 5,
-//   },
-//   departments: {
-//     Całość: "-",
-//     D08: 28,
-//     D38: 28,
-//     "D48/D58": 28,
-//     "D68/D78": 28,
-//     D88: 28,
-//     D98: 28,
-//     "D118/D148": 21,
-//     "D308/D318": 28,
-//   },
-// };
+// kolory do kolumn w raportach
+const pastelColors = {
+  yellow: "#fff3bc",
+  blue: "#dceefb",
+  green: "#e6ffd6ff",
+  rose: "#ffd3f8ff",
+  default: "#fcfcfcff",
+};
 
 const muiTableBodyCellProps = {
   align: "center",
@@ -22,21 +14,11 @@ const muiTableBodyCellProps = {
     backgroundColor: "#fff",
     borderRight: "1px solid #000",
     borderTop: "1px solid #000",
-    fontSize: "14px",
-    fontWeight: "bold",
+    fontSize: "1rem",
+    fontWeight: 500,
     padding: "2px",
     minHeight: "3rem",
   },
-  // sx: {
-  //   fontFamily: "Calibri, sans-serif",
-  //   fontSize: "15px",
-  //   borderRight: "1px solid #000",
-  //   border: "1px solid #000",
-  //   fontWeight: "500",
-  //   minHeight: "65px",
-  //   textWrap: "balance",
-  //   whiteSpace: "pre-wrap",
-  // },
 };
 
 const addedAllToRaportsDep = (generatingRaport) => {
@@ -281,18 +263,6 @@ export const grossTotalDepartments = (
         howManyExpiredElements.set(dep, howManyExpiredElements.get(dep) + 1);
       }
 
-      // if (
-      //   item.DZIAL === dep &&
-      //   afterDeadlineDate > todayDate &&
-      //   documentDate >= minDate &&
-      //   documentDate <= maxDate
-      // ) {
-      //   notExpiredPayment.set(
-      //     dep,
-      //     notExpiredPayment.get(dep) + item.DO_ROZLICZENIA
-      //   );
-      // }
-
       if (
         item.DZIAL === dep &&
         afterDeadlineDate >= todayDate &&
@@ -304,14 +274,6 @@ export const grossTotalDepartments = (
           notExpiredPayment.get(dep) + item.DO_ROZLICZENIA
         );
       }
-      // if (
-      //   item.DZIAL === dep &&
-      //   item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
-      //   item.JAKA_KANCELARIA !== "CNP" &&
-      //   afterDeadlineDate < todayDate &&
-      //   documentDate >= minDate &&
-      //   documentDate <= maxDate
-      // )
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA_TU !== "ROK-KONOPA" &&
@@ -330,14 +292,6 @@ export const grossTotalDepartments = (
         );
       }
 
-      // if (
-      //   item.DZIAL === dep &&
-      //   item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
-      //   item.JAKA_KANCELARIA !== "CNP" &&
-      //   afterDeadlineDate > todayDate &&
-      //   documentDate >= minDate &&
-      //   documentDate <= maxDate
-      // )
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA_TU !== "ROK-KONOPA" &&
@@ -352,15 +306,6 @@ export const grossTotalDepartments = (
         );
       }
 
-      // if (
-      //   item.DZIAL === dep &&
-      //   item.JAKA_KANCELARIA !== "BRAK" &&
-      //   item.JAKA_KANCELARIA !== "ROK-KONOPA" &&
-      //   item.JAKA_KANCELARIA !== "CNP" &&
-      //   afterDeadlineDate < todayDate &&
-      //   documentDate >= minDate &&
-      //   documentDate <= maxDate
-      // )
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA !== "BRAK" &&
@@ -374,13 +319,6 @@ export const grossTotalDepartments = (
         legalCounter.set(dep, legalCounter.get(dep) + 1);
       }
 
-      // if (
-      //   item.DZIAL === dep &&
-      //   item.JAKA_KANCELARIA === "BRAK" &&
-      //   afterDeadlineDate < todayDate &&
-      //   documentDate >= minDate &&
-      //   documentDate <= maxDate
-      // )
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA === "BRAK" &&
@@ -395,14 +333,6 @@ export const grossTotalDepartments = (
         );
         withoutLegalCounter.set(dep, withoutLegalCounter.get(dep) + 1);
       }
-
-      // if (
-      //   item.DZIAL === dep &&
-      //   item.JAKA_KANCELARIA === "BRAK" &&
-      //   afterDeadlineDate > todayDate &&
-      //   documentDate >= minDate &&
-      //   documentDate <= maxDate
-      // )
       if (
         item.DZIAL === dep &&
         item.JAKA_KANCELARIA === "BRAK" &&
@@ -425,7 +355,7 @@ export const grossTotalDepartments = (
         item.DO_ROZLICZENIA !== 0
       ) {
         VATCounter.set(dep, VATCounter.get(dep) + 1);
-        VATPayment.set(dep, VATPayment.get(dep) + item["100_VAT"]);
+        VATPayment.set(dep, VATPayment.get(dep) + item["VAT_100"]);
       }
       if (
         item.DZIAL === dep &&
@@ -435,7 +365,7 @@ export const grossTotalDepartments = (
         item.DO_ROZLICZENIA !== 0
       ) {
         VATCounter.set(dep, VATCounter.get(dep) + 1);
-        VATPayment.set(dep, VATPayment.get(dep) + item["50_VAT"]);
+        VATPayment.set(dep, VATPayment.get(dep) + item["VAT_50"]);
       }
 
       if (
@@ -548,6 +478,13 @@ export const columnsDepartments = [
     header: "Dział",
     filterVariant: "multi-select",
     enableColumnFilter: true,
+    muiTableBodyCellProps: {
+      ...muiTableBodyCellProps,
+      sx: {
+        ...muiTableBodyCellProps.sx,
+        backgroundColor: pastelColors.default,
+      },
+    },
   },
   {
     accessorKey: "CEL",
@@ -559,6 +496,13 @@ export const columnsDepartments = [
       const formattedValue =
         value !== undefined && value !== "" ? `${value}%` : " "; // Dodanie znaku procent do wartości, jeśli nie jest to pusty string
       return formattedValue;
+    },
+    muiTableBodyCellProps: {
+      ...muiTableBodyCellProps,
+      sx: {
+        ...muiTableBodyCellProps.sx,
+        backgroundColor: pastelColors.default,
+      },
     },
   },
   {
@@ -582,7 +526,8 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#ffe884",
+        // backgroundColor: "#ffe884",
+        backgroundColor: pastelColors.yellow,
       },
     },
     enableColumnFilter: false,
@@ -608,7 +553,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#ffe884",
+        backgroundColor: pastelColors.yellow,
       },
     },
     enableColumnFilter: false,
@@ -621,7 +566,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#ffe884",
+        backgroundColor: pastelColors.yellow,
       },
     },
     enableColumnFilter: false,
@@ -647,7 +592,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#ffe884",
+        backgroundColor: pastelColors.yellow,
       },
     },
     enableColumnFilter: false,
@@ -672,7 +617,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#caff84",
+        backgroundColor: pastelColors.green,
       },
     },
     enableColumnFilter: false,
@@ -698,7 +643,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#caff84",
+        backgroundColor: pastelColors.green,
       },
     },
     enableColumnFilter: false,
@@ -711,7 +656,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#caff84",
+        backgroundColor: pastelColors.green,
       },
     },
     enableColumnFilter: false,
@@ -736,7 +681,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#caff84",
+        backgroundColor: pastelColors.green,
       },
     },
     enableColumnFilter: false,
@@ -761,7 +706,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#9fdcff",
+        backgroundColor: pastelColors.blue,
       },
     },
     enableColumnFilter: false,
@@ -786,7 +731,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#9fdcff",
+        backgroundColor: pastelColors.blue,
       },
     },
     enableColumnFilter: false,
@@ -798,7 +743,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#9fdcff",
+        backgroundColor: pastelColors.blue,
       },
     },
     enableColumnFilter: false,
@@ -823,7 +768,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#9fdcff",
+        backgroundColor: pastelColors.blue,
       },
     },
     enableColumnFilter: false,
@@ -849,7 +794,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "rgba(255, 0, 255, .2)",
+        backgroundColor: pastelColors.rose,
       },
     },
     enableColumnFilter: false,
@@ -861,7 +806,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "rgba(255, 0, 255, .2)",
+        backgroundColor: pastelColors.rose,
       },
     },
     enableColumnFilter: false,
@@ -886,7 +831,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "rgba(255, 0, 255, .2)",
+        backgroundColor: pastelColors.rose,
       },
     },
     enableColumnFilter: false,
@@ -899,7 +844,7 @@ export const columnsDepartments = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "rgba(255, 0, 255, .2)",
+        backgroundColor: pastelColors.rose,
       },
     },
     enableColumnFilter: false,
@@ -911,11 +856,25 @@ export const columnsAdv = [
     accessorKey: "DORADCA",
     header: "Doradca",
     filterVariant: "multi-select",
+    muiTableBodyCellProps: {
+      ...muiTableBodyCellProps,
+      sx: {
+        ...muiTableBodyCellProps.sx,
+        backgroundColor: pastelColors.default,
+      },
+    },
   },
   {
     accessorKey: "DZIAL",
     header: "Dział",
     filterVariant: "multi-select",
+    muiTableBodyCellProps: {
+      ...muiTableBodyCellProps,
+      sx: {
+        ...muiTableBodyCellProps.sx,
+        backgroundColor: pastelColors.default,
+      },
+    },
   },
 
   {
@@ -940,7 +899,8 @@ export const columnsAdv = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#ffe884",
+        // backgroundColor: "#ffe884",
+        backgroundColor: pastelColors.yellow,
       },
     },
   },
@@ -966,7 +926,8 @@ export const columnsAdv = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#ffe884",
+        // backgroundColor: "#ffe884",
+        backgroundColor: pastelColors.yellow,
       },
     },
   },
@@ -979,7 +940,8 @@ export const columnsAdv = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#ffe884",
+        // backgroundColor: "#ffe884",
+        backgroundColor: pastelColors.yellow,
       },
     },
   },
@@ -1005,7 +967,8 @@ export const columnsAdv = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "#ffe884",
+        // backgroundColor: "#ffe884",
+        backgroundColor: pastelColors.yellow,
       },
     },
   },
@@ -1031,7 +994,7 @@ export const columnsAdv = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "rgba(255, 0, 255, .2)",
+        backgroundColor: pastelColors.rose,
       },
     },
   },
@@ -1043,7 +1006,7 @@ export const columnsAdv = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "rgba(255, 0, 255, .2)",
+        backgroundColor: pastelColors.rose,
       },
     },
   },
@@ -1068,7 +1031,7 @@ export const columnsAdv = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "rgba(255, 0, 255, .2)",
+        backgroundColor: pastelColors.rose,
       },
     },
   },
@@ -1081,7 +1044,7 @@ export const columnsAdv = [
       ...muiTableBodyCellProps,
       sx: {
         ...muiTableBodyCellProps.sx,
-        backgroundColor: "rgba(255, 0, 255, .2)",
+        backgroundColor: pastelColors.rose,
       },
     },
   },
@@ -1306,7 +1269,7 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
         item.DO_ROZLICZENIA !== 0
       ) {
         VATCounter.set(dep.merge, VATCounter.get(dep.merge) + 1);
-        VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item["100_VAT"]);
+        VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item["VAT_100"]);
       }
 
       if (
@@ -1318,7 +1281,7 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
         item.DO_ROZLICZENIA !== 0
       ) {
         VATCounter.set(dep.merge, VATCounter.get(dep.merge) + 1);
-        VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item["50_VAT"]);
+        VATPayment.set(dep.merge, VATPayment.get(dep.merge) + item["VAT_50"]);
       }
 
       if (
@@ -1411,6 +1374,5 @@ export const grossTotalAdv = (departments, raportData, raportDate) => {
       generatingRaport.push(departmentObj);
     }
   });
-
   return generatingRaport;
 };

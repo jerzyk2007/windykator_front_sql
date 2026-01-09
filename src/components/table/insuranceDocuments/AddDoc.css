@@ -1,0 +1,264 @@
+/* GŁÓWNY KONTENER */
+.add_doc {
+  flex-grow: 1;
+  width: 100%;
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  font-size: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: #fcfcfc;
+}
+
+.add_doc h2 {
+  text-align: center;
+  color: #2c7ba8;
+  margin: 15px 0;
+}
+
+/* FORMULARZ */
+.add_doc__form {
+  flex-grow: 1;
+  min-width: 1000px;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+/* POJEDYNCZA KOLUMNA */
+.add_doc-data {
+  flex: 1;
+  min-width: 450px;
+  max-width: 500px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(44, 123, 168, 0.3);
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.add_doc-data h3 {
+  width: 100%;
+  text-align: center;
+  background-color: rgba(44, 123, 168, 0.05);
+  margin: 0;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(44, 123, 168, 0.2);
+  border-radius: 8px 8px 0 0;
+  color: #2c7ba8;
+}
+
+.add_doc__container {
+  width: 100%;
+  height: calc(100vh - 250px);
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.add_doc__container label {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 15px;
+  color: #444;
+  font-weight: 500;
+}
+
+/* INPUTY */
+.add_doc input {
+  margin-top: 5px;
+  padding: 8px 12px;
+  border: 1px solid rgba(44, 123, 168, 0.4);
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.add_doc input:focus {
+  border-color: #2c7ba8;
+  box-shadow: 0 0 0 2px rgba(44, 123, 168, 0.2);
+}
+
+.add_doc-code-city {
+  display: flex;
+  justify-content: space-between;
+}
+
+.add_doc-code-city label {
+  width: 100%;
+}
+
+/* --- REACT SELECT (Dział) --- */
+.react-select-container {
+  margin-top: 5px;
+}
+
+.rs__control {
+  border: 1px solid rgba(44, 123, 168, 0.4) !important;
+  border-radius: 5px !important;
+  min-height: 40px !important;
+  box-shadow: none !important;
+  transition: all 0.2s !important;
+}
+
+.rs__control--is-focused {
+  border-color: #2c7ba8 !important;
+  box-shadow: 0 0 0 2px rgba(44, 123, 168, 0.2) !important;
+}
+
+/* Walidacja Selecta */
+.is-invalid .rs__control {
+  border-color: #ffa7a7 !important;
+}
+
+.rs__value-container {
+  padding: 0 12px !important;
+}
+
+.rs__menu {
+  z-index: 1000 !important;
+  border: 1px solid rgba(44, 123, 168, 0.4) !important;
+}
+
+.rs__menu-list {
+  max-height: 40vh !important;
+}
+
+.rs__indicator-separator {
+  display: none;
+}
+
+/* --- KONTAKT DO KLIENTA (3 KOLUMNA) --- */
+.add_doc-contact-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 250px);
+}
+
+.add_doc-contact-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.contact-title {
+  color: #2c7ba8;
+  margin: 5px 0 10px 0;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+}
+
+.contact-divider {
+  border-bottom: 2px solid rgba(44, 123, 168, 0.2);
+}
+
+.add_doc-contact-row {
+  display: flex;
+  width: 90%;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.add_doc-contact {
+  flex-grow: 1;
+  height: 38px;
+}
+
+/* SCROLLBARS */
+.add_doc__container::-webkit-scrollbar,
+.add_doc-contact-section::-webkit-scrollbar,
+.rs__menu-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.add_doc__container::-webkit-scrollbar-thumb,
+.add_doc-contact-section::-webkit-scrollbar-thumb,
+.rs__menu-list::-webkit-scrollbar-thumb {
+  background: rgba(44, 123, 168, 0.3);
+  border-radius: 10px;
+}
+
+/* PANEL DOLNY */
+.add_doc__accept-panel {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* NAKŁADKA POWIADOMIENIA */
+.add_doc__message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4); /* Przyciemnienie tła */
+  backdrop-filter: blur(4px); /* Rozmycie tła aplikacji */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* KARTA POWIADOMIENIA */
+.add_doc__message__container {
+  background-color: white;
+  padding: 40px 60px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 450px;
+  text-align: center;
+  border-top: 6px solid #2e7d32; /* Zielony pasek sukcesu */
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* TEKST W POWIADOMIENIU */
+.add_doc__message__container span {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* IKONA SUKCESU (opcjonalnie, jeśli dodasz do JSX) */
+.add_doc__message__icon {
+  font-size: 4rem;
+  color: #2e7d32;
+  margin-bottom: 10px;
+}
+
+/* ANIMACJE */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

@@ -16,7 +16,6 @@ import { pl } from "date-fns/locale";
 import useData from "../hooks/useData";
 import useWindowSize from "../hooks/useWindow";
 // import QuickTableNote from "./profileInsider/QuickTableNote";
-import EditRowTable from "./profileInsider/EditRowTable";
 import { Box, Button } from "@mui/material";
 import {
   getAllDataRaport,
@@ -24,7 +23,8 @@ import {
   insuranceRaport,
 } from "./utilsForTable/excelFilteredTable";
 import TableButtonInfo from "./TableButtonInfo";
-import EditRowTablePro from "./profileManager/EditRowTablePro";
+import EditRowTablePro from "./editDocument/EditRowTablePro";
+import { commonTableHeadCellProps } from "./utilsForTable/tableFunctions";
 import PleaseWait from "../PleaseWait";
 
 import "./Table.css";
@@ -61,14 +61,14 @@ const Table = ({
   );
   const [tableSize, setTableSize] = useState(500);
   const [data, setData] = useState([]);
-  // const [quickNote, setQuickNote] = useState("");
+
   const [dataRowTable, setDataRowTable] = useState({
     edit: false,
     singleDoc: {},
     controlDoc: {},
     lawPartner: [],
   });
-  // sortowanie defaultowe tabeli, jeśli istnieje dana kolumna
+
   const [sorting, setSorting] = useState(() => {
     const has = (key) => columns.some((c) => c.accessorKey === key);
     if (profile === "insider" && has("ILE_DNI_PO_TERMINIE")) {
@@ -90,17 +90,11 @@ const Table = ({
     plPL.components.MuiLocalizationProvider.defaultProps.localeText;
 
   const handleExportExel = async (data, type) => {
-    // włącz loader
     setExcelFile(true);
-
-    // pozwól Reactowi przetworzyć render
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     try {
-      const rowData = data.map((item) => {
-        return item.original;
-      });
-
+      const rowData = data.map((item) => item.original);
       const arrayOrder = columnOrder.filter(
         (item) => columnVisibility[item] !== false
       );
@@ -125,12 +119,11 @@ const Table = ({
         );
         return matchedColumn ? matchedColumn.header : key;
       });
+
       const updateData = rowData.map((item) => {
-        // Filtracja kluczy obiektu na podstawie arrayOrder
         const filteredKeys = Object.keys(item).filter((key) =>
           arrayOrder.includes(key)
         );
-        // Tworzenie nowego obiektu z wybranymi kluczami
         const updatedItem = filteredKeys.reduce((obj, key) => {
           obj[key] = item[key];
           return obj;
@@ -151,17 +144,11 @@ const Table = ({
   };
 
   const handleExportExcelPartner = async (data, type) => {
-    // włącz loader
     setExcelFile(true);
-
-    // pozwól Reactowi przetworzyć render
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     try {
-      const rowData = data.map((item) => {
-        return item.original;
-      });
-
+      const rowData = data.map((item) => item.original);
       const arrayOrder = columnOrder.filter(
         (item) => columnVisibility[item] !== false
       );
@@ -188,11 +175,9 @@ const Table = ({
       });
 
       const updateData = rowData.map((item) => {
-        // Filtracja kluczy obiektu na podstawie arrayOrder
         const filteredKeys = Object.keys(item).filter((key) =>
           arrayOrder.includes(key)
         );
-        // Tworzenie nowego obiektu z wybranymi kluczami
         const updatedItem = filteredKeys.reduce((obj, key) => {
           obj[key] = item[key];
           return obj;
@@ -216,11 +201,19 @@ const Table = ({
   };
 
   const getSingleRow = async (id, type) => {
+    setPleaseWait(true);
+    // NATYCHMIAST CZYŚCIMY DANE, ALE ZOSTAWIAMY TRYB EDYCJI
+    setDataRowTable((prev) => ({
+      ...prev,
+      edit: true,
+      singleDoc: {}, // To usuwa "ducha" starego dokumentu
+      controlDoc: {},
+      lawPartner: [],
+    }));
     const getRow = documents.filter((row) => row.id_document === id);
 
     if (getRow.length > 0) {
       try {
-        setPleaseWait(true);
         if (profile === "insider") {
           const response = await axiosPrivateIntercept.get(
             `/documents/get-single-document/${id}`
@@ -259,7 +252,9 @@ const Table = ({
       } catch (error) {
         console.error("Error fetching data from the server:", error);
       } finally {
-        setPleaseWait(false);
+        setTimeout(() => {
+          setPleaseWait(false);
+        }, 100);
       }
     } else {
       console.error("No row found with the specified ID");
@@ -307,7 +302,6 @@ const Table = ({
     enableColumnResizing: true,
     enableColumnOrdering: true,
     enableColumnPinning: true,
-    // enableRowVirtualization: true,
     onColumnSizingChange: setColumnSizing,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnOrderChange: setColumnOrder,
@@ -332,18 +326,12 @@ const Table = ({
     enableGlobalFilterModes: true,
     globalFilterModeOptions: ["fuzzy", "contains", "startsWith"],
     globalFilterFn: "contains",
-    // globalFilterFn: "contains",
     positionGlobalFilter: "left",
-    // opcja wyszukuje zbiory do select i multi-select
     enableFacetedValues: true,
-    // wyłącza filtr (3 kropki) w kolumnie
     enableColumnActions: false,
-    // nie odświeża tabeli po zmianie danych
     autoResetPageIndex: false,
     muiTableContainerProps: { sx: { maxHeight: tableSize } },
-    // wyświetla filtry nad komórką -
     columnFilterDisplayMode: "popover",
-    //filtr nad headerem - popover
     muiFilterTextFieldProps: {
       sx: { m: "0", width: "250px" },
       variant: "outlined",
@@ -353,74 +341,28 @@ const Table = ({
       shape: "rounded",
       variant: "outlined",
     },
-    muiTableHeadCellProps: () => ({
-      align: "left",
-      sx: {
-        fontWeight: "600",
-        fontFamily: "'Source Sans 3', Calibri, sans-serif",
-        fontSize: ".95rem",
-        color: "black",
-        backgroundColor: "#bfe2ff",
-        borderRight: "1px solid #c9c7c7",
-        minHeight: "3rem",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
 
-        "& .Mui-TableHeadCell-Content": {
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          textWrap: "balance",
-        },
-        "& .Mui-TableHeadCell-Content-Labels": {
-          padding: 0,
-        },
-        "& .Mui-TableHeadCell-Content-Actions": {
-          display: "none",
-        },
-
-        "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
-          borderWidth: "1px",
-          background: "none",
-          marginRight: "-9px",
-          borderColor: "rgba(75, 75, 75, .1)",
-        },
-      },
-    }),
-    // odczytanie danych po kliknięciu w wiersz
-    muiTableBodyCellProps: ({ column, row, cell }) => ({
-      // align: "center",
+    muiTableHeadCellProps: commonTableHeadCellProps,
+    muiTableBodyCellProps: ({ row }) => ({
+      className: "mrt-custom-body-cell",
       onDoubleClick: () => {
-        getSingleRow(row.original.id_document, "full");
-        // if (column.id === "UWAGI_ASYSTENT") {
-        //   getSingleRow(row.original.id_document, "quick");
-        // } else {
-        //   getSingleRow(row.original.id_document, "full");
-        // }
+        // 1. Sprawdzamy, czy którakolwiek z wymaganych ról znajduje się w tablicy auth.roles
+        const hasAccess = [110, 120, 350, 500, 2000].some((role) =>
+          auth?.roles?.includes(role)
+        );
+
+        // 2. Jeśli ma dostęp, wywołujemy funkcję
+        if (hasAccess) {
+          getSingleRow(row.original.id_document, "full");
+        }
       },
     }),
 
     renderTopToolbarCustomActions: ({ table }) => (
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          gap: "16px",
-          padding: "0px",
-          flexWrap: "wrap",
-        }}
-      >
-        {/* <Button
-          disabled={table.getRowModel().rows.length === 0}
-          onClick={() => handleExportExel(documents, "Całość")}
-        >
-          <i className="fa-regular fa-file-excel table-export-excel"></i>
-        </Button> */}
+      <Box className="table-toolbar-actions">
+        {/* PRZYCISK ZAPISZ WIDOK */}
         <Button
+          className="table-action-btn save"
           onClick={() =>
             handleSaveSettings(
               columnSizing,
@@ -431,88 +373,51 @@ const Table = ({
             )
           }
         >
-          <i className="fas fa-save table-save-settings"></i>
+          <i className="fas fa-save"></i>
+          <span>Zapisz widok</span>
         </Button>
-        {profile === "insider" && (
+
+        {/* PRZYCISK EXCEL */}
+        {["insider", "partner", "insurance"].includes(profile) && (
           <TableButtonInfo
-            className="table_excel"
+            className={`table-action-btn excel ${
+              !dataTableCounter ? "disabled" : ""
+            }`}
             disabled={!dataTableCounter}
-            onClick={() =>
-              handleExportExel(
-                table.getPrePaginationRowModel().rows,
-                "Zestawienie"
-              )
-            }
-            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
+            onClick={() => {
+              const type = profile === "insurance" ? "Polisy" : "Zestawienie";
+              profile === "insider"
+                ? handleExportExel(table.getPrePaginationRowModel().rows, type)
+                : handleExportExcelPartner(
+                    table.getPrePaginationRowModel().rows,
+                    type
+                  );
+            }}
+            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry."
           >
-            <i
-              className="fa-regular fa-file-excel table-export-excel"
-              style={
-                !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
-              }
-            ></i>
-          </TableButtonInfo>
-        )}
-        {profile === "partner" && info !== "no-accept" && (
-          <TableButtonInfo
-            className="table_excel"
-            disabled={!dataTableCounter}
-            onClick={() =>
-              handleExportExcelPartner(
-                table.getPrePaginationRowModel().rows,
-                "Zestawienie"
-              )
-            }
-            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
-          >
-            <i
-              className="fa-regular fa-file-excel table-export-excel"
-              style={
-                !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
-              }
-            ></i>
-          </TableButtonInfo>
-        )}
-        {profile === "insurance" && (
-          <TableButtonInfo
-            className="table_excel"
-            disabled={!dataTableCounter}
-            onClick={() =>
-              handleExportExcelPartner(
-                table.getPrePaginationRowModel().rows,
-                "Polisy"
-              )
-            }
-            tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry lub wyłączyć część kolumn."
-          >
-            <i
-              className="fa-regular fa-file-excel table-export-excel"
-              style={
-                !dataTableCounter ? { color: "rgba(129,129,129,0.3)" } : {}
-              }
-            ></i>
+            <i className="fa-regular fa-file-excel"></i>
+            <span>Eksport Excel</span>
           </TableButtonInfo>
         )}
       </Box>
     ),
   });
 
-  // obliczenie ilości danych przekazanych do tabeli żeby określić czy nie jest za dużo do wygenerowania pliku excel
   const tableDataSize = (dataSize) => {
-    const rowData = dataSize.map((item) => {
-      return item.original;
-    });
+    if (!dataSize || dataSize.length === 0) {
+      setDataTableCounter(false);
+      return;
+    }
 
+    const rowData = dataSize.map((item) => item.original);
     const arrayOrder = columnOrder.filter(
       (item) => columnVisibility[item] !== false
     );
 
     const updateData = rowData.map((item) => {
-      // Filtracja kluczy obiektu na podstawie arrayOrder
       const filteredKeys = Object.keys(item).filter((key) =>
         arrayOrder.includes(key)
       );
-      // Tworzenie nowego obiektu z wybranymi kluczami
       const updatedItem = filteredKeys.reduce((obj, key) => {
         obj[key] = item[key];
         return obj;
@@ -521,13 +426,13 @@ const Table = ({
     });
 
     const json = JSON.stringify(updateData);
-    const size = new TextEncoder().encode(json).length; // bajty
+    const size = new TextEncoder().encode(json).length;
 
-    setDataTableCounter(size >= 1 && size <= 30000000);
+    setDataTableCounter(size >= 1 && size <= 30000000); // limit 30MB
   };
 
   useEffect(() => {
-    setTableSize(height - 151);
+    setTableSize(height - 162);
   }, [height]);
 
   useEffect(() => {
@@ -541,7 +446,14 @@ const Table = ({
 
     setNextDoc(visibleData);
     tableDataSize(table.getPrePaginationRowModel().rows);
-  }, [table.getPrePaginationRowModel().rows, columnVisibility]);
+  }, [table.getPrePaginationRowModel().rows, columnVisibility, columnOrder]);
+
+  // --- NOWE: Przewijanie do góry przy zmianie paginacji ---
+  useEffect(() => {
+    if (table.refs.tableContainerRef.current) {
+      table.refs.tableContainerRef.current.scrollTop = 0;
+    }
+  }, [pagination.pageIndex, pagination.pageSize]);
 
   return (
     <section
@@ -549,34 +461,12 @@ const Table = ({
       style={dataRowTable.edit ? { display: "flex" } : null}
     >
       <ThemeProvider theme={theme}>
-        {/* {quickNote && (
-          <QuickTableNote
-            quickNote={quickNote}
-            setQuickNote={setQuickNote}
-            updateDocuments={updateDocuments}
-          />
-        )} */}
-
-        {pleaseWait ? (
-          <PleaseWait />
-        ) : [110, 120, 2000].some((role) => auth?.roles?.includes(role)) &&
-          profile === "insider" ? (
-          dataRowTable.edit && (
-            <EditRowTable
-              dataRowTable={dataRowTable}
-              setDataRowTable={setDataRowTable}
-              updateDocuments={updateDocuments}
-              roles={roles}
-              nextDoc={nextDoc}
-              getSingleRow={getSingleRow}
-              clearRowTable={clearRowTable}
-              info={info}
-            />
-          )
-        ) : [500, 350].some((role) => auth?.roles?.includes(role)) ? (
-          (profile === "partner" || profile === "insurance") &&
-          dataRowTable.edit && (
+        {dataRowTable.edit &&
+          (pleaseWait ? (
+            <PleaseWait />
+          ) : (
             <EditRowTablePro
+              // key={dataRowTable.singleDoc?.id_document || "loading"}
               dataRowTable={dataRowTable}
               setDataRowTable={setDataRowTable}
               updateDocuments={updateDocuments}
@@ -584,20 +474,21 @@ const Table = ({
               nextDoc={nextDoc}
               getSingleRow={getSingleRow}
               clearRowTable={clearRowTable}
+              roles={roles}
+              info={info}
               profile={profile}
             />
-          )
-        ) : null}
+          ))}
 
-        <LocalizationProvider
-          dateAdapter={AdapterDateFns}
-          adapterLocale={pl}
-          localeText={plLocale}
-        >
-          <div style={dataRowTable.edit ? { display: "none" } : null}>
+        <div style={dataRowTable.edit ? { display: "none" } : null}>
+          <LocalizationProvider
+            dateAdapter={AdapterDateFns}
+            adapterLocale={pl}
+            localeText={plLocale}
+          >
             <MaterialReactTable table={table} />
-          </div>
-        </LocalizationProvider>
+          </LocalizationProvider>
+        </div>
       </ThemeProvider>
     </section>
   );

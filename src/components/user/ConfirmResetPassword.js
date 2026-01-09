@@ -2,235 +2,138 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router";
 import { axiosPrivate } from "../../api/axios";
 import {
-    faCheck,
-    faTimes,
-    faInfoCircle,
+  faCheck,
+  faTimes,
+  faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FiX } from "react-icons/fi";
 import { Button } from "@mui/material";
 import PleaseWait from "../PleaseWait";
-import "./ChangePassword.css";
+import "../Login.css";
 
 const ConfirmResetPassword = () => {
-    const { token } = useParams(); // Pobiera token z URL
-    const passRef = useRef();
-    const errRef = useRef();
-    const navigate = useNavigate();
+  const { token } = useParams();
+  const navigate = useNavigate();
+  const [confirmPass, setConfirmPass] = useState(false);
+  const [password, setPassword] = useState("");
+  const [validPassword, setValidPassword] = useState(false);
+  const [passwordFocus, setPasswordFocus] = useState(false);
+  const [matchPassword, setMatchPassword] = useState("");
+  const [validMatchPassword, setValidMatchPassword] = useState(false);
+  const [matchPasswordFocus, setMatchPasswordFocus] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
 
-    const [confirmPass, setConfirmPass] = useState(false);
-    const [password, setPassword] = useState("");
-    const [validPassword, setValidPassword] = useState(false);
-    const [passwordFocus, setPasswordFocus] = useState(false);
+  const PASSWORD_REGEX =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
-    const [matchPassword, setMatchPassword] = useState("");
-    const [validMatchPassword, setValidMatchPassword] = useState(false);
-    const [matchPasswordFocus, setMatchPasswordFocus] = useState(false);
-
-    const [errMsg, setErrMsg] = useState("");
-
-    const PASSWORD_REGEX =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const v1 = PASSWORD_REGEX.test(password);
-
-            if (!v1) {
-                setErrMsg("Invalid entry");
-                return;
-            }
-
-            await axiosPrivate.patch(
-                `/reset-password/change-pass`,
-                JSON.stringify({ password, token }),
-                {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-                }
-            );
-            setPassword("");
-            setMatchPassword("");
-            navigate("/login", { replace: true }); // Zapobiega powrotowi wstecz
-        } catch (err) {
-            if (!err?.response) {
-                setErrMsg("Brak odpowiedzi z serwera.");
-            } else if (err.response?.status === 400) {
-                setErrMsg("Błędne hasło.");
-            } else if (err.response?.status === 401) {
-                setErrMsg("Brak autoryzaji.");
-            } else {
-                setErrMsg("Zmiana hasła nie powiodła się.");
-            }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axiosPrivate.patch(
+        `/reset-password/change-pass`,
+        JSON.stringify({ password, token }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         }
-    };
+      );
+      navigate("/login", { replace: true });
+    } catch (err) {
+      setErrMsg("Sesja wygasła lub błąd serwera.");
+    }
+  };
 
+  useEffect(() => {
+    setValidPassword(PASSWORD_REGEX.test(password));
+    setValidMatchPassword(password === matchPassword && matchPassword !== "");
+  }, [password, matchPassword]);
 
-    useEffect(() => {
-        const result = PASSWORD_REGEX.test(password);
-        setValidPassword(result);
-        const match = password === matchPassword;
-        setValidMatchPassword(match);
-    }, [password, matchPassword]);
-
-    useEffect(() => {
-        setErrMsg("");
-    }, [password, matchPassword]);
-
-
-    const veryfiResetPass = async () => {
-        try {
-            const result = await axiosPrivate.post(
-                `/reset-password/verify-pass`,
-                JSON.stringify({ token }),
-                {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-
-                }
-            );
-
-            if (result?.data?.checkDate) {
-                setConfirmPass(true);
-            } else {
-                setConfirmPass(true);
-
-                navigate('/login');
-            }
+  const verifyResetPass = async () => {
+    try {
+      const result = await axiosPrivate.post(
+        `/reset-password/verify-pass`,
+        JSON.stringify({ token }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         }
-        catch (error) {
-            console.error(error);
-        }
-    };
-    useEffect(() => {
+      );
+      if (result?.data?.checkDate) setConfirmPass(true);
+      else navigate("/login");
+    } catch (error) {
+      navigate("/login");
+    }
+  };
 
-        veryfiResetPass();
-    }, []);
+  useEffect(() => {
+    verifyResetPass();
+  }, []);
 
-    return (
-        <>
-            {confirmPass ? <section className="change_password">
-                {errMsg && (
-                    <p className="user-error-message" ref={errRef}>
-                        {errMsg}
-                    </p>
-                )}
-                {!errMsg && <h1 className="change_password-title">Zmiana hasła</h1>}
-                <h3 className="change_user_pass-info">
-                    Jeśli zmiana hasła zakończy się sukcesem to pojawi sie okno logowania
-                </h3>
-                <form className="change_password__container" onSubmit={handleSubmit}>
-                    <label htmlFor="password" className="change_password__container-title">
-                        Hasło:
-                        <span
-                            className={
-                                validPassword
-                                    ? "change_password__container-title--valid"
-                                    : "change_password__container-title--hide"
-                            }
-                        >
-                            <FontAwesomeIcon icon={faCheck} />
-                        </span>
-                        <span
-                            className={
-                                validPassword || !password
-                                    ? "change_password__container-title--hide"
-                                    : "change_password__container-title--invalid"
-                            }
-                        >
-                            <FontAwesomeIcon icon={faTimes} />
-                        </span>
-                    </label>
-                    <input
-                        className="change_password-text"
-                        type="password"
-                        id="password"
-                        autoComplete="off"
-                        name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie
-                        ref={passRef}
-                        value={password}
-                        onChange={(e) => {
-                            setPassword(e.target.value);
+  if (!confirmPass) return <PleaseWait />;
 
-                        }}
-                        required
-                        onFocus={() => setPasswordFocus(true)}
-                        onBlur={() => setPasswordFocus(false)}
-                    />
-                    {passwordFocus && !validPassword && (
-                        <p className="change_password__container-instructions">
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            od 8 od 24 znaków.
-                            <br />
-                            Musi zawierać małe i duże litery, cyfrę i znak specjalny.
-                            <br />
-                            Dostępne znaki specjalne:
-                            <span aria-label="exclamation mark">!</span>{" "}
-                            <span aria-label="at symbol">@</span>{" "}
-                            <span aria-label="hashtag">#</span>{" "}
-                            <span aria-label="dollar sign">$</span>{" "}
-                            <span aria-label="percent">%</span>
-                        </p>
-                    )}
-                    <label
-                        htmlFor="confirm_password"
-                        className="change_password__container-title"
-                    >
-                        Powtórz hasło:
-                        <span
-                            className={
-                                validMatchPassword && matchPassword
-                                    ? "change_password__container-title--valid"
-                                    : "change_password__container-title--hide"
-                            }
-                        >
-                            <FontAwesomeIcon icon={faCheck} />
-                        </span>
-                        <span
-                            className={
-                                validMatchPassword || !matchPassword
-                                    ? "change_password__container-title--hide"
-                                    : "change_password__container-title--invalid"
-                            }
-                        >
-                            <FontAwesomeIcon icon={faTimes} />
-                        </span>
-                    </label>
-                    <input
-                        className="change_password-text"
-                        type="password"
-                        id="confirm_password"
-                        autoComplete="off"
-                        name="uniqueNameForThisField" //wyłącza w chrome autouzupełnianie
-                        value={matchPassword}
-                        onChange={(e) => setMatchPassword(e.target.value)}
-                        required
-                        onFocus={() => setMatchPasswordFocus(true)}
-                        onBlur={() => setMatchPasswordFocus(false)}
-                    />
-                    {matchPasswordFocus && !validMatchPassword && (
-                        <p className="change_password__container-instructions">
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            Hasła musza być takie same.
-                        </p>
-                    )}
-                    <Button
-                        variant="contained"
-                        type="submit"
-                        disabled={!validPassword || !validMatchPassword}
-                        size="large"
-                    >
-                        Zmień hasło
-                    </Button>
-                </form>
-                <FiX
-                    className="change_password-close-button"
-                    onClick={() => navigate('/login')}
-                />
-            </section> : <PleaseWait />}
-        </>
-    );
+  return (
+    <div className="login-page">
+      <section className="login-card">
+        <header className="login-card__header">
+          <h1 className="login-card__title">Ustalanie nowego hasła</h1>
+        </header>
+
+        <form className="login-card__content" onSubmit={handleSubmit}>
+          {errMsg && <p className="register-card__error-box">{errMsg}</p>}
+
+          <div className="login-card__field">
+            <label className="login-card__label">
+              Nowe hasło:
+              <span className={validPassword ? "icon-valid" : "icon-hide"}>
+                <FontAwesomeIcon icon={faCheck} />
+              </span>
+            </label>
+            <input
+              className="login-card__input"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onFocus={() => setPasswordFocus(true)}
+              onBlur={() => setPasswordFocus(false)}
+              required
+            />
+            {passwordFocus && !validPassword && (
+              <p className="login-card__instruction">
+                Musi zawierać: 8-24 znaki, A-z, 0-9 i znak specjalny.
+              </p>
+            )}
+          </div>
+
+          <div className="login-card__field">
+            <label className="login-card__label">
+              Powtórz hasło:
+              <span className={validMatchPassword ? "icon-valid" : "icon-hide"}>
+                <FontAwesomeIcon icon={faCheck} />
+              </span>
+            </label>
+            <input
+              className="login-card__input"
+              type="password"
+              value={matchPassword}
+              onChange={(e) => setMatchPassword(e.target.value)}
+              onFocus={() => setMatchPasswordFocus(true)}
+              onBlur={() => setMatchPasswordFocus(false)}
+              required
+            />
+          </div>
+
+          <Button
+            variant="contained"
+            type="submit"
+            className="login-card__button"
+            disabled={!validPassword || !validMatchPassword}
+          >
+            Zapisz nowe hasło
+          </Button>
+        </form>
+      </section>
+    </div>
+  );
 };
 
 export default ConfirmResetPassword;

@@ -1,47 +1,125 @@
-.update-data {
-    flex-grow: 1;
-    max-width: 80%;
-    min-width: 800px;
-    font-family: "Source Sans 3", Calibri, sans-serif;
-    font-size: 1.15rem;
-    display: flex;
-    flex-direction: column;
+/* GŁÓWNY KONTENER KARTY */
+.update-data-card {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 75%;
+  margin: 10px auto;
+  border: 1px solid rgba(44, 123, 168, 0.2);
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  font-family: "Source Sans 3", Calibri, sans-serif;
+  overflow: hidden;
 }
 
-.update-data__container {
-    flex-grow: 1;
-    margin: 2px 0;
-    border: 1px solid rgba(191, 196, 199, 0.6);
-    background-color: rgba(202, 219, 230, 0.1);
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-evenly;
+/* NAGŁÓWEK KARTY */
+.update-data-card__header {
+  padding: 10px 20px;
+  background-color: rgba(44, 123, 168, 0.05);
+  border-bottom: 1px solid rgba(44, 123, 168, 0.1);
 }
 
-.update-data__container:first-child {
-    background-color: rgba(193, 230, 255, 0.3);
-    font-weight: bold;
+.update-data-card__title {
+  text-align: center;
+  margin: 0;
+  font-size: 1.3rem;
+  color: #2c7ba8;
+  font-weight: 600;
 }
 
-.update-data--name,
-.update-data--update {
-    flex-basis: 35%;
-    padding: 0 10px;
+/* WIERSZ Z ETYKIETAMI (NAGŁÓWEK TABELI) */
+.update-data-card__table-labels {
+  display: flex;
+  padding: 10px 20px;
+  background-color: #fafcfe;
+  border-bottom: 2px solid rgba(44, 123, 168, 0.1);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #555;
 }
 
-.update-data--update {
-    flex-basis: 30%;
+/* TREŚĆ - LISTA WIERSZY */
+.update-data-card__content {
+  overflow-y: auto;
+  overflow-x: hidden; /* Zabezpieczenie przed poziomym scrollem przy skali */
+  max-height: calc(100vh - 250px);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centruje wiersze, gdy ich szerokość spadnie poniżej 100% */
+  padding: 5px 0;
 }
 
-.update-data--date,
-.update-data--hour {
-    flex-basis: 20%;
+/* POJEDYNCZY WIERSZ DANYCH */
+.update-data-card__row {
+  display: flex;
+  width: 100%; /* Domyślnie pełna szerokość */
+  padding: 8px 20px;
+  border-bottom: 1px solid rgba(44, 123, 168, 0.05);
+  align-items: center;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Płynna animacja */
+  cursor: default;
 }
 
-.update-data__container:hover {
-    background-color: rgba(193, 230, 255, 0.5);
+.update-data-card__row:last-child {
+  border-bottom: none;
 }
 
-.update-data__container:first-child:hover {
-    background-color: rgba(193, 230, 255, 0.3);
+/* EFEKT HOVER */
+.update-data-card__row:hover {
+  background-color: rgba(44, 123, 168, 0.15);
+  border-radius: 8px;
+  border-bottom-color: transparent;
+
+  /* Efekt zwężenia i powiększenia */
+  width: 95%; /* Delikatne zwężenie (z 100% do 95%) */
+  transform: scale(1.02); /* Delikatne powiększenie */
+
+  /* Wyniesienie wiersza nad inne */
+  z-index: 10;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* KOLUMNY - DEFINICJA SZEROKOŚCI */
+.col-name {
+  flex: 2;
+  color: #333;
+  font-weight: 500;
+}
+
+.col-date {
+  flex: 1;
+  text-align: center;
+  color: #666;
+}
+
+.col-hour {
+  flex: 1;
+  text-align: center;
+  color: #666;
+}
+
+.col-status {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* KOLORY STATUSÓW */
+.status-ok {
+  color: #2e7d32;
+}
+
+/* SCROLLBAR */
+.update-data-card__content::-webkit-scrollbar {
+  width: 6px;
+}
+.update-data-card__content::-webkit-scrollbar-thumb {
+  background-color: rgba(44, 123, 168, 0.3);
+  border-radius: 10px;
 }
