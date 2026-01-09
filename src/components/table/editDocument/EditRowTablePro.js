@@ -122,6 +122,8 @@ const EditRowTablePro = ({
         updateDocuments(changeSingleDoc(rowData));
       } else if (profile === "partner") {
         updateDocuments(changeSingleDocLawPartner(rowData));
+      } else if (profile === "insurance") {
+        updateDocuments(rowData);
       }
 
       if (type !== "no_exit") {
