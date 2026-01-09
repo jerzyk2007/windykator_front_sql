@@ -314,11 +314,6 @@ const ChangeOrgStr = () => {
     getData();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(filteredData.missingDeps);
-  //   console.log(company);
-  // }, [filteredData, company]);
-
   const itemsArray = createItem?.map((item, index) => {
     if (
       item.department === editDep.department &&

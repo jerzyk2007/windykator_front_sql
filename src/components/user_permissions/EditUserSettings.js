@@ -20,10 +20,7 @@ const EditUserSettings = ({ user, setEdit }) => {
   const [company, setCompany] = useState([]);
   const [pleaseWait, setPleaseWait] = useState(false);
   const [lawPartner, setLawPartner] = useState([]);
-  // const [toggleState, setToggleState] = useState(1);
-  // const toggleTab = (index) => {
-  //   setToggleState(index);
-  // };
+
   //sprawdzanie działów przypisanych do użytkownika, występujących w dokumentach i opisanych company_join_items
   const checkMergeDep = (data) => {
     const departmentsFromCompDocs = (

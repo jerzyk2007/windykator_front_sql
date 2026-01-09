@@ -175,22 +175,6 @@ const TableColumns = () => {
   const createArea = (nameDB, colIndex) =>
     Object.keys(editData).length && editData.id_table_columns === colIndex
       ? editData?.areas?.map((area, index) => (
-          // <section className="table_column__areas--item" key={index}>
-          //   <span className="table_column__areas--name">{area.name}</span>
-          //   <section className="table_column__areas--available">
-          //     <span>Dostęp:</span>
-          //     <input
-          //       className={
-          //         editData.id_table_columns === colIndex
-          //           ? "table_column__areas--check"
-          //           : "table_column__areas--check-disabled"
-          //       }
-          //       type="checkbox"
-          //       checked={area.available}
-          //       onChange={() => changeArea(area)}
-          //     />
-          //   </section>
-          // </section>
           <section className="table_column__areas--item" key={index}>
             <span className="table_column__areas--name">{area.name}</span>
             <section className="table_column__areas--available">
@@ -238,11 +222,6 @@ const TableColumns = () => {
         editData.id_table_columns === col.id_table_columns
       ) {
         return (
-          // <section
-          //   style={{ border: "4px solid #0035c7ff" }}
-          //   className="table_column__wrapper "
-          //   key={index}
-          // >
           <section
             className="table_column__wrapper table_column__wrapper--active"
             style={{
@@ -352,7 +331,6 @@ const TableColumns = () => {
                 <section className="table_column__areas--available">
                   <Button
                     variant="contained"
-                    // onClick={() => handleChangeChecked(col, "all", "available")}
                     onClick={() => handleChangeChecked(true)}
                     size="small"
                     color="success"
@@ -362,10 +340,7 @@ const TableColumns = () => {
                   <Button
                     style={{ backgroundColor: "white" }}
                     variant="outlined"
-                    onClick={() =>
-                      // handleChangeChecked(col, "null", "available")
-                      handleChangeChecked(false)
-                    }
+                    onClick={() => handleChangeChecked(false)}
                     size="small"
                     color="success"
                   >

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
-// import "./UserChangeLawPartner.css";
 
 const UserChangeLawPartner = ({ id, lawPartner, setLawPartner }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
@@ -55,29 +54,6 @@ const UserChangeLawPartner = ({ id, lawPartner, setLawPartner }) => {
     setErrMsg("");
   }, [lawPartner]);
 
-  // return (
-  //   <section className="user-change-law-partner">
-  //     <section className="user-change-law-partner__title">
-  //       <h3 className="user-change-law-partner__title--name">
-  //         {!errMsg ? "Dostęp do zewnętrznych kancelarii" : errMsg}
-  //       </h3>
-  //     </section>
-
-  //     <section className="user-change-law-partner__wrapper">
-  //       {lawPartnerItem}
-  //     </section>
-
-  //     <Button
-  //       className="edit_user__Buttons"
-  //       variant="contained"
-  //       onClick={handleChangePermission}
-  //       size="small"
-  //       sx={{ textTransform: "none" }}
-  //     >
-  //       Zapisz zmiany
-  //     </Button>
-  //   </section>
-  // );
   return (
     <section className="user-edit-card user-edit-card--limited">
       <header className="user-edit-card__header">

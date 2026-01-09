@@ -117,66 +117,6 @@ const UserChangeDepartments = ({ id, departments, multiCompany }) => {
     );
   }, [changeCompany, startData]);
 
-  // return (
-  //   <section className="user_change_departments">
-  //     <header className="user_change_departments__title">
-  //       <div className="user_change_departments--counter">
-  //         <div className="user_change_departments--counter--info">
-  //           {userDepartments ? userDepartments.length : "0"}
-  //         </div>
-  //       </div>
-  //       <h3 className="user_change_departments__title--name">
-  //         {!errMsg ? "Dostęp do działów" : errMsg}
-  //       </h3>
-  //       <select
-  //         className="user_change_departments__title--select"
-  //         value={changeCompany}
-  //         onChange={(e) => setChangeCompany(e.target.value)}
-  //       >
-  //         {company.map((option, index) => (
-  //           <option key={index} value={option}>
-  //             {option}
-  //           </option>
-  //         ))}
-  //       </select>
-  //     </header>
-
-  //     <section className="user_change_departments__select">
-  //       <Button
-  //         variant="contained"
-  //         onClick={() => handleChangeAllChecked("all")}
-  //         size="small"
-  //         color="primary"
-  //       >
-  //         Zaznacz widoczne
-  //       </Button>
-  //       <Button
-  //         variant="outlined"
-  //         onClick={() => handleChangeAllChecked("none")}
-  //         size="small"
-  //         color="primary"
-  //       >
-  //         Odznacz widoczne
-  //       </Button>
-  //     </section>
-
-  //     <section className="user_change_departments__container">
-  //       {departmentsItem}
-  //     </section>
-
-  //     <footer className="user_change_departments__accept">
-  //       <Button
-  //         className="edit_user__Buttons"
-  //         variant="contained"
-  //         onClick={handleSaveUserDepartments}
-  //         size="medium"
-  //         color="success"
-  //       >
-  //         Zapisz zmiany
-  //       </Button>
-  //     </footer>
-  //   </section>
-  // );
   return (
     <section className="user-edit-card">
       <header className="user-edit-card__header">

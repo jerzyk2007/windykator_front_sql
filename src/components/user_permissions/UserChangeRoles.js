@@ -2,116 +2,12 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import useData from "../hooks/useData";
 import { Button } from "@mui/material";
-// import "./UserChangeRoles.css";
 
 const UserChangeRoles = ({ id, roles, setRoles, permission }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
   const [userRoles, setUserRoles] = useState({});
   const [errMsg, setErrMsg] = useState("");
-
-  // const rolesItem = Object.entries(userRoles).map(
-  //   ([role, isChecked], index) => (
-  //     <section key={index} className="user-change-roles__container">
-  //       <label
-  //         className="user-change-roles__container--info"
-  //         id={`role${index}`}
-  //       >
-  //         <span className="user-change-roles__container--text">
-  //           {/* Owinąłem nazwę roli w span dla lepszego wyglądu */}
-  //           <span className="role-name">{role}</span>
-
-  //           {role === "FK_KRT" && (
-  //             <span className="user-change-roles--information">
-  //               {" dodatkowy Raport FK - KRT"}
-  //             </span>
-  //           )}
-  //           {role === "FK_KEM" && (
-  //             <span className="user-change-roles--information">
-  //               {" dodatkowy Raport FK - KEM"}
-  //             </span>
-  //           )}
-  //           {role === "FK_RAC" && (
-  //             <span className="user-change-roles--information">
-  //               {" dodatkowy Raport FK - RAC"}
-  //             </span>
-  //           )}
-  //           {role === "FKAdmin" && (
-  //             <span className="user-change-roles--information">
-  //               {" administrator FK"}
-  //             </span>
-  //           )}
-  //           {role === "User" && (
-  //             <span className="user-change-roles--information">
-  //               {" przeglądanie dokumentów"}
-  //             </span>
-  //           )}
-  //           {role === "Nora" && (
-  //             <span className="user-change-roles--information">
-  //               {" raporty dla Nory"}
-  //             </span>
-  //           )}
-  //           {role === "Insurance" && (
-  //             <span className="user-change-roles--information">
-  //               {" obsługa polis"}
-  //             </span>
-  //           )}
-  //           {role === "Editor" && (
-  //             <span className="user-change-roles--information">
-  //               {" edytowanie dokumentów"}
-  //             </span>
-  //           )}
-  //           {role === "Raports" && (
-  //             <span className="user-change-roles--information">
-  //               {" tylko pobieranie raportów excel"}
-  //             </span>
-  //           )}
-  //           {role === "Controller" && (
-  //             <span className="user-change-roles--information">
-  //               {" kontroler dokumentów"}
-  //             </span>
-  //           )}
-  //           {role === "DNiKN" && (
-  //             <span className="user-change-roles--information">
-  //               {" wszystkie uprawnienia windykacyjne"}
-  //             </span>
-  //           )}
-  //           {role === "LawPartner" && (
-  //             <span className="user-change-roles--information">
-  //               {" dostęp do danych zewn Kancelarii"}
-  //             </span>
-  //           )}
-  //           {role === "Admin" && (
-  //             <span className="user-change-roles--information">
-  //               {" Administrator"}
-  //             </span>
-  //           )}
-
-  //           {role === "SuperAdmin" && (
-  //             <span className="user-change-roles--information">
-  //               {" Super Administrator"}
-  //             </span>
-  //           )}
-  //         </span>
-  //         <input
-  //           className="user-change-roles--check"
-  //           name={`role${index}`}
-  //           type="checkbox"
-  //           checked={isChecked}
-  //           onChange={() => {
-  //             setUserRoles((prevRoles) => {
-  //               const updatedRoles = { ...prevRoles, [role]: !isChecked };
-  //               if (role === "Editor" && !isChecked) {
-  //                 updatedRoles["User"] = true;
-  //               }
-  //               return updatedRoles;
-  //             });
-  //           }}
-  //         />
-  //       </label>
-  //     </section>
-  //   )
-  // );
 
   const handleChangeRoles = async () => {
     try {
@@ -160,29 +56,6 @@ const UserChangeRoles = ({ id, roles, setRoles, permission }) => {
     setUserRoles(permission === "Pracownik" ? newRolesUser : newRolesLaw);
   }, [roles]);
 
-  // return (
-  //   <section className="user-change-roles">
-  //     <section className="user-change-roles__title">
-  //       <h3 className="user-change-roles__title--name">
-  //         {!errMsg ? "Zmień uprawnienia użytkownika" : errMsg}
-  //       </h3>
-  //     </section>
-  //     <section className="user-change-roles__wrapper">{rolesItem}</section>
-  //     <Button
-  //       className="edit_user__Buttons"
-  //       variant="contained"
-  //       onClick={handleChangeRoles}
-  //       size="small"
-  //       sx={{
-  //         // Dodatkowe wymuszenie stylów MUI, jeśli globalne style by je nadpisywały
-  //         textTransform: "none",
-  //         fontSize: "0.9rem",
-  //       }}
-  //     >
-  //       Zapisz zmiany
-  //     </Button>
-  //   </section>
-  // );
   return (
     <section className="user-edit-card user-edit-card--flexible">
       <header className="user-edit-card__header">

@@ -1,5 +1,3 @@
-import { maxHeight } from "@mui/system";
-
 // wybór ściezki do zapisu w zależności od profilu użytkownika
 export const basePath = {
   insider: "/documents",

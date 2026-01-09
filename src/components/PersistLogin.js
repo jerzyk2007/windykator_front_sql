@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import useRefreshToken from "./hooks/useRefreshToken";
 import useData from "./hooks/useData";
 import PleaseWait from "./PleaseWait";
-// import './PersistLogin.css';
 
 const PersistLogin = () => {
   const refresh = useRefreshToken();

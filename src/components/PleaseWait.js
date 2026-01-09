@@ -7,9 +7,6 @@ const variants = {
   dnikn: WindykacjaLoading,
   old: DefaultLoading,
   xmas: XmasLoading,
-  // halloween: HalloweenLoading,
-  // summer: SummerLoading,
-  // blackFriday: BlackFridayLoading,
 };
 
 const PleaseWait = ({ info = "dnikn" }) => {

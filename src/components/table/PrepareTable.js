@@ -11,7 +11,6 @@ import {
 import { basePath } from "./utilsForTable/tableFunctions";
 import "./PrepareTable.css";
 
-// const PrepareTable = ({ info, raportDocuments }) => {
 const PrepareTable = ({ info, profile }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
@@ -53,13 +52,6 @@ const PrepareTable = ({ info, profile }) => {
         if (!["insider", "partner", "insurance"].includes(profile)) {
           return;
         }
-
-        // const basePath = profile === "insider" ? "/documents" : "/law-partner";
-        // const basePath = {
-        //   insider: "/documents",
-        //   partner: "/law-partner",
-        //   insurance: "/insurance",
-        // };
 
         const dataTable = await axiosPrivateIntercept.get(
           `${basePath[profile]}/get-data-table/${auth.id_user}/${info}/${profile}`,
@@ -105,7 +97,6 @@ const PrepareTable = ({ info, profile }) => {
       {pleaseWait ? (
         <PleaseWait />
       ) : (
-        // <PleaseWait info="xmas" />
         columns.length > 0 && (
           <Table
             documents={documents}
