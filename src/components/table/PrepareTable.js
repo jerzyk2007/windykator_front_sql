@@ -77,12 +77,12 @@ const PrepareTable = ({ info, profile }) => {
             : [];
 
         setColumns(update);
-
-        setPleaseWait(false);
       } catch (err) {
         if (err.name !== "CanceledError") {
           console.error(err);
         }
+      } finally {
+        setPleaseWait(false);
       }
     };
 

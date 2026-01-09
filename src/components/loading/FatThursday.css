@@ -1,0 +1,145 @@
+.fat-thursday-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle, #fff9c4 0%, #ffeb3b 100%);
+  cursor: crosshair;
+  font-family: "Arial Black", Gadget, sans-serif;
+}
+
+/* Środkowy panel ładowania */
+.loading-central-unit {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 40px;
+  border-radius: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border: 5px solid #d35400;
+  min-width: 400px;
+}
+
+.wait-title {
+  font-size: 3rem;
+  color: #d35400;
+  margin: 0 0 20px 0;
+  letter-spacing: -2px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Pasek konfitury */
+.jam-progress-bar {
+  width: 100%;
+  height: 30px;
+  background: #f3e5f5;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 3px solid #6d4c41;
+  position: relative;
+}
+
+.jam-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #c2185b, #ad1457, #c2185b);
+  background-size: 200% 100%;
+  animation: fillMove 2s infinite linear,
+    loadingSimulation 10s infinite alternate;
+  border-radius: 15px;
+}
+
+.loading-phrase {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  color: #6d4c41;
+  font-weight: bold;
+}
+
+/* Statystyki na górze */
+.stats-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 15px;
+  z-index: 10;
+}
+
+.stat-box {
+  background: #fff;
+  padding: 10px 20px;
+  border-radius: 15px;
+  border: 2px solid #d35400;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-box .label {
+  font-size: 10px;
+  color: #7f8c8d;
+  text-transform: uppercase;
+}
+.stat-box .value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.loading-footer {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  color: #5d4037;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+@keyframes fillMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes loadingSimulation {
+  0% {
+    width: 5%;
+  }
+  30% {
+    width: 45%;
+  }
+  60% {
+    width: 55%;
+  }
+  100% {
+    width: 95%;
+  }
+}
+
+@media (max-width: 500px) {
+  .loading-central-unit {
+    min-width: 80%;
+    padding: 20px;
+  }
+  .wait-title {
+    font-size: 1.5rem;
+  }
+}

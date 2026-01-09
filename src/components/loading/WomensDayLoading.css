@@ -1,0 +1,49 @@
+.womens-day-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-width: 800px;
+  /* Pastelowy, czysty gradient */
+  background: linear-gradient(to bottom, #fdfcfb 0%, #e2d1c3 100%);
+  overflow: hidden;
+}
+
+.womens-day-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.message-top,
+.message-bottom {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.message-top {
+  top: 15%;
+  font-size: 2.5rem;
+  color: #5d4037;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  animation: gentleBounce 3s infinite ease-in-out;
+}
+
+.message-bottom {
+  bottom: 30px;
+  font-size: 1.4rem;
+  color: #4e342e;
+}
+
+@keyframes gentleBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
