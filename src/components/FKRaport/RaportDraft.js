@@ -126,7 +126,7 @@ const RaportDraft = ({ company }) => {
 
   return (
     <main className="raport-draft-page">
-      {pleaseWait && <PleaseWait info="xmas" />}
+      {pleaseWait && <PleaseWait info="kulig" />}
 
       <div className="raport-draft-content">
         <header className="raport-header">
