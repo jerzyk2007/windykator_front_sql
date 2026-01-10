@@ -408,9 +408,8 @@ const BasicDataInsider = ({
               : "ertp-data-row__value"
           }
           style={
-            rowData?.UWAGI_Z_FAKTURY?.length > 70 &&
-            rowData.AREA === "BLACHARNIA"
-              ? { overflowY: "auto", maxHeight: "70px" }
+            rowData?.UWAGI_Z_FAKTURY?.length > 70
+              ? { overflowY: "auto", maxHeight: "80px", padding: "0px 2px" }
               : null
           }
         >
