@@ -62,7 +62,8 @@ const EditDocSettlements = ({ settlement, date, fv_zal, fv_zal_kwota }) => {
         <span className="ertp-data-row__value">{date || "brak danych"}</span>
       </section>
 
-      <div ref={scrollRef} className="ertp-settlements__scroll-box">
+      {/* <div ref={scrollRef} className="ertp-settlements__scroll-box"> */}
+      <div className="ertp-settlements__scroll-box">
         {settlementData.length > 0 ? (
           settlementData.map((item, index) => (
             <div key={index} className="ertp-settlement-item">

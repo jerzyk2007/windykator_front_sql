@@ -51,6 +51,7 @@
   flex-grow: 1;
   flex-basis: 33%;
   min-width: 500px;
+  /* max-width: 34%; */
   height: calc(100vh - 100px);
   max-height: calc(100vh - 100px);
   min-height: calc(100vh - 100px);
@@ -224,6 +225,7 @@
   min-height: 30vh;
   /* Kluczowe: ograniczamy wysokość całej sekcji do ok. 40% widoku */
   max-height: 33vh;
+  /* max-width: 500px; */
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -253,6 +255,10 @@
   white-space: pre-wrap;
   background-color: #fff;
   box-sizing: border-box;
+  /* word-break: break-all; */
+  white-space: normal;
+  overflow-wrap: anywhere; /* nowoczesne przeglądarki */
+  word-break: normal;
 }
 
 /* Panel Akceptacji */

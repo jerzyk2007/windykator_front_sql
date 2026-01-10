@@ -378,13 +378,13 @@ const BasicDataInsider = ({
         <span className="ertp-data-row__label">Kontrahent:</span>
         <span
           className={
-            rowData?.KONTRAHENT?.length > 140
+            rowData?.KONTRAHENT?.length > 70
               ? "ertp-data-row__value ertp-data-row__value--scrollable"
               : "ertp-data-row__value"
           }
           style={
-            rowData?.KONTRAHENT?.length > 140 && rowData.AREA === "BLACHARNIA"
-              ? { overflowY: "auto", maxHeight: "80px" }
+            rowData?.KONTRAHENT?.length > 70 && rowData.AREA === "BLACHARNIA"
+              ? { overflowY: "auto", maxHeight: "80px", padding: "0px 2px" }
               : null
           }
         >
