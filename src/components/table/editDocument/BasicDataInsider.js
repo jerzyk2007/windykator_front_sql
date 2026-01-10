@@ -383,7 +383,8 @@ const BasicDataInsider = ({
               : "ertp-data-row__value"
           }
           style={
-            rowData?.KONTRAHENT?.length > 70 && rowData.AREA === "BLACHARNIA"
+            // rowData?.KONTRAHENT?.length > 70 && rowData.AREA === "BLACHARNIA"
+            rowData?.KONTRAHENT?.length > 70
               ? { overflowY: "auto", maxHeight: "80px", padding: "0px 2px" }
               : null
           }

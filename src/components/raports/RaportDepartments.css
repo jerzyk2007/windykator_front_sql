@@ -78,13 +78,12 @@
 }
 
 /* STYLE TABELI */
-.raport_departments-cell {
+/* .raport_departments-cell {
   font-size: 1rem !important;
   font-weight: 500 !important;
   color: #000000 !important;
   padding: 4px 8px !important;
-  border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
 }
 
 .raport_departments-cell:hover {
@@ -93,7 +92,7 @@
   color: #e74c3c !important;
   font-weight: 600 !important;
   border-radius: 10px;
-}
+} */
 
 .raport_departments td {
   cursor: pointer;

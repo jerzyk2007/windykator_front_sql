@@ -102,5 +102,6 @@
   color: #232831 !important;
   padding: 4px 6px !important;
   border-width: 1px !important;
-  border-color: rgba(0, 0, 0, 0.15) !important;
+  /* border-color: rgba(0, 0, 0, 0.15) !important; */
+  border-color: rgba(0, 0, 0, 0.33) !important;
 }

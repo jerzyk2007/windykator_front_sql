@@ -54,7 +54,8 @@
 }
 
 .nav_menu__menu-item:hover {
-  background-color: rgba(44, 123, 168, 0.2);
+  /* background-color: rgba(44, 123, 168, 0.2); */
+  background-color: rgb(197, 216, 233);
 }
 
 .nav_menu-dropdown__menu {
