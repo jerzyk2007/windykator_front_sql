@@ -1,7 +1,6 @@
 import { useState } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
-import "./UserChangeName.css"; // Korzystamy z tego samego pliku co UserChangeName
 
 const UserDelete = ({ id, login, setEdit }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
@@ -11,7 +10,7 @@ const UserDelete = ({ id, login, setEdit }) => {
   const handleConfirmDeleteUser = async () => {
     try {
       await axiosPrivateIntercept.delete(`/user/delete-user/${id}`, {
-        userlogin: login,
+        data: { userlogin: login }, // W axios delete body przesyłamy w kluczu data
       });
       setEdit(false);
     } catch (err) {
@@ -21,47 +20,35 @@ const UserDelete = ({ id, login, setEdit }) => {
   };
 
   return (
-    <section className="user_change_name">
-      {" "}
-      {/* Ta sama klasa główna */}
-      <section className="user_change_name__title">
-        <h3
-          className={`user_change_name__title--name ${
-            confirmDelete ? "msg-error" : ""
-          }`}
-        >
+    <section className="user-edit-card user-edit-card--limited">
+      <header
+        className={`user-edit-card__header ${
+          confirmDelete ? "user-edit-card__header--danger" : ""
+        }`}
+      >
+        <h3 className="user-edit-card__title">
           {!confirmDelete
             ? !errMsg
               ? "Usuń użytkownika"
               : errMsg
             : "Potwierdź, tej operacji nie można cofnąć!"}
         </h3>
-      </section>
-      <section className="user_change_name__container">
-        {/* p udaje inputa, aby zachować marginesy i układ */}
-        <p
-          className="user_change_name__container--edit"
-          style={{
-            border: "none",
-            background: "transparent",
-            fontWeight: "bold",
-          }}
+      </header>
+
+      <div className="user-edit-card__content user-edit-card__content--centered">
+        <span
+          className="user-edit-card__text-highlight"
+          style={{ color: "red", fontStyle: "italic" }}
         >
           {login}
-        </p>
-      </section>
-      <section
-        className="user_change_name__container"
-        style={{
-          paddingTop: 0,
-          flexDirection: "row",
-          gap: "10px",
-          justifyContent: "center",
-        }}
-      >
+        </span>
+      </div>
+
+      <footer className="user-edit-card__footer user-edit-card__footer--gap">
         {!confirmDelete ? (
           <Button
             variant="contained"
+            className="user-edit-card__button"
             onClick={() => setConfirmDelete(true)}
             size="small"
             color="error"
@@ -71,10 +58,10 @@ const UserDelete = ({ id, login, setEdit }) => {
         ) : (
           <>
             <Button
-              variant="contained"
+              variant="outlined"
               onClick={() => setConfirmDelete(false)}
               size="small"
-              color="secondary"
+              color="inherit"
             >
               Anuluj
             </Button>
@@ -84,11 +71,11 @@ const UserDelete = ({ id, login, setEdit }) => {
               size="small"
               color="error"
             >
-              Potwierdź
+              Potwierdź usunięcie
             </Button>
           </>
         )}
-      </section>
+      </footer>
     </section>
   );
 };

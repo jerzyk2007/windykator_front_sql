@@ -37,30 +37,36 @@ const UserChangePass = ({ id }) => {
   };
 
   return (
-    <section className="user_change_name">
-      <section className="user_change_name__title">
-        <h3 className="user_change_name__title--name">
+    <section className="user-edit-card user-edit-card--limited">
+      <header className="user-edit-card__header">
+        <h3 className="user-edit-card__title">
           {!errMsg ? "Zmień hasło użytkownika" : errMsg}
         </h3>
-      </section>
-      <section className="user_change_name__container">
+      </header>
+
+      <div className="user-edit-card__content user-edit-card__content--centered">
         <input
-          className="user_change_name__container--edit"
-          type="text"
+          className="user-edit-card__input"
+          type="text" // Pozostawione jako text dla widoczności przy zmianie przez admina
           placeholder="podaj nowe hasło"
           value={userPass}
           onChange={handleInputChange}
         />
-      </section>
+        {/* Opcjonalnie można tu dodać mały tekst z wymaganiami, jeśli isValidPass jest false i userPass nie jest puste */}
+      </div>
 
-      <Button
-        variant="contained"
-        onClick={handleChangePass}
-        disabled={!isValidPass}
-        size="small"
-      >
-        Zmień
-      </Button>
+      <footer className="user-edit-card__footer">
+        <Button
+          variant="contained"
+          className="user-edit-card__button"
+          onClick={handleChangePass}
+          disabled={!isValidPass}
+          color="primary"
+          size="small"
+        >
+          Zmień hasło
+        </Button>
+      </footer>
     </section>
   );
 };

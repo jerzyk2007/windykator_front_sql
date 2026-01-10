@@ -18,7 +18,7 @@ const UserChangeLogin = ({ id, login }) => {
       });
       setErrMsg(`Sukces.`);
     } catch (err) {
-      if (err.response.status === 409) {
+      if (err.response?.status === 409) {
         setErrMsg(`Użytkownik ${userLogin} już istnieje.`);
       } else {
         setErrMsg(`Zmiana się nie powiodła.`);
@@ -34,29 +34,35 @@ const UserChangeLogin = ({ id, login }) => {
   }, [userLogin]);
 
   return (
-    <section className="user_change_name">
-      <section className="user_change_name__title">
-        <h3 className="user_change_name__title--name">
+    <section className="user-edit-card user-edit-card--limited">
+      <header className="user-edit-card__header">
+        <h3 className="user-edit-card__title">
           {!errMsg ? "Zmień login użytkownika" : errMsg}
         </h3>
-      </section>
-      <section className="user_change_name__container">
+      </header>
+
+      <div className="user-edit-card__content user-edit-card__content--centered">
         <input
-          className="user_change_name__container--edit"
-          type="text"
+          className="user-edit-card__input"
+          type="email"
           placeholder={login}
           value={userLogin}
-          onChange={(e) => setUserLogin(e.target.value.toLocaleLowerCase())}
+          onChange={(e) => setUserLogin(e.target.value.toLowerCase())}
         />
-      </section>
-      <Button
-        variant="contained"
-        onClick={handleChangeLogin}
-        disabled={!isValidLogin}
-        size="small"
-      >
-        Zmień login
-      </Button>
+      </div>
+
+      <footer className="user-edit-card__footer">
+        <Button
+          variant="contained"
+          className="user-edit-card__button"
+          onClick={handleChangeLogin}
+          disabled={!isValidLogin}
+          color="primary"
+          size="small"
+        >
+          Zmień login
+        </Button>
+      </footer>
     </section>
   );
 };

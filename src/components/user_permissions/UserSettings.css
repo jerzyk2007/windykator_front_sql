@@ -190,7 +190,7 @@
 }
 
 /* Responsywność - obsługa małych ekranów */
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
   .search-card {
     flex-direction: column;
     padding: 10px;
@@ -201,4 +201,4 @@
   .user-card {
     padding: 10px 15px;
   }
-}
+} */

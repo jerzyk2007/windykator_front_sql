@@ -9,6 +9,7 @@ import UserChangeLogin from "./UserChangeLogin";
 import UserDelete from "./UserDelete";
 import PleaseWait from "../PleaseWait";
 import { Button } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 import "./EditUserSettings.css";
 
@@ -136,14 +137,6 @@ const EditUserSettings = ({ user, setEdit }) => {
             </section>
 
             <section className="edit_user_settings_section-content-data">
-              {/* {permissions && Object.keys(permissions).length > 0 && (
-                <UserChangePermissions
-                  id={user.id_user}
-                  permissions={permissions}
-                  setPermissions={setPermissions}
-                />
-              )} */}
-
               {
                 // permissions === "Pracownik" &&
                 roles && Object.keys(roles).length > 0 && (
@@ -190,7 +183,7 @@ const EditUserSettings = ({ user, setEdit }) => {
           /> */}
         </>
       )}
-      <section className="edit_user_settings-button">
+      {/* <section className="edit_user_settings-button">
         <Button
           className="mui-button"
           variant="contained"
@@ -200,6 +193,12 @@ const EditUserSettings = ({ user, setEdit }) => {
         >
           Wyjście
         </Button>
+      </section> */}
+      <section className="edit_user_settings-close">
+        <CloseIcon
+          className="edit_user_settings-close--icon"
+          onClick={() => setEdit(false)}
+        />
       </section>
     </section>
   );

@@ -86,6 +86,7 @@ const UserChangeLawPartner = ({ id, lawPartner, setLawPartner }) => {
           variant="contained"
           className="user-edit-card__button"
           onClick={handleChangePermission}
+          size="small"
         >
           Zapisz zmiany
         </Button>

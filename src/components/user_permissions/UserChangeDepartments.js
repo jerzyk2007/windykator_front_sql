@@ -193,6 +193,7 @@ const UserChangeDepartments = ({ id, departments, multiCompany }) => {
           className="user-edit-card__button"
           onClick={handleSaveUserDepartments}
           color="success"
+          size="small"
         >
           Zapisz zmiany
         </Button>

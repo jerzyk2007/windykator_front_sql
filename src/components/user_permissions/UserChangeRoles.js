@@ -118,6 +118,7 @@ const UserChangeRoles = ({ id, roles, setRoles, permission }) => {
           variant="contained"
           className="user-edit-card__button"
           onClick={handleChangeRoles}
+          size="small"
         >
           Zapisz zmiany
         </Button>
