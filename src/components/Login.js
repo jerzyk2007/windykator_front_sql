@@ -27,14 +27,15 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      const { username, usersurname, roles, id_user, permissions } =
+      const { username, usersurname, roles, company, id_user, permissions } =
         response?.data;
       setAuth({
+        id_user,
         username,
         usersurname,
         userlogin,
         roles,
-        id_user,
+        company,
         permissions,
       });
       navigate("/");

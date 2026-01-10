@@ -7,8 +7,8 @@ import UserChangeName from "./UserChangeName";
 import UserChangePass from "./UserChangePass";
 import UserChangeLogin from "./UserChangeLogin";
 import UserDelete from "./UserDelete";
+import UserCompany from "./UserCompany";
 import PleaseWait from "../PleaseWait";
-import { Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import "./EditUserSettings.css";
@@ -21,7 +21,6 @@ const EditUserSettings = ({ user, setEdit }) => {
   const [company, setCompany] = useState([]);
   const [pleaseWait, setPleaseWait] = useState(false);
   const [lawPartner, setLawPartner] = useState([]);
-
   //sprawdzanie działów przypisanych do użytkownika, występujących w dokumentach i opisanych company_join_items
   const checkMergeDep = (data) => {
     const departmentsFromCompDocs = (
@@ -120,80 +119,68 @@ const EditUserSettings = ({ user, setEdit }) => {
         <PleaseWait />
       ) : (
         <>
-          <section className="edit_user_settings_section-content">
-            <section className="edit_user_settings_section-content-data">
-              <UserChangeName
-                id={user.id_user}
-                name={user.username}
-                surname={user.usersurname}
-              />
-              <UserChangePass id={user.id_user} />
-              <UserChangeLogin id={user.id_user} login={user.userlogin} />
-              <UserDelete
-                id={user.id_user}
-                login={user.userlogin}
-                setEdit={setEdit}
-              />
-            </section>
-
-            <section className="edit_user_settings_section-content-data">
-              {
-                // permissions === "Pracownik" &&
-                roles && Object.keys(roles).length > 0 && (
-                  <UserChangeRoles
-                    id={user.id_user}
-                    roles={roles}
-                    setRoles={setRoles}
-                    permission={permissions}
-                    // user={user.roles}
-                  />
-                )
-              }
-              {roles?.LawPartner === true && permissions === "Pracownik" && (
-                <UserChangeLawPartner
-                  id={user.id_user}
-                  lawPartner={lawPartner}
-                  setLawPartner={setLawPartner}
-                />
-              )}
-              {permissions === "Kancelaria" && (
-                <UserChangeLawPartner
-                  id={user.id_user}
-                  lawPartner={lawPartner}
-                  setLawPartner={setLawPartner}
-                />
-              )}
-            </section>
-
-            <section className="edit_user_settings_section-content-data">
-              {permissions === "Pracownik" &&
-                departments &&
-                Object.keys(departments).length > 0 && (
-                  <UserChangeDepartments
-                    id={user.id_user}
-                    departments={departments}
-                    multiCompany={company}
-                  />
-                )}
-            </section>
+          <section className="edit_user_settings__container">
+            <UserChangeName
+              id={user.id_user}
+              name={user.username}
+              surname={user.usersurname}
+            />
+            <UserChangePass id={user.id_user} />
+            <UserChangeLogin id={user.id_user} login={user.userlogin} />
+            <UserDelete
+              id={user.id_user}
+              login={user.userlogin}
+              setEdit={setEdit}
+            />
           </section>
-          {/* <FiX
-            className="edit_user_settings-button"
-            onClick={() => setEdit(false)}
-          /> */}
+          <section className="edit_user_settings__container">
+            {
+              // permissions === "Pracownik" &&
+              roles && Object.keys(roles).length > 0 && (
+                <UserChangeRoles
+                  id={user.id_user}
+                  roles={roles}
+                  setRoles={setRoles}
+                  permission={permissions}
+                  // user={user.roles}
+                />
+              )
+            }
+            {roles?.LawPartner === true && permissions === "Pracownik" && (
+              <UserChangeLawPartner
+                id={user.id_user}
+                lawPartner={lawPartner}
+                setLawPartner={setLawPartner}
+              />
+            )}
+            {permissions === "Kancelaria" && (
+              <UserChangeLawPartner
+                id={user.id_user}
+                lawPartner={lawPartner}
+                setLawPartner={setLawPartner}
+              />
+            )}
+          </section>
+          <section className="edit_user_settings__container">
+            {permissions === "Pracownik" &&
+              departments &&
+              Object.keys(departments).length > 0 && (
+                <UserChangeDepartments
+                  id={user.id_user}
+                  departments={departments}
+                  multiCompany={company}
+                />
+              )}
+          </section>
+          <section className="edit_user_settings__container">
+            <UserCompany
+              id={user.id_user}
+              company={company}
+              userCompany={user.company}
+            />
+          </section>
         </>
       )}
-      {/* <section className="edit_user_settings-button">
-        <Button
-          className="mui-button"
-          variant="contained"
-          // size="large"
-          color="secondary"
-          onClick={() => setEdit(false)}
-        >
-          Wyjście
-        </Button>
-      </section> */}
       <section className="edit_user_settings-close">
         <CloseIcon
           className="edit_user_settings-close--icon"

@@ -16,28 +16,6 @@ const UserChangeLawPartner = ({ id, lawPartner, setLawPartner }) => {
     setLawPartner(updated);
   };
 
-  const lawPartnerItem = (
-    <section className="user-change-law-partner__container">
-      {lawPartner?.map((item, index) => {
-        const [name, value] = Object.entries(item)[0];
-        return (
-          <label
-            key={index}
-            className="user-change-law-partner__container--info"
-          >
-            <span className="user-change-law-partner__name">{name}</span>
-            <input
-              className="user-change-law-partner--check"
-              type="checkbox"
-              checked={value}
-              onChange={() => changeItemSelect(name)}
-            />
-          </label>
-        );
-      })}
-    </section>
-  );
-
   const handleChangePermission = async () => {
     try {
       await axiosPrivateIntercept.patch(`/user/change-law-partner/${id}`, {

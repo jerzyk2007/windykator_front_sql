@@ -38,7 +38,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     await logout();
     navigate("/login");
   };
-
   // Funkcja do obsługi akcji (np. wylogowanie, generowanie raportu)
   const handleAction = (actionName) => {
     switch (actionName) {
@@ -64,16 +63,44 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
   };
 
   // Funkcja sprawdzająca uprawnienia
-  const hasAccess = (item) => {
-    if (!item.roles && !item.permission) return true; // Domyślnie dostępne, jeśli brak ról/permisji
+  // const hasAccess = (item) => {
+  //   if (!item.roles && !item.permission) return true; // Domyślnie dostępne, jeśli brak ról/permisji
 
-    if (item.roles && auth?.roles?.some((role) => item.roles.includes(role))) {
-      return true;
+  //   if (item.roles && auth?.roles?.some((role) => item.roles.includes(role))) {
+  //     return true;
+  //   }
+  //   if (item.permission && auth?.permissions?.[item.permission]) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
+  const hasAccess = (item) => {
+    // 1. Sprawdzanie Ról (Roles)
+    let roleAccess = true;
+    if (item.roles && item.roles.length > 0) {
+      roleAccess = auth?.roles?.some((role) => item.roles.includes(role));
     }
-    if (item.permission && auth?.permissions?.[item.permission]) {
-      return true;
+
+    // 2. Sprawdzanie Permisji (Permissions - opcjonalne, jeśli używasz)
+    let permissionAccess = true;
+    if (item.permission) {
+      permissionAccess = auth?.permissions?.[item.permission];
     }
-    return false;
+
+    // 3. Sprawdzanie Spółek (Company)
+    let companyAccess = true;
+    if (item.company && item.company.length > 0) {
+      // Pobieramy listę spółek użytkownika (zapewniamy, że to tablica)
+      const userCompanies = Array.isArray(auth?.company) ? auth.company : [];
+
+      // Warunek: wszystkie spółki z item.company muszą znaleźć się w userCompanies
+      companyAccess = item.company.every((comp) =>
+        userCompanies.includes(comp)
+      );
+    }
+
+    // Wynik końcowy: Użytkownik musi przejść test ról/permisji ORAZ test spółek
+    return (roleAccess || permissionAccess) && companyAccess;
   };
 
   const renderMenuItem = (item, isSideMenu = false) => {

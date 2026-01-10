@@ -55,7 +55,11 @@ const PrepareTable = ({ info, profile }) => {
 
         const dataTable = await axiosPrivateIntercept.get(
           `${basePath[profile]}/get-data-table/${auth.id_user}/${info}/${profile}`,
-          { signal: controller.signal }
+          { signal: controller.signal },
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
         );
 
         setDocuments(dataTable.data);
