@@ -62,18 +62,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     handleLinkClick(); // Zamknij menu po akcji
   };
 
-  // Funkcja sprawdzająca uprawnienia
-  // const hasAccess = (item) => {
-  //   if (!item.roles && !item.permission) return true; // Domyślnie dostępne, jeśli brak ról/permisji
-
-  //   if (item.roles && auth?.roles?.some((role) => item.roles.includes(role))) {
-  //     return true;
-  //   }
-  //   if (item.permission && auth?.permissions?.[item.permission]) {
-  //     return true;
-  //   }
-  //   return false;
-  // };
   const hasAccess = (item) => {
     // 1. Sprawdzanie Ról (Roles)
     let roleAccess = true;
