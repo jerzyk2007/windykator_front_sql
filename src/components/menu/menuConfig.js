@@ -4,12 +4,37 @@ export const menuItems = [
     roles: [100, 2000],
     company: [],
     submenu: [
-      { label: "Aktualne", path: "/actual-table", roles: [100, 2000] },
-      { label: "Pilne", path: "/critical-table", roles: [100, 2000] },
-      { label: "Zobowiązania", path: "/obligations-table", roles: [100, 2000] },
-      { label: "Archiwum", path: "/archive-table", roles: [100, 2000] },
-      { label: "Kpl dane", path: "/all-data-table", roles: [100, 2000] },
-      { label: "KRD", path: "/krd", roles: [150, 1000, 2000] },
+      {
+        label: "Aktualne",
+        path: "/actual-table",
+        roles: [100, 2000],
+        company: [],
+      },
+      {
+        label: "Pilne",
+        path: "/critical-table",
+        roles: [100, 2000],
+        company: [],
+      },
+      {
+        label: "Zobowiązania",
+        path: "/obligations-table",
+        roles: [100, 2000],
+        company: [],
+      },
+      {
+        label: "Archiwum",
+        path: "/archive-table",
+        roles: [100, 2000],
+        company: [],
+      },
+      {
+        label: "Kpl dane",
+        path: "/all-data-table",
+        roles: [100, 2000],
+        company: [],
+      },
+      { label: "KRD", path: "/krd", roles: [150, 1000, 2000], company: [] },
       {
         label: "Dokumenty Raportu FK",
         path: "/fk-documents-table",
@@ -275,28 +300,3 @@ export const menuItems = [
     ],
   },
 ];
-
-/**
- * Funkcja rekurencyjnie szukająca ścieżki i zbierająca role
- */
-export const getRolesForPath = (path) => {
-  const findRoles = (items) => {
-    for (const item of items) {
-      if (item.path === path) return item.roles || [];
-      if (item.submenu) {
-        const res = findRoles(item.submenu);
-        if (res.length > 0)
-          return [...new Set([...(item.roles || []), ...res])];
-      }
-      if (item.sideMenu) {
-        const res = findRoles(item.sideMenu);
-        if (res.length > 0)
-          return [...new Set([...(item.roles || []), ...res])];
-      }
-    }
-    return [];
-  };
-
-  const result = findRoles(menuItems);
-  return result.length > 0 ? result : [2000]; // Domyślnie tylko superadmin jeśli nie znaleziono
-};
