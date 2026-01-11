@@ -9,6 +9,7 @@
 } */
 .header_notification {
   flex: 0 0 30%; /* Dokładnie 30%, nie rośnie, nie kurczy się */
+  min-width: 300px;
   height: 100%;
   display: flex;
   justify-content: center;

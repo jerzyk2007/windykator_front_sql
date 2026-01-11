@@ -119,6 +119,32 @@ export const menuItems = [
     ],
   },
   {
+    title: "KEM",
+    roles: [150],
+    company: ["KEM"],
+
+    submenu: [
+      {
+        label: "Zablokowane",
+        path: "/",
+        roles: [150],
+        company: ["KEM"],
+      },
+      {
+        label: "Przed windykacją",
+        path: "/",
+        roles: [150],
+        company: ["KEM"],
+      },
+      {
+        label: "Windykacja oddział",
+        path: "/",
+        roles: [150],
+        company: ["KEM"],
+      },
+    ],
+  },
+  {
     title: "Raporty",
     roles: [100, 200, 201, 202, 300, 400, 1000, 2000],
     company: [],
@@ -165,8 +191,8 @@ export const menuItems = [
           {
             label: "Dokumenty kontroli BL",
             path: "/control-bl-documents-table",
-            roles: [120, 2000],
-            company: [],
+            roles: [100, 2000],
+            company: ["KRT"],
           },
           {
             label: "Raport kontroli BL",

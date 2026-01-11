@@ -15,25 +15,17 @@
 } */
 
 .nav_menu {
-  flex: 0 0 70%; /* Dokładnie 70% */
+  flex: 0 1 70%; /* Dokładnie 70% */
   height: 100%;
+  min-width: 750px;
   display: flex;
   align-items: center;
   padding: 0 20px;
   box-sizing: border-box;
-  /* USUNIĘTO: position: fixed, top, left, width */
 }
 
-/* .nav_menu__menu {
-  flex-grow: 1;
-  list-style: none;
-  display: flex;
-  justify-content: flex-end;
-  gap: 5px;
-  height: 100%;
-} */
-
 .nav_menu__menu {
+  width: 100%;
   flex-grow: 1;
   list-style: none;
   display: flex;
@@ -45,22 +37,21 @@
 .nav_menu__menu-item {
   position: relative;
   cursor: pointer;
-  display: flex;
-  align-items: center;
   padding: 0 5px;
   height: 100%;
   border-radius: 6px;
   transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .nav_menu__menu-item:hover {
-  /* background-color: rgba(44, 123, 168, 0.2); */
   background-color: rgb(197, 216, 233);
 }
 
 .nav_menu-dropdown__menu {
   position: absolute;
-  /* top: 100%; */
   top: 50px;
   left: 50%;
   transform: translateX(-50%);
@@ -91,7 +82,7 @@
   font-size: 1.1rem;
   font-weight: 500;
   color: #000000;
-  padding: 10px 30px; /* Zwiększony padding boczny, by tekst nie najechał na strzałkę */
+  padding: 10px 20px; /* Zwiększony padding boczny, by tekst nie najechał na strzałkę */
   transition: all 0.2s ease;
   width: 100%;
   position: relative; /* Baza dla absolutnej ikony */
