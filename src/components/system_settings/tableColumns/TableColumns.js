@@ -468,7 +468,6 @@ const TableColumns = () => {
         permissions: settingsColumn?.data?.permissions || [],
         employees: {},
       };
-
       settingsColumn?.data?.permissions?.forEach((item) => {
         const updatedColumns =
           settingsColumn?.data?.employees?.[item]?.columns?.map((col) => {

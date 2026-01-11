@@ -342,6 +342,12 @@ export const prepareColumnsPartner = (columnsData) => {
       modifiedItem.accessorFn = kanalConfig.accessorFn;
       modifiedItem.muiTableBodyCellProps = kanalConfig.muiTableBodyCellProps;
     }
+    // if (item.accessorKey === "KANAL_KOMUNIKACJI") {
+    //   const kanalConfig = kanalKomunikacjiColumnConfig(muiTableBodyCellProps);
+
+    //   modifiedItem.accessorFn = kanalConfig.accessorFn;
+    //   modifiedItem.muiTableBodyCellProps = kanalConfig.muiTableBodyCellProps;
+    // }
 
     if (item.accessorKey === "KONTRAHENT") {
       modifiedItem.muiTableBodyCellProps = ({ cell }) => {
@@ -552,6 +558,72 @@ export const prepareColumnsInsurance = (columnsData) => {
           wordBreak: " break-all",
         },
       });
+    }
+
+    if (item.filterVariant === "none") {
+      modifiedItem.enableColumnFilter = false;
+      delete modifiedItem.filterVariant;
+    }
+
+    if (item.type === "money") {
+      modifiedItem.Cell = ({ cell }) => {
+        const value = cell.getValue();
+
+        const formattedSalary =
+          value !== undefined && value !== null && value !== 0
+            ? value.toLocaleString("pl-PL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+              })
+            : "0,00";
+
+        return formattedSalary;
+      };
+    }
+
+    modifiedItem.columnFilterModeOptions = [];
+    delete modifiedItem.type;
+    return modifiedItem;
+  });
+  return update;
+};
+
+// przygotowanie kolumn dla Koordynatora
+export const prepareColumnsVindex = (columnsData) => {
+  const update = columnsData.map((item) => {
+    const modifiedItem = { ...item };
+    modifiedItem.muiTableBodyCellProps = muiTableBodyCellProps;
+
+    if (item.filterVariant === "date-range") {
+      modifiedItem.accessorFn = (originalRow) => {
+        if (originalRow[item.accessorKey]) {
+          const date = new Date(originalRow[item.accessorKey]);
+          // ustaw godzinę na początek dnia, by uniknąć problemów z filtrowaniem
+          date.setHours(0, 0, 0, 0);
+          return date;
+        }
+        return null;
+      };
+
+      modifiedItem.Cell = ({ cell }) => {
+        // Parsowanie wartości komórki jako data
+        if (cell.getValue()) {
+          const date = new Date(cell.getValue());
+          // Sprawdzenie, czy data jest prawidłowa
+          if (!isNaN(date)) {
+            return format(date, "yyyy-MM-dd");
+          }
+        }
+        return null;
+      };
+    }
+
+    if (item.accessorKey === "KANAL_KOMUNIKACJI") {
+      const kanalConfig = kanalKomunikacjiColumnConfig(muiTableBodyCellProps);
+
+      modifiedItem.accessorFn = kanalConfig.accessorFn;
+      modifiedItem.muiTableBodyCellProps = kanalConfig.muiTableBodyCellProps;
     }
 
     if (item.filterVariant === "none") {

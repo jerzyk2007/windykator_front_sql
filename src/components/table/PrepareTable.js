@@ -7,6 +7,7 @@ import {
   prepareColumnsInsider,
   prepareColumnsPartner,
   prepareColumnsInsurance,
+  prepareColumnsVindex,
 } from "./utilsForTable/prepareColumns";
 import { basePath } from "./utilsForTable/tableFunctions";
 import "./PrepareTable.css";
@@ -49,10 +50,9 @@ const PrepareTable = ({ info, profile }) => {
     const getData = async () => {
       try {
         setPleaseWait(true);
-        if (!["insider", "partner", "insurance"].includes(profile)) {
+        if (!["insider", "partner", "insurance", "vindex"].includes(profile)) {
           return;
         }
-
         const dataTable = await axiosPrivateIntercept.get(
           `${basePath[profile]}/get-data-table/${auth.id_user}/${info}/${profile}`,
           { signal: controller.signal },
@@ -78,6 +78,8 @@ const PrepareTable = ({ info, profile }) => {
             ? prepareColumnsPartner(tableSettingsColumns.data.columns)
             : profile === "insurance"
             ? prepareColumnsInsurance(tableSettingsColumns.data.columns)
+            : profile === "vindex"
+            ? prepareColumnsVindex(tableSettingsColumns.data.columns)
             : [];
 
         setColumns(update);

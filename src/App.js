@@ -133,6 +133,19 @@ function App() {
               />
               <Route path="/edit-insurance-document" element={<EditDoc />} />
 
+              <Route
+                path="/blocked"
+                element={<PrepareTable info={"critical"} profile={"vindex"} />}
+              />
+              <Route
+                path="/pre-collection"
+                element={<PrepareTable info={"critical"} profile={"vindex"} />}
+              />
+              <Route
+                path="/branch-collection"
+                element={<PrepareTable info={"critical"} profile={"vindex"} />}
+              />
+
               {/* Grupa: Raporty */}
               <Route
                 path="/raport-departments"

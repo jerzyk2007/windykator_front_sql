@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import useData from "../hooks/useData";
@@ -62,33 +62,76 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     handleLinkClick(); // Zamknij menu po akcji
   };
 
+  // const hasAccess = (item) => {
+  //   // 1. Sprawdzanie Ról (Roles)
+  //   let roleAccess = true;
+  //   if (item.roles && item.roles.length > 0) {
+  //     roleAccess = auth?.roles?.some((role) => item.roles.includes(role));
+  //   }
+
+  //   // 2. Sprawdzanie Permisji (Permissions - opcjonalne, jeśli używasz)
+  //   let permissionAccess = true;
+  //   if (item.permission) {
+  //     permissionAccess = auth?.permissions?.[item.permission];
+  //   }
+
+  //   // 3. Sprawdzanie Spółek (Company)
+  //   let companyAccess = true;
+  //   if (item.company && item.company.length > 0) {
+  //     // Pobieramy listę spółek użytkownika (zapewniamy, że to tablica)
+  //     const userCompanies = Array.isArray(auth?.company) ? auth.company : [];
+
+  //     // Warunek: wszystkie spółki z item.company muszą znaleźć się w userCompanies
+  //     companyAccess = item.company.every((comp) =>
+  //       userCompanies.includes(comp)
+  //     );
+  //   }
+
+  //   // Wynik końcowy: Użytkownik musi przejść test ról/permisji ORAZ test spółek
+  //   return (roleAccess || permissionAccess) && companyAccess;
+  // };
+
   const hasAccess = (item) => {
-    // 1. Sprawdzanie Ról (Roles)
+    // 1. Sprawdzanie ról (jeśli zdefiniowane)
     let roleAccess = true;
     if (item.roles && item.roles.length > 0) {
       roleAccess = auth?.roles?.some((role) => item.roles.includes(role));
     }
 
-    // 2. Sprawdzanie Permisji (Permissions - opcjonalne, jeśli używasz)
-    let permissionAccess = true;
+    // 2. Sprawdzanie permisji (jeśli zdefiniowane)
+    // Jeśli item nie ma pola permission, permissionAccess nie powinno wpływać na wynik
+    let permissionAccess = false;
+    let hasPermissionField = false;
     if (item.permission) {
+      hasPermissionField = true;
       permissionAccess = auth?.permissions?.[item.permission];
     }
 
-    // 3. Sprawdzanie Spółek (Company)
+    // 3. Sprawdzanie spółek (jeśli zdefiniowane)
     let companyAccess = true;
     if (item.company && item.company.length > 0) {
-      // Pobieramy listę spółek użytkownika (zapewniamy, że to tablica)
       const userCompanies = Array.isArray(auth?.company) ? auth.company : [];
-
-      // Warunek: wszystkie spółki z item.company muszą znaleźć się w userCompanies
       companyAccess = item.company.every((comp) =>
         userCompanies.includes(comp)
       );
     }
 
-    // Wynik końcowy: Użytkownik musi przejść test ról/permisji ORAZ test spółek
-    return (roleAccess || permissionAccess) && companyAccess;
+    // LOGIKA DOSTĘPU:
+    // Jeśli element ma i role i permisje -> wystarczy jedno z nich (OR)
+    // Jeśli ma tylko role -> musi mieć rolę
+    // Jeśli ma tylko permisje -> musi mieć permisję
+    // Jeśli nie ma nic -> dostępny dla każdego
+
+    let finalAccess = true;
+    if (item.roles?.length > 0 && hasPermissionField) {
+      finalAccess = roleAccess || permissionAccess;
+    } else if (item.roles?.length > 0) {
+      finalAccess = roleAccess;
+    } else if (hasPermissionField) {
+      finalAccess = permissionAccess;
+    }
+
+    return finalAccess && companyAccess;
   };
 
   const renderMenuItem = (item, isSideMenu = false) => {
