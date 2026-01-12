@@ -44,7 +44,7 @@ const formatChatField = (arrayData) => {
         if (countEnters > maxEnters) break;
       }
       // Jeśli to jest 121 znak, przerywamy
-      if (truncated.length >= 120) break;
+      if (truncated.length >= 200) break;
 
       truncated += char;
     }
@@ -98,17 +98,20 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
   };
 
   const cleanData = allData.map((item) => {
-    const informacja_zarzd =
-      Array.isArray(item.INFORMACJA_ZARZAD) && item.INFORMACJA_ZARZAD.length > 0
-        ? item.INFORMACJA_ZARZAD.length === 1
-          ? sanitize(item.INFORMACJA_ZARZAD[item.INFORMACJA_ZARZAD.length - 1])
-          : `Liczba wcześniejszych wpisów: ${
-              item.INFORMACJA_ZARZAD.length - 1
-            }\n${sanitize(
-              item.INFORMACJA_ZARZAD[item.INFORMACJA_ZARZAD.length - 1]
-            )}`
-        : "BRAK";
+    // const informacja_zarzd1 =
+    //   Array.isArray(item.INFORMACJA_ZARZAD) && item.INFORMACJA_ZARZAD.length > 0
+    //     ? item.INFORMACJA_ZARZAD.length === 1
+    //       ? sanitize(item.INFORMACJA_ZARZAD[item.INFORMACJA_ZARZAD.length - 1])
+    //       : `Liczba wcześniejszych wpisów: ${
+    //           item.INFORMACJA_ZARZAD.length - 1
+    //         }\n${sanitize(
+    //           item.INFORMACJA_ZARZAD[item.INFORMACJA_ZARZAD.length - 1]
+    //         )}`
+    //     : "BRAK";
+    const informacja_zarzd = formatChatField(item.INFORMACJA_ZARZAD);
+
     const chatPanel = formatChatField(item.KANAL_KOMUNIKACJI);
+
     return {
       ...item,
       INFORMACJA_ZARZAD: informacja_zarzd,

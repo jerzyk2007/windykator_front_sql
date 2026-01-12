@@ -378,7 +378,8 @@ const Table = ({
         </Button>
 
         {/* PRZYCISK EXCEL */}
-        {["insider", "partner", "insurance"].includes(profile) && (
+        {/* {["insider", "partner", "insurance"].includes(profile) && ( */}
+        {
           <TableButtonInfo
             className={`table-action-btn excel ${
               !dataTableCounter ? "disabled" : ""
@@ -398,7 +399,7 @@ const Table = ({
             <i className="fa-regular fa-file-excel"></i>
             <span>Eksport Excel</span>
           </TableButtonInfo>
-        )}
+        }
       </Box>
     ),
   });
