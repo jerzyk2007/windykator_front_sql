@@ -62,7 +62,7 @@ const EditBasicDataPro = ({ rowData, profile }) => {
     const streetLine = KONTRAHENT_ULICA
       ? KONTRAHENT_ULICA +
         (KONTRAHENT_NR_BUDYNKU ? ` ${KONTRAHENT_NR_BUDYNKU}` : "") +
-        (KONTRAHENT_NR_LOKALU ? ` / ${KONTRAHENT_NR_LOKALU}` : "")
+        (KONTRAHENT_NR_LOKALU ? ` m. ${KONTRAHENT_NR_LOKALU}` : "")
       : "";
     const cityLine =
       KONTRAHENT_KOD_POCZTOWY || KONTRAHENT_MIASTO
