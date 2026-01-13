@@ -1,0 +1,74 @@
+.ski-jump-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #001f3f 0%, #000428 100%);
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.ski-title {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  text-align: center;
+  color: #fbff00;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 32px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  text-shadow: 3px 3px 0px #ff0000, 5px 5px 15px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.ski-status {
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+}
+
+.retro-blink {
+  color: #00ff00;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 2px 2px #000;
+  animation: skiBlink 1.2s step-start infinite;
+}
+
+@keyframes skiBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.ski-jump-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  z-index: 100;
+}

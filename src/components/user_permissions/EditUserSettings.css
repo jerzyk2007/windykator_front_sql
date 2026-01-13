@@ -291,7 +291,7 @@
   position: fixed; /* Zmienione ze sticky */
   top: 55px; /* Odległość od góry */
   left: 15px; /* Lepiej dać po prawej stronie */
-  z-index: 999999; /* Bardzo wysoki z-index, by był nad kartami */
+  z-index: 100; /* Bardzo wysoki z-index, by był nad kartami */
   cursor: pointer;
   display: flex;
   align-items: center;

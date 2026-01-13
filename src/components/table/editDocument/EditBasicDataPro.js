@@ -197,6 +197,10 @@ const EditBasicDataPro = ({ rowData, profile }) => {
         </DataRow>
         <DataRow title="NIP" children={formatNip(rowData.KONTRAHENT_NIP)} />
         <DataRow
+          title="Kwota dokumentu"
+          children={formatCurrency(rowData.KWOTA_DOKUMENT)}
+        />
+        <DataRow
           title="Należność"
           children={formatCurrency(rowData.NALEZNOSC)}
         />

@@ -6,7 +6,7 @@
   right: 0;
   background-color: #fff;
   font-family: "Source Sans 3", Calibri, sans-serif;
-  z-index: 9999999;
+  z-index: 101;
   display: flex;
   justify-content: center;
   align-items: center;

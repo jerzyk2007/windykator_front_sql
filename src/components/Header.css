@@ -14,7 +14,7 @@
   background-color: #f8fafc;
   display: flex;
   align-items: center;
-  z-index: 9999; /* Wysoki z-index, aby nic nie zasłoniło headera */
+  z-index: 10;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 }

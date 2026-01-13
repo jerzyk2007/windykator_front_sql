@@ -10,7 +10,7 @@
   flex-direction: column;
   /* justify-content: center; */
   align-items: center;
-  z-index: 9999; /* Musi być najwyższy w całej aplikacji */
+  z-index: 100; /* Musi być najwyższy w całej aplikacji */
   overflow-y: auto; /* Pozwala na scroll tylko wewnątrz logowania, jeśli ekran jest mały */
   padding: 20px;
   box-sizing: border-box;

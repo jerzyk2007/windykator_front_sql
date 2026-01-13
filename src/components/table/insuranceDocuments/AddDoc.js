@@ -10,11 +10,14 @@ const clearForm = {
   numerDokumentu: "",
   ubezpieczyciel: "",
   terminPlatnosci: "",
-  dataPrzekazania: "", // <--- DODANO
+  dataPrzekazania: "",
+  kwotaDokument: 0,
+  kwotaDokumentDisplay: "",
   kwotaNaleznosci: 0,
   kwotaDisplay: "",
   konto: "",
   kontoDisplay: "",
+  firma: "", // <--- DODANO
   osobaZlecajaca: "",
   dzial: "",
   kontrahentNazwa: "",
@@ -34,6 +37,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
   const [form, setForm] = useState(clearForm);
   const [message, setMessage] = useState({ type: "", info: "" });
   const [departments, setDepartments] = useState([]);
+  const [company, setCompany] = useState([]);
 
   // --- WALIDATORY ---
   const v = {
@@ -152,8 +156,10 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
     if (!v.required(form.numerDokumentu)) errors.push("Numer dokumentu");
     if (!v.required(form.ubezpieczyciel)) errors.push("Ubezpieczyciel");
     if (!v.required(form.terminPlatnosci)) errors.push("Termin płatności");
-    if (!v.required(form.dataPrzekazania)) errors.push("Data przekazania"); // <--- WALIDACJA
-    if (!v.isPositive(form.kwotaNaleznosci)) errors.push("Kwota należności");
+    if (!v.required(form.dataPrzekazania)) errors.push("Data przekazania");
+    if (!v.isPositive(form.kwotaDokument)) errors.push("Kwota dokumentu");
+    if (!v.isPositive(form.kwotaNaleznosci)) errors.push("Należność");
+    if (!v.required(form.firma)) errors.push("Spółka"); // <--- WALIDACJA
     if (!v.email(form.osobaZlecajaca)) errors.push("E-mail zlecającego");
     if (!v.required(form.dzial)) errors.push("Dział");
     if (!v.required(form.kontrahentNazwa)) errors.push("Nazwa kontrahenta");
@@ -188,7 +194,6 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
         );
         if (result.status === 201)
           setMessage({ type: "new", info: result.data.message });
-        // setIsEditing(false);
       }
     } catch (error) {
       if (error.response?.status === 409) {
@@ -202,9 +207,15 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
   const getData = async () => {
     try {
       const result = await axiosPrivateIntercept.get(
-        "insurance/get-available-departments"
+        "insurance/get-available-dep-comp"
       );
-      setDepartments(result.data);
+
+      setDepartments(result?.data?.departments ?? []);
+      const formattedCompanies = result.data.company.map((item) => ({
+        value: item,
+        label: item,
+      }));
+      setCompany(formattedCompanies);
     } catch (error) {
       console.error(error);
     }
@@ -217,11 +228,13 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
         ubezpieczyciel: docData.UBEZPIECZYCIEL ?? "",
         terminPlatnosci: docData.TERMIN_PLATNOSCI ?? "",
         dataPrzekazania: docData.DATA_PRZEKAZANIA ?? "",
-        // kwotaNaleznosci: docData.NALEZNOSC ?? 0,
+        kwotaDokument: docData.KWOTA_DOKUMENT ?? 0,
+        kwotaDokumentDisplay: formatToPLN(docData.KWOTA_DOKUMENT) ?? "",
         kwotaNaleznosci: docData.NALEZNOSC ?? 0,
         kwotaDisplay: formatToPLN(docData.NALEZNOSC) ?? "",
         konto: docData.NR_KONTA ?? "",
         kontoDisplay: formatBankAccount(docData.NR_KONTA) ?? "",
+        firma: docData.FIRMA ?? "", // <--- MAPOWANIE Z BAZY
         osobaZlecajaca: docData.OSOBA_ZLECAJACA_WINDYKACJE ?? "",
         dzial: docData.DZIAL ?? "",
         kontrahentNazwa: docData.KONTRAHENT_NAZWA ?? "",
@@ -246,6 +259,9 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
 
   const options = departments.map((dep) => ({ value: dep, label: dep }));
   const currentValue = options.find((o) => o.value === form.dzial) || null;
+
+  const currentCompanyValue =
+    company.find((o) => o.value === form.firma) || null;
 
   const documentPanel = () => (
     <section className="add_doc">
@@ -295,7 +311,61 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
                 />
               </label>
               <label>
-                Kwota (PLN) *
+                Data przekazania *
+                <input
+                  type="date"
+                  name="dataPrzekazania"
+                  value={form.dataPrzekazania}
+                  onChange={handleChange}
+                  style={getInvalidStyle(true, form.dataPrzekazania, true)}
+                />
+              </label>
+            </section>
+
+            <section className="add_doc-code-city">
+              <label>
+                Kwota *
+                <input
+                  type="text"
+                  value={form.kwotaDokumentDisplay}
+                  placeholder="0,00"
+                  style={getInvalidStyle(
+                    v.isPositive(form.kwotaDokument),
+                    form.kwotaDokumentDisplay,
+                    true
+                  )}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^[0-9.,]*$/.test(val) || val === "") {
+                      setForm((p) => ({
+                        ...p,
+                        kwotaDokumentDisplay: val,
+                        kwotaDokument:
+                          parseFloat(
+                            val.replace(",", ".").replace(/\s/g, "")
+                          ) || 0,
+                      }));
+                    }
+                  }}
+                  onBlur={() =>
+                    setForm((p) => ({
+                      ...p,
+                      kwotaDokumentDisplay: formatToPLN(p.kwotaDokument),
+                    }))
+                  }
+                  onFocus={() =>
+                    setForm((p) => ({
+                      ...p,
+                      kwotaDokumentDisplay:
+                        p.kwotaDokument === 0
+                          ? ""
+                          : String(p.kwotaDokument).replace(".", ","),
+                    }))
+                  }
+                />
+              </label>
+              <label>
+                Należność *
                 <input
                   type="text"
                   value={form.kwotaDisplay}
@@ -337,25 +407,50 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
               </label>
             </section>
 
-            <label>
-              Nr konta do wpłaty
-              <input
-                type="text"
-                value={form.kontoDisplay}
-                style={getInvalidStyle(v.konto(form.konto), form.kontoDisplay)}
-                onChange={(e) => {
-                  const clean = e.target.value
-                    .replace(/\D/g, "")
-                    .substring(0, 26);
-                  setForm((p) => ({
-                    ...p,
-                    kontoDisplay: formatBankAccount(clean),
-                    konto: clean,
-                  }));
-                }}
-                placeholder="26 cyfr"
-              />
-            </label>
+            {/* WIERSZ: NR KONTA (70%) + SPÓŁKA (30%) */}
+            <section className="add_doc-code-city">
+              <label style={{ width: "65%" }}>
+                Nr konta do wpłaty
+                <input
+                  type="text"
+                  value={form.kontoDisplay}
+                  style={getInvalidStyle(
+                    v.konto(form.konto),
+                    form.kontoDisplay
+                  )}
+                  onChange={(e) => {
+                    const clean = e.target.value
+                      .replace(/\D/g, "")
+                      .substring(0, 26);
+                    setForm((p) => ({
+                      ...p,
+                      kontoDisplay: formatBankAccount(clean),
+                      konto: clean,
+                    }));
+                  }}
+                  placeholder="26 cyfr"
+                />
+              </label>
+              <label style={{ width: "35%" }}>
+                Spółka *
+                <Select
+                  name="firma"
+                  className={`react-select-container ${
+                    !form.firma ? "is-invalid" : ""
+                  }`}
+                  classNamePrefix="rs"
+                  value={currentCompanyValue}
+                  options={company}
+                  onChange={(sel) =>
+                    handleChange({
+                      target: { name: "firma", value: sel ? sel.value : "" },
+                    })
+                  }
+                  placeholder="Wybierz..."
+                  menuPlacement="top"
+                />
+              </label>
+            </section>
 
             <section className="add_doc-code-city">
               <label>
@@ -392,22 +487,6 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
                   menuPlacement="top"
                 />
               </label>
-            </section>
-
-            {/* DODANA SEKCJA DATA PRZEKAZANIA */}
-            <section className="add_doc-code-city">
-              <label style={{ width: "50%" }}>
-                Data przekazania *
-                <input
-                  type="date"
-                  name="dataPrzekazania"
-                  value={form.dataPrzekazania}
-                  onChange={handleChange}
-                  style={getInvalidStyle(true, form.dataPrzekazania, true)}
-                />
-              </label>
-              <div style={{ width: "50%" }}></div>{" "}
-              {/* Placeholder dla układu */}
             </section>
           </section>
         </section>
@@ -580,10 +659,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
             <section className="add_doc-contact-section">
               <h4 className="contact-title">Adresy E-mail</h4>
               {form.maile.map((m, idx) => (
-                <div
-                  key={`osobaZlecajaca-${idx}`}
-                  className="add_doc-contact-row"
-                >
+                <div key={`mail-${idx}`} className="add_doc-contact-row">
                   <input
                     className="add_doc-contact"
                     type="text"
@@ -625,7 +701,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
       <section className="add_doc__accept-panel">
         <Button
           variant="contained"
-          size="large"
+          size="small"
           color="success"
           onClick={handleSaveData}
         >

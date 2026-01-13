@@ -4,18 +4,22 @@ import WindykacjaLoading from "./loading/WindykacjaLoading";
 import FatThursday from "./loading/FatThursday";
 import WomensDayLoading from "./loading/WomensDayLoading";
 import XmasKulig from "./loading/XmasKulig";
+import XmasSkiJump from "./loading/XmasSkiJump";
 import "./PleaseWait.css";
 
 const variants = {
-  dnikn: WindykacjaLoading,
+  // default: XmasSkiJump,
+  default: WindykacjaLoading,
+  draft: XmasSkiJump,
   old: DefaultLoading,
   xmas: XmasLoading,
   fat: FatThursday,
   valentine: WomensDayLoading,
   kulig: XmasKulig,
+  ski: XmasSkiJump,
 };
 
-const PleaseWait = ({ info = "dnikn" }) => {
+const PleaseWait = ({ info = "default" }) => {
   const LoaderComponent = variants[info] || variants.cube;
   return (
     <section className="please-wait">

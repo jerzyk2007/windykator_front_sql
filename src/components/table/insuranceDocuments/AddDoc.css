@@ -120,7 +120,7 @@
 }
 
 .rs__menu {
-  z-index: 1000 !important;
+  z-index: 100 !important;
   border: 1px solid rgba(44, 123, 168, 0.4) !important;
 }
 
@@ -187,7 +187,7 @@
 
 /* PANEL DOLNY */
 .add_doc__accept-panel {
-  height: 80px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -207,7 +207,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 100;
   animation: fadeIn 0.3s ease-out;
 }
 
