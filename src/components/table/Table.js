@@ -52,12 +52,22 @@ const Table = ({
   const { height } = useWindowSize();
   const [pleaseWait, setPleaseWait] = useState(false);
 
-  const [columnVisibility, setColumnVisibility] = useState(settings.visible);
-  const [columnSizing, setColumnSizing] = useState(settings.size);
-  const [columnOrder, setColumnOrder] = useState(settings.order);
-  const [columnPinning, setColumnPinning] = useState(settings.pinning);
+  const [columnVisibility, setColumnVisibility] = useState(
+    settings.visible ?? {}
+  );
+  const [columnSizing, setColumnSizing] = useState(settings.size ?? {});
+  const [columnOrder, setColumnOrder] = useState(settings.order ?? []);
+  const [columnPinning, setColumnPinning] = useState(
+    settings.pinning ?? { left: [], right: [] }
+  );
   const [pagination, setPagination] = useState(
     settings?.pagination ? settings.pagination : { pageIndex: 0, pageSize: 10 }
+  );
+  // const [columnFilters, setColumnFilters] = useState([
+  //   { id: "AREA", value: ["BLACHARNIA", "SAMOCHODY NOWE"] },
+  // ]);
+  const [columnFilters, setColumnFilters] = useState(
+    settings.columnFilters ?? []
   );
   const [tableSize, setTableSize] = useState(500);
   const [data, setData] = useState([]);
@@ -69,17 +79,41 @@ const Table = ({
     lawPartner: [],
   });
 
+  // const [sorting, setSorting] = useState(() => {
+  //   const has = (key) => columns.some((c) => c.accessorKey === key);
+  //   if (profile === "insider" && has("ILE_DNI_PO_TERMINIE")) {
+  //     return [{ id: "ILE_DNI_PO_TERMINIE", desc: false }];
+  //   }
+  //   if (profile === "partner" && has("DATA_PRZEKAZANIA_SPRAWY")) {
+  //     return [{ id: "DATA_PRZEKAZANIA_SPRAWY", desc: true }];
+  //   }
+  //   if (profile === "insurance" && has("DATA_PRZEKAZANIA")) {
+  //     return [{ id: "DATA_PRZEKAZANIA", desc: false }];
+  //   }
+  //   return [];
+  // });
+
   const [sorting, setSorting] = useState(() => {
+    // 1️⃣ najwyższy priorytet – zapisane ustawienia
+    if (Array.isArray(settings?.sorting) && settings.sorting.length > 0) {
+      return settings.sorting;
+    }
+
     const has = (key) => columns.some((c) => c.accessorKey === key);
+
+    // 2️⃣ fallback wg profilu
     if (profile === "insider" && has("ILE_DNI_PO_TERMINIE")) {
       return [{ id: "ILE_DNI_PO_TERMINIE", desc: false }];
     }
+
     if (profile === "partner" && has("DATA_PRZEKAZANIA_SPRAWY")) {
       return [{ id: "DATA_PRZEKAZANIA_SPRAWY", desc: true }];
     }
+
     if (profile === "insurance" && has("DATA_PRZEKAZANIA")) {
       return [{ id: "DATA_PRZEKAZANIA", desc: false }];
     }
+
     return [];
   });
 
@@ -306,6 +340,7 @@ const Table = ({
     onColumnVisibilityChange: setColumnVisibility,
     onColumnOrderChange: setColumnOrder,
     onColumnPinningChange: setColumnPinning,
+    onColumnFiltersChange: setColumnFilters,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
     enableDensityToggle: false,
@@ -321,6 +356,7 @@ const Table = ({
       columnPinning: columnPinning ? columnPinning : {},
       pagination,
       sorting,
+      columnFilters,
     },
     localization: MRT_Localization_PL,
     enableGlobalFilterModes: true,
@@ -369,7 +405,9 @@ const Table = ({
               columnVisibility,
               columnOrder,
               columnPinning,
-              pagination
+              pagination,
+              columnFilters,
+              sorting
             )
           }
         >
@@ -411,6 +449,7 @@ const Table = ({
     }
 
     const rowData = dataSize.map((item) => item.original);
+
     const arrayOrder = columnOrder.filter(
       (item) => columnVisibility[item] !== false
     );
@@ -431,6 +470,21 @@ const Table = ({
 
     setDataTableCounter(size >= 1 && size <= 30000000); // limit 30MB
   };
+
+  // wyąłczenie filtrów jeśli kolumna przestanie być widoczna lub została usunięta dla Obszaru
+  useEffect(() => {
+    setColumnFilters((prev) =>
+      prev.filter((filter) => {
+        const columnExists = columns.some(
+          (col) => col.accessorKey === filter.id
+        );
+
+        const isVisible = columnVisibility?.[filter.id] !== false;
+
+        return columnExists && isVisible;
+      })
+    );
+  }, [columns, columnVisibility]);
 
   useEffect(() => {
     setTableSize(height - 162);

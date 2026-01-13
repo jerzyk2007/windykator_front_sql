@@ -161,17 +161,17 @@ const EditUserSettings = ({ user, setEdit }) => {
               />
             )}
           </section>
-          <section className="edit_user_settings__container">
-            {permissions === "Pracownik" &&
-              departments &&
-              Object.keys(departments).length > 0 && (
+          {permissions === "Pracownik" && departments && (
+            <section className="edit_user_settings__container">
+              {Object.keys(departments).length > 0 && (
                 <UserChangeDepartments
                   id={user.id_user}
                   departments={departments}
                   multiCompany={company}
                 />
               )}
-          </section>
+            </section>
+          )}
           <section className="edit_user_settings__container">
             <UserCompany
               id={user.id_user}

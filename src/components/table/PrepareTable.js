@@ -25,7 +25,9 @@ const PrepareTable = ({ info, profile }) => {
     columnVisibility,
     columnOrder,
     columnPinning,
-    pagination
+    pagination,
+    columnFilters,
+    sorting
   ) => {
     const tableSettings = {
       size: { ...columnSizing },
@@ -33,6 +35,8 @@ const PrepareTable = ({ info, profile }) => {
       order: columnOrder,
       pinning: columnPinning,
       pagination,
+      columnFilters: [...columnFilters],
+      sorting,
     };
     try {
       await axiosPrivateIntercept.patch(
