@@ -12,11 +12,11 @@ const XmasSkiJump = () => {
 
     // --- PARAMETRY ŚWIATA ---
     const SLOPE_ANGLE = 0.85;
-    const TAKEOFF_X = 600;
-    const FLIGHT_TIME = 150; // ok. 2.5 sekundy lotu
-    const LANDING_X_START = 2200;
-    const JUDGE_X = 5200; // Sędziowie na końcu długiego zjazdu
-    const gravity = 0.08;
+    const TAKEOFF_X = 2000;
+    const LANDING_X_START = 4000;
+    const FLAT_START = 8000;
+    const JUDGE_X = 9000;
+    const gravity = 0.12;
 
     let player = {
       x: 20,
@@ -25,15 +25,14 @@ const XmasSkiJump = () => {
       vy: 0,
       state: "INRUN",
       frame: 0,
-      flightTimer: 0,
       waitTimer: 0,
-      scores: ["20.0", "20.0", "20.0"],
+      scores: ["7.5", "7.0", "6.5"],
     };
 
     let camera = { x: 0, y: 0 };
-    const stars = Array.from({ length: 250 }, () => ({
-      x: Math.random() * 12000,
-      y: Math.random() * 2000,
+    const stars = Array.from({ length: 600 }, () => ({
+      x: Math.random() * 15000,
+      y: Math.random() * 4000,
       size: Math.random() * 2,
     }));
 
@@ -46,45 +45,34 @@ const XmasSkiJump = () => {
       if (x < TAKEOFF_X) {
         return 200 + x * SLOPE_ANGLE;
       } else if (x >= LANDING_X_START) {
-        const dx = x - LANDING_X_START;
         const takeoffY = 200 + TAKEOFF_X * SLOPE_ANGLE;
         const landingStartY = takeoffY + 600;
-        return landingStartY + dx * SLOPE_ANGLE;
+        if (x < FLAT_START) {
+          return landingStartY + (x - LANDING_X_START) * SLOPE_ANGLE;
+        } else {
+          return landingStartY + (FLAT_START - LANDING_X_START) * SLOPE_ANGLE;
+        }
       }
-      return 20000; // Przepaść
+      return 20000;
     };
 
     const getSlopeAngle = (x) => {
-      const p1 = getSlopeY(x);
-      const p2 = getSlopeY(x + 1);
-      return Math.atan2(p2 - p1, 1);
+      if (x < TAKEOFF_X) return Math.atan(SLOPE_ANGLE);
+      if (x >= LANDING_X_START && x < FLAT_START) return Math.atan(SLOPE_ANGLE);
+      return 0;
     };
 
-    // --- RYSOWANIE DZIEWCZYNKI (TWOJA POSTAĆ) ---
-    function drawLimber(
-      startX,
-      startY,
-      angle,
-      length,
-      thickness,
-      color,
-      hasHand = true
-    ) {
-      const endX = startX + Math.cos(angle) * length;
-      const endY = startY + Math.sin(angle) * length;
+    // --- RYSOWANIE CZĘŚCI CIAŁA ---
+    function drawLimber(startX, startY, angle, length, thickness, color) {
       ctx.strokeStyle = color;
       ctx.lineWidth = thickness;
       ctx.lineCap = "round";
       ctx.beginPath();
+      const endX = startX + Math.cos(angle) * length;
+      const endY = startY + Math.sin(angle) * length;
       ctx.moveTo(startX, startY);
       ctx.lineTo(endX, endY);
       ctx.stroke();
-      if (hasHand) {
-        ctx.fillStyle = "#ffdbac";
-        ctx.beginPath();
-        ctx.arc(endX, endY, 4, 0, Math.PI * 2);
-        ctx.fill();
-      }
       return { x: endX, y: endY };
     }
 
@@ -92,7 +80,7 @@ const XmasSkiJump = () => {
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(angle);
-      ctx.strokeStyle = "#333";
+      ctx.strokeStyle = "#111";
       ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.moveTo(-length * 0.4, 0);
@@ -104,71 +92,67 @@ const XmasSkiJump = () => {
     function drawGirl(p) {
       ctx.save();
       ctx.translate(p.x, p.y);
-
       const isFlying = p.state === "FLIGHT";
-      const isTelemark = p.state !== "INRUN" && p.state !== "FLIGHT";
+      const isStopped = p.state === "SCORES";
+      const isInrun = p.state === "INRUN";
 
-      if (isFlying) {
-        ctx.rotate(Math.sin(p.frame * 0.1) * 0.3);
-      } else {
-        ctx.rotate(getSlopeAngle(p.x));
-      }
+      ctx.rotate(isFlying ? Math.sin(p.frame * 0.1) * 0.2 : getSlopeAngle(p.x));
 
       const headY = -72;
       const bodyY = -50;
-      const armLen = 28;
 
-      let legAngleL, legAngleR, skiAngleL, skiAngleR;
-      if (isFlying) {
-        legAngleL = Math.PI / 2 + Math.sin(p.frame * 0.15) * 0.7;
-        legAngleR = Math.PI / 2 + Math.cos(p.frame * 0.15) * 0.7;
-        skiAngleL = -0.7 + Math.sin(p.frame * 0.2) * 0.5;
-        skiAngleR = 0.7 + Math.cos(p.frame * 0.2) * 0.5;
-      } else if (isTelemark) {
-        legAngleL = Math.PI / 2.0;
-        legAngleR = Math.PI / 1.5;
-        skiAngleL = 0;
-        skiAngleR = 0;
-      } else {
-        legAngleL = legAngleR = Math.PI / 2;
-        skiAngleL = skiAngleR = 0;
-      }
+      const fL = drawLimber(
+        0,
+        -20,
+        Math.PI / 2 + (isFlying ? 0.5 : 0),
+        22,
+        8,
+        "#e74c3c"
+      );
+      const fR = drawLimber(
+        0,
+        -20,
+        Math.PI / 2 - (isFlying ? 0.5 : 0),
+        22,
+        8,
+        "#e74c3c"
+      );
+      drawSki(fL.x, fL.y, isFlying ? -0.5 : 0, 65);
+      drawSki(fR.x, fR.y, isFlying ? 0.5 : 0, 65);
 
-      const fL = drawLimber(0, -20, legAngleL, 22, 8, "#e74c3c", false);
-      const fR = drawLimber(0, -20, legAngleR, 22, 8, "#e74c3c", false);
-      drawSki(fL.x, fL.y, skiAngleL, 65);
-      drawSki(fR.x, fR.y, skiAngleR, 65);
-
-      ctx.fillStyle = "#e74c3c"; // Sukienka
+      ctx.fillStyle = "#e74c3c";
       ctx.beginPath();
       ctx.moveTo(0, headY + 12);
       ctx.lineTo(-25, -20);
       ctx.lineTo(25, -20);
       ctx.fill();
 
-      if (isFlying) {
-        const wave = p.frame * 0.15;
+      if (isInrun) {
+        drawLimber(10, bodyY, Math.PI / 2.5, 25, 6, "#ffdbac");
+      } else if (isFlying) {
         drawLimber(
           -10,
           bodyY,
-          Math.PI + Math.sin(wave) * 2.2,
-          armLen,
+          Math.PI + Math.sin(p.frame * 0.2) * 1.5,
+          25,
           6,
           "#ffdbac"
         );
-        drawLimber(10, bodyY, Math.cos(wave) * 2.2, armLen, 6, "#ffdbac");
-      } else if (isTelemark) {
-        drawLimber(-10, bodyY, Math.PI + 0.3, armLen, 6, "#ffdbac");
-        drawLimber(10, bodyY, -0.3, armLen, 6, "#ffdbac");
+        drawLimber(10, bodyY, Math.cos(p.frame * 0.2) * 1.5, 25, 6, "#ffdbac");
+      } else if (isStopped) {
+        drawLimber(-15, bodyY, Math.PI + 0.5, 25, 6, "#ffdbac");
+        drawLimber(15, bodyY, -0.5, 25, 6, "#ffdbac");
       } else {
-        drawLimber(10, bodyY, Math.PI / 3, armLen, 6, "#ffdbac");
+        drawLimber(
+          10,
+          bodyY,
+          -0.4 + Math.sin(p.frame * 0.1) * 0.6,
+          25,
+          6,
+          "#ffdbac"
+        );
       }
 
-      ctx.fillStyle = "#5d4037";
-      ctx.beginPath();
-      ctx.arc(-12, headY, 6, 0, Math.PI * 2);
-      ctx.arc(12, headY, 6, 0, Math.PI * 2);
-      ctx.fill();
       ctx.fillStyle = "#ffdbac";
       ctx.beginPath();
       ctx.arc(0, headY, 14, 0, Math.PI * 2);
@@ -177,26 +161,29 @@ const XmasSkiJump = () => {
       ctx.beginPath();
       ctx.arc(0, headY - 5, 14, Math.PI, 0);
       ctx.fill();
-      const pomT = p.frame * 0.05;
+      const pomT = p.frame * 0.12;
       ctx.fillStyle = "white";
       ctx.beginPath();
       ctx.arc(
-        Math.sin(pomT) * 6,
-        headY - 20 - Math.abs(Math.sin(pomT)) * 8,
-        4,
+        Math.sin(pomT) * 4,
+        headY - 22 - Math.abs(Math.sin(pomT)) * 6,
+        5,
         0,
         Math.PI * 2
       );
       ctx.fill();
+
       ctx.fillStyle = "#3e2723";
       ctx.beginPath();
-      ctx.arc(-4, headY - 1, 1.5, 0, Math.PI * 2);
-      ctx.arc(4, headY - 1, 1.5, 0, Math.PI * 2);
+      ctx.arc(-5, headY - 2, 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(5, headY - 2, 2, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = "#3e2723";
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = 2.5;
       ctx.beginPath();
-      ctx.arc(0, headY + 2, 5, 0.2 * Math.PI, 0.8 * Math.PI);
+      ctx.arc(0, headY + 3, 8, 0.1 * Math.PI, 0.9 * Math.PI, false);
       ctx.stroke();
 
       ctx.restore();
@@ -207,43 +194,31 @@ const XmasSkiJump = () => {
       const groundY = getSlopeY(player.x);
 
       if (player.state === "INRUN") {
-        player.vx += 0.22;
+        player.vx += 0.09;
         player.x += player.vx;
         player.y = groundY;
         if (player.x >= TAKEOFF_X) {
           player.state = "FLIGHT";
-          player.vy = -5.5;
-          player.flightTimer = FLIGHT_TIME;
+          player.vy = -7;
         }
       } else if (player.state === "FLIGHT") {
         player.x += player.vx;
         player.vy += gravity;
         player.y += player.vy;
-        player.flightTimer--;
-        if (player.flightTimer <= 0 && player.x >= LANDING_X_START) {
-          if (player.y >= groundY - 20) {
-            player.y = groundY;
-            player.state = "LANDING";
-            player.waitTimer = 30;
-          }
+        if (player.y >= groundY - 20 && player.x > LANDING_X_START) {
+          player.y = groundY;
+          player.state = "SLIDING";
         }
-      } else if (player.state === "LANDING") {
-        player.x += player.vx;
-        player.y = getSlopeY(player.x);
-        player.waitTimer--;
-        if (player.waitTimer <= 0) player.state = "SLIDING";
       } else if (player.state === "SLIDING") {
         player.x += player.vx;
-        player.vx *= 0.998;
         player.y = getSlopeY(player.x);
+        player.vx *= player.x > FLAT_START ? 0.98 : 0.999;
         if (player.x >= JUDGE_X) {
           player.state = "SCORES";
           player.waitTimer = 180;
+          player.vx = 0;
         }
       } else if (player.state === "SCORES") {
-        player.vx *= 0.8;
-        player.x += player.vx;
-        player.y = getSlopeY(player.x);
         player.waitTimer--;
         if (player.waitTimer <= 0) {
           player.x = 20;
@@ -260,7 +235,7 @@ const XmasSkiJump = () => {
       ctx.clearRect(0, 0, width, height);
       ctx.fillStyle = "white";
       stars.forEach((s) => {
-        let sx = (s.x - camera.x * 0.1) % width;
+        let sx = (s.x - camera.x * 0.1) % (width + 3000);
         let sy = (s.y - camera.y * 0.1) % height;
         ctx.beginPath();
         ctx.arc(
@@ -276,71 +251,114 @@ const XmasSkiJump = () => {
       ctx.save();
       ctx.translate(-camera.x, -camera.y);
 
-      // Najazd
-      ctx.beginPath();
-      ctx.moveTo(camera.x - 200, 10000);
-      for (let x = camera.x - 200; x <= TAKEOFF_X; x += 20)
-        ctx.lineTo(x, getSlopeY(x));
-      ctx.lineTo(TAKEOFF_X, 10000);
+      // Śnieg
       ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.moveTo(-2000, 15000);
+      for (let x = -2000; x <= TAKEOFF_X; x += 100) ctx.lineTo(x, getSlopeY(x));
+      ctx.lineTo(TAKEOFF_X, 15000);
       ctx.fill();
-
-      // Próg
       ctx.fillStyle = "#bdc3c7";
-      ctx.fillRect(TAKEOFF_X - 40, getSlopeY(TAKEOFF_X), 40, 5000);
-      ctx.strokeStyle = "#c0392b";
-      ctx.lineWidth = 12;
-      ctx.beginPath();
-      ctx.moveTo(TAKEOFF_X - 80, getSlopeY(TAKEOFF_X - 80));
-      ctx.lineTo(TAKEOFF_X, getSlopeY(TAKEOFF_X));
-      ctx.stroke();
-
-      // Zeskok (SOLIDNY I DŁUGI)
-      const endX = Math.max(JUDGE_X + 2000, camera.x + width + 500);
-      ctx.beginPath();
-      ctx.moveTo(LANDING_X_START, 10000);
-      for (let x = LANDING_X_START; x <= endX; x += 40) {
-        const sy = getSlopeY(x);
-        if (sy < 20000) ctx.lineTo(x, sy);
-      }
-      ctx.lineTo(endX, 10000);
+      ctx.fillRect(TAKEOFF_X - 15, getSlopeY(TAKEOFF_X), 30, 2500);
       ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.moveTo(LANDING_X_START, 15000);
+      for (let x = LANDING_X_START; x <= JUDGE_X + 2000; x += 100)
+        ctx.lineTo(x, getSlopeY(x));
+      ctx.lineTo(JUDGE_X + 2000, 15000);
       ctx.fill();
 
-      // --- SĘDZIOWIE ---
-      const dy = getSlopeY(JUDGE_X);
-      if (dy < 20000) {
-        ctx.save();
-        ctx.translate(JUDGE_X, dy);
-        ctx.rotate(getSlopeAngle(JUDGE_X));
-        ctx.fillStyle = "#4e342e";
-        ctx.fillRect(-100, -40, 200, 40);
-        ctx.strokeStyle = "white";
-        ctx.strokeRect(-100, -40, 200, 40);
-        for (let i = 0; i < 3; i++) {
-          const jx = -60 + i * 60;
-          ctx.fillStyle = "#2c3e50";
-          ctx.fillRect(jx - 12, -65, 24, 25);
-          ctx.fillStyle = "#ffdbac";
-          ctx.beginPath();
-          ctx.arc(jx, -72, 9, 0, Math.PI * 2);
-          ctx.fill();
-          if (player.state === "SCORES") {
-            ctx.save();
-            ctx.translate(jx, -100);
-            ctx.fillStyle = "white";
-            ctx.fillRect(-22, -26, 44, 26);
-            ctx.strokeStyle = "black";
-            ctx.strokeRect(-22, -26, 44, 26);
-            ctx.fillStyle = "black";
-            ctx.font = "bold 18px Courier New";
-            ctx.textAlign = "center";
-            ctx.fillText(player.scores[i], 0, -6);
-            ctx.restore();
-          }
+      // SĘDZIOWIE I BIURKO
+      const jy = getSlopeY(JUDGE_X);
+      ctx.save();
+      ctx.translate(JUDGE_X + 150, jy);
+
+      // Biurko
+      ctx.fillStyle = "#5d4037";
+      ctx.fillRect(0, -60, 180, 60);
+      ctx.strokeStyle = "white";
+      ctx.strokeRect(0, -60, 180, 60);
+      ctx.fillRect(10, 0, 10, -60);
+      ctx.fillRect(160, 0, 10, -60);
+
+      // Napis na biurku
+      ctx.fillStyle = "#fbff00";
+      ctx.font = "bold 24px 'Courier New', Courier, monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("DKiKN", 90, -30);
+
+      // Rysowanie sędziów
+      for (let i = 0; i < 3; i++) {
+        const sx = 40 + i * 50;
+
+        // --- TUŁÓW ---
+        ctx.fillStyle = "#2c3e50";
+        if (i === 2) {
+          // Łysy gruby facet
+          ctx.fillRect(sx - 16, -85, 32, 25);
+        } else {
+          ctx.fillRect(sx - 12, -85, 24, 25);
         }
-        ctx.restore();
+
+        // --- GŁOWA ---
+        ctx.fillStyle = "#ffdbac";
+        ctx.beginPath();
+        const headRadius = i === 2 ? 12 : 10;
+        ctx.arc(sx, -90, headRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // --- WŁOSY ---
+        if (i === 0) {
+          // Blondynka
+          ctx.fillStyle = "#FFD700";
+          ctx.beginPath();
+          ctx.arc(sx, -92, 11, Math.PI, 0); // Grzywka
+          ctx.fill();
+          ctx.fillRect(sx - 11, -92, 4, 15); // Bok lewy
+          ctx.fillRect(sx + 7, -92, 4, 15); // Bok prawy
+        } else if (i === 1) {
+          // Brunetka
+          ctx.fillStyle = "#1a1a1a";
+          ctx.beginPath();
+          ctx.arc(sx, -92, 11, Math.PI * 1.1, Math.PI * 1.9);
+          ctx.fill();
+          ctx.fillRect(sx - 11, -92, 5, 22); // Długie włosy lewe
+          ctx.fillRect(sx + 6, -92, 5, 22); // Długie włosy prawe
+        }
+        // i === 2 jest łysy, nic nie rysujemy
+
+        // --- TWARZ (Oczy i Miny) ---
+        ctx.fillStyle = "#3e2723";
+        ctx.beginPath();
+        ctx.arc(sx - 3, -93, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(sx + 3, -93, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#3e2723";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        if (player.state === "SCORES") {
+          ctx.arc(sx, -89, 5, 0.1 * Math.PI, 0.9 * Math.PI, false); // Uśmiech
+        } else {
+          ctx.arc(sx, -83, 4, 1.1 * Math.PI, 1.9 * Math.PI, false); // Smutek
+        }
+        ctx.stroke();
+
+        // --- NOTY ---
+        if (player.state === "SCORES") {
+          ctx.fillStyle = "white";
+          ctx.fillRect(sx - 22, -145, 44, 30);
+          ctx.strokeStyle = "black";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(sx - 22, -145, 44, 30);
+          ctx.fillStyle = "black";
+          ctx.font = "bold 18px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(player.scores[i], sx, -123);
+        }
       }
+      ctx.restore();
 
       drawGirl(player);
       ctx.restore();
@@ -359,10 +377,10 @@ const XmasSkiJump = () => {
 
   return (
     <div className="ski-jump-container">
-      <div className="ski-title">ZAKOPANE: LOT W KOSMOS ❄️</div>
+      <div className="ski-title">ZAKOPANE ❄️ WIADOMO - CZEKAĆ ... ❄️</div>
       <canvas ref={canvasRef} />
       <div className="ski-status">
-        <span className="retro-blink">ŁADOWANIE... POWIETRZE!</span>
+        <span className="retro-blink">PRÓBA SKOKU NA PODWYŻKĘ</span>
       </div>
     </div>
   );

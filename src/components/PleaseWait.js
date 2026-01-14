@@ -8,7 +8,6 @@ import XmasSkiJump from "./loading/XmasSkiJump";
 import "./PleaseWait.css";
 
 const variants = {
-  // default: XmasSkiJump,
   default: WindykacjaLoading,
   draft: XmasSkiJump,
   old: DefaultLoading,
