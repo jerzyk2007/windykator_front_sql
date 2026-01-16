@@ -632,7 +632,5 @@
   background-color: #e2e8f0;
   padding: 5px;
   border-radius: 10px;
-}
-.calc_res_scroll_content--value {
-  text-align: left;
+  text-align: center;
 }
