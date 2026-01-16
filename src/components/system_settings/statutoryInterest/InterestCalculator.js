@@ -185,7 +185,10 @@ const InterestCalculator = () => {
   return (
     <div className="interest_rates_container">
       <header className="interest_rates_header">
-        <h2>Kalkulator odsetek</h2>
+        <h2>Kalkulator odsetek ustawowych</h2>
+        <span>
+          gdy dłużnikiem nie jest podmiot publiczny będący podmiotem leczniczym
+        </span>
       </header>
       <div className="interest_rates_list" style={{ padding: "15px" }}>
         <div className="interest_rates_modal_form">

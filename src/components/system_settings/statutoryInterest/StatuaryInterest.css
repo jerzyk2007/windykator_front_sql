@@ -40,6 +40,14 @@
   margin: 0;
 }
 
+.interest_rates_header span {
+  color: #0f172a;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+  color: #08724f;
+}
+
 /* ETYKIETY I WIERSZE */
 .interest_rates_labels {
   flex-shrink: 0;
