@@ -5,7 +5,7 @@ import {
   FiBookOpen,
   FiZoomIn,
 } from "react-icons/fi";
-import { menuItems } from "../menu/menuConfig";
+// import { menuItems } from "../../menu/menuConfig";
 import { instructionData } from "./instructionData";
 import InstructionTable from "./InstructionTable";
 import "./Instruction.css";

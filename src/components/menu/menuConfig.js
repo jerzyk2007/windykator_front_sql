@@ -291,6 +291,12 @@ export const menuItems = [
           },
         ],
       },
+      {
+        label: "Odsetki ustawowe",
+        path: "/statutory-interest",
+        roles: [150, 2000],
+        company: [],
+      },
     ],
   },
   {

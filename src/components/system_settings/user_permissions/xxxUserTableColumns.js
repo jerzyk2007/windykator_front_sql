@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
-import "./UserTableColumns.css";
+// import "./UserTableColumns.css";
 
 const UserTableColumns = ({ user, columns }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();

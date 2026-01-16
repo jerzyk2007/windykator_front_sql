@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import UserChangeRoles from "./UserChangeRoles";
 import UserChangeDepartments from "./UserChangeDepartments";
 import UserChangeLawPartner from "./UserChangeLawPartner";
@@ -8,7 +8,7 @@ import UserChangePass from "./UserChangePass";
 import UserChangeLogin from "./UserChangeLogin";
 import UserDelete from "./UserDelete";
 import UserCompany from "./UserCompany";
-import PleaseWait from "../PleaseWait";
+import PleaseWait from "../../PleaseWait";
 import CloseIcon from "@mui/icons-material/Close";
 
 import "./EditUserSettings.css";
@@ -114,12 +114,14 @@ const EditUserSettings = ({ user, setEdit }) => {
   }, []);
 
   return (
-    <section className="edit_user_settings">
+    // <section className="edit_user_settings">
+    <section className="global_columns_panel">
       {pleaseWait ? (
         <PleaseWait />
       ) : (
         <>
-          <section className="edit_user_settings__container">
+          {/* <section className="edit_user_settings__container"> */}
+          <section className="global_columns_panel__container">
             <UserChangeName
               id={user.id_user}
               name={user.username}
@@ -133,7 +135,8 @@ const EditUserSettings = ({ user, setEdit }) => {
               setEdit={setEdit}
             />
           </section>
-          <section className="edit_user_settings__container">
+          {/* <section className="edit_user_settings__container"> */}
+          <section className="global_columns_panel__container">
             {
               // permissions === "Pracownik" &&
               roles && Object.keys(roles).length > 0 && (
@@ -162,7 +165,8 @@ const EditUserSettings = ({ user, setEdit }) => {
             )}
           </section>
           {permissions === "Pracownik" && departments && (
-            <section className="edit_user_settings__container">
+            // <section className="edit_user_settings__container">
+            <section className="global_columns_panel__container">
               {Object.keys(departments).length > 0 && (
                 <UserChangeDepartments
                   id={user.id_user}
@@ -172,7 +176,8 @@ const EditUserSettings = ({ user, setEdit }) => {
               )}
             </section>
           )}
-          <section className="edit_user_settings__container">
+          {/* <section className="edit_user_settings__container"> */}
+          <section className="global_columns_panel__container">
             <UserCompany
               id={user.id_user}
               company={company}
@@ -181,11 +186,8 @@ const EditUserSettings = ({ user, setEdit }) => {
           </section>
         </>
       )}
-      <section className="edit_user_settings-close">
-        <CloseIcon
-          className="edit_user_settings-close--icon"
-          onClick={() => setEdit(false)}
-        />
+      <section className="global_columns_panel-close">
+        <CloseIcon onClick={() => setEdit(false)} />
       </section>
     </section>
   );

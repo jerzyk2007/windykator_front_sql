@@ -12,7 +12,7 @@ import Register from "./components/user/Register";
 import PersistLogin from "./components/PersistLogin";
 // import RequireAuth from "./components/RequireAuth";
 import ChangePassword from "./components/user/ChangePassword";
-import UserSettings from "./components/user_permissions/UserSettings";
+import UserSettings from "./components/system_settings/user_permissions/UserSettings";
 import TableColumns from "./components/system_settings/tableColumns/TableColumns";
 import RaportDepartments from "./components/raports/RaportDepartments";
 import RaportDraft from "./components/FKRaport/RaportDraft";
@@ -22,9 +22,10 @@ import PrepareTable from "./components/table/PrepareTable";
 import RaportsNora from "./components/Nora/RaportsNora";
 import AddDoc from "./components/table/insuranceDocuments/AddDoc";
 import EditDoc from "./components/table/insuranceDocuments/EditDoc";
-import Instruction from "./components/instruction/Instruction";
+import Instruction from "./components/user/instruction/Instruction";
 import ConfirmResetPassword from "./components/user/ConfirmResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
+import StatuaryInterest from "./components/system_settings/statutoryInterest/StatutoryInterest";
 import "./App.css";
 
 function App() {
@@ -193,6 +194,11 @@ function App() {
                 path="/change-org-str"
                 element={<OrganizationStructure />}
               />
+              <Route
+                path="/statutory-interest"
+                element={<StatuaryInterest />}
+              />
+
               <Route path="/create-org-str" element={<ChangeOrgStr />} />
 
               {/* Grupa: Użytkownik */}

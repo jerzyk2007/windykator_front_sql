@@ -439,30 +439,6 @@ const ChangeOrgStr = () => {
             <div className="change-org-str__header-spacer"></div>
           </header>
 
-          {/* <main className="change-org-str__main">
-            <section className="change-org-str__item change-org-str__item--header">
-              <div className="change-org-str__col-lp">
-                <span>Lp</span>
-              </div>
-              <div className="change-org-str__col-dept">
-                <span>Dział</span>
-              </div>
-              <div className="change-org-str__col-loc">
-                <span>Lokalizacja</span>
-              </div>
-              <div className="change-org-str__col-area">
-                <span>Obszar</span>
-              </div>
-              <div className="change-org-str__col-owner">
-                <span>Owner</span>
-              </div>
-              <div className="change-org-str__col-guardian">
-                <span>Opiekun</span>
-              </div>
-            </section>
-
-            <section className="change-org-str__list">{itemsArray}</section>
-          </main> */}
           <main className="change-org-str__main">
             <section className="change-org-str__item change-org-str__item--header">
               <div className="change-org-str__col-lp">

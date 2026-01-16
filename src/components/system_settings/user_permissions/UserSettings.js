@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { LiaEditSolid } from "react-icons/lia";
 import { IoSearchOutline } from "react-icons/io5"; // Specyficzna ikona wyszukiwania osób
-import PleaseWait from "../PleaseWait";
+import PleaseWait from "../../PleaseWait";
 import EditUserSettings from "./EditUserSettings";
 import { Button } from "@mui/material";
 import "./UserSettings.css";
