@@ -86,8 +86,8 @@
 .global_columns_panel__container {
   flex-basis: 50%;
   min-width: 500px;
-  height: calc(100vh - 50px);
-  max-height: calc(100vh - 50px);
+  height: calc(100vh - 70px);
+  max-height: calc(100vh - 70px);
   margin: 0 2px;
   display: flex;
   flex-direction: column;
