@@ -59,8 +59,10 @@ const PercentageTarget = ({ departments, setPleaseWait }) => {
 
   return (
     <section className="org-str-target">
-      <header className="org-str-target__header">
-        <div className="org-str-target__header-top">
+      {/* <header className="org-str-target__header"> */}
+      <header className="org-str-item__header">
+        {/* <div className="org-str-target__header-top"> */}
+        <div className="org-str-item__title">
           <div className="org-str-target__title-group">
             <label className="org-str-target__label">Cel Q</label>
             <select

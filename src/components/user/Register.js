@@ -131,11 +131,7 @@ const Register = () => {
         <PleaseWait />
       ) : (
         <div className="login-page">
-          {" "}
-          {/* Zmienione z register-overlay */}
           <section className="login-card">
-            {" "}
-            {/* Zmienione z register-card */}
             <header className="login-card__header">
               <h1 className="login-card__title">
                 {success ? (

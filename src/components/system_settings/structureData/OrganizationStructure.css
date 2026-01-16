@@ -161,7 +161,9 @@
 .org-str-target__label {
   font-weight: 700;
   color: var(--text-dark);
-  font-size: 1.05rem;
+  font-size: 1.15rem;
+  width: 100%;
+  text-align: center;
 }
 
 .org-str-item__add-btn i,
@@ -392,6 +394,8 @@
   width: 100%;
 }
 .org-str-target__title-group {
+  flex-grow: 1;
+  padding-right: 20px;
   display: flex;
   align-items: center;
   gap: 8px;
