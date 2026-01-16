@@ -3,6 +3,7 @@ import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import InterestRates from "./InterestRates";
 import PublicHolidays from "./PublicHolidays";
 import PleaseWait from "../../PleaseWait";
+import InterestCalculator from "./InterestCalculator";
 // import CloseIcon from "@mui/icons-material/Close";
 import "./StatuaryInterest.css";
 
@@ -66,7 +67,9 @@ const StatuaryInterest = () => {
             />
           </section>
 
-          <section className="global_columns_panel__container"></section>
+          <section className="global_columns_panel__container">
+            <InterestCalculator />
+          </section>
         </>
       )}
       {/* <section className="global_columns_panel-close">

@@ -1,135 +1,56 @@
-/* KONTENER GŁÓWNY */
+/* ==========================================================================
+   1. GŁÓWNY KONTENER I UKŁAD (Shared)
+   ========================================================================== */
 .interest_rates_container {
-  position: relative; /* Potrzebne dla pozycjonowania modala */
+  position: relative; /* KLUCZOWE: wszystkie nakładki pozycjonują się względem tego */
   width: 100%;
-  min-width: 500px;
+  min-width: 450px;
   margin: 0 auto;
-  padding: 4px;
+  padding: 10px;
   background-color: #f8fafc;
   border-radius: 1.25rem;
-  font-family: "Inter", sans-serif;
+  /* font-family: "Inter", sans-serif; */
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 70px);
   max-height: calc(100vh - 70px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  overflow: hidden; /* KLUCZOWE: modal nie wyjdzie poza zaokrąglenia */
 }
 
 .interest_rates_header {
   flex-shrink: 0;
-  padding: 5px;
+  padding: 10px 0;
+  text-align: center;
 }
-
 .interest_rates_header h2 {
   color: #0f172a;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 800;
   margin: 0;
-  letter-spacing: -0.025em;
-  text-align: center;
 }
-
 .interest_rates_header h3 {
-  color: #0f172a;
+  color: #ef4444;
   font-size: 1rem;
   font-weight: 600;
-  padding: 15px 0;
-  text-align: center;
-  color: red;
+  padding: 5px 10px;
+  margin: 0;
 }
 
+/* ETYKIETY I WIERSZE */
 .interest_rates_labels {
   flex-shrink: 0;
   display: flex;
-  /* padding: 0 24px 10px 24px; */
-  padding: 4px;
+  padding: 8px 15px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 800;
   color: #64748b;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-align: center;
+  margin-bottom: 5px;
 }
 
-/* MODAL OVERLAY - BLOKADA EKRANU */
-.interest_rates_modal_overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(15, 23, 42, 0.7); /* Ciemny półprzezroczysty */
-  backdrop-filter: blur(4px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 1.25rem;
-}
-
-.interest_rates_modal_content {
-  background: white;
-  padding: 1rem;
-  border-radius: 1rem;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-}
-
-.interest_rates_modal_content h3 {
-  margin-top: 0;
-  padding: 5px 0;
-  color: #1e293b;
-  text-align: center;
-}
-
-.interest_rates_modal_content p {
-  padding: 5px 0;
-}
-
-.interest_rates_modal_form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.interest_rates_modal_form input {
-  padding: 10px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 1rem;
-  outline: 1px solid red;
-}
-
-.interest_rates_modal_actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-/* LISTA I WIERSZE */
-.interest_rates_list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 5px;
-}
-
-.interest_rates_row_section {
-  display: flex;
-  align-items: center;
-  background: white;
-  margin-bottom: 8px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-}
-
-.interest_rates_row_section:hover {
-  box-shadow: 0 0 0 3px rgba(25, 108, 241, 0.2);
-}
-
-/* KOLUMNY 1/3 */
 .interest_rates_label_date,
 .interest_rates_label_percent,
 .interest_rates_label_actions,
@@ -138,64 +59,177 @@
   min-width: 0;
 }
 
-.interest_rates_field_percent {
-  text-align: center;
-  justify-content: center;
-  display: flex;
-}
 .interest_rates_label_percent {
   text-align: center;
 }
-.interest_rates_field_actions {
+.interest_rates_label_actions {
+  text-align: right;
+}
+
+/* ==========================================================================
+   2. LISTA I WIERSZE (Rates & Holidays)
+   ========================================================================== */
+.interest_rates_list {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 5px;
+}
+
+.interest_rates_row_section {
   display: flex;
-  flex-direction: column; /* GUZIKI JEDEN POD DRUGIM */
-  align-items: flex-end;
-  gap: 4px;
+  align-items: center;
+  padding: 10px 15px;
+  background: white;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.interest_rates_row_section:hover {
+  box-shadow: 0 4px 12px rgba(25, 108, 241, 0.1);
+  border-color: #cbd5e1;
 }
 
 .display_val {
   font-weight: 700;
   color: #1e293b;
+  font-size: 0.95rem;
+}
+
+.interest_rates_field_percent {
+  text-align: center;
+  justify-content: center;
+  display: flex;
+}
+
+.interest_rates_field_actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+/* ==========================================================================
+   3. SYSTEM MODALNY (Shared Overlay)
+   ========================================================================== */
+.interest_rates_modal_overlay,
+.calc_overlay_results {
+  position: absolute; /* Lokalnie do .interest_rates_container */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Wyśrodkowanie w pionie wewnątrz subkomponentu */
+  align-items: center; /* Wyśrodkowanie w poziomie wewnątrz subkomponentu */
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.calc_overlay_results {
+  background: #ffffff;
+  justify-content: flex-start; /* Wyniki od góry */
+  align-items: stretch;
+  backdrop-filter: none;
+}
+
+.interest_rates_modal_content {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  width: 95%;
+  max-width: 400px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.interest_rates_modal_content h3 {
+  margin: 0 0 1rem 0;
+  color: #1e293b;
+  text-align: center;
+}
+
+.modal_danger {
+  border-top: 5px solid #ef4444;
+}
+
+.interest_rates_modal_form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.interest_rates_modal_form label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: -8px;
+}
+
+/* ==========================================================================
+   4. FORMULARZE I INPUTY
+   ========================================================================== */
+.interest_rates_modal_input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #f8fafc;
   font-size: 1rem;
+  /* font-family: inherit; */
+  box-sizing: border-box;
+  transition: all 0.2s;
 }
 
-/* PRZYCISKI W WIERSZU (MAŁE) */
-.interest_rates_small_btn {
-  width: 80px;
-  padding: 4px 8px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: 4px;
-  cursor: pointer;
-  border: 1px solid #e2e8f0;
-  transition: 0.2s;
+.interest_rates_modal_input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.interest_rates_small_btn.edit {
-  background: #f1f5f9;
-  color: #475569;
-}
-.interest_rates_small_btn.edit:hover {
-  background: #e2e8f0;
-}
-
-.interest_rates_small_btn.delete {
-  background: transparent;
-  color: #94a3b8;
-  border: none;
-}
-.interest_rates_small_btn.delete:hover {
-  color: #ef4444;
+/* Specyfika dla Holidays (Dzień/Miesiąc) */
+.interest_rates_modal_date_group {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
 }
 
-/* PRZYCISKI W MODALU I FOOTERZE */
+.interest_rates_modal_actions {
+  padding: 10px 5px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.interest_rates_input_day {
+  max-width: 80px;
+  text-align: center;
+}
+.interest_rates_input_month {
+  flex: 1;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px;
+}
+
+/* ==========================================================================
+   5. PRZYCISKI
+   ========================================================================== */
 .interest_rates_btn {
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 10px 18px;
+  border-radius: 8px;
   font-weight: 600;
+  font-size: 0.85rem;
   cursor: pointer;
   border: none;
 }
+
 .btn_primary {
   background: #3b82f6;
   color: white;
@@ -209,84 +243,396 @@
   color: #475569;
 }
 
-.interest_rates_btn_save_global {
-  background: #10b981;
-  color: white;
-  padding: 12px 30px;
-  border-radius: 8px;
+/* Małe przyciski w wierszach */
+.interest_rates_small_btn {
+  width: 75px;
+  padding: 4px;
+  font-size: 0.7rem;
   font-weight: 700;
-  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  border: 1px solid #e2e8f0;
 }
 
+.interest_rates_small_btn.edit {
+  background: #f8fafc;
+  color: #475569;
+}
+.interest_rates_small_btn.edit:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+.interest_rates_small_btn.delete {
+  background: transparent;
+  color: #94a3b8;
+  border-color: transparent;
+}
+.interest_rates_small_btn.delete:hover {
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+/* Footer i przycisk Zapisz */
 .interest_rates_footer {
   flex-shrink: 0;
-
-  padding: 4px;
-  /* border-top: 1px solid #e2e8f0; */
+  padding: 10px;
   display: flex;
   justify-content: space-evenly;
+  border-top: 1px solid #e2e8f0;
+}
 
+/* ==========================================================================
+   6. KALKULATOR (Overlay & Results)
+   ========================================================================== */
+.calculator_main_container {
+  flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.calculator_results_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* height: 100%; */
+  height: 80vh;
+  background: #ffffff;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  box-sizing: border-box;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.calculator_results_scroll_area {
+  flex: 1;
+  overflow-y: auto;
+  margin: 10px 0;
+}
+
+.calc_summary_card {
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 5px;
+}
+
+.calc_summary_card p {
+  font-size: 0.85rem;
+  margin: 4px 0;
+  color: #1e293b;
+}
+.calc_summary_card strong {
+  color: #3b82f6;
+}
+
+.calc_warning_alert {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  color: #92400e;
+  font-size: 0.75rem;
+  border-radius: 4px;
+}
+
+/* Tabela wyników kalkulatora */
+.calc_table_labels {
+  display: flex;
+  background: #f1f5f9;
+  padding: 8px 12px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #64748b;
+  border-radius: 6px 6px 0 0;
+}
+
+.calc_table_row {
+  display: flex;
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.85rem;
   align-items: center;
 }
 
-.interest_rates_footer--button {
-  width: 100px;
-}
-
-/* Kontener dla pól Dzień + Miesiąc */
-.interest_rates_modal_date_group {
-  display: flex;
-  gap: 12px;
-  margin-top: 10px;
-  align-items: flex-end;
-}
-
-/* Styl dla pola Dzień (mały) */
-.interest_rates_input_day {
-  flex: 1; /* Zajmie około 1/3 miejsca */
-  max-width: 80px;
-  text-align: center;
-}
-
-/* Styl dla pola Miesiąc (okazalszy) */
-.interest_rates_input_month {
-  flex: 2; /* Zajmie około 2/3 miejsca */
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-  appearance: none; /* Ukrywa standardową strzałkę przeglądarki */
-  padding-right: 40px !important;
-}
-
-/* Wspólne poprawki dla inputów w modalu */
-.interest_rates_modal_input {
+.calc_total_display {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  background-color: #f8fafc;
-  font-size: 0.95rem;
-  font-family: inherit;
-  color: #1e293b;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #1e293b;
+  color: #ffffff;
+  border-radius: 10px;
   box-sizing: border-box;
 }
 
-.interest_rates_modal_input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.interest_rates_header .interest_rates-message--ok,
-.interest_rates_header .interest_rates-message--error {
-  font-weight: 600;
+.calc_total_display strong {
+  font-size: 1.2rem;
   color: #10b981;
 }
 
-.interest_rates_header .interest_rates-message--error {
-  color: red;
+/* ==========================================================================
+   7. STATUSY I WIADOMOŚCI
+   ========================================================================== */
+.interest_rates-message--ok {
+  color: #10b981 !important;
+}
+.interest_rates-message--error {
+  color: #ef4444 !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar Styling */
+.interest_rates_list::-webkit-scrollbar,
+.calculator_results_scroll_area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.interest_rates_list::-webkit-scrollbar-thumb,
+.calculator_results_scroll_area::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* Kontener kalkulatora */
+.calc_main_box {
+  position: relative;
+  overflow: hidden;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+/* NAKŁADKA WYNIKÓW - wypełnia 100% wysokości rodzica */
+/* .calc_overlay_results {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  animation: slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+} */
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.calc_res_title {
+  color: #334155 !important;
+  font-size: 1.2rem !important;
+}
+
+/* Obszar przewijania treści wyniku */
+.calc_res_scroll_content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 15px;
+  min-height: 0;
+}
+
+/* Karta z kwotami i datami */
+.calc_res_card_main {
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.calc_res_row_info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+}
+
+.calc_res_row_info strong {
+  color: #2563eb;
+}
+
+.calc_res_warning {
+  margin-top: 10px;
+  padding: 10px;
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  color: #92400e;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  border-radius: 4px;
+}
+
+/* Tabela okresów wewnątrz wyniku */
+.calc_res_table_header {
+  display: flex;
+  background: #334155;
+  color: white;
+  padding: 8px 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 6px 6px 0 0;
+}
+
+.calc_res_list {
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+}
+
+.calc_res_item {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.8rem;
+}
+
+.calc_res_item:last-child {
+  border-bottom: none;
+}
+
+.calc_item_dates {
+  font-weight: 600;
+  color: #1e293b;
+}
+.calc_item_rate {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* Stopka wyniku - Przyklejona do dołu */
+.calc_res_footer {
+  padding: 15px;
+  background: #fff;
+  border-top: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calc_res_total_box {
+  width: 100%;
+  background: #1e293b;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.total_label {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+.total_val {
+  color: #10b981;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.calc_res_close_btn {
+  background: #64748b !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+}
+
+/* Formularz - poprawki */
+.calc_padding {
+  padding: 0 15px;
+}
+/* DODATKI DO FORMULARZA */
+.calc_form_label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 4px;
+  margin-top: 10px;
+}
+
+.calc_input_wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.calc_input_addon {
+  position: absolute;
+  right: 12px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+/* WIDOK WYNIKÓW - ELEMENTY STAŁE */
+.calc_results_summary_section {
+  flex-shrink: 0;
+  padding: 0 5px;
+}
+
+/* LISTA - JEDYNY ELEMENT PRZEWIJALNY */
+
+/* STOPKA WYNIKÓW */
+.calc_results_footer {
+  flex-direction: column !important;
+  gap: 10px;
+  padding: 10px !important;
+}
+
+.calc_res_scroll_content--info {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  /* flex-direction: column; */
+}
+
+.calc_res_scroll_content--title,
+.calc_res_scroll_content--value {
+  width: 40%;
+  margin: 4px 0;
+  font-size: 1rem;
+  background-color: #e2e8f0;
+  padding: 5px;
+  border-radius: 10px;
+}
+.calc_res_scroll_content--value {
+  text-align: left;
 }

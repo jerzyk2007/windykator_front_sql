@@ -214,60 +214,6 @@ const PublicHolidays = ({ customHolidays, handleSaveData }) => {
                 Czy usunąć święto: <strong>{modal.data.name}</strong>?
               </p>
             )}
-            {/* {modal.type !== "delete" ? (
-              <div className="interest_rates_modal_form">
-                <label>Nazwa święta:</label>
-                <input
-                  type="text"
-                  className="interest_rates_modal_input"
-                  value={modal.data.name}
-                  onChange={(e) =>
-                    handleModalInputChange("name", e.target.value)
-                  }
-                  placeholder="np. Wigilia"
-                />
-
-                <div
-                  style={{ display: "flex", gap: "10px", marginTop: "10px" }}
-                >
-                  <div style={{ flex: 1 }}>
-                    <label>Dzień:</label>
-                    <input
-                      type="number"
-                      className="interest_rates_modal_input"
-                      value={modal.data.day}
-                      onChange={(e) =>
-                        handleModalInputChange("day", e.target.value)
-                      }
-                    />
-                  </div>
-                  <div style={{ flex: 2 }}>
-                    <label>Miesiąc:</label>
-                    <select
-                      className="interest_rates_modal_input"
-                      value={modal.data.month}
-                      onChange={(e) =>
-                        handleModalInputChange(
-                          "month",
-                          parseInt(e.target.value)
-                        )
-                      }
-                    >
-                      {monthNames.map((m, idx) => (
-                        <option key={idx} value={idx + 1}>
-                          {m}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p>
-                Czy usunąć święto: <strong>{modal.data.name}</strong> (
-                {modal.data.day} {monthNames[modal.data.month - 1]})?
-              </p>
-            )} */}
 
             <div className="interest_rates_modal_actions">
               <button
@@ -300,9 +246,9 @@ const PublicHolidays = ({ customHolidays, handleSaveData }) => {
           {message.info ? `${message.info}` : "Dni ustawowo wolne (stałe)"}
         </h2>
         <h3>
-          Proszę wprowadzać wyłącznie święta o stałych datach. Święta ruchome
-          (takie jak Wielkanoc czy Boże Ciało) są uwzględniane automatycznie
-          przez system
+          Proszę wprowadzać wyłącznie święta o stałych datach. <br />
+          Święta ruchome (takie jak Wielkanoc czy Boże Ciało) są uwzględniane
+          automatycznie przez system
         </h3>
       </header>
 
