@@ -55,6 +55,9 @@ const StatuaryInterest = () => {
       ) : (
         <>
           <section className="global_columns_panel__container">
+            <InterestCalculator />
+          </section>
+          <section className="global_columns_panel__container">
             <InterestRates
               percentYear={data?.PROCENTY_ROK ?? []}
               handleSaveData={handleSaveData}
@@ -65,10 +68,6 @@ const StatuaryInterest = () => {
               customHolidays={data?.WOLNE_USTAWOWE ?? []}
               handleSaveData={handleSaveData}
             />
-          </section>
-
-          <section className="global_columns_panel__container">
-            <InterestCalculator />
           </section>
         </>
       )}
