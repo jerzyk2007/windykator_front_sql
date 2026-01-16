@@ -248,7 +248,7 @@ export const menuItems = [
         ],
       },
       {
-        label: "Odsetki ustawowe",
+        label: "Kalkulator odsetek ustawowych",
         path: "/statutory-interest-calc",
         roles: [100, 110, 150, 300, 400, 2000],
         company: [],
