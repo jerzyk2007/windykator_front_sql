@@ -247,6 +247,12 @@ export const menuItems = [
           },
         ],
       },
+      {
+        label: "Odsetki ustawowe",
+        path: "/statutory-interest-calc",
+        roles: [100, 110, 150, 300, 400, 2000],
+        company: [],
+      },
     ],
   },
   {
@@ -289,13 +295,13 @@ export const menuItems = [
             roles: [150, 200, 201, 202, 2000],
             company: [],
           },
+          {
+            label: "Odsetki ustawowe",
+            path: "/statutory-interest-settings",
+            roles: [150, 2000],
+            company: [],
+          },
         ],
-      },
-      {
-        label: "Odsetki ustawowe",
-        path: "/statutory-interest",
-        roles: [150, 2000],
-        company: [],
       },
     ],
   },

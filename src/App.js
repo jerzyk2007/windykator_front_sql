@@ -195,8 +195,12 @@ function App() {
                 element={<OrganizationStructure />}
               />
               <Route
-                path="/statutory-interest"
-                element={<StatuaryInterest />}
+                path="/statutory-interest-calc"
+                element={<StatuaryInterest type={"user"} />}
+              />
+              <Route
+                path="/statutory-interest-settings"
+                element={<StatuaryInterest type="admin" />}
               />
 
               <Route path="/create-org-str" element={<ChangeOrgStr />} />
