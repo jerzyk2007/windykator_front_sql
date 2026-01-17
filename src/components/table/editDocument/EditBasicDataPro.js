@@ -1,5 +1,16 @@
-import { color } from "@mui/system";
+import { useState, useEffect } from "react";
+import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { formatNip } from "../utilsForTable/tableFunctions";
+
+const authLogin = [
+  "marta.bednarek@krotoski.com",
+  "amanda.nawrocka@krotoski.com",
+  "jolanta.maslowska@krotoski.com",
+  "anna.wylupek@krotoski.com",
+  "jerzy.komorowski@krotoski.com",
+  "jerzy.komorowski2@krotoski.com",
+  "marcin.furmanek@krotoski.com",
+];
 
 const formatCurrency = (amount) => {
   if (amount === undefined || amount === null) return null;
@@ -48,8 +59,22 @@ const getScrollStyle = (text) => {
   return { whiteSpace: "pre-line" };
 };
 
-const EditBasicDataPro = ({ rowData, profile }) => {
-  if (!rowData) return null;
+const EditBasicDataPro = ({
+  rowData,
+  setRowData,
+  login,
+  handleAddNote,
+  profile,
+  context,
+}) => {
+  // if (!rowData) return null;
+  const axiosPrivateIntercept = useAxiosPrivateIntercept();
+  // zmienna dla zmiany DZIALu przez Blacharnie
+  const [changeDepartment, setChangeDepartment] = useState({
+    oldDep: "",
+    newDep: "",
+    optionsDep: [],
+  });
 
   const formatAddress = ({
     KONTRAHENT_ULICA,
@@ -71,8 +96,249 @@ const EditBasicDataPro = ({ rowData, profile }) => {
     return [streetLine, cityLine].filter(Boolean).join("\n");
   };
 
+  useEffect(() => {
+    setChangeDepartment((prev) => {
+      return {
+        ...prev,
+        oldDep: rowData.DZIAL,
+      };
+    });
+    const fetchData = async () => {
+      try {
+        const result = await axiosPrivateIntercept.get(
+          `/documents/get-available-deps/${rowData.FIRMA}`,
+        );
+        setChangeDepartment((prev) => ({
+          ...prev,
+          optionsDep:
+            Array.isArray(result.data) && result.data.length > 0
+              ? result.data
+              : prev.optionsDep, // jeśli pusta, zostawiamy poprzednią wartość
+        }));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (rowData.AREA === "BLACHARNIA" && profile === "insider") {
+      fetchData();
+    }
+  }, [rowData.DZIAL]);
+
+  // --- WIDOK: UŻYTKOWNIK KRT/KEM/RAC ---
+  if (profile === "insider") {
+    return (
+      <section className="ertp-data-section">
+        <DataRow title="Faktura:" children={rowData.NUMER_FV} />
+
+        <DataRow title="Data wystawienia:" children={rowData.DATA_FV} />
+
+        <DataRow title="Termin płatności:" children={rowData.TERMIN} />
+
+        <DataRow
+          title="Po terminie:"
+          style={
+            rowData.ILE_DNI_PO_TERMINIE > 0
+              ? { backgroundColor: "rgba(255, 130, 130, 1)" }
+              : null
+          }
+          children={rowData.ILE_DNI_PO_TERMINIE}
+        />
+
+        {rowData?.AREA === "BLACHARNIA" && authLogin.includes(login) && (
+          <DataRow title="Przypisz inny dział:">
+            <select
+              className="ertp-input-select"
+              style={{ backgroundColor: "#f5ffe3", width: "100%" }}
+              value={changeDepartment.newDep || changeDepartment.oldDep}
+              onChange={(e) => {
+                const newDep = e.target.value;
+                setRowData((prev) => ({ ...prev, DZIAL: newDep }));
+                handleAddNote(
+                  `Zmiana działu: ${changeDepartment.oldDep} na ${newDep}`,
+                  "log",
+                  context,
+                );
+              }}
+            >
+              {changeDepartment.oldDep && (
+                <option value={changeDepartment.oldDep} disabled>
+                  {changeDepartment.oldDep}
+                </option>
+              )}
+              {changeDepartment.optionsDep
+                .filter((dep) => dep !== changeDepartment.oldDep)
+                .map((dep) => (
+                  <option key={dep} value={dep}>
+                    {dep}
+                  </option>
+                ))}
+            </select>
+          </DataRow>
+        )}
+
+        <DataRow
+          title="Brutto:"
+          children={formatCurrency(Number(rowData?.BRUTTO)) || "0,00"}
+        />
+
+        <DataRow
+          title="Netto:"
+          children={formatCurrency(Number(rowData?.NETTO)) || "0,00"}
+        />
+
+        {rowData.AREA === "BLACHARNIA" && (
+          <>
+            <DataRow title="Netto + 50% VAT:">
+              {rowData?.NETTO && rowData?.BRUTTO
+                ? formatCurrency(
+                    (Number(rowData.NETTO) + Number(rowData.BRUTTO)) / 2,
+                  )
+                : "0,00"}
+            </DataRow>
+
+            <DataRow
+              title="100% VAT:"
+              style={{
+                backgroundColor:
+                  Math.abs(
+                    Number(rowData.BRUTTO) -
+                      Number(rowData.NETTO) -
+                      Number(rowData.DO_ROZLICZENIA),
+                  ) <= 1
+                    ? "#fee2e2"
+                    : "white",
+                color:
+                  Math.abs(
+                    Number(rowData.BRUTTO) -
+                      Number(rowData.NETTO) -
+                      Number(rowData.DO_ROZLICZENIA),
+                  ) <= 1
+                    ? "#991b1b"
+                    : "#000000ff",
+                fontWeight:
+                  Math.abs(
+                    Number(rowData.BRUTTO) -
+                      Number(rowData.NETTO) -
+                      Number(rowData.DO_ROZLICZENIA),
+                  ) <= 1
+                    ? "600"
+                    : "normal",
+              }}
+              children={formatCurrency(
+                Number(rowData.BRUTTO) - Number(rowData.NETTO),
+              )}
+            />
+
+            <DataRow
+              title="50% VAT:"
+              style={{
+                backgroundColor:
+                  Math.abs(
+                    (Number(rowData.BRUTTO) - Number(rowData.NETTO)) / 2 -
+                      Number(rowData.DO_ROZLICZENIA),
+                  ) <= 1
+                    ? "#fee2e2"
+                    : "white",
+                color:
+                  Math.abs(
+                    (Number(rowData.BRUTTO) - Number(rowData.NETTO)) / 2 -
+                      Number(rowData.DO_ROZLICZENIA),
+                  ) <= 1
+                    ? "#991b1b"
+                    : "#000000ff",
+                fontWeight:
+                  Math.abs(
+                    (Number(rowData.BRUTTO) - Number(rowData.NETTO)) / 2 -
+                      Number(rowData.DO_ROZLICZENIA),
+                  ) <= 1
+                    ? "600"
+                    : "normal",
+              }}
+              children={formatCurrency(
+                (Number(rowData.BRUTTO) - Number(rowData.NETTO)) / 2,
+              )}
+            />
+          </>
+        )}
+
+        <DataRow
+          title="Do rozliczenia AS:"
+          style={{
+            backgroundColor: "#fef9c3",
+            fontWeight: "500",
+            color: "#1e293b",
+          }}
+          children={formatCurrency(Number(rowData?.DO_ROZLICZENIA)) || "0,00"}
+        />
+
+        {(rowData.AREA === "SERWIS" || rowData.FIRMA === "RAC") && (
+          <DataRow
+            title="Typ płatności:"
+            style={
+              rowData.TYP_PLATNOSCI === "Gotówka"
+                ? { backgroundColor: "rgba(240, 69, 69, .7)" }
+                : null
+            }
+            children={rowData.TYP_PLATNOSCI}
+          />
+        )}
+
+        {rowData.AREA === "BLACHARNIA" && (
+          <DataRow title="Nr szkody:" children={rowData.NR_SZKODY} />
+        )}
+
+        {rowData.AREA !== "BLACHARNIA" && rowData.FIRMA !== "RAC" && (
+          <DataRow title="Nr autoryzacji:" children={rowData.NR_AUTORYZACJI} />
+        )}
+
+        {rowData.AREA !== "CZĘŚCI" &&
+          rowData.AREA !== "SAMOCHODY NOWE" &&
+          rowData.FIRMA !== "RAC" && (
+            <DataRow
+              title="Nr rejestracyjny:"
+              children={rowData.NR_REJESTRACYJNY}
+            />
+          )}
+
+        {rowData.AREA !== "CZĘŚCI" &&
+          rowData.AREA !== "BLACHARNIA" &&
+          rowData.FIRMA !== "RAC" && (
+            <DataRow title="Nr VIN:" children={rowData.VIN} />
+          )}
+
+        <DataRow title="Doradca:" children={rowData.DORADCA} />
+
+        <DataRow
+          title="Kontrahent:"
+          style={getScrollStyle(rowData.KONTRAHENT)}
+          contentClass={
+            rowData?.KONTRAHENT?.length > 70
+              ? "ertp-data-row__value ertp-data-row__value--scrollable"
+              : "ertp-data-row__value"
+          }
+          children={rowData.KONTRAHENT}
+        />
+
+        {rowData.AREA !== "BLACHARNIA" && (
+          <DataRow title="NIP:" children={rowData.NIP} />
+        )}
+
+        <DataRow
+          title="Uwagi z faktury:"
+          style={getScrollStyle(rowData.UWAGI_Z_FAKTURY)}
+          contentClass={
+            rowData?.UWAGI_Z_FAKTURY?.length > 70
+              ? "ertp-data-row__value ertp-data-row__value--scrollable"
+              : "ertp-data-row__value"
+          }
+          children={rowData.UWAGI_Z_FAKTURY}
+        />
+      </section>
+    );
+  }
+
   // --- WIDOK: PARTNER ---
-  if (profile === "partner") {
+  else if (profile === "partner") {
     const itemsSettlements = (rowData?.WYKAZ_SPLACONEJ_KWOTY_FK ?? []).map(
       (item, index) => (
         <section key={index} className="ertp-settlements-list__item">
@@ -86,7 +352,7 @@ const EditBasicDataPro = ({ rowData, profile }) => {
             )}
           </span>
         </section>
-      )
+      ),
     );
 
     return (
@@ -220,7 +486,7 @@ const EditBasicDataPro = ({ rowData, profile }) => {
           contentClass="ertp-data-row__value ertp-data-row__value--column"
         >
           {renderContactList(rowData.KONTAKT_DO_KLIENTA?.TELEFON, (val) =>
-            val.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3")
+            val.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3"),
           )}
         </DataRow>
 

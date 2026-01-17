@@ -3,7 +3,6 @@ import useData from "../../hooks/useData";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
-import BasicDataInsider from "./BasicDataInsider";
 import EditBasicDataPro from "./EditBasicDataPro";
 import EditActionsDataPro from "./EditActionsDataPro";
 import AcceptCasePanel from "./AcceptCasePanel";
@@ -218,21 +217,40 @@ const EditRowTablePro = ({
     }
   };
 
+  // const profileComponentFirst = () => {
+  //   if (profile === "insider") {
+  //     return (
+  //       <BasicDataInsider
+  //         rowData={rowData}
+  //         setRowData={setRowData}
+  //         login={auth.userlogin || null}
+  //         handleAddNote={handleAddNote}
+  //         context="documents"
+  //       />
+  //     );
+  //   } else if (profile === "partner" || profile === "insurance") {
+  //     return <EditBasicDataPro rowData={rowData} profile={profile} />;
+  //   }
+  //   return null;
+  // };
+
   const profileComponentFirst = () => {
-    if (profile === "insider") {
+    if (
+      profile === "insider" ||
+      profile === "partner" ||
+      profile === "insurance"
+    ) {
       return (
-        <BasicDataInsider
+        <EditBasicDataPro
           rowData={rowData}
           setRowData={setRowData}
           login={auth.userlogin || null}
           handleAddNote={handleAddNote}
+          profile={profile}
           context="documents"
         />
       );
-    } else if (profile === "partner" || profile === "insurance") {
-      return <EditBasicDataPro rowData={rowData} profile={profile} />;
-    }
-    return null;
+    } else return null;
   };
 
   const profileComponentSecond = () => {
