@@ -9,6 +9,6 @@ root.render(
   // <React.StrictMode>
   <DataProvider>
     <App />
-  </DataProvider>
+  </DataProvider>,
   // </React.StrictMode>
 );
