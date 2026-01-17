@@ -3,11 +3,11 @@ import useData from "../../hooks/useData";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
+import BasicDataInsider from "./BasicDataInsider";
 import EditBasicDataPro from "./EditBasicDataPro";
 import EditActionsDataPro from "./EditActionsDataPro";
 import AcceptCasePanel from "./AcceptCasePanel";
 import LogAndChat from "./LogAndChat";
-import BasicDataInsider from "./BasicDataInsider";
 import SelectPanel from "./SelectPanel";
 import EditDocActions from "./EditDocActions";
 import EditDocBeCared from "./EditDocBeCared";
@@ -83,7 +83,7 @@ const EditRowTablePro = ({
     try {
       await axiosPrivateIntercept.patch(
         `${basePath[profile]}/change-single-document`,
-        { id_document, document: rowData, chatLog, lawFirmData }
+        { id_document, document: rowData, chatLog, lawFirmData },
       );
 
       // zapis danych z kontroli BL
@@ -98,7 +98,7 @@ const EditRowTablePro = ({
             documentControlBL,
             FIRMA,
             chatLog: chatLog.controlBL,
-          }
+          },
         );
       }
       if (
@@ -602,7 +602,7 @@ const EditRowTablePro = ({
                   changeMarkDoc(
                     rowData.NUMER_FV,
                     rowData.MARK_FK === 1 ? 0 : 1,
-                    rowData.FIRMA
+                    rowData.FIRMA,
                   )
                 }
               >
