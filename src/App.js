@@ -135,6 +135,10 @@ function App() {
               <Route path="/edit-insurance-document" element={<EditDoc />} />
 
               <Route
+                path="/all-kem"
+                element={<PrepareTable info={"all-kem"} profile={"vindex"} />}
+              />
+              <Route
                 path="/blocked"
                 element={<PrepareTable info={"critical"} profile={"vindex"} />}
               />

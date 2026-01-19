@@ -53,21 +53,21 @@ const Table = ({
   const [pleaseWait, setPleaseWait] = useState(false);
 
   const [columnVisibility, setColumnVisibility] = useState(
-    settings.visible ?? {}
+    settings.visible ?? {},
   );
   const [columnSizing, setColumnSizing] = useState(settings.size ?? {});
   const [columnOrder, setColumnOrder] = useState(settings.order ?? []);
   const [columnPinning, setColumnPinning] = useState(
-    settings.pinning ?? { left: [], right: [] }
+    settings.pinning ?? { left: [], right: [] },
   );
   const [pagination, setPagination] = useState(
-    settings?.pagination ? settings.pagination : { pageIndex: 0, pageSize: 10 }
+    settings?.pagination ? settings.pagination : { pageIndex: 0, pageSize: 10 },
   );
   // const [columnFilters, setColumnFilters] = useState([
   //   { id: "AREA", value: ["BLACHARNIA", "SAMOCHODY NOWE"] },
   // ]);
   const [columnFilters, setColumnFilters] = useState(
-    settings.columnFilters ?? []
+    settings.columnFilters ?? [],
   );
   const [tableSize, setTableSize] = useState(500);
   const [data, setData] = useState([]);
@@ -79,20 +79,6 @@ const Table = ({
     lawPartner: [],
   });
 
-  // const [sorting, setSorting] = useState(() => {
-  //   const has = (key) => columns.some((c) => c.accessorKey === key);
-  //   if (profile === "insider" && has("ILE_DNI_PO_TERMINIE")) {
-  //     return [{ id: "ILE_DNI_PO_TERMINIE", desc: false }];
-  //   }
-  //   if (profile === "partner" && has("DATA_PRZEKAZANIA_SPRAWY")) {
-  //     return [{ id: "DATA_PRZEKAZANIA_SPRAWY", desc: true }];
-  //   }
-  //   if (profile === "insurance" && has("DATA_PRZEKAZANIA")) {
-  //     return [{ id: "DATA_PRZEKAZANIA", desc: false }];
-  //   }
-  //   return [];
-  // });
-
   const [sorting, setSorting] = useState(() => {
     // 1️⃣ najwyższy priorytet – zapisane ustawienia
     if (Array.isArray(settings?.sorting) && settings.sorting.length > 0) {
@@ -100,7 +86,6 @@ const Table = ({
     }
 
     const has = (key) => columns.some((c) => c.accessorKey === key);
-
     // 2️⃣ fallback wg profilu
     if (profile === "insider" && has("ILE_DNI_PO_TERMINIE")) {
       return [{ id: "ILE_DNI_PO_TERMINIE", desc: false }];
@@ -112,6 +97,9 @@ const Table = ({
 
     if (profile === "insurance" && has("DATA_PRZEKAZANIA")) {
       return [{ id: "DATA_PRZEKAZANIA", desc: false }];
+    }
+    if (profile === "vindex" && has("DATA_FV")) {
+      return [{ id: "DATA_FV", desc: false }];
     }
 
     return [];
@@ -130,13 +118,13 @@ const Table = ({
     try {
       const rowData = data.map((item) => item.original);
       const arrayOrder = columnOrder.filter(
-        (item) => columnVisibility[item] !== false
+        (item) => columnVisibility[item] !== false,
       );
 
       const newColumns = columns
         .map((item) => {
           const matching = arrayOrder.find(
-            (match) => match === item.accessorKey
+            (match) => match === item.accessorKey,
           );
           if (matching) {
             return {
@@ -149,14 +137,14 @@ const Table = ({
 
       const newOrder = arrayOrder.map((key) => {
         const matchedColumn = newColumns.find(
-          (column) => column.accessorKey === key
+          (column) => column.accessorKey === key,
         );
         return matchedColumn ? matchedColumn.header : key;
       });
 
       const updateData = rowData.map((item) => {
         const filteredKeys = Object.keys(item).filter((key) =>
-          arrayOrder.includes(key)
+          arrayOrder.includes(key),
         );
         const updatedItem = filteredKeys.reduce((obj, key) => {
           obj[key] = item[key];
@@ -184,13 +172,13 @@ const Table = ({
     try {
       const rowData = data.map((item) => item.original);
       const arrayOrder = columnOrder.filter(
-        (item) => columnVisibility[item] !== false
+        (item) => columnVisibility[item] !== false,
       );
 
       const newColumns = columns
         .map((item) => {
           const matching = arrayOrder.find(
-            (match) => match === item.accessorKey
+            (match) => match === item.accessorKey,
           );
           if (matching) {
             return {
@@ -203,14 +191,14 @@ const Table = ({
 
       const newOrder = arrayOrder.map((key) => {
         const matchedColumn = newColumns.find(
-          (column) => column.accessorKey === key
+          (column) => column.accessorKey === key,
         );
         return matchedColumn ? matchedColumn.header : key;
       });
 
       const updateData = rowData.map((item) => {
         const filteredKeys = Object.keys(item).filter((key) =>
-          arrayOrder.includes(key)
+          arrayOrder.includes(key),
         );
         const updatedItem = filteredKeys.reduce((obj, key) => {
           obj[key] = item[key];
@@ -250,7 +238,7 @@ const Table = ({
       try {
         if (profile === "insider") {
           const response = await axiosPrivateIntercept.get(
-            `/documents/get-single-document/${id}`
+            `/documents/get-single-document/${id}`,
           );
           setDataRowTable({
             edit: true,
@@ -264,7 +252,7 @@ const Table = ({
           });
         } else if (profile === "partner") {
           const response = await axiosPrivateIntercept.get(
-            `/law-partner/get-single-document/${id}`
+            `/law-partner/get-single-document/${id}`,
           );
           setDataRowTable({
             edit: true,
@@ -274,7 +262,7 @@ const Table = ({
           });
         } else if (profile === "insurance") {
           const response = await axiosPrivateIntercept.get(
-            `/insurance/get-single-document/${id}`
+            `/insurance/get-single-document/${id}`,
           );
           setDataRowTable({
             edit: true,
@@ -322,7 +310,7 @@ const Table = ({
         minSize: 50,
         maxSize: 400,
       })),
-    [columnSizing, columns]
+    [columnSizing, columns],
   );
 
   const table = useMaterialReactTable({
@@ -384,7 +372,7 @@ const Table = ({
       onDoubleClick: () => {
         // 1. Sprawdzamy, czy którakolwiek z wymaganych ról znajduje się w tablicy auth.roles
         const hasAccess = [110, 120, 350, 500, 2000].some((role) =>
-          auth?.roles?.includes(role)
+          auth?.roles?.includes(role),
         );
 
         // 2. Jeśli ma dostęp, wywołujemy funkcję
@@ -407,7 +395,7 @@ const Table = ({
               columnPinning,
               pagination,
               columnFilters,
-              sorting
+              sorting,
             )
           }
         >
@@ -429,7 +417,7 @@ const Table = ({
                 ? handleExportExel(table.getPrePaginationRowModel().rows, type)
                 : handleExportExcelPartner(
                     table.getPrePaginationRowModel().rows,
-                    type
+                    type,
                   );
             }}
             tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry."
@@ -451,12 +439,12 @@ const Table = ({
     const rowData = dataSize.map((item) => item.original);
 
     const arrayOrder = columnOrder.filter(
-      (item) => columnVisibility[item] !== false
+      (item) => columnVisibility[item] !== false,
     );
 
     const updateData = rowData.map((item) => {
       const filteredKeys = Object.keys(item).filter((key) =>
-        arrayOrder.includes(key)
+        arrayOrder.includes(key),
       );
       const updatedItem = filteredKeys.reduce((obj, key) => {
         obj[key] = item[key];
@@ -476,13 +464,13 @@ const Table = ({
     setColumnFilters((prev) =>
       prev.filter((filter) => {
         const columnExists = columns.some(
-          (col) => col.accessorKey === filter.id
+          (col) => col.accessorKey === filter.id,
         );
 
         const isVisible = columnVisibility?.[filter.id] !== false;
 
         return columnExists && isVisible;
-      })
+      }),
     );
   }, [columns, columnVisibility]);
 

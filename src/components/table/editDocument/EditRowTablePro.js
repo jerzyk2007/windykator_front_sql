@@ -217,40 +217,17 @@ const EditRowTablePro = ({
     }
   };
 
-  // const profileComponentFirst = () => {
-  //   if (profile === "insider") {
-  //     return (
-  //       <BasicDataInsider
-  //         rowData={rowData}
-  //         setRowData={setRowData}
-  //         login={auth.userlogin || null}
-  //         handleAddNote={handleAddNote}
-  //         context="documents"
-  //       />
-  //     );
-  //   } else if (profile === "partner" || profile === "insurance") {
-  //     return <EditBasicDataPro rowData={rowData} profile={profile} />;
-  //   }
-  //   return null;
-  // };
-
   const profileComponentFirst = () => {
-    if (
-      profile === "insider" ||
-      profile === "partner" ||
-      profile === "insurance"
-    ) {
-      return (
-        <EditBasicDataPro
-          rowData={rowData}
-          setRowData={setRowData}
-          login={auth.userlogin || null}
-          handleAddNote={handleAddNote}
-          profile={profile}
-          context="documents"
-        />
-      );
-    } else return null;
+    return (
+      <EditBasicDataPro
+        rowData={rowData}
+        setRowData={setRowData}
+        login={auth.userlogin || null}
+        handleAddNote={handleAddNote}
+        profile={profile}
+        context="documents"
+      />
+    );
   };
 
   const profileComponentSecond = () => {
@@ -317,61 +294,6 @@ const EditRowTablePro = ({
     return (
       <section className="edit_row_table_pro_section-content-data"></section>
     );
-  };
-
-  const profileComponentThird1 = () => {
-    if (
-      (profile === "partner" || profile === "insurance") &&
-      rowData?.DATA_PRZYJECIA_SPRAWY
-    ) {
-      return (
-        <EditActionsDataPro
-          rowData={rowData}
-          setRowData={setRowData}
-          handleAddNote={handleAddNote}
-          profile={profile}
-          roles={auth.roles || []}
-          context="documents"
-        />
-      );
-    } else if (profile === "insider") {
-      if (changePanel === "doc-actions") {
-        return (
-          <EditDocActions
-            rowData={rowData}
-            setRowData={setRowData}
-            handleAddNote={handleAddNote}
-            roles={auth.roles || []}
-            context="documents"
-          />
-        );
-      } else if (changePanel === "becared") {
-        return <EditDocBeCared rowData={rowData} />;
-      } else if (changePanel === "control-bl") {
-        return (
-          <DocumentsControlBL
-            documentControlBL={documentControlBL}
-            setDocumentControlBL={setDocumentControlBL}
-            handleAddNote={handleAddNote}
-            context="controlBL"
-          />
-        );
-      } else if (changePanel === "management") {
-        return (
-          <EditManagement
-            setRowData={setRowData}
-            ostatecznaDataRozliczenia={rowData.OSTATECZNA_DATA_ROZLICZENIA}
-            historiaZmianyDatyRozliczenia={
-              rowData.HISTORIA_ZMIANY_DATY_ROZLICZENIA
-            }
-            informacjaZarzad={rowData.INFORMACJA_ZARZAD}
-            handleAddNote={handleAddNote}
-            context="raportFK"
-          />
-        );
-      }
-    }
-    return null;
   };
 
   const profileComponentThird = () => {

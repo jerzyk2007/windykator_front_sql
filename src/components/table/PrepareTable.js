@@ -19,7 +19,6 @@ const PrepareTable = ({ info, profile }) => {
   const [documents, setDocuments] = useState([]);
   const [tableSettings, setTableSettings] = useState([]);
   const [pleaseWait, setPleaseWait] = useState(false);
-
   const handleSaveSettings = async (
     columnSizing,
     columnVisibility,
@@ -27,7 +26,7 @@ const PrepareTable = ({ info, profile }) => {
     columnPinning,
     pagination,
     columnFilters,
-    sorting
+    sorting,
   ) => {
     const tableSettings = {
       size: { ...columnSizing },
@@ -41,7 +40,7 @@ const PrepareTable = ({ info, profile }) => {
     try {
       await axiosPrivateIntercept.patch(
         `/user/save-table-settings/${auth.id_user}/${profile}`,
-        { newTableSettings: tableSettings }
+        { newTableSettings: tableSettings },
       );
     } catch (err) {
       console.error(err);
@@ -63,14 +62,14 @@ const PrepareTable = ({ info, profile }) => {
           {
             headers: { "Content-Type": "application/json" },
             withCredentials: true,
-          }
+          },
         );
 
         setDocuments(dataTable.data);
 
         const tableSettingsColumns = await axiosPrivateIntercept.get(
           `/table/get-settings-colums-table/${auth.id_user}/${profile}`,
-          { signal: controller.signal }
+          { signal: controller.signal },
         );
 
         setTableSettings(tableSettingsColumns.data.tableSettings);
@@ -79,12 +78,12 @@ const PrepareTable = ({ info, profile }) => {
           profile === "insider"
             ? prepareColumnsInsider(tableSettingsColumns.data.columns)
             : profile === "partner"
-            ? prepareColumnsPartner(tableSettingsColumns.data.columns)
-            : profile === "insurance"
-            ? prepareColumnsInsurance(tableSettingsColumns.data.columns)
-            : profile === "vindex"
-            ? prepareColumnsVindex(tableSettingsColumns.data.columns)
-            : [];
+              ? prepareColumnsPartner(tableSettingsColumns.data.columns)
+              : profile === "insurance"
+                ? prepareColumnsInsurance(tableSettingsColumns.data.columns)
+                : profile === "vindex"
+                  ? prepareColumnsVindex(tableSettingsColumns.data.columns)
+                  : [];
 
         setColumns(update);
       } catch (err) {

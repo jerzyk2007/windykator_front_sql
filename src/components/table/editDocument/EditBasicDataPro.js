@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { formatNip } from "../utilsForTable/tableFunctions";
 
+// tylko dla blacharni, te loginy mogą zmienić przypisanie działu a obszarze Blacharni
 const authLogin = [
   "marta.bednarek@krotoski.com",
   "amanda.nawrocka@krotoski.com",
@@ -123,7 +124,6 @@ const EditBasicDataPro = ({
       fetchData();
     }
   }, [rowData.DZIAL]);
-
   // --- WIDOK: UŻYTKOWNIK KRT/KEM/RAC ---
   if (profile === "insider") {
     return (

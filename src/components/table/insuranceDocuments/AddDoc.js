@@ -180,7 +180,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
       if (profile === "new") {
         const result = await axiosPrivateIntercept.post(
           `insurance/insert-new-document`,
-          { data: form }
+          { data: form },
         );
         if (result.status === 201)
           setMessage({ type: "new", info: result.data.message });
@@ -190,7 +190,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
           {
             id: docData.id_document,
             data: form,
-          }
+          },
         );
         if (result.status === 201)
           setMessage({ type: "new", info: result.data.message });
@@ -207,7 +207,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
   const getData = async () => {
     try {
       const result = await axiosPrivateIntercept.get(
-        "insurance/get-available-dep-comp"
+        "insurance/get-available-dep-comp",
       );
 
       setDepartments(result?.data?.departments ?? []);
@@ -332,7 +332,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
                   style={getInvalidStyle(
                     v.isPositive(form.kwotaDokument),
                     form.kwotaDokumentDisplay,
-                    true
+                    true,
                   )}
                   onChange={(e) => {
                     const val = e.target.value;
@@ -342,7 +342,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
                         kwotaDokumentDisplay: val,
                         kwotaDokument:
                           parseFloat(
-                            val.replace(",", ".").replace(/\s/g, "")
+                            val.replace(",", ".").replace(/\s/g, ""),
                           ) || 0,
                       }));
                     }
@@ -373,7 +373,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
                   style={getInvalidStyle(
                     v.isPositive(form.kwotaNaleznosci),
                     form.kwotaDisplay,
-                    true
+                    true,
                   )}
                   onChange={(e) => {
                     const val = e.target.value;
@@ -383,7 +383,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
                         kwotaDisplay: val,
                         kwotaNaleznosci:
                           parseFloat(
-                            val.replace(",", ".").replace(/\s/g, "")
+                            val.replace(",", ".").replace(/\s/g, ""),
                           ) || 0,
                       }));
                     }
@@ -416,7 +416,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
                   value={form.kontoDisplay}
                   style={getInvalidStyle(
                     v.konto(form.konto),
-                    form.kontoDisplay
+                    form.kontoDisplay,
                   )}
                   onChange={(e) => {
                     const clean = e.target.value
@@ -462,7 +462,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
                   style={getInvalidStyle(
                     v.email(form.osobaZlecajaca),
                     form.osobaZlecajaca,
-                    true
+                    true,
                   )}
                   onChange={handleChange}
                   placeholder="przyklad@firma.pl"
@@ -545,7 +545,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
                   style={getInvalidStyle(
                     v.zip(form.kontrahentKod),
                     form.kontrahentKod,
-                    true
+                    true,
                   )}
                   onChange={(e) =>
                     setForm((p) => ({
@@ -576,7 +576,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
                   value={form.kontrahentNip}
                   style={getInvalidStyle(
                     v.nip(form.kontrahentNip),
-                    form.kontrahentNip
+                    form.kontrahentNip,
                   )}
                   onChange={(e) =>
                     setForm((p) => ({
@@ -594,7 +594,7 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
                   value={form.kontrahentRegon}
                   style={getInvalidStyle(
                     v.regon(form.kontrahentRegon),
-                    form.kontrahentRegon
+                    form.kontrahentRegon,
                   )}
                   onChange={(e) =>
                     setForm((p) => ({

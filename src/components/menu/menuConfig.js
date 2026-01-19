@@ -125,6 +125,12 @@ export const menuItems = [
 
     submenu: [
       {
+        label: "Wszystkie dokumenty",
+        path: "/all-kem",
+        roles: [150, 2000],
+        company: ["KEM"],
+      },
+      {
         label: "Zablokowane",
         path: "/blocked",
         roles: [150, 2000],
