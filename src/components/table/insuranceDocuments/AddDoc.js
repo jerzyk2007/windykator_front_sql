@@ -38,7 +38,6 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
   const [message, setMessage] = useState({ type: "", info: "" });
   const [departments, setDepartments] = useState([]);
   const [company, setCompany] = useState([]);
-
   // --- WALIDATORY ---
   const v = {
     required: (val) => val && String(val).trim().length > 0,
@@ -699,6 +698,16 @@ const AddDoc = ({ profile, docData = {}, setIsEditing = () => {} }) => {
       </form>
 
       <section className="add_doc__accept-panel">
+        {profile === "edit" && (
+          <Button
+            variant="contained"
+            size="small"
+            color="secondary"
+            onClick={() => setIsEditing(false)}
+          >
+            Anuluj
+          </Button>
+        )}
         <Button
           variant="contained"
           size="small"

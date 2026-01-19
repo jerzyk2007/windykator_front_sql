@@ -26,6 +26,7 @@ import Instruction from "./components/user/instruction/Instruction";
 import ConfirmResetPassword from "./components/user/ConfirmResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 import StatuaryInterest from "./components/system_settings/statutoryInterest/StatutoryInterest";
+import ContarctorSettings from "./components/system_settings/contractorSettings/ContractorSettings";
 import "./App.css";
 
 function App() {
@@ -149,6 +150,10 @@ function App() {
               <Route
                 path="/branch-collection"
                 element={<PrepareTable info={"critical"} profile={"vindex"} />}
+              />
+              <Route
+                path="/conractor-settings"
+                element={<ContarctorSettings />}
               />
 
               {/* Grupa: Raporty */}

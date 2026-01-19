@@ -148,6 +148,19 @@ export const menuItems = [
         roles: [150, 2000],
         company: ["KEM"],
       },
+      {
+        label: "Ustawienia",
+        roles: [150, 2000],
+        company: ["KEM"],
+        sideMenu: [
+          {
+            label: "Kontrahent",
+            path: "/conractor-settings",
+            roles: [150, 2000],
+            company: ["KEM"],
+          },
+        ],
+      },
     ],
   },
   {

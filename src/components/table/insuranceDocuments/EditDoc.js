@@ -5,7 +5,7 @@ import AddDoc from "./AddDoc";
 import { LiaEditSolid } from "react-icons/lia";
 import { IoSearchOutline } from "react-icons/io5";
 import { Button } from "@mui/material";
-import "./EditDoc.css";
+// import "./SearchModule.css"; // Używamy wspólnego pliku
 
 const EditDoc = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
@@ -16,8 +16,8 @@ const EditDoc = () => {
   const [documents, setDocuments] = useState([]);
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
 
-  // Funkcja formatująca walutę
   const formatToPLN = (value) => {
     if (!value && value !== 0) return "0,00 zł";
     return new Intl.NumberFormat("pl-PL", {
@@ -31,28 +31,34 @@ const EditDoc = () => {
     if (search.length < 5) return;
 
     setPleaseWait(true);
+    setHasSearched(false);
+
     try {
       const result = await axiosPrivateIntercept.get(
         "/insurance/get-insurance-nr/",
         { params: { search } },
       );
       setDocuments(result.data);
+      setHasSearched(true);
     } catch (err) {
       console.error("Błąd wyszukiwania:", err);
+      setHasSearched(true);
     } finally {
       setPleaseWait(false);
     }
   };
 
-  const handleEditInitiation = (doc) => {
-    setSelectedDoc(doc);
-    setIsEditing(true);
+  const handleInputChange = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearch(value);
+    if (hasSearched) setHasSearched(false);
   };
 
   useEffect(() => {
     if (!isEditing) {
       setDocuments([]);
       setSearch("");
+      setHasSearched(false);
     }
   }, [isEditing]);
 
@@ -62,91 +68,80 @@ const EditDoc = () => {
 
   useEffect(() => {
     setDocuments([]);
+    setHasSearched(false);
   }, [search]);
 
   return (
-    <main className="edit-doc-page">
+    <main className="sm-container">
       {!isEditing ? (
-        <div className="edit-doc-content">
-          <header className="edit-doc-header">
+        <div className="sm-content">
+          <header className="sm-header">
             <h1>Edycja Dokumentów</h1>
             <p>Wyszukaj polisę, aby dokonać zmian w systemie</p>
           </header>
 
-          <section className="search-section">
-            <form className="search-card" onSubmit={handleSubmit}>
-              <div className="search-input-wrapper">
-                <IoSearchOutline className="search-icon" />
+          <section className="sm-search-area">
+            <form className="sm-search-form" onSubmit={handleSubmit}>
+              <div className="sm-input-group">
+                <IoSearchOutline className="sm-search-icon" />
                 <input
                   type="text"
                   ref={searchRef}
                   placeholder="Wpisz numer polisy (min. 5 znaków)..."
                   value={search}
-                  onChange={(e) => setSearch(e.target.value.toLowerCase())}
+                  onChange={handleInputChange}
                 />
               </div>
               <Button
                 variant="contained"
                 type="submit"
-                disabled={search.length < 5}
-                size="large"
+                disabled={search.length < 5 || pleaseWait}
                 color="primary"
-                className="search-button"
               >
                 Szukaj
               </Button>
             </form>
           </section>
 
-          <section className="results-list">
+          <section className="sm-results-list">
             {documents.map((doc, index) => (
-              <div className="doc-card" key={doc.id_document || index}>
+              <div className="sm-result-card" key={doc.id_document || index}>
                 {/* 1. Podstawowe dane polisy */}
-                <div className="doc-info">
-                  <span className="doc-label">Numer i Ubezpieczyciel</span>
-                  <h3 className="doc-value">{doc.NUMER_POLISY}</h3>
-                  <small className="doc-subvalue">{doc.UBEZPIECZYCIEL}</small>
+                <div className="sm-info">
+                  <span className="sm-info-label">Numer i Ubezpieczyciel</span>
+                  <h3 className="sm-info-value">{doc.NUMER_POLISY}</h3>
+                  <small className="sm-info-subvalue">
+                    {doc.UBEZPIECZYCIEL}
+                  </small>
                 </div>
 
                 {/* 2. Dane kontrahenta */}
-                <div className="doc-info">
-                  <span className="doc-label">Kontrahent</span>
-                  <p className="doc-value">{doc.KONTRAHENT_NAZWA}</p>
+                <div className="sm-info">
+                  <span className="sm-info-label">Kontrahent</span>
+                  <p className="sm-info-value">{doc.KONTRAHENT_NAZWA}</p>
                 </div>
 
-                {/* 3. Spółka (NOWE) */}
-                <div className="doc-info">
-                  <span className="doc-label">Spółka</span>
-                  <p className="doc-value">{doc.FIRMA || "Brak danych"}</p>
+                {/* 3. Spółka */}
+                <div className="sm-info">
+                  <span className="sm-info-label">Spółka</span>
+                  <p className="sm-info-value">{doc.FIRMA || "Brak danych"}</p>
                 </div>
 
-                {/* 4. Logistyka/Daty */}
-                <div className="doc-info">
-                  <span className="doc-label">Data przekazania</span>
-                  <p className="doc-value">{doc.DATA_PRZEKAZANIA || "-"}</p>
-                </div>
-
-                {/* 5. Finanse */}
-                <div className="doc-info">
-                  <span className="doc-label">Kwota / Należność</span>
-                  <p
-                    className="doc-value"
-                    style={{ fontSize: "0.85rem", opacity: 0.8 }}
-                  >
-                    Kwota dokumentu: {formatToPLN(doc.KWOTA_DOKUMENT)}
+                {/* 4. Finanse */}
+                <div className="sm-info">
+                  <span className="sm-info-label">Kwota / Pozostało</span>
+                  <p className="sm-info-subvalue">
+                    Suma: {formatToPLN(doc.KWOTA_DOKUMENT)}
                   </p>
-                  <p
-                    className="doc-value"
-                    style={{ fontWeight: "bold", color: "#2e7d32" }}
-                  >
-                    Pozostało: {formatToPLN(doc.NALEZNOSC)}
+                  <p className="sm-info-value" style={{ color: "#2e7d32" }}>
+                    Należność: {formatToPLN(doc.NALEZNOSC)}
                   </p>
                 </div>
 
                 {/* Przycisk akcji */}
                 <button
-                  className="edit-action-btn"
-                  onClick={() => handleEditInitiation(doc)}
+                  className="sm-action-btn"
+                  onClick={() => (setSelectedDoc(doc), setIsEditing(true))}
                   title="Edytuj dokument"
                 >
                   <LiaEditSolid />
@@ -154,8 +149,8 @@ const EditDoc = () => {
               </div>
             ))}
 
-            {!pleaseWait && search.length >= 5 && documents.length === 0 && (
-              <div className="no-results">
+            {!pleaseWait && hasSearched && documents.length === 0 && (
+              <div className="sm-no-results">
                 Brak dokumentów spełniających kryteria.
               </div>
             )}

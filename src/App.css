@@ -25,7 +25,8 @@
   border: none;
   border-radius: 10px;
   background-color: rgb(213, 232, 248);
-  box-shadow: 4px 4px 2px 0 rgba(224, 224, 224, 0.548),
+  box-shadow:
+    4px 4px 2px 0 rgba(224, 224, 224, 0.548),
     2px 2px 2px 0 rgba(173, 180, 189, 0.5),
     inset -4px -4px 6px 0 rgba(173, 180, 189, 0.5),
     inset 4px 4px 6px 0 rgba(197, 197, 197, 0.4);
@@ -33,7 +34,8 @@
 
 .active-tabs {
   background-color: #007bff;
-  box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, 0.5),
+  box-shadow:
+    4px 4px 6px 0 rgba(255, 255, 255, 0.5),
     2px 2px 6px 0 rgba(116, 125, 136, 0.5),
     inset -4px -4px 6px 0 rgba(255, 255, 255, 0.2),
     inset 4px 4px 6px 0 rgba(0, 0, 0, 0.4);
@@ -116,4 +118,203 @@
 .global_columns_panel-close:hover {
   transform: scale(1.1);
   background-color: #b71c1c;
+}
+
+/* Prefix: .sm- (Search Module) dla unikalności w dużym systemie, dla wyszukiwania uzytkoników i kontrahentów */
+
+.sm-container {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 100vw;
+  background-color: #f4f7f9;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.sm-content {
+  width: 100%;
+  max-width: 1000px; /* Nieco szerszy dla dokumentów, które mają więcej danych */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sm-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.sm-header h1 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.8rem;
+}
+
+.sm-header p {
+  color: #7f8c8d;
+  margin-top: 5px;
+}
+
+/* Sekcja wyszukiwania */
+.sm-search-area {
+  padding-bottom: 10px;
+  display: flex;
+}
+
+.sm-search-form {
+  flex-grow: 1;
+  background: #ffffff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.sm-input-group {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  background: #f1f4f8;
+  border-radius: 8px;
+  padding: 0 15px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.sm-input-group:focus-within {
+  border-color: #1976d2;
+  background: #fff;
+}
+
+.sm-input-group input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 12px;
+  font-size: 1rem;
+  outline: none;
+  color: #2c3e50;
+}
+
+.sm-search-icon {
+  font-size: 1.4rem;
+  color: #7f8c8d;
+}
+
+/* Lista wyników */
+.sm-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.sm-result-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Rozsuwa dane i przycisk */
+  gap: 15px;
+  border: 1px solid #e0e6ed;
+  transition: all 0.2s ease-in-out;
+  flex-wrap: wrap; /* Elastyczność na mniejszych ekranach */
+}
+
+.sm-result-card:hover {
+  border-color: #1976d2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+/* Kontener na dane wewnątrz karty (może być ich wiele) */
+.sm-info {
+  flex: 1;
+  min-width: 150px; /* Zapobiega zbytniemu ściskaniu kolumn */
+}
+
+.sm-info-label {
+  display: block;
+  font-size: 0.7rem;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.sm-info-value {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #2c3e50;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.sm-info-subvalue {
+  display: block;
+  font-size: 0.8rem;
+  color: #95a5a6;
+  margin-top: 2px;
+}
+
+/* Przycisk akcji */
+.sm-action-btn {
+  background: #f0f7f0;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  color: #2e7d32;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0;
+}
+
+.sm-action-btn:hover {
+  background: #2e7d32;
+  color: #fff;
+}
+
+/* Komunikat o braku wyników */
+.sm-no-results {
+  text-align: center;
+  padding: 40px;
+  color: #7f8c8d;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px dashed #e0e6ed;
+}
+
+/* Awatar / Inicjały */
+.sm-avatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #1976d2, #64b5f6);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.sm-result-card:hover {
+  transform: scale(0.98);
+}
+
+.sm-result-card:hover .sm-avatar {
+  background: linear-gradient(135deg, #2e7d32, #55d17e);
 }

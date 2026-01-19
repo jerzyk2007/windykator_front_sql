@@ -187,10 +187,12 @@
 
 /* PANEL DOLNY */
 .add_doc__accept-panel {
+  width: 50%;
+  margin: 0 auto;
   height: 50px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   background-color: white;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
