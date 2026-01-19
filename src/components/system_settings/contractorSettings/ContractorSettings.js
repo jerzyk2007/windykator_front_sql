@@ -165,7 +165,7 @@ const ContarctorSettings = ({ id = null }) => {
                 <input
                   type="text"
                   ref={searchRef}
-                  placeholder="NIP lub nazwa (min. 5 znaków)..."
+                  placeholder="NIP (same liczby pisane ciągiem) lub nazwa kontrahenta (min. 5 znaków)..."
                   value={search}
                   onChange={handleInputChange}
                 />
