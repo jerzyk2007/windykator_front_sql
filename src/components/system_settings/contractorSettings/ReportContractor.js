@@ -30,6 +30,9 @@
 //   const [reportData, setReportData] = useState([]);
 
 //   const isBlacklisted = contractor.KOD_KONTR_LISTA === "CZARNA";
+//   // LOGIKA: Czy kontrahent ma zgodę na przelew?
+//   const hasTransferConsent =
+//     contractor.PRZYPISANA_FORMA_PLATNOSCI?.toLowerCase().includes("przelew");
 
 //   useEffect(() => {
 //     const getData = async () => {
@@ -38,6 +41,7 @@
 //         const result = await axiosPrivateIntercept.get(
 //           `/contractor/get-report-data/${contractor.KONTRAHENT_ID}/${contractor.SPOLKA}`,
 //         );
+//         console.log(result.data);
 //         setReportData(result.data || []);
 //       } catch (error) {
 //         console.error("Błąd:", error);
@@ -52,7 +56,7 @@
 //     if (!reportData || reportData.length === 0) return {};
 //     const stats = {};
 //     const today = new Date();
-//     today.setHours(0, 0, 0, 0); // Porównujemy same daty
+//     today.setHours(0, 0, 0, 0);
 
 //     reportData.forEach((item) => {
 //       const year = new Date(item.DATA_FV).getFullYear();
@@ -64,8 +68,8 @@
 //           late1to8: { count: 0, sum: 0 },
 //           late9to20: { count: 0, sum: 0 },
 //           lateOver20: { count: 0, sum: 0 },
-//           unpaidOverdue: { count: 0, sum: 0 }, // PO TERMINIE
-//           unpaidInTerm: { count: 0, sum: 0 }, // W TERMINIE
+//           unpaidOverdue: { count: 0, sum: 0 },
+//           unpaidInTerm: { count: 0, sum: 0 },
 //           settled: 0,
 //           delaySum: 0,
 //         };
@@ -77,7 +81,6 @@
 //       const termDate = new Date(item.TERMIN);
 //       termDate.setHours(0, 0, 0, 0);
 
-//       // 1. Obsługa faktur NIEROZLICZONYCH
 //       if (item.DO_ROZLICZENIA > 0) {
 //         if (termDate < today) {
 //           s.unpaidOverdue.count++;
@@ -86,15 +89,11 @@
 //           s.unpaidInTerm.count++;
 //           s.unpaidInTerm.sum += item.BRUTTO;
 //         }
-//       }
-
-//       // 2. Obsługa faktur ROZLICZONYCH (Historia)
-//       else if (item.DATA_ROZL_AS) {
+//       } else if (item.DATA_ROZL_AS) {
 //         s.settled++;
 //         const rozlDate = new Date(item.DATA_ROZL_AS);
 //         const diff = Math.ceil((rozlDate - termDate) / (1000 * 3600 * 24));
 //         const kwota = item.BRUTTO;
-
 //         s.delaySum += diff > 0 ? diff : 0;
 
 //         if (diff <= 0) {
@@ -121,14 +120,14 @@
 //         label: "KONTRAHENT ZABLOKOWANY",
 //         color: "#b71c1c",
 //         icon: <IoAlertCircleOutline size={22} />,
-//         text: "UWAGA: Czarna lista. Całkowity zakaz sprzedaży z odroczonym terminem.",
+//         text: "UWAGA: Czarna lista. Całkowity zakaz sprzedaży z odroczonym terminem płatności.",
 //       };
 //     if (reportData.length === 0)
 //       return {
 //         label: "BRAK HISTORII",
 //         color: "#7f8c8d",
 //         icon: <IoHelpCircleOutline size={22} />,
-//         text: "Brak danych o fakturach.",
+//         text: "Brak danych o fakturach dla tego kontrahenta.",
 //       };
 
 //     let totalCritical = 0;
@@ -143,13 +142,13 @@
 //         label: "WYSOKIE RYZYKO",
 //         color: "#d32f2f",
 //         icon: <IoAlertCircleOutline size={22} />,
-//         text: "Wysoka zaległość lub nieterminowość. Zalecana blokada kredytu.",
+//         text: "Wysoka zaległość lub nieterminowość. Zalecana blokada sprzedaży odroczonej.",
 //       };
 //     return {
 //       label: "WIARYGODNY PŁATNIK",
 //       color: "#2e7d32",
 //       icon: <IoCheckmarkDoneOutline size={22} />,
-//       text: "Klient płaci terminowo.",
+//       text: "Klient reguluje płatności terminowo.",
 //     };
 //   }, [reportData, statsByYear, isBlacklisted]);
 
@@ -197,6 +196,7 @@
 //           </header>
 
 //           <div className="sm-edit-grid">
+//             {/* KOLUMNA 1 */}
 //             <section className="sm-edit-column">
 //               <div className="sm-edit-card">
 //                 <h3>DANE PODSTAWOWE</h3>
@@ -226,9 +226,30 @@
 //                     </span>
 //                   </div>
 //                 </div>
+
+//                 <div className="sm-view-field">
+//                   <label>Zgoda na termin (Przelew)</label>
+//                   <span
+//                     style={{
+//                       color: hasTransferConsent ? "#2e7d32" : "#d32f2f",
+//                       fontWeight: 700,
+//                       display: "flex",
+//                       alignItems: "center",
+//                       gap: "4px",
+//                     }}
+//                   >
+//                     {hasTransferConsent ? "TAK / WYRAŻONA" : "NIE / BRAK"}
+//                     {hasTransferConsent && (
+//                       <small style={{ fontWeight: 400, color: "#7f8c8d" }}>
+//                         ({contractor.PRZYPISANA_FORMA_PLATNOSCI})
+//                       </small>
+//                     )}
+//                   </span>
+//                 </div>
 //               </div>
 //             </section>
 
+//             {/* KOLUMNA 2 */}
 //             <section className="sm-edit-column">
 //               <div className="sm-edit-card highlight-card">
 //                 <h3>STRUKTURA ROZLICZEŃ</h3>
@@ -237,7 +258,6 @@
 //                   .map((year) => {
 //                     const s = statsByYear[year];
 //                     const hasOverdue = s.unpaidOverdue.count > 0;
-
 //                     return (
 //                       <div key={year} style={{ marginBottom: "35px" }}>
 //                         <div
@@ -270,9 +290,7 @@
 //                           </span>
 //                         </div>
 
-//                         {/* --- SEKCJA NIEROZLICZONE (AKTUALNE ZADŁUŻENIE) --- */}
 //                         <div className="sm-unpaid-container">
-//                           {/* 1. KRYTYCZNE: PO TERMINIE */}
 //                           <div
 //                             className={`sm-debt-box ${hasOverdue ? "active-debt" : ""}`}
 //                           >
@@ -294,8 +312,6 @@
 //                               </small>
 //                             )}
 //                           </div>
-
-//                           {/* 2. INFORMACYJNE: W TERMINIE */}
 //                           <div className="sm-debt-box-clean">
 //                             <label>Nierozliczone: W TERMINIE</label>
 //                             <div className="sm-debt-content-small">
@@ -353,6 +369,7 @@
 //               </div>
 //             </section>
 
+//             {/* KOLUMNA 3 */}
 //             <section className="sm-edit-column">
 //               <div className="sm-edit-card">
 //                 <h3>ANALIZA I DECYZJA</h3>
@@ -396,6 +413,12 @@
 //                     >
 //                       {risk.text}
 //                     </p>
+//                   </div>
+//                   <div className="sm-view-field">
+//                     <label>Łączna liczba faktur w historii</label>
+//                     <span style={{ fontSize: "1.4rem", fontWeight: 700 }}>
+//                       {reportData.length}
+//                     </span>
 //                   </div>
 //                 </div>
 //               </div>
@@ -441,8 +464,6 @@ const ReportContractor = ({ contractor, onBack }) => {
   const [reportData, setReportData] = useState([]);
 
   const isBlacklisted = contractor.KOD_KONTR_LISTA === "CZARNA";
-
-  // LOGIKA: Czy kontrahent ma zgodę na przelew?
   const hasTransferConsent =
     contractor.PRZYPISANA_FORMA_PLATNOSCI?.toLowerCase().includes("przelew");
 
@@ -474,51 +495,62 @@ const ReportContractor = ({ contractor, onBack }) => {
       if (!stats[year]) {
         stats[year] = {
           count: 0,
-          total: 0,
+          totalBrutto: 0,
           before: { count: 0, sum: 0 },
           late1to8: { count: 0, sum: 0 },
           late9to20: { count: 0, sum: 0 },
           lateOver20: { count: 0, sum: 0 },
-          unpaidOverdue: { count: 0, sum: 0 },
-          unpaidInTerm: { count: 0, sum: 0 },
-          settled: 0,
+          unpaidOverdue: { count: 0, sum: 0 }, // REALNY DŁUG (DO_ROZLICZENIA)
+          unpaidInTerm: { count: 0, sum: 0 }, // PORTFEL W TERMINIE (DO_ROZLICZENIA)
+          settledCount: 0,
           delaySum: 0,
         };
       }
       const s = stats[year];
       s.count++;
-      s.total += item.BRUTTO || 0;
+      s.totalBrutto += item.BRUTTO || 0;
 
       const termDate = new Date(item.TERMIN);
       termDate.setHours(0, 0, 0, 0);
 
+      // --- LOGIKA 1: FAKTURY NIEROZLICZONE (Zaległości i Portfel) ---
       if (item.DO_ROZLICZENIA > 0) {
         if (termDate < today) {
           s.unpaidOverdue.count++;
-          s.unpaidOverdue.sum += item.BRUTTO;
+          s.unpaidOverdue.sum += item.DO_ROZLICZENIA; // Używamy kwoty do rozliczenia
         } else {
           s.unpaidInTerm.count++;
-          s.unpaidInTerm.sum += item.BRUTTO;
+          s.unpaidInTerm.sum += item.DO_ROZLICZENIA; // Używamy kwoty do rozliczenia
         }
-      } else if (item.DATA_ROZL_AS) {
-        s.settled++;
-        const rozlDate = new Date(item.DATA_ROZL_AS);
-        const diff = Math.ceil((rozlDate - termDate) / (1000 * 3600 * 24));
-        const kwota = item.BRUTTO;
-        s.delaySum += diff > 0 ? diff : 0;
+      }
 
-        if (diff <= 0) {
-          s.before.count++;
-          s.before.sum += kwota;
-        } else if (diff <= 8) {
-          s.late1to8.count++;
-          s.late1to8.sum += kwota;
-        } else if (diff <= 20) {
-          s.late9to20.count++;
-          s.late9to20.sum += kwota;
-        } else {
-          s.lateOver20.count++;
-          s.lateOver20.sum += kwota;
+      // --- LOGIKA 2: FAKTURY ROZLICZONE (Historia spłacalności) ---
+      // Analizujemy tylko te, które zostały w pełni lub częściowo zamknięte (DATA_ROZL_AS istnieje)
+      if (item.DATA_ROZL_AS) {
+        const rozlDate = new Date(item.DATA_ROZL_AS);
+        rozlDate.setHours(0, 0, 0, 0);
+
+        const diff = Math.ceil((rozlDate - termDate) / (1000 * 3600 * 24));
+
+        // Kwota którą analizujemy historycznie to BRUTTO (zakładamy zamknięcie dokumentu)
+        // Jeśli DO_ROZLICZENIA > 0, to faktura i tak wylądowała już w boksach powyżej
+        if (item.DO_ROZLICZENIA === 0) {
+          s.settledCount++;
+          s.delaySum += diff > 0 ? diff : 0;
+
+          if (diff <= 0) {
+            s.before.count++;
+            s.before.sum += item.BRUTTO;
+          } else if (diff <= 8) {
+            s.late1to8.count++;
+            s.late1to8.sum += item.BRUTTO;
+          } else if (diff <= 20) {
+            s.late9to20.count++;
+            s.late9to20.sum += item.BRUTTO;
+          } else {
+            s.lateOver20.count++;
+            s.lateOver20.sum += item.BRUTTO;
+          }
         }
       }
     });
@@ -637,24 +669,15 @@ const ReportContractor = ({ contractor, onBack }) => {
                     </span>
                   </div>
                 </div>
-
                 <div className="sm-view-field">
                   <label>Zgoda na termin (Przelew)</label>
                   <span
                     style={{
                       color: hasTransferConsent ? "#2e7d32" : "#d32f2f",
                       fontWeight: 700,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px",
                     }}
                   >
                     {hasTransferConsent ? "TAK / WYRAŻONA" : "NIE / BRAK"}
-                    {hasTransferConsent && (
-                      <small style={{ fontWeight: 400, color: "#7f8c8d" }}>
-                        ({contractor.PRZYPISANA_FORMA_PLATNOSCI})
-                      </small>
-                    )}
                   </span>
                 </div>
               </div>
@@ -694,8 +717,8 @@ const ReportContractor = ({ contractor, onBack }) => {
                             }}
                           >
                             Śr. opóźnienie:{" "}
-                            {s.settled > 0
-                              ? (s.delaySum / s.settled).toFixed(1)
+                            {s.settledCount > 0
+                              ? (s.delaySum / s.settledCount).toFixed(1)
                               : 0}{" "}
                             dni
                           </span>
@@ -723,6 +746,7 @@ const ReportContractor = ({ contractor, onBack }) => {
                               </small>
                             )}
                           </div>
+
                           <div className="sm-debt-box-clean">
                             <label>Nierozliczone: W TERMINIE</label>
                             <div className="sm-debt-content-small">
