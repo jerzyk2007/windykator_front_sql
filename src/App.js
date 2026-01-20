@@ -153,7 +153,11 @@ function App() {
               />
               <Route
                 path="/conractor-settings"
-                element={<ContarctorSettings />}
+                element={<ContarctorSettings viewMode={"edit"} />}
+              />
+              <Route
+                path="/conractor-single-raport"
+                element={<ContarctorSettings viewMode={"raport"} />}
               />
 
               {/* Grupa: Raporty */}

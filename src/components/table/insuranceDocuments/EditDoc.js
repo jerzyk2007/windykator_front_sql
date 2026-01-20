@@ -5,7 +5,6 @@ import AddDoc from "./AddDoc";
 import { LiaEditSolid } from "react-icons/lia";
 import { IoSearchOutline } from "react-icons/io5";
 import { Button } from "@mui/material";
-// import "./SearchModule.css"; // Używamy wspólnego pliku
 
 const EditDoc = () => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();

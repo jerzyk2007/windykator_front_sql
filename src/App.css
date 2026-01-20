@@ -1,3 +1,4 @@
+/* --- FUNDAMENTY APLIKACJI --- */
 .App {
   flex-grow: 1;
   font-family: "Source Sans 3", Calibri, sans-serif;
@@ -6,6 +7,7 @@
   padding-top: 50px;
 }
 
+/* --- Taby / Zakładki --- */
 .bloc-tabs {
   padding: 5px;
   display: flex;
@@ -14,7 +16,6 @@
 }
 
 .tabs {
-  padding: 5px;
   padding: 10px 0;
   text-align: center;
   width: 100px;
@@ -62,25 +63,12 @@
   display: block;
 }
 
-.user-error-message {
-  color: rgb(0, 0, 0);
-  text-align: center;
-  font-weight: 600;
-  letter-spacing: 1px;
-  background-color: rgba(255, 154, 196, 0.5);
-  border-radius: 10px;
-  border: none;
-  padding: 10px 20px;
-}
-
-/* ustawienia dla paneli którę dzielą na 3 kolumny, dla ustawień */
+/* --- PANELE GLOBALNE (3 KOLUMNY) --- */
 .global_columns_panel {
   position: relative;
   flex-grow: 1;
   font-family: "Source Sans 3", Calibri, sans-serif;
   font-size: 1.05rem;
-  font-optical-sizing: auto;
-  font-style: 700;
   display: flex;
   overflow: auto;
 }
@@ -97,12 +85,11 @@
   overflow: auto;
 }
 
-/* Kontener przycisku */
 .global_columns_panel-close {
-  position: fixed; /* Zmienione ze sticky */
-  top: 55px; /* Odległość od góry */
-  left: 15px; /* Lepiej dać po prawej stronie */
-  z-index: 100; /* Bardzo wysoki z-index, by był nad kartami */
+  position: fixed;
+  top: 55px;
+  left: 15px;
+  z-index: 100;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -120,8 +107,7 @@
   background-color: #b71c1c;
 }
 
-/* Prefix: .sm- (Search Module) dla unikalności w dużym systemie, dla wyszukiwania uzytkoników i kontrahentów */
-
+/* --- MODUŁ WYSZUKIWANIA (.sm-) --- */
 .sm-container {
   flex-grow: 1;
   width: 100%;
@@ -136,7 +122,7 @@
 
 .sm-content {
   width: 100%;
-  max-width: 1000px; /* Nieco szerszy dla dokumentów, które mają więcej danych */
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -158,7 +144,6 @@
   margin-top: 5px;
 }
 
-/* Sekcja wyszukiwania */
 .sm-search-area {
   padding-bottom: 10px;
   display: flex;
@@ -206,12 +191,11 @@
   color: #7f8c8d;
 }
 
-/* Lista wyników */
+/* Karty Wyników */
 .sm-results-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  /* max-height: 80vh; */
   overflow: auto;
 }
 
@@ -221,11 +205,11 @@
   padding: 15px 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Rozsuwa dane i przycisk */
+  justify-content: space-between;
   gap: 15px;
   border: 1px solid #e0e6ed;
   transition: all 0.2s ease-in-out;
-  flex-wrap: wrap; /* Elastyczność na mniejszych ekranach */
+  flex-wrap: wrap;
 }
 
 .sm-result-card:hover {
@@ -234,10 +218,9 @@
   transform: translateY(-2px);
 }
 
-/* Kontener na dane wewnątrz karty (może być ich wiele) */
 .sm-info {
   flex: 1;
-  min-width: 150px; /* Zapobiega zbytniemu ściskaniu kolumn */
+  min-width: 150px;
 }
 
 .sm-info-label {
@@ -264,7 +247,6 @@
   margin-top: 2px;
 }
 
-/* Przycisk akcji */
 .sm-action-btn {
   background: #f0f7f0;
   border: none;
@@ -286,7 +268,6 @@
   color: #fff;
 }
 
-/* Komunikat o braku wyników */
 .sm-no-results {
   text-align: center;
   padding: 40px;
@@ -296,7 +277,6 @@
   border: 1px dashed #e0e6ed;
 }
 
-/* Awatar / Inicjały */
 .sm-avatar {
   width: 50px;
   height: 50px;
@@ -311,10 +291,479 @@
   flex-shrink: 0;
 }
 
-.sm-result-card:hover {
-  transform: scale(0.98);
-}
-
 .sm-result-card:hover .sm-avatar {
   background: linear-gradient(135deg, #2e7d32, #55d17e);
+}
+
+/* --- MODUŁ EDYCJI I KONTAKTU --- */
+.sm-edit-wrapper {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  height: calc(
+    100vh - 100px
+  ); /* Dopasuj tę wartość do wysokości Twojego headera systemowego */
+  display: flex;
+  flex-direction: column;
+}
+
+.sm-edit-header {
+  flex-shrink: 0; /* Header nie może się kurczyć */
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.sm-edit-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.sm-edit-header h1 {
+  font-size: 1.4rem;
+  margin: 0;
+  color: #2c3e50;
+}
+
+.sm-edit-header p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.sm-back-btn {
+  background: #f1f4f8;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: 0.2s;
+}
+
+.sm-back-btn:hover {
+  background: #e2e8f0;
+}
+
+/* Grid Edycji */
+.sm-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+  flex-grow: 1; /* Zajmuje resztę wysokości wrapper-a */
+  min-height: 0; /* Kluczowe dla flexbox, aby scroll zadziałał */
+  align-items: start;
+}
+
+.sm-edit-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 100%; /* Nie może być wyższa niż grid */
+  overflow-y: auto; /* Włączamy przewijanie pionowe */
+  padding-right: 8px; /* Miejsce na scrollbar, żeby nie przykrywał kart */
+  padding-bottom: 20px; /* Oddech na dole po przewinięciu */
+}
+
+.sm-edit-column::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sm-edit-column::-webkit-scrollbar-thumb {
+  background: #d1d9e6;
+  border-radius: 10px;
+}
+
+.sm-edit-column:hover::-webkit-scrollbar-thumb {
+  background: #b8c2d1;
+}
+
+.sm-edit-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  border: 1px solid #eef2f6;
+}
+
+.sm-edit-card h3 {
+  margin: 0 0 15px 0;
+  font-size: 0.95rem;
+  color: #1976d2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #f0f4f8;
+  padding-bottom: 8px;
+}
+
+/* Widok Podglądu (Label-Value) */
+.sm-view-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.sm-view-field label {
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.sm-view-field span {
+  font-size: 1rem;
+  color: #2c3e50;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.sm-view-row {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.sm-value-important {
+  font-size: 1.1rem !important;
+  color: #1a237e !important;
+  line-height: 1.2;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Adresy i Statusy */
+.ak-bg {
+  background-color: #fcfdfe;
+  border-left: 4px solid #ffa726; /* Pomarańczowy dla korespondencji */
+}
+
+.highlight-card {
+  border-top: 4px solid #2e7d32;
+}
+
+.sm-status-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.sm-spolka-badge {
+  background-color: #1976d2;
+  color: white;
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}
+
+/* Kolumna Kontaktu i Scroll */
+.sm-contact-column {
+  height: calc(100vh - 180px);
+  display: flex;
+  flex-direction: column;
+  gap: 0 !important;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #eef2f6;
+}
+
+.sm-contact-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.sm-section-header {
+  padding: 10px 15px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #1976d2;
+  border-bottom: 1px solid #eef2f6;
+}
+
+.sm-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 5px;
+}
+
+.sm-scroll-area::-webkit-scrollbar {
+  width: 4px;
+}
+.sm-scroll-area::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.sm-scroll-area::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.sm-contact-item {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f1f4f8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s;
+}
+
+.sm-contact-item:hover {
+  background: #fcfdfe;
+}
+
+.sm-contact-item.is-invalid {
+  background: #fff5f5;
+}
+
+.sm-contact-val {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2c3e50;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.sm-contact-flags {
+  display: flex;
+  gap: 2px;
+}
+
+/* Komunikaty błędów */
+.sm-header-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #fdecea;
+  color: #d32f2f;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #f5c2c7;
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: slideIn 0.3s ease-out;
+}
+
+.user-error-message {
+  color: rgb(0, 0, 0);
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 1px;
+  background-color: rgba(255, 154, 196, 0.5);
+  border-radius: 10px;
+  padding: 10px 20px;
+}
+
+/* Animacje */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sm-bucket-mini {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 4px solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sm-bucket-mini label {
+  font-size: 0.6rem;
+  color: #546e7a;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0;
+  display: block;
+}
+
+.sm-bucket-mini strong {
+  font-size: 1.1rem;
+  color: #263238;
+  display: block;
+}
+
+.sm-bucket-wide {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border-left: 5px solid;
+  margin-bottom: 10px;
+}
+
+.sm-bucket-wide label {
+  font-size: 0.65rem;
+  color: #546e7a;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.bucket-sum {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #263238;
+  margin-top: 2px;
+}
+
+.sm-bucket-mini {
+  padding: 8px;
+  border-radius: 6px;
+  border-left: 4px solid;
+}
+
+.sm-bucket-mini label {
+  font-size: 0.55rem;
+  color: #546e7a;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: block;
+}
+
+.bucket-sum-small {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #263238;
+}
+
+.sm-unpaid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+/* Box dla długu po terminie */
+.sm-debt-box {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-left: 5px solid #9e9e9e;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.sm-debt-box.active-debt {
+  background: #fff5f5;
+  border-color: #ffcdd2;
+  border-left-color: #d32f2f;
+}
+
+.sm-debt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.sm-debt-header label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #546e7a;
+}
+
+.sm-debt-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.sm-debt-amount {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #2c3e50;
+}
+
+.sm-debt-note {
+  display: block;
+  font-size: 0.7rem;
+  color: #d32f2f;
+  margin-top: 5px;
+  font-weight: 600;
+}
+
+/* Box dla faktur jeszcze w terminie */
+.sm-debt-box-clean {
+  background: #f1f8e9;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border-left: 5px solid #8bc34a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sm-debt-box-clean label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #33691e;
+}
+
+.sm-debt-content-small {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.sm-debt-content-small span {
+  font-size: 0.8rem;
+  color: #558b2f;
+}
+.sm-debt-content-small strong {
+  font-size: 0.9rem;
+  color: #1b5e20;
+}
+
+.sm-section-label-mini {
+  font-size: 0.65rem;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.sm-buckets-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }

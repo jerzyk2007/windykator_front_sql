@@ -267,6 +267,19 @@ export const menuItems = [
         ],
       },
       {
+        label: "Kontrahent",
+        roles: [150, 2000],
+        company: [],
+        sideMenu: [
+          {
+            label: "Raport wiarygodności kontrahenta",
+            path: "/conractor-single-raport",
+            roles: [150, 2000],
+            company: [],
+          },
+        ],
+      },
+      {
         label: "Kalkulator odsetek ustawowych",
         path: "/statutory-interest-calc",
         roles: [100, 110, 150, 300, 400, 2000],

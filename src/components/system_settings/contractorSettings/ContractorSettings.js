@@ -4,73 +4,72 @@ import { LiaEditSolid } from "react-icons/lia";
 import { IoSearchOutline } from "react-icons/io5";
 import PleaseWait from "../../PleaseWait";
 import { Button } from "@mui/material";
+import EditContractor from "./EditContractor";
+import ReportContractor from "./ReportContractor";
 
-const ContarctorSettings = ({ id = null }) => {
+const ContractorSettings = ({ viewMode }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const searchRef = useRef();
 
   const [search, setSearch] = useState("");
   const [pleaseWait, setPleaseWait] = useState(false);
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [contractors, setContractors] = useState([]);
+  const [selectedContractor, setSelectedContractor] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-
-  // --- ZMIANA 1: Nowy stan informujący, czy wyszukiwanie zostało wykonane ---
   const [hasSearched, setHasSearched] = useState(false);
+
+  // Formatowanie adresu z pól A_ (Główny)
+  const formatAddress = (c) => {
+    const street = c.A_ULICA_EXT || "";
+    const houseNum = c.A_NRDOMU || "";
+    const flatNum = c.A_NRLOKALU ? `/${c.A_NRLOKALU}` : "";
+    const zip = c.A_KOD || "";
+    const city = c.A_MIASTO || "";
+
+    if (!street && !city) return "Brak adresu głównego";
+
+    return (
+      <>
+        {street} {houseNum}
+        {flatNum}
+        <br />
+        {zip} {city}
+      </>
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (search.length < 5) return;
 
     setPleaseWait(true);
-    // --- ZMIANA 2: Resetujemy stan przed nowym wyszukiwaniem ---
     setHasSearched(false);
 
     try {
-      // Przykład zapytania (odkomentuj i dostosuj endpoint):
-      // const result = await axiosPrivateIntercept.get("/contractor/get-data/", {
-      //   params: { search },
-      // });
-      // setUsers(result.data);
-
-      // --- ZMIANA 3: Potwierdzamy zakończenie wyszukiwania ---
+      const result = await axiosPrivateIntercept.get(
+        "/contractor/get-contarctors-list",
+        { params: { search } },
+      );
+      setContractors(result.data);
       setHasSearched(true);
     } catch (err) {
-      console.error("Błąd podczas pobierania kontrahentów:", err);
+      console.error("Błąd podczas wyszukiwania kontrahentów:", err);
       setHasSearched(true);
+      setContractors([]);
     } finally {
       setPleaseWait(false);
     }
   };
 
-  const handleEditInitiation = (userData) => {
-    setSelectedUser(userData);
-    setIsEditing(true);
-  };
-
-  const getInitials = (login) => {
-    if (!login) return "??";
-    const namePart = login.split("@")[0];
-    const parts = namePart.split(".");
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[1][0]).toUpperCase();
-    } else {
-      return parts[0].substring(0, 2).toUpperCase();
-    }
-  };
-
-  // --- ZMIANA 4: Funkcja resetująca komunikaty, gdy użytkownik wpisuje nowy tekst ---
   const handleInputChange = (e) => {
-    setSearch(e.target.value.toLowerCase());
+    setSearch(e.target.value);
     if (hasSearched) setHasSearched(false);
-    if (users.length > 0) setUsers([]);
   };
 
   useEffect(() => {
     if (!isEditing) {
-      setUsers([]);
+      setContractors([]);
       setSearch("");
-      // --- ZMIANA 5: Resetujemy przy powrocie z edycji ---
       setHasSearched(false);
     }
   }, [isEditing]);
@@ -79,83 +78,17 @@ const ContarctorSettings = ({ id = null }) => {
     searchRef.current?.focus();
   }, []);
 
-  //   return (
-  //     <main className="user-settings-page">
-  //       {!isEditing ? (
-  //         <div className="user-settings-content">
-  //           <header className="user-settings-header">
-  //             <h1>Zarządzanie Kontrahentami</h1>
-  //             <p>Wyszukaj kontrahenta, aby edytować jego dane lub ustawienia</p>
-  //           </header>
-
-  //           <section className="search-section">
-  //             <form className="search-card" onSubmit={handleSubmit}>
-  //               <div className="search-input-wrapper">
-  //                 <IoSearchOutline className="search-icon" />
-  //                 <input
-  //                   type="text"
-  //                   ref={searchRef}
-  //                   placeholder="NIP lub nazwa kontrahenta (min. 5 znaków)..."
-  //                   value={search}
-  //                   // --- ZMIANA 6: Podpięcie nowej funkcji ---
-  //                   onChange={handleInputChange}
-  //                 />
-  //               </div>
-  //               <Button
-  //                 variant="contained"
-  //                 type="submit"
-  //                 disabled={search.length < 5 || pleaseWait}
-  //                 size="large"
-  //                 color="primary"
-  //                 className="search-button"
-  //               >
-  //                 Szukaj
-  //               </Button>
-  //             </form>
-  //           </section>
-
-  //           <section className="results-list">
-  //             {users.map((u, index) => (
-  //               <div className="user-card" key={u.id_user || index}>
-  //                 <div className="user-avatar-placeholder">
-  //                   {getInitials(u.userlogin)}
-  //                 </div>
-  //                 <div className="user-info">
-  //                   <span className="user-label">Login użytkownika</span>
-  //                   <h3 className="user-value">{u.userlogin}</h3>
-  //                 </div>
-  //                 <button
-  //                   className="edit-action-btn"
-  //                   onClick={() => handleEditInitiation(u)}
-  //                   title="Edytuj uprawnienia"
-  //                 >
-  //                   <LiaEditSolid />
-  //                 </button>
-  //               </div>
-  //             ))}
-
-  //             {/* --- ZMIANA 7: Warunek uzależniony od hasSearched --- */}
-  //             {!pleaseWait && hasSearched && users.length === 0 && (
-  //               <div className="no-results">
-  //                 Nie znaleziono kontrahenta o podanym NIP lub nazwie.
-  //               </div>
-  //             )}
-  //           </section>
-  //         </div>
-  //       ) : (
-  //         <div>{/* Tutaj komponent edycji kontrahenta */}</div>
-  //       )}
-  //       {pleaseWait && <PleaseWait />}
-  //     </main>
-  //   );
-
   return (
     <main className="sm-container">
       {!isEditing ? (
         <div className="sm-content">
           <header className="sm-header">
-            <h1>Zarządzanie Kontrahentami</h1>
-            <p>Wyszukaj kontrahenta, aby edytować jego ustawienia</p>
+            <h1>
+              {viewMode === "edit"
+                ? "Zarządzanie Kontrahentami"
+                : "Historia rozliczeń i windykacji Kontrahenta"}
+            </h1>
+            <p>Wyszukaj kontrahenta, aby edytować dane w systemie</p>
           </header>
 
           <section className="sm-search-area">
@@ -165,7 +98,7 @@ const ContarctorSettings = ({ id = null }) => {
                 <input
                   type="text"
                   ref={searchRef}
-                  placeholder="NIP (same liczby pisane ciągiem) lub nazwa kontrahenta (min. 5 znaków)..."
+                  placeholder="NIP lub nazwa kontrahenta (min. 5 znaków)..."
                   value={search}
                   onChange={handleInputChange}
                 />
@@ -182,35 +115,100 @@ const ContarctorSettings = ({ id = null }) => {
           </section>
 
           <section className="sm-results-list">
-            {users.map((u, index) => (
-              <div className="sm-result-card" key={u.id_user || index}>
-                <div className="sm-avatar">{getInitials(u.userlogin)}</div>
-                <div className="sm-info">
-                  <span className="sm-info-label">Nazwa kontrahenta / NIP</span>
-                  <h3 className="sm-info-value">{u.userlogin}</h3>
+            {contractors.map((c, index) => (
+              <div className="sm-result-card" key={c.id_kontrahent || index}>
+                {/* AWATAR: F dla Firmy (niebieski), P dla Prywatnego (zielony) */}
+                <div
+                  className="sm-avatar"
+                  style={{
+                    background:
+                      c.IS_FIRMA === 1
+                        ? "linear-gradient(135deg, #1976d2, #42a5f5)" // Niebieski dla firm
+                        : "linear-gradient(135deg, #2e7d32, #66bb6a)", // Zielony dla prywatnych
+                    fontSize: "1.4rem",
+                  }}
+                  title={c.IS_FIRMA === 1 ? "Firma" : "Osoba prywatna"}
+                >
+                  {c.IS_FIRMA === 1 ? "F" : "P"}
                 </div>
+
+                {/* 1. Nazwa i NIP */}
+                <div className="sm-info" style={{ flex: 2 }}>
+                  <span className="sm-info-label">Nazwa i NIP</span>
+                  <h3 className="sm-info-value">
+                    {c.NAZWA_KONTRAHENTA_SLOWNIK}
+                  </h3>
+                  <small className="sm-info-subvalue">
+                    {c.KONTR_NIP
+                      ? `NIP: ${c.KONTR_NIP}`
+                      : c.PESEL
+                        ? `PESEL: ${c.PESEL}`
+                        : "Brak identyfikatora"}
+                  </small>
+                </div>
+
+                {/* 2. Adres Główny */}
+                <div className="sm-info">
+                  <span className="sm-info-label">Adres Główny</span>
+                  <p
+                    className="sm-info-value"
+                    style={{ fontWeight: 400, fontSize: "0.85rem" }}
+                  >
+                    {formatAddress(c)}
+                  </p>
+                </div>
+
+                {/* 3. Spółka i ID */}
+                <div className="sm-info">
+                  <span className="sm-info-label">System / Spółka</span>
+                  <p className="sm-info-value">{c.SPOLKA || "---"}</p>
+                  <small className="sm-info-subvalue">
+                    CKK: {c.CUSTOMER_ID_CKK}
+                  </small>
+                </div>
+
+                {/* Akcja */}
                 <button
                   className="sm-action-btn"
-                  onClick={() => handleEditInitiation(u)}
+                  onClick={() => {
+                    setSelectedContractor(c);
+                    setIsEditing(true);
+                  }}
+                  title="Edytuj dane kontrahenta"
                 >
                   <LiaEditSolid />
                 </button>
               </div>
             ))}
 
-            {!pleaseWait && hasSearched && users.length === 0 && (
+            {!pleaseWait && hasSearched && contractors.length === 0 && (
               <div className="sm-no-results">
-                Nie znaleziono kontrahenta o podanych danych.
+                Nie znaleziono kontrahenta spełniającego kryteria.
               </div>
             )}
           </section>
         </div>
       ) : (
-        <div>{/* Komponent edycji kontrahenta */}</div>
+        <>
+          {viewMode === "edit" && (
+            <EditContractor
+              contractor={selectedContractor}
+              onBack={() => setIsEditing(false)}
+            />
+          )}
+
+          {viewMode === "raport" && (
+            <ReportContractor
+              contractor={selectedContractor}
+              onBack={() => setIsEditing(false)}
+            />
+          )}
+        </>
       )}
+
       {pleaseWait && <PleaseWait />}
     </main>
   );
 };
 
-export default ContarctorSettings;
+export default ContractorSettings;
