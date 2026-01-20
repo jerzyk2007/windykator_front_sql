@@ -36,6 +36,14 @@ const clearRowTable = {
   lawPartner: [],
 };
 
+// nazwy plików excel w zaleźności od profilu
+const typeInfo = {
+  insider: "Zestawienie",
+  partner: "Zestawienie spraw",
+  insurance: "Zestawienie polis",
+  vindex: "Zestawienie windykacyjne",
+};
+
 const Table = ({
   documents,
   setDocuments,
@@ -63,9 +71,7 @@ const Table = ({
   const [pagination, setPagination] = useState(
     settings?.pagination ? settings.pagination : { pageIndex: 0, pageSize: 10 },
   );
-  // const [columnFilters, setColumnFilters] = useState([
-  //   { id: "AREA", value: ["BLACHARNIA", "SAMOCHODY NOWE"] },
-  // ]);
+
   const [columnFilters, setColumnFilters] = useState(
     settings.columnFilters ?? [],
   );
@@ -212,9 +218,16 @@ const Table = ({
         order: newOrder,
       };
 
-      profile === "partner"
-        ? lawPartnerRaport(updateData, orderColumns, type)
-        : insuranceRaport(updateData, orderColumns, type);
+      const reportActions = {
+        partner: lawPartnerRaport,
+        insurance: insuranceRaport,
+      };
+      const action = reportActions[profile];
+
+      // Jeśli profil istnieje w mapie, uruchom przypisaną funkcję
+      if (action) {
+        action(updateData, orderColumns, type);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -411,14 +424,33 @@ const Table = ({
               !dataTableCounter ? "disabled" : ""
             }`}
             disabled={!dataTableCounter}
+            // onClick={() => {
+            //   profile === "insider"
+            //     ? handleExportExel(
+            //         table.getPrePaginationRowModel().rows,
+            //         typeInfo[profile],
+            //       )
+            //     : handleExportExcelPartner(
+            //         table.getPrePaginationRowModel().rows,
+            //         typeInfo[profile],
+            //       );
+            // }}
             onClick={() => {
-              const type = profile === "insurance" ? "Polisy" : "Zestawienie";
-              profile === "insider"
-                ? handleExportExel(table.getPrePaginationRowModel().rows, type)
-                : handleExportExcelPartner(
-                    table.getPrePaginationRowModel().rows,
-                    type,
-                  );
+              const rows = table.getPrePaginationRowModel().rows;
+              const info = typeInfo[profile];
+
+              switch (profile) {
+                case "insider":
+                case "vindex":
+                  handleExportExel(rows, info);
+                  break;
+                case "partner":
+                case "insurance":
+                  handleExportExcelPartner(rows, info);
+                  break;
+                default:
+                  console.warn("Nieobsługiwany profil:", profile);
+              }
             }}
             tooltipText="Za dużo danych do exportu. Spróbuj założyć filtry."
           >

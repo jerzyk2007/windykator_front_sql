@@ -72,7 +72,7 @@ const sanitize = (text) => {
 
   return str.replace(
     /[^\x20-\x7EąćęłńóśżźĄĆĘŁŃÓŚŻŹ,.\-+@()$%&"';:/\\!?=\[\]{}<>_\n\r]/g,
-    " "
+    " ",
   );
 };
 
@@ -158,7 +158,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
     ];
 
     const sortedDzialNames = Object.keys(groupedByDzial).sort((a, b) =>
-      a.localeCompare(b)
+      a.localeCompare(b),
     );
 
     sortedDzialNames.forEach((dzialName) => {
@@ -188,7 +188,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
       for (let i = 0; i < startRow - 1; i++) worksheet.addRow([]);
 
       const headers = orderColumns.order.filter((column) =>
-        sheet.data[0].hasOwnProperty(column)
+        sheet.data[0].hasOwnProperty(column),
       );
 
       worksheet.addRow(["Lp", ...headers]);
@@ -222,6 +222,22 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
         vertical: "middle",
       };
 
+      //       headers.forEach((header, columnIndex) => {
+      //   const colIndex = columnIndex + 2;
+      //   const column = worksheet.getColumn(colIndex);
+      //   let maxLength = header.length;
+      //   worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
+      //     if (rowIndex >= startRow) {
+      //       const cellValue = row.getCell(colIndex).value;
+      //       if (cellValue) {
+      //         const len = cellValue.toString().length;
+      //         if (len > maxLength) maxLength = len;
+      //       }
+      //     }
+      //   });
+      //   column.width = Math.max(15, Math.min(maxLength, 40));
+      // });
+
       headers.forEach((header, columnIndex) => {
         const colIndex = columnIndex + 2;
         const column = worksheet.getColumn(colIndex);
@@ -235,6 +251,17 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
           vertical: "middle",
           wrapText: true,
         };
+        let maxLength = header.length;
+        worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
+          if (rowIndex >= startRow) {
+            const cellValue = row.getCell(colIndex).value;
+            if (cellValue) {
+              const len = cellValue.toString().length;
+              if (len > maxLength) maxLength = len;
+            }
+          }
+        });
+        column.width = Math.max(15, Math.min(maxLength, 40));
 
         const sumCell = worksheet.getCell(startRow - 1, colIndex);
         const border = {
@@ -245,7 +272,7 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
         };
 
         if (header === "Faktura") {
-          column.width = 25;
+          column.width = 30;
           sumCell.value = {
             formula: `SUBTOTAL(103,${columnLetter}${startDataRow}:${columnLetter}${endDataRow})`,
           };
@@ -294,21 +321,21 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
         }
       });
 
-      headers.forEach((header, columnIndex) => {
-        const colIndex = columnIndex + 2;
-        const column = worksheet.getColumn(colIndex);
-        let maxLength = header.length;
-        worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
-          if (rowIndex >= startRow) {
-            const cellValue = row.getCell(colIndex).value;
-            if (cellValue) {
-              const len = cellValue.toString().length;
-              if (len > maxLength) maxLength = len;
-            }
-          }
-        });
-        column.width = Math.max(15, Math.min(maxLength, 40));
-      });
+      // headers.forEach((header, columnIndex) => {
+      //   const colIndex = columnIndex + 2;
+      //   const column = worksheet.getColumn(colIndex);
+      //   let maxLength = header.length;
+      //   worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
+      //     if (rowIndex >= startRow) {
+      //       const cellValue = row.getCell(colIndex).value;
+      //       if (cellValue) {
+      //         const len = cellValue.toString().length;
+      //         if (len > maxLength) maxLength = len;
+      //       }
+      //     }
+      //   });
+      //   column.width = Math.max(15, Math.min(maxLength, 40));
+      // });
 
       worksheet.eachRow({ includeEmpty: true }, (row, rowIndex) => {
         if (rowIndex >= startRow) {
@@ -393,19 +420,19 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
       return isNaN(d.getTime()) ? "" : d; // jeśli niepoprawna data -> "BRAK"
     };
     const DATA_PRZEKAZANIA_SPRAWY = parseDateOrDefault(
-      item.DATA_PRZEKAZANIA_SPRAWY
+      item.DATA_PRZEKAZANIA_SPRAWY,
     );
     const DATA_PRZYJECIA_SPRAWY = parseDateOrDefault(
-      item.DATA_PRZYJECIA_SPRAWY
+      item.DATA_PRZYJECIA_SPRAWY,
     );
     const DATA_WYMAGALNOSCI_PLATNOSCI = parseDateOrDefault(
-      item.DATA_WYMAGALNOSCI_PLATNOSCI
+      item.DATA_WYMAGALNOSCI_PLATNOSCI,
     );
     const DATA_WYSTAWIENIA_DOKUMENTU = parseDateOrDefault(
-      item.DATA_WYSTAWIENIA_DOKUMENTU
+      item.DATA_WYSTAWIENIA_DOKUMENTU,
     );
     const TERMIN_PRZEDAWNIENIA_ROSZCZENIA = parseDateOrDefault(
-      item.TERMIN_PRZEDAWNIENIA_ROSZCZENIA
+      item.TERMIN_PRZEDAWNIENIA_ROSZCZENIA,
     );
     const ODDZIAL = `${item?.ODDZIAL?.LOKALIZACJA || ""} ${
       item?.ODDZIAL?.DZIAL || ""
@@ -454,7 +481,7 @@ export const lawPartnerRaport = async (allData, orderColumns, info) => {
       for (let i = 0; i < startRow - 1; i++) worksheet.addRow([]);
 
       const headers = orderColumns.order.filter((column) =>
-        sheet.data[0].hasOwnProperty(column)
+        sheet.data[0].hasOwnProperty(column),
       );
 
       worksheet.addRow(["Lp", ...headers]);
@@ -645,48 +672,48 @@ export const insuranceRaport = async (allData, orderColumns, info) => {
   };
 
   // obrabiam dane z KANAL_KOMUNIKACJI i tworzę skrócone zapisy
-  const formatChatField = (arrayData) => {
-    if (!arrayData) return "Brak wpisów";
+  // const formatChatField = (arrayData) => {
+  //   if (!arrayData) return "Brak wpisów";
 
-    try {
-      let dzialania;
+  //   try {
+  //     let dzialania;
 
-      if (!Array.isArray(arrayData) || arrayData.length === 0) {
-        dzialania = "Brak wpisów";
-      } else if (arrayData.length === 1) {
-        const e = arrayData[0];
-        // Używamy sanitize, aby uniknąć błędów w Excelu przy dziwnych znakach
-        dzialania = `${e.date} - ${sanitize(e.username)} - ${sanitize(e.note)}`;
-      } else {
-        const last = arrayData[arrayData.length - 1];
-        dzialania = `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
-          last.date
-        } - ${sanitize(last.username)} - ${sanitize(last.note)}`;
-      }
+  //     if (!Array.isArray(arrayData) || arrayData.length === 0) {
+  //       dzialania = "Brak wpisów";
+  //     } else if (arrayData.length === 1) {
+  //       const e = arrayData[0];
+  //       // Używamy sanitize, aby uniknąć błędów w Excelu przy dziwnych znakach
+  //       dzialania = `${e.date} - ${sanitize(e.username)} - ${sanitize(e.note)}`;
+  //     } else {
+  //       const last = arrayData[arrayData.length - 1];
+  //       dzialania = `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
+  //         last.date
+  //       } - ${sanitize(last.username)} - ${sanitize(last.note)}`;
+  //     }
 
-      // --- Twoja logika przycinania (max 2 entery lub 120 znaków) ---
-      let maxEnters = 5;
-      let countEnters = 0;
-      let truncated = "";
+  //     // --- Twoja logika przycinania (max 2 entery lub 120 znaków) ---
+  //     let maxEnters = 5;
+  //     let countEnters = 0;
+  //     let truncated = "";
 
-      for (let char of dzialania) {
-        if (char === "\n") {
-          countEnters++;
-          // Jeśli to jest 3 enter, przerywamy zanim go dodamy
-          if (countEnters > maxEnters) break;
-        }
-        // Jeśli to jest 121 znak, przerywamy
-        if (truncated.length >= 350) break;
+  //     for (let char of dzialania) {
+  //       if (char === "\n") {
+  //         countEnters++;
+  //         // Jeśli to jest 3 enter, przerywamy zanim go dodamy
+  //         if (countEnters > maxEnters) break;
+  //       }
+  //       // Jeśli to jest 121 znak, przerywamy
+  //       if (truncated.length >= 350) break;
 
-        truncated += char;
-      }
+  //       truncated += char;
+  //     }
 
-      return truncated.length < dzialania.length ? truncated + " …" : truncated;
-    } catch (err) {
-      console.error("Błąd formatowania czatu:", err);
-      return "Brak wpisów";
-    }
-  };
+  //     return truncated.length < dzialania.length ? truncated + " …" : truncated;
+  //   } catch (err) {
+  //     console.error("Błąd formatowania czatu:", err);
+  //     return "Brak wpisów";
+  //   }
+  // };
 
   const cleanData = allData.map((item) => {
     // Wywołujemy nową funkcję dla pola KANAL_KOMUNIKACJI
@@ -739,7 +766,7 @@ export const insuranceRaport = async (allData, orderColumns, info) => {
       for (let i = 0; i < startRow - 1; i++) worksheet.addRow([]);
 
       const headers = orderColumns.order.filter((column) =>
-        sheet.data[0].hasOwnProperty(column)
+        sheet.data[0].hasOwnProperty(column),
       );
 
       worksheet.addRow(["Lp", ...headers]);
@@ -824,7 +851,7 @@ export const insuranceRaport = async (allData, orderColumns, info) => {
             formula: `SUBTOTAL(103,${columnLetter}${startDataRow}:${columnLetter}${endDataRow})`,
           };
           sumCell.numFmt = "0";
-        } else if (header === "Należność") {
+        } else if (header === "Należność" || header === "Kwota dokumentu") {
           column.numFmt = "#,##0.00";
           column.width = 22;
 
@@ -842,7 +869,10 @@ export const insuranceRaport = async (allData, orderColumns, info) => {
           sumCell.numFmt = "#,##0.00 zł";
         } else if (
           header === "Data przekazania" ||
-          header === "Termin płatności"
+          header === "Termin płatności" ||
+          header === "Dział" ||
+          header == "Status" ||
+          header === "Ubezpieczyciel"
         ) {
           column.width = 19;
         } else if (header === "Kontrahent" || header === "Panel komunikacji") {
@@ -967,7 +997,7 @@ export const dataRaport = async (allData, orderColumns, info) => {
 
         // Użyj tablicy columnsOrder, aby uporządkować nagłówki
         const headers = orderColumns.order.filter((column) =>
-          sheet.data[0].hasOwnProperty(column)
+          sheet.data[0].hasOwnProperty(column),
         );
 
         // Dodaj nagłówki w 6. wierszu, z kolumną 'Lp' na początku
@@ -1055,7 +1085,7 @@ export const dataRaport = async (allData, orderColumns, info) => {
 
               if (typeof rawValue === "string" && rawValue.includes("%")) {
                 const number = parseFloat(
-                  rawValue.replace("%", "").trim().replace(",", ".")
+                  rawValue.replace("%", "").trim().replace(",", "."),
                 );
                 if (!isNaN(number)) {
                   cell.value = number / 100; // Przekształcamy np. 26% → 0.26
