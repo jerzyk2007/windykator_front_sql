@@ -173,7 +173,9 @@
   color: #000000;
   cursor: pointer;
   /* Płynne przejście kolorów przy interakcji */
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   box-sizing: border-box;
 }
 
@@ -212,7 +214,7 @@
 .ertp-input-checkbox {
   width: 100%;
   margin: 2px;
-  transform: scale(0.8);
+  transform: scale(0.7);
   cursor: pointer;
 }
 
@@ -351,6 +353,7 @@
   border: 1px solid rgba(142, 205, 241, 0.6);
   border-radius: 5px;
   padding: 5px;
+  margin-bottom: 2px;
   text-align: center;
   background-color: rgba(88, 228, 253, 0.4);
 }
@@ -361,6 +364,7 @@
   border: 1px solid rgba(44, 123, 168, 0.6);
   border-radius: 5px;
   padding: 5px;
+  margin-bottom: 2px;
   white-space: pre-wrap; /* Zachowuje entery/nowe linie, ale zawija tekst gdy dotknie krawędzi */
   overflow-wrap: break-word; /* Rozbija bardzo długie słowa (np. linki), aby nie wystawały poza ramkę */
   word-break: break-word; /* Dodatkowe zabezpieczenie dla starszych przeglądarek */

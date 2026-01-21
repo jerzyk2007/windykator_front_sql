@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { formatNip } from "../utilsForTable/tableFunctions";
+import { border } from "@mui/system";
 
 // tylko dla blacharni, te loginy mogą zmienić przypisanie działu a obszarze Blacharni
 const authLogin = [
@@ -145,7 +146,7 @@ const EditBasicDataPro = ({
         />
 
         {rowData?.AREA === "BLACHARNIA" && authLogin.includes(login) && (
-          <DataRow title="Przypisz inny dział:">
+          <DataRow title="Przypisz inny dział:" style={{ border: "none" }}>
             <select
               className="ertp-input-select"
               style={{ backgroundColor: "#f5ffe3", width: "100%" }}

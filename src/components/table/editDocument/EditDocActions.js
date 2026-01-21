@@ -42,7 +42,7 @@ const EditDocActions = ({
                     e.target.options[e.target.selectedIndex].text
                   }`,
                   "log",
-                  context
+                  context,
                 );
                 setRowData((prev) => ({
                   ...prev,
@@ -73,7 +73,7 @@ const EditDocActions = ({
                     e.target.options[e.target.selectedIndex].text
                   }`,
                   "log",
-                  context
+                  context,
                 );
                 setRowData((prev) => ({ ...prev, DZIALANIA: e.target.value }));
               }}
@@ -111,7 +111,7 @@ const EditDocActions = ({
                     e.target.options[e.target.selectedIndex].text
                   }`,
                   "log",
-                  context
+                  context,
                 );
                 setRowData((prev) => ({
                   ...prev,
@@ -142,7 +142,7 @@ const EditDocActions = ({
                       e.target.options[e.target.selectedIndex].text
                     }`,
                     "log",
-                    context
+                    context,
                   );
                   setRowData((prev) => ({
                     ...prev,
@@ -186,7 +186,7 @@ const EditDocActions = ({
                       e.target.options[e.target.selectedIndex].text
                     }`,
                     "log",
-                    context
+                    context,
                   );
                   setRowData((prev) => ({
                     ...prev,
