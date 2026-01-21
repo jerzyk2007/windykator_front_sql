@@ -1,0 +1,52 @@
+.restaurant-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #fdf5e6;
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.rest-title {
+  position: absolute;
+  top: 30px;
+  width: 100%;
+  text-align: center;
+  color: #147e1d;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 32px;
+  font-weight: bold;
+  text-shadow: 3px 3px 0px #23cf7f;
+  z-index: 10;
+}
+
+.rest-status {
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+}
+
+.retro-blink {
+  color: #ffffff;
+  background: #ff0000;
+  padding: 5px 20px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 22px;
+  font-weight: bold;
+  animation: restBlink 1s step-start infinite;
+}
+
+@keyframes restBlink {
+  50% {
+    opacity: 0;
+  }
+}

@@ -5,11 +5,12 @@ import FatThursday from "./loading/FatThursday";
 import WomensDayLoading from "./loading/WomensDayLoading";
 import XmasKulig from "./loading/XmasKulig";
 import XmasSkiJump from "./loading/XmasSkiJump";
+import XmasRestaurant from "./loading/XmasRestaurant";
 import "./PleaseWait.css";
 
 const variants = {
   default: WindykacjaLoading,
-  draft: XmasSkiJump,
+  draft: XmasRestaurant,
   old: DefaultLoading,
   xmas: XmasLoading,
   fat: FatThursday,
