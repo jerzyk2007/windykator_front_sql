@@ -115,7 +115,6 @@ const ReportContractor = ({ contractor, onBack }) => {
   }, [reportData]);
 
   const risk = useMemo(() => {
-    // 1. Czarna lista
     if (isBlacklisted)
       return {
         label: "ZABLOKOWANY",
@@ -124,13 +123,12 @@ const ReportContractor = ({ contractor, onBack }) => {
         text: "KONTRAHENT NA CZARNEJ LIŚCIE. Bezwzględny zakaz sprzedaży z odroczonym terminem.",
       };
 
-    // 2. Brak danych
     if (reportData.length === 0)
       return {
         label: "BRAK HISTORII",
         color: "#607d8b",
         icon: <IoSearchOutline size={22} />,
-        text: "Brak historycznych rozliczeń. Zalecana płatność gotówką/przedpłatą przy pierwszej transakcji.",
+        text: "Brak historycznych rozliczeń w systemie.",
       };
 
     let totalInvoices = reportData.length;
@@ -147,16 +145,16 @@ const ReportContractor = ({ contractor, onBack }) => {
     const ratioCritical =
       (totalCriticalLateCount + totalUnpaidOverdueCount) / totalInvoices;
 
-    // 3. Wysokie Ryzyko (Zaległości lub recydywa w spóźnieniach)
+    // 1. WYSOKIE RYZYKO: Ma długi teraz LUB więcej niż 15% faktur to duże spóźnienia
     if (totalUnpaidOverdueCount > 0 || ratioCritical > 0.15)
       return {
         label: "WYSOKIE RYZYKO",
         color: "#c62828",
         icon: <IoAlertCircleOutline size={22} />,
-        text: `Klient posiada ${totalUnpaidOverdueCount} faktur po terminie lub wykazuje wysoką nieterminowość (${(ratioCritical * 100).toFixed(0)}%). Zalecana blokada odroczonych płatności.`,
+        text: `Wykryto ${totalUnpaidOverdueCount} faktur po terminie lub bardzo niski wskaźnik terminowości (${(ratioCritical * 100).toFixed(1)}%).`,
       };
 
-    // 4. Brak formalnej zgody na przelew (Niezależnie od jakości płatności)
+    // 2. BRAK UPRAWNIEŃ: Brak zgody na przelew
     if (!hasTransferConsent)
       return {
         label: "BRAK UPRAWNIEŃ",
@@ -165,25 +163,37 @@ const ReportContractor = ({ contractor, onBack }) => {
         text: "Klient nie posiada w systemie zgody na odroczony termin płatności (formę: Przelew).",
       };
 
-    // 5. Średnie Ryzyko / Ograniczone zaufanie (Zbyt mało danych)
-    if (totalPaidOnTime < 3)
+    // 3. WIARYGODNY PŁATNIK (Poprawiona logika):
+    // Jeśli ma zgodę, brak długów i jego historia jest "czysta" (ratioCritical < 5%)
+    // To bez względu na to czy ma 1, 2 czy 100 faktur - jest wiarygodny.
+    if (ratioCritical <= 0.05 && totalPaidOnTime > 0)
+      return {
+        label: "WIARYGODNY PŁATNIK",
+        color: "#2e7d32",
+        icon: <IoShieldCheckmarkOutline size={22} />,
+        text: "Klient posiada pozytywną historię płatności i wymaganą zgodę na formę przelewową.",
+      };
+
+    // 4. OGRANICZONE ZAUFANIE: Jeśli jednak ratioCritical jest między 5% a 15%
+    if (ratioCritical > 0.05)
       return {
         label: "OGRANICZONE ZAUFANIE",
         color: "#f9a825",
-        icon: <IoAlertCircleOutline size={22} />,
-        text: `Niewystarczająca historia współpracy (tylko ${totalPaidOnTime} faktur zapłaconych w terminie). Zalecana ostrożność przy wyznaczaniu limitów.`,
+        icon: <IoWarning size={22} />,
+        text: `W historii występują opóźnienia (${(ratioCritical * 100).toFixed(1)}% faktur powyżej 8 dni). Zalecane monitorowanie płatności.`,
       };
 
-    // 6. Wiarygodny płatnik
+    // Domyślny dla nowych bez żadnej rozliczonej faktury
     return {
-      label: "WIARYGODNY PŁATNIK",
-      color: "#2e7d32",
-      icon: <IoShieldCheckmarkOutline size={22} />,
-      text: "Klient posiada stabilną historię terminowych płatności oraz wymaganą zgodę na formę przelewową.",
+      label: "W TRAKCIE WERYFIKACJI",
+      color: "#607d8b",
+      icon: <IoSearchOutline size={22} />,
+      text: "Brak rozliczonych dokumentów do pełnej oceny historycznej.",
     };
   }, [reportData, statsByYear, isBlacklisted, hasTransferConsent]);
 
   return (
+    // ... reszta kodu JSX pozostaje bez zmian ...
     <>
       {pleaseWait ? (
         <PleaseWait />
@@ -230,7 +240,6 @@ const ReportContractor = ({ contractor, onBack }) => {
           </header>
 
           <div className="sm-edit-grid">
-            {/* KOLUMNA 1 */}
             <section className="sm-edit-column">
               <div className="sm-edit-card">
                 <h3>DANE PODSTAWOWE</h3>
@@ -286,24 +295,10 @@ const ReportContractor = ({ contractor, onBack }) => {
                       </>
                     )}
                   </span>
-                  {!hasTransferConsent && (
-                    <small
-                      style={{
-                        color: "#c62828",
-                        marginTop: "4px",
-                        display: "block",
-                        lineHeight: 1.3,
-                      }}
-                    >
-                      * Klient nie posiada w systemie zgody na odroczony termin
-                      płatności!
-                    </small>
-                  )}
                 </div>
               </div>
             </section>
 
-            {/* KOLUMNA 2 */}
             <section className="sm-edit-column">
               <div className="sm-edit-card highlight-card">
                 <h3>STRUKTURA ROZLICZEŃ</h3>
@@ -429,7 +424,6 @@ const ReportContractor = ({ contractor, onBack }) => {
               </div>
             </section>
 
-            {/* KOLUMNA 3 */}
             <section className="sm-edit-column">
               <div className="sm-edit-card">
                 <h3>REKOMENDACJA SYSTEMOWA</h3>
