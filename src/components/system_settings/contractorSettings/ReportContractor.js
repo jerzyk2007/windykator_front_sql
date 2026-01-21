@@ -1,450 +1,14 @@
-// import { useState, useEffect, useMemo } from "react";
-// import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
-// import PleaseWait from "../../PleaseWait";
-// import { Divider, Typography } from "@mui/material";
-// import {
-//   IoArrowBackOutline,
-//   IoPauseCircleOutline,
-//   IoPlayCircleOutline,
-//   IoTrendingUpOutline,
-//   IoAlertCircleOutline,
-//   IoCheckmarkDoneOutline,
-//   IoHelpCircleOutline,
-//   IoWarning,
-// } from "react-icons/io5";
-
-// const formatPLN = (value) => {
-//   return (
-//     new Intl.NumberFormat("pl-PL", {
-//       style: "decimal",
-//       minimumFractionDigits: 2,
-//       maximumFractionDigits: 2,
-//       useGrouping: true,
-//     }).format(value || 0) + " zł"
-//   );
-// };
-
-// const ReportContractor = ({ contractor, onBack }) => {
-//   const axiosPrivateIntercept = useAxiosPrivateIntercept();
-//   const [pleaseWait, setPleaseWait] = useState(false);
-//   const [reportData, setReportData] = useState([]);
-
-//   const isBlacklisted = contractor.KOD_KONTR_LISTA === "CZARNA";
-//   // LOGIKA: Czy kontrahent ma zgodę na przelew?
-//   const hasTransferConsent =
-//     contractor.PRZYPISANA_FORMA_PLATNOSCI?.toLowerCase().includes("przelew");
-
-//   useEffect(() => {
-//     const getData = async () => {
-//       try {
-//         setPleaseWait(true);
-//         const result = await axiosPrivateIntercept.get(
-//           `/contractor/get-report-data/${contractor.KONTRAHENT_ID}/${contractor.SPOLKA}`,
-//         );
-//         console.log(result.data);
-//         setReportData(result.data || []);
-//       } catch (error) {
-//         console.error("Błąd:", error);
-//       } finally {
-//         setPleaseWait(false);
-//       }
-//     };
-//     getData();
-//   }, [contractor, axiosPrivateIntercept]);
-
-//   const statsByYear = useMemo(() => {
-//     if (!reportData || reportData.length === 0) return {};
-//     const stats = {};
-//     const today = new Date();
-//     today.setHours(0, 0, 0, 0);
-
-//     reportData.forEach((item) => {
-//       const year = new Date(item.DATA_FV).getFullYear();
-//       if (!stats[year]) {
-//         stats[year] = {
-//           count: 0,
-//           total: 0,
-//           before: { count: 0, sum: 0 },
-//           late1to8: { count: 0, sum: 0 },
-//           late9to20: { count: 0, sum: 0 },
-//           lateOver20: { count: 0, sum: 0 },
-//           unpaidOverdue: { count: 0, sum: 0 },
-//           unpaidInTerm: { count: 0, sum: 0 },
-//           settled: 0,
-//           delaySum: 0,
-//         };
-//       }
-//       const s = stats[year];
-//       s.count++;
-//       s.total += item.BRUTTO || 0;
-
-//       const termDate = new Date(item.TERMIN);
-//       termDate.setHours(0, 0, 0, 0);
-
-//       if (item.DO_ROZLICZENIA > 0) {
-//         if (termDate < today) {
-//           s.unpaidOverdue.count++;
-//           s.unpaidOverdue.sum += item.BRUTTO;
-//         } else {
-//           s.unpaidInTerm.count++;
-//           s.unpaidInTerm.sum += item.BRUTTO;
-//         }
-//       } else if (item.DATA_ROZL_AS) {
-//         s.settled++;
-//         const rozlDate = new Date(item.DATA_ROZL_AS);
-//         const diff = Math.ceil((rozlDate - termDate) / (1000 * 3600 * 24));
-//         const kwota = item.BRUTTO;
-//         s.delaySum += diff > 0 ? diff : 0;
-
-//         if (diff <= 0) {
-//           s.before.count++;
-//           s.before.sum += kwota;
-//         } else if (diff <= 8) {
-//           s.late1to8.count++;
-//           s.late1to8.sum += kwota;
-//         } else if (diff <= 20) {
-//           s.late9to20.count++;
-//           s.late9to20.sum += kwota;
-//         } else {
-//           s.lateOver20.count++;
-//           s.lateOver20.sum += kwota;
-//         }
-//       }
-//     });
-//     return stats;
-//   }, [reportData]);
-
-//   const risk = useMemo(() => {
-//     if (isBlacklisted)
-//       return {
-//         label: "KONTRAHENT ZABLOKOWANY",
-//         color: "#b71c1c",
-//         icon: <IoAlertCircleOutline size={22} />,
-//         text: "UWAGA: Czarna lista. Całkowity zakaz sprzedaży z odroczonym terminem płatności.",
-//       };
-//     if (reportData.length === 0)
-//       return {
-//         label: "BRAK HISTORII",
-//         color: "#7f8c8d",
-//         icon: <IoHelpCircleOutline size={22} />,
-//         text: "Brak danych o fakturach dla tego kontrahenta.",
-//       };
-
-//     let totalCritical = 0;
-//     Object.values(statsByYear).forEach((y) => {
-//       totalCritical +=
-//         y.late9to20.count + y.lateOver20.count + y.unpaidOverdue.count;
-//     });
-//     const ratio = totalCritical / reportData.length;
-
-//     if (ratio > 0.15)
-//       return {
-//         label: "WYSOKIE RYZYKO",
-//         color: "#d32f2f",
-//         icon: <IoAlertCircleOutline size={22} />,
-//         text: "Wysoka zaległość lub nieterminowość. Zalecana blokada sprzedaży odroczonej.",
-//       };
-//     return {
-//       label: "WIARYGODNY PŁATNIK",
-//       color: "#2e7d32",
-//       icon: <IoCheckmarkDoneOutline size={22} />,
-//       text: "Klient reguluje płatności terminowo.",
-//     };
-//   }, [reportData, statsByYear, isBlacklisted]);
-
-//   return (
-//     <>
-//       {pleaseWait ? (
-//         <PleaseWait />
-//       ) : (
-//         <div className="sm-edit-wrapper">
-//           <header className="sm-edit-header">
-//             <div className="sm-edit-header-left">
-//               <button className="sm-back-btn" onClick={onBack} title="Wróć">
-//                 <IoArrowBackOutline />
-//               </button>
-//               <div>
-//                 <div
-//                   style={{ display: "flex", alignItems: "center", gap: "12px" }}
-//                 >
-//                   <h1>Raport płatniczy</h1>
-//                   <span className="sm-spolka-badge">{contractor.SPOLKA}</span>
-//                 </div>
-//                 <p>
-//                   Analiza długu i historii:{" "}
-//                   {contractor.NAZWA_KONTRAHENTA_SLOWNIK}
-//                 </p>
-//               </div>
-//             </div>
-//             <div
-//               style={{
-//                 display: "flex",
-//                 alignItems: "center",
-//                 gap: "10px",
-//                 padding: "8px 20px",
-//                 borderRadius: "8px",
-//                 border: `2px solid ${risk.color}`,
-//                 color: risk.color,
-//                 background: `${risk.color}05`,
-//               }}
-//             >
-//               {risk.icon}{" "}
-//               <strong style={{ fontSize: "1rem", textTransform: "uppercase" }}>
-//                 {risk.label}
-//               </strong>
-//             </div>
-//           </header>
-
-//           <div className="sm-edit-grid">
-//             {/* KOLUMNA 1 */}
-//             <section className="sm-edit-column">
-//               <div className="sm-edit-card">
-//                 <h3>DANE PODSTAWOWE</h3>
-//                 <div className="sm-view-field">
-//                   <label>Nazwa kontrahenta</label>
-//                   <span className="sm-value-important">
-//                     {contractor.NAZWA_KONTRAHENTA_SLOWNIK}
-//                   </span>
-//                 </div>
-//                 <div className="sm-view-field">
-//                   <label>Adres siedziby</label>
-//                   <span>
-//                     {contractor.A_ULICA_EXT} {contractor.A_NRDOMU}
-//                     <br />
-//                     {contractor.A_KOD} {contractor.A_MIASTO}
-//                   </span>
-//                 </div>
-//                 <div className="sm-view-row">
-//                   <div className="sm-view-field">
-//                     <label>NIP</label>
-//                     <span>{contractor.KONTR_NIP || "---"}</span>
-//                   </div>
-//                   <div className="sm-view-field">
-//                     <label>Status listy</label>
-//                     <span style={{ color: risk.color, fontWeight: 700 }}>
-//                       {isBlacklisted ? "CZARNA" : "BIAŁA"}
-//                     </span>
-//                   </div>
-//                 </div>
-
-//                 <div className="sm-view-field">
-//                   <label>Zgoda na termin (Przelew)</label>
-//                   <span
-//                     style={{
-//                       color: hasTransferConsent ? "#2e7d32" : "#d32f2f",
-//                       fontWeight: 700,
-//                       display: "flex",
-//                       alignItems: "center",
-//                       gap: "4px",
-//                     }}
-//                   >
-//                     {hasTransferConsent ? "TAK / WYRAŻONA" : "NIE / BRAK"}
-//                     {hasTransferConsent && (
-//                       <small style={{ fontWeight: 400, color: "#7f8c8d" }}>
-//                         ({contractor.PRZYPISANA_FORMA_PLATNOSCI})
-//                       </small>
-//                     )}
-//                   </span>
-//                 </div>
-//               </div>
-//             </section>
-
-//             {/* KOLUMNA 2 */}
-//             <section className="sm-edit-column">
-//               <div className="sm-edit-card highlight-card">
-//                 <h3>STRUKTURA ROZLICZEŃ</h3>
-//                 {Object.keys(statsByYear)
-//                   .sort((a, b) => b - a)
-//                   .map((year) => {
-//                     const s = statsByYear[year];
-//                     const hasOverdue = s.unpaidOverdue.count > 0;
-//                     return (
-//                       <div key={year} style={{ marginBottom: "35px" }}>
-//                         <div
-//                           style={{
-//                             display: "flex",
-//                             justifyContent: "space-between",
-//                             alignItems: "center",
-//                             marginBottom: "10px",
-//                           }}
-//                         >
-//                           <Typography
-//                             variant="h6"
-//                             sx={{ color: "#1976d2", fontWeight: 800 }}
-//                           >
-//                             {year}
-//                           </Typography>
-//                           <span
-//                             style={{
-//                               fontSize: "0.75rem",
-//                               background: "#f1f4f8",
-//                               padding: "4px 10px",
-//                               borderRadius: "20px",
-//                             }}
-//                           >
-//                             Śr. opóźnienie:{" "}
-//                             {s.settled > 0
-//                               ? (s.delaySum / s.settled).toFixed(1)
-//                               : 0}{" "}
-//                             dni
-//                           </span>
-//                         </div>
-
-//                         <div className="sm-unpaid-container">
-//                           <div
-//                             className={`sm-debt-box ${hasOverdue ? "active-debt" : ""}`}
-//                           >
-//                             <div className="sm-debt-header">
-//                               <label>Nierozliczone: PO TERMINIE</label>
-//                               {hasOverdue && (
-//                                 <IoWarning color="#d32f2f" size={18} />
-//                               )}
-//                             </div>
-//                             <div className="sm-debt-content">
-//                               <strong>{s.unpaidOverdue.count} szt.</strong>
-//                               <span className="sm-debt-amount">
-//                                 {formatPLN(s.unpaidOverdue.sum)}
-//                               </span>
-//                             </div>
-//                             {hasOverdue && (
-//                               <small className="sm-debt-note">
-//                                 Wymagana interwencja windykacyjna
-//                               </small>
-//                             )}
-//                           </div>
-//                           <div className="sm-debt-box-clean">
-//                             <label>Nierozliczone: W TERMINIE</label>
-//                             <div className="sm-debt-content-small">
-//                               <span>{s.unpaidInTerm.count} szt.</span>
-//                               <strong>{formatPLN(s.unpaidInTerm.sum)}</strong>
-//                             </div>
-//                           </div>
-//                         </div>
-
-//                         <label className="sm-section-label-mini">
-//                           Historia spłacalności (zamknięte):
-//                         </label>
-//                         <div className="sm-buckets-grid">
-//                           <div
-//                             className="sm-bucket-mini"
-//                             style={{ borderLeftColor: "#2e7d32" }}
-//                           >
-//                             <label>W terminie ({s.before.count})</label>
-//                             <span className="bucket-sum-small">
-//                               {formatPLN(s.before.sum)}
-//                             </span>
-//                           </div>
-//                           <div
-//                             className="sm-bucket-mini"
-//                             style={{ borderLeftColor: "#fbc02d" }}
-//                           >
-//                             <label>1 - 8 dni ({s.late1to8.count})</label>
-//                             <span className="bucket-sum-small">
-//                               {formatPLN(s.late1to8.sum)}
-//                             </span>
-//                           </div>
-//                           <div
-//                             className="sm-bucket-mini"
-//                             style={{ borderLeftColor: "#fb8c00" }}
-//                           >
-//                             <label>9 - 20 dni ({s.late9to20.count})</label>
-//                             <span className="bucket-sum-small">
-//                               {formatPLN(s.late9to20.sum)}
-//                             </span>
-//                           </div>
-//                           <div
-//                             className="sm-bucket-mini"
-//                             style={{ borderLeftColor: "#d32f2f" }}
-//                           >
-//                             <label>Pow. 20 dni ({s.lateOver20.count})</label>
-//                             <span className="bucket-sum-small">
-//                               {formatPLN(s.lateOver20.sum)}
-//                             </span>
-//                           </div>
-//                         </div>
-//                         <Divider sx={{ mt: 3 }} />
-//                       </div>
-//                     );
-//                   })}
-//               </div>
-//             </section>
-
-//             {/* KOLUMNA 3 */}
-//             <section className="sm-edit-column">
-//               <div className="sm-edit-card">
-//                 <h3>ANALIZA I DECYZJA</h3>
-//                 <div
-//                   style={{
-//                     display: "flex",
-//                     flexDirection: "column",
-//                     gap: "15px",
-//                   }}
-//                 >
-//                   <div
-//                     style={{
-//                       padding: "15px",
-//                       borderRadius: "8px",
-//                       background: `${risk.color}15`,
-//                       border: isBlacklisted
-//                         ? `2px solid ${risk.color}`
-//                         : `1px dashed ${risk.color}`,
-//                     }}
-//                   >
-//                     <Typography
-//                       variant="subtitle2"
-//                       sx={{
-//                         color: risk.color,
-//                         fontWeight: 800,
-//                         mb: 1,
-//                         fontSize: "0.7rem",
-//                         textTransform: "uppercase",
-//                       }}
-//                     >
-//                       Rekomendacja:
-//                     </Typography>
-//                     <p
-//                       style={{
-//                         fontSize: "0.95rem",
-//                         margin: 0,
-//                         color: "#2c3e50",
-//                         fontWeight: isBlacklisted ? 700 : 500,
-//                         lineHeight: 1.5,
-//                       }}
-//                     >
-//                       {risk.text}
-//                     </p>
-//                   </div>
-//                   <div className="sm-view-field">
-//                     <label>Łączna liczba faktur w historii</label>
-//                     <span style={{ fontSize: "1.4rem", fontWeight: 700 }}>
-//                       {reportData.length}
-//                     </span>
-//                   </div>
-//                 </div>
-//               </div>
-//             </section>
-//           </div>
-//         </div>
-//       )}
-//     </>
-//   );
-// };
-
-// export default ReportContractor;
-
 import { useState, useEffect, useMemo } from "react";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import PleaseWait from "../../PleaseWait";
 import { Divider, Typography } from "@mui/material";
 import {
   IoArrowBackOutline,
-  IoPauseCircleOutline,
-  IoPlayCircleOutline,
-  IoTrendingUpOutline,
   IoAlertCircleOutline,
-  IoCheckmarkDoneOutline,
-  IoHelpCircleOutline,
   IoWarning,
+  IoShieldCheckmarkOutline,
+  IoLockClosedOutline,
+  IoSearchOutline,
 } from "react-icons/io5";
 
 const formatPLN = (value) => {
@@ -500,8 +64,8 @@ const ReportContractor = ({ contractor, onBack }) => {
           late1to8: { count: 0, sum: 0 },
           late9to20: { count: 0, sum: 0 },
           lateOver20: { count: 0, sum: 0 },
-          unpaidOverdue: { count: 0, sum: 0 }, // REALNY DŁUG (DO_ROZLICZENIA)
-          unpaidInTerm: { count: 0, sum: 0 }, // PORTFEL W TERMINIE (DO_ROZLICZENIA)
+          unpaidOverdue: { count: 0, sum: 0 },
+          unpaidInTerm: { count: 0, sum: 0 },
           settledCount: 0,
           delaySum: 0,
         };
@@ -513,31 +77,24 @@ const ReportContractor = ({ contractor, onBack }) => {
       const termDate = new Date(item.TERMIN);
       termDate.setHours(0, 0, 0, 0);
 
-      // --- LOGIKA 1: FAKTURY NIEROZLICZONE (Zaległości i Portfel) ---
       if (item.DO_ROZLICZENIA > 0) {
         if (termDate < today) {
           s.unpaidOverdue.count++;
-          s.unpaidOverdue.sum += item.DO_ROZLICZENIA; // Używamy kwoty do rozliczenia
+          s.unpaidOverdue.sum += item.DO_ROZLICZENIA;
         } else {
           s.unpaidInTerm.count++;
-          s.unpaidInTerm.sum += item.DO_ROZLICZENIA; // Używamy kwoty do rozliczenia
+          s.unpaidInTerm.sum += item.DO_ROZLICZENIA;
         }
       }
 
-      // --- LOGIKA 2: FAKTURY ROZLICZONE (Historia spłacalności) ---
-      // Analizujemy tylko te, które zostały w pełni lub częściowo zamknięte (DATA_ROZL_AS istnieje)
       if (item.DATA_ROZL_AS) {
         const rozlDate = new Date(item.DATA_ROZL_AS);
         rozlDate.setHours(0, 0, 0, 0);
-
         const diff = Math.ceil((rozlDate - termDate) / (1000 * 3600 * 24));
 
-        // Kwota którą analizujemy historycznie to BRUTTO (zakładamy zamknięcie dokumentu)
-        // Jeśli DO_ROZLICZENIA > 0, to faktura i tak wylądowała już w boksach powyżej
         if (item.DO_ROZLICZENIA === 0) {
           s.settledCount++;
           s.delaySum += diff > 0 ? diff : 0;
-
           if (diff <= 0) {
             s.before.count++;
             s.before.sum += item.BRUTTO;
@@ -558,42 +115,73 @@ const ReportContractor = ({ contractor, onBack }) => {
   }, [reportData]);
 
   const risk = useMemo(() => {
+    // 1. Czarna lista
     if (isBlacklisted)
       return {
-        label: "KONTRAHENT ZABLOKOWANY",
+        label: "ZABLOKOWANY",
         color: "#b71c1c",
-        icon: <IoAlertCircleOutline size={22} />,
-        text: "UWAGA: Czarna lista. Całkowity zakaz sprzedaży z odroczonym terminem płatności.",
+        icon: <IoLockClosedOutline size={22} />,
+        text: "KONTRAHENT NA CZARNEJ LIŚCIE. Bezwzględny zakaz sprzedaży z odroczonym terminem.",
       };
+
+    // 2. Brak danych
     if (reportData.length === 0)
       return {
         label: "BRAK HISTORII",
-        color: "#7f8c8d",
-        icon: <IoHelpCircleOutline size={22} />,
-        text: "Brak danych o fakturach dla tego kontrahenta.",
+        color: "#607d8b",
+        icon: <IoSearchOutline size={22} />,
+        text: "Brak historycznych rozliczeń. Zalecana płatność gotówką/przedpłatą przy pierwszej transakcji.",
       };
 
-    let totalCritical = 0;
-    Object.values(statsByYear).forEach((y) => {
-      totalCritical +=
-        y.late9to20.count + y.lateOver20.count + y.unpaidOverdue.count;
-    });
-    const ratio = totalCritical / reportData.length;
+    let totalInvoices = reportData.length;
+    let totalPaidOnTime = 0;
+    let totalUnpaidOverdueCount = 0;
+    let totalCriticalLateCount = 0;
 
-    if (ratio > 0.15)
+    Object.values(statsByYear).forEach((y) => {
+      totalPaidOnTime += y.before.count;
+      totalUnpaidOverdueCount += y.unpaidOverdue.count;
+      totalCriticalLateCount += y.late9to20.count + y.lateOver20.count;
+    });
+
+    const ratioCritical =
+      (totalCriticalLateCount + totalUnpaidOverdueCount) / totalInvoices;
+
+    // 3. Wysokie Ryzyko (Zaległości lub recydywa w spóźnieniach)
+    if (totalUnpaidOverdueCount > 0 || ratioCritical > 0.15)
       return {
         label: "WYSOKIE RYZYKO",
-        color: "#d32f2f",
+        color: "#c62828",
         icon: <IoAlertCircleOutline size={22} />,
-        text: "Wysoka zaległość lub nieterminowość. Zalecana blokada sprzedaży odroczonej.",
+        text: `Klient posiada ${totalUnpaidOverdueCount} faktur po terminie lub wykazuje wysoką nieterminowość (${(ratioCritical * 100).toFixed(0)}%). Zalecana blokada odroczonych płatności.`,
       };
+
+    // 4. Brak formalnej zgody na przelew (Niezależnie od jakości płatności)
+    if (!hasTransferConsent)
+      return {
+        label: "BRAK UPRAWNIEŃ",
+        color: "#ef6c00",
+        icon: <IoWarning size={22} />,
+        text: "Klient nie posiada w systemie zgody na odroczony termin płatności (formę: Przelew).",
+      };
+
+    // 5. Średnie Ryzyko / Ograniczone zaufanie (Zbyt mało danych)
+    if (totalPaidOnTime < 3)
+      return {
+        label: "OGRANICZONE ZAUFANIE",
+        color: "#f9a825",
+        icon: <IoAlertCircleOutline size={22} />,
+        text: `Niewystarczająca historia współpracy (tylko ${totalPaidOnTime} faktur zapłaconych w terminie). Zalecana ostrożność przy wyznaczaniu limitów.`,
+      };
+
+    // 6. Wiarygodny płatnik
     return {
       label: "WIARYGODNY PŁATNIK",
       color: "#2e7d32",
-      icon: <IoCheckmarkDoneOutline size={22} />,
-      text: "Klient reguluje płatności terminowo.",
+      icon: <IoShieldCheckmarkOutline size={22} />,
+      text: "Klient posiada stabilną historię terminowych płatności oraz wymaganą zgodę na formę przelewową.",
     };
-  }, [reportData, statsByYear, isBlacklisted]);
+  }, [reportData, statsByYear, isBlacklisted, hasTransferConsent]);
 
   return (
     <>
@@ -624,15 +212,18 @@ const ReportContractor = ({ contractor, onBack }) => {
                 display: "flex",
                 alignItems: "center",
                 gap: "10px",
-                padding: "8px 20px",
-                borderRadius: "8px",
+                padding: "10px 24px",
+                borderRadius: "12px",
                 border: `2px solid ${risk.color}`,
                 color: risk.color,
-                background: `${risk.color}05`,
+                background: `${risk.color}08`,
+                boxShadow: `0 4px 12px ${risk.color}15`,
               }}
             >
-              {risk.icon}{" "}
-              <strong style={{ fontSize: "1rem", textTransform: "uppercase" }}>
+              {risk.icon}
+              <strong
+                style={{ fontSize: "1.1rem", textTransform: "uppercase" }}
+              >
                 {risk.label}
               </strong>
             </div>
@@ -664,7 +255,12 @@ const ReportContractor = ({ contractor, onBack }) => {
                   </div>
                   <div className="sm-view-field">
                     <label>Status listy</label>
-                    <span style={{ color: risk.color, fontWeight: 700 }}>
+                    <span
+                      style={{
+                        color: isBlacklisted ? "#b71c1c" : "#2e7d32",
+                        fontWeight: 700,
+                      }}
+                    >
                       {isBlacklisted ? "CZARNA" : "BIAŁA"}
                     </span>
                   </div>
@@ -673,12 +269,36 @@ const ReportContractor = ({ contractor, onBack }) => {
                   <label>Zgoda na termin (Przelew)</label>
                   <span
                     style={{
-                      color: hasTransferConsent ? "#2e7d32" : "#d32f2f",
+                      color: hasTransferConsent ? "#2e7d32" : "#c62828",
                       fontWeight: 700,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
                     }}
                   >
-                    {hasTransferConsent ? "TAK / WYRAŻONA" : "NIE / BRAK"}
+                    {hasTransferConsent ? (
+                      <>
+                        <IoShieldCheckmarkOutline /> TAK / WYRAŻONA
+                      </>
+                    ) : (
+                      <>
+                        <IoAlertCircleOutline /> NIE / BRAK
+                      </>
+                    )}
                   </span>
+                  {!hasTransferConsent && (
+                    <small
+                      style={{
+                        color: "#c62828",
+                        marginTop: "4px",
+                        display: "block",
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      * Klient nie posiada w systemie zgody na odroczony termin
+                      płatności!
+                    </small>
+                  )}
                 </div>
               </div>
             </section>
@@ -687,6 +307,17 @@ const ReportContractor = ({ contractor, onBack }) => {
             <section className="sm-edit-column">
               <div className="sm-edit-card highlight-card">
                 <h3>STRUKTURA ROZLICZEŃ</h3>
+                {Object.keys(statsByYear).length === 0 && (
+                  <p
+                    style={{
+                      textAlign: "center",
+                      color: "#7f8c8d",
+                      padding: "20px",
+                    }}
+                  >
+                    Brak danych operacyjnych
+                  </p>
+                )}
                 {Object.keys(statsByYear)
                   .sort((a, b) => b - a)
                   .map((year) => {
@@ -729,7 +360,7 @@ const ReportContractor = ({ contractor, onBack }) => {
                             className={`sm-debt-box ${hasOverdue ? "active-debt" : ""}`}
                           >
                             <div className="sm-debt-header">
-                              <label>Nierozliczone: PO TERMINIE</label>
+                              <label>Zaległości: PO TERMINIE</label>
                               {hasOverdue && (
                                 <IoWarning color="#d32f2f" size={18} />
                               )}
@@ -740,15 +371,9 @@ const ReportContractor = ({ contractor, onBack }) => {
                                 {formatPLN(s.unpaidOverdue.sum)}
                               </span>
                             </div>
-                            {hasOverdue && (
-                              <small className="sm-debt-note">
-                                Wymagana interwencja windykacyjna
-                              </small>
-                            )}
                           </div>
-
                           <div className="sm-debt-box-clean">
-                            <label>Nierozliczone: W TERMINIE</label>
+                            <label>W terminie (OTWARTE)</label>
                             <div className="sm-debt-content-small">
                               <span>{s.unpaidInTerm.count} szt.</span>
                               <strong>{formatPLN(s.unpaidInTerm.sum)}</strong>
@@ -773,7 +398,7 @@ const ReportContractor = ({ contractor, onBack }) => {
                             className="sm-bucket-mini"
                             style={{ borderLeftColor: "#fbc02d" }}
                           >
-                            <label>1 - 8 dni ({s.late1to8.count})</label>
+                            <label>1-8 dni ({s.late1to8.count})</label>
                             <span className="bucket-sum-small">
                               {formatPLN(s.late1to8.sum)}
                             </span>
@@ -782,7 +407,7 @@ const ReportContractor = ({ contractor, onBack }) => {
                             className="sm-bucket-mini"
                             style={{ borderLeftColor: "#fb8c00" }}
                           >
-                            <label>9 - 20 dni ({s.late9to20.count})</label>
+                            <label>9-20 dni ({s.late9to20.count})</label>
                             <span className="bucket-sum-small">
                               {formatPLN(s.late9to20.sum)}
                             </span>
@@ -807,7 +432,7 @@ const ReportContractor = ({ contractor, onBack }) => {
             {/* KOLUMNA 3 */}
             <section className="sm-edit-column">
               <div className="sm-edit-card">
-                <h3>ANALIZA I DECYZJA</h3>
+                <h3>REKOMENDACJA SYSTEMOWA</h3>
                 <div
                   style={{
                     display: "flex",
@@ -817,12 +442,10 @@ const ReportContractor = ({ contractor, onBack }) => {
                 >
                   <div
                     style={{
-                      padding: "15px",
-                      borderRadius: "8px",
-                      background: `${risk.color}15`,
-                      border: isBlacklisted
-                        ? `2px solid ${risk.color}`
-                        : `1px dashed ${risk.color}`,
+                      padding: "20px",
+                      borderRadius: "12px",
+                      background: `${risk.color}10`,
+                      border: `2px solid ${risk.color}`,
                     }}
                   >
                     <Typography
@@ -830,27 +453,37 @@ const ReportContractor = ({ contractor, onBack }) => {
                       sx={{
                         color: risk.color,
                         fontWeight: 800,
-                        mb: 1,
+                        mb: 1.5,
                         fontSize: "0.9rem",
                         textTransform: "uppercase",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
                       }}
                     >
-                      Rekomendacja:
+                      {risk.icon} Status:
                     </Typography>
                     <p
                       style={{
-                        fontSize: ".95rem",
+                        fontSize: "1rem",
                         margin: 0,
                         color: "#2c3e50",
-                        fontWeight: isBlacklisted ? 700 : 500,
-                        lineHeight: 1.5,
+                        fontWeight: 500,
+                        lineHeight: 1.6,
                       }}
                     >
                       {risk.text}
                     </p>
                   </div>
-                  <div className="sm-view-field">
-                    <label>Łączna liczba faktur w historii</label>
+                  <div
+                    className="sm-view-field"
+                    style={{
+                      background: "#f8f9fa",
+                      padding: "15px",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    <label>Łączna liczba wszystkich faktur</label>
                     <span style={{ fontSize: "1.4rem", fontWeight: 700 }}>
                       {reportData.length}
                     </span>

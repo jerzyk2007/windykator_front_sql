@@ -74,9 +74,22 @@ const ContractorSettings = ({ viewMode }) => {
     }
   }, [isEditing]);
 
-  useEffect(() => {
-    searchRef.current?.focus();
-  }, []);
+  // Dodaj to wewnątrz komponentu ContractorSettings
+  // useEffect(() => {
+  //   // Resetuj wszystkie stany, gdy zmienia się tryb widoku
+  //   setSearch("");
+  //   setContractors([]);
+  //   setSelectedContractor(null);
+  //   setIsEditing(false);
+  //   setHasSearched(false);
+
+  //   // Opcjonalnie: ustaw fokus na wyszukiwarkę po resecie
+  //   setTimeout(() => searchRef.current?.focus(), 0);
+  // }, [viewMode]); // Wykona się za każdym razem, gdy viewMode się zmieni
+
+  //   useEffect(() => {
+  //     searchRef.current?.focus();
+  //   }, []);
 
   return (
     <main className="sm-container">
