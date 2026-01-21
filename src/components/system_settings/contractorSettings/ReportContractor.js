@@ -613,7 +613,7 @@ const ReportContractor = ({ contractor, onBack }) => {
                   <h1>Raport płatniczy</h1>
                   <span className="sm-spolka-badge">{contractor.SPOLKA}</span>
                 </div>
-                <p>
+                <p style={{ fontSize: "1rem" }}>
                   Analiza długu i historii:{" "}
                   {contractor.NAZWA_KONTRAHENTA_SLOWNIK}
                 </p>
@@ -710,7 +710,7 @@ const ReportContractor = ({ contractor, onBack }) => {
                           </Typography>
                           <span
                             style={{
-                              fontSize: "0.75rem",
+                              fontSize: "0.85rem",
                               background: "#f1f4f8",
                               padding: "4px 10px",
                               borderRadius: "20px",
@@ -831,7 +831,7 @@ const ReportContractor = ({ contractor, onBack }) => {
                         color: risk.color,
                         fontWeight: 800,
                         mb: 1,
-                        fontSize: "0.7rem",
+                        fontSize: "0.9rem",
                         textTransform: "uppercase",
                       }}
                     >
@@ -839,7 +839,7 @@ const ReportContractor = ({ contractor, onBack }) => {
                     </Typography>
                     <p
                       style={{
-                        fontSize: "0.95rem",
+                        fontSize: ".95rem",
                         margin: 0,
                         color: "#2c3e50",
                         fontWeight: isBlacklisted ? 700 : 500,

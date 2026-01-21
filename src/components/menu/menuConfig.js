@@ -266,18 +266,24 @@ export const menuItems = [
           },
         ],
       },
+      // {
+      //   label: "Kontrahent",
+      //   roles: [150, 2000],
+      //   company: [],
+      //   sideMenu: [
+      //     {
+      //       label: "Raport wiarygodności kontrahenta",
+      //       path: "/conractor-single-raport",
+      //       roles: [150, 2000],
+      //       company: [],
+      //     },
+      //   ],
+      // },
       {
-        label: "Kontrahent",
+        label: "Raport wiarygodności kontrahenta",
+        path: "/conractor-single-raport",
         roles: [150, 2000],
         company: [],
-        sideMenu: [
-          {
-            label: "Raport wiarygodności kontrahenta",
-            path: "/conractor-single-raport",
-            roles: [150, 2000],
-            company: [],
-          },
-        ],
       },
       {
         label: "Kalkulator odsetek ustawowych",
