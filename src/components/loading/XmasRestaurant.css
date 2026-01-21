@@ -19,11 +19,11 @@ canvas {
   top: 30px;
   width: 100%;
   text-align: center;
-  color: #147e1d;
+  color: #141f7e;
   font-family: "Courier New", Courier, monospace;
-  font-size: 32px;
+  font-size: 2.5rem;
   font-weight: bold;
-  text-shadow: 3px 3px 0px #23cf7f;
+  /* text-shadow: 3px 3px 0px #2359cf; */
   z-index: 10;
 }
 
