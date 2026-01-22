@@ -41,7 +41,7 @@ const InterestCalculator = () => {
           amount: numericAmount,
           deadlineDate: formData.deadlineDate,
           paymentDate: formData.paymentDate,
-        }
+        },
       );
       setResults(response.data);
     } catch (error) {
@@ -111,13 +111,13 @@ const InterestCalculator = () => {
                 <div style={{ flex: 2 }}>
                   <div
                     className="calc_item_dates"
-                    style={{ fontSize: "0.9rem", fontWeight: 600 }}
+                    style={{ fontSize: "1rem", fontWeight: 600 }}
                   >
                     {item.od_do}
                   </div>
                   <div
                     className="calc_item_rate"
-                    style={{ fontSize: "0.8rem", color: "#64748b" }}
+                    style={{ fontSize: "0.9rem", color: "#64748b" }}
                   >
                     stawka: {item.stawka}
                   </div>
@@ -126,7 +126,7 @@ const InterestCalculator = () => {
                   style={{
                     flex: 0.8,
                     textAlign: "center",
-                    fontSize: "0.9rem",
+                    fontSize: "1rem",
                   }}
                 >
                   {item.liczba_dni}
@@ -136,7 +136,7 @@ const InterestCalculator = () => {
                     flex: 1.2,
                     textAlign: "right",
                     fontWeight: "700",
-                    fontSize: "0.9rem",
+                    fontSize: "1rem",
                   }}
                 >
                   {formatMoney(item.kwota)}

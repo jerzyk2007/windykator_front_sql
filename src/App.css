@@ -496,7 +496,7 @@
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: #1976d2;
   border-bottom: 1px solid #eef2f6;
 }
@@ -536,7 +536,7 @@
 }
 
 .sm-contact-val {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 500;
   color: #2c3e50;
   white-space: nowrap;
@@ -548,6 +548,22 @@
 .sm-contact-flags {
   display: flex;
   gap: 2px;
+}
+
+.sm-contact-flags .MuiIconButton-root svg {
+  font-size: 1.5rem; /* Lub dowolna inna wartość */
+}
+
+/* Powiększenie tekstu w dymkach podpowiedzi */
+.MuiTooltip-tooltip {
+  font-size: 0.9rem !important;
+  padding: 8px 12px !important;
+  background-color: #333 !important;
+}
+
+/* Powiększenie strzałki (opcjonalnie) */
+.MuiTooltip-arrow {
+  color: #333 !important;
 }
 
 /* Komunikaty błędów */
