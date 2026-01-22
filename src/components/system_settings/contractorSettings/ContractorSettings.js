@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { LiaEditSolid } from "react-icons/lia";
-import { IoSearchOutline } from "react-icons/io5";
+import { IoSearchOutline, IoEye } from "react-icons/io5"; // Dodałem ikonę raportu
 import PleaseWait from "../../PleaseWait";
 import { Button } from "@mui/material";
 import EditContractor from "./EditContractor";
@@ -18,7 +18,7 @@ const ContractorSettings = ({ viewMode }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
-  // Formatowanie adresu z pól A_ (Główny)
+  // Formatowanie adresu
   const formatAddress = (c) => {
     const street = c.A_ULICA_EXT || "";
     const houseNum = c.A_NRDOMU || "";
@@ -39,7 +39,7 @@ const ContractorSettings = ({ viewMode }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (search.length < 5) return;
 
     setPleaseWait(true);
@@ -66,30 +66,16 @@ const ContractorSettings = ({ viewMode }) => {
     if (hasSearched) setHasSearched(false);
   };
 
+  // USUNIĘTO useEffect, który czyścił stan przy powrocie (isEditing === false)
+  // Dzięki temu lista 'contractors' zostanie zachowana w pamięci komponentu.
+
+  // Opcjonalnie: Resetuj listę TYLKO gdy zmienia się tryb (np. z Edycji na Raporty w menu bocznym)
   useEffect(() => {
-    if (!isEditing) {
-      setContractors([]);
-      setSearch("");
-      setHasSearched(false);
-    }
-  }, [isEditing]);
-
-  // Dodaj to wewnątrz komponentu ContractorSettings
-  // useEffect(() => {
-  //   // Resetuj wszystkie stany, gdy zmienia się tryb widoku
-  //   setSearch("");
-  //   setContractors([]);
-  //   setSelectedContractor(null);
-  //   setIsEditing(false);
-  //   setHasSearched(false);
-
-  //   // Opcjonalnie: ustaw fokus na wyszukiwarkę po resecie
-  //   setTimeout(() => searchRef.current?.focus(), 0);
-  // }, [viewMode]); // Wykona się za każdym razem, gdy viewMode się zmieni
-
-  //   useEffect(() => {
-  //     searchRef.current?.focus();
-  //   }, []);
+    setContractors([]);
+    setSearch("");
+    setHasSearched(false);
+    setIsEditing(false);
+  }, [viewMode]);
 
   return (
     <main className="sm-container">
@@ -101,7 +87,7 @@ const ContractorSettings = ({ viewMode }) => {
                 ? "Zarządzanie Kontrahentami"
                 : "Historia rozliczeń i windykacji Kontrahenta"}
             </h1>
-            <p>Wyszukaj kontrahenta, aby edytować dane w systemie</p>
+            <p>Wyszukaj kontrahenta, aby wyświetlić szczegóły</p>
           </header>
 
           <section className="sm-search-area">
@@ -129,23 +115,20 @@ const ContractorSettings = ({ viewMode }) => {
 
           <section className="sm-results-list">
             {contractors.map((c, index) => (
-              <div className="sm-result-card" key={c.id_kontrahent || index}>
-                {/* AWATAR: F dla Firmy (niebieski), P dla Prywatnego (zielony) */}
+              <div className="sm-result-card" key={c.KONTRAHENT_ID || index}>
                 <div
                   className="sm-avatar"
                   style={{
                     background:
                       c.IS_FIRMA === 1
-                        ? "linear-gradient(135deg, #1976d2, #42a5f5)" // Niebieski dla firm
-                        : "linear-gradient(135deg, #2e7d32, #66bb6a)", // Zielony dla prywatnych
+                        ? "linear-gradient(135deg, #1976d2, #42a5f5)"
+                        : "linear-gradient(135deg, #2e7d32, #66bb6a)",
                     fontSize: "1.4rem",
                   }}
-                  title={c.IS_FIRMA === 1 ? "Firma" : "Osoba prywatna"}
                 >
                   {c.IS_FIRMA === 1 ? "F" : "P"}
                 </div>
 
-                {/* 1. Nazwa i NIP */}
                 <div className="sm-info" style={{ flex: 2 }}>
                   <span className="sm-info-label">Nazwa i NIP</span>
                   <h3 className="sm-info-value">
@@ -154,13 +137,10 @@ const ContractorSettings = ({ viewMode }) => {
                   <small className="sm-info-subvalue">
                     {c.KONTR_NIP
                       ? `NIP: ${c.KONTR_NIP}`
-                      : c.PESEL
-                        ? `PESEL: ${c.PESEL}`
-                        : "Brak identyfikatora"}
+                      : `PESEL: ${c.PESEL || "---"}`}
                   </small>
                 </div>
 
-                {/* 2. Adres Główny */}
                 <div className="sm-info">
                   <span className="sm-info-label">Adres Główny</span>
                   <p
@@ -171,7 +151,6 @@ const ContractorSettings = ({ viewMode }) => {
                   </p>
                 </div>
 
-                {/* 3. Spółka i ID */}
                 <div className="sm-info">
                   <span className="sm-info-label">System / Spółka</span>
                   <p className="sm-info-value">{c.SPOLKA || "---"}</p>
@@ -180,16 +159,15 @@ const ContractorSettings = ({ viewMode }) => {
                   </small>
                 </div>
 
-                {/* Akcja */}
                 <button
                   className="sm-action-btn"
                   onClick={() => {
                     setSelectedContractor(c);
                     setIsEditing(true);
                   }}
-                  title="Edytuj dane kontrahenta"
+                  title={viewMode === "edit" ? "Edytuj dane" : "Pokaż raport"}
                 >
-                  <LiaEditSolid />
+                  {viewMode === "edit" ? <LiaEditSolid /> : <IoEye />}
                 </button>
               </div>
             ))}
