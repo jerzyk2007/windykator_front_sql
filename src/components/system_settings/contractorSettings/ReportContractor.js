@@ -68,19 +68,20 @@ const ReportContractor = ({ contractor, onBack }) => {
           unpaidInTerm: { count: 0, sum: 0 },
           settledCount: 0,
           delaySum: 0,
-          historyOkCount: 0, // Licznik wszystkich terminowych wpłat (nawet tych rozliczonych)
+          historyOkCount: 0,
         };
       }
       const s = stats[year];
       const amountToSettle = item.DO_ROZLICZENIA || 0;
+      const totalBrutto = item.BRUTTO || 0;
 
       s.count++;
-      s.totalBrutto += item.BRUTTO || 0;
+      s.totalBrutto += totalBrutto;
 
       const termDate = new Date(item.TERMIN);
       termDate.setHours(0, 0, 0, 0);
 
-      // 1. GŁÓWNE BOKSY (Zadłużenie bieżące)
+      // 1. ZADŁUŻENIE BIEŻĄCE (Tylko to, co jeszcze nie zostało zapłacone)
       if (amountToSettle > 0) {
         if (termDate < today) {
           s.unpaidOverdue.count++;
@@ -91,12 +92,14 @@ const ReportContractor = ({ contractor, onBack }) => {
         }
       }
 
-      // 2. ANALIZA TERMINOWOŚCI (KOSZYKI)
+      // 2. ANALIZA TERMINOWOŚCI (Wszystkie faktury historycznie - wg BRUTTO)
       let compareDate;
       if (amountToSettle === 0 && item.DATA_ROZL_AS) {
+        // Jeśli zapłacona - patrzymy kiedy faktycznie wpłynęły środki
         compareDate = new Date(item.DATA_ROZL_AS);
         s.settledCount++;
       } else {
+        // Jeśli nie zapłacona - patrzymy na dzisiaj
         compareDate = today;
       }
       compareDate.setHours(0, 0, 0, 0);
@@ -104,25 +107,23 @@ const ReportContractor = ({ contractor, onBack }) => {
       const diff = Math.ceil((compareDate - termDate) / (1000 * 3600 * 24));
 
       if (diff <= 0) {
-        s.historyOkCount++; // Zliczamy do ogólnej wiarygodności
-        if (amountToSettle > 0) {
-          s.before.count++;
-          s.before.sum += amountToSettle;
-        }
+        // Zapłacone w terminie lub przed czasem
+        s.historyOkCount++;
+        s.before.count++;
+        s.before.sum += totalBrutto;
       } else {
-        if (amountToSettle === 0) s.delaySum += diff; // Tylko dla rozliczonych do statystyk średniej
+        // Spóźnione
+        if (amountToSettle === 0) s.delaySum += diff; // Średnia tylko z rozliczonych
 
-        if (amountToSettle > 0) {
-          if (diff <= 8) {
-            s.late1to8.count++;
-            s.late1to8.sum += amountToSettle;
-          } else if (diff <= 20) {
-            s.late9to20.count++;
-            s.late9to20.sum += amountToSettle;
-          } else {
-            s.lateOver20.count++;
-            s.lateOver20.sum += amountToSettle;
-          }
+        if (diff <= 8) {
+          s.late1to8.count++;
+          s.late1to8.sum += totalBrutto;
+        } else if (diff <= 20) {
+          s.late9to20.count++;
+          s.late9to20.sum += totalBrutto;
+        } else {
+          s.lateOver20.count++;
+          s.lateOver20.sum += totalBrutto;
         }
       }
     });
@@ -147,9 +148,9 @@ const ReportContractor = ({ contractor, onBack }) => {
       };
 
     let totalInvoices = reportData.length;
-    let totalPaidInTermHistory = 0;
     let totalUnpaidOverdueCount = 0;
     let totalCriticalLateCount = 0;
+    let totalPaidInTermHistory = 0;
 
     Object.values(statsByYear).forEach((y) => {
       totalPaidInTermHistory += y.historyOkCount;
@@ -160,25 +161,22 @@ const ReportContractor = ({ contractor, onBack }) => {
     const ratioCritical =
       (totalCriticalLateCount + totalUnpaidOverdueCount) / totalInvoices;
 
-    // 1. WYSOKIE RYZYKO
     if (totalUnpaidOverdueCount > 0 || ratioCritical > 0.15)
       return {
         label: "WYSOKIE RYZYKO",
         color: "#c62828",
         icon: <IoAlertCircleOutline size={22} />,
-        text: `Wykryto ${totalUnpaidOverdueCount} zaległości płatniczych lub niski poziom dyscypliny (${(ratioCritical * 100).toFixed(1)}% spóźnień).`,
+        text: `Wykryto ${totalUnpaidOverdueCount} zaległości płatniczych lub niską dyscyplinę (${(ratioCritical * 100).toFixed(1)}% spóźnień).`,
       };
 
-    // 2. BRAK UPRAWNIEŃ
     if (!hasTransferConsent)
       return {
         label: "BRAK UPRAWNIEŃ",
         color: "#ef6c00",
         icon: <IoWarning size={22} />,
-        text: "Klient nie ma przypisanej formy płatności 'Przelew'. Sprzedaż tylko gotówkowa.",
+        text: "Klient nie ma przypisanej formy płatności 'Przelew'.",
       };
 
-    // 3. WIARYGODNY PŁATNIK (Zasada 3 faktur)
     if (totalPaidInTermHistory >= 3 && ratioCritical <= 0.05)
       return {
         label: "WIARYGODNY PŁATNIK",
@@ -187,12 +185,11 @@ const ReportContractor = ({ contractor, onBack }) => {
         text: "Rzetelny płatnik. Pozytywna historia i brak bieżących zaległości.",
       };
 
-    // 4. OGRANICZONE ZAUFANIE (Nowy lub drobne spóźnienia)
     return {
       label: "OGRANICZONE ZAUFANIE",
       color: "#f9a825",
       icon: <IoWarning size={22} />,
-      text: "Zbyt krótka historia współpracy (poniżej 3 faktur) lub występujące drobne opóźnienia.",
+      text: "Zbyt krótka historia współpracy lub drobne opóźnienia płatnicze.",
     };
   }, [reportData, statsByYear, isBlacklisted, hasTransferConsent]);
 
@@ -282,7 +279,7 @@ const ReportContractor = ({ contractor, onBack }) => {
             {/* KOLUMNA 2: STRUKTURA ROZLICZEŃ */}
             <section className="sm-edit-column">
               <div className="sm-edit-card highlight-card">
-                <h3>STRUKTURA ROZLICZEŃ (DŁUG)</h3>
+                <h3>STRUKTURA ROZLICZEŃ</h3>
                 {Object.keys(statsByYear).length === 0 && (
                   <p
                     style={{
@@ -315,7 +312,7 @@ const ReportContractor = ({ contractor, onBack }) => {
                             {year}
                           </Typography>
                           <span style={{ fontSize: "0.85rem", color: "#666" }}>
-                            Śr. spóźnienie:{" "}
+                            Śr. spóźnienie (rozliczone):{" "}
                             {s.settledCount > 0
                               ? (s.delaySum / s.settledCount).toFixed(1)
                               : 0}{" "}
@@ -323,18 +320,19 @@ const ReportContractor = ({ contractor, onBack }) => {
                           </span>
                         </div>
 
+                        {/* BOKSY ZADŁUŻENIA (Kwoty do zapłaty) */}
                         <div className="sm-unpaid-container">
                           <div
                             className={`sm-debt-box ${hasOverdue ? "active-debt" : ""}`}
                           >
-                            <label>PO TERMINIE</label>
+                            <label>OBECNIE PO TERMINIE</label>
                             <div className="sm-debt-content">
                               <strong>{s.unpaidOverdue.count} szt.</strong>
                               <span>{formatPLN(s.unpaidOverdue.sum)}</span>
                             </div>
                           </div>
                           <div className="sm-debt-box-clean">
-                            <label>W TERMINIE (OTWARTE)</label>
+                            <label>OTWARTE W TERMINIE</label>
                             <div className="sm-debt-content">
                               <strong>{s.unpaidInTerm.count} szt.</strong>
                               <span>{formatPLN(s.unpaidInTerm.sum)}</span>
@@ -342,8 +340,9 @@ const ReportContractor = ({ contractor, onBack }) => {
                           </div>
                         </div>
 
+                        {/* KOSZYKI HISTORYCZNE (Suma Brutto wszystkich faktur) */}
                         <label className="sm-section-label-mini">
-                          Wiek obecnego zadłużenia:
+                          Historia terminowości (wszystkie faktury wg Brutto):
                         </label>
                         <div className="sm-buckets-grid">
                           <div
@@ -357,21 +356,25 @@ const ReportContractor = ({ contractor, onBack }) => {
                             className="sm-bucket-mini"
                             style={{ borderLeftColor: "#fbc02d" }}
                           >
-                            <label>1-8 dni ({s.late1to8.count})</label>
+                            <label>
+                              Spóźnione 1-8 dni ({s.late1to8.count})
+                            </label>
                             <span>{formatPLN(s.late1to8.sum)}</span>
                           </div>
                           <div
                             className="sm-bucket-mini"
                             style={{ borderLeftColor: "#fb8c00" }}
                           >
-                            <label>9-20 dni ({s.late9to20.count})</label>
+                            <label>
+                              Spóźnione 9-20 dni ({s.late9to20.count})
+                            </label>
                             <span>{formatPLN(s.late9to20.sum)}</span>
                           </div>
                           <div
                             className="sm-bucket-mini"
                             style={{ borderLeftColor: "#d32f2f" }}
                           >
-                            <label>Pow. 20 dni ({s.lateOver20.count})</label>
+                            <label>Ponad 20 dni ({s.lateOver20.count})</label>
                             <span>{formatPLN(s.lateOver20.sum)}</span>
                           </div>
                         </div>
