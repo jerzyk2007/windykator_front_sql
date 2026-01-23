@@ -24,7 +24,11 @@ import {
 } from "./utilsForTable/excelFilteredTable";
 import TableButtonInfo from "./TableButtonInfo";
 import EditRowTablePro from "./editDocument/EditRowTablePro";
-import { commonTableHeadCellProps } from "./utilsForTable/tableFunctions";
+import {
+  commonTableHeadCellProps,
+  basePath,
+} from "./utilsForTable/tableFunctions";
+
 import PleaseWait from "../PleaseWait";
 
 import "./Table.css";
@@ -256,21 +260,29 @@ const Table = ({
         edit: true,
         singleDoc: {},
       }));
-
       try {
-        let response;
-        if (profile === "insider") {
-          response = await axiosPrivateIntercept.get(
-            `/documents/get-single-document/${id}`,
-          );
-          setDataRowTable({
-            edit: true,
-            singleDoc: response?.data?.singleDoc || {},
-            controlDoc: response?.data?.controlDoc || {},
-            lawPartner: response?.data?.lawPartner || [],
-          });
+        const getRow = documents.filter((row) => row.id_document === id);
+
+        if (getRow.length > 0) {
+          try {
+            const response = await axiosPrivateIntercept.get(
+              `${basePath[profile]}/get-single-document/${id}`,
+            );
+            setDataRowTable({
+              edit: true,
+              singleDoc: response?.data?.singleDoc || {},
+              controlDoc: response?.data?.controlDoc || {},
+              lawPartner: response?.data?.lawPartner || [],
+            });
+          } catch (error) {
+            console.error("Error fetching data from the server:", error);
+          } finally {
+            // setTimeout(() => {
+            //   setPleaseWait(false);
+            // }, 100);
+            setPleaseWait(false);
+          }
         }
-        // ... reszta logiki filtrów profilu (partner/insurance)
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

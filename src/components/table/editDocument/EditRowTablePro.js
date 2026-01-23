@@ -54,7 +54,6 @@ const EditRowTablePro = ({
     };
     return panelMap[info] ?? "doc-actions";
   });
-
   // zmienna dla obsługi panelu KOntrola BL
   const [documentControlBL, setDocumentControlBL] = useState({
     COMPANY: dataRowTable?.controlDoc?.COMPANY || null,
@@ -141,6 +140,8 @@ const EditRowTablePro = ({
       } else if (profile === "partner") {
         updateDocuments(changeSingleDocLawPartner(rowData));
       } else if (profile === "insurance") {
+        updateDocuments(rowData);
+      } else if (profile === "vindex") {
         updateDocuments(rowData);
       }
 

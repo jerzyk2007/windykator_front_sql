@@ -115,7 +115,7 @@ const ContractorSettings = ({ viewMode }) => {
 
           <section className="sm-results-list">
             {contractors.map((c, index) => (
-              <div className="sm-result-card" key={c.KONTRAHENT_ID || index}>
+              <div className="sm-result-card" key={index}>
                 <div
                   className="sm-avatar"
                   style={{
@@ -183,6 +183,7 @@ const ContractorSettings = ({ viewMode }) => {
         <>
           {viewMode === "edit" && (
             <EditContractor
+              id={selectedContractor.id_kontrahent}
               contractor={selectedContractor}
               onBack={() => setIsEditing(false)}
             />

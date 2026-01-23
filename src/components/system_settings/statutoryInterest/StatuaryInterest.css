@@ -10,13 +10,16 @@
   background-color: #ffffff;
   border: 1px solid rgb(226, 226, 226);
   border-radius: 1.25rem;
-  display: flex;
-  flex-direction: column;
+
+  font-family: "Source Sans 3", Calibri, sans-serif;
+
   /* height: calc(100vh - 70px);
   max-height: calc(100vh - 70px); */
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
   overflow: hidden; /* KLUCZOWE: modal nie wyjdzie poza zaokrąglenia */
+  display: flex;
+  flex-direction: column;
 }
 
 .interest_rates_header {
@@ -188,7 +191,7 @@
   border-radius: 8px;
   background-color: #f8fafc;
   font-size: 1rem;
-  /* font-family: inherit; */
+  font-family: "Source Sans 3", Calibri, sans-serif;
   box-sizing: border-box;
   transition: all 0.2s;
 }

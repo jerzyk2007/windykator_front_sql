@@ -62,6 +62,14 @@
   justify-content: space-between;
 }
 
+.ertp-label-clickable:hover {
+  cursor: pointer;
+  background-color: #f0f9ff;
+  color: #0369a1;
+  border-color: #7dd3fc;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(3, 105, 161, 0.15);
+}
 /* Fix dla kolumn, które mają wypełniać 100% wysokości (np. Czat) */
 .ertp-column--fill {
   display: flex;
