@@ -235,78 +235,6 @@ const Table = ({
     }
   };
 
-  // const updateDocuments = (editRowData) => {
-  //   const newDocuments = documents.map((item) => {
-  //     if (item.id_document === editRowData.id_document) {
-  //       return editRowData;
-  //     } else {
-  //       return item;
-  //     }
-  //   });
-  //   setDocuments(newDocuments);
-  // };
-
-  // const getSingleRow = async (id, type) => {
-  //   setPleaseWait(true);
-  //   // NATYCHMIAST CZYŚCIMY DANE, ALE ZOSTAWIAMY TRYB EDYCJI
-  //   setDataRowTable((prev) => ({
-  //     ...prev,
-  //     edit: true,
-  //     singleDoc: {}, // To usuwa "ducha" starego dokumentu
-  //     controlDoc: {},
-  //     lawPartner: [],
-  //   }));
-  //   const getRow = documents.filter((row) => row.id_document === id);
-
-  //   if (getRow.length > 0) {
-  //     try {
-  //       if (profile === "insider") {
-  //         const response = await axiosPrivateIntercept.get(
-  //           `/documents/get-single-document/${id}`,
-  //         );
-  //         setDataRowTable({
-  //           edit: true,
-  //           singleDoc: response?.data?.singleDoc ? response.data.singleDoc : {},
-  //           controlDoc: response?.data?.controlDoc
-  //             ? response.data.controlDoc
-  //             : {},
-  //           lawPartner: response?.data?.lawPartner
-  //             ? response.data.lawPartner
-  //             : [],
-  //         });
-  //       } else if (profile === "partner") {
-  //         const response = await axiosPrivateIntercept.get(
-  //           `/law-partner/get-single-document/${id}`,
-  //         );
-  //         setDataRowTable({
-  //           edit: true,
-  //           singleDoc: response?.data ? response.data : {},
-  //           controlDoc: {},
-  //           lawPartner: [],
-  //         });
-  //       } else if (profile === "insurance") {
-  //         const response = await axiosPrivateIntercept.get(
-  //           `/insurance/get-single-document/${id}`,
-  //         );
-  //         setDataRowTable({
-  //           edit: true,
-  //           singleDoc: response?.data ? response.data : {},
-  //           controlDoc: {},
-  //           lawPartner: [],
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching data from the server:", error);
-  //     } finally {
-  //       setTimeout(() => {
-  //         setPleaseWait(false);
-  //       }, 100);
-  //     }
-  //   } else {
-  //     console.error("No row found with the specified ID");
-  //   }
-  // };
-
   const updateDocuments = useCallback((editRowData) => {
     setDocuments((prev) =>
       prev.map((item) =>
@@ -351,13 +279,6 @@ const Table = ({
     },
     [documents],
   );
-
-  // Dodaj zależności
-
-  // const removeDocuments = (id) => {
-  //   const newDocuments = documents.filter((item) => item.id_document !== id);
-  //   setDocuments(newDocuments);
-  // };
 
   const columnsItem = useMemo(
     () =>
@@ -471,17 +392,6 @@ const Table = ({
               !dataTableCounter ? "disabled" : ""
             }`}
             disabled={!dataTableCounter}
-            // onClick={() => {
-            //   profile === "insider"
-            //     ? handleExportExel(
-            //         table.getPrePaginationRowModel().rows,
-            //         typeInfo[profile],
-            //       )
-            //     : handleExportExcelPartner(
-            //         table.getPrePaginationRowModel().rows,
-            //         typeInfo[profile],
-            //       );
-            // }}
             onClick={() => {
               const rows = table.getPrePaginationRowModel().rows;
               const info = typeInfo[profile];

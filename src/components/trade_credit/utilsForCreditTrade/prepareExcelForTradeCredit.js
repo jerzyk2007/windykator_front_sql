@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 export const getExcelRaport = async (
   cleanData,
   settingsColumn,
-  columnsContractor
+  columnsContractor,
 ) => {
   try {
     const workbook = new ExcelJS.Workbook();
@@ -132,7 +132,7 @@ export const getExcelRaport = async (
           // Dopasowanie szerokości kolumny: nie węższa niż 10, nie szersza niż 25
           worksheet.getColumn(index + 1).width = Math.max(
             Math.min(maxLength + 5, 25),
-            8
+            8,
           );
 
           // // Zmienna do sortowania przed dodaniem do arkusza
@@ -156,40 +156,6 @@ export const getExcelRaport = async (
             // Jeśli oba wiersze mają "PRZELEW" lub oba "BRAK PRZELEWU", sortuj na podstawie kolumny 9 (malejąco)
             return b[settingsColumn[9]] - a[settingsColumn[9]];
           });
-
-          // obj.data.sort((a, b) => {
-          //   // Pobieranie pierwszych wartości z tablicy w kolumnie 5
-          //   const aValue = a[settingsColumn[5]][0]; // Pierwszy element w tablicy a[settingsColumn[5]]
-          //   const bValue = b[settingsColumn[5]][0]; // Pierwszy element w tablicy b[settingsColumn[5]]
-
-          //   // Najpierw sortowanie na podstawie wartości w kolumnie 5 ("PRZELEW" najpierw)
-          //   if (aValue === "PRZELEW" && bValue !== "PRZELEW") {
-          //     return -1;
-          //   }
-          //   if (aValue !== "PRZELEW" && bValue === "PRZELEW") {
-          //     return 1;
-          //   }
-
-          //   // Jeśli oba wiersze mają "PRZELEW" lub oba "BRAK PRZELEWU", sortuj na podstawie kolumny 9 (malejąco)
-          //   return b[settingsColumn[9]] - a[settingsColumn[9]];
-          // });
-
-          // // Zmienna do sortowania przed dodaniem do arkusza, sortuje po pierwszej wartości w tablicy i zamianie na Number
-          // obj.data.sort((a, b) => {
-          //   // Sprawdź, czy a[settingsColumn[10]] i b[settingsColumn[10]] są tablicami
-          //   const valueA =
-          //     Array.isArray(a[settingsColumn[10]]) &&
-          //     a[settingsColumn[10]].length > 0
-          //       ? Number(a[settingsColumn[10]][0])
-          //       : 0;
-          //   const valueB =
-          //     Array.isArray(b[settingsColumn[10]]) &&
-          //     b[settingsColumn[10]].length > 0
-          //       ? Number(b[settingsColumn[10]][0])
-          //       : 0;
-
-          //   return valueB - valueA; // Sortowanie malejące
-          // });
 
           // Dodaj dane bez zmian w stylu
           // Wstaw dane do arkusza, pominając kolumnę A
@@ -243,124 +209,6 @@ export const getExcelRaport = async (
                 }
               });
           }
-
-          // if (worksheet.getColumn("H")) {
-          //   // Iteracja przez komórki, zaczynając od drugiego wiersza
-          //   worksheet
-          //     .getColumn("H")
-          //     .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
-          //       // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
-          //       if (rowNumber > 1) {
-          //         const cellValue = cell.value;
-          //         const [displayValue, isValid] = cellValue;
-
-          //         cell.value = displayValue;
-
-          //         cell.dataValidation = {
-          //           type: "list",
-          //           allowBlank: false,
-          //           operator: "equal",
-          //           formulae: [`"${daysPayment.join(",")}"`],
-          //           showErrorMessage: true,
-          //           errorStyle: "stop",
-          //           errorTitle: "Nieprawidłowa wartość",
-          //           error: "Wartość musi zostać wybrana z listy",
-          //         };
-
-          //         cell.fill = {
-          //           type: "pattern",
-          //           pattern: "solid",
-          //           fgColor: {
-          //             argb: isValid ? "ADD8E6" : "efc179",
-          //           },
-          //         };
-
-          //         // Blokowanie komórki
-          //         cell.protection = {
-          //           locked: false, // Oznacza komórkę jako zablokowaną
-          //         };
-          //       }
-          //     });
-          // }
-
-          // if (worksheet.getColumn("I")) {
-          //   // Iteracja przez komórki, zaczynając od drugiego wiersza
-          //   worksheet
-          //     .getColumn("I")
-          //     .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
-          //       // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
-          //       if (rowNumber > 1) {
-          //         const cellValue = cell.value;
-          //         const [displayValue, isValid] = cellValue;
-
-          //         cell.value = displayValue;
-
-          //         cell.dataValidation = {
-          //           type: "list",
-          //           allowBlank: false,
-          //           operator: "equal",
-          //           formulae: [`"${businessPayment.join(",")}"`],
-          //           showErrorMessage: true,
-          //           errorStyle: "stop",
-          //           errorTitle: "Nieprawidłowa wartość",
-          //           error: "Wartość musi zostać wybrana z listy",
-          //         };
-
-          //         cell.fill = {
-          //           type: "pattern",
-          //           pattern: "solid",
-          //           fgColor: {
-          //             argb: isValid ? "ADD8E6" : "efc179",
-          //           },
-          //         };
-
-          //         // Blokowanie komórki
-          //         cell.protection = {
-          //           locked: false, // Oznacza komórkę jako zablokowaną
-          //         };
-          //       }
-          //     });
-          // }
-
-          // if (worksheet.getColumn("J")) {
-          //   // Iteracja przez komórki, zaczynając od drugiego wiersza
-          //   worksheet
-          //     .getColumn("J")
-          //     .eachCell({ includeEmpty: true }, (cell, rowNumber) => {
-          //       // Sprawdzamy, czy to nie jest pierwszy wiersz (nagłówek)
-          //       if (rowNumber > 1) {
-          //         // const cellValue = cell.value;
-          //         // const [displayValue, isValid] = cellValue;
-
-          //         // cell.value = displayValue;
-
-          //         cell.fill = {
-          //           type: "pattern",
-          //           pattern: "solid",
-          //           fgColor: {
-          //             argb: "efc179",
-          //           },
-          //         };
-          //         // Blokowanie komórki
-          //         cell.protection = {
-          //           locked: false, // Oznacza komórkę jako zablokowaną
-          //         };
-
-          //         cell.numFmt = "#,##0";
-
-          //         cell.dataValidation = {
-          //           type: "whole", // Możliwe wartości: 'whole', 'decimal', 'list', 'date', 'time', 'textLength', 'custom'
-          //           operator: "between", // Możliwe wartości: 'between', 'notBetween', 'equal', 'notEqual', 'greaterThan', 'lessThan', 'greaterThanOrEqual', 'lessThanOrEqual'
-          //           formula1: 0, // Minimalna wartość
-          //           formula2: 1000000, // Maksymalna wartość (możesz ustawić na wartość, którą potrzebujesz)
-          //           showErrorMessage: true,
-          //           errorTitle: "Nieprawidłowa wartość",
-          //           error:
-          //             "Proszę wprowadzić wartość liczbową (tylko liczby, bez przecinka).",
-          //         };
-          //       }
-          //     });
-          // }
 
           if (worksheet.getColumn("K")) {
             worksheet.getColumn("K").width = 20;
@@ -618,7 +466,7 @@ export const getExcelRaport = async (
           // Dopasowanie szerokości kolumny: nie węższa niż 10, nie szersza niż 25
           worksheet.getColumn(index + 1).width = Math.max(
             Math.min(maxLength + 5, 25),
-            8
+            8,
           );
           const totalRows = worksheet.rowCount; // Pobierz liczbę wierszy w arkuszu
           const rowHeight = 25; // Ustaw wysokość, na jaką chcesz ustawić wiersze

@@ -98,16 +98,6 @@ export const getAllDataRaport = async (allData, orderColumns, info) => {
   };
 
   const cleanData = allData.map((item) => {
-    // const informacja_zarzd1 =
-    //   Array.isArray(item.INFORMACJA_ZARZAD) && item.INFORMACJA_ZARZAD.length > 0
-    //     ? item.INFORMACJA_ZARZAD.length === 1
-    //       ? sanitize(item.INFORMACJA_ZARZAD[item.INFORMACJA_ZARZAD.length - 1])
-    //       : `Liczba wcześniejszych wpisów: ${
-    //           item.INFORMACJA_ZARZAD.length - 1
-    //         }\n${sanitize(
-    //           item.INFORMACJA_ZARZAD[item.INFORMACJA_ZARZAD.length - 1]
-    //         )}`
-    //     : "BRAK";
     const informacja_zarzd = formatChatField(item.INFORMACJA_ZARZAD);
 
     const chatPanel = formatChatField(item.KANAL_KOMUNIKACJI);
@@ -670,50 +660,6 @@ export const insuranceRaport = async (allData, orderColumns, info) => {
     usedNames.add(name);
     return name;
   };
-
-  // obrabiam dane z KANAL_KOMUNIKACJI i tworzę skrócone zapisy
-  // const formatChatField = (arrayData) => {
-  //   if (!arrayData) return "Brak wpisów";
-
-  //   try {
-  //     let dzialania;
-
-  //     if (!Array.isArray(arrayData) || arrayData.length === 0) {
-  //       dzialania = "Brak wpisów";
-  //     } else if (arrayData.length === 1) {
-  //       const e = arrayData[0];
-  //       // Używamy sanitize, aby uniknąć błędów w Excelu przy dziwnych znakach
-  //       dzialania = `${e.date} - ${sanitize(e.username)} - ${sanitize(e.note)}`;
-  //     } else {
-  //       const last = arrayData[arrayData.length - 1];
-  //       dzialania = `Liczba wcześniejszych wpisów: ${arrayData.length - 1}\n${
-  //         last.date
-  //       } - ${sanitize(last.username)} - ${sanitize(last.note)}`;
-  //     }
-
-  //     // --- Twoja logika przycinania (max 2 entery lub 120 znaków) ---
-  //     let maxEnters = 5;
-  //     let countEnters = 0;
-  //     let truncated = "";
-
-  //     for (let char of dzialania) {
-  //       if (char === "\n") {
-  //         countEnters++;
-  //         // Jeśli to jest 3 enter, przerywamy zanim go dodamy
-  //         if (countEnters > maxEnters) break;
-  //       }
-  //       // Jeśli to jest 121 znak, przerywamy
-  //       if (truncated.length >= 350) break;
-
-  //       truncated += char;
-  //     }
-
-  //     return truncated.length < dzialania.length ? truncated + " …" : truncated;
-  //   } catch (err) {
-  //     console.error("Błąd formatowania czatu:", err);
-  //     return "Brak wpisów";
-  //   }
-  // };
 
   const cleanData = allData.map((item) => {
     // Wywołujemy nową funkcję dla pola KANAL_KOMUNIKACJI

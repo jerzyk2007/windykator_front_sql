@@ -62,35 +62,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     handleLinkClick(); // Zamknij menu po akcji
   };
 
-  // const hasAccess = (item) => {
-  //   // 1. Sprawdzanie Ról (Roles)
-  //   let roleAccess = true;
-  //   if (item.roles && item.roles.length > 0) {
-  //     roleAccess = auth?.roles?.some((role) => item.roles.includes(role));
-  //   }
-
-  //   // 2. Sprawdzanie Permisji (Permissions - opcjonalne, jeśli używasz)
-  //   let permissionAccess = true;
-  //   if (item.permission) {
-  //     permissionAccess = auth?.permissions?.[item.permission];
-  //   }
-
-  //   // 3. Sprawdzanie Spółek (Company)
-  //   let companyAccess = true;
-  //   if (item.company && item.company.length > 0) {
-  //     // Pobieramy listę spółek użytkownika (zapewniamy, że to tablica)
-  //     const userCompanies = Array.isArray(auth?.company) ? auth.company : [];
-
-  //     // Warunek: wszystkie spółki z item.company muszą znaleźć się w userCompanies
-  //     companyAccess = item.company.every((comp) =>
-  //       userCompanies.includes(comp)
-  //     );
-  //   }
-
-  //   // Wynik końcowy: Użytkownik musi przejść test ról/permisji ORAZ test spółek
-  //   return (roleAccess || permissionAccess) && companyAccess;
-  // };
-
   const hasAccess = (item) => {
     // 1. Sprawdzanie ról (jeśli zdefiniowane)
     let roleAccess = true;
@@ -112,7 +83,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     if (item.company && item.company.length > 0) {
       const userCompanies = Array.isArray(auth?.company) ? auth.company : [];
       companyAccess = item.company.every((comp) =>
-        userCompanies.includes(comp)
+        userCompanies.includes(comp),
       );
     }
 
@@ -141,8 +112,8 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
     const props = item.path
       ? { to: item.path, onClick: handleLinkClick }
       : item.action
-      ? { onClick: () => handleAction(item.action) }
-      : {};
+        ? { onClick: () => handleAction(item.action) }
+        : {};
 
     const menuLinkClass = "nav_menu-link" + (isSideMenu ? "" : ""); // Możesz dodać klasę dla side-menu linków
 
@@ -167,11 +138,6 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
 
         {item.sideMenu && (
           <div
-            // className={
-            //   activeSideMenu === item.title
-            //     ? "nav_menu-dropdown__menu--side_left"
-            //     : "nav_menu-dropdown__menu--side_left-disabled" // Dodana klasa dla ukrycia
-            // }
             className={
               activeSideMenu === item.label // tutaj też label
                 ? "nav_menu-dropdown__menu--side_left"
@@ -220,7 +186,7 @@ const NavMenu = ({ handleCloseMobileMenu, mobileMenu }) => {
                 </div>
               )}
             </li>
-          ) : null
+          ) : null,
         )}
       </ul>
     </nav>

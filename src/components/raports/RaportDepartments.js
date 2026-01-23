@@ -38,8 +38,8 @@ const RaportDepartments = ({ profile, reportType }) => {
     reportType === "departments"
       ? [{ id: "DZIALY", desc: false }]
       : reportType === "advisers"
-      ? [{ id: "DORADCA", desc: false }]
-      : []
+        ? [{ id: "DORADCA", desc: false }]
+        : [],
   );
   const [raportData, setRaportData] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -94,7 +94,7 @@ const RaportDepartments = ({ profile, reportType }) => {
     try {
       await axiosPrivateIntercept.patch(
         `/user/save-raport-${endpoint}-settings/${auth.id_user}`,
-        payload
+        payload,
       );
     } catch (err) {
       console.error(err);
@@ -109,7 +109,7 @@ const RaportDepartments = ({ profile, reportType }) => {
       arrayOrder = [...columnOrder];
     } else if (type === "Filtr") {
       arrayOrder = columnOrder.filter(
-        (item) => columnVisibility[item] !== false
+        (item) => columnVisibility[item] !== false,
       );
     }
 
@@ -118,7 +118,7 @@ const RaportDepartments = ({ profile, reportType }) => {
       newColumns = currentColumns
         .map((item) => {
           const matching = arrayOrder.find(
-            (match) => match === item.accessorKey
+            (match) => match === item.accessorKey,
           );
           return matching
             ? { accessorKey: item.accessorKey, header: item.header }
@@ -129,14 +129,14 @@ const RaportDepartments = ({ profile, reportType }) => {
 
     const newOrder = arrayOrder.map((key) => {
       const matchedColumn = newColumns.find(
-        (column) => column.accessorKey === key
+        (column) => column.accessorKey === key,
       );
       return matchedColumn ? matchedColumn.header : key;
     });
 
     const updateData = rowData.map((item) => {
       const filteredKeys = Object.keys(item).filter((key) =>
-        arrayOrder.includes(key)
+        arrayOrder.includes(key),
       );
       return filteredKeys.reduce((obj, key) => {
         obj[key] = item[key];
@@ -155,11 +155,11 @@ const RaportDepartments = ({ profile, reportType }) => {
         ...item,
         CEL_BEZ_PZU_LINK4: String(`${formatNum(item.CEL_BEZ_PZU_LINK4)} %`),
         ILE_BLEDOW_DORADCY_I_DOKUMENTACJI: Number(
-          item.ILE_BLEDOW_DORADCY_I_DOKUMENTACJI
+          item.ILE_BLEDOW_DORADCY_I_DOKUMENTACJI,
         ).toFixed(0),
         ILE_NIEPOBRANYCH_VAT: Number(item.ILE_NIEPOBRANYCH_VAT).toFixed(0),
         ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4: Number(
-          item.ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4
+          item.ILOSC_PRZETERMINOWANYCH_FV_BEZ_PZU_LINK4,
         ).toFixed(0),
       };
 
@@ -170,15 +170,15 @@ const RaportDepartments = ({ profile, reportType }) => {
             item.DZIALY === "Całość"
               ? ""
               : item.CEL
-              ? `${item.CEL} %`
-              : "Brak %",
+                ? `${item.CEL} %`
+                : "Brak %",
           CEL_BEZ_KANCELARII: String(`${formatNum(item.CEL_BEZ_KANCELARII)} %`),
           CEL_CALOSC: String(`${formatNum(item.CEL_CALOSC)} %`),
           ILOSC_PRZETERMINOWANYCH_FV: Number(
-            item.ILOSC_PRZETERMINOWANYCH_FV
+            item.ILOSC_PRZETERMINOWANYCH_FV,
           ).toFixed(0),
           ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII: Number(
-            item.ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII
+            item.ILOSC_PRZETERMINOWANYCH_FV_BEZ_KANCELARII,
           ).toFixed(0),
         };
       }
@@ -224,75 +224,6 @@ const RaportDepartments = ({ profile, reportType }) => {
       sorting,
     },
     defaultColumn: { maxSize: 400, minSize: 100 },
-    // muiTableHeadCellProps: () => ({
-    //   // align: "left",
-    //   // sx: {
-    //   //   fontWeight: "500",
-    //   //   fontFamily: "'Source Sans 3', Calibri, sans-serif",
-    //   //   fontSize: ".9rem",
-    //   //   color: "black",
-    //   //   background: "rgba(233, 245, 255, 1)",
-    //   //   borderRight: "1px solid #eeededff",
-    //   //   minHeight: "2rem",
-    //   //   display: "flex",
-    //   //   justifyContent: "center",
-    //   //   alignItems: "center",
-    //   //   "& .Mui-TableHeadCell-Content": {
-    //   //     display: "flex",
-    //   //     alignItems: "center",
-    //   //     justifyContent: "center",
-    //   //     textAlign: "center",
-    //   //     textWrap: "balance",
-    //   //   },
-    //   //   "& .Mui-TableHeadCell-Content-Labels": { padding: 0 },
-    //   //   "& .Mui-TableHeadCell-Content-Actions": { display: "none" },
-    //   //   "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
-    //   //     borderWidth: "1px",
-    //   //     background: "none",
-    //   //     marginRight: "-9px",
-    //   //     borderColor: "rgba(75, 75, 75, .1)",
-    //   //   },
-    //   // },
-    //   align: "left",
-    //   sx: {
-    //     fontWeight: "600",
-    //     fontFamily: "'Source Sans 3', Calibri, sans-serif",
-    //     fontSize: ".9rem",
-    //     color: "black",
-    //     background: "rgba(233, 245, 255, 1)",
-    //     borderRight: "1px solid #eeededff",
-    //     minHeight: "3rem",
-    //     display: "flex",
-    //     justifyContent: "center",
-    //     alignItems: "center",
-    //     "& .Mui-TableHeadCell-Content": {
-    //       display: "flex",
-    //       alignItems: "center",
-    //       justifyContent: "center",
-    //       textAlign: "center",
-    //       textWrap: "balance",
-    //     },
-    //     "& .Mui-TableHeadCell-Content-Labels": { padding: 0 },
-    //     "& .Mui-TableHeadCell-Content-Actions": { display: "none" },
-    //     "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
-    //       borderWidth: "1px",
-    //       background: "none",
-    //       marginRight: "-9px",
-    //       borderColor: "rgba(75, 75, 75, .1)",
-    //     },
-    //   },
-    // }),
-    // muiTableHeadCellProps: () => ({
-    //   sx: {
-    //     "& .Mui-TableHeadCell-ResizeHandle-Wrapper": {
-    //       borderWidth: "1px",
-    //       background: "none",
-    //       marginRight: "-19px",
-    //       borderColor: "rgba(75, 75, 75, .1)",
-    //     },
-    //   },
-    // }),
-    // muiTableHeadCellProps: commonTableHeadCellProps,
 
     muiTableHeadCellProps: {
       ...commonTableHeadCellProps, // 1. Kopiujemy align, fonty, tło itp.
@@ -378,7 +309,7 @@ const RaportDepartments = ({ profile, reportType }) => {
               onClick={() =>
                 handleExportExcel(
                   table.getPrePaginationRowModel().rows,
-                  excelTitle
+                  excelTitle,
                 )
               }
             >
@@ -414,7 +345,7 @@ const RaportDepartments = ({ profile, reportType }) => {
           }
         });
         uniqueItems.sort((a, b) =>
-          a.adviser.toLowerCase().localeCompare(b.adviser.toLowerCase())
+          a.adviser.toLowerCase().localeCompare(b.adviser.toLowerCase()),
         );
       }
       setDepartments(uniqueItems);
@@ -428,7 +359,7 @@ const RaportDepartments = ({ profile, reportType }) => {
           departments,
           raportData,
           raportDate,
-          percentTarget
+          percentTarget,
         )
       : grossTotalAdv(departments, raportData, raportDate);
     setRaport(update);
@@ -449,7 +380,7 @@ const RaportDepartments = ({ profile, reportType }) => {
       try {
         setPleaseWait(true);
         const resultData = await axiosPrivateIntercept.get(
-          `/raport/get-data/${auth.id_user}/${profile}`
+          `/raport/get-data/${auth.id_user}/${profile}`,
         );
 
         if (resultData.data.data.length === 0) {
@@ -459,7 +390,7 @@ const RaportDepartments = ({ profile, reportType }) => {
 
         if (isDep) {
           const resultDepartments = await axiosPrivateIntercept.get(
-            "/settings/get-departments"
+            "/settings/get-departments",
           );
           setPercentTarget(resultDepartments.data.target);
           setColumnsDep(
@@ -469,8 +400,8 @@ const RaportDepartments = ({ profile, reportType }) => {
                     ...item,
                     header: `Cele na ${resultDepartments.data.target.time.Q} kwartał`,
                   }
-                : item
-            )
+                : item,
+            ),
           );
         }
 
@@ -479,7 +410,7 @@ const RaportDepartments = ({ profile, reportType }) => {
 
         const endpoint = isDep ? "departments" : "advisers";
         const settings = await axiosPrivateIntercept.get(
-          `/user/get-raport-${endpoint}-settings/${auth.id_user}`
+          `/user/get-raport-${endpoint}-settings/${auth.id_user}`,
         );
 
         setColumnVisibility(settings?.data?.visible || {});
@@ -488,7 +419,7 @@ const RaportDepartments = ({ profile, reportType }) => {
         setColumnOrder(settings?.data?.order || []);
         setColumnPinning(settings?.data?.pinning || { left: [], right: [] });
         setPagination(
-          settings?.data?.pagination || { pageIndex: 0, pageSize: 20 }
+          settings?.data?.pagination || { pageIndex: 0, pageSize: 20 },
         );
       } catch (err) {
         console.error(err);
