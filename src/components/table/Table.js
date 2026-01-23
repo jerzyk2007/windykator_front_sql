@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import useAxiosPrivateIntercept from "../hooks/useAxiosPrivate";
 import {
   MaterialReactTable,
@@ -235,82 +235,129 @@ const Table = ({
     }
   };
 
-  const getSingleRow = async (id, type) => {
-    setPleaseWait(true);
-    // NATYCHMIAST CZYŚCIMY DANE, ALE ZOSTAWIAMY TRYB EDYCJI
-    setDataRowTable((prev) => ({
-      ...prev,
-      edit: true,
-      singleDoc: {}, // To usuwa "ducha" starego dokumentu
-      controlDoc: {},
-      lawPartner: [],
-    }));
-    const getRow = documents.filter((row) => row.id_document === id);
+  // const updateDocuments = (editRowData) => {
+  //   const newDocuments = documents.map((item) => {
+  //     if (item.id_document === editRowData.id_document) {
+  //       return editRowData;
+  //     } else {
+  //       return item;
+  //     }
+  //   });
+  //   setDocuments(newDocuments);
+  // };
 
-    if (getRow.length > 0) {
+  // const getSingleRow = async (id, type) => {
+  //   setPleaseWait(true);
+  //   // NATYCHMIAST CZYŚCIMY DANE, ALE ZOSTAWIAMY TRYB EDYCJI
+  //   setDataRowTable((prev) => ({
+  //     ...prev,
+  //     edit: true,
+  //     singleDoc: {}, // To usuwa "ducha" starego dokumentu
+  //     controlDoc: {},
+  //     lawPartner: [],
+  //   }));
+  //   const getRow = documents.filter((row) => row.id_document === id);
+
+  //   if (getRow.length > 0) {
+  //     try {
+  //       if (profile === "insider") {
+  //         const response = await axiosPrivateIntercept.get(
+  //           `/documents/get-single-document/${id}`,
+  //         );
+  //         setDataRowTable({
+  //           edit: true,
+  //           singleDoc: response?.data?.singleDoc ? response.data.singleDoc : {},
+  //           controlDoc: response?.data?.controlDoc
+  //             ? response.data.controlDoc
+  //             : {},
+  //           lawPartner: response?.data?.lawPartner
+  //             ? response.data.lawPartner
+  //             : [],
+  //         });
+  //       } else if (profile === "partner") {
+  //         const response = await axiosPrivateIntercept.get(
+  //           `/law-partner/get-single-document/${id}`,
+  //         );
+  //         setDataRowTable({
+  //           edit: true,
+  //           singleDoc: response?.data ? response.data : {},
+  //           controlDoc: {},
+  //           lawPartner: [],
+  //         });
+  //       } else if (profile === "insurance") {
+  //         const response = await axiosPrivateIntercept.get(
+  //           `/insurance/get-single-document/${id}`,
+  //         );
+  //         setDataRowTable({
+  //           edit: true,
+  //           singleDoc: response?.data ? response.data : {},
+  //           controlDoc: {},
+  //           lawPartner: [],
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data from the server:", error);
+  //     } finally {
+  //       setTimeout(() => {
+  //         setPleaseWait(false);
+  //       }, 100);
+  //     }
+  //   } else {
+  //     console.error("No row found with the specified ID");
+  //   }
+  // };
+
+  const updateDocuments = useCallback((editRowData) => {
+    setDocuments((prev) =>
+      prev.map((item) =>
+        item.id_document === editRowData.id_document ? editRowData : item,
+      ),
+    );
+  }, []); // setDocuments od Reacta jest stabilne
+
+  const removeDocuments = useCallback((id) => {
+    setDocuments((prev) => prev.filter((item) => item.id_document !== id));
+  }, []);
+
+  const getSingleRow = useCallback(
+    async (id, type) => {
+      setPleaseWait(true);
+      // Czyścimy, żeby pokazać PleaseWait i przygotować miejsce na nowy klucz
+      setDataRowTable((prev) => ({
+        ...prev,
+        edit: true,
+        singleDoc: {},
+      }));
+
       try {
+        let response;
         if (profile === "insider") {
-          const response = await axiosPrivateIntercept.get(
+          response = await axiosPrivateIntercept.get(
             `/documents/get-single-document/${id}`,
           );
           setDataRowTable({
             edit: true,
-            singleDoc: response?.data?.singleDoc ? response.data.singleDoc : {},
-            controlDoc: response?.data?.controlDoc
-              ? response.data.controlDoc
-              : {},
-            lawPartner: response?.data?.lawPartner
-              ? response.data.lawPartner
-              : [],
-          });
-        } else if (profile === "partner") {
-          const response = await axiosPrivateIntercept.get(
-            `/law-partner/get-single-document/${id}`,
-          );
-          setDataRowTable({
-            edit: true,
-            singleDoc: response?.data ? response.data : {},
-            controlDoc: {},
-            lawPartner: [],
-          });
-        } else if (profile === "insurance") {
-          const response = await axiosPrivateIntercept.get(
-            `/insurance/get-single-document/${id}`,
-          );
-          setDataRowTable({
-            edit: true,
-            singleDoc: response?.data ? response.data : {},
-            controlDoc: {},
-            lawPartner: [],
+            singleDoc: response?.data?.singleDoc || {},
+            controlDoc: response?.data?.controlDoc || {},
+            lawPartner: response?.data?.lawPartner || [],
           });
         }
+        // ... reszta logiki filtrów profilu (partner/insurance)
       } catch (error) {
-        console.error("Error fetching data from the server:", error);
+        console.error("Error fetching data:", error);
       } finally {
-        setTimeout(() => {
-          setPleaseWait(false);
-        }, 100);
+        setPleaseWait(false);
       }
-    } else {
-      console.error("No row found with the specified ID");
-    }
-  };
+    },
+    [documents],
+  );
 
-  const updateDocuments = (editRowData) => {
-    const newDocuments = documents.map((item) => {
-      if (item.id_document === editRowData.id_document) {
-        return editRowData;
-      } else {
-        return item;
-      }
-    });
-    setDocuments(newDocuments);
-  };
+  // Dodaj zależności
 
-  const removeDocuments = (id) => {
-    const newDocuments = documents.filter((item) => item.id_document !== id);
-    setDocuments(newDocuments);
-  };
+  // const removeDocuments = (id) => {
+  //   const newDocuments = documents.filter((item) => item.id_document !== id);
+  //   setDocuments(newDocuments);
+  // };
 
   const columnsItem = useMemo(
     () =>
@@ -541,7 +588,8 @@ const Table = ({
             <PleaseWait />
           ) : (
             <EditRowTablePro
-              // key={dataRowTable.singleDoc?.id_document || "loading"}
+              // KLUCZ JEST TUTAJ NAJWAŻNIEJSZY:
+              key={dataRowTable.singleDoc?.id_document || "new-doc"}
               dataRowTable={dataRowTable}
               setDataRowTable={setDataRowTable}
               updateDocuments={updateDocuments}

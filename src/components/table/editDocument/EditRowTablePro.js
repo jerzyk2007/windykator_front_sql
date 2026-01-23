@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import useData from "../../hooks/useData";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
 import { Button } from "@mui/material";
@@ -40,7 +40,7 @@ const EditRowTablePro = ({
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
-  const [rowData, setRowData] = useState({});
+  const [rowData, setRowData] = useState(dataRowTable?.singleDoc || {});
   const [nextPrevDoc, SetNextPrevDoc] = useState({ prev: null, next: null });
   const [toggleState, setToggleState] = useState(1);
   // Stan nowych wpisów (bufor przed wysłaniem na serwer)
@@ -57,25 +57,44 @@ const EditRowTablePro = ({
 
   // zmienna dla obsługi panelu KOntrola BL
   const [documentControlBL, setDocumentControlBL] = useState({
-    COMPANY: null,
-    CONTROL_ODPOWIEDZIALNOSC: null,
-    CONTROL_DECYZJA: null,
-    CONTROL_DOW_REJ: null,
-    CONTROL_BRAK_DZIALAN_OD_OST: null,
-    CONTROL_FV: null,
-    CONTROL_OSW_VAT: null,
-    CONTROL_PLATNOSC_VAT: null,
-    CONTROL_POLISA: null,
-    CONTROL_PR_JAZ: null,
-    CONTROL_UPOW: null,
-    DZIENNIK_ZMIAN: null,
-    KANAL_KOMUNIKACJI: null,
-    NUMER_FV: null,
-    id_control_documents: null,
+    COMPANY: dataRowTable?.controlDoc?.COMPANY || null,
+    CONTROL_ODPOWIEDZIALNOSC:
+      dataRowTable?.controlDoc?.CONTROL_ODPOWIEDZIALNOSC || null,
+    CONTROL_DECYZJA: dataRowTable?.controlDoc?.CONTROL_DECYZJA || null,
+    CONTROL_DOW_REJ: dataRowTable?.controlDoc?.CONTROL_DOW_REJ || null,
+    CONTROL_BRAK_DZIALAN_OD_OST:
+      dataRowTable?.controlDoc?.CONTROL_BRAK_DZIALAN_OD_OST || null,
+    CONTROL_FV: dataRowTable?.controlDoc?.CONTROL_FV || null,
+    CONTROL_OSW_VAT: dataRowTable?.controlDoc?.CONTROL_OSW_VAT || null,
+    CONTROL_PLATNOSC_VAT:
+      dataRowTable?.controlDoc?.CONTROL_PLATNOSC_VAT || null,
+    CONTROL_POLISA: dataRowTable?.controlDoc?.CONTROL_POLISA || null,
+    CONTROL_PR_JAZ: dataRowTable?.controlDoc?.CONTROL_PR_JAZ || null,
+    CONTROL_UPOW: dataRowTable?.controlDoc?.CONTROL_UPOW || null,
+    DZIENNIK_ZMIAN: dataRowTable?.controlDoc?.DZIENNIK_ZMIAN || null,
+    KANAL_KOMUNIKACJI: dataRowTable?.controlDoc?.KANAL_KOMUNIKACJI || null,
+    NUMER_FV: dataRowTable?.controlDoc?.NUMER_FV || null,
+    id_control_documents:
+      dataRowTable?.controlDoc?.id_control_documents || null,
   });
 
   // dane dla przekzania do kancelarii
-  const [lawFirmData, setLawFirmData] = useState({});
+  const [lawFirmData, setLawFirmData] = useState({
+    numerFv: dataRowTable?.singleDoc?.NUMER_FV ?? "",
+    kontrahent: dataRowTable?.singleDoc?.KONTRAHENT ?? "",
+    nip: dataRowTable?.singleDoc?.NIP ?? "",
+    firma: dataRowTable?.singleDoc?.FIRMA ?? "",
+
+    // Dla liczb użyj Number(...) || 0
+    // To zamieni stringi na liczby i naprawi ewentualne NaN/null na 0
+    kwota_brutto: Number(dataRowTable?.singleDoc?.BRUTTO) || 0,
+    kwotaRoszczenia: Number(dataRowTable?.singleDoc?.DO_ROZLICZENIA) || 0,
+
+    // Dla tablic ?? [] chroni przed błędem .map() is not a function
+    kancelaria: "",
+    kancelariaWybor: dataRowTable?.lawPartner ?? [],
+    zapisz: false,
+  });
 
   const handleSaveData = async (type = "exit") => {
     const { id_document, NUMER_FV, FIRMA } = rowData;
@@ -132,46 +151,6 @@ const EditRowTablePro = ({
       console.error(err);
     }
   };
-
-  // const handleAddNote = (info, type, context) => {
-  //   const saveInfo = { chat: "KANAL_KOMUNIKACJI", log: "DZIENNIK_ZMIAN" };
-  //   const fieldName = saveInfo[type];
-
-  //   const date = new Date();
-  //   const formattedDate = `${String(date.getDate()).padStart(2, "0")}-${String(
-  //     date.getMonth() + 1
-  //   ).padStart(2, "0")}-${date.getFullYear()}`;
-
-  //   const note = {
-  //     date: formattedDate,
-  //     note: info,
-  //     profile: auth.permissions,
-  //     userlogin: auth.userlogin,
-  //     username: auth.usersurname,
-  //   };
-
-  //   // 1. Aktualizacja bufora wysyłkowego (chatLog)
-  //   setChatLog((prev) => ({
-  //     ...prev,
-  //     [context]: {
-  //       ...prev[context],
-  //       [fieldName]: [...(prev[context]?.[fieldName] ?? []), note],
-  //     },
-  //   }));
-
-  //   // 2. Aktualizacja widoku lokalnego (rowData lub controlBL)
-  //   if (context === "documents") {
-  //     setRowData((prev) => ({
-  //       ...prev,
-  //       [fieldName]: [...(prev[fieldName] ?? []), note],
-  //     }));
-  //   } else if (context === "controlBL") {
-  //     setDocumentControlBL((prev) => ({
-  //       ...prev,
-  //       [fieldName]: [...(prev[fieldName] ?? []), note],
-  //     }));
-  //   }
-  // };
 
   const handleAddNote = (info, type, context) => {
     const saveInfo = { chat: "KANAL_KOMUNIKACJI", log: "DZIENNIK_ZMIAN" };
@@ -406,44 +385,6 @@ const EditRowTablePro = ({
       next: nextDoc[index + 1] ?? null,
     });
   }, [rowData, nextDoc]);
-
-  // Czyścimy bufor chatLog przy każdej zmianie dokumentu (strzałki/ładowanie)
-  useEffect(() => {
-    setRowData(dataRowTable?.singleDoc ? dataRowTable.singleDoc : {});
-    setChatLog(initialChatLogState); // Resetujemy notatki, których nie zapisano
-    setDocumentControlBL({
-      COMPANY: dataRowTable?.controlDoc?.COMPANY || null,
-      CONTROL_ODPOWIEDZIALNOSC:
-        dataRowTable?.controlDoc?.CONTROL_ODPOWIEDZIALNOSC || null,
-      CONTROL_DECYZJA: dataRowTable?.controlDoc?.CONTROL_DECYZJA || null,
-      CONTROL_DOW_REJ: dataRowTable?.controlDoc?.CONTROL_DOW_REJ || null,
-      CONTROL_BRAK_DZIALAN_OD_OST:
-        dataRowTable?.controlDoc?.CONTROL_BRAK_DZIALAN_OD_OST || null,
-      CONTROL_FV: dataRowTable?.controlDoc?.CONTROL_FV || null,
-      CONTROL_OSW_VAT: dataRowTable?.controlDoc?.CONTROL_OSW_VAT || null,
-      CONTROL_PLATNOSC_VAT:
-        dataRowTable?.controlDoc?.CONTROL_PLATNOSC_VAT || null,
-      CONTROL_POLISA: dataRowTable?.controlDoc?.CONTROL_POLISA || null,
-      CONTROL_PR_JAZ: dataRowTable?.controlDoc?.CONTROL_PR_JAZ || null,
-      CONTROL_UPOW: dataRowTable?.controlDoc?.CONTROL_UPOW || null,
-      DZIENNIK_ZMIAN: dataRowTable?.controlDoc?.DZIENNIK_ZMIAN || null,
-      KANAL_KOMUNIKACJI: dataRowTable?.controlDoc?.KANAL_KOMUNIKACJI || null,
-      NUMER_FV: dataRowTable?.controlDoc?.NUMER_FV || null,
-      id_control_documents:
-        dataRowTable?.controlDoc?.id_control_documents || null,
-    });
-    setLawFirmData({
-      numerFv: dataRowTable?.singleDoc.NUMER_FV ?? "",
-      kontrahent: dataRowTable?.singleDoc.KONTRAHENT ?? "",
-      nip: dataRowTable?.singleDoc.NIP ?? "",
-      kwota_brutto: dataRowTable?.singleDoc.BRUTTO ?? 0,
-      firma: dataRowTable?.singleDoc.FIRMA ?? "",
-      kwotaRoszczenia: dataRowTable?.singleDoc?.DO_ROZLICZENIA ?? 0, // Zmieniamy na string, aby łatwiej obsługiwać formatowanie
-      kancelaria: "",
-      kancelariaWybor: dataRowTable.lawPartner ?? [],
-      zapisz: false,
-    });
-  }, [dataRowTable]);
 
   useEffect(() => {
     if (changePanel === "law-partner") {
