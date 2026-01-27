@@ -40,6 +40,8 @@ const EditRowTablePro = ({
 }) => {
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
   const { auth } = useData();
+  // na czas ładowania wewnętrznych elementów, np pliku pdf
+  const [loading, setLoading] = useState(false);
   const [rowData, setRowData] = useState(dataRowTable?.singleDoc || {});
   const [nextPrevDoc, SetNextPrevDoc] = useState({ prev: null, next: null });
   const [toggleState, setToggleState] = useState(1);
@@ -153,34 +155,11 @@ const EditRowTablePro = ({
     }
   };
 
-  const handleGetLetter1 = async () => {
-    try {
-      const response = await axiosPrivateIntercept.get("/vindex/get-letter", {
-        responseType: "blob", // Kluczowe dla plików binarnych
-      });
-      console.log(response);
-      // 1. Tworzymy specjalny URL z Bloba (danych binarnych)
-      const blob = new Blob([response.data], { type: "application/pdf" });
-      const url = window.URL.createObjectURL(blob);
-
-      // 2. SPOSÓB A: Automatyczne pobieranie pliku
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "wezwanie_do_zaplaty.pdf"); // Nazwa pliku
-      document.body.appendChild(link);
-      link.click();
-
-      // 3. Czyszczenie pamięci
-      link.parentNode.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleGetLetter = async () => {
     try {
+      setLoading(true);
       const response = await axiosPrivateIntercept.get("/vindex/get-letter", {
+        params: { id: rowData.id_document },
         responseType: "blob", // kluczowe
         transformResponse: (r) => r, // 🔥 wyłącza parsowanie
       });
@@ -204,6 +183,8 @@ const EditRowTablePro = ({
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Błąd pobierania PDF:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -261,6 +242,7 @@ const EditRowTablePro = ({
         profile={profile}
         context="documents"
         handleGetLetter={handleGetLetter}
+        loading={loading}
       />
     );
   };

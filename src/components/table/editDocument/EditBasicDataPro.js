@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivateIntercept from "../../hooks/useAxiosPrivate";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { formatNip } from "../utilsForTable/tableFunctions";
 import EditContractor from "../../system_settings/contractorSettings/EditContractor";
+import { margin } from "@mui/system";
 
 // --- KONSTANTY I HELPERY ---
 const authLogin = [
@@ -49,6 +50,7 @@ const DataRow = ({
   children,
   contentClass = "ertp-data-row__value",
   style = {},
+  titleStyle = {},
   titleClassName = "",
   onDoubleClick,
 }) => {
@@ -59,7 +61,7 @@ const DataRow = ({
       <span
         className={`ertp-data-row__label ${titleClassName}`}
         onDoubleClick={onDoubleClick}
-        style={{ cursor: onDoubleClick ? "pointer" : "default" }}
+        style={{ ...titleStyle, cursor: onDoubleClick ? "pointer" : "default" }}
       >
         {title}
       </span>
@@ -375,38 +377,66 @@ const InsuranceView = ({ rowData }) => {
   );
 };
 
-const VindexView = ({ rowData, onEdit, handleGetLetter }) => (
-  <section className="ertp-data-section">
-    <DataRow title="Faktura:" children={rowData.NUMER_FV} />
-    <DataRow title="Data wystawienia:" children={rowData.DATA_FV} />
-    <DataRow title="Kwota brutto:" children={formatCurrency(rowData.BRUTTO)} />
-    <DataRow
-      title="AS należność:"
-      children={formatCurrency(rowData.DO_ROZLICZENIA)}
-    />
-    <DataRow
-      title="Kontrahent:"
-      titleClassName="ertp-label-clickable"
-      onDoubleClick={onEdit}
-      style={getScrollStyle(rowData.KONTRAHENT)}
-      children={rowData.KONTRAHENT}
-    />
-    <DataRow title="Dział:" children={rowData.DZIAL} />
-    <Button
-      variant="contained"
-      color="success"
-      size="medium"
-      onClick={handleGetLetter}
-    >
-      Pobierz testowy PDF
-    </Button>
-  </section>
-);
+const VindexView = ({ rowData, onEdit, handleGetLetter, loading }) => {
+  const today = new Date().toISOString().slice(0, 10);
+
+  const termin =
+    typeof rowData?.TERMIN === "string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(rowData.TERMIN)
+      ? rowData.TERMIN
+      : null;
+
+  const isOverdue = termin ? termin < today : false;
+  return (
+    <section className="ertp-data-section">
+      <DataRow title="Faktura:" children={rowData.NUMER_FV} />
+      <DataRow title="Data wystawienia:" children={rowData.DATA_FV} />
+      <DataRow title="Termin płatności:" children={rowData.TERMIN} />
+      <DataRow
+        title="Kwota brutto:"
+        children={formatCurrency(rowData.BRUTTO)}
+      />
+      <DataRow
+        title="AS należność:"
+        children={formatCurrency(rowData.DO_ROZLICZENIA)}
+      />
+      <DataRow
+        title="FK należność:"
+        titleStyle={{ backgroundColor: "#fdbda9" }}
+        children={formatCurrency(rowData.FK_DO_ROZLICZENIA)}
+      />
+      <DataRow
+        title="Kontrahent:"
+        titleClassName="ertp-label-clickable"
+        onDoubleClick={onEdit}
+        style={getScrollStyle(rowData.KONTRAHENT)}
+        children={rowData.KONTRAHENT}
+      />
+      <DataRow title="Dział:" children={rowData.DZIAL} />
+      {isOverdue && (
+        <Button
+          style={{ width: "50%", margin: "0 auto" }}
+          variant="contained"
+          color="success"
+          size="medium"
+          disabled={loading}
+          onClick={handleGetLetter}
+        >
+          {loading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Pobierz testowy PDF"
+          )}
+        </Button>
+      )}
+    </section>
+  );
+};
 
 // --- KOMPONENT GŁÓWNY ---
 
 const EditBasicDataPro = (props) => {
-  const { rowData, profile, handleGetLetter } = props;
+  const { rowData, profile, handleGetLetter, loading } = props;
   const axiosPrivateIntercept = useAxiosPrivateIntercept();
 
   const [isContractorEditing, setIsContractorEditing] = useState(false);
@@ -458,6 +488,7 @@ const EditBasicDataPro = (props) => {
         rowData={rowData}
         onEdit={() => setIsContractorEditing(true)}
         handleGetLetter={handleGetLetter}
+        loading={loading}
       />
     ),
   };
