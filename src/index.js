@@ -10,5 +10,6 @@ root.render(
   <DataProvider>
     <App />
   </DataProvider>,
-  //  </React.StrictMode>,
+
+  // </React.StrictMode>,
 );

@@ -84,6 +84,18 @@ const InsiderView = ({
 }) => {
   const isBlacharnia = rowData?.AREA === "BLACHARNIA";
 
+  // --- OBLICZENIA I WARUNKI ---
+  const doRozliczenia = Number(rowData.DO_ROZLICZENIA) || 0;
+  const fullVat = Number(rowData.BRUTTO) - Number(rowData.NETTO);
+  const halfVat = fullVat / 2;
+
+  // Porównanie z dokładnością do 1 zł
+  const isFullVatMatch = Math.abs(fullVat - doRozliczenia) <= 1;
+  const isHalfVatMatch = Math.abs(halfVat - doRozliczenia) <= 1;
+
+  // Stały kolor dla wyróżnienia (np. jasny zielony)
+  const matchStyle = { backgroundColor: "#fcdcdc" };
+
   return (
     <section className="ertp-data-section">
       <DataRow title="Faktura:" children={rowData.NUMER_FV} />
@@ -150,12 +162,14 @@ const InsiderView = ({
           />
           <DataRow
             title="100% VAT:"
+            style={isFullVatMatch ? matchStyle : null}
             children={formatCurrency(
               Number(rowData.BRUTTO) - Number(rowData.NETTO),
             )}
           />
           <DataRow
             title="50% VAT:"
+            style={isHalfVatMatch ? matchStyle : null}
             children={formatCurrency(
               (Number(rowData.BRUTTO) - Number(rowData.NETTO)) / 2,
             )}
