@@ -42,7 +42,7 @@ const RaportDraft = ({ company }) => {
       const getMainRaport = await axiosPrivateIntercept.post(
         `/fk/get-main-report/${company}`,
         {},
-        { responseType: "blob" }
+        { responseType: "blob" },
       );
       const blobMain = new Blob([getMainRaport.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -52,7 +52,7 @@ const RaportDraft = ({ company }) => {
       const getBusinessRaport = await axiosPrivateIntercept.post(
         `/fk/get-business-report/${company}`,
         {},
-        { responseType: "blob" }
+        { responseType: "blob" },
       );
       const blobBusiness = new Blob([getBusinessRaport.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -71,7 +71,7 @@ const RaportDraft = ({ company }) => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get(
-        `/fk/create-raport/${company}`
+        `/fk/create-raport/${company}`,
       );
       if (result?.data?.message) return setMissingDeps(result.data.message);
       if (result?.data?.info) return setMissingDeps(result?.data?.info);
@@ -88,7 +88,7 @@ const RaportDraft = ({ company }) => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get(
-        `/fk/get-date-counter/${company}`
+        `/fk/get-date-counter/${company}`,
       );
       setDateCounter(result.data.updateData);
     } catch (err) {
@@ -102,7 +102,7 @@ const RaportDraft = ({ company }) => {
     try {
       setPleaseWait(true);
       const result = await axiosPrivateIntercept.get(
-        `/fk/get-owners-mail/${company}`
+        `/fk/get-owners-mail/${company}`,
       );
       const sortedMails = result.data.mail.sort((a, b) => a.localeCompare(b));
       setMails({ generate: true, data: sortedMails || [] });
@@ -157,15 +157,15 @@ const RaportDraft = ({ company }) => {
                     </span>
                   </div>
                 )}
-                {dateCounter?.raport?.date && (
-                  <div className="status-item">
-                    <span className="label">Pobranie danych:</span>
-                    <span className="value">{dateCounter.raport.date}</span>
-                  </div>
-                )}
                 {dateCounter?.generate?.date && (
                   <div className="status-item highlight">
                     <span className="label">Wygenerowano raport:</span>
+                    <span className="value">{dateCounter.raport.date}</span>
+                  </div>
+                )}
+                {dateCounter?.raport?.date && (
+                  <div className="status-item">
+                    <span className="label">Pobranie danych:</span>
                     <span className="value">{dateCounter.generate.date}</span>
                   </div>
                 )}
